@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staffFound:Staff = Staff.allInstance()->any(s | s.Id = id), bossFound:Staff = Staff.allInstance()->any(b | b.Id = bossid)",
+        "precondition": "bossFound.oclIsUndefined() = false",
+        "postcondition": "staffFound.oclIsUndefined() = true and let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = bossFound and result = true or staffFound.oclIsUndefined() <> true and Staff.allInstance()->includes(staffFound) and result = false"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 49,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 61,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staffFound:Staff = Staff.allInstance()->any(s | s.Id = id), bossFound:Staff = Staff.allInstance()->any(b | b.Id = bossid)\n            \n            precondition:\n          bossFound.oclIsUndefined() = false\n            \n            postcondition:\n          staffFound.oclIsUndefined() = true and let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = bossFound and result = true or staffFound.oclIsUndefined() <> true and Staff.allInstance()->includes(staffFound) and result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

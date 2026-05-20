@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "books:Set(Book) = Book.allInstance()->select(b | b.Author = authorname)",
+        "precondition": "authorname.oclIsUndefined() = bool",
+        "postcondition": "Book.allInstance()->includes(books) and result = books"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SearchBook::searchBookByAuthor(authorname: String): Set(Book) {\n\tdefinition:\n\t\tbooks: Set(Book) = Book.allInstance()->select(b|b.Author = authorname)\n\tprecondition:\n\t\tauthorname.oclIsUndefined() = bool\n\tpostcondition:\n\t\tBook.allInstance()->includes(books) and\n\t\tresult = books\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "request:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+        "precondition": "request.oclIsUndefined() = false",
+        "postcondition": "let addOb:ApprovalLetter in addOb.oclIsNew() and addOb.Content = 'ApprovalLetterContent' and request.AttachedApprovalLetter = addOb and CurrentApprovalLetter = addOb and CurrentLoanRequest = request and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id: Integer): Boolean {\n\tdefinition:\n\t\trequest: LoanRequest = LoanRequest.allInstance()->any(o|o.RequestID = id)\n\tprecondition:\n\t\trequest.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet addOb: ApprovalLetter in\n\t\taddOb.oclIsNew() and\n\t\taddOb.Content = 'ApprovalLetterContent' and\n\t\trequest.AttachedApprovalLetter = addOb and\n\t\tCurrentApprovalLetter = addOb and\n\t\tCurrentLoanRequest = request and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentApprovalLetter"
+        }
+      ]
+    }
+  }
+]

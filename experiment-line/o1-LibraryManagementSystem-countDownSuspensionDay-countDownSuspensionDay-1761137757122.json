@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "us:Set(User) = User.allInstance()->select(u | u.OverDueFee > 0)",
+        "precondition": "User.allInstance()->exists(u | u.OverDueFee > 0)",
+        "postcondition": "us->forAll(u | u.SuspensionDays = u.SuspensionDays@pre - 1) and us->forAll(u | if u.SuspensionDays@pre <= 1 then u.BorrowStatus = BorrowStatus::SUSPEND else u.BorrowStatus = u.BorrowStatus@pre endif)"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\tus: Set(User) = User.allInstance()->select(u|u.OverDueFee>0)\n\tprecondition:\n\t\tUser.allInstance()->exists(u|u.OverDueFee>0)\n\tpostcondition:\n\t\tus->forAll(u|u.SuspensionDays = u.SuspensionDays@pre-1) and\n\t\tus->forAll(u|if u.SuspensionDays@pre<=1 \n\t\tthen u.BorrowStatus = BorrowStatus::SUSPEND \n\t\telse u.BorrowStatus = u.BorrowStatus@pre \n\t\tendif )\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

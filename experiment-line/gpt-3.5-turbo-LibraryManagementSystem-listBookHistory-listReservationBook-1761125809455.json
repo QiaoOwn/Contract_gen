@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedBooks:Set(BookCopy) = User.allInstance()->select(u | u.UserID = uid).ReservedBook->collect(r | r.ReservedCopy)",
+        "precondition": "User.allInstance()->includes(u) and u.UserID = uid and reservedBooks.isEmpty() = false",
+        "postcondition": "let reservedCopy:BookCopy in reservedCopy.oclIsNew() and User.allInstance()->includes(u) and reservedBooks->forAll(rb | rb.ReservedCopy = reservedCopy)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 86,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {\n          definition:\n          reservedBooks:Set(BookCopy) = User.allInstance()->select(u | u.UserID = uid).ReservedBook->collect(r | r.ReservedCopy)\n            \n            precondition:\n          User.allInstance()->includes(u) and u.UserID = uid and reservedBooks.isEmpty() = false\n            \n            postcondition:\n          let reservedCopy:BookCopy in reservedCopy.oclIsNew() and User.allInstance()->includes(u) and reservedBooks->forAll(rb | rb.ReservedCopy = reservedCopy)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: u"
+        }
+      ]
+    }
+  }
+]

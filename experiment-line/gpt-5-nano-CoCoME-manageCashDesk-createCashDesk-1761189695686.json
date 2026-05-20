@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "cashDesk.oclIsUndefined() = true or cashDesk.Id = id",
+        "postcondition": "if cashDesk.oclIsUndefined() then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isOpened else cashDesk.Name = name and cashDesk.IsOpened = isOpened and cashDesk.Id = id endif and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 319,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          cashDesk.oclIsUndefined() = true or cashDesk.Id = id\n            \n            postcondition:\n          if cashDesk.oclIsUndefined() then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isOpened else cashDesk.Name = name and cashDesk.IsOpened = isOpened and cashDesk.Id = id endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: isOpened"
+        }
+      ]
+    }
+  }
+]

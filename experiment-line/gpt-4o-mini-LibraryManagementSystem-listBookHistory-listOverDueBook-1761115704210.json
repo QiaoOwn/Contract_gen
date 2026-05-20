@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(o | o.asseName = User.allInstance()->any(u | u.UserID = uid) and o.OverDueDays > 0), result:Set(BookCopy) = overdueBooks",
+        "precondition": "User.allInstance()->includes(User.allInstance()->any(u | u.UserID = uid))",
+        "postcondition": "BookCopy.allInstance()->includes(result)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 155,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 81,
+          "msg": "mismatched input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(o | o.asseName = User.allInstance()->any(u | u.UserID = uid) and o.OverDueDays > 0), result:Set(BookCopy) = overdueBooks\n            \n            precondition:\n          User.allInstance()->includes(User.allInstance()->any(u | u.UserID = uid))\n            \n            postcondition:\n          BookCopy.allInstance()->includes(result)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCreated:Boolean = if existingCashier.oclIsUndefined() = true then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and Cashier.allInstance()->isUnique(o:Cashier | o.Id)",
+        "postcondition": "if isCreated = true then let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name else Cashier.allInstance()->includes(existingCashier) endif and result = isCreated"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 241,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          existingCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCreated:Boolean = if existingCashier.oclIsUndefined() = true then true else false endif\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and Cashier.allInstance()->isUnique(o:Cashier | o.Id)\n            \n            postcondition:\n          if isCreated = true then let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name else Cashier.allInstance()->includes(existingCashier) endif and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

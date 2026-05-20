@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingLa:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), createdResult:Boolean = existingLa.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus) and LoanAccount.allInstance()->isUnique(l:LoanAccount | l.LoanAccountID)",
+        "postcondition": "if createdResult then let newLa:LoanAccount in newLa.oclIsNew() and LoanAccount.allInstance()->includes(newLa) and newLa.LoanAccountID = loanaccountid and newLa.Balance = balance and newLa.Status = status else LoanAccount.allInstance()->includes(existingLa) endif and result = createdResult"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 274,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          existingLa:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), createdResult:Boolean = existingLa.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus) and LoanAccount.allInstance()->isUnique(l:LoanAccount | l.LoanAccountID)\n            \n            postcondition:\n          if createdResult then let newLa:LoanAccount in newLa.oclIsNew() and LoanAccount.allInstance()->includes(newLa) and newLa.LoanAccountID = loanaccountid and newLa.Balance = balance and newLa.Status = status else LoanAccount.allInstance()->includes(existingLa) endif and result = createdResult\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

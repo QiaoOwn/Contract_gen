@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "let newSale:Sale in newSale.oclIsNew(), currentCashDesk:CashDesk = self.CurrentCashDesk",
+        "precondition": "currentCashDesk.oclIsUndefined() = false and currentCashDesk.IsOpened = true and (self.CurrentSale.oclIsUndefined() = true or self.CurrentSale.IsComplete = true)",
+        "postcondition": "newSale.BelongedCashDesk = currentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and Sale.allInstance()->includes(newSale) and self.CurrentSale = newSale and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 27,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          let newSale:Sale in newSale.oclIsNew(), currentCashDesk:CashDesk = self.CurrentCashDesk\n            \n            precondition:\n          currentCashDesk.oclIsUndefined() = false and currentCashDesk.IsOpened = true and (self.CurrentSale.oclIsUndefined() = true or self.CurrentSale.IsComplete = true)\n            \n            postcondition:\n          newSale.BelongedCashDesk = currentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and Sale.allInstance()->includes(newSale) and self.CurrentSale = newSale and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentCashDesk"
+        }
+      ]
+    }
+  }
+]

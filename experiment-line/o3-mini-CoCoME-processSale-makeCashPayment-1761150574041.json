@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let cp:CashPayment in cp.oclIsNew() and CashPayment.allInstance()->includes(cp) and CurrentSale.AssoicatedPayment = cp and currentStore.Sales->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = now and cp.Balance = amount - CurrentSale.Amount and ThirdPartyServices.save(cp) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 308,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = CurrentSale.Belongedstore\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let cp:CashPayment in cp.oclIsNew() and CashPayment.allInstance()->includes(cp) and CurrentSale.AssoicatedPayment = cp and currentStore.Sales->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = now and cp.Balance = amount - CurrentSale.Amount and ThirdPartyServices.save(cp) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

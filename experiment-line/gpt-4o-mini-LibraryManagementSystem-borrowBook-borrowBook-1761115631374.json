@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = user.oclIsUndefined() = false, book.oclIsUndefined() = false",
+        "precondition": "user:User = User.allInstance()->any(o | o.UserID = uid) and book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and user.OverDueFee <= 0 and user.BorrowStatus = BorrowStatus.NORMAL and book.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let loan:Loan in loan.oclIsNew() and loan.LoanedUser = user and loan.LoanedCopy = book and user.LoanedNumber = user.LoanedNumber + 1 and book.Status = CopyStatus.LOANED and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 60,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          bool:Boolean = user.oclIsUndefined() = false, book.oclIsUndefined() = false\n            \n            precondition:\n          user:User = User.allInstance()->any(o | o.UserID = uid) and book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and user.OverDueFee <= 0 and user.BorrowStatus = BorrowStatus.NORMAL and book.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let loan:Loan in loan.oclIsNew() and loan.LoanedUser = user and loan.LoanedCopy = book and user.LoanedNumber = user.LoanedNumber + 1 and book.Status = CopyStatus.LOANED and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: user"
+        }
+      ]
+    }
+  }
+]

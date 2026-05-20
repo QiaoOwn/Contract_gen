@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(i | i.Barcode = barcode)",
+        "precondition": "barcode.oclIsTypeOf(Integer) and quantity.oclIsTypeOf(Integer)",
+        "postcondition": "let item:Item = Item.allInstance()->any(i | i.Barcode = barcode) in let ob:OrderEntry in ob.oclIsNew() and ob.Quantity = quantity and (if item.oclIsUndefined() = true then ob.SubAmount = 0.0 else (ob.SubAmount = item.Price * quantity and ob.Item = item) endif) and CurrentOrderProduct.ContainedEntries->including(ob) and result = (item.oclIsUndefined() = false)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 313,
+          "msg": "no viable alternative at input 'CurrentOrderProduct.ContainedEntries->including'"
+        },
+        {
+          "line": 9,
+          "column": 340,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 363,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item: Item = Item.allInstance()->any(i | i.Barcode = barcode)\n            \n            precondition:\n          barcode.oclIsTypeOf(Integer) and quantity.oclIsTypeOf(Integer)\n            \n            postcondition:\n          let item:Item = Item.allInstance()->any(i | i.Barcode = barcode) in let ob:OrderEntry in ob.oclIsNew() and ob.Quantity = quantity and (if item.oclIsUndefined() = true then ob.SubAmount = 0.0 else (ob.SubAmount = item.Price * quantity and ob.Item = item) endif) and CurrentOrderProduct.ContainedEntries->including(ob) and result = (item.oclIsUndefined() = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

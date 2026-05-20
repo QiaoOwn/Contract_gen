@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)",
+        "precondition": "obs->size() = 0 or (obs->size() = 1 and obs->forAll(o | o.Name = name))",
+        "postcondition": "result = Cashier.allInstance()->exists(c | c.Id = id and c.Name = name)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 15,
+          "msg": "no viable alternative at input 'obs->size()'"
+        },
+        {
+          "line": 6,
+          "column": 35,
+          "msg": "no viable alternative at input 'obs->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)\n            \n            precondition:\n          obs->size() = 0 or (obs->size() = 1 and obs->forAll(o | o.Name = name))\n            \n            postcondition:\n          result = Cashier.allInstance()->exists(c | c.Id = id and c.Name = name)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

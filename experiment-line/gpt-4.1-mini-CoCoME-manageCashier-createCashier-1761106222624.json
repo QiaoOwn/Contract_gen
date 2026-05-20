@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashiers:Set(Cashier) = Cashier.allInstance()->select(c | c.Id = id), cashier:Cashier = cashiers->any(true)",
+        "precondition": "cashier.oclIsUndefined() or cashier.Id <> id",
+        "postcondition": "(cashier.oclIsNew() and cashier.Id = id and cashier.Name = name and result = true) or (cashier.oclIsNew() = false and result = false)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 112,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashiers:Set(Cashier) = Cashier.allInstance()->select(c | c.Id = id), cashier:Cashier = cashiers->any(true)\n            \n            precondition:\n          cashier.oclIsUndefined() or cashier.Id <> id\n            \n            postcondition:\n          (cashier.oclIsNew() and cashier.Id = id and cashier.Name = name and result = true) or (cashier.oclIsNew() = false and result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

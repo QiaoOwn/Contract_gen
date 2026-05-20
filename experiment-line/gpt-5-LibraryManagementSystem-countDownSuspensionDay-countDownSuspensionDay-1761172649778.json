@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u:User | u.LoanedBook->exists(l:Loan | l.IsReturned = false and (l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true))), toDecrement:Set(User) = overdueUsers->select(u:User | u.SuspensionDays > 0)",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "toDecrement->forAll(u:User | u.SuspensionDays = u.SuspensionDays@pre - 1) and overdueUsers->forAll(u:User | u.BorrowStatus = if u.SuspensionDays@pre <= 1 then BorrowStatus::SUSPEND else u.BorrowStatus@pre endif)"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 135,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 159,
+          "msg": "missing ')' at '<='"
+        },
+        {
+          "line": 9,
+          "column": 164,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          overdueUsers:Set(User) = User.allInstance()->select(u:User | u.LoanedBook->exists(l:Loan | l.IsReturned = false and (l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true))), toDecrement:Set(User) = overdueUsers->select(u:User | u.SuspensionDays > 0)\n            \n            precondition:\n          overdueUsers.isEmpty() = false\n            \n            postcondition:\n          toDecrement->forAll(u:User | u.SuspensionDays = u.SuspensionDays@pre - 1) and overdueUsers->forAll(u:User | u.BorrowStatus = if u.SuspensionDays@pre <= 1 then BorrowStatus::SUSPEND else u.BorrowStatus@pre endif)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

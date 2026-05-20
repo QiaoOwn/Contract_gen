@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "chosenRequest:LoanRequest = CurrentLoanRequests->select(o | o.RequestID = requestId)",
+        "precondition": "CurrentLoanRequests.isEmpty() = false",
+        "postcondition": "let chosenRequest:LoanRequest in chosenRequest = CurrentLoanRequests->select(o | o.RequestID = requestId)->any() and result = chosenRequest"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 115,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::chooseOneForReview(requestid:Integer): LoanRequest {\n          definition:\n          chosenRequest:LoanRequest = CurrentLoanRequests->select(o | o.RequestID = requestId)\n            \n            precondition:\n          CurrentLoanRequests.isEmpty() = false\n            \n            postcondition:\n          let chosenRequest:LoanRequest in chosenRequest = CurrentLoanRequests->select(o | o.RequestID = requestId)->any() and result = chosenRequest\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: requestId"
+        }
+      ]
+    }
+  }
+]

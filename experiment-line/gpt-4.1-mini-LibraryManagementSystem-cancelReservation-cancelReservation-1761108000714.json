@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = res->any(true), copy:BookCopy = res.ReservedCopy",
+        "precondition": "obs:Set(User) = User.allInstance()->select(u | u.UserID = uid), res:Set(Reserve) = Reserve.allInstance()->select(r | r.ReservedUser = obs->any(true) and r.ReservedCopy.Barcode = barcode and r.IsReserveClosed = false), res->size() > 0",
+        "postcondition": "res.IsReserveClosed = true and copy.IsReserved = false and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 33,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 24,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          res:Reserve = res->any(true), copy:BookCopy = res.ReservedCopy\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(u | u.UserID = uid), res:Set(Reserve) = Reserve.allInstance()->select(r | r.ReservedUser = obs->any(true) and r.ReservedCopy.Barcode = barcode and r.IsReserveClosed = false), res->size() > 0\n            \n            postcondition:\n          res.IsReserveClosed = true and copy.IsReserved = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

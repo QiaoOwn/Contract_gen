@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "OrderProduct.allInstance()->includes(self.CurrentOrderProduct)",
+        "postcondition": "self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = self.CurrentOrderProduct.ContainedEntries->sum(e:OrderEntry|e.SubAmount) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 47,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 7,
+          "column": 153,
+          "msg": "no viable alternative at input 'self.CurrentOrderProduct.ContainedEntries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          \n            precondition:\n          OrderProduct.allInstance()->includes(self.CurrentOrderProduct)\n            \n            postcondition:\n          self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = self.CurrentOrderProduct.ContainedEntries->sum(e:OrderEntry|e.SubAmount) and result = true\n            \n        }"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newSale:Sale",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and CurrentCashDesk.IsOpened = true and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)",
+        "postcondition": "newSale.oclIsNew() and Store.allInstance()->includes(newSale) and newSale.BelongedCashDesk = CurrentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n\tdefinition:\n\t\tnewSale: Sale\n\tprecondition:\n\t\tCurrentCashDesk.oclIsUndefined() = false and\n\t\tCurrentCashDesk.IsOpened = true and\n\t\t(CurrentSale.oclIsUndefined() = true or\n\t\tCurrentSale.IsComplete = true)\n\tpostcondition:\n\t\tnewSale.oclIsNew() and\n\t\tStore.allInstance()->includes(newSale) and\n\t\tnewSale.BelongedCashDesk = CurrentCashDesk and\n\t\tnewSale.IsComplete = false and\n\t\tnewSale.IsReadytoPay = false and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

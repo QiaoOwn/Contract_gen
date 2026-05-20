@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchedUsers:Set(User) = User.allInstance()->select(u | u.UserID = userid)",
+        "precondition": "userid.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String)",
+        "postcondition": "(let newUser:User in newUser.oclIsNew() and matchedUsers.isEmpty() = true and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true) or (matchedUsers.isEmpty() = false and result = false)"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 227,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          matchedUsers:Set(User) = User.allInstance()->select(u | u.UserID = userid)\n            \n            precondition:\n          userid.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String)\n            \n            postcondition:\n          (let newUser:User in newUser.oclIsNew() and matchedUsers.isEmpty() = true and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true) or (matchedUsers.isEmpty() = false and result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

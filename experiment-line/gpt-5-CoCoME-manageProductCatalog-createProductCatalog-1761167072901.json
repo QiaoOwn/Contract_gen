@@ -1,0 +1,55 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "definition: matchingCatalogs:Set(ProductCatalog) = ProductCatalog.allInstance()->select(o | o.Id = self.id)",
+        "precondition": "precondition: self.id.oclIsTypeOf(Integer) and self.name.oclIsTypeOf(String)",
+        "postcondition": "postcondition: if matchingCatalogs.isEmpty() = true then let pc:ProductCatalog in pc.oclIsNew() and ProductCatalog.allInstance()->includes(pc) and pc.Id = self.id and pc.Name = self.name else true endif and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'definition' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 38,
+          "msg": "missing 'precondition' at ':'"
+        },
+        {
+          "line": 3,
+          "column": 42,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 3,
+          "column": 59,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        },
+        {
+          "line": 9,
+          "column": 10,
+          "msg": "mismatched input 'postcondition' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          definition: matchingCatalogs:Set(ProductCatalog) = ProductCatalog.allInstance()->select(o | o.Id = self.id)\n            \n            precondition:\n          precondition: self.id.oclIsTypeOf(Integer) and self.name.oclIsTypeOf(String)\n            \n            postcondition:\n          postcondition: if matchingCatalogs.isEmpty() = true then let pc:ProductCatalog in pc.oclIsNew() and ProductCatalog.allInstance()->includes(pc) and pc.Id = self.id and pc.Name = self.name else true endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

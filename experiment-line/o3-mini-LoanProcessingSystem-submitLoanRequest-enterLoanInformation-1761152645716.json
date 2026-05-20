@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "lr:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)",
+        "precondition": "requestid > 0 and LoanRequest.allInstance()->isUnique(o:LoanRequest | o.RequestID)",
+        "postcondition": "LoanRequest.allInstance()->excludes(lr) and let newLR:LoanRequest in newLR.oclIsNew() and LoanRequest.allInstance()->includes(newLR) and CurrentLoanRequest = newLR or LoanRequest.allInstance()->includes(lr) and CurrentLoanRequest = lr and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 54,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 63,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          lr:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)\n            \n            precondition:\n          requestid > 0 and LoanRequest.allInstance()->isUnique(o:LoanRequest | o.RequestID)\n            \n            postcondition:\n          LoanRequest.allInstance()->excludes(lr) and let newLR:LoanRequest in newLR.oclIsNew() and LoanRequest.allInstance()->includes(newLR) and CurrentLoanRequest = newLR or LoanRequest.allInstance()->includes(lr) and CurrentLoanRequest = lr and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

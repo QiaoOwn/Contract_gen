@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk), currentSale.IsComplete = false, currentSale.IsReadytoPay = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined()=false and CurrentCashDesk.IsOpened = true and (Sale.allInstance()->isEmpty() or (Sale.allInstance()->includes(currentSale) and currentSale.IsComplete = true))",
+        "postcondition": "let newSale:Sale in newSale.oclIsNew() and Sale.allInstance()->includes(newSale) and newSale.BelongedCashDesk = CurrentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 107,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk), currentSale.IsComplete = false, currentSale.IsReadytoPay = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined()=false and CurrentCashDesk.IsOpened = true and (Sale.allInstance()->isEmpty() or (Sale.allInstance()->includes(currentSale) and currentSale.IsComplete = true))\n            \n            postcondition:\n          let newSale:Sale in newSale.oclIsNew() and Sale.allInstance()->includes(newSale) and newSale.BelongedCashDesk = CurrentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

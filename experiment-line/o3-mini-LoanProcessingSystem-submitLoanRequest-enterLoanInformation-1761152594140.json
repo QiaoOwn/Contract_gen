@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)",
+        "precondition": "true",
+        "postcondition": "((loanRequest.oclIsUndefined() = true and let lr:LoanRequest in lr.oclIsNew() and LoanRequest.allInstance()->includes(lr) and self.CurrentLoanRequest = lr) or (loanRequest.oclIsUndefined() = false and self.CurrentLoanRequest = loanRequest)) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 58,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 132,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          ((loanRequest.oclIsUndefined() = true and let lr:LoanRequest in lr.oclIsNew() and LoanRequest.allInstance()->includes(lr) and self.CurrentLoanRequest = lr) or (loanRequest.oclIsUndefined() = false and self.CurrentLoanRequest = loanRequest)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

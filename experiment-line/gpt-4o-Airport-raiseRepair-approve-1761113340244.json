@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "r:Repair = Repair.allInstance()->any(x | x.Id = rid), s:Staff = Staff.allInstance()->any(x | x.Id = sid), ah:ApprovalHistory = ApprovalHistory.allInstance()->any(x | x.Reject = reject and x.StaffId = s.Id and x.Suggestion = suggestion)",
+        "precondition": "r.oclIsUndefined() = false and s.oclIsUndefined() = false",
+        "postcondition": "(reject = false and if r.Process = 0 and s.Role = 1 then r.Process = 1 else if r.Process = 1 and s.Role = 2 then r.Process = 2 else if r.Process = 2 and s.Role = 3 then r.Process = 3 endif endif endif) and if reject = true then r.Process = 5 endif and ApprovalHistory.allInstance()->includes(ah) and r.History->includes(ah) and result = ah"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 212,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          r:Repair = Repair.allInstance()->any(x | x.Id = rid), s:Staff = Staff.allInstance()->any(x | x.Id = sid), ah:ApprovalHistory = ApprovalHistory.allInstance()->any(x | x.Reject = reject and x.StaffId = s.Id and x.Suggestion = suggestion)\n            \n            precondition:\n          r.oclIsUndefined() = false and s.oclIsUndefined() = false\n            \n            postcondition:\n          (reject = false and if r.Process = 0 and s.Role = 1 then r.Process = 1 else if r.Process = 1 and s.Role = 2 then r.Process = 2 else if r.Process = 2 and s.Role = 3 then r.Process = 3 endif endif endif) and if reject = true then r.Process = 5 endif and ApprovalHistory.allInstance()->includes(ah) and r.History->includes(ah) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

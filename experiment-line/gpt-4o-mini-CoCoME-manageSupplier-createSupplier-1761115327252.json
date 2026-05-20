@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingSupplier:Supplier = Supplier.allInstance()->any(o | o.Id = id), newSupplier:Supplier = Supplier()",
+        "precondition": "Supplier.allInstance()->excludes(existingSupplier)",
+        "postcondition": "if existingSupplier.oclIsUndefined() then Supplier.allInstance()->includes(newSupplier) and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\texistingSupplier: Supplier = Supplier.allInstance()->any(o|o.Id = id),\n\t\tnewSupplier: Supplier = Supplier()\n\tprecondition:\n\t\tSupplier.allInstance()->excludes(existingSupplier)\n\tpostcondition:\n\t\tif existingSupplier.oclIsUndefined() \n\t\tthen Supplier.allInstance()->includes(newSupplier) and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDeskID: Integer, obs: CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), isOpenAttempt: Boolean = (obs.oclIsUndefined() = false) and (obs.IsOpened = false) and (CurrentStore.oclIsUndefined() = false) and (CurrentStore.IsOpened = true) and (obs = CurrentCashDesk)",
+        "precondition": "obs.oclIsUndefined() = false and obs.IsOpened = false and CurrentStore.oclIsUndefined() = false and CurrentStore.IsOpened = true and obs = CurrentCashDesk",
+        "postcondition": "CurrentCashDesk = obs and obs.IsOpened = true and result = isOpenAttempt"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 155,
+          "msg": "mismatched input 'and' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          cashDeskID: Integer, obs: CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), isOpenAttempt: Boolean = (obs.oclIsUndefined() = false) and (obs.IsOpened = false) and (CurrentStore.oclIsUndefined() = false) and (CurrentStore.IsOpened = true) and (obs = CurrentCashDesk)\n            \n            precondition:\n          obs.oclIsUndefined() = false and obs.IsOpened = false and CurrentStore.oclIsUndefined() = false and CurrentStore.IsOpened = true and obs = CurrentCashDesk\n            \n            postcondition:\n          CurrentCashDesk = obs and obs.IsOpened = true and result = isOpenAttempt\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

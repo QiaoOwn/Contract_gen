@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentCaHistory:CheckingAccount = CurrentLoanRequest.RequestedCAHistory\ncurrentLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.RequestedCAHistory.oclIsUndefined() = false)",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+        "postcondition": "result = CurrentLoanRequest.RequestedCAHistory"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'currentLoanRequests' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {\n          definition:\n          currentCaHistory:CheckingAccount = CurrentLoanRequest.RequestedCAHistory\ncurrentLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.RequestedCAHistory.oclIsUndefined() = false)\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false\n            \n            postcondition:\n          result = CurrentLoanRequest.RequestedCAHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

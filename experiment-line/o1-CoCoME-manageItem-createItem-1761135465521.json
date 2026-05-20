@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "",
+        "postcondition": "if i.oclIsUndefined() then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true else result = false endif"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            \n            postcondition:\n          if i.oclIsUndefined() then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

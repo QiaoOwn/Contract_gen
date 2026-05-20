@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashier:Cashier = Cashier.allInstance()->any(c | c.Id = id)",
+        "precondition": "true",
+        "postcondition": "if existingCashier.oclIsUndefined() then let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name else existingCashier.Id = id and existingCashier.Name = name endif and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          existingCashier:Cashier = Cashier.allInstance()->any(c | c.Id = id)\n            \n            precondition:\n          true\n            \n            postcondition:\n          if existingCashier.oclIsUndefined() then let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name else existingCashier.Id = id and existingCashier.Name = name endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

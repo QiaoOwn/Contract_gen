@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currSale:Sale = self.CurrentSale, currStore:Store = self.CurrentSale.Belongedstore, balanceVal:Real = amount - currSale.Amount, success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and Sale.allInstance()->includes(self.CurrentSale) and currSale.IsComplete = false and currSale.IsReadytoPay = true and amount.oclIsTypeOf(Real) and amount >= currSale.Amount and self.CurrentPaymentMethod = PaymentMethod::CASH and Store.allInstance()->includes(currStore)",
+        "postcondition": "let pay:Payment in pay.oclIsNew() and Payment.allInstance()->includes(pay) and pay.AmountTendered = amount and pay.BelongedSale = currSale and currSale.AssoicatedPayment = pay and currSale.Belongedstore = currStore and currStore.Sales->includes(currSale) and let cashPay:CashPayment in cashPay.oclIsNew() and CashPayment.allInstance()->includes(cashPay) and cashPay.Balance = balanceVal and currSale.IsComplete = true and currSale.Time = ThirdPartyServices.currentTime() and result = success"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 119,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 269,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 280,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currSale:Sale = self.CurrentSale, currStore:Store = self.CurrentSale.Belongedstore, balanceVal:Real = amount - currSale.Amount, success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and Sale.allInstance()->includes(self.CurrentSale) and currSale.IsComplete = false and currSale.IsReadytoPay = true and amount.oclIsTypeOf(Real) and amount >= currSale.Amount and self.CurrentPaymentMethod = PaymentMethod::CASH and Store.allInstance()->includes(currStore)\n            \n            postcondition:\n          let pay:Payment in pay.oclIsNew() and Payment.allInstance()->includes(pay) and pay.AmountTendered = amount and pay.BelongedSale = currSale and currSale.AssoicatedPayment = pay and currSale.Belongedstore = currStore and currStore.Sales->includes(currSale) and let cashPay:CashPayment in cashPay.oclIsNew() and CashPayment.allInstance()->includes(cashPay) and cashPay.Balance = balanceVal and currSale.IsComplete = true and currSale.Time = ThirdPartyServices.currentTime() and result = success\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentSale"
+        }
+      ]
+    }
+  }
+]

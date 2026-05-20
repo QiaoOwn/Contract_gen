@@ -1,0 +1,416 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item)\n",
+        "precondition": "item.oclIsUndefined() = bool",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 10,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 10,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item)\n\n            \n            precondition:\n          item.oclIsUndefined() = bool\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item), exists:Boolean = item.oclIsUndefined() = false\n",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 146,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 10,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 10,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item), exists:Boolean = item.oclIsUndefined() = false\n\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item), exists:Boolean = item.oclIsUndefined() = false, result:Boolean = (exists = false)",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = (exists = false)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 146,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 194,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 212,
+          "msg": "mismatched input 'exists' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item), exists:Boolean = item.oclIsUndefined() = false, result:Boolean = (exists = false)\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = (exists = false)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item), exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 146,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry = OrderEntry.allInstance()->any(o | o.Item = item), exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = (exists = false and true)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = (exists = false and true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true and exists = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "mismatched input 'exists' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true and exists = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true and exists = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "mismatched input 'exists' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true and exists = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = true and exists = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and result = exists = false"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "mismatched input 'exists' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 270,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = true and exists = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and result = exists = false and result = exists = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), orderEntry:OrderEntry, exists:Boolean = item.oclIsUndefined() = false, defaultExists:Boolean = false",
+        "precondition": "item.oclIsUndefined() = true and exists = false",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = (item.Price * quantity) and orderEntry.Item = item and defaultExists = false and result = (defaultExists = false and defaultExists = false)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any() = CashDesk.ContainedSales->any(o | o.IsOpened = true), newSale:Sale = Sale.allInstance()->includes(newSale)",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = bool and CurrentSale.oclIsUndefined() = bool and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any() = CashDesk.ContainedSales->any(o | o.IsOpened = true), newSale:Sale = Sale.allInstance()->includes(newSale)\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = bool and CurrentSale.oclIsUndefined() = bool and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), bool:Boolean = CurrentSale.oclIsUndefined() and (CurrentSale.IsComplete = true)",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = bool and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), bool:Boolean = CurrentSale.oclIsUndefined() and (CurrentSale.IsComplete = true)\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = bool and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = if CurrentSale.oclIsUndefined() then true else CurrentSale.IsComplete = false endif",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleIncomplete = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = if CurrentSale.oclIsUndefined() then true else CurrentSale.IsComplete = false endif\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleIncomplete = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined() = true, isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined() = true, isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and result = sale and newSale = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and result = sale and newSale = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->select(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 163,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->select(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->select(o | o.BelongedCashDesk = CurrentCashDesk and o.IsComplete = false), newSale:Sale = Sale.allInstance()->any(), isCurrentSaleIncomplete:Boolean = CurrentSale.oclIsUndefined(), isCurrentSaleNotOpen:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = false",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = false and isCurrentSaleNotOpen = true",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and Store.Sales->includes(sale) and sale = newSale and result = sale"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

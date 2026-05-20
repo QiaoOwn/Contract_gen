@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cardSet:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), card:BankCard = cardSet->any(o | true), cardExists:Boolean = cardSet->isEmpty() = false",
+        "precondition": "cardExists",
+        "postcondition": "cardIDValidated = if cardExists then true else false endif and inputCard = if cardExists then card else null endif and result = if cardExists then true else false endif"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 122,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 3,
+          "column": 159,
+          "msg": "no viable alternative at input 'cardSet->isEmpty()'"
+        },
+        {
+          "line": 9,
+          "column": 28,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          cardSet:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), card:BankCard = cardSet->any(o | true), cardExists:Boolean = cardSet->isEmpty() = false\n            \n            precondition:\n          cardExists\n            \n            postcondition:\n          cardIDValidated = if cardExists then true else false endif and inputCard = if cardExists then card else null endif and result = if cardExists then true else false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

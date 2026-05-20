@@ -1,0 +1,281 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid);\nbookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode);\nloan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false);",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE;",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true;"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'bookCopy' expecting 'precondition'"
+        },
+        {
+          "line": 11,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid);\nbookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode);\nloan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false);\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE;\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true;\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = (true)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = (true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = (true)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = (true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = (true)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = (true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false), isLoanValid:Boolean = loan.IsReturned = false",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.DueDate > currentDate() and user.LoanedNumber < 5 and bookCopy.Status = CopyStatus.AVAILABLE and loan.OverDueFee = 0",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and loan.RenewedTimes = loan.RenewedTimes + 1 and loan.DueDate = loan.DueDate.addDays(predefinedDays) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

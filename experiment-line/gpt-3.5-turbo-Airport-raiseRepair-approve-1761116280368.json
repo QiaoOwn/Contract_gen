@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), \nstaff:Staff = Staff.allInstance()->any(o | o.Id = sid), \napprovalHistory:ApprovalHistory = ApprovalHistory.allInstance()->select(o | o.Suggestion = suggestion and o.StaffId = sid)->any()",
+        "precondition": "repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, repair.Process = 0 and staff.Role = 1",
+        "postcondition": "let newApprovalHistory:ApprovalHistory in newApprovalHistory.oclIsNew(), ApprovalHistory.allInstance()->includes(newApprovalHistory), repair.Process = 1, repair.Process = 2, repair.Process = 3, repair.Process = 5, result = newApprovalHistory"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 122,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        },
+        {
+          "line": 11,
+          "column": 81,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), \nstaff:Staff = Staff.allInstance()->any(o | o.Id = sid), \napprovalHistory:ApprovalHistory = ApprovalHistory.allInstance()->select(o | o.Suggestion = suggestion and o.StaffId = sid)->any()\n            \n            precondition:\n          repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, repair.Process = 0 and staff.Role = 1\n            \n            postcondition:\n          let newApprovalHistory:ApprovalHistory in newApprovalHistory.oclIsNew(), ApprovalHistory.allInstance()->includes(newApprovalHistory), repair.Process = 1, repair.Process = 2, repair.Process = 3, repair.Process = 5, result = newApprovalHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

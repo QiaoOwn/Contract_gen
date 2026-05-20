@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "allCards:Set(BankCard) = BankCard.allInstance(), cardExist:Boolean = if allCards->includes(self.InputCard) then true else false endif, isNormal:Boolean = if self.InputCard.CardStatus = BankCard::NORMAL then true else false endif",
+        "precondition": "self.CardIDValidated = true and self.PasswordValidated = true and cardExist and isNormal",
+        "postcondition": "self.WithdrawedNumber = 0\nif self.CardIDValidated and self.PasswordValidated and cardExist and (self.IsWithdraw and self.WithdrawedNumber > 0) then\n  result = self.WithdrawedNumber\nelse if self.IsDeposit and self.DepositedNumber > 0 then\n  result = self.DepositedNumber\nelse\n  result = 0\nendif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 101,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 10,
+          "column": 0,
+          "msg": "mismatched input 'if' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          allCards:Set(BankCard) = BankCard.allInstance(), cardExist:Boolean = if allCards->includes(self.InputCard) then true else false endif, isNormal:Boolean = if self.InputCard.CardStatus = BankCard::NORMAL then true else false endif\n            \n            precondition:\n          self.CardIDValidated = true and self.PasswordValidated = true and cardExist and isNormal\n            \n            postcondition:\n          self.WithdrawedNumber = 0\nif self.CardIDValidated and self.PasswordValidated and cardExist and (self.IsWithdraw and self.WithdrawedNumber > 0) then\n  result = self.WithdrawedNumber\nelse if self.IsDeposit and self.DepositedNumber > 0 then\n  result = self.DepositedNumber\nelse\n  result = 0\nendif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum() and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 162,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum() and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingSupplier:Supplier = Supplier.allInstance()->any(s | s.Id = id)",
+        "precondition": "id.oclIsUndefined() = false and name.oclIsUndefined() = false",
+        "postcondition": "if existingSupplier.oclIsUndefined() then\n  let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name\nelse\n  Supplier.allInstance()->includes(existingSupplier)\nendif and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 13,
+          "column": 6,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          existingSupplier:Supplier = Supplier.allInstance()->any(s | s.Id = id)\n            \n            precondition:\n          id.oclIsUndefined() = false and name.oclIsUndefined() = false\n            \n            postcondition:\n          if existingSupplier.oclIsUndefined() then\n  let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name\nelse\n  Supplier.allInstance()->includes(existingSupplier)\nendif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u|u.UserID = uid), loan:Loan = Loan.allInstance()->any(l|l.LoanedUser = user and l.LoanedCopy.Barcode = barcode and l.IsReturned = false), period:Integer = 14",
+        "precondition": "user.oclIsUndefined() = false and loan.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL",
+        "postcondition": "loan.RenewedTimes = loan.RenewedTimes@pre + 1 and loan.DueDate = ThirdPartyServices.addDays(loan.DueDate@pre,period) and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 101,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u|u.UserID = uid), loan:Loan = Loan.allInstance()->any(l|l.LoanedUser = user and l.LoanedCopy.Barcode = barcode and l.IsReturned = false), period:Integer = 14\n            \n            precondition:\n          user.oclIsUndefined() = false and loan.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL\n            \n            postcondition:\n          loan.RenewedTimes = loan.RenewedTimes@pre + 1 and loan.DueDate = ThirdPartyServices.addDays(loan.DueDate@pre,period) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

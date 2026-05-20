@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o:LoanTerm | o.ItemID = itemid), exists:Boolean = if loanTerm.oclIsUndefined() = true then false else true endif",
+        "precondition": "itemid.oclIsTypeOf(Integer)",
+        "postcondition": "(exists and LoanTerm.allInstance()->excludes(loanTerm) and LoanRequest.allInstance()->forAll(lr:LoanRequest | lr.AttachedLoanTerms->excludes(loanTerm)) and result = true) or (exists = false and result = false)"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 91,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 11,
+          "msg": "mismatched input 'exists' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 65,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::deleteLoanTerm(itemid:Integer): Boolean {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(o:LoanTerm | o.ItemID = itemid), exists:Boolean = if loanTerm.oclIsUndefined() = true then false else true endif\n            \n            precondition:\n          itemid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          (exists and LoanTerm.allInstance()->excludes(loanTerm) and LoanRequest.allInstance()->forAll(lr:LoanRequest | lr.AttachedLoanTerms->excludes(loanTerm)) and result = true) or (exists = false and result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

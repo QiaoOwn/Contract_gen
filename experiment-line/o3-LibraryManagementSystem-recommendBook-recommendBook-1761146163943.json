@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = uid), books:Set(Book) = Book.allInstance()->select(b | b.ISBn = isbn or b.CallNo = callNo)",
+        "precondition": "u.oclIsUndefined() = false and books.isEmpty() = true",
+        "postcondition": "let rec:RecommendBook in rec.oclIsNew() and let nb:Book in nb.oclIsNew() and RecommendBook.allInstance()->includes(rec) and Book.allInstance()->includes(nb) and nb.CallNo = callNo and nb.Title = title and nb.Edition = edition and nb.Author = author and nb.Publisher = publisher and nb.Description = description and nb.ISBn = isbn and rec.RecommendUser = u and u.RecommendedBook->includes(rec) and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 54,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 60,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = uid), books:Set(Book) = Book.allInstance()->select(b | b.ISBn = isbn or b.CallNo = callNo)\n            \n            precondition:\n          u.oclIsUndefined() = false and books.isEmpty() = true\n            \n            postcondition:\n          let rec:RecommendBook in rec.oclIsNew() and let nb:Book in nb.oclIsNew() and RecommendBook.allInstance()->includes(rec) and Book.allInstance()->includes(nb) and nb.CallNo = callNo and nb.Title = title and nb.Edition = edition and nb.Author = author and nb.Publisher = publisher and nb.Description = description and nb.ISBn = isbn and rec.RecommendUser = u and u.RecommendedBook->includes(rec) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

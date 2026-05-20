@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = InputCard.CardID and o.Password = InputCard.Password), \nbool:Boolean = if PasswordValidated = true and inputCard <> null then true else false endif",
+        "precondition": "InputCard.oclIsUndefined() = bool and PasswordValidated = true and inputCard <> null",
+        "postcondition": "inputCard.Balance = 0.0 and inputCard.CardStatus = CardStatus.CANNEL and result = bool"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = InputCard.CardID and\n\t\to.Password = InputCard.Password),\n\t\tbool: Boolean = if PasswordValidated = true and\n\t\tinputCard<>null \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tInputCard.oclIsUndefined() = bool and\n\t\tPasswordValidated = true and\n\t\tinputCard<>null\n\tpostcondition:\n\t\tinputCard.Balance = 0.0 and\n\t\tinputCard.CardStatus = CardStatus.CANNEL and\n\t\tresult = bool\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CardStatus"
+        }
+      ]
+    }
+  }
+]

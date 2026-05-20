@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundCard:BankCard = BankCard.allInstance()->any(o:BankCard | o.CardID = cardid)",
+        "precondition": "cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)",
+        "postcondition": "(foundCard.oclIsUndefined() = false and self.InputCard = foundCard and self.CardIDValidated = true and result = true) or (foundCard.oclIsUndefined() = true and self.InputCard = null and self.CardIDValidated = false and result = false)"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 128,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          foundCard:BankCard = BankCard.allInstance()->any(o:BankCard | o.CardID = cardid)\n            \n            precondition:\n          cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)\n            \n            postcondition:\n          (foundCard.oclIsUndefined() = false and self.InputCard = foundCard and self.CardIDValidated = true and result = true) or (foundCard.oclIsUndefined() = true and self.InputCard = null and self.CardIDValidated = false and result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

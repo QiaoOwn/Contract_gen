@@ -1,0 +1,301 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid)",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool",
+        "postcondition": "let approvalHistory:ApprovalHistory in approvalHistory.oclIsNew(), repair.History->includes(approvalHistory), if reject then repair.Process = 5 else if repair.Process = 0 and staff.Role = 1 then repair.Process = 1 else if repair.Process = 1 and staff.Role = 2 then repair.Process = 2 else if repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif endif endif, repair.Result = suggestion, result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid)\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool\n            \n            postcondition:\n          let approvalHistory:ApprovalHistory in approvalHistory.oclIsNew(), repair.History->includes(approvalHistory), if reject then repair.Process = 5 else if repair.Process = 0 and staff.Role = 1 then repair.Process = 1 else if repair.Process = 1 and staff.Role = 2 then repair.Process = 2 else if repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif endif endif, repair.Result = suggestion, result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool",
+        "postcondition": "let approvalHistory:ApprovalHistory in isNewApproval and repair.History->includes(approvalHistory), if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif, repair.Result = suggestion, result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool\n            \n            postcondition:\n          let approvalHistory:ApprovalHistory in isNewApproval and repair.History->includes(approvalHistory), if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif, repair.Result = suggestion, result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif, repair.Result = suggestion, result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif, repair.Result = suggestion, result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 else 0 endif, result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 else 0 endif, result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if reject then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 else 0 endif, result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew()\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if reject then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then repair.Process = 5 elseif repair.Process = 0 and staff.Role = 1 then repair.Process = 1 elseif repair.Process = 1 and staff.Role = 2 then repair.Process = 2 elseif repair.Process = 2 and staff.Role = 3 then repair.Process = 3 else 0 endif, result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject = true",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then 5 elseif repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else 0 endif, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject = true\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then 5 elseif repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else 0 endif, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject = true",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then 5 else if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject = true\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then 5 else if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then 5 else if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, finishProcess:Integer = if reject then 5 else if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 400,
+          "msg": "mismatched input 'elseif' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 3,
+          "column": 530,
+          "msg": "extraneous input 'endif' expecting 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 401,
+          "msg": "mismatched input 'elseif' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 401,
+          "msg": "mismatched input 'elseif' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 elseif repair.Process = 1 and staff.Role = 2 then 2 elseif repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 else (if repair.Process = 1 and staff.Role = 2 then 2 else (if repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif) endif)",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing 'endif' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 else (if repair.Process = 1 and staff.Role = 2 then 2 else (if repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif) endif)\n            \n            precondition:\n          staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif\n            \n            postcondition:\n          isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->isUnique(o | o.StaffId = sid), isNewApproval:Boolean = approvalHistory.oclIsNew(), isRejected:Boolean = reject, finishProcess:Integer = if isRejected then 5 else (if repair.Process = 0 and staff.Role = 1 then 1 else (if repair.Process = 1 and staff.Role = 2 then 2 else (if repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif) endif) endif)",
+        "precondition": "staff.oclIsUndefined() = bool, repair.oclIsUndefined() = bool, approvalHistory.oclIsUndefined() = bool, roleCheck:Boolean = if isRejected then true else (repair.Process = 0 and staff.Role = 1) or (repair.Process = 1 and staff.Role = 2) or (repair.Process = 2 and staff.Role = 3) endif",
+        "postcondition": "isNewApproval and repair.History->includes(approvalHistory), repair.Result = suggestion, repair.Process = finishProcess, result = approvalHistory and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

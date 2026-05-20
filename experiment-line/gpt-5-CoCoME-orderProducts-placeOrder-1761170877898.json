@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "entries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries, subAmounts:Set(Real) = entries->collect(e:OrderEntry | e.SubAmount)",
+        "precondition": "self.CurrentOrderProduct.oclIsUndefined() = false and OrderProduct.allInstance()->includes(self.CurrentOrderProduct)",
+        "postcondition": "self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = subAmounts.sum() and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 101,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          entries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries, subAmounts:Set(Real) = entries->collect(e:OrderEntry | e.SubAmount)\n            \n            precondition:\n          self.CurrentOrderProduct.oclIsUndefined() = false and OrderProduct.allInstance()->includes(self.CurrentOrderProduct)\n            \n            postcondition:\n          self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = subAmounts.sum() and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

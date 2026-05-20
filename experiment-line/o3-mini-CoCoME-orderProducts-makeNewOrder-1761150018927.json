@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "order:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+        "precondition": "order.oclIsUndefined() = true",
+        "postcondition": "let op:OrderProduct in op.oclIsNew() and OrderProduct.allInstance()->includes(op) and op.OrderStatus = OrderStatus::NEW and op.Id = orderid and op.Time = currentTime and self.CurrentOrderProduct = op and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid: Integer): Boolean {\n\tdefinition:\n\t\torder: OrderProduct = OrderProduct.allInstance()->any(o|o.Id = orderid)\n\tprecondition:\n\t\torder.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet op: OrderProduct in\n\t\top.oclIsNew() and\n\t\tOrderProduct.allInstance()->includes(op) and\n\t\top.OrderStatus = OrderStatus::NEW and\n\t\top.Id = orderid and\n\t\top.Time = currentTime and\n\t\tself.CurrentOrderProduct = op and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentTime"
+        }
+      ]
+    }
+  }
+]

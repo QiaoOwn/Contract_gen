@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid)",
+        "precondition": "User.allInstance()->includes(user) and user.BorrowStatus = BorrowStatus::NORMAL",
+        "postcondition": "let recommendedBook:RecommendBook in recommendedBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendedBook) and recommendedBook.RecommendDate = 'current date' and recommendedBook.RecommendUser = user and let book:Book in book.oclIsNew() and Book.allInstance()->includes(book) and book.CallNo = callNo and book.Title = title and book.Edition = edition and book.Author = author and book.Publisher = author and book.Description = description and book.ISBn = isbn and user.RecommendedBook->includes(recommendedBook) and book.Copys->isEmpty() and user.LoanStatus = BorrowStatus::NORMAL and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 229,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 237,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid)\n            \n            precondition:\n          User.allInstance()->includes(user) and user.BorrowStatus = BorrowStatus::NORMAL\n            \n            postcondition:\n          let recommendedBook:RecommendBook in recommendedBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendedBook) and recommendedBook.RecommendDate = 'current date' and recommendedBook.RecommendUser = user and let book:Book in book.oclIsNew() and Book.allInstance()->includes(book) and book.CallNo = callNo and book.Title = title and book.Edition = edition and book.Author = author and book.Publisher = author and book.Description = description and book.ISBn = isbn and user.RecommendedBook->includes(recommendedBook) and book.Copys->isEmpty() and user.LoanStatus = BorrowStatus::NORMAL and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

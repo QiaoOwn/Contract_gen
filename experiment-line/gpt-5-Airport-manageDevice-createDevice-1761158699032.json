@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "d:Device = Device.allInstance()->any(o | o.Id = id), s:Staff = Staff.allInstance()->any(o | o.Id = contactsid)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and location.oclIsTypeOf(String) and contactsid.oclIsTypeOf(Integer) and s.oclIsUndefined() = false and Staff.allInstance()->includes(s) and d.oclIsUndefined() = true and Device.allInstance()->excludes(d) and Device.allInstance()->isUnique(o:Device | o.Id)",
+        "postcondition": "let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = s and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createDevice(id: Integer,name: String,location: String,contactsid: Integer): Boolean {\n\tdefinition:\n\t\td: Device = Device.allInstance()->any(o|o.Id = id),\n\t\ts: Staff = Staff.allInstance()->any(o|o.Id = contactsid)\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tlocation.oclIsTypeOf(String) and\n\t\tcontactsid.oclIsTypeOf(Integer) and\n\t\ts.oclIsUndefined() = false and\n\t\tStaff.allInstance()->includes(s) and\n\t\td.oclIsUndefined() = true and\n\t\tDevice.allInstance()->excludes(d) and\n\t\tDevice.allInstance()->isUnique(o: Device|o.Id)\n\tpostcondition:\n\t\tlet newDevice: Device in\n\t\tnewDevice.oclIsNew() and\n\t\tDevice.allInstance()->includes(newDevice) and\n\t\tnewDevice.Id = id and\n\t\tnewDevice.Name = name and\n\t\tnewDevice.Location = location and\n\t\tnewDevice.Contacts = s and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

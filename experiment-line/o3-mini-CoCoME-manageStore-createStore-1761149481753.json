@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(o | o.Id = id)",
+        "precondition": "store.oclIsUndefined() = true or store.oclIsTypeOf(Store)",
+        "postcondition": "store.oclIsUndefined() = true and let st:Store in st.oclIsNew() and Store.allInstance()->includes(st) and st.Id = id and st.Name = name and st.Address = address and st.IsOpened = isopened or store.oclIsUndefined() = false and result = false"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 44,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 50,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          store:Store = Store.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          store.oclIsUndefined() = true or store.oclIsTypeOf(Store)\n            \n            postcondition:\n          store.oclIsUndefined() = true and let st:Store in st.oclIsNew() and Store.allInstance()->includes(st) and st.Id = id and st.Name = name and st.Address = address and st.IsOpened = isopened or store.oclIsUndefined() = false and result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

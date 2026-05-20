@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), success:Boolean",
+        "precondition": "obs.oclIsUndefined() = true or obs.oclIsUndefined() = false",
+        "postcondition": "if obs.oclIsUndefined() then let ob:CashDesk in ob.oclIsNew() and CashDesk.allInstance()->includes(ob) and ob.Id = id and ob.Name = name and ob.IsOpened = isopened else true endif and result = success"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 190,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          obs:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), success:Boolean\n            \n            precondition:\n          obs.oclIsUndefined() = true or obs.oclIsUndefined() = false\n            \n            postcondition:\n          if obs.oclIsUndefined() then let ob:CashDesk in ob.oclIsNew() and CashDesk.allInstance()->includes(ob) and ob.Id = id and ob.Name = name and ob.IsOpened = isopened else true endif and result = success\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

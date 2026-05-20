@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), exists:Boolean = if obs.isEmpty() = false then true else false endif, delCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), delUser:User = delCard.BelongedUser",
+        "precondition": "cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)",
+        "postcondition": "if exists = true then delUser.OwnedCard->excludes(delCard) and BankCard.allInstance()->excludes(delCard) endif and result = exists"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 85,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 13,
+          "msg": "mismatched input 'exists' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 121,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::deleteBankCard(cardid:Integer): Boolean {\n          definition:\n          obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), exists:Boolean = if obs.isEmpty() = false then true else false endif, delCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), delUser:User = delCard.BelongedUser\n            \n            precondition:\n          cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)\n            \n            postcondition:\n          if exists = true then delUser.OwnedCard->excludes(delCard) and BankCard.allInstance()->excludes(delCard) endif and result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

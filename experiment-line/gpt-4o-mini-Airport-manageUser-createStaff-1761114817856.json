@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(o | o.Id = id), boss:Staff = Staff.allInstance()->any(o | o.Id = bossid)",
+        "precondition": "Staff.allInstance()->includes(staff) = bool and Staff.allInstance()->includes(boss) = bool",
+        "postcondition": "if staff.oclIsUndefined() then let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createStaff(id: Integer,name: String,pswd: String,phone: String,role: Integer,bossid: Integer): Boolean {\n\tdefinition:\n\t\tstaff: Staff = Staff.allInstance()->any(o|o.Id = id),\n\t\tboss: Staff = Staff.allInstance()->any(o|o.Id = bossid)\n\tprecondition:\n\t\tStaff.allInstance()->includes(staff) = bool and\n\t\tStaff.allInstance()->includes(boss) = bool\n\tpostcondition:\n\t\tif staff.oclIsUndefined() \n\t\tthen let newStaff: Staff in\n\t\tnewStaff.oclIsNew() and\n\t\tStaff.allInstance()->includes(newStaff) and\n\t\tnewStaff.Id = id and\n\t\tnewStaff.Name = name and\n\t\tnewStaff.Password = pswd and\n\t\tnewStaff.Phone = phone and\n\t\tnewStaff.Role = role and\n\t\tnewStaff.Boss = boss \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), items:Set(Item) = orderProduct.ContainedEntries->collect(o | o.Item), stockUpdate:Boolean = items->forAll(i | i.StockNumber = i.StockNumber + quantity)",
+        "precondition": "orderProduct.oclIsUndefined() = bool or orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "result = (orderProduct.OrderStatus = OrderStatus::RECEIVED and stockUpdate)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), items:Set(Item) = orderProduct.ContainedEntries->collect(o | o.Item), stockUpdate:Boolean = items->forAll(i | i.StockNumber = i.StockNumber + quantity)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = bool or orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          result = (orderProduct.OrderStatus = OrderStatus::RECEIVED and stockUpdate)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: quantity"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(s | s.Id = id)",
+        "precondition": "Store.allInstance()->includes(store) and store.Id = id",
+        "postcondition": "let storeExists:Boolean in store.oclIsUndefined() = false implies (store.Name = name and store.Address = address and store.IsOpened = isopened) and result = storeExists"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 68,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::modifyStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          store:Store = Store.allInstance()->any(s | s.Id = id)\n            \n            precondition:\n          Store.allInstance()->includes(store) and store.Id = id\n            \n            postcondition:\n          let storeExists:Boolean in store.oclIsUndefined() = false implies (store.Name = name and store.Address = address and store.IsOpened = isopened) and result = storeExists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

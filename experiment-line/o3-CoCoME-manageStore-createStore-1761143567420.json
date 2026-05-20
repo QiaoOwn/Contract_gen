@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(s | s.Id = id), success:Boolean = true",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "(if store.oclIsUndefined() then let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened else Store.allInstance()->includes(store) endif) and result = success"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 287,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          store:Store = Store.allInstance()->any(s | s.Id = id), success:Boolean = true\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          (if store.oclIsUndefined() then let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened else Store.allInstance()->includes(store) endif) and result = success\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

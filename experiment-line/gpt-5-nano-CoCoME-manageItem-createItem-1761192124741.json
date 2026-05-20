@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), result:Boolean",
+        "precondition": "true",
+        "postcondition": "(let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice) or (Item.allInstance()->exists(i | i.Barcode = barcode and i.Name = name and i.Price = price and i.StockNumber = stocknumber and i.OrderPrice = orderprice)) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 72,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 247,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), result:Boolean\n            \n            precondition:\n          true\n            \n            postcondition:\n          (let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice) or (Item.allInstance()->exists(i | i.Barcode = barcode and i.Name = name and i.Price = price and i.StockNumber = stocknumber and i.OrderPrice = orderprice)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

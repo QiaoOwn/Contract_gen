@@ -1,0 +1,30 @@
+import {dirname} from 'path';
+import {fileURLToPath} from 'url';
+import {FlatCompat} from '@eslint/eslintrc';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  {
+    ignores: [
+      '.next/**',
+      'coverage/**',
+      'public/coverage/**',
+      'node_modules/**',
+      'test/tmp/**',
+      'experiment/**',
+      'experiment-line/**',
+      'bleu-dataset/**',
+      'bleu-dataset-line/**',
+      'cosine-similarity/**',
+    ],
+  },
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+];
+
+export default eslintConfig;

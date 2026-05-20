@@ -1,0 +1,361 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | let oldDays: Integer = o.SuspensionDays in o.SuspensionDays = oldDays - 1 and if oldDays - 1 <= 0 then o.BorrowStatus = NORMAL else o.BorrowStatus = SUSPEND endif)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "extraneous input 'let' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 71,
+          "msg": "mismatched input 'in' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | let oldDays: Integer = o.SuspensionDays in o.SuspensionDays = oldDays - 1 and if oldDays - 1 <= 0 then o.BorrowStatus = NORMAL else o.BorrowStatus = SUSPEND endif)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | if o.SuspensionDays > 0 then let oldDays: Integer = o.SuspensionDays in (o.SuspensionDays = oldDays - 1) and (if oldDays - 1 <= 0 then o.BorrowStatus = NORMAL else o.BorrowStatus = SUSPEND endif) else true endif)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 136,
+          "msg": "mismatched input 'and' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 152,
+          "msg": "mismatched input '-' expecting 'then'"
+        },
+        {
+          "line": 9,
+          "column": 227,
+          "msg": "mismatched input 'else' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | if o.SuspensionDays > 0 then let oldDays: Integer = o.SuspensionDays in (o.SuspensionDays = oldDays - 1) and (if oldDays - 1 <= 0 then o.BorrowStatus = NORMAL else o.BorrowStatus = SUSPEND endif) else true endif)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | let oldDays: Integer = o.SuspensionDays in (o.SuspensionDays = oldDays - 1) and ( ((oldDays - 1) > 0) and (o.BorrowStatus = SUSPEND) or ((oldDays - 1) <= 0) and (o.BorrowStatus = NORMAL) ))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "extraneous input 'let' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 71,
+          "msg": "mismatched input 'in' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | let oldDays: Integer = o.SuspensionDays in (o.SuspensionDays = oldDays - 1) and ( ((oldDays - 1) > 0) and (o.BorrowStatus = SUSPEND) or ((oldDays - 1) <= 0) and (o.BorrowStatus = NORMAL) ))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays@pre = o.SuspensionDays - 1 and ((o.SuspensionDays@pre - 1) > 0 and o.BorrowStatus = SUSPEND) or ((o.SuspensionDays@pre - 1) <= 0 and o.BorrowStatus = NORMAL))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 102,
+          "msg": "mismatched input '-' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 107,
+          "msg": "missing ')' at '>'"
+        },
+        {
+          "line": 9,
+          "column": 139,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays@pre = o.SuspensionDays - 1 and ((o.SuspensionDays@pre - 1) > 0 and o.BorrowStatus = SUSPEND) or ((o.SuspensionDays@pre - 1) <= 0 and o.BorrowStatus = NORMAL))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ( ((o.SuspensionDays@pre - 1) > 0 and o.BorrowStatus = SUSPEND) or ((o.SuspensionDays@pre - 1) <= 0 and o.BorrowStatus = NORMAL) ))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 104,
+          "msg": "mismatched input '-' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 109,
+          "msg": "mismatched input '>' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 141,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ( ((o.SuspensionDays@pre - 1) > 0 and o.BorrowStatus = SUSPEND) or ((o.SuspensionDays@pre - 1) <= 0 and o.BorrowStatus = NORMAL) ))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ( ((o.SuspensionDays@pre - 1) > 0 and o.BorrowStatus = SUSPEND) or ((o.SuspensionDays@pre - 1) <= 0 and o.BorrowStatus = NORMAL) ))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 104,
+          "msg": "mismatched input '-' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 109,
+          "msg": "mismatched input '>' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 141,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ( ((o.SuspensionDays@pre - 1) > 0 and o.BorrowStatus = SUSPEND) or ((o.SuspensionDays@pre - 1) <= 0 and o.BorrowStatus = NORMAL) ))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = SUSPEND) or (o.SuspensionDays@pre <= 1 and o.BorrowStatus = NORMAL)))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 136,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 195,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = SUSPEND) or (o.SuspensionDays@pre <= 1 and o.BorrowStatus = NORMAL)))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and o.BorrowStatus = if o.SuspensionDays@pre > 1 then SUSPEND else NORMAL endif)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 96,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 120,
+          "msg": "missing ')' at '>'"
+        },
+        {
+          "line": 9,
+          "column": 124,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and o.BorrowStatus = if o.SuspensionDays@pre > 1 then SUSPEND else NORMAL endif)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = NORMAL)))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 136,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 194,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = NORMAL)))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and (o.SuspensionDays@pre > 1 and o.BorrowStatus = SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = NORMAL))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\tobs: Set(User) = User.allInstance()->select(o|o.BorrowStatus = SUSPEND and\n\t\to.SuspensionDays>0)\n\tprecondition:\n\t\tobs->forAll(o: User|o.SuspensionDays>0 and\n\t\to.BorrowStatus = SUSPEND) and\n\t\tobs.isEmpty() = false\n\tpostcondition:\n\t\tobs->forAll(o: User|o.SuspensionDays = o.SuspensionDays@pre-1 and\n\t\t(o.SuspensionDays@pre>1 and\n\t\to.BorrowStatus = SUSPEND) or\n\t\t(o.SuspensionDays@pre = 1 and\n\t\to.BorrowStatus = NORMAL))\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: SUSPEND"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = BorrowStatus::SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = BorrowStatus::SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = BorrowStatus::SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = BorrowStatus::NORMAL)))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 150,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 222,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = BorrowStatus::SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = BorrowStatus::SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = BorrowStatus::SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = BorrowStatus::NORMAL)))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = BorrowStatus::SUSPEND and o.SuspensionDays > 0)",
+        "precondition": "obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = BorrowStatus::SUSPEND) and obs.isEmpty() = false",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = BorrowStatus::SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = BorrowStatus::NORMAL)))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 150,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 222,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.BorrowStatus = BorrowStatus::SUSPEND and o.SuspensionDays > 0)\n            \n            precondition:\n          obs->forAll(o:User | o.SuspensionDays > 0 and o.BorrowStatus = BorrowStatus::SUSPEND) and obs.isEmpty() = false\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays@pre - 1 and ((o.SuspensionDays@pre > 1 and o.BorrowStatus = BorrowStatus::SUSPEND) or (o.SuspensionDays@pre = 1 and o.BorrowStatus = BorrowStatus::NORMAL)))\n            \n        }"
+    }
+  }
+]

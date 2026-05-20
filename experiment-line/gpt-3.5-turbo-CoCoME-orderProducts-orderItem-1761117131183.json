@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode),\nentry:OrderEntry = OrderEntry.new()",
+        "precondition": "item.oclIsUndefined() = bool",
+        "postcondition": "let entry:OrderEntry in \nentry.Quantity = quantity,\nentry.SubAmount = item.Price * quantity,\nCurrentOrderProduct.ContainedEntries->includes(entry)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 33,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 11,
+          "column": 25,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode),\nentry:OrderEntry = OrderEntry.new()\n            \n            precondition:\n          item.oclIsUndefined() = bool\n            \n            postcondition:\n          let entry:OrderEntry in \nentry.Quantity = quantity,\nentry.SubAmount = item.Price * quantity,\nCurrentOrderProduct.ContainedEntries->includes(entry)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: OrderEntry"
+        }
+      ]
+    }
+  }
+]

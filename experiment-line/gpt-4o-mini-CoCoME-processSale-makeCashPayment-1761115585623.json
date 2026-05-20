@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentPayment:CashPayment = CashPayment.new(), sale:Sale = CurrentSale, currentStore:Store = CurrentSale.Belongedstore, bool:Boolean = CurrentSale.oclIsUndefined()",
+        "precondition": "not CurrentSale.oclIsUndefined() and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentPayment:CashPayment in currentPayment.oclIsNew() and Store.allInstance()->includes(currentStore) and Sale.allInstance()->includes(sale) and CurrentSale.AssociatedPayment = currentPayment and CurrentSale.Belongedstore = currentStore and Store.Sales->includes(sale) and CurrentSale.IsComplete = true and CurrentSale.Time = Date.now() and currentPayment.Balance = amount - CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 54,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 342,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentPayment:CashPayment = CashPayment.new(), sale:Sale = CurrentSale, currentStore:Store = CurrentSale.Belongedstore, bool:Boolean = CurrentSale.oclIsUndefined()\n            \n            precondition:\n          not CurrentSale.oclIsUndefined() and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let currentPayment:CashPayment in currentPayment.oclIsNew() and Store.allInstance()->includes(currentStore) and Sale.allInstance()->includes(sale) and CurrentSale.AssociatedPayment = currentPayment and CurrentSale.Belongedstore = currentStore and Store.Sales->includes(sale) and CurrentSale.IsComplete = true and CurrentSale.Time = Date.now() and currentPayment.Balance = amount - CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CashPayment"
+        }
+      ]
+    }
+  }
+]

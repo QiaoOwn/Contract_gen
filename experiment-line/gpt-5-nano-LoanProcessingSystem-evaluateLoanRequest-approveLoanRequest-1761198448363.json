@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "statusApproved:Boolean",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false",
+        "postcondition": "statusApproved = (CurrentLoanRequest.Status = LoanRequestStatus::APPROVED) and result = statusApproved"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 27,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 54,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          statusApproved:Boolean\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          statusApproved = (CurrentLoanRequest.Status = LoanRequestStatus::APPROVED) and result = statusApproved\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), store:Store = currentCashDesk.BelongedStore",
+        "precondition": "CashDesk.allInstance()->includes(currentCashDesk) = true and currentCashDesk.oclIsUndefined() = false and currentStore.oclIsUndefined() = false and currentStore.IsOpened = true and currentCashDesk = currentCashDesk and currentCashDesk.IsOpened = false",
+        "postcondition": "result = currentCashDesk.oclIsNew() and CashDesk.allInstance()->includes(currentCashDesk)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::openCashDesk(cashDeskID: Integer): Boolean {\n\tdefinition:\n\t\tcurrentCashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = cashDeskID),\n\t\tstore: Store = currentCashDesk.BelongedStore\n\tprecondition:\n\t\tCashDesk.allInstance()->includes(currentCashDesk) = true and\n\t\tcurrentCashDesk.oclIsUndefined() = false and\n\t\tcurrentStore.oclIsUndefined() = false and\n\t\tcurrentStore.IsOpened = true and\n\t\tcurrentCashDesk = currentCashDesk and\n\t\tcurrentCashDesk.IsOpened = false\n\tpostcondition:\n\t\tresult = currentCashDesk.oclIsNew() and\n\t\tCashDesk.allInstance()->includes(currentCashDesk)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentStore"
+        }
+      ]
+    }
+  }
+]

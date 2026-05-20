@@ -1,0 +1,346 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid);\nobs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo);\nobs:Set(User) = User.allInstance()->select(o | o.UserID = uid);",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid);\nobs.isEmpty() = false = bool",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew()\nUser.allInstance()->includes(obs)\nobs->forAll(o:RecommendBook | o.RecommendUser = obs) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'obs' expecting 'precondition'"
+        },
+        {
+          "line": 13,
+          "column": 0,
+          "msg": "mismatched input 'User' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid);\nobs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo);\nobs:Set(User) = User.allInstance()->select(o | o.UserID = uid);\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid);\nobs.isEmpty() = false = bool\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew()\nUser.allInstance()->includes(obs)\nobs->forAll(o:RecommendBook | o.RecommendUser = obs) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), isValidUser:Boolean = obs.isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), obs->forAll(o:RecommendBook | o.RecommendUser = obs) and result = isValidUser"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 24,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), isValidUser:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), obs->forAll(o:RecommendBook | o.RecommendUser = obs) and result = isValidUser\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), isValidUser:Boolean = obs.isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = obs)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 24,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), isValidUser:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = obs)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = obs)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = obs)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = obs)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(obs), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = obs)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = isValidUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false, validUser:Boolean = isValidUser",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false, validUser:Boolean = isValidUser\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false, validUser:Boolean = isValidUser",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false, validUser:Boolean = isValidUser\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false, validUser:Boolean = isValidUser, isValidUser",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false, validUser:Boolean = isValidUser, isValidUser\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew(), User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and obs->forAll(o:RecommendBook | o.RecommendUser = newRecommend.RecommendUser)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and result = isValidUser"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 113,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser), result = validUser and result = isValidUser\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser), result = isValidUser and result = validUser"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 113,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser), result = isValidUser and result = validUser\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser) and result = isValidUser"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 241,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 113,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser\n            \n            postcondition:\n          let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser) and result = isValidUser\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), isValidUser:Boolean = User.allInstance()->select(o | o.UserID = uid).isEmpty() = false",
+        "precondition": "obs:Set(User) = User.allInstance()->select(o | o.UserID = uid), obs.isEmpty() = false and isValidUser",
+        "postcondition": "let newRecommend:RecommendBook in newRecommend.oclIsNew() and User.allInstance()->includes(newRecommend.RecommendUser) and result = isValidUser and result = isValidUser"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "recommendedBook:RecommendBook = RecommendBook.allInstance()->any(o | o.RecommendUser.UserID = uid), book:Book = Book.allInstance()->any(o | o.ISBn = isbn)",
+        "precondition": "uid.oclIsUndefined() = bool and callNo.oclIsUndefined() = bool and title.oclIsUndefined() = bool and edition.oclIsUndefined() = bool and author.oclIsUndefined() = bool and publisher.oclIsUndefined() = bool and description.oclIsUndefined() = bool and isbn.oclIsUndefined() = bool",
+        "postcondition": "let recommendedBook:RecommendBook in recommendedBook.oclIsNew() and User.allInstance()->includes(recommendedBook.RecommendUser) and Book.allInstance()->includes(recommendedBook.Book) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 122,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 186,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          recommendedBook:RecommendBook = RecommendBook.allInstance()->any(o | o.RecommendUser.UserID = uid), book:Book = Book.allInstance()->any(o | o.ISBn = isbn)\n            \n            precondition:\n          uid.oclIsUndefined() = bool and callNo.oclIsUndefined() = bool and title.oclIsUndefined() = bool and edition.oclIsUndefined() = bool and author.oclIsUndefined() = bool and publisher.oclIsUndefined() = bool and description.oclIsUndefined() = bool and isbn.oclIsUndefined() = bool\n            \n            postcondition:\n          let recommendedBook:RecommendBook in recommendedBook.oclIsNew() and User.allInstance()->includes(recommendedBook.RecommendUser) and Book.allInstance()->includes(recommendedBook.Book) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

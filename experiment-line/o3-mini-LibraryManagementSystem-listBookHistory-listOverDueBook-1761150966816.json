@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid)",
+        "precondition": "user.oclIsUndefined() = false and user.LoanedBook->select(l | l.DueDate < self.currentDate and l.IsReturned = false).size() > 0",
+        "postcondition": "overdueCopies:Set(BookCopy) = user.LoanedBook->select(l | l.DueDate < self.currentDate and l.IsReturned = false)->collect(l | l.LoanedCopy) and result = overdueCopies"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 126,
+          "msg": "mismatched input '.' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid)\n            \n            precondition:\n          user.oclIsUndefined() = false and user.LoanedBook->select(l | l.DueDate < self.currentDate and l.IsReturned = false).size() > 0\n            \n            postcondition:\n          overdueCopies:Set(BookCopy) = user.LoanedBook->select(l | l.DueDate < self.currentDate and l.IsReturned = false)->collect(l | l.LoanedCopy) and result = overdueCopies\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: overdueCopies"
+        }
+      ]
+    }
+  }
+]

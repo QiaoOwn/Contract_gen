@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingItem:Item = Item.allInstance()->any(i | i.Barcode = barcode), newItem:Item = Item.allInstance()->any(i | i.Barcode = barcode)",
+        "precondition": "existingItem.oclIsUndefined() = bool and existingItem.oclIsTypeOf(Item)",
+        "postcondition": "let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode: Integer,name: String,price: Real,stocknumber: Integer,orderprice: Real): Boolean {\n\tdefinition:\n\t\texistingItem: Item = Item.allInstance()->any(i|i.Barcode = barcode),\n\t\tnewItem: Item = Item.allInstance()->any(i|i.Barcode = barcode)\n\tprecondition:\n\t\texistingItem.oclIsUndefined() = bool and\n\t\texistingItem.oclIsTypeOf(Item)\n\tpostcondition:\n\t\tlet newItem: Item in\n\t\tnewItem.oclIsNew() and\n\t\tItem.allInstance()->includes(newItem) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

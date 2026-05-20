@@ -1,0 +1,331 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = obs.isEmpty()->if true then Supplier.new() else obs->any(o | o.id = id) endif",
+        "precondition": "obs.isEmpty() = bool and (obs.size() = 0 or obs->forAll(o:Supplier | o.id <> id))",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 110,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = obs.isEmpty()->if true then Supplier.new() else obs->any(o | o.id = id) endif\n            \n            precondition:\n          obs.isEmpty() = bool and (obs.size() = 0 or obs->forAll(o:Supplier | o.id <> id))\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = if obs.isEmpty() then Supplier.new() else obs->any(o | o.id = id) endif",
+        "precondition": "obs.isEmpty() = bool and (obs.size() = 0 or obs->forAll(o:Supplier | o.id <> id))",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 131,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = if obs.isEmpty() then Supplier.new() else obs->any(o | o.id = id) endif\n            \n            precondition:\n          obs.isEmpty() = bool and (obs.size() = 0 or obs->forAll(o:Supplier | o.id <> id))\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty()",
+        "precondition": "obs.isEmpty() = bool and (obs.size() = 0 or obs->forAll(o:Supplier | o.id <> id))",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = bool"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty()\n            \n            precondition:\n          obs.isEmpty() = bool and (obs.size() = 0 or obs->forAll(o:Supplier | o.id <> id))\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = bool\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty()",
+        "precondition": "obs.isEmpty() = bool and obs.size() = 0",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = bool"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty()\n            \n            precondition:\n          obs.isEmpty() = bool and obs.size() = 0\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = bool\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty(), exists:Boolean = obs.size() = 0",
+        "precondition": "bool and exists",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty(), exists:Boolean = obs.size() = 0\n            \n            precondition:\n          bool and exists\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty(), exists:Boolean = obs.size() = 0",
+        "precondition": "bool and exists",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty(), exists:Boolean = obs.size() = 0\n            \n            precondition:\n          bool and exists\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty(), exists:Boolean = obs.size() = 0",
+        "precondition": "bool and exists",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), bool:Boolean = obs.isEmpty(), exists:Boolean = obs.size() = 0\n            \n            precondition:\n          bool and exists\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()",
+        "precondition": "exists",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()\n            \n            precondition:\n          exists\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()",
+        "precondition": "exists = false",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()\n            \n            precondition:\n          exists = false\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()",
+        "precondition": "exists = true",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists and exists = false"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 77,
+          "msg": "mismatched input 'exists' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()\n            \n            precondition:\n          exists = true\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists and exists = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()",
+        "precondition": "exists = true",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists and exists = false"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 77,
+          "msg": "mismatched input 'exists' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()\n            \n            precondition:\n          exists = true\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists and exists = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()",
+        "precondition": "exists = true and obs.isEmpty() = false",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and result = exists and exists = false"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 77,
+          "msg": "mismatched input 'exists' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()\n            \n            precondition:\n          exists = true and obs.isEmpty() = false\n            \n            postcondition:\n          Supplier.allInstance()->includes(supplier) and result = exists and exists = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Supplier) = Supplier.allInstance()->select(o | o.id = id), supplier:Supplier = Supplier.new(), exists:Boolean = obs.isEmpty()",
+        "precondition": "exists = true and obs.isEmpty() = false",
+        "postcondition": "Supplier.allInstance()->includes(supplier) and exists = false and result = exists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

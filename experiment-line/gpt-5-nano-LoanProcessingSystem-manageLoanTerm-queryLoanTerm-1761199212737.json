@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid)",
+        "precondition": "true",
+        "postcondition": "obs->isEmpty() or (result = obs->any(o | o.ItemID = itemid) and currentLoanRequest.AttachedLoanTerms->includes(result))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 15,
+          "msg": "no viable alternative at input 'obs->isEmpty()'"
+        },
+        {
+          "line": 9,
+          "column": 121,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid:Integer): LoanTerm {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          obs->isEmpty() or (result = obs->any(o | o.ItemID = itemid) and currentLoanRequest.AttachedLoanTerms->includes(result))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

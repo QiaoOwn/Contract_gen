@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+        "precondition": "loanRequest.oclIsUndefined() = false",
+        "postcondition": "let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and LoanRequest.allInstance()->includes(loanRequest) and loanRequest.AttachedApprovalLetter = approvalLetter and approvalLetter.Content = \"ApprovalLetterContent\" and CurrentLoanRequest = loanRequest and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id: Integer): Boolean {\n\tdefinition:\n\t\tloanRequest: LoanRequest = LoanRequest.allInstance()->any(o|o.RequestID = id)\n\tprecondition:\n\t\tloanRequest.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet approvalLetter: ApprovalLetter in\n\t\tapprovalLetter.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(loanRequest) and\n\t\tloanRequest.AttachedApprovalLetter = approvalLetter and\n\t\tapprovalLetter.Content = \"ApprovalLetterContent\" and\n\t\tCurrentLoanRequest = loanRequest and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

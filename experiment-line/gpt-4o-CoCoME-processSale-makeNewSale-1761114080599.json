@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesks:Set(CashDesk) = CashDesk.allInstance()->select(cd | cd.IsOpened and self.CurrentSale.oclIsUndefined() or self.CurrentSale.IsComplete)\nsale:Sale = Sale.allInstance()->any(s | s.BelongedCashDesk = cashDesks and s.IsComplete = false and s.IsReadytoPay = false)",
+        "precondition": "cashDesks.isEmpty() = false and sale.oclIsUndefined() = true",
+        "postcondition": "let newSale:Sale in newSale.oclIsNew() and \nCashDesk.allInstance()->includes(self.CurrentSale.BelongedCashDesk) and \nCashDesk.allInstance()->excludes(sale) and \nsale.BelongedCashDesk = self.CurrentSale.BelongedCashDesk and \nsale.IsComplete = false and \nsale.IsReadytoPay = false and \nSale.allInstance()->includes(newSale) and \nresult = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'sale' expecting 'precondition'"
+        },
+        {
+          "line": 11,
+          "column": 33,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          cashDesks:Set(CashDesk) = CashDesk.allInstance()->select(cd | cd.IsOpened and self.CurrentSale.oclIsUndefined() or self.CurrentSale.IsComplete)\nsale:Sale = Sale.allInstance()->any(s | s.BelongedCashDesk = cashDesks and s.IsComplete = false and s.IsReadytoPay = false)\n            \n            precondition:\n          cashDesks.isEmpty() = false and sale.oclIsUndefined() = true\n            \n            postcondition:\n          let newSale:Sale in newSale.oclIsNew() and \nCashDesk.allInstance()->includes(self.CurrentSale.BelongedCashDesk) and \nCashDesk.allInstance()->excludes(sale) and \nsale.BelongedCashDesk = self.CurrentSale.BelongedCashDesk and \nsale.IsComplete = false and \nsale.IsReadytoPay = false and \nSale.allInstance()->includes(newSale) and \nresult = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: sale"
+        }
+      ]
+    }
+  }
+]

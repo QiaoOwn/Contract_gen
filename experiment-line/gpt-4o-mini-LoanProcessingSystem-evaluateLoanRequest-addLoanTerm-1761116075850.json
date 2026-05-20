@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), isLoanTermFound:Boolean = loanTerm.oclIsUndefined()",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = bool or loanTerm.oclIsUndefined() = bool",
+        "postcondition": "loanRequest.AttachedLoanTerms->includes(loanTerm) and result = !isLoanTermFound"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "extraneous input '!' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), isLoanTermFound:Boolean = loanTerm.oclIsUndefined()\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = bool or loanTerm.oclIsUndefined() = bool\n            \n            postcondition:\n          loanRequest.AttachedLoanTerms->includes(loanTerm) and result = !isLoanTermFound\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

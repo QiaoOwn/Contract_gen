@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid)",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false\nCurrentLoanRequest.AttachedLoanTerms->excludes(obs)",
+        "postcondition": "let term:LoanTerm = obs in (CurrentLoanRequest.AttachedLoanTerms->includes(term) and result = CurrentLoanRequest.AttachedLoanTerms->includes(term))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 0,
+          "msg": "mismatched input 'CurrentLoanRequest' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          obs:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid)\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false\nCurrentLoanRequest.AttachedLoanTerms->excludes(obs)\n            \n            postcondition:\n          let term:LoanTerm = obs in (CurrentLoanRequest.AttachedLoanTerms->includes(term) and result = CurrentLoanRequest.AttachedLoanTerms->includes(term))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

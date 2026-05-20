@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = userid), valTrue:Boolean = true, valFalse:Boolean = false",
+        "precondition": "",
+        "postcondition": "u.oclIsUndefined() and let newU:User in newU.oclIsNew() and User.allInstance()->includes(newU) and newU.UserID = userid and newU.Name = name and newU.Address = address and result = valTrue or u.oclIsUndefined()=false and result = valFalse"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 33,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 7,
+          "column": 41,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = userid), valTrue:Boolean = true, valFalse:Boolean = false\n            \n            \n            postcondition:\n          u.oclIsUndefined() and let newU:User in newU.oclIsNew() and User.allInstance()->includes(newU) and newU.UserID = userid and newU.Name = name and newU.Address = address and result = valTrue or u.oclIsUndefined()=false and result = valFalse\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

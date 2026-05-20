@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid)",
+        "precondition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid) and loanRequest:LoanRequest = self.GlobalVariableName",
+        "postcondition": "if loanTerm.oclIsUndefined() = false then loanRequest.AttachedLoanTerms->includes(loanTerm) endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 18,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 96,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid:Integer): LoanTerm {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid)\n            \n            precondition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid) and loanRequest:LoanRequest = self.GlobalVariableName\n            \n            postcondition:\n          if loanTerm.oclIsUndefined() = false then loanRequest.AttachedLoanTerms->includes(loanTerm) endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: loanRequest"
+        }
+      ]
+    }
+  }
+]

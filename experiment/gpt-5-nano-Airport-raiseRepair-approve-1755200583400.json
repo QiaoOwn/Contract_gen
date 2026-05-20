@@ -1,0 +1,306 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) else obsRepair.Process = 5 endif) and result = ah)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 438,
+          "msg": "mismatched input ')' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) else obsRepair.Process = 5 endif) and result = ah)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) else obsRepair.Process = 5 endif) and result = ah)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 438,
+          "msg": "mismatched input ')' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) else obsRepair.Process = 5 endif) and result = ah)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else (if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else (if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) endif) endif) else obsRepair.Process = 5 endif) and result = ah)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract RepairService::approve(sid: Integer,rid: Integer,reject: Boolean,suggestion: String): ApprovalHistory {\n\tdefinition:\n\t\tobsRepair: Repair = Repair.allInstance()->any(o|o.Id = rid),\n\t\tobsStaff: Staff = Staff.allInstance()->any(o|o.Id = sid)\n\tprecondition:\n\t\tobsRepair.oclIsUndefined() = false and\n\t\tobsStaff.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet ah: ApprovalHistory in\n\t\t(ah.oclIsNew() and\n\t\tobsRepair.History->includes(ah) and\n\t\tah.StaffId = sid and\n\t\tah.Reject = reject and\n\t\tah.Suggestion = suggestion and\n\t\t(if reject = false \n\t\tthen (if obsRepair.Process = 0 and\n\t\tobsStaff.Role = 1 \n\t\tthen obsRepair.Process = 1 \n\t\telse (if obsRepair.Process = 1 and\n\t\tobsStaff.Role = 2 \n\t\tthen obsRepair.Process = 2 \n\t\telse (if obsRepair.Process = 2 and\n\t\tobsStaff.Role = 3 \n\t\tthen obsRepair.Process = 3 \n\t\telse true \n\t\tendif ) \n\t\tendif ) \n\t\tendif ) \n\t\telse obsRepair.Process = 5 \n\t\tendif ) and\n\t\tresult = ah)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) else obsRepair.Process = 5 endif) and result = ah)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 438,
+          "msg": "mismatched input ')' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) else obsRepair.Process = 5 endif) and result = ah)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif endif) else obsRepair.Process = 5 endif) and result = ah)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 443,
+          "msg": "mismatched input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 445,
+          "msg": "mismatched input 'else' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif endif) else obsRepair.Process = 5 endif) and result = ah)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif endif) else obsRepair.Process = 5 endif)) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 443,
+          "msg": "mismatched input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 445,
+          "msg": "mismatched input 'else' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif endif) else obsRepair.Process = 5 endif)) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else (if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else (if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) endif) else obsRepair.Process = 5 endif)) ) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 449,
+          "msg": "mismatched input 'else' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 484,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else (if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else (if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else true endif) endif) else obsRepair.Process = 5 endif)) ) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif) else obsRepair.Process = 5 endif)) ) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 471,
+          "msg": "mismatched input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 508,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif) else obsRepair.Process = 5 endif)) ) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif) else obsRepair.Process = 5 endif)) ) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 471,
+          "msg": "mismatched input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 508,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then (if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif) else obsRepair.Process = 5 endif)) ) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif endif) else obsRepair.Process = 5 endif) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 476,
+          "msg": "mismatched input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 478,
+          "msg": "mismatched input 'else' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif endif) else obsRepair.Process = 5 endif) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif endif) else obsRepair.Process = 5 endif) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 476,
+          "msg": "mismatched input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 478,
+          "msg": "mismatched input 'else' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and (if reject = false then if obsRepair.Process = 0 and obsStaff.Role = 1 then obsRepair.Process = 1 else if obsRepair.Process = 1 and obsStaff.Role = 2 then obsRepair.Process = 2 else if obsRepair.Process = 2 and obsStaff.Role = 3 then obsRepair.Process = 3 else obsRepair.Process = obsRepair.Process endif endif) else obsRepair.Process = 5 endif) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion) and result = ah"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 163,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and obsRepair.History->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion) and result = ah\n            \n        }"
+    }
+  }
+]

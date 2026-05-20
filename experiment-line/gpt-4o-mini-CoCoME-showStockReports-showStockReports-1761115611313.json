@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "stores:Set(Store) = Store.allInstance(), items:Set(Item) = Item.allInstance()->select(i | i.StockNumber > 0)",
+        "postcondition": "result = items"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 16,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 4,
+          "column": 20,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 4,
+          "column": 28,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::showStockReports(): Set(Item) {\n          \n            precondition:\n          stores:Set(Store) = Store.allInstance(), items:Set(Item) = Item.allInstance()->select(i | i.StockNumber > 0)\n            \n            postcondition:\n          result = items\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: stores"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "la:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "let newAcc:LoanAccount in newAcc.oclIsNew() and LoanAccount.allInstance()->includes(newAcc) and newAcc.LoanAccountID = loanaccountid and newAcc.Balance = balance and newAcc.Status = status and result = true or la.oclIsUndefined() = false and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tla: LoanAccount = LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid)\n\tprecondition:\n\t\tstatus.oclIsTypeOf(LoanAccountStatus)\n\tpostcondition:\n\t\tlet newAcc: LoanAccount in\n\t\tnewAcc.oclIsNew() and\n\t\tLoanAccount.allInstance()->includes(newAcc) and\n\t\tnewAcc.LoanAccountID = loanaccountid and\n\t\tnewAcc.Balance = balance and\n\t\tnewAcc.Status = status and\n\t\tresult = true or\n\t\tla.oclIsUndefined() = false and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

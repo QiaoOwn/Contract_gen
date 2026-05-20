@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), exists:Boolean = obs.size() > 0, cardFound:BankCard = obs->any(o | o.CardID = cardid)",
+        "precondition": "true",
+        "postcondition": "InputCard = cardFound and CardIDValidated = exists and result = exists"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 85,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 54,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 74,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), exists:Boolean = obs.size() > 0, cardFound:BankCard = obs->any(o | o.CardID = cardid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          InputCard = cardFound and CardIDValidated = exists and result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

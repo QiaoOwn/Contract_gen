@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.OrderStatus = OrderStatus::REQUESTED), entries:Set(OrderEntry) = currentOrderProduct.ContainedEntries, totalAmount:Real = entries->collect(e | e.SubAmount)->sum()",
+        "precondition": "currentOrderProduct.oclIsUndefined() = bool",
+        "postcondition": "currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = totalAmount and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 238,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.OrderStatus = OrderStatus::REQUESTED), entries:Set(OrderEntry) = currentOrderProduct.ContainedEntries, totalAmount:Real = entries->collect(e | e.SubAmount)->sum()\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = bool\n            \n            postcondition:\n          currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = totalAmount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

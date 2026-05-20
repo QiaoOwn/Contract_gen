@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(o | o.LoanedBook->exists(l | l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days))",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "overdueUsers->forAll(o | o.SuspensionDays > 0 implies o.SuspensionDays = o.SuspensionDays - 1) and overdueUsers->forAll(o | (o.SuspensionDays - 1) <= 0 implies o.BorrowStatus = SUSPEND)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 56,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 103,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          overdueUsers:Set(User) = User.allInstance()->select(o | o.LoanedBook->exists(l | l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days))\n            \n            precondition:\n          overdueUsers.isEmpty() = false\n            \n            postcondition:\n          overdueUsers->forAll(o | o.SuspensionDays > 0 implies o.SuspensionDays = o.SuspensionDays - 1) and overdueUsers->forAll(o | (o.SuspensionDays - 1) <= 0 implies o.BorrowStatus = SUSPEND)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: o"
+        }
+      ]
+    }
+  }
+]

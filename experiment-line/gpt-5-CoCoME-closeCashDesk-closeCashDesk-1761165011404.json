@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cd:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), isSuccess:Boolean = true",
+        "precondition": "cd.oclIsUndefined() = false and cd.IsOpened = true and self.CurrentStore.oclIsUndefined() = false and Store.allInstance()->includes(self.CurrentStore) and self.CurrentCashDesk = cd and cd.BelongedStore = self.CurrentStore",
+        "postcondition": "cd.IsOpened = false and result = isSuccess"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 142,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          cd:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), isSuccess:Boolean = true\n            \n            precondition:\n          cd.oclIsUndefined() = false and cd.IsOpened = true and self.CurrentStore.oclIsUndefined() = false and Store.allInstance()->includes(self.CurrentStore) and self.CurrentCashDesk = cd and cd.BelongedStore = self.CurrentStore\n            \n            postcondition:\n          cd.IsOpened = false and result = isSuccess\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentStore"
+        }
+      ]
+    }
+  }
+]

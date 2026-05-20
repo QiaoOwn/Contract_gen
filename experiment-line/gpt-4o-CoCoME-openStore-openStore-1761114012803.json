@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Set(Store) = Store.allInstance()->any(s | s.Id = storeID)",
+        "precondition": "Store.allInstance()->exists(s | s.Id = storeID and s.oclIsTypeOf(Store) and Store.allInstance()->excludes(s))",
+        "postcondition": "CurrentStore.oclIsNew() and Store.allInstance()->includes(CurrentStore) and CurrentStore.Name = 'newStoreName' and result = CurrentStore"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::openStore(storeID: Integer): Boolean {\n\tdefinition:\n\t\tstore: Set(Store) = Store.allInstance()->any(s|s.Id = storeID)\n\tprecondition:\n\t\tStore.allInstance()->exists(s|s.Id = storeID and\n\t\ts.oclIsTypeOf(Store) and\n\t\tStore.allInstance()->excludes(s))\n\tpostcondition:\n\t\tCurrentStore.oclIsNew() and\n\t\tStore.allInstance()->includes(CurrentStore) and\n\t\tCurrentStore.Name = 'newStoreName' and\n\t\tresult = CurrentStore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

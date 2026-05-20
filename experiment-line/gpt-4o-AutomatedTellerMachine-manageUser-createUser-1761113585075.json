@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance()",
+        "precondition": "true",
+        "postcondition": "let newUser:User in if users->exists(u | u.UserID = userid) then users->select(u | u.UserID = userid).Name = name and users->select(u | u.UserID = userid).Address = address else newUser.oclIsNew() and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and User.allInstance()->includes(newUser) endif and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 111,
+          "msg": "mismatched input '.' expecting {'else', 'endif'}"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance()\n            \n            precondition:\n          true\n            \n            postcondition:\n          let newUser:User in if users->exists(u | u.UserID = userid) then users->select(u | u.UserID = userid).Name = name and users->select(u | u.UserID = userid).Address = address else newUser.oclIsNew() and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and User.allInstance()->includes(newUser) endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

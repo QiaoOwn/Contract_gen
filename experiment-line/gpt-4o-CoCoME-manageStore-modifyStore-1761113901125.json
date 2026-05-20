@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "stores:Set(Store) = Store.allInstance(), existingStore:Set(Store) = stores->select(s | s.Id = id), store:Store = existingStore->any(true)",
+        "precondition": "stores:Set(Store) = Store.allInstance(), existingStore:Set(Store) = stores->select(s | s.Id = id), existingStore->size() = 1",
+        "postcondition": "store.Name = name and store.Address = address and store.IsOpened = isopened and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 16,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 20,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 28,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::modifyStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          stores:Set(Store) = Store.allInstance(), existingStore:Set(Store) = stores->select(s | s.Id = id), store:Store = existingStore->any(true)\n            \n            precondition:\n          stores:Set(Store) = Store.allInstance(), existingStore:Set(Store) = stores->select(s | s.Id = id), existingStore->size() = 1\n            \n            postcondition:\n          store.Name = name and store.Address = address and store.IsOpened = isopened and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

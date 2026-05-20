@@ -1,0 +1,316 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->any(o | o.Barcode <> barcode) \nif newItem.oclIsUndefined() then\n   newItem = Item.allInstance()->create() \n   newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\nendif",
+        "precondition": "item.oclIsUndefined() = false",
+        "postcondition": "let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'if' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->any(o | o.Barcode <> barcode) \nif newItem.oclIsUndefined() then\n   newItem = Item.allInstance()->create() \n   newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\nendif\n            \n            precondition:\n          item.oclIsUndefined() = false\n            \n            postcondition:\n          let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->any(o | o.Barcode <> barcode) \nnewItem = Item.allInstance()->create() \nnewItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'newItem' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->any(o | o.Barcode <> barcode) \nnewItem = Item.allInstance()->create() \nnewItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->any(o | o.Barcode <> barcode), newItem = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 168,
+          "msg": "no viable alternative at input 'Item.allInstance()->create'"
+        },
+        {
+          "line": 3,
+          "column": 185,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->any(o | o.Barcode <> barcode), newItem = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 107,
+          "msg": "no viable alternative at input 'Item.allInstance()->create'"
+        },
+        {
+          "line": 3,
+          "column": 124,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 107,
+          "msg": "no viable alternative at input 'Item.allInstance()->create'"
+        },
+        {
+          "line": 3,
+          "column": 124,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 107,
+          "msg": "no viable alternative at input 'Item.allInstance()->create'"
+        },
+        {
+          "line": 3,
+          "column": 124,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          let itemCreated:Boolean = newItem.oclIsNew() in Item.allInstance()->includes(newItem) and result = itemCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = false, newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "isCreated = newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 134,
+          "msg": "no viable alternative at input 'Item.allInstance()->create'"
+        },
+        {
+          "line": 3,
+          "column": 151,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = false, newItem:Item = Item.allInstance()->create(), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          isCreated = newItem.oclIsNew() and Item.allInstance()->includes(newItem) and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item, newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "bool:Boolean = item.oclIsUndefined(), newItem.oclIsNew() = isCreated and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 136,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item, newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          bool:Boolean = item.oclIsUndefined(), newItem.oclIsNew() = isCreated and Item.allInstance()->includes(newItem) and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item, newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "bool:Boolean = item.oclIsUndefined(), newItem.oclIsNew() = isCreated and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 136,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item, newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          bool:Boolean = item.oclIsUndefined(), newItem.oclIsNew() = isCreated and Item.allInstance()->includes(newItem) and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item, newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "bool:Boolean = item.oclIsUndefined(), newItem.oclIsNew() = isCreated and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 136,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item, newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          bool:Boolean = item.oclIsUndefined(), newItem.oclIsNew() = isCreated and Item.allInstance()->includes(newItem) and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "isCreated = item.oclIsUndefined() and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 187,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          isCreated = item.oclIsUndefined() and Item.allInstance()->includes(newItem) and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "isCreated = item.oclIsUndefined() and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 187,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice\n            \n            precondition:\n          item.oclIsUndefined()\n            \n            postcondition:\n          isCreated = item.oclIsUndefined() and Item.allInstance()->includes(newItem) and result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isCreated:Boolean = item.oclIsUndefined(), newItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem.Barcode = barcode, newItem.Name = name, newItem.Price = price, newItem.StockNumber = stocknumber, newItem.OrderPrice = orderprice",
+        "precondition": "item.oclIsUndefined()",
+        "postcondition": "isCreated = item.oclIsUndefined() and Item.allInstance()->includes(newItem) and result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

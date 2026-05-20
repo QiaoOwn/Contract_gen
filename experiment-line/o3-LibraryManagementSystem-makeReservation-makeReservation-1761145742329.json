@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), copy:BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode)",
+        "precondition": "User.allInstance()->includes(user) and BookCopy.allInstance()->includes(copy) and copy.Status = CopyStatus::AVAILABLE and copy.IsReserved = false and user.BorrowStatus = BorrowStatus::NORMAL",
+        "postcondition": "let newReserve:Reserve in newReserve.oclIsNew() and Reserve.allInstance()->includes(newReserve) and newReserve.ReserveDate = ThirdPartyServices.currentDate() and newReserve.IsReserveClosed = false and newReserve.ReservedCopy = copy and newReserve.ReservedUser = user and user.ReservedBook->includes(newReserve) and copy.ReservationRecord->includes(newReserve) and copy.IsReserved = true and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 165,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), copy:BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode)\n            \n            precondition:\n          User.allInstance()->includes(user) and BookCopy.allInstance()->includes(copy) and copy.Status = CopyStatus::AVAILABLE and copy.IsReserved = false and user.BorrowStatus = BorrowStatus::NORMAL\n            \n            postcondition:\n          let newReserve:Reserve in newReserve.oclIsNew() and Reserve.allInstance()->includes(newReserve) and newReserve.ReserveDate = ThirdPartyServices.currentDate() and newReserve.IsReserveClosed = false and newReserve.ReservedCopy = copy and newReserve.ReservedUser = user and user.ReservedBook->includes(newReserve) and copy.ReservationRecord->includes(newReserve) and copy.IsReserved = true and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

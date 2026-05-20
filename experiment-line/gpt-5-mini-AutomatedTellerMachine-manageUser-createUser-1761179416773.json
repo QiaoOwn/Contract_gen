@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = userid), userExists:Boolean = User.allInstance()->exists(u | u.UserID = userid), success:Boolean = true",
+        "precondition": "userid.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String)",
+        "postcondition": "userExists and User.allInstance()->includes(user) and user.UserID = userid and result = success or let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = success"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 109,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 120,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = userid), userExists:Boolean = User.allInstance()->exists(u | u.UserID = userid), success:Boolean = true\n            \n            precondition:\n          userid.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String)\n            \n            postcondition:\n          userExists and User.allInstance()->includes(user) and user.UserID = userid and result = success or let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = success\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

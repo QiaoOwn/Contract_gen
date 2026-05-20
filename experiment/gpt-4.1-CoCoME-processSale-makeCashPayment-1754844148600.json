@@ -1,0 +1,355 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashPayment:CashPayment, payment:Payment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(self.CurrentSale.Belongedstore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 338,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          cashPayment:CashPayment, payment:Payment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(self.CurrentSale.Belongedstore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashPayment:CashPayment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcashPayment: CashPayment,\n\t\tcurrentStore: Store = self.CurrentSale.Belongedstore,\n\t\tisAmountEnough: Boolean = if amount>=self.CurrentSale.Amount \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tself.CurrentSale.oclIsUndefined() = false and\n\t\tself.CurrentSale.IsComplete = false and\n\t\tself.CurrentSale.IsReadytoPay = true and\n\t\tisAmountEnough = true\n\tpostcondition:\n\t\tlet cashPayment: CashPayment in\n\t\tcashPayment.oclIsNew() and\n\t\tPayment.allInstance()->includes(cashPayment) and\n\t\tcashPayment.AmountTendered = amount and\n\t\tcashPayment.BelongedSale = self.CurrentSale and\n\t\tself.CurrentSale.AssoicatedPayment = cashPayment and\n\t\tself.CurrentSale.Belongedstore = currentStore and\n\t\tStore.allInstance()->includes(currentStore) and\n\t\tself.CurrentSale.IsComplete = true and\n\t\tself.CurrentSale.Time = now() and\n\t\tcashPayment.Balance = amount-self.CurrentSale.Amount and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum PaymentMethod {\n  CASH = \"CASH\",\n  CARD = \"CARD\",\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  PaymentMethod,\n  OrderStatus,\n  Store,\n  ProductCatalog,\n  CashDesk,\n  Sale,\n  Cashier,\n  SalesLineItem,\n  Item,\n  Payment,\n  CashPayment,\n  CardPayment,\n  OrderEntry,\n  Supplier,\n  OrderProduct,\n  getRepository,\n};\n",
+        "originalService": "class ProcessSaleService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*if the current sale exist and not complete\n   *and is ready to pay\n   *and the input amount is greater or equal to the current sale amount\n   *then create a new cash payment with the amount tendered with amount and the payment belonged sale is current sale\n   *and current sale's assoicated payment is the payment and the current sale's belonged store is current store\n   *and the current store will add this sale then the current sale is complete and the time is now\n   *and the payment balance is equal to the input amount minus the current sale amount, then save the cash payment*/\n  makeCashPayment(amount: number): boolean {\n    /*Definition Start*/\n    let cashPayment: CashPayment;\n    let currentStore: Store = l({\n      logic: () => this.CurrentSale.Belongedstore,\n      description: \"self.CurrentSale.Belongedstore\",\n    }).build().pass;\n    let isAmountEnough: boolean = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => amount >= this.CurrentSale.Amount,\n            description: \"amount>=self.CurrentSale.Amount\",\n          }),\n        description: \"amount>=self.CurrentSale.Amount\",\n        then: l({\n          logic: () => true,\n          description: \"true\",\n        }),\n        else: l({\n          logic: () => false,\n          description: \"false\",\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,\n        description: \"self.CurrentSale.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => this.CurrentSale.IsComplete === false,\n          description: \"self.CurrentSale.IsComplete=false\",\n        })\n        .and({\n          logic: () => this.CurrentSale.IsReadytoPay === true,\n          description: \"self.CurrentSale.IsReadytoPay=true\",\n        })\n        .and({\n          logic: () => isAmountEnough === true,\n          description: \"isAmountEnough=true\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let cashPayment: CashPayment;\n    return l({\n      execute: () => (cashPayment = new CashPayment()),\n      description: \"cashPayment.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(Payment).push(cashPayment),\n        description: \"Payment.allInstance()->includes(cashPayment)\",\n      })\n      .and({\n        execute: () => (cashPayment.AmountTendered = amount),\n        description: \"cashPayment.AmountTendered=amount\",\n      })\n      .and({\n        execute: () => (cashPayment.BelongedSale = this.CurrentSale),\n        description: \"cashPayment.BelongedSale=self.CurrentSale\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.AssoicatedPayment = cashPayment),\n        description: \"self.CurrentSale.AssoicatedPayment=cashPayment\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.Belongedstore = currentStore),\n        description: \"self.CurrentSale.Belongedstore=currentStore\",\n      })\n      .and({\n        execute: () => getRepository(Store).push(currentStore),\n        description: \"Store.allInstance()->includes(currentStore)\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.IsComplete = true),\n        description: \"self.CurrentSale.IsComplete=true\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.Time = now()),\n        description: \"self.CurrentSale.Time=now()\",\n      })\n      .and({\n        execute: () => (cashPayment.Balance = amount - this.CurrentSale.Amount),\n        description: \"cashPayment.Balance=amount-self.CurrentSale.Amount\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { ProcessSaleService_AutoGenerated };\n",
+        "entity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum PaymentMethod {\n  CASH = \"CASH\",\n  CARD = \"CARD\",\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class ProcessSaleService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*if the current sale exist and not complete\n   *and is ready to pay\n   *and the input amount is greater or equal to the current sale amount\n   *then create a new cash payment with the amount tendered with amount and the payment belonged sale is current sale\n   *and current sale's assoicated payment is the payment and the current sale's belonged store is current store\n   *and the current store will add this sale then the current sale is complete and the time is now\n   *and the payment balance is equal to the input amount minus the current sale amount, then save the cash payment*/\n  makeCashPayment(amount: number): boolean {\n    /*Definition Start*/\n    let cashPayment: CashPayment;\n    let currentStore: Store = l({\n      logic: () => this.CurrentSale.Belongedstore,\n      description: \"self.CurrentSale.Belongedstore\",\n    }).build().pass;\n    let isAmountEnough: boolean = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => amount >= this.CurrentSale.Amount,\n            description: \"amount>=self.CurrentSale.Amount\",\n          }),\n        description: \"amount>=self.CurrentSale.Amount\",\n        then: l({\n          logic: () => true,\n          description: \"true\",\n        }),\n        else: l({\n          logic: () => false,\n          description: \"false\",\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,\n        description: \"self.CurrentSale.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => this.CurrentSale.IsComplete === false,\n          description: \"self.CurrentSale.IsComplete=false\",\n        })\n        .and({\n          logic: () => this.CurrentSale.IsReadytoPay === true,\n          description: \"self.CurrentSale.IsReadytoPay=true\",\n        })\n        .and({\n          logic: () => isAmountEnough === true,\n          description: \"isAmountEnough=true\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let cashPayment: CashPayment;\n    return l({\n      execute: () => (cashPayment = new CashPayment()),\n      description: \"cashPayment.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(Payment).push(cashPayment),\n        description: \"Payment.allInstance()->includes(cashPayment)\",\n      })\n      .and({\n        execute: () => (cashPayment.AmountTendered = amount),\n        description: \"cashPayment.AmountTendered=amount\",\n      })\n      .and({\n        execute: () => (cashPayment.BelongedSale = this.CurrentSale),\n        description: \"cashPayment.BelongedSale=self.CurrentSale\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.AssoicatedPayment = cashPayment),\n        description: \"self.CurrentSale.AssoicatedPayment=cashPayment\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.Belongedstore = currentStore),\n        description: \"self.CurrentSale.Belongedstore=currentStore\",\n      })\n      .and({\n        execute: () => getRepository(Store).push(currentStore),\n        description: \"Store.allInstance()->includes(currentStore)\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.IsComplete = true),\n        description: \"self.CurrentSale.IsComplete=true\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.Time = now()),\n        description: \"self.CurrentSale.Time=now()\",\n      })\n      .and({\n        execute: () => (cashPayment.Balance = amount - this.CurrentSale.Amount),\n        description: \"cashPayment.Balance=amount-self.CurrentSale.Amount\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum PaymentMethod {\n  CASH = \"CASH\",\n  CARD = \"CARD\",\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass ProcessSaleService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*if the current sale exist and not complete\n   *and is ready to pay\n   *and the input amount is greater or equal to the current sale amount\n   *then create a new cash payment with the amount tendered with amount and the payment belonged sale is current sale\n   *and current sale's assoicated payment is the payment and the current sale's belonged store is current store\n   *and the current store will add this sale then the current sale is complete and the time is now\n   *and the payment balance is equal to the input amount minus the current sale amount, then save the cash payment*/\n  makeCashPayment(amount: number): boolean {\n    /*Definition Start*/\n    let cashPayment: CashPayment;\n    let currentStore: Store = l({\n      logic: () => this.CurrentSale.Belongedstore,\n      description: \"self.CurrentSale.Belongedstore\",\n    }).build().pass;\n    let isAmountEnough: boolean = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => amount >= this.CurrentSale.Amount,\n            description: \"amount>=self.CurrentSale.Amount\",\n          }),\n        description: \"amount>=self.CurrentSale.Amount\",\n        then: l({\n          logic: () => true,\n          description: \"true\",\n        }),\n        else: l({\n          logic: () => false,\n          description: \"false\",\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,\n        description: \"self.CurrentSale.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => this.CurrentSale.IsComplete === false,\n          description: \"self.CurrentSale.IsComplete=false\",\n        })\n        .and({\n          logic: () => this.CurrentSale.IsReadytoPay === true,\n          description: \"self.CurrentSale.IsReadytoPay=true\",\n        })\n        .and({\n          logic: () => isAmountEnough === true,\n          description: \"isAmountEnough=true\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let cashPayment: CashPayment;\n    return l({\n      execute: () => (cashPayment = new CashPayment()),\n      description: \"cashPayment.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(Payment).push(cashPayment),\n        description: \"Payment.allInstance()->includes(cashPayment)\",\n      })\n      .and({\n        execute: () => (cashPayment.AmountTendered = amount),\n        description: \"cashPayment.AmountTendered=amount\",\n      })\n      .and({\n        execute: () => (cashPayment.BelongedSale = this.CurrentSale),\n        description: \"cashPayment.BelongedSale=self.CurrentSale\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.AssoicatedPayment = cashPayment),\n        description: \"self.CurrentSale.AssoicatedPayment=cashPayment\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.Belongedstore = currentStore),\n        description: \"self.CurrentSale.Belongedstore=currentStore\",\n      })\n      .and({\n        execute: () => getRepository(Store).push(currentStore),\n        description: \"Store.allInstance()->includes(currentStore)\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.IsComplete = true),\n        description: \"self.CurrentSale.IsComplete=true\",\n      })\n      .and({\n        execute: () => (this.CurrentSale.Time = now()),\n        description: \"self.CurrentSale.Time=now()\",\n      })\n      .and({\n        execute: () => (cashPayment.Balance = amount - this.CurrentSale.Amount),\n        description: \"cashPayment.Balance=amount-self.CurrentSale.Amount\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 193,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'cashPayment'.",
+          "code": 2451
+        },
+        {
+          "line": 195,
+          "column": 25,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 202,
+          "column": 41,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 221,
+          "column": 54,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 225,
+          "column": 29,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 229,
+          "column": 29,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 243,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'cashPayment'.",
+          "code": 2451
+        },
+        {
+          "line": 257,
+          "column": 57,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 261,
+          "column": 30,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 265,
+          "column": 30,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 273,
+          "column": 30,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 277,
+          "column": 30,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        },
+        {
+          "line": 277,
+          "column": 49,
+          "msg": "Cannot find name 'now'.",
+          "code": 2304
+        },
+        {
+          "line": 281,
+          "column": 61,
+          "msg": "Property 'CurrentSale' does not exist on type 'ProcessSaleService_AutoGenerated'.",
+          "code": 2339
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashPayment:CashPayment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(self.CurrentSale.Belongedstore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 338,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 455,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          cashPayment:CashPayment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(self.CurrentSale.Belongedstore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashPayment:CashPayment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 437,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          cashPayment:CashPayment, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= self.CurrentSale.Amount then true else false endif\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = cashPayment and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = self.CurrentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 412,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = currentSale.Belongedstore, isAmountEnough:Boolean = if amount >= currentSale.Amount then true else false endif",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and isAmountEnough = true",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and Payment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and currentSale.IsComplete = true and currentSale.Time = SystemDateTime.now() and cashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  }
+]

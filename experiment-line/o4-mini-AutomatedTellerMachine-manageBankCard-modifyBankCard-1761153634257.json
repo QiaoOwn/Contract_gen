@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:BankCard = BankCard.allInstance()->any(bankCard | bankCard.CardID = cardid)",
+        "precondition": "cardid > 0",
+        "postcondition": "bankCard.oclIsUndefined() = false and bankCard.CardStatus = cardstatus and bankCard.Catalog = catalog and bankCard.Password = password and bankCard.Balance = balance and result = true or bankCard.oclIsUndefined() = true and result = false"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBankCardCRUDService::modifyBankCard(cardid: Integer,cardstatus: CardStatus[NORMAL|SUSPEND|CANCEL],catalog: CardCatalog[CREDIT|DEPOSIT],password: Integer,balance: Real): Boolean {\n\tdefinition:\n\t\tbankCard: BankCard = BankCard.allInstance()->any(bankCard|bankCard.CardID = cardid)\n\tprecondition:\n\t\tcardid>0\n\tpostcondition:\n\t\tbankCard.oclIsUndefined() = false and\n\t\tbankCard.CardStatus = cardstatus and\n\t\tbankCard.Catalog = catalog and\n\t\tbankCard.Password = password and\n\t\tbankCard.Balance = balance and\n\t\tresult = true or\n\t\tbankCard.oclIsUndefined() = true and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

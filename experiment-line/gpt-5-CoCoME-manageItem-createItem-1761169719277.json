@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "items:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), opResult:Boolean = true",
+        "precondition": "barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real) and Item.allInstance()->isUnique(o:Item | o.Barcode)",
+        "postcondition": "if items.isEmpty() = true then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = opResult else Item.allInstance()->exists(o:Item | o.Barcode = barcode) and result = opResult endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode: Integer,name: String,price: Real,stocknumber: Integer,orderprice: Real): Boolean {\n\tdefinition:\n\t\titems: Set(Item) = Item.allInstance()->select(o|o.Barcode = barcode),\n\t\topResult: Boolean = true\n\tprecondition:\n\t\tbarcode.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tprice.oclIsTypeOf(Real) and\n\t\tstocknumber.oclIsTypeOf(Integer) and\n\t\torderprice.oclIsTypeOf(Real) and\n\t\tItem.allInstance()->isUnique(o: Item|o.Barcode)\n\tpostcondition:\n\t\tif items.isEmpty() = true \n\t\tthen let newItem: Item in\n\t\tnewItem.oclIsNew() and\n\t\tItem.allInstance()->includes(newItem) and\n\t\tnewItem.Barcode = barcode and\n\t\tnewItem.Name = name and\n\t\tnewItem.Price = price and\n\t\tnewItem.StockNumber = stocknumber and\n\t\tnewItem.OrderPrice = orderprice and\n\t\tresult = opResult \n\t\telse Item.allInstance()->exists(o: Item|o.Barcode = barcode) and\n\t\tresult = opResult \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

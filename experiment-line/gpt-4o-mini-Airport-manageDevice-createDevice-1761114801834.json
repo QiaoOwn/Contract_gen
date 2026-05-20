@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newDevice:Device = Device.create(), newDevice.Name = name, newDevice.Location = location, newDevice.Contacts = staff",
+        "precondition": "device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid), device.oclIsUndefined() or staff.oclIsUndefined()",
+        "postcondition": "Device.allInstance()->includes(newDevice) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 42,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {\n          definition:\n          newDevice:Device = Device.create(), newDevice.Name = name, newDevice.Location = location, newDevice.Contacts = staff\n            \n            precondition:\n          device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid), device.oclIsUndefined() or staff.oclIsUndefined()\n            \n            postcondition:\n          Device.allInstance()->includes(newDevice) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Device"
+        }
+      ]
+    }
+  }
+]

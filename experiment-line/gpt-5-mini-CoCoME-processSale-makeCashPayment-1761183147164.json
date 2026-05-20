@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = self.CurrentSale.Belongedstore",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+        "postcondition": "let pay:CashPayment in pay.oclIsNew() and CashPayment.allInstance()->includes(pay) and pay.AmountTendered = amount and pay.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = pay and currentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now and pay.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 243,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = self.CurrentSale.Belongedstore\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount\n            \n            postcondition:\n          let pay:CashPayment in pay.oclIsNew() and CashPayment.allInstance()->includes(pay) and pay.AmountTendered = amount and pay.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = pay and currentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now and pay.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentSale"
+        }
+      ]
+    }
+  }
+]

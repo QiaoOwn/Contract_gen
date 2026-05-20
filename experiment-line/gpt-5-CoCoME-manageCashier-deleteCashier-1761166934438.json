@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierExists:Boolean = Cashier.allInstance()->exists(c:Cashier | c.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and Cashier.allInstance()->isUnique(o:Cashier | o.Id)",
+        "postcondition": "result = cashierExists"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashierCRUDService::deleteCashier(id: Integer): Boolean {\n\tdefinition:\n\t\tcashierExists: Boolean = Cashier.allInstance()->exists(c: Cashier|c.Id = id)\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tCashier.allInstance()->isUnique(o: Cashier|o.Id)\n\tpostcondition:\n\t\tresult = cashierExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

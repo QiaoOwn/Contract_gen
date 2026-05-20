@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchedCashDesks:Set(CashDesk) = CashDesk.allInstance()->select(c | c.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean) and CashDesk.allInstance()->isUnique(c:CashDesk | c.Id)",
+        "postcondition": "if matchedCashDesks.isEmpty() then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened else true endif and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 250,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          matchedCashDesks:Set(CashDesk) = CashDesk.allInstance()->select(c | c.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean) and CashDesk.allInstance()->isUnique(c:CashDesk | c.Id)\n            \n            postcondition:\n          if matchedCashDesks.isEmpty() then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened else true endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

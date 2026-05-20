@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "searchedBooks:Set(Book) = BookCopy.allInstance()->select(o | o.Barcode = barcode)",
+        "precondition": "searchedBooks.isEmpty() = bool",
+        "postcondition": "let searchedBook:Book in Book.allInstance()->includes(searchedBook) and result = searchedBooks"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SearchBook::searchBookByBarCode(barcode: String): Set(Book) {\n\tdefinition:\n\t\tsearchedBooks: Set(Book) = BookCopy.allInstance()->select(o|o.Barcode = barcode)\n\tprecondition:\n\t\tsearchedBooks.isEmpty() = bool\n\tpostcondition:\n\t\tlet searchedBook: Book in\n\t\tBook.allInstance()->includes(searchedBook) and\n\t\tresult = searchedBooks\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

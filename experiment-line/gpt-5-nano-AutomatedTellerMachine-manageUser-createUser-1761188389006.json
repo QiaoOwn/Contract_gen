@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:User = User.allInstance()->any(o | o.UserID = userid), ok:Boolean",
+        "precondition": "",
+        "postcondition": "obs.UserID = userid and obs.Name = name and obs.Address = address and ok = true and result = ok"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          obs:User = User.allInstance()->any(o | o.UserID = userid), ok:Boolean\n            \n            \n            postcondition:\n          obs.UserID = userid and obs.Name = name and obs.Address = address and ok = true and result = ok\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

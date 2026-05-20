@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0)",
+        "precondition": "obs.notEmpty() = true",
+        "postcondition": "obs->forAll(u:User|u.SuspensionDays = u.SuspensionDays@pre - 1) and obs->forAll(u:User|u.SuspensionDays <> 0 or u.BorrowStatus = BorrowStatus::SUSPEND)"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\tobs: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0)\n\tprecondition:\n\t\tobs.notEmpty() = true\n\tpostcondition:\n\t\tobs->forAll(u: User|u.SuspensionDays = u.SuspensionDays@pre-1) and\n\t\tobs->forAll(u: User|u.SuspensionDays<>0 or\n\t\tu.BorrowStatus = BorrowStatus::SUSPEND)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Unexpected token (36:42)\n  34 |     }).and({\n  35 |       execute: () => obs.forEach((u: User) => l({\n> 36 |         execute: () => u.SuspensionDays <> 0,\n     |                                          ^\n  37 |         description: \"u.SuspensionDays<>0\"\n  38 |       }).or({\n  39 |         execute: () => u.BorrowStatus = BorrowStatus.SUSPEND,"
+        }
+      ]
+    }
+  }
+]

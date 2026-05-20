@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+        "precondition": "bankCard.oclIsUndefined() or bankCard.CardID = cardid",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew() = (bankCard.oclIsUndefined() and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance) and (BankCard.allInstance()->includes(newCard) or BankCard.allInstance()->excludes(newCard)) and (bankCard.CardID = cardid or (bankCard.oclIsUndefined() and result = true)) and (result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 55,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 237,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          bankCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)\n            \n            precondition:\n          bankCard.oclIsUndefined() or bankCard.CardID = cardid\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew() = (bankCard.oclIsUndefined() and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance) and (BankCard.allInstance()->includes(newCard) or BankCard.allInstance()->excludes(newCard)) and (bankCard.CardID = cardid or (bankCard.oclIsUndefined() and result = true)) and (result = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"AssignmentExpression\""
+        }
+      ]
+    }
+  }
+]

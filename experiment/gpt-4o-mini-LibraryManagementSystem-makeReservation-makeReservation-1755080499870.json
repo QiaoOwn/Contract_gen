@@ -1,0 +1,250 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = if reservations.isEmpty() then true else false endif",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and not(Reserve.allInstance()->includes(reservations))",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and LibraryManagementSystemService.Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 90,
+          "msg": "mismatched input 'allInstance()' expecting {'self', 'result', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 127,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 109,
+          "msg": "no viable alternative at input 'LibraryManagementSystemService.Reserve.allInstance()'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = if reservations.isEmpty() then true else false endif\n            \n            precondition:\n          self.UserID = uid and BookCopy.allInstance()->includes(barcode) and not(Reserve.allInstance()->includes(reservations))\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew() and LibraryManagementSystemService.Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and result = isReserved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = if reservations.isEmpty() then true else false endif",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and LibraryManagementSystemSystem.Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 108,
+          "msg": "no viable alternative at input 'LibraryManagementSystemSystem.Reserve.allInstance()'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = if reservations.isEmpty() then true else false endif\n            \n            precondition:\n          self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew() and LibraryManagementSystemSystem.Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and result = isReserved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and LibraryManagementSystemSystem.Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 108,
+          "msg": "no viable alternative at input 'LibraryManagementSystemSystem.Reserve.allInstance()'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true\n            \n            precondition:\n          self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew() and LibraryManagementSystemSystem.Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and result = isReserved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservations: Set(Reserve) = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\tisReserved: Boolean = reservations.isEmpty() = true\n\tprecondition:\n\t\tself.UserID = uid and\n\t\tBookCopy.allInstance()->includes(barcode) and\n\t\tReserve.allInstance()->excludes(reservations)\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserve.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedUser = self and\n\t\tnewReservation.ReservedCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode) and\n\t\tisReserved = true and\n\t\tresult = isReserved\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservations: Set(Reserve) = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\tisReserved: Boolean = reservations.isEmpty() = true\n\tprecondition:\n\t\tself.UserID = uid and\n\t\tBookCopy.allInstance()->includes(barcode) and\n\t\tReserve.allInstance()->excludes(reservations)\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserve.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedUser = self and\n\t\tnewReservation.ReservedCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode) and\n\t\tisReserved = true and\n\t\tresult = isReserved\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservations: Set(Reserve) = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\tisReserved: Boolean = reservations.isEmpty() = true\n\tprecondition:\n\t\tself.UserID = uid and\n\t\tBookCopy.allInstance()->includes(barcode) and\n\t\tReserve.allInstance()->excludes(reservations)\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserve.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedUser = self and\n\t\tnewReservation.ReservedCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode) and\n\t\tisReserved = true and\n\t\tresult = isReserved\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservations: Set(Reserve) = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\tisReserved: Boolean = reservations.isEmpty() = true\n\tprecondition:\n\t\tself.UserID = uid and\n\t\tBookCopy.allInstance()->includes(barcode) and\n\t\tReserve.allInstance()->excludes(reservations)\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserve.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedUser = self and\n\t\tnewReservation.ReservedCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode) and\n\t\tisReserved = true and\n\t\tresult = isReserved\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservations: Set(Reserve) = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\tisReserved: Boolean = reservations.isEmpty() = true\n\tprecondition:\n\t\tself.UserID = uid and\n\t\tBookCopy.allInstance()->includes(barcode) and\n\t\tReserve.allInstance()->excludes(reservations)\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserve.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedUser = self and\n\t\tnewReservation.ReservedCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode) and\n\t\tisReserved = true and\n\t\tresult = isReserved\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservations: Set(Reserve) = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\tisReserved: Boolean = reservations.isEmpty() = true\n\tprecondition:\n\t\tself.UserID = uid and\n\t\tBookCopy.allInstance()->includes(barcode) and\n\t\tReserve.allInstance()->excludes(reservations)\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserve.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedUser = self and\n\t\tnewReservation.ReservedCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode) and\n\t\tisReserved = true and\n\t\tresult = isReserved\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservations:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), isReserved:Boolean = reservations.isEmpty() = true",
+        "precondition": "self.UserID = uid and BookCopy.allInstance()->includes(barcode) and Reserve.allInstance()->excludes(reservations)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserve.allInstance()->includes(newReservation) and newReservation.ReservedUser = self and newReservation.ReservedCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) and isReserved = true and result = isReserved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

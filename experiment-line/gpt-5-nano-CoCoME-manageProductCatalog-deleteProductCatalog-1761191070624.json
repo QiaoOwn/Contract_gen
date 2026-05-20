@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "ProductCatalog.allInstance()->includes(obs)",
+        "postcondition": "let found: Boolean = ProductCatalog.allInstance()->select(o | o.Id = id)->size() > 0 in result = found"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 82,
+          "msg": "mismatched input '->' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::deleteProductCatalog(id:Integer): Boolean {\n          definition:\n          obs:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          ProductCatalog.allInstance()->includes(obs)\n            \n            postcondition:\n          let found: Boolean = ProductCatalog.allInstance()->select(o | o.Id = id)->size() > 0 in result = found\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

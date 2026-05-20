@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid)",
+        "precondition": "user.oclIsUndefined() = bool",
+        "postcondition": "let newUser:User in newUser.oclIsNew(), User.allInstance()->includes(newUser)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 48,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::queryUser(userid:Integer): User {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid)\n            \n            precondition:\n          user.oclIsUndefined() = bool\n            \n            postcondition:\n          let newUser:User in newUser.oclIsNew(), User.allInstance()->includes(newUser)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

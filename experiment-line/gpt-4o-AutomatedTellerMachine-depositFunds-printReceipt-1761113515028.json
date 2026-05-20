@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o = self.InputCard)",
+        "precondition": "self.CardIDValidated = true and self.PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let result:Real in (self.CardIDValidated and self.PasswordValidated and inputCard.oclIsUndefined() = false) and (if self.IsDeposit then result = self.DepositedNumber else result = 0.0 endif)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 118,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o = self.InputCard)\n            \n            precondition:\n          self.CardIDValidated = true and self.PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let result:Real in (self.CardIDValidated and self.PasswordValidated and inputCard.oclIsUndefined() = false) and (if self.IsDeposit then result = self.DepositedNumber else result = 0.0 endif)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

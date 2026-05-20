@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), ob:Item = obs->any(i | true), orderEntry:OrderEntry, orderProduct:OrderProduct = self.CurrentOrderProduct",
+        "precondition": "obs.isEmpty() = true",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and orderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = ob.Price * quantity and orderEntry.Item = ob and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 102,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), ob:Item = obs->any(i | true), orderEntry:OrderEntry, orderProduct:OrderProduct = self.CurrentOrderProduct\n            \n            precondition:\n          obs.isEmpty() = true\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and orderProduct.ContainedEntries->includes(orderEntry) and orderEntry.Quantity = quantity and orderEntry.SubAmount = ob.Price * quantity and orderEntry.Item = ob and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

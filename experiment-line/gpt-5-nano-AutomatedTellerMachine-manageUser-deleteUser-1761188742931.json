@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchedUsers:Set(User) = User.allInstance()->select(o | o.UserID = userid), deleted:Boolean = matchedUsers->size() > 0",
+        "precondition": "true",
+        "postcondition": "matchedUsers->forAll(o:User | User.allInstance()->excludes(o))\nresult = deleted"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 118,
+          "msg": "no viable alternative at input 'matchedUsers->size()'"
+        },
+        {
+          "line": 10,
+          "column": 0,
+          "msg": "mismatched input 'result' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::deleteUser(userid:Integer): Boolean {\n          definition:\n          matchedUsers:Set(User) = User.allInstance()->select(o | o.UserID = userid), deleted:Boolean = matchedUsers->size() > 0\n            \n            precondition:\n          true\n            \n            postcondition:\n          matchedUsers->forAll(o:User | User.allInstance()->excludes(o))\nresult = deleted\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

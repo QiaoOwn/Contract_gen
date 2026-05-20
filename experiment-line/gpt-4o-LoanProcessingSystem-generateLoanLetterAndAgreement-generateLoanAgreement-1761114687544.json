@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existsLoanRequest:Boolean = if CurrentLoanRequest.oclIsUndefined() then false else true endif",
+        "precondition": "existsLoanRequest = true",
+        "postcondition": "let newLoanAgreement:LoanAgreement in newLoanAgreement.oclIsNew() and LoanAgreement.allInstance()->includes(newLoanAgreement) and newLoanAgreement.Content = \"Loan Agreement\" and CurrentLoanRequest.AttachedLoanAgreement = newLoanAgreement and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {\n\tdefinition:\n\t\texistsLoanRequest: Boolean = if CurrentLoanRequest.oclIsUndefined() \n\t\tthen false \n\t\telse true \n\t\tendif \n\tprecondition:\n\t\texistsLoanRequest = true\n\tpostcondition:\n\t\tlet newLoanAgreement: LoanAgreement in\n\t\tnewLoanAgreement.oclIsNew() and\n\t\tLoanAgreement.allInstance()->includes(newLoanAgreement) and\n\t\tnewLoanAgreement.Content = \"Loan Agreement\" and\n\t\tCurrentLoanRequest.AttachedLoanAgreement = newLoanAgreement and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

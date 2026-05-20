@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "allUsers:Set(User) = User.allInstance(), user:User = allUsers->any(u | u.UserID = userid)",
+        "precondition": "User.allInstance()->excludes(user)",
+        "postcondition": "let newUser:User in newUser.oclIsNew() and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and User.allInstance()->includes(newUser) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::createUser(userid: Integer,name: String,address: String): Boolean {\n\tdefinition:\n\t\tallUsers: Set(User) = User.allInstance(),\n\t\tuser: User = allUsers->any(u|u.UserID = userid)\n\tprecondition:\n\t\tUser.allInstance()->excludes(user)\n\tpostcondition:\n\t\tlet newUser: User in\n\t\tnewUser.oclIsNew() and\n\t\tnewUser.UserID = userid and\n\t\tnewUser.Name = name and\n\t\tnewUser.Address = address and\n\t\tUser.allInstance()->includes(newUser) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

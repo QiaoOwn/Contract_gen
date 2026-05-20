@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk: CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "let exists:Boolean = cashDesk.oclIsUndefined() = false in result = exists"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 77,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {\n          definition:\n          cashDesk: CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          let exists:Boolean = cashDesk.oclIsUndefined() = false in result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

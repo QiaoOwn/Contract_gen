@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "LR:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)",
+        "precondition": "",
+        "postcondition": "LR.oclIsUndefined()=true and let newLR:LoanRequest in newLR.oclIsNew() and LoanRequest.allInstance()->includes(newLR) and newLR.RequestID=requestid and newLR.Name=name and newLR.LoanAmount=loanamount and newLR.LoanPurpose=loanpurpose and newLR.Income=income and newLR.PhoneNumber=phonenumber and newLR.PostalAddress=postaladdress and newLR.ZipCode=zipcode and newLR.Email=email and newLR.WorkReferences=workreferences and newLR.CreditReferences=creditreferences and newLR.CheckingAccountNumber=checkingaccountnumber and newLR.SecurityNumber=securitynumber and newLR.Status=LoanRequestStatus::SUBMITTED and self.CurrentLoanRequest=newLR and result=true or LR.oclIsUndefined()=false and self.CurrentLoanRequest=LR and result=true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 39,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 7,
+          "column": 48,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          LR:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)\n            \n            \n            postcondition:\n          LR.oclIsUndefined()=true and let newLR:LoanRequest in newLR.oclIsNew() and LoanRequest.allInstance()->includes(newLR) and newLR.RequestID=requestid and newLR.Name=name and newLR.LoanAmount=loanamount and newLR.LoanPurpose=loanpurpose and newLR.Income=income and newLR.PhoneNumber=phonenumber and newLR.PostalAddress=postaladdress and newLR.ZipCode=zipcode and newLR.Email=email and newLR.WorkReferences=workreferences and newLR.CreditReferences=creditreferences and newLR.CheckingAccountNumber=checkingaccountnumber and newLR.SecurityNumber=securitynumber and newLR.Status=LoanRequestStatus::SUBMITTED and self.CurrentLoanRequest=newLR and result=true or LR.oclIsUndefined()=false and self.CurrentLoanRequest=LR and result=true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

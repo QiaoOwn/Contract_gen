@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "entriesAmounts:Sequence(Real) = self.CurrentOrderProduct.ContainedEntries->collect(o:OrderEntry | o.SubAmount)",
+        "precondition": "self.CurrentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = entriesAmounts.sum() and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n\tdefinition:\n\t\tentriesAmounts: Sequence(Real) = self.CurrentOrderProduct.ContainedEntries->collect(o: OrderEntry|o.SubAmount)\n\tprecondition:\n\t\tself.CurrentOrderProduct.oclIsUndefined() = false\n\tpostcondition:\n\t\tself.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and\n\t\tself.CurrentOrderProduct.Amount = entriesAmounts.sum() and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Missing semicolon. (12:33)\n  10 |   placeOrder(): boolean {\n  11 |     /*Definition Start*/\n> 12 |     let entriesAmounts: Sequence(Real) = l({\n     |                                 ^\n  13 |       logic: () => this.CurrentOrderProduct.ContainedEntries.map((o: OrderEntry) => l({\n  14 |         logic: () => o.SubAmount,\n  15 |         description: \"o.SubAmount\""
+        }
+      ]
+    }
+  }
+]

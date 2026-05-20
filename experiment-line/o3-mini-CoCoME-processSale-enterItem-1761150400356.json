@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and item.oclIsUndefined() = false and item.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = CurrentSale and saleLine.Quantity = quantity and saleLine.Subamount = item.Price * quantity and item.StockNumber = item.StockNumber - quantity and CurrentSaleLine = saleLine and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::enterItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tCurrentSale.oclIsUndefined() = false and\n\t\tCurrentSale.IsComplete = false and\n\t\titem.oclIsUndefined() = false and\n\t\titem.StockNumber>=quantity\n\tpostcondition:\n\t\tlet saleLine: SalesLineItem in\n\t\tsaleLine.oclIsNew() and\n\t\tCurrentSale.ContainedSalesLine->includes(saleLine) and\n\t\tsaleLine.BelongedSale = CurrentSale and\n\t\tsaleLine.Quantity = quantity and\n\t\tsaleLine.Subamount = item.Price*quantity and\n\t\titem.StockNumber = item.StockNumber-quantity and\n\t\tCurrentSaleLine = saleLine and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID)",
+        "precondition": "obs.oclIsUndefined() = false",
+        "postcondition": "let existsOrderProduct: Boolean = obs.oclIsUndefined() = false in obs.OrderStatus = RECEIVED and obs.ContainedEntries->forAll(oe | oe.Item.StockNumber = oe.Item.StockNumber + oe.Quantity) and result = existsOrderProduct"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID: Integer): Boolean {\n\tdefinition:\n\t\tobs: OrderProduct = OrderProduct.allInstance()->any(o|o.Id = orderID)\n\tprecondition:\n\t\tobs.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet existsOrderProduct: Boolean = obs.oclIsUndefined() = false in\n\t\tobs.OrderStatus = RECEIVED and\n\t\tobs.ContainedEntries->forAll(oe|oe.Item.StockNumber = oe.Item.StockNumber+oe.Quantity) and\n\t\tresult = existsOrderProduct\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.CardIDValidated = true and self.PasswordValidated = true and self.InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(self.InputCard)",
+        "postcondition": "let retVal:Real = if self.IsDeposit = false then self.DepositedNumber else if self.IsDeposit = true then self.DepositedNumber else 0 endif endif in result = retVal"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 153,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          \n            precondition:\n          self.CardIDValidated = true and self.PasswordValidated = true and self.InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(self.InputCard)\n            \n            postcondition:\n          let retVal:Real = if self.IsDeposit = false then self.DepositedNumber else if self.IsDeposit = true then self.DepositedNumber else 0 endif endif in result = retVal\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

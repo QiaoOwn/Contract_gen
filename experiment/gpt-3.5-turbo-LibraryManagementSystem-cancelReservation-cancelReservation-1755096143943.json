@@ -1,0 +1,286 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = Barcode.allInstance()->any(o | o.Barcode = barcode),\nuser:User = uid.allInstance()->any(o | o.UserID = uid)",
+        "precondition": "reservedCopy.oclIsUndefined() = bool,\nuser.oclIsUndefined() = bool,\nReserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = Barcode.allInstance()->any(o | o.Barcode = barcode),\nuser:User = uid.allInstance()->any(o | o.UserID = uid)\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool,\nuser.oclIsUndefined() = bool,\nReserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid)",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = reservedCopy.IsReserved = false and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid)\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = reservedCopy.IsReserved = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid, isReserved:Boolean = reservedCopy.IsReserved)",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, reservedCopy.IsReserved = false and result = reservedCopy.IsReserved = false, result = isReserved = false and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "missing ')' at ','"
+        },
+        {
+          "line": 3,
+          "column": 188,
+          "msg": "extraneous input ')' expecting 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid, isReserved:Boolean = reservedCopy.IsReserved)\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, reservedCopy.IsReserved = false and result = reservedCopy.IsReserved = false, result = isReserved = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = reservedCopy.IsReserved = false, result = isReserved = false and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = reservedCopy.IsReserved = false, result = isReserved = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = if reservedCopy.IsReserved then true else false endif",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter = false and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = if reservedCopy.IsReserved then true else false endif\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = reservedCopy.IsReserved, isReservedAfter:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, Reserved.allInstance()->includes(reservedCopy)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, result = isReservedAfter and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = if reservedCopy.IsReserved then true else false endif",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user)",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReservedAfter = false and result = isReservedAfter"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = if reservedCopy.IsReserved then true else false endif\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user)\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReservedAfter = false and result = isReservedAfter\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user), isReserved = true",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReserved = true and result = isReserved"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user), isReserved = true\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReserved = true and result = isReserved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = reservedCopy.IsReserved",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user), isReserved = true",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReserved = true and result = isReserved"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy), isReservedAfter:Boolean = reservedCopy.IsReserved\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user), isReserved = true\n            \n            postcondition:\n          let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReserved = true and result = isReserved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), user:User = User.allInstance()->any(o | o.UserID = uid), isReserved:Boolean = user.ReservedBook->includes(reservedCopy)",
+        "precondition": "reservedCopy.oclIsUndefined() = bool, user.oclIsUndefined() = bool, User.allInstance()->includes(user), isReserved = true",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew(), BookCopy.allInstance()->excludes(reservedCopy), reservedCopy.IsReserved = false, isReserved = true and result = isReserved"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

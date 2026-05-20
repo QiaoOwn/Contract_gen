@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), found:Boolean = if item.oclIsUndefined() = false then true else false endif",
+        "precondition": "newPrice > 0.0 and Item.allInstance()->isUnique(i:Item | i.Barcode)",
+        "postcondition": "(item.oclIsUndefined() = true or item.Price = newPrice) and result = found"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), found:Boolean = if item.oclIsUndefined() = false then true else false endif\n            \n            precondition:\n          newPrice > 0.0 and Item.allInstance()->isUnique(i:Item | i.Barcode)\n            \n            postcondition:\n          (item.oclIsUndefined() = true or item.Price = newPrice) and result = found\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

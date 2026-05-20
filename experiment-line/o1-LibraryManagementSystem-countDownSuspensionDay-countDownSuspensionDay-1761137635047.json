@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overDueUsers:Set(User) = User.allInstance()->select(u|u.OverDueFee > 0.0)",
+        "precondition": "overDueUsers.isEmpty() = false",
+        "postcondition": "overDueUsers->forAll(u:User|u.SuspensionDays = u.SuspensionDays@pre - 1 and if u.SuspensionDays@pre - 1 = 0 then u.BorrowStatus = BorrowStatus::SUSPEND else true endif)"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 110,
+          "msg": "mismatched input '-' expecting 'then'"
+        },
+        {
+          "line": 9,
+          "column": 118,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          overDueUsers:Set(User) = User.allInstance()->select(u|u.OverDueFee > 0.0)\n            \n            precondition:\n          overDueUsers.isEmpty() = false\n            \n            postcondition:\n          overDueUsers->forAll(u:User|u.SuspensionDays = u.SuspensionDays@pre - 1 and if u.SuspensionDays@pre - 1 = 0 then u.BorrowStatus = BorrowStatus::SUSPEND else true endif)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existing:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isNew:Boolean = if existing.oclIsUndefined() = true then true else false endif",
+        "precondition": "requestid.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and loanamount.oclIsTypeOf(Real) and loanpurpose.oclIsTypeOf(String) and income.oclIsTypeOf(Real) and phonenumber.oclIsTypeOf(Integer) and postaladdress.oclIsTypeOf(String) and zipcode.oclIsTypeOf(Integer) and email.oclIsTypeOf(String) and workreferences.oclIsTypeOf(String) and creditreferences.oclIsTypeOf(String) and checkingaccountnumber.oclIsTypeOf(Integer) and securitynumber.oclIsTypeOf(Integer) and LoanRequest.allInstance()->isUnique(o:LoanRequest | o.RequestID)",
+        "postcondition": "if isNew then let newRequest:LoanRequest in newRequest.oclIsNew() and LoanRequest.allInstance()->includes(newRequest) and newRequest.RequestID = requestid and newRequest.Name = name and newRequest.LoanAmount = loanamount and newRequest.LoanPurpose = loanpurpose and newRequest.Income = income and newRequest.PhoneNumber = phonenumber and newRequest.PostalAddress = postaladdress and newRequest.ZipCode = zipcode and newRequest.Email = email and newRequest.WorkReferences = workreferences and newRequest.CreditReferences = creditreferences and newRequest.CheckingAccountNumber = checkingaccountnumber and newRequest.SecurityNumber = securitynumber and newRequest.Status = LoanRequestStatus::SUBMITTED and self.CurrentLoanRequest = newRequest and result = true else self.CurrentLoanRequest = existing and result = true endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid: Integer,name: String,loanamount: Real,loanpurpose: String,income: Real,phonenumber: Integer,postaladdress: String,zipcode: Integer,email: String,workreferences: String,creditreferences: String,checkingaccountnumber: Integer,securitynumber: Integer): Boolean {\n\tdefinition:\n\t\texisting: LoanRequest = LoanRequest.allInstance()->any(o|o.RequestID = requestid),\n\t\tisNew: Boolean = if existing.oclIsUndefined() = true \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\trequestid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tloanamount.oclIsTypeOf(Real) and\n\t\tloanpurpose.oclIsTypeOf(String) and\n\t\tincome.oclIsTypeOf(Real) and\n\t\tphonenumber.oclIsTypeOf(Integer) and\n\t\tpostaladdress.oclIsTypeOf(String) and\n\t\tzipcode.oclIsTypeOf(Integer) and\n\t\temail.oclIsTypeOf(String) and\n\t\tworkreferences.oclIsTypeOf(String) and\n\t\tcreditreferences.oclIsTypeOf(String) and\n\t\tcheckingaccountnumber.oclIsTypeOf(Integer) and\n\t\tsecuritynumber.oclIsTypeOf(Integer) and\n\t\tLoanRequest.allInstance()->isUnique(o: LoanRequest|o.RequestID)\n\tpostcondition:\n\t\tif isNew \n\t\tthen let newRequest: LoanRequest in\n\t\tnewRequest.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(newRequest) and\n\t\tnewRequest.RequestID = requestid and\n\t\tnewRequest.Name = name and\n\t\tnewRequest.LoanAmount = loanamount and\n\t\tnewRequest.LoanPurpose = loanpurpose and\n\t\tnewRequest.Income = income and\n\t\tnewRequest.PhoneNumber = phonenumber and\n\t\tnewRequest.PostalAddress = postaladdress and\n\t\tnewRequest.ZipCode = zipcode and\n\t\tnewRequest.Email = email and\n\t\tnewRequest.WorkReferences = workreferences and\n\t\tnewRequest.CreditReferences = creditreferences and\n\t\tnewRequest.CheckingAccountNumber = checkingaccountnumber and\n\t\tnewRequest.SecurityNumber = securitynumber and\n\t\tnewRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\tself.CurrentLoanRequest = newRequest and\n\t\tresult = true \n\t\telse self.CurrentLoanRequest = existing and\n\t\tresult = true \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

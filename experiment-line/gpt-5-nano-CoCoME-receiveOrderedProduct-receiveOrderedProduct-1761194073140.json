@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID)",
+        "precondition": "obs.oclIsUndefined() = false and OrderProduct.allInstance()->includes(obs)",
+        "postcondition": "obs.OrderStatus = RECEIVED and obs.ContainedEntries->forAll(o: OrderEntry | o.Item.StockNumber = o.Item.StockNumber + o.Quantity) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID: Integer): Boolean {\n\tdefinition:\n\t\tobs: OrderProduct = OrderProduct.allInstance()->any(o|o.Id = orderID)\n\tprecondition:\n\t\tobs.oclIsUndefined() = false and\n\t\tOrderProduct.allInstance()->includes(obs)\n\tpostcondition:\n\t\tobs.OrderStatus = RECEIVED and\n\t\tobs.ContainedEntries->forAll(o: OrderEntry|o.Item.StockNumber = o.Item.StockNumber+o.Quantity) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: RECEIVED"
+        }
+      ]
+    }
+  }
+]

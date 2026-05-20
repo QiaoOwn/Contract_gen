@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(s | s.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "if store.oclIsUndefined() then let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and result = true else store.Name = name and store.Address = address and store.IsOpened = isopened and result = false endif"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageStoreCRUDService::createStore(id: Integer,name: String,address: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tstore: Store = Store.allInstance()->any(s|s.Id = id)\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\taddress.oclIsTypeOf(String) and\n\t\tisopened.oclIsTypeOf(Boolean)\n\tpostcondition:\n\t\tif store.oclIsUndefined() \n\t\tthen let newStore: Store in\n\t\tnewStore.oclIsNew() and\n\t\tStore.allInstance()->includes(newStore) and\n\t\tnewStore.Id = id and\n\t\tnewStore.Name = name and\n\t\tnewStore.Address = address and\n\t\tnewStore.IsOpened = isopened and\n\t\tresult = true \n\t\telse store.Name = name and\n\t\tstore.Address = address and\n\t\tstore.IsOpened = isopened and\n\t\tresult = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

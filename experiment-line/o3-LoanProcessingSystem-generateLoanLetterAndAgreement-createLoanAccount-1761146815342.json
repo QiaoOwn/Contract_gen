@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(a | a.LoanAccountID = loanaccountid)",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "if existingLoanAccount.oclIsUndefined() = true then\n  let createdAccount:LoanAccount in createdAccount.oclIsNew() and LoanAccount.allInstance()->includes(createdAccount) and createdAccount.LoanAccountID = loanaccountid and createdAccount.Balance = balance and createdAccount.Status = status\nelse\n  existingLoanAccount.oclIsUndefined() = false and existingLoanAccount.LoanAccountID = loanaccountid and existingLoanAccount.Balance = balance and existingLoanAccount.Status = status\nendif and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 13,
+          "column": 6,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(a | a.LoanAccountID = loanaccountid)\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          if existingLoanAccount.oclIsUndefined() = true then\n  let createdAccount:LoanAccount in createdAccount.oclIsNew() and LoanAccount.allInstance()->includes(createdAccount) and createdAccount.LoanAccountID = loanaccountid and createdAccount.Balance = balance and createdAccount.Status = status\nelse\n  existingLoanAccount.oclIsUndefined() = false and existingLoanAccount.LoanAccountID = loanaccountid and existingLoanAccount.Balance = balance and existingLoanAccount.Status = status\nendif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

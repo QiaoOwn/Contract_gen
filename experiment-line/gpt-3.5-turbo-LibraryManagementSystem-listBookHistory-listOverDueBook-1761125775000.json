@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Status = CopyStatus.Loan);\nobs:Set(BookCopy) = obs->select(o | o.LoanedRecord->exists(l | l.LoanedUser.UserID = uid and l.IsReturned = false));",
+        "precondition": "obs.isEmpty() = false and ClassName.allInstance()->includes(obs)",
+        "postcondition": "obs->forAll(o:BookCopy|o.Status = CopyStatus.Loan) and result = obs"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'obs' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Status = CopyStatus.Loan);\nobs:Set(BookCopy) = obs->select(o | o.LoanedRecord->exists(l | l.LoanedUser.UserID = uid and l.IsReturned = false));\n            \n            precondition:\n          obs.isEmpty() = false and ClassName.allInstance()->includes(obs)\n            \n            postcondition:\n          obs->forAll(o:BookCopy|o.Status = CopyStatus.Loan) and result = obs\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CopyStatus"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "User.allInstance()->excludes(User.allInstance()->any(u | u.UserID = userid))",
+        "postcondition": "let ob:User in ob.oclIsNew() and User.allInstance()->includes(ob) and ob.UserID = userid and ob.Name = name and ob.Sex = sex and ob.Password = password and ob.Email = email and ob.Faculty = faculty and ob.LoanedNumber = loanednumber and ob.BorrowStatus = borrowstatus and ob.SuspensionDays = suspensiondays and ob.OverDueFee = overduefee and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 43,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 4,
+          "column": 84,
+          "msg": "mismatched input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:String,name:String,sex:Sex [M|F],password:String,email:String,faculty:String,loanednumber:Integer,borrowstatus:BorrowStatus [NORMAL|SUSPEND],suspensiondays:Integer,overduefee:Real): Boolean {\n          \n            precondition:\n          User.allInstance()->excludes(User.allInstance()->any(u | u.UserID = userid))\n            \n            postcondition:\n          let ob:User in ob.oclIsNew() and User.allInstance()->includes(ob) and ob.UserID = userid and ob.Name = name and ob.Sex = sex and ob.Password = password and ob.Email = email and ob.Faculty = faculty and ob.LoanedNumber = loanednumber and ob.BorrowStatus = borrowstatus and ob.SuspensionDays = suspensiondays and ob.OverDueFee = overduefee and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

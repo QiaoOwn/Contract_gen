@@ -1,0 +1,281 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password);\nwithdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif;",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true;",
+        "postcondition": "let paymentAmount:Real in (inputCard.Balance < WithdrawedNumber implies (paymentAmount = 0) else (paymentAmount = WithdrawedNumber) and (inputCard.Balance = inputCard.Balance - WithdrawedNumber) and (inputCard.Balance < 0 implies (inputCard.Balance = 0)) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'withdrawedAmount' expecting 'precondition'"
+        },
+        {
+          "line": 10,
+          "column": 74,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password);\nwithdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif;\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true;\n            \n            postcondition:\n          let paymentAmount:Real in (inputCard.Balance < WithdrawedNumber implies (paymentAmount = 0) else (paymentAmount = WithdrawedNumber) and (inputCard.Balance = inputCard.Balance - WithdrawedNumber) and (inputCard.Balance < 0 implies (inputCard.Balance = 0)) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and (inputCard.Balance = inputCard.Balance - withdrawedAmount) and (inputCard.Balance < 0 implies (inputCard.Balance = 0)) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and (inputCard.Balance = inputCard.Balance - withdrawedAmount) and (inputCard.Balance < 0 implies (inputCard.Balance = 0)) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in (inputCard.Balance < withdrawedAmount implies (paymentAmount = 0) else (paymentAmount = withdrawedAmount) and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies (inputCard.Balance = 0) and result = paymentAmount);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies inputCard.Balance = 0) and result = paymentAmount"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies inputCard.Balance = 0) and result = paymentAmount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies inputCard.Balance = 0) and result = paymentAmount"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount and inputCard.Balance < 0 implies inputCard.Balance = 0) and result = paymentAmount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount) and inputCard.Balance < 0 implies inputCard.Balance = 0 and result = paymentAmount"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount) and inputCard.Balance < 0 implies inputCard.Balance = 0 and result = paymentAmount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount) and inputCard.Balance < 0 implies inputCard.Balance = 0 and result = paymentAmount"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount) and inputCard.Balance < 0 implies inputCard.Balance = 0 and result = paymentAmount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedAmount:Real = if WithdrawedNumber > 0 then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false and inputCard.CardStatus = CardStatus.NORMAL and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "let paymentAmount:Real = withdrawedAmount in paymentAmount = 0 implies (inputCard.Balance < withdrawedAmount) else (paymentAmount = withdrawedAmount and inputCard.Balance = inputCard.Balance - withdrawedAmount) and inputCard.Balance < 0 implies inputCard.Balance = 0 and result = paymentAmount"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

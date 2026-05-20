@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = InputCard.CardID)\nexistCard:BankCard = obs->any(o | o.CardID = InputCard.CardID and o.Password = InputCard.Password)\nisWithdraw:Boolean = if IsDeposit = false then true else false endif\nisDeposit:Boolean = IsDeposit\nwithdrawedNumber:Real = existCard.Balance if isWithdraw = true else 0 endif\ndepositedNumber:Real = DepositedNumber if isDeposit = true else 0 endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and obs.isEmpty() = false",
+        "postcondition": "result = withdrawedNumber if isWithdraw = true else (depositedNumber if isDeposit = true else 0) endif"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'existCard' expecting 'precondition'"
+        },
+        {
+          "line": 14,
+          "column": 36,
+          "msg": "mismatched input 'if' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = InputCard.CardID)\nexistCard:BankCard = obs->any(o | o.CardID = InputCard.CardID and o.Password = InputCard.Password)\nisWithdraw:Boolean = if IsDeposit = false then true else false endif\nisDeposit:Boolean = IsDeposit\nwithdrawedNumber:Real = existCard.Balance if isWithdraw = true else 0 endif\ndepositedNumber:Real = DepositedNumber if isDeposit = true else 0 endif\n            \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and obs.isEmpty() = false\n            \n            postcondition:\n          result = withdrawedNumber if isWithdraw = true else (depositedNumber if isDeposit = true else 0) endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: withdrawedNumber"
+        }
+      ]
+    }
+  }
+]

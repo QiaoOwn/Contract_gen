@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "ca:CheckingAccount = self.CurrentLoanRequest.RequestedCAHistory",
+        "precondition": "LoanRequest.allInstance()->includes(self.CurrentLoanRequest) and self.CurrentLoanRequest.oclIsUndefined() = false and ca.oclIsUndefined() = false and CheckingAccount.allInstance()->includes(ca) and ca.oclIsTypeOf(CheckingAccount)",
+        "postcondition": "result = ca"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {\n          definition:\n          ca:CheckingAccount = self.CurrentLoanRequest.RequestedCAHistory\n            \n            precondition:\n          LoanRequest.allInstance()->includes(self.CurrentLoanRequest) and self.CurrentLoanRequest.oclIsUndefined() = false and ca.oclIsUndefined() = false and CheckingAccount.allInstance()->includes(ca) and ca.oclIsTypeOf(CheckingAccount)\n            \n            postcondition:\n          result = ca\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "candidates:Set(CashDesk) = CashDesk.allInstance()->select(o | o.Id = id), cd:CashDesk = if candidates.isEmpty() = true then null else CashDesk.allInstance()->any(o | o.Id = id) endif",
+        "precondition": "id.oclIsTypeOf(Integer) and CashDesk.allInstance()->isUnique(o:CashDesk | o.Id)",
+        "postcondition": "if candidates.isEmpty() = true then result = null else result = cd endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::queryCashDesk(id: Integer): CashDesk {\n\tdefinition:\n\t\tcandidates: Set(CashDesk) = CashDesk.allInstance()->select(o|o.Id = id),\n\t\tcd: CashDesk = if candidates.isEmpty() = true \n\t\tthen null \n\t\telse CashDesk.allInstance()->any(o|o.Id = id) \n\t\tendif \n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tCashDesk.allInstance()->isUnique(o: CashDesk|o.Id)\n\tpostcondition:\n\t\tif candidates.isEmpty() = true \n\t\tthen result = null \n\t\telse result = cd \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

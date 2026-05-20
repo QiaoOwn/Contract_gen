@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(x | x.UserID = uid), bc:BookCopy = BookCopy.allInstance()->any(y | y.Barcode = barcode), l:Loan = Loan.allInstance()->any(z | z.LoanedUser = u and z.LoanedCopy = bc and z.IsReturned = false)",
+        "precondition": "u.oclIsUndefined() = false and bc.oclIsUndefined() = false and l.oclIsUndefined() = false and Loan.allInstance()->includes(l) and l.IsReturned = false",
+        "postcondition": "l.RenewedTimes = l.RenewedTimes + 1 and l.RenewDate = ThirdPartyServices.getSystemDate() and l.DueDate = ThirdPartyServices.addDays(l.DueDate,14) and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 96,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(x | x.UserID = uid), bc:BookCopy = BookCopy.allInstance()->any(y | y.Barcode = barcode), l:Loan = Loan.allInstance()->any(z | z.LoanedUser = u and z.LoanedCopy = bc and z.IsReturned = false)\n            \n            precondition:\n          u.oclIsUndefined() = false and bc.oclIsUndefined() = false and l.oclIsUndefined() = false and Loan.allInstance()->includes(l) and l.IsReturned = false\n            \n            postcondition:\n          l.RenewedTimes = l.RenewedTimes + 1 and l.RenewDate = ThirdPartyServices.getSystemDate() and l.DueDate = ThirdPartyServices.addDays(l.DueDate,14) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

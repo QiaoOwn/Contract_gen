@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "passwordValidated:Boolean = self.InputCard.Password.oclIsUndefined() = false, cardIDValidated:Boolean = self.InputCard.CardID.oclIsUndefined() = false, obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = self.InputCard.CardID), inputCard:BankCard = obs->any(o | o.Balance >= quantity)",
+        "precondition": "passwordValidated = true and cardIDValidated = true and obs.isEmpty() = false",
+        "postcondition": "let inputCard:BankCard in inputCard.Balance = inputCard.Balance - quantity and WithdrawedNumber = quantity and BankCard.allInstance()->includes(inputCard)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 61,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::withdrawCash(quantity:Integer): Boolean {\n          definition:\n          passwordValidated:Boolean = self.InputCard.Password.oclIsUndefined() = false, cardIDValidated:Boolean = self.InputCard.CardID.oclIsUndefined() = false, obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = self.InputCard.CardID), inputCard:BankCard = obs->any(o | o.Balance >= quantity)\n            \n            precondition:\n          passwordValidated = true and cardIDValidated = true and obs.isEmpty() = false\n            \n            postcondition:\n          let inputCard:BankCard in inputCard.Balance = inputCard.Balance - quantity and WithdrawedNumber = quantity and BankCard.allInstance()->includes(inputCard)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardIDValidated"
+        }
+      ]
+    }
+  }
+]

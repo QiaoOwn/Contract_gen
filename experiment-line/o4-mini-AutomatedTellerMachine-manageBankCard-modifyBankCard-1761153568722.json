@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardId)",
+        "precondition": "true",
+        "postcondition": "card.oclIsUndefined() = false and card.CardStatus = cardstatus and card.Catalog = catalog and card.Password = password and card.Balance = balance and result = true or card.oclIsUndefined() = true and result = false"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBankCardCRUDService::modifyBankCard(cardid: Integer,cardstatus: CardStatus[NORMAL|SUSPEND|CANCEL],catalog: CardCatalog[CREDIT|DEPOSIT],password: Integer,balance: Real): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardId)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tcard.oclIsUndefined() = false and\n\t\tcard.CardStatus = cardstatus and\n\t\tcard.Catalog = catalog and\n\t\tcard.Password = password and\n\t\tcard.Balance = balance and\n\t\tresult = true or\n\t\tcard.oclIsUndefined() = true and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardId"
+        }
+      ]
+    }
+  }
+]

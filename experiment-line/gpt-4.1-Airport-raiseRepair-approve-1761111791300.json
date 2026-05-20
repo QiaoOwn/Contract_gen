@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), let ah:ApprovalHistory in ah.oclIsNew(), ah.StaffId = sid, ah.Reject = reject, ah.Suggestion = suggestion, ah.Id = ApprovalHistory.allInstance()->size() + 1",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "repair.History->includes(ah) and (if reject = false and repair.Process = 0 and staff.Role = 1 then repair.Process = 1 endif) and (if reject = false and repair.Process = 1 and staff.Role = 2 then repair.Process = 2 endif) and (if reject = false and repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif) and (if reject = true then repair.Process = 5 endif) and Repair.allInstance()->includes(repair) and result = ah"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 125,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 148,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), let ah:ApprovalHistory in ah.oclIsNew(), ah.StaffId = sid, ah.Reject = reject, ah.Suggestion = suggestion, ah.Id = ApprovalHistory.allInstance()->size() + 1\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          repair.History->includes(ah) and (if reject = false and repair.Process = 0 and staff.Role = 1 then repair.Process = 1 endif) and (if reject = false and repair.Process = 1 and staff.Role = 2 then repair.Process = 2 endif) and (if reject = false and repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif) and (if reject = true then repair.Process = 5 endif) and Repair.allInstance()->includes(repair) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ah"
+        }
+      ]
+    }
+  }
+]

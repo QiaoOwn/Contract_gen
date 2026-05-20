@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u:User | u.LoanedBook->exists(l:Loan | l.IsReturned = false and (l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true)))",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "overdueUsers->forAll(u:User | if u.SuspensionDays > 0 then u.SuspensionDays = u.SuspensionDays - 1 else u.SuspensionDays = u.SuspensionDays endif) and overdueUsers->forAll(u:User | if u.SuspensionDays = 0 then u.BorrowStatus = BorrowStatus::SUSPEND else u.BorrowStatus = u.BorrowStatus endif)"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u: User|u.LoanedBook->exists(l: Loan|l.IsReturned = false and\n\t\t(l.OverDue3Days = true or\n\t\tl.OverDue10Days = true or\n\t\tl.OverDue17Days = true or\n\t\tl.OverDue31Days = true)))\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\toverdueUsers->forAll(u: User|if u.SuspensionDays>0 \n\t\tthen u.SuspensionDays = u.SuspensionDays-1 \n\t\telse u.SuspensionDays = u.SuspensionDays \n\t\tendif ) and\n\t\toverdueUsers->forAll(u: User|if u.SuspensionDays = 0 \n\t\tthen u.BorrowStatus = BorrowStatus::SUSPEND \n\t\telse u.BorrowStatus = u.BorrowStatus \n\t\tendif )\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

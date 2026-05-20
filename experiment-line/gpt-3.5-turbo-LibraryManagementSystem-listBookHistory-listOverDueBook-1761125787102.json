@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(b | b.LoanedRecord->forAll(l | l.IsReturned = false and l.DueDate < Date::today())), user:User = User.allInstance()->select(u | u.UserID = uid)->any()",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "let overdueBook:BookCopy in overdueBook.oclIsNew() and BookCopy.allInstance()->includes(overdueBook)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 138,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 3,
+          "column": 152,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(b | b.LoanedRecord->forAll(l | l.IsReturned = false and l.DueDate < Date::today())), user:User = User.allInstance()->select(u | u.UserID = uid)->any()\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          let overdueBook:BookCopy in overdueBook.oclIsNew() and BookCopy.allInstance()->includes(overdueBook)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

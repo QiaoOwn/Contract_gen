@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = userid), card:BankCard = user.OwnedCard",
+        "precondition": "user.oclIsUndefined() = false and card.oclIsUndefined() = false",
+        "postcondition": "card.oclIsUndefined() = false and card.CardID = self.cardID and card.CardStatus = self.cardStatus and card.Catalog = self.catalog and card.Password = self.password and card.Balance = self.balance and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::modifyUser(userid: Integer,name: String,address: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(u|u.UserID = userid),\n\t\tcard: BankCard = user.OwnedCard\n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tcard.oclIsUndefined() = false\n\tpostcondition:\n\t\tcard.oclIsUndefined() = false and\n\t\tcard.CardID = self.cardID and\n\t\tcard.CardStatus = self.cardStatus and\n\t\tcard.Catalog = self.catalog and\n\t\tcard.Password = self.password and\n\t\tcard.Balance = self.balance and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

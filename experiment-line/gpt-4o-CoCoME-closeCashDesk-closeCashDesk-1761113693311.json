@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(cd | cd.Id = cashDeskID), isCurrentCashDesk:Boolean = (self.CurrentCashDesk = cashDesk)",
+        "precondition": "cashDesk.oclIsUndefined() = false and cashDesk.isOpened=true and self.CurrentStore.oclIsUndefined() = false and isCurrentCashDesk = true",
+        "postcondition": "let ob:CashDesk in ob.oclIsNew() and Store.allInstance()->includes(self.CurrentStore) and Store.allInstance()->includes(cashDesk.BelongedStore) and cashDesk.isOpened = false and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 77,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 138,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(cd | cd.Id = cashDeskID), isCurrentCashDesk:Boolean = (self.CurrentCashDesk = cashDesk)\n            \n            precondition:\n          cashDesk.oclIsUndefined() = false and cashDesk.isOpened=true and self.CurrentStore.oclIsUndefined() = false and isCurrentCashDesk = true\n            \n            postcondition:\n          let ob:CashDesk in ob.oclIsNew() and Store.allInstance()->includes(self.CurrentStore) and Store.allInstance()->includes(cashDesk.BelongedStore) and cashDesk.isOpened = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

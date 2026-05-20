@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "theStore:Set(Store) = Store.allInstance()->select(o | o.Id = id), foundStore:Store = theStore->any(true), newStore:Store",
+        "precondition": "theStore->size() <= 1",
+        "postcondition": "(theStore->size() = 0 implies (let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened)) and (theStore->size() > 0 implies (foundStore.Id = id and foundStore.Name = foundStore.Name and foundStore.Address = foundStore.Address and foundStore.IsOpened = foundStore.IsOpened)) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 20,
+          "msg": "no viable alternative at input 'theStore->size()'"
+        },
+        {
+          "line": 9,
+          "column": 21,
+          "msg": "no viable alternative at input 'theStore->size()'"
+        },
+        {
+          "line": 9,
+          "column": 32,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          theStore:Set(Store) = Store.allInstance()->select(o | o.Id = id), foundStore:Store = theStore->any(true), newStore:Store\n            \n            precondition:\n          theStore->size() <= 1\n            \n            postcondition:\n          (theStore->size() = 0 implies (let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened)) and (theStore->size() > 0 implies (foundStore.Id = id and foundStore.Name = foundStore.Name and foundStore.Address = foundStore.Address and foundStore.IsOpened = foundStore.IsOpened)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

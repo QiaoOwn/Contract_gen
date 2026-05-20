@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode);\nobs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.CallNo=callNo);\nnewBookCopy:BookCopy = BookCopy.allInstance()->select(o | o.Barcode=barcode);",
+        "precondition": "bookCopy.oclIsUndefined() = bool\nobs.isEmpty() = bool\nobs.size() = 0",
+        "postcondition": "let newBookCopy:BookCopy in newBookCopy.oclIsNew() and BookCopy.allInstance()->includes(newBookCopy) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'obs' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode);\nobs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.CallNo=callNo);\nnewBookCopy:BookCopy = BookCopy.allInstance()->select(o | o.Barcode=barcode);\n            \n            precondition:\n          bookCopy.oclIsUndefined() = bool\nobs.isEmpty() = bool\nobs.size() = 0\n            \n            postcondition:\n          let newBookCopy:BookCopy in newBookCopy.oclIsNew() and BookCopy.allInstance()->includes(newBookCopy) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

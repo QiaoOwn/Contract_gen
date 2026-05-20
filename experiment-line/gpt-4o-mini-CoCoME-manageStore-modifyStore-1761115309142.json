@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(o | o.Id = id), isUpdated:Boolean",
+        "precondition": "store.oclIsUndefined() = bool",
+        "postcondition": "let updatedStore:Store in updatedStore.oclIsNew() and Store.allInstance()->includes(updatedStore) and updatedStore.Name = name and updatedStore.Address = address and updatedStore.IsOpened = isopened and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageStoreCRUDService::modifyStore(id: Integer,name: String,address: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tstore: Store = Store.allInstance()->any(o|o.Id = id),\n\t\tisUpdated: Boolean\n\tprecondition:\n\t\tstore.oclIsUndefined() = bool\n\tpostcondition:\n\t\tlet updatedStore: Store in\n\t\tupdatedStore.oclIsNew() and\n\t\tStore.allInstance()->includes(updatedStore) and\n\t\tupdatedStore.Name = name and\n\t\tupdatedStore.Address = address and\n\t\tupdatedStore.IsOpened = isopened and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

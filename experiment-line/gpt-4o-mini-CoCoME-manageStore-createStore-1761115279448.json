@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(o | o.Id = id), isStoreExist:Boolean = store.oclIsUndefined()",
+        "precondition": "store.oclIsUndefined() = isStoreExist",
+        "postcondition": "let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isOpened and result = not isStoreExist"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 223,
+          "msg": "extraneous input 'isStoreExist' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          store:Store = Store.allInstance()->any(o | o.Id = id), isStoreExist:Boolean = store.oclIsUndefined()\n            \n            precondition:\n          store.oclIsUndefined() = isStoreExist\n            \n            postcondition:\n          let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isOpened and result = not isStoreExist\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: isOpened"
+        }
+      ]
+    }
+  }
+]

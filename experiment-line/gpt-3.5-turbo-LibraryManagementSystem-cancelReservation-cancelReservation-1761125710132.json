@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "uid:String, barcode:String, isReservationOpen:Boolean = if (Reserve.allInstance()->select(r | r.ReservedUser.UserID = uid and r.ReserveDate <= Date.now())->isEmpty()) then true else false endif",
+        "precondition": "Reserve.allInstance()->select(r | r.ReservedUser.UserID = uid and r.IsReserveClosed = false)->isEmpty() = false",
+        "postcondition": "let ob:Reserve in ob.oclIsNew(), Reserve.allInstance()->includes(ob), ob.ReservedUser.UserID = uid, ob.ReservedCopy.Barcode = barcode, ob.IsReserveClosed = true, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 153,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 3,
+          "column": 164,
+          "msg": "mismatched input '->' expecting 'then'"
+        },
+        {
+          "line": 6,
+          "column": 102,
+          "msg": "mismatched input '->' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          uid:String, barcode:String, isReservationOpen:Boolean = if (Reserve.allInstance()->select(r | r.ReservedUser.UserID = uid and r.ReserveDate <= Date.now())->isEmpty()) then true else false endif\n            \n            precondition:\n          Reserve.allInstance()->select(r | r.ReservedUser.UserID = uid and r.IsReserveClosed = false)->isEmpty() = false\n            \n            postcondition:\n          let ob:Reserve in ob.oclIsNew(), Reserve.allInstance()->includes(ob), ob.ReservedUser.UserID = uid, ob.ReservedCopy.Barcode = barcode, ob.IsReserveClosed = true, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

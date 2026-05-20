@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(i | i.Barcode = barcode), boolItemExists:Boolean = if item.oclIsUndefined() then false else true endif, boolSaleExists:Boolean = if self.CurrentSale.oclIsUndefined() then false else true endif, boolSaleNotComplete:Boolean = if boolSaleExists and not self.CurrentSale.IsComplete then true else false endif, boolStockAvailable:Boolean = if boolItemExists and item.StockNumber > 0 then true else false endif",
+        "precondition": "boolSaleExists and boolSaleNotComplete and boolItemExists and boolStockAvailable",
+        "postcondition": "let salesLineItem:SalesLineItem in salesLineItem.oclIsNew() and Sale.allInstance()->includes(self.CurrentSale) and SalesLineItem.allInstance()->includes(salesLineItem) and self.CurrentSale.ContainedSalesLine->includes(salesLineItem) and salesLineItem.BelongedSale = self.CurrentSale and salesLineItem.Quantity = quantity and salesLineItem.BelongedItem = item and item.StockNumber = item.StockNumber - quantity and salesLineItem.Subamount = item.Price * quantity and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 296,
+          "msg": "missing 'then' at 'self'"
+        },
+        {
+          "line": 3,
+          "column": 324,
+          "msg": "mismatched input 'then' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 103,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(i | i.Barcode = barcode), boolItemExists:Boolean = if item.oclIsUndefined() then false else true endif, boolSaleExists:Boolean = if self.CurrentSale.oclIsUndefined() then false else true endif, boolSaleNotComplete:Boolean = if boolSaleExists and not self.CurrentSale.IsComplete then true else false endif, boolStockAvailable:Boolean = if boolItemExists and item.StockNumber > 0 then true else false endif\n            \n            precondition:\n          boolSaleExists and boolSaleNotComplete and boolItemExists and boolStockAvailable\n            \n            postcondition:\n          let salesLineItem:SalesLineItem in salesLineItem.oclIsNew() and Sale.allInstance()->includes(self.CurrentSale) and SalesLineItem.allInstance()->includes(salesLineItem) and self.CurrentSale.ContainedSalesLine->includes(salesLineItem) and salesLineItem.BelongedSale = self.CurrentSale and salesLineItem.Quantity = quantity and salesLineItem.BelongedItem = item and item.StockNumber = item.StockNumber - quantity and salesLineItem.Subamount = item.Price * quantity and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

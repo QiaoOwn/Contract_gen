@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemId)",
+        "precondition": "term.oclIsUndefined() = bool",
+        "postcondition": "let currentTerm:LoanTerm in currentTerm.oclIsNew() and LoanTerm.allInstance()->includes(currentTerm)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid: Integer): LoanTerm {\n\tdefinition:\n\t\tterm: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = itemId)\n\tprecondition:\n\t\tterm.oclIsUndefined() = bool\n\tpostcondition:\n\t\tlet currentTerm: LoanTerm in\n\t\tcurrentTerm.oclIsNew() and\n\t\tLoanTerm.allInstance()->includes(currentTerm)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: itemId"
+        }
+      ]
+    }
+  }
+]

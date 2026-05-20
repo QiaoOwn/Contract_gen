@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = self.InputCard",
+        "precondition": "inputCard.oclIsUndefined() = false and self.CardIDValidated = true and self.PasswordValidated = true",
+        "postcondition": "(self.IsWithdraw = true and result = self.WithdrawedNumber) or (self.IsDeposit = true and result = self.DepositedNumber) or (self.IsWithdraw = false and self.IsDeposit = false and result = 0)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 70,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = self.InputCard\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and self.CardIDValidated = true and self.PasswordValidated = true\n            \n            postcondition:\n          (self.IsWithdraw = true and result = self.WithdrawedNumber) or (self.IsDeposit = true and result = self.DepositedNumber) or (self.IsWithdraw = false and self.IsDeposit = false and result = 0)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

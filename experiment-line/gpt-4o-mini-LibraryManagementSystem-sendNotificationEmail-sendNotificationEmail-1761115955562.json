@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "isEmailSent:Boolean = ThirdPartyServices.sendEmail(email)",
+        "precondition": "email.oclIsUndefined() = false",
+        "postcondition": "isEmailSent = true and result = isEmailSent"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 60,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ThirdPartyServices::sendNotificationEmail(email:String): Boolean {\n          definition:\n          isEmailSent:Boolean = ThirdPartyServices.sendEmail(email)\n            \n            precondition:\n          email.oclIsUndefined() = false\n            \n            postcondition:\n          isEmailSent = true and result = isEmailSent\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

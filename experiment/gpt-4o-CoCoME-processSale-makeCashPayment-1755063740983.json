@@ -1,0 +1,257 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = Date#now() and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 347,
+          "msg": "extraneous input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = Date#now() and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = Date.now() and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 347,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = Date.now() and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment, currentTime:Date = Date.now()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'Date' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment, currentTime:Date = Date.now()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment, currentTime:Date = Date.allInstance()->any(t | t.isEqual(currentTime))",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'Date' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment, currentTime:Date = Date.allInstance()->any(t | t.isEqual(currentTime))\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentCashPayment:CashPayment, currentTime:Date = currentTime",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = currentCashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - CurrentSale.Amount and currentStore.Sales->includes(CurrentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcurrentStore: Store = CurrentSale.Belongedstore,\n\t\tcurrentCashPayment: CashPayment,\n\t\tcurrentTime: Date = currentTime\n\tprecondition:\n\t\tCurrentSale.oclIsUndefined() = false and\n\t\tCurrentSale.IsComplete = false and\n\t\tCurrentSale.IsReadytoPay = true and\n\t\tamount>=CurrentSale.Amount\n\tpostcondition:\n\t\tlet currentCashPayment: CashPayment in\n\t\tcurrentCashPayment.oclIsNew() and\n\t\tCashPayment.allInstance()->includes(currentCashPayment) and\n\t\tcurrentCashPayment.AmountTendered = amount and\n\t\tcurrentCashPayment.BelongedSale = CurrentSale and\n\t\tCurrentSale.AssoicatedPayment = currentCashPayment and\n\t\tCurrentSale.IsComplete = true and\n\t\tCurrentSale.Time = currentTime and\n\t\tcurrentCashPayment.Balance = amount-CurrentSale.Amount and\n\t\tcurrentStore.Sales->includes(CurrentSale) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentSale:Sale = Sale.allInstance()->any(o | o = CurrentSale), currentTime:Date = currentTime",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = currentCashPayment and currentSale.IsComplete = true and currentSale.Time = currentTime and currentCashPayment.Balance = amount - currentSale.Amount and currentStore.Sales->includes(currentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcurrentStore: Store = CurrentSale.Belongedstore,\n\t\tcurrentSale: Sale = Sale.allInstance()->any(o|o = CurrentSale),\n\t\tcurrentTime: Date = currentTime\n\tprecondition:\n\t\tcurrentSale.oclIsUndefined() = false and\n\t\tcurrentSale.IsComplete = false and\n\t\tcurrentSale.IsReadytoPay = true and\n\t\tamount>=currentSale.Amount\n\tpostcondition:\n\t\tlet currentCashPayment: CashPayment in\n\t\tcurrentCashPayment.oclIsNew() and\n\t\tCashPayment.allInstance()->includes(currentCashPayment) and\n\t\tcurrentCashPayment.AmountTendered = amount and\n\t\tcurrentCashPayment.BelongedSale = currentSale and\n\t\tcurrentSale.AssoicatedPayment = currentCashPayment and\n\t\tcurrentSale.IsComplete = true and\n\t\tcurrentSale.Time = currentTime and\n\t\tcurrentCashPayment.Balance = amount-currentSale.Amount and\n\t\tcurrentStore.Sales->includes(currentSale) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentSale:Sale = Sale.allInstance()->any(o | o.IsReadytoPay = true), currentTime:Date = currentTime",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = currentCashPayment and currentSale.IsComplete = true and currentSale.Time = currentTime and currentCashPayment.Balance = amount - currentSale.Amount and currentStore.Sales->includes(currentSale) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcurrentStore: Store = CurrentSale.Belongedstore,\n\t\tcurrentSale: Sale = Sale.allInstance()->any(o|o.IsReadytoPay = true),\n\t\tcurrentTime: Date = currentTime\n\tprecondition:\n\t\tcurrentSale.oclIsUndefined() = false and\n\t\tcurrentSale.IsComplete = false and\n\t\tcurrentSale.IsReadytoPay = true and\n\t\tamount>=currentSale.Amount\n\tpostcondition:\n\t\tlet currentCashPayment: CashPayment in\n\t\tcurrentCashPayment.oclIsNew() and\n\t\tCashPayment.allInstance()->includes(currentCashPayment) and\n\t\tcurrentCashPayment.AmountTendered = amount and\n\t\tcurrentCashPayment.BelongedSale = currentSale and\n\t\tcurrentSale.AssoicatedPayment = currentCashPayment and\n\t\tcurrentSale.IsComplete = true and\n\t\tcurrentSale.Time = currentTime and\n\t\tcurrentCashPayment.Balance = amount-currentSale.Amount and\n\t\tcurrentStore.Sales->includes(currentSale) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = CurrentSale.Belongedstore, currentSale:Sale = Sale.allInstance()->any(o | o.IsReadytoPay = true), currentTime:Date = currentTime",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = currentCashPayment and currentStore.Sales->includes(currentSale) and currentSale.IsComplete = true and currentSale.Time = currentTime and currentCashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcurrentStore: Store = CurrentSale.Belongedstore,\n\t\tcurrentSale: Sale = Sale.allInstance()->any(o|o.IsReadytoPay = true),\n\t\tcurrentTime: Date = currentTime\n\tprecondition:\n\t\tcurrentSale.oclIsUndefined() = false and\n\t\tcurrentSale.IsComplete = false and\n\t\tcurrentSale.IsReadytoPay = true and\n\t\tamount>=currentSale.Amount\n\tpostcondition:\n\t\tlet currentCashPayment: CashPayment in\n\t\tcurrentCashPayment.oclIsNew() and\n\t\tCashPayment.allInstance()->includes(currentCashPayment) and\n\t\tcurrentCashPayment.AmountTendered = amount and\n\t\tcurrentCashPayment.BelongedSale = currentSale and\n\t\tcurrentSale.AssoicatedPayment = currentCashPayment and\n\t\tcurrentStore.Sales->includes(currentSale) and\n\t\tcurrentSale.IsComplete = true and\n\t\tcurrentSale.Time = currentTime and\n\t\tcurrentCashPayment.Balance = amount-currentSale.Amount and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = Sale.allInstance()->any(s | s.IsReadytoPay = true).Belongedstore, currentSale:Sale = Sale.allInstance()->any(s | s.IsReadytoPay = true), currentTime:Date = currentTime",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = currentCashPayment and currentStore.Sales->includes(currentSale) and currentSale.IsComplete = true and currentSale.Time = currentTime and currentCashPayment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 81,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = Sale.allInstance()->any(s | s.IsReadytoPay = true).Belongedstore, currentSale:Sale = Sale.allInstance()->any(s | s.IsReadytoPay = true), currentTime:Date = currentTime\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = currentCashPayment and currentStore.Sales->includes(currentSale) and currentSale.IsComplete = true and currentSale.Time = currentTime and currentCashPayment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = Sale.allInstance()->any(s | s = self.CurrentSale).Belongedstore, currentTime:Date = currentTime",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = currentCashPayment and currentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 80,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 333,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = Sale.allInstance()->any(s | s = self.CurrentSale).Belongedstore, currentTime:Date = currentTime\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and CashPayment.allInstance()->includes(currentCashPayment) and currentCashPayment.AmountTendered = amount and currentCashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = currentCashPayment and currentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = currentTime and currentCashPayment.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = Sale.allInstance()->any(s | s = self.CurrentSale).Belongedstore\ncurrentTime:Date = currentTime",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew()\nCashPayment.allInstance()->includes(currentCashPayment)\ncurrentCashPayment.AmountTendered = amount\ncurrentCashPayment.BelongedSale = self.CurrentSale\nself.CurrentSale.AssoicatedPayment = currentCashPayment\ncurrentStore.Sales->includes(self.CurrentSale)\nself.CurrentSale.IsComplete = true\nself.CurrentSale.Time = currentTime\ncurrentCashPayment.Balance = amount - self.CurrentSale.Amount\nresult = true"
+      },
+      "model": "gpt-4o"
+    }
+  }
+]

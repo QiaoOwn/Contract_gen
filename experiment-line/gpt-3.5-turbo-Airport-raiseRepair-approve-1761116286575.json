@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), isApprovalValid:Boolean = if process = 0 and staff.Role = 1 then true elseif process = 1 and staff.Role = 2 then true elseif process = 2 and staff.Role = 3 then true else false endif",
+        "precondition": "repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, repair.Name.oclIsUndefined() = bool, staff.Name.oclIsUndefined() = bool, repair.Process = 0 or repair.Process = 1 or repair.Process = 2, staff.Role = 1 or staff.Role = 2 or staff.Role = 3",
+        "postcondition": "let approvalHistory:ApprovalHistory in approvalHistory.oclIsNew(), ApprovalHistory.allInstance()->includes(approvalHistory), approvalHistory.Suggestion = suggestion, approvalHistory.Reject = reject, repair.Process = if reject then 5 else if isApprovalValid then repair.Process + 1 else repair.Process endif endif, result = approvalHistory"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 195,
+          "msg": "mismatched input 'elseif' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 6,
+          "column": 40,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), isApprovalValid:Boolean = if process = 0 and staff.Role = 1 then true elseif process = 1 and staff.Role = 2 then true elseif process = 2 and staff.Role = 3 then true else false endif\n            \n            precondition:\n          repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, repair.Name.oclIsUndefined() = bool, staff.Name.oclIsUndefined() = bool, repair.Process = 0 or repair.Process = 1 or repair.Process = 2, staff.Role = 1 or staff.Role = 2 or staff.Role = 3\n            \n            postcondition:\n          let approvalHistory:ApprovalHistory in approvalHistory.oclIsNew(), ApprovalHistory.allInstance()->includes(approvalHistory), approvalHistory.Suggestion = suggestion, approvalHistory.Reject = reject, repair.Process = if reject then 5 else if isApprovalValid then repair.Process + 1 else repair.Process endif endif, result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: process"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), canAdvanceTo1:Boolean = (repair.Process = 0 and staff.Role = 1 and reject = false), canAdvanceTo2:Boolean = (repair.Process = 1 and staff.Role = 2 and reject = false), canAdvanceTo3:Boolean = (repair.Process = 2 and staff.Role = 3 and reject = false), isRejected:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "let ah:ApprovalHistory in ah.oclIsNew() and ah.StaffId = staff.Id and ah.Reject = reject and ah.Suggestion = suggestion and repair.History->includes(ah) and if isRejected then repair.Process = 5 else if canAdvanceTo3 then repair.Process = 3 else if canAdvanceTo2 then repair.Process = 2 else if canAdvanceTo1 then repair.Process = 1 else repair.Process = repair.Process endif endif endif endif and result = ah"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract RepairService::approve(sid: Integer,rid: Integer,reject: Boolean,suggestion: String): ApprovalHistory {\n\tdefinition:\n\t\trepair: Repair = Repair.allInstance()->any(r|r.Id = rid),\n\t\tstaff: Staff = Staff.allInstance()->any(s|s.Id = sid),\n\t\tcanAdvanceTo1: Boolean = (repair.Process = 0 and\n\t\tstaff.Role = 1 and\n\t\treject = false),\n\t\tcanAdvanceTo2: Boolean = (repair.Process = 1 and\n\t\tstaff.Role = 2 and\n\t\treject = false),\n\t\tcanAdvanceTo3: Boolean = (repair.Process = 2 and\n\t\tstaff.Role = 3 and\n\t\treject = false),\n\t\tisRejected: Boolean = (reject = true)\n\tprecondition:\n\t\trepair.oclIsUndefined() = false and\n\t\tstaff.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet ah: ApprovalHistory in\n\t\tah.oclIsNew() and\n\t\tah.StaffId = staff.Id and\n\t\tah.Reject = reject and\n\t\tah.Suggestion = suggestion and\n\t\trepair.History->includes(ah) and\n\t\tif isRejected \n\t\tthen repair.Process = 5 \n\t\telse if canAdvanceTo3 \n\t\tthen repair.Process = 3 \n\t\telse if canAdvanceTo2 \n\t\tthen repair.Process = 2 \n\t\telse if canAdvanceTo1 \n\t\tthen repair.Process = 1 \n\t\telse repair.Process = repair.Process \n\t\tendif  \n\t\tendif  \n\t\tendif  \n\t\tendif  and\n\t\tresult = ah\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

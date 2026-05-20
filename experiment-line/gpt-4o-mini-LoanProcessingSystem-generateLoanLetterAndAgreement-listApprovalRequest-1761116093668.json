@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "approvedRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status=LoanRequestStatus::APPROVED)",
+        "precondition": "approvedRequests.isEmpty()=false",
+        "postcondition": "CurrentLoanRequests = approvedRequests"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {\n\tdefinition:\n\t\tapprovedRequests: Set(LoanRequest) = LoanRequest.allInstance()->select(o|o.Status = LoanRequestStatus::APPROVED)\n\tprecondition:\n\t\tapprovedRequests.isEmpty() = false\n\tpostcondition:\n\t\tCurrentLoanRequests = approvedRequests\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequests"
+        }
+      ]
+    }
+  }
+]

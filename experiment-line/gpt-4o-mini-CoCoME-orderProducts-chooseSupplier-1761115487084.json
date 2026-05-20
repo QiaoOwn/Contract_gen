@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = supplierID), currentOrderProduct:OrderProduct = CurrentOrderProduct, exists:Boolean = if supplier.oclIsUndefined() then false else true endif",
+        "precondition": "supplier.oclIsUndefined() = false and currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "In the post condition, if exists then CurrentOrderProduct.Supplier = supplier and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 138,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 13,
+          "msg": "mismatched input 'the' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::chooseSupplier(supplierID:Integer): Boolean {\n          definition:\n          supplier:Supplier = Supplier.allInstance()->any(o | o.Id = supplierID), currentOrderProduct:OrderProduct = CurrentOrderProduct, exists:Boolean = if supplier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          supplier.oclIsUndefined() = false and currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          In the post condition, if exists then CurrentOrderProduct.Supplier = supplier and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

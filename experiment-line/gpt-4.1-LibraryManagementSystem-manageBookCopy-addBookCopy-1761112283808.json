@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "Book.allInstance()->exists(b | b.CallNo = callNo) and BookCopy.allInstance()->excludes(BookCopy.allInstance()->any(bc | bc.Barcode = barcode))",
+        "postcondition": "let bookCopy:BookCopy in bookCopy.oclIsNew() and BookCopy.allInstance()->includes(bookCopy) and bookCopy.Barcode = barcode and bookCopy.Location = location and bookCopy.Status = BookCopy::AVAILABLE and bookCopy.IsReserved = false and let book:Book = Book.allInstance()->any(b | b.CallNo = callNo) and book.Copys->includes(bookCopy) and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 105,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 4,
+          "column": 150,
+          "msg": "mismatched input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          \n            precondition:\n          Book.allInstance()->exists(b | b.CallNo = callNo) and BookCopy.allInstance()->excludes(BookCopy.allInstance()->any(bc | bc.Barcode = barcode))\n            \n            postcondition:\n          let bookCopy:BookCopy in bookCopy.oclIsNew() and BookCopy.allInstance()->includes(bookCopy) and bookCopy.Barcode = barcode and bookCopy.Location = location and bookCopy.Status = BookCopy::AVAILABLE and bookCopy.IsReserved = false and let book:Book = Book.allInstance()->any(b | b.CallNo = callNo) and book.Copys->includes(bookCopy) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

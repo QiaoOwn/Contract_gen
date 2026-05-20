@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(c | c.Id = id)",
+        "precondition": "cashDesk.oclIsUndefined() = bool",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = (cashDesk.oclIsNew())"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 124,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 144,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(c | c.Id = id)\n            \n            precondition:\n          cashDesk.oclIsUndefined() = bool\n            \n            postcondition:\n          let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = (cashDesk.oclIsNew())\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

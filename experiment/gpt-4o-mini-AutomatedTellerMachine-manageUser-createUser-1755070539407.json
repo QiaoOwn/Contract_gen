@@ -1,0 +1,301 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = if user.oclIsUndefined() then User.create() else null endif",
+        "precondition": "User.allInstance()->includes(user) = false",
+        "postcondition": "if user.oclIsUndefined() then result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 126,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = if user.oclIsUndefined() then User.create() else null endif\n            \n            precondition:\n          User.allInstance()->includes(user) = false\n            \n            postcondition:\n          if user.oclIsUndefined() then result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()",
+        "precondition": "user.oclIsUndefined() and User.allInstance()->includes(user) = false",
+        "postcondition": "if userExists then User.allInstance()->includes(newUser) and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 96,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()\n            \n            precondition:\n          user.oclIsUndefined() and User.allInstance()->includes(user) = false\n            \n            postcondition:\n          if userExists then User.allInstance()->includes(newUser) and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()",
+        "precondition": "user.oclIsUndefined() and User.allInstance()->excludes(user)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 96,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()\n            \n            precondition:\n          user.oclIsUndefined() and User.allInstance()->excludes(user)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()",
+        "precondition": "user.oclIsUndefined() and User.allInstance()->excludes(user)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 96,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()\n            \n            precondition:\n          user.oclIsUndefined() and User.allInstance()->excludes(user)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()",
+        "precondition": "user.oclIsUndefined() and User.allInstance()->excludes(user) and userExists = false",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 96,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()\n            \n            precondition:\n          user.oclIsUndefined() and User.allInstance()->excludes(user) and userExists = false\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()",
+        "precondition": "user.oclIsUndefined() and User.allInstance()->excludes(user) and userExists = true",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 96,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()\n            \n            precondition:\n          user.oclIsUndefined() and User.allInstance()->excludes(user) and userExists = true\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()",
+        "precondition": "user.oclIsUndefined() and User.allInstance()->excludes(user) and userExists = false",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 96,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), newUser:User = User.create(), userExists:Boolean = user.oclIsUndefined()\n            \n            precondition:\n          user.oclIsUndefined() and User.allInstance()->excludes(user) and userExists = false\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()",
+        "precondition": "userExists = false and User.allInstance()->excludes(user) and userExists = false",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 64,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()\n            \n            precondition:\n          userExists = false and User.allInstance()->excludes(user) and userExists = false\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()",
+        "precondition": "userExists = false and User.allInstance()->excludes(newUser)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 64,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()\n            \n            precondition:\n          userExists = false and User.allInstance()->excludes(newUser)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()",
+        "precondition": "userExists = false and User.allInstance()->excludes(newUser)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 64,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()\n            \n            precondition:\n          userExists = false and User.allInstance()->excludes(newUser)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()",
+        "precondition": "userExists = false and User.allInstance()->excludes(newUser)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 64,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()\n            \n            precondition:\n          userExists = false and User.allInstance()->excludes(newUser)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()",
+        "precondition": "userExists = false and User.allInstance()->excludes(newUser)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 64,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()\n            \n            precondition:\n          userExists = false and User.allInstance()->excludes(newUser)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "userExists:Boolean = User.allInstance()->includes(User.allInstance()->any(o | o.UserID = userid)), newUser:User = User.create()",
+        "precondition": "userExists = false and User.allInstance()->excludes(newUser)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = userExists and userExists = false"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

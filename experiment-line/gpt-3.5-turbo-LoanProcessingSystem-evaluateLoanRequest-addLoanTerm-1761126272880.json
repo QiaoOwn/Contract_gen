@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), currentRequest:LoanRequest = CurrentLoanRequest, exists:Boolean = if LoanTerm.allInstance()->includes(term) and LoanRequest.allInstance()->includes(currentRequest) then true else false endif",
+        "precondition": "LoanTerm.allInstance()->includes(term) and LoanRequest.allInstance()->includes(currentRequest)",
+        "postcondition": "let newTerm:LoanTerm in newTerm.oclIsNew() and currentRequest.AttachedLoanTerms->includes(newTerm) and currentRequest.AttachedLoanTerms.size() = 1"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 127,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), currentRequest:LoanRequest = CurrentLoanRequest, exists:Boolean = if LoanTerm.allInstance()->includes(term) and LoanRequest.allInstance()->includes(currentRequest) then true else false endif\n            \n            precondition:\n          LoanTerm.allInstance()->includes(term) and LoanRequest.allInstance()->includes(currentRequest)\n            \n            postcondition:\n          let newTerm:LoanTerm in newTerm.oclIsNew() and currentRequest.AttachedLoanTerms->includes(newTerm) and currentRequest.AttachedLoanTerms.size() = 1\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

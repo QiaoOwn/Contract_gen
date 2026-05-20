@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(u | u.BorrowStatus = BorrowStatus::SUSPEND)",
+        "precondition": "true",
+        "postcondition": "obs->forAll(u:User | u.SuspensionDays = u.SuspensionDays - 1 and (u.SuspensionDays <= 0 implies u.BorrowStatus = BorrowStatus::NORMAL))"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 98,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 143,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(u | u.BorrowStatus = BorrowStatus::SUSPEND)\n            \n            precondition:\n          true\n            \n            postcondition:\n          obs->forAll(u:User | u.SuspensionDays = u.SuspensionDays - 1 and (u.SuspensionDays <= 0 implies u.BorrowStatus = BorrowStatus::NORMAL))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), success:Boolean = if CurrentLoanRequest.oclIsUndefined() or term.oclIsUndefined() then false else CurrentLoanRequest.AttachedLoanTerms->includes(term) endif",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and term.oclIsUndefined() = false and LoanTerm.allInstance()->includes(term)",
+        "postcondition": "result = success"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid: Integer): Boolean {\n\tdefinition:\n\t\tterm: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = termid),\n\t\tsuccess: Boolean = if CurrentLoanRequest.oclIsUndefined() or\n\t\tterm.oclIsUndefined() \n\t\tthen false \n\t\telse CurrentLoanRequest.AttachedLoanTerms->includes(term) \n\t\tendif \n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tterm.oclIsUndefined() = false and\n\t\tLoanTerm.allInstance()->includes(term)\n\tpostcondition:\n\t\tresult = success\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

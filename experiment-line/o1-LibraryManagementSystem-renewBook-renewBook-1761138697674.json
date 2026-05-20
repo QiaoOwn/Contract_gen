@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u|u.UserID=uid), bc:BookCopy = BookCopy.allInstance()->any(b|b.Barcode=barcode), loan:Loan = user.LoanedBook->any(l|l.LoanedCopy=bc and l.IsReturned=false)",
+        "precondition": "user.oclIsUndefined()=false and bc.oclIsUndefined()=false and loan.oclIsUndefined()=false and user.BorrowStatus=BorrowStatus::NORMAL and user.OverDueFee=0 and bc.Status=CopyStatus::LOANED and loan.IsReturned=false",
+        "postcondition": "loan.RenewDate=ThirdPartyServices.getSystemDate() and loan.DueDate=ThirdPartyServices.dateAdd(loan.DueDate,14) and loan.RenewedTimes=loan.RenewedTimes+1 and result=true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 57,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u|u.UserID=uid), bc:BookCopy = BookCopy.allInstance()->any(b|b.Barcode=barcode), loan:Loan = user.LoanedBook->any(l|l.LoanedCopy=bc and l.IsReturned=false)\n            \n            precondition:\n          user.oclIsUndefined()=false and bc.oclIsUndefined()=false and loan.oclIsUndefined()=false and user.BorrowStatus=BorrowStatus::NORMAL and user.OverDueFee=0 and bc.Status=CopyStatus::LOANED and loan.IsReturned=false\n            \n            postcondition:\n          loan.RenewDate=ThirdPartyServices.getSystemDate() and loan.DueDate=ThirdPartyServices.dateAdd(loan.DueDate,14) and loan.RenewedTimes=loan.RenewedTimes+1 and result=true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

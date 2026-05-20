@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false and ((reject = false and repair.Process = 0 and staff.Role = 1) or (reject = false and repair.Process = 1 and staff.Role = 2) or (reject = false and repair.Process = 2 and staff.Role = 3) or reject = true)",
+        "postcondition": "let ah:ApprovalHistory in ah.oclIsNew() and ((reject = false and repair.Process = 1) or (reject = false and repair.Process = 2) or (reject = false and repair.Process = 3) or (reject = true and repair.Process = 5)) and Repair.allInstance()->includes(repair) and result = ah"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 141,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 6,
+          "column": 281,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 95,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 222,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false and ((reject = false and repair.Process = 0 and staff.Role = 1) or (reject = false and repair.Process = 1 and staff.Role = 2) or (reject = false and repair.Process = 2 and staff.Role = 3) or reject = true)\n            \n            postcondition:\n          let ah:ApprovalHistory in ah.oclIsNew() and ((reject = false and repair.Process = 1) or (reject = false and repair.Process = 2) or (reject = false and repair.Process = 3) or (reject = true and repair.Process = 5)) and Repair.allInstance()->includes(repair) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

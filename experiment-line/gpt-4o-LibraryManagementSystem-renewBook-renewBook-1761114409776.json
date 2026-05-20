@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "librarian: Librarian = Librarian.allInstance()->any(l | l.LibrarianID = uid), copy: BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode)",
+        "precondition": "librarian.oclIsUndefined() = false and copy.oclIsUndefined() = false and copy.Status = CopyStatus::LOANED",
+        "postcondition": "let loan: Loan in loan.oclIsNew() and Loan.allInstance()->includes(loan) and loan.LoanedCopy = copy and loan.DueDate = copy.LoanDueDate->sum(predefinedAmount) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 147,
+          "msg": "no viable alternative at input 'copy.LoanDueDate->sum'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          librarian: Librarian = Librarian.allInstance()->any(l | l.LibrarianID = uid), copy: BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode)\n            \n            precondition:\n          librarian.oclIsUndefined() = false and copy.oclIsUndefined() = false and copy.Status = CopyStatus::LOANED\n            \n            postcondition:\n          let loan: Loan in loan.oclIsNew() and Loan.allInstance()->includes(loan) and loan.LoanedCopy = copy and loan.DueDate = copy.LoanDueDate->sum(predefinedAmount) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

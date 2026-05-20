@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = userid), userExists:Boolean = not user.oclIsUndefined()",
+        "precondition": "userid.oclIsTypeOf(Integer)",
+        "postcondition": "if userExists then User.allInstance()->excludes(user) else true endif and result = userExists"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'user' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 80,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::deleteUser(userid:Integer): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = userid), userExists:Boolean = not user.oclIsUndefined()\n            \n            precondition:\n          userid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          if userExists then User.allInstance()->excludes(user) else true endif and result = userExists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

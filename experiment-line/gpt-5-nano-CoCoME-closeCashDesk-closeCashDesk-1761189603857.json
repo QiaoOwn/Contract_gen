@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk: CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID)",
+        "precondition": "cashDesk.oclIsUndefined() = false and CurrentStore.oclIsUndefined() = false and cashDesk.BelongedStore = CurrentStore and cashDesk.IsOpened = true and CurrentCashDesk = cashDesk",
+        "postcondition": "let success: Boolean = (cashDesk.oclIsUndefined() = false and cashDesk.IsOpened = false and CurrentStore.oclIsUndefined() = false and cashDesk.BelongedStore = CurrentStore and CurrentCashDesk = cashDesk) in result = success"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID: Integer): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = cashDeskID)\n\tprecondition:\n\t\tcashDesk.oclIsUndefined() = false and\n\t\tCurrentStore.oclIsUndefined() = false and\n\t\tcashDesk.BelongedStore = CurrentStore and\n\t\tcashDesk.IsOpened = true and\n\t\tCurrentCashDesk = cashDesk\n\tpostcondition:\n\t\tlet success: Boolean = (cashDesk.oclIsUndefined() = false and\n\t\tcashDesk.IsOpened = false and\n\t\tCurrentStore.oclIsUndefined() = false and\n\t\tcashDesk.BelongedStore = CurrentStore and\n\t\tCurrentCashDesk = cashDesk) in\n\t\tresult = success\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

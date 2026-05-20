@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "existingAccount.oclIsUndefined() = true and let newAccount:LoanAccount in newAccount.oclIsNew() and LoanAccount.allInstance()->includes(newAccount) and newAccount.LoanAccountID = loanaccountid and newAccount.Balance = balance and newAccount.Status = status and result = true or existingAccount.oclIsUndefined() = false and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 54,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 68,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          existingAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          existingAccount.oclIsUndefined() = true and let newAccount:LoanAccount in newAccount.oclIsNew() and LoanAccount.allInstance()->includes(newAccount) and newAccount.LoanAccountID = loanaccountid and newAccount.Balance = balance and newAccount.Status = status and result = true or existingAccount.oclIsUndefined() = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

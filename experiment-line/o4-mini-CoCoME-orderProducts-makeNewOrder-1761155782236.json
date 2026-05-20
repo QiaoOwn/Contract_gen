@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingOrder:OrderProduct = OrderProduct.allInstance()->any(o | o.id = orderid), shouldCreate:Boolean = existingOrder.oclIsUndefined()",
+        "precondition": "orderid > 0",
+        "postcondition": "shouldCreate = true and let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.id = orderid and newOrder.time = ThirdPartyServices.now() and newOrder.orderStatus = OrderStatus::NEW and self.CurrentOrderProduct = newOrder and result = true or shouldCreate = false and self.CurrentOrderProduct = existingOrder and result = false"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 34,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 46,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          existingOrder:OrderProduct = OrderProduct.allInstance()->any(o | o.id = orderid), shouldCreate:Boolean = existingOrder.oclIsUndefined()\n            \n            precondition:\n          orderid > 0\n            \n            postcondition:\n          shouldCreate = true and let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.id = orderid and newOrder.time = ThirdPartyServices.now() and newOrder.orderStatus = OrderStatus::NEW and self.CurrentOrderProduct = newOrder and result = true or shouldCreate = false and self.CurrentOrderProduct = existingOrder and result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

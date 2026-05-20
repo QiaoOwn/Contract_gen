@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "book:Book = Book.allInstance()->any(b | b.CallNo = callNo), copy:BookCopy",
+        "precondition": "book.oclIsUndefined() = false and BookCopy.allInstance()->excludes(copy)",
+        "postcondition": "let copy:BookCopy in copy.oclIsNew() and BookCopy.allInstance()->includes(copy) and copy.Barcode = barcode and copy.Location = location and copy.Status = ClassName::AVAILABLE and copy.BookBelongs = book and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo: String,barcode: String,location: String): Boolean {\n\tdefinition:\n\t\tbook: Book = Book.allInstance()->any(b|b.CallNo = callNo),\n\t\tcopy: BookCopy\n\tprecondition:\n\t\tbook.oclIsUndefined() = false and\n\t\tBookCopy.allInstance()->excludes(copy)\n\tpostcondition:\n\t\tlet copy: BookCopy in\n\t\tcopy.oclIsNew() and\n\t\tBookCopy.allInstance()->includes(copy) and\n\t\tcopy.Barcode = barcode and\n\t\tcopy.Location = location and\n\t\tcopy.Status = ClassName::AVAILABLE and\n\t\tcopy.BookBelongs = book and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

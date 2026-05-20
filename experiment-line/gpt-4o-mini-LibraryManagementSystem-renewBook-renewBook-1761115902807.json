@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)",
+        "precondition": "user.oclIsUndefined() = bool, bookCopy.oclIsUndefined() = bool, loan.oclIsUndefined() = bool",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew(), loan.RenewedTimes = loan.RenewedTimes + 1 and loan.RenewDate = Date.current(), result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 38,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), loan:Loan = bookCopy.LoanedRecord->any(o | o.IsReturned = false)\n            \n            precondition:\n          user.oclIsUndefined() = bool, bookCopy.oclIsUndefined() = bool, loan.oclIsUndefined() = bool\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew(), loan.RenewedTimes = loan.RenewedTimes + 1 and loan.RenewDate = Date.current(), result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

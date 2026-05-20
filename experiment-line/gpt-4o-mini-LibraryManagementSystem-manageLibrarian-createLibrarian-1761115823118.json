@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "librarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid)\\nnewLibrarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = libraryid)",
+        "precondition": "Librarian.allInstance()->excludes(librarianid)",
+        "postcondition": "let newLibrarian:Librarian in newLibrarian.oclIsNew() and Librarian.allInstance()->includes(newLibrarian) and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 94,
+          "msg": "mismatched input 'nnewLibrarian' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageLibrarianCRUDService::createLibrarian(librarianid:String,name:String,password:String): Boolean {\n          definition:\n          librarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid)\\nnewLibrarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = libraryid)\n            \n            precondition:\n          Librarian.allInstance()->excludes(librarianid)\n            \n            postcondition:\n          let newLibrarian:Librarian in newLibrarian.oclIsNew() and Librarian.allInstance()->includes(newLibrarian) and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

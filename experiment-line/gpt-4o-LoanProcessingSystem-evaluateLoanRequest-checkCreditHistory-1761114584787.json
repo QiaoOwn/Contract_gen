@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "LoanRequest.allInstance()->includes(self.CurrentLoanRequest) and CreditHistory.allInstance()->includes(self.CurrentLoanRequest.RequestedCreditHistory)",
+        "postcondition": "result = currentCreditHistory"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 46,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 4,
+          "column": 113,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::checkCreditHistory(): CreditHistory {\n          \n            precondition:\n          LoanRequest.allInstance()->includes(self.CurrentLoanRequest) and CreditHistory.allInstance()->includes(self.CurrentLoanRequest.RequestedCreditHistory)\n            \n            postcondition:\n          result = currentCreditHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

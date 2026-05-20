@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingLA:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid)",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus) and LoanAccount.allInstance()->isUnique(l:LoanAccount | l.LoanAccountID)",
+        "postcondition": "if existingLA.oclIsUndefined() then let newLA:LoanAccount in newLA.oclIsNew() and LoanAccount.allInstance()->includes(newLA) and newLA.LoanAccountID = loanaccountid and newLA.Balance = balance and newLA.Status = status and result = true else result = true endif"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\texistingLA: LoanAccount = LoanAccount.allInstance()->any(l|l.LoanAccountID = loanaccountid)\n\tprecondition:\n\t\tloanaccountid.oclIsTypeOf(Integer) and\n\t\tbalance.oclIsTypeOf(Real) and\n\t\tstatus.oclIsTypeOf(LoanAccountStatus) and\n\t\tLoanAccount.allInstance()->isUnique(l: LoanAccount|l.LoanAccountID)\n\tpostcondition:\n\t\tif existingLA.oclIsUndefined() \n\t\tthen let newLA: LoanAccount in\n\t\tnewLA.oclIsNew() and\n\t\tLoanAccount.allInstance()->includes(newLA) and\n\t\tnewLA.LoanAccountID = loanaccountid and\n\t\tnewLA.Balance = balance and\n\t\tnewLA.Status = status and\n\t\tresult = true \n\t\telse result = true \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

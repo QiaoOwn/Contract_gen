@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), newOverDue:Real = if user.OverDueFee >= fee then user.OverDueFee - fee else 0.0 endif",
+        "precondition": "user.oclIsUndefined() = false, fee >= 0.0",
+        "postcondition": "user.OverDueFee = newOverDue and result = (user.oclIsUndefined() = false)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '-' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), newOverDue:Real = if user.OverDueFee >= fee then user.OverDueFee - fee else 0.0 endif\n            \n            precondition:\n          user.oclIsUndefined() = false, fee >= 0.0\n            \n            postcondition:\n          user.OverDueFee = newOverDue and result = (user.oclIsUndefined() = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

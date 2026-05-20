@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "usersToDelete:Set(User) = User.allInstance()->select(o | o.UserID = userid), success:Boolean = if usersToDelete.isEmpty() = false then true else false endif",
+        "precondition": "userid.oclIsTypeOf(Integer) and User.allInstance()->isUnique(o:User | o.UserID)",
+        "postcondition": "success = true and User.allInstance()->excludesAll(usersToDelete) and result = success or success = false and result = success"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::deleteUser(userid: Integer): Boolean {\n\tdefinition:\n\t\tusersToDelete: Set(User) = User.allInstance()->select(o|o.UserID = userid),\n\t\tsuccess: Boolean = if usersToDelete.isEmpty() = false \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tuserid.oclIsTypeOf(Integer) and\n\t\tUser.allInstance()->isUnique(o: User|o.UserID)\n\tpostcondition:\n\t\tsuccess = true and\n\t\tUser.allInstance()->excludesAll(usersToDelete) and\n\t\tresult = success or\n\t\tsuccess = false and\n\t\tresult = success\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

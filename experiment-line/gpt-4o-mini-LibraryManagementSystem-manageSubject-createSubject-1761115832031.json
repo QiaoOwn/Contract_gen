@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newSubject:Subject = Subject.allInstance()->any(s | s.Name = name)\nresult:Boolean = if newSubject.oclIsNew() then true else false endif",
+        "precondition": "name.oclIsUndefined() = bool",
+        "postcondition": "Subject.allInstance()->includes(newSubject) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'result' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageSubjectCRUDService::createSubject(name:String): Boolean {\n          definition:\n          newSubject:Subject = Subject.allInstance()->any(s | s.Name = name)\nresult:Boolean = if newSubject.oclIsNew() then true else false endif\n            \n            precondition:\n          name.oclIsUndefined() = bool\n            \n            postcondition:\n          Subject.allInstance()->includes(newSubject) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

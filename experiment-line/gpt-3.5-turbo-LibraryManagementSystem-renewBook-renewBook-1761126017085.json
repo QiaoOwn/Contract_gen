@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loan:Loan = Loan.allInstance()->any(o | o.isReturned = false and o.loanedUser.UserID = uid and o.loanedCopy.Barcode = barcode), isRenewed:Boolean = false",
+        "precondition": "loan.oclIsUndefined() = bool",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew(), Book.allInstance()->includes(loan.loanedCopy.BookBelongs), loan.RenewedTimes = loan.RenewedTimes + 1, result = isRenewed"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 48,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          loan:Loan = Loan.allInstance()->any(o | o.isReturned = false and o.loanedUser.UserID = uid and o.loanedCopy.Barcode = barcode), isRenewed:Boolean = false\n            \n            precondition:\n          loan.oclIsUndefined() = bool\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew(), Book.allInstance()->includes(loan.loanedCopy.BookBelongs), loan.RenewedTimes = loan.RenewedTimes + 1, result = isRenewed\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

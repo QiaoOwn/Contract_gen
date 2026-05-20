@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingDevice:Device = Device.allInstance()->any(d | d.Id = id), existingStaff:Staff = Staff.allInstance()->any(s | s.Id = contactsid)",
+        "precondition": "let existingDevice:Device = Device.allInstance()->any(d | d.Id = id) in let existingStaff:Staff = Staff.allInstance()->any(s | s.Id = contactsid) in existingDevice.oclIsUndefined() or existingStaff.oclIsUndefined()",
+        "postcondition": "let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = contacts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createDevice(id: Integer,name: String,location: String,contactsid: Integer): Boolean {\n\tdefinition:\n\t\texistingDevice: Device = Device.allInstance()->any(d|d.Id = id),\n\t\texistingStaff: Staff = Staff.allInstance()->any(s|s.Id = contactsid)\n\tprecondition:\n\t\tlet existingDevice: Device = Device.allInstance()->any(d|d.Id = id) in\n\t\tlet existingStaff: Staff = Staff.allInstance()->any(s|s.Id = contactsid) in\n\t\texistingDevice.oclIsUndefined() or\n\t\texistingStaff.oclIsUndefined()\n\tpostcondition:\n\t\tlet newDevice: Device in\n\t\tnewDevice.oclIsNew() and\n\t\tDevice.allInstance()->includes(newDevice) and\n\t\tnewDevice.Name = name and\n\t\tnewDevice.Location = location and\n\t\tnewDevice.Contacts = contacts\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property expression of ExpressionStatement expected node to be of a type [\"Expression\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

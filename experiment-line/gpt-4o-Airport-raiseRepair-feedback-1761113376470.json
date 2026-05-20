@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff) and repair.RaiseStaff = staff and staff.Role = 0 and repair.Process = 7 and repair.Score = score",
+        "postcondition": "let res:Boolean in (score >= 3 implies repair.Close = true) and (score < 3 implies repair.Close = false and repair.Description = des and repair.Process = 0) and Repair.allInstance()->includes(repair) and result = res"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 41,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff) and repair.RaiseStaff = staff and staff.Role = 0 and repair.Process = 7 and repair.Score = score\n            \n            postcondition:\n          let res:Boolean in (score >= 3 implies repair.Close = true) and (score < 3 implies repair.Close = false and repair.Description = des and repair.Process = 0) and Repair.allInstance()->includes(repair) and result = res\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

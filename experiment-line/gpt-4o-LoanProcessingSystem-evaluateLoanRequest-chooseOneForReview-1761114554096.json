@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "CurrentLoanRequests->exists(lr | lr.RequestID = requestid)",
+        "postcondition": "let loanReq:LoanRequest in CurrentLoanRequests->any(lr | lr.RequestID = requestid) = loanReq and CurrentLoanRequest = loanReq and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::chooseOneForReview(requestid: Integer): LoanRequest {\n\tprecondition:\n\t\tCurrentLoanRequests->exists(lr|lr.RequestID = requestid)\n\tpostcondition:\n\t\tlet loanReq: LoanRequest in\n\t\tCurrentLoanRequests->any(lr|lr.RequestID = requestid) = loanReq and\n\t\tCurrentLoanRequest = loanReq and\n\t\tresult = CurrentLoanRequest\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

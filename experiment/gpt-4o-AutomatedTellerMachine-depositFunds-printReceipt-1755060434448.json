@@ -1,0 +1,341 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = not IsDeposit, withdrawedNumber:Real = if isWithdraw then if passwordValid and cardIDValid and inputCardExists then inputCard.Balance - \"WithdrawAmount\" else null endif else null endif, depositedNumber:Real = if IsDeposit then DepositedNumber else null endif",
+        "precondition": "PasswordValidated and CardIDValidated and inputCardExists",
+        "postcondition": "let result:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then result = withdrawedNumber else result = depositedNumber endif else result = 0 endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 270,
+          "msg": "mismatched input 'IsDeposit' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = not IsDeposit, withdrawedNumber:Real = if isWithdraw then if passwordValid and cardIDValid and inputCardExists then inputCard.Balance - \"WithdrawAmount\" else null endif else null endif, depositedNumber:Real = if IsDeposit then DepositedNumber else null endif\n            \n            precondition:\n          PasswordValidated and CardIDValidated and inputCardExists\n            \n            postcondition:\n          let result:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then result = withdrawedNumber else result = depositedNumber endif else result = 0 endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = 1, withdrawedNumber:Real = if isWithdraw then if passwordValid and cardIDValid and inputCardExists then InputCard.Balance - \"WithdrawAmount\" else null endif else null endif, depositedNumber:Real = if IsDeposit then DepositedNumber else null endif",
+        "precondition": "PasswordValidated and CardIDValidated and inputCardExists",
+        "postcondition": "let output:Real = if inputCardExists and cardIDValid and passwordValid then if isWithdraw then withdrawedNumber else depositedNumber endif else 0 endif in result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 341,
+          "msg": "mismatched input '=' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = 1, withdrawedNumber:Real = if isWithdraw then if passwordValid and cardIDValid and inputCardExists then InputCard.Balance - \"WithdrawAmount\" else null endif else null endif, depositedNumber:Real = if IsDeposit then DepositedNumber else null endif\n            \n            precondition:\n          PasswordValidated and CardIDValidated and inputCardExists\n            \n            postcondition:\n          let output:Real = if inputCardExists and cardIDValid and passwordValid then if isWithdraw then withdrawedNumber else depositedNumber endif else 0 endif in result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = 1",
+        "precondition": "PasswordValidated and CardIDValidated and inputCardExists",
+        "postcondition": "let output:Real = if inputCardExists and cardIDValid and passwordValid then if isWithdraw then withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and result = withdrawedNumber else result = DepositedNumber endif else result = 0 endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 341,
+          "msg": "mismatched input '=' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 121,
+          "msg": "mismatched input ':' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'else' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = 1\n            \n            precondition:\n          PasswordValidated and CardIDValidated and inputCardExists\n            \n            postcondition:\n          let output:Real = if inputCardExists and cardIDValid and passwordValid then if isWithdraw then withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and result = withdrawedNumber else result = DepositedNumber endif else result = 0 endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = 1",
+        "precondition": "PasswordValidated and CardIDValidated and inputCardExists",
+        "postcondition": "let output:Real in if inputCardExists and cardIDValid and passwordValid then (if isWithdraw then (withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and result = withdrawedNumber) else result = DepositedNumber) else result = 0"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 281,
+          "msg": "mismatched input '=' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 124,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 229,
+          "msg": "mismatched input ')' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = 1\n            \n            precondition:\n          PasswordValidated and CardIDValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if inputCardExists and cardIDValid and passwordValid then (if isWithdraw then (withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and result = withdrawedNumber) else result = DepositedNumber) else result = 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = 1 then true else false endif",
+        "precondition": "PasswordValidated and CardIDValidated and inputCardExists",
+        "postcondition": "let output:Real in if inputCardExists and cardIDValid and passwordValid then (if isWithdraw then withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber) else output = 0 and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 284,
+          "msg": "mismatched input '=' expecting 'then'"
+        },
+        {
+          "line": 9,
+          "column": 123,
+          "msg": "mismatched input ':' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 227,
+          "msg": "mismatched input ')' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = 1 then true else false endif\n            \n            precondition:\n          PasswordValidated and CardIDValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if inputCardExists and cardIDValid and passwordValid then (if isWithdraw then withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber) else output = 0 and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = 1 then true else false endif",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 344,
+          "msg": "mismatched input '=' expecting 'then'"
+        },
+        {
+          "line": 9,
+          "column": 122,
+          "msg": "mismatched input ':' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 233,
+          "msg": "mismatched input 'else' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = 1 then true else false endif\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then withdrawedNumber:Real = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" then true else false endif",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 279,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" then true else false endif\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" then true else false endif",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 279,
+          "msg": "mismatched input 'result' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" then true else false endif\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = true",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 281,
+          "msg": "mismatched input '=' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 279,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = true\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if inputCardExists and cardIDValid and passwordValid then if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = true then true else false endif",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 344,
+          "msg": "mismatched input '=' expecting 'then'"
+        },
+        {
+          "line": 9,
+          "column": 199,
+          "msg": "mismatched input 'else' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = true then true else false endif\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif else output = 0 endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = true",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in let withdrawedNumber:Real in if isWithdraw then withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 281,
+          "msg": "mismatched input '=' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 199,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = InputCard.CardID = \"ExpectedID\", passwordValid:Boolean = InputCard.Password = \"ExpectedPassword\", obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = true\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in let withdrawedNumber:Real in if isWithdraw then withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = true then true else false endif",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 344,
+          "msg": "mismatched input '=' expecting 'then'"
+        },
+        {
+          "line": 9,
+          "column": 199,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard), cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = if \"WithdrawFlag\" = true then true else false endif\n            \n            precondition:\n          CardIDValidated and PasswordValidated and inputCardExists\n            \n            postcondition:\n          let output:Real in if isWithdraw then let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\" and output = withdrawedNumber else output = DepositedNumber endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cardIDValid:Boolean = if InputCard.CardID = \"ExpectedID\" then true else false endif, passwordValid:Boolean = if InputCard.Password = \"ExpectedPassword\" then true else false endif, obs:Set(BankCard) = BankCard.allInstance(), isWithdraw:Boolean = \"WithdrawFlag\" = true, inputCardExists:Boolean = BankCard.allInstance()->includes(InputCard)",
+        "precondition": "CardIDValidated and PasswordValidated and inputCardExists",
+        "postcondition": "let output:Real in (if isWithdraw then (let withdrawedNumber:Real in withdrawedNumber = InputCard.Balance - \"WithdrawAmount\") and output = withdrawedNumber else output = DepositedNumber endif) and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  }
+]

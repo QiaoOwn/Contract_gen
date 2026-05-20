@@ -1,0 +1,289 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "((staff.oclIsUndefined() = true and let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Boss = boss and staff = newStaff) or (staff.oclIsUndefined() = false and staff.Boss = boss)) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 46,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 58,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 132,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          ((staff.oclIsUndefined() = true and let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Boss = boss and staff = newStaff) or (staff.oclIsUndefined() = false and staff.Boss = boss)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), newStaff:Staff = Staff.allInstance()->any(s | s.Id = id)",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "staff.oclIsUndefined() = true and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff) and result = true or staff.oclIsUndefined() = false and staff.Boss = boss and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createStaff(id: Integer,name: String,pswd: String,phone: String,role: Integer,bossid: Integer): Boolean {\n\tdefinition:\n\t\tstaff: Staff = Staff.allInstance()->any(s|s.Id = id),\n\t\tboss: Staff = Staff.allInstance()->any(s|s.Id = bossid),\n\t\tnewStaff: Staff = Staff.allInstance()->any(s|s.Id = id)\n\tprecondition:\n\t\tboss.oclIsUndefined() = false\n\tpostcondition:\n\t\tstaff.oclIsUndefined() = true and\n\t\tnewStaff.Boss = boss and\n\t\tStaff.allInstance()->includes(newStaff) and\n\t\tresult = true or\n\t\tstaff.oclIsUndefined() = false and\n\t\tstaff.Boss = boss and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "staff.oclIsUndefined() = true and let newStaff:Staff in newStaff.oclIsNew() and newStaff.Boss = boss and In the post condition, Staff.allInstance()->includes(newStaff) and result = true or staff.oclIsUndefined() = false and staff.Boss = boss and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 44,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 56,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          staff.oclIsUndefined() = true and let newStaff:Staff in newStaff.oclIsNew() and newStaff.Boss = boss and In the post condition, Staff.allInstance()->includes(newStaff) and result = true or staff.oclIsUndefined() = false and staff.Boss = boss and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "let newStaff:Staff in newStaff.oclIsNew() and staff.oclIsUndefined() = true and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff) and result = true or staff.oclIsUndefined() = false and staff.Boss = boss and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createStaff(id: Integer,name: String,pswd: String,phone: String,role: Integer,bossid: Integer): Boolean {\n\tdefinition:\n\t\tstaff: Staff = Staff.allInstance()->any(s|s.Id = id),\n\t\tboss: Staff = Staff.allInstance()->any(s|s.Id = bossid)\n\tprecondition:\n\t\tboss.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet newStaff: Staff in\n\t\tnewStaff.oclIsNew() and\n\t\tstaff.oclIsUndefined() = true and\n\t\tnewStaff.Boss = boss and\n\t\tStaff.allInstance()->includes(newStaff) and\n\t\tresult = true or\n\t\tstaff.oclIsUndefined() = false and\n\t\tstaff.Boss = boss and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "let newStaff:Staff in ((staff.oclIsUndefined() = true and newStaff.oclIsNew() and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff)) or (staff.oclIsUndefined() = false and staff.Boss = boss)) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 158,
+          "msg": "mismatched input 'or' expecting ')'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          let newStaff:Staff in ((staff.oclIsUndefined() = true and newStaff.oclIsNew() and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff)) or (staff.oclIsUndefined() = false and staff.Boss = boss)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "(staff.oclIsUndefined() = true implies (let newStaff:Staff in newStaff.oclIsNew() and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff) and result = true)) and (staff.oclIsUndefined() = false implies (staff.Boss = boss and result = true))"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 41,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid)\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          (staff.oclIsUndefined() = true implies (let newStaff:Staff in newStaff.oclIsNew() and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff) and result = true)) and (staff.oclIsUndefined() = false implies (staff.Boss = boss and result = true))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), staffNotFound:Boolean = if staff.oclIsUndefined() then true else false endif",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "let newStaff:Staff in (staffNotFound = true and newStaff.oclIsNew() and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff) or staffNotFound = false and staff.Boss = boss) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 195,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), staffNotFound:Boolean = if staff.oclIsUndefined() then true else false endif\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          let newStaff:Staff in (staffNotFound = true and newStaff.oclIsNew() and newStaff.Boss = boss and Staff.allInstance()->includes(newStaff) or staffNotFound = false and staff.Boss = boss) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), staffNotFound:Boolean = if staff.oclIsUndefined() then true else false endif",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "let newStaff:Staff in ((staffNotFound = true and newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Boss = boss) or (staffNotFound = false and staff.Boss = boss)) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 149,
+          "msg": "mismatched input 'or' expecting ')'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), staffNotFound:Boolean = if staff.oclIsUndefined() then true else false endif\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          let newStaff:Staff in ((staffNotFound = true and newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Boss = boss) or (staffNotFound = false and staff.Boss = boss)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then createStaff else staff endif",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "newStaff.Boss = boss and staff.oclIsUndefined() = true implies newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and staff.oclIsUndefined() = false implies newStaff = staff and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 65,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then createStaff else staff endif\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          newStaff.Boss = boss and staff.oclIsUndefined() = true implies newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and staff.oclIsUndefined() = false implies newStaff = staff and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.newInstance(name,pswd,phone,role) else staff endif, isNew:Boolean = if staff.oclIsUndefined() then true else false endif",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "newStaff.Boss = boss and newStaff.oclIsNew() = isNew and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 188,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 3,
+          "column": 209,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.newInstance(name,pswd,phone,role) else staff endif, isNew:Boolean = if staff.oclIsUndefined() then true else false endif\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          newStaff.Boss = boss and newStaff.oclIsNew() = isNew and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s|s.Id = id), boss:Staff = Staff.allInstance()->any(s|s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.newInstance(name,pswd,phone,role) else staff endif, isNew:Boolean = if staff.oclIsUndefined() then true else false endif, newStaffCheck:Boolean = if newStaff.oclIsNew() = isNew then true else false endif",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "newStaff.Boss = boss and result = newStaffCheck"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 184,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 3,
+          "column": 205,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(s|s.Id = id), boss:Staff = Staff.allInstance()->any(s|s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.newInstance(name,pswd,phone,role) else staff endif, isNew:Boolean = if staff.oclIsUndefined() then true else false endif, newStaffCheck:Boolean = if newStaff.oclIsNew() = isNew then true else false endif\n            \n            precondition:\n          boss.oclIsUndefined() = false\n            \n            postcondition:\n          newStaff.Boss = boss and result = newStaffCheck\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(s | s.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.newInstance(name,pswd,phone,role) else staff endif, flag:Boolean = if staff.oclIsUndefined() then true else false endif",
+        "precondition": "boss.oclIsUndefined() = false",
+        "postcondition": "newStaff.Boss = boss and result = flag"
+      },
+      "model": "o3-mini"
+    }
+  }
+]

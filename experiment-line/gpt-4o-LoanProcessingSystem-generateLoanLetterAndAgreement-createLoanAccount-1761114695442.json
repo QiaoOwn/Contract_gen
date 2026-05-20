@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(l | l.LoanAccountID = loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 48,
+          "msg": "mismatched input '|' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 81,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid)\n            \n            precondition:\n          LoanAccount.allInstance()->excludes(l | l.LoanAccountID = loanaccountid)\n            \n            postcondition:\n          let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

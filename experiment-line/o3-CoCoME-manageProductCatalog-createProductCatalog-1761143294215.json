@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(pc | pc.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and ProductCatalog.allInstance()->isUnique(pc:ProductCatalog | pc.Id)",
+        "postcondition": "(if existingCatalog.oclIsUndefined() then let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and newCatalog.Id = id and newCatalog.Name = name else true endif) and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 229,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(pc | pc.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and ProductCatalog.allInstance()->isUnique(pc:ProductCatalog | pc.Id)\n            \n            postcondition:\n          (if existingCatalog.oclIsUndefined() then let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and newCatalog.Id = id and newCatalog.Name = name else true endif) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

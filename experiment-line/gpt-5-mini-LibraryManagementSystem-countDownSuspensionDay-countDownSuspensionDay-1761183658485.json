@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance()->select(u | u.LoanedBook->exists(l | l.IsReturned = false and l.OverDue31Days = true) and u.SuspensionDays > 0)",
+        "precondition": "users.isEmpty() = false",
+        "postcondition": "users->forAll(u:User | u.SuspensionDays = u.SuspensionDays@pre - 1 and ((u.SuspensionDays <> 0 and u.BorrowStatus = u.BorrowStatus@pre) or (u.SuspensionDays = 0 and u.BorrowStatus = BorrowStatus::SUSPEND)))"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 146,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 215,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          users:Set(User) = User.allInstance()->select(u | u.LoanedBook->exists(l | l.IsReturned = false and l.OverDue31Days = true) and u.SuspensionDays > 0)\n            \n            precondition:\n          users.isEmpty() = false\n            \n            postcondition:\n          users->forAll(u:User | u.SuspensionDays = u.SuspensionDays@pre - 1 and ((u.SuspensionDays <> 0 and u.BorrowStatus = u.BorrowStatus@pre) or (u.SuspensionDays = 0 and u.BorrowStatus = BorrowStatus::SUSPEND)))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

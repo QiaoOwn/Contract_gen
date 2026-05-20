@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingSuppliers:Set(Supplier) = Supplier.allInstance()->select(o | o.Id = id), isMissing:Boolean = if existingSuppliers.size() = 0 then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String)",
+        "postcondition": "if isMissing = true then let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name and result = true else result = true endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\texistingSuppliers: Set(Supplier) = Supplier.allInstance()->select(o|o.Id = id),\n\t\tisMissing: Boolean = if existingSuppliers.size() = 0 \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String)\n\tpostcondition:\n\t\tif isMissing = true \n\t\tthen let newSupplier: Supplier in\n\t\tnewSupplier.oclIsNew() and\n\t\tSupplier.allInstance()->includes(newSupplier) and\n\t\tnewSupplier.Id = id and\n\t\tnewSupplier.Name = name and\n\t\tresult = true \n\t\telse result = true \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

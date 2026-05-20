@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = Store.allInstance()->any(o | o.Id = storeID), isOpened:Boolean = if currentStore.oclIsUndefined() then false else currentStore.IsOpened endif",
+        "precondition": "storeID.oclIsTypeOf(Integer) and !currentStore.oclIsUndefined() and !currentStore.IsOpened",
+        "postcondition": "currentStore.IsOpened = true and result = (currentStore.oclIsNew())"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "extraneous input '!' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 78,
+          "msg": "extraneous input '!' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 76,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openStore(storeID:Integer): Boolean {\n          definition:\n          currentStore:Store = Store.allInstance()->any(o | o.Id = storeID), isOpened:Boolean = if currentStore.oclIsUndefined() then false else currentStore.IsOpened endif\n            \n            precondition:\n          storeID.oclIsTypeOf(Integer) and !currentStore.oclIsUndefined() and !currentStore.IsOpened\n            \n            postcondition:\n          currentStore.IsOpened = true and result = (currentStore.oclIsNew())\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

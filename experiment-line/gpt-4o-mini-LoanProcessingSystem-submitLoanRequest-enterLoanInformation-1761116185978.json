@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isNew:Boolean = loanRequest.oclIsUndefined(), newLoanRequest:LoanRequest = if isNew then LoanRequest.create() else loanRequest endif",
+        "precondition": "loanRequest.oclIsUndefined() = isNew",
+        "postcondition": "if isNew then LoanRequest.allInstance()->includes(newLoanRequest) else LoanRequest.allInstance()->includes(loanRequest) endif and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 204,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 136,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isNew:Boolean = loanRequest.oclIsUndefined(), newLoanRequest:LoanRequest = if isNew then LoanRequest.create() else loanRequest endif\n            \n            precondition:\n          loanRequest.oclIsUndefined() = isNew\n            \n            postcondition:\n          if isNew then LoanRequest.allInstance()->includes(newLoanRequest) else LoanRequest.allInstance()->includes(loanRequest) endif and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: LoanRequest"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = if existingItem.oclIsUndefined() then Item.allInstance()->includes(new Item{Barcode = barcode, Name = name, Price = price, StockNumber = stocknumber, OrderPrice = orderprice}) else false endif",
+        "precondition": "Item.allInstance()->includes(existingItem) = false",
+        "postcondition": "existingItem.oclIsUndefined() and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 166,
+          "msg": "mismatched input 'Item' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 188,
+          "msg": "mismatched input ',' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 3,
+          "column": 268,
+          "msg": "mismatched input '}' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          existingItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), newItem:Item = if existingItem.oclIsUndefined() then Item.allInstance()->includes(new Item{Barcode = barcode, Name = name, Price = price, StockNumber = stocknumber, OrderPrice = orderprice}) else false endif\n            \n            precondition:\n          Item.allInstance()->includes(existingItem) = false\n            \n            postcondition:\n          existingItem.oclIsUndefined() and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: new"
+        }
+      ]
+    }
+  }
+]

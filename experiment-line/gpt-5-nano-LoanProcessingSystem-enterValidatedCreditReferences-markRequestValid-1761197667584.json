@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o = CurrentLoanRequest)",
+        "precondition": "LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.oclIsUndefined() = false and obs->forAll(o:LoanRequest | o.Status = SUBMITTED)",
+        "postcondition": "CurrentLoanRequest.Status = REFERENCESVALIDATED and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {\n\tdefinition:\n\t\tobs: Set(LoanRequest) = LoanRequest.allInstance()->select(o|o = CurrentLoanRequest)\n\tprecondition:\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs->forAll(o: LoanRequest|o.Status = SUBMITTED)\n\tpostcondition:\n\t\tCurrentLoanRequest.Status = REFERENCESVALIDATED and\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

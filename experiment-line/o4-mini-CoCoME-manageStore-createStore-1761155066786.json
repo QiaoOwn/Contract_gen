@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(o | o.Id = id)",
+        "precondition": "true",
+        "postcondition": "let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and store.oclIsUndefined() and result = true or store.oclIsUndefined() = false and result = false"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageStoreCRUDService::createStore(id: Integer,name: String,address: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tstore: Store = Store.allInstance()->any(o|o.Id = id)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tlet newStore: Store in\n\t\tnewStore.oclIsNew() and\n\t\tStore.allInstance()->includes(newStore) and\n\t\tnewStore.Id = id and\n\t\tnewStore.Name = name and\n\t\tnewStore.Address = address and\n\t\tnewStore.IsOpened = isopened and\n\t\tstore.oclIsUndefined() and\n\t\tresult = true or\n\t\tstore.oclIsUndefined() = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

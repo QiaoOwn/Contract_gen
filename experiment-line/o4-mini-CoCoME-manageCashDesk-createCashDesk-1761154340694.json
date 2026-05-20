@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cd:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = cd.oclIsUndefined()",
+        "precondition": "true",
+        "postcondition": "(isNew = true and let newCd:CashDesk in newCd.oclIsNew() and CashDesk.allInstance()->includes(newCd) and newCd.Id = id and newCd.Name = name and newCd.IsOpened = isopened) or (isNew = false and cd.Name = name and cd.IsOpened = isopened) and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 28,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 37,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cd:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = cd.oclIsUndefined()\n            \n            precondition:\n          true\n            \n            postcondition:\n          (isNew = true and let newCd:CashDesk in newCd.oclIsNew() and CashDesk.allInstance()->includes(newCd) and newCd.Id = id and newCd.Name = name and newCd.IsOpened = isopened) or (isNew = false and cd.Name = name and cd.IsOpened = isopened) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

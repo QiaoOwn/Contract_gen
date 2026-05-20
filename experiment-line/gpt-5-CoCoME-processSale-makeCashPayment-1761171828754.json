@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = Store.allInstance()->any(o:Store | o.IsOpened = true)",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount and self.CurrentPaymentMethod = PaymentMethod::CASH",
+        "postcondition": "let p:Payment, cp:CashPayment in p.oclIsNew() and cp.oclIsNew() and Payment.allInstance()->includes(p) and CashPayment.allInstance()->includes(cp) and p.AmountTendered = amount and p.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = p and self.CurrentSale.Belongedstore = currentStore and currentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = ThirdPartyServices.getCurrentDate() and cp.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 351,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 469,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = Store.allInstance()->any(o:Store | o.IsOpened = true)\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount and self.CurrentPaymentMethod = PaymentMethod::CASH\n            \n            postcondition:\n          let p:Payment, cp:CashPayment in p.oclIsNew() and cp.oclIsNew() and Payment.allInstance()->includes(p) and CashPayment.allInstance()->includes(cp) and p.AmountTendered = amount and p.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = p and self.CurrentSale.Belongedstore = currentStore and currentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = ThirdPartyServices.getCurrentDate() and cp.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentSale"
+        }
+      ]
+    }
+  }
+]

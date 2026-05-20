@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isLoanRequestExists:Boolean = if loanRequest.oclIsUndefined() then false else true endif",
+        "precondition": "loanRequest.oclIsUndefined() = isLoanRequestExists",
+        "postcondition": "let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(newLoanRequest) and CurrentLoanRequest = if isLoanRequestExists then loanRequest else newLoanRequest endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 151,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 174,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isLoanRequestExists:Boolean = if loanRequest.oclIsUndefined() then false else true endif\n            \n            precondition:\n          loanRequest.oclIsUndefined() = isLoanRequestExists\n            \n            postcondition:\n          let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(newLoanRequest) and CurrentLoanRequest = if isLoanRequestExists then loanRequest else newLoanRequest endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

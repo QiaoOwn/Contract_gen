@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesks:Set(CashDesk) = CashDesk.allInstance(), targetCashDesk:CashDesk = cashDesks->any(o | o.Id = id)",
+        "precondition": "true",
+        "postcondition": "let cashDesk:CashDesk = cashDesks->any(o | o.Id = id) in (cashDesk.oclIsUndefined() = true and result = false) or (cashDesk.oclIsUndefined() = false and cashDesk.Name = name and cashDesk.IsOpened = isopened and result = true)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 121,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::modifyCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesks:Set(CashDesk) = CashDesk.allInstance(), targetCashDesk:CashDesk = cashDesks->any(o | o.Id = id)\n            \n            precondition:\n          true\n            \n            postcondition:\n          let cashDesk:CashDesk = cashDesks->any(o | o.Id = id) in (cashDesk.oclIsUndefined() = true and result = false) or (cashDesk.oclIsUndefined() = false and cashDesk.Name = name and cashDesk.IsOpened = isopened and result = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), itemUpdate:Boolean = item.oclIsUndefined() = false",
+        "precondition": "item.oclIsUndefined() = bool, item.UpdateStatus = true",
+        "postcondition": "item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice and result = itemUpdate"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 38,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::modifyItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode), itemUpdate:Boolean = item.oclIsUndefined() = false\n            \n            precondition:\n          item.oclIsUndefined() = bool, item.UpdateStatus = true\n            \n            postcondition:\n          item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice and result = itemUpdate\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

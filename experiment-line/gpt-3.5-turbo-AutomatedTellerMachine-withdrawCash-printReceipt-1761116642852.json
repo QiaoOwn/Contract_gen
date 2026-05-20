@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = InputCard,\nobs:Boolean = PasswordValidated and CardIDValidated,\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = card.Password and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.OwnedCard = card),\nwithdrawed:Boolean = IsWithdraw,\ndeposited:Boolean = IsDeposit\n",
+        "precondition": "obs.isEmpty() = false and obs.size() = 1 and obs->forAll(o:BankCard|o.CardStatus = CardStatus.NORMAL) and card.oclIsUndefined() = false",
+        "postcondition": "let result:Real in (withdrawed = true and result = WithdrawedNumber) or (deposited = true and result = DepositedNumber) or (withdrawed = false and deposited = false and result = 0)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 14,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 14,
+          "column": 79,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          card:BankCard = InputCard,\nobs:Boolean = PasswordValidated and CardIDValidated,\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = card.Password and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.OwnedCard = card),\nwithdrawed:Boolean = IsWithdraw,\ndeposited:Boolean = IsDeposit\n\n            \n            precondition:\n          obs.isEmpty() = false and obs.size() = 1 and obs->forAll(o:BankCard|o.CardStatus = CardStatus.NORMAL) and card.oclIsUndefined() = false\n            \n            postcondition:\n          let result:Real in (withdrawed = true and result = WithdrawedNumber) or (deposited = true and result = DepositedNumber) or (withdrawed = false and deposited = false and result = 0)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CardStatus"
+        }
+      ]
+    }
+  }
+]

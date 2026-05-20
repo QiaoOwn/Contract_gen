@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), result:Set(BookCopy) = Set{}",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "result = user.LoanedBook->select(l | l.IsReturned = false and l.DueDate < OclAny.currentDate())->collect(l | l.LoanedCopy)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 67,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 84,
+          "msg": "mismatched input 'OclAny' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 104,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), result:Set(BookCopy) = Set{}\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          result = user.LoanedBook->select(l | l.IsReturned = false and l.DueDate < OclAny.currentDate())->collect(l | l.LoanedCopy)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property body of ArrowFunctionExpression expected node to be of a type [\"BlockStatement\",\"Expression\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

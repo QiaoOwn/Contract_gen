@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "usr:User = User.allInstance()->any(u | u.UserID = uid), bcp:BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode), bk:Book = bcp.BookBelongs, ln:Loan = Loan.allInstance()->any(l | l.LoanedUser = usr and l.LoanedCopy = bcp)",
+        "precondition": "!usr.oclIsUndefined() and !bcp.oclIsUndefined() and usr.BorrowStatus = BorrowStatus::NORMAL and bcp.Status = CopyStatus::AVAILABLE and !ln.oclIsUndefined()",
+        "postcondition": "let ln:Loan in ln.oclIsNew() and Loan.allInstance()->includes(ln) and ln.LoanedUser = usr and ln.LoanedCopy = bcp and ln.LoanDate = currentDate and ln.ReturnDate = null and ln.IsReturned = false and ln.OverDueFee = 0.0 and bcp.Status = CopyStatus::LOANED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "extraneous input '!' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 6,
+          "column": 36,
+          "msg": "extraneous input '!' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 145,
+          "msg": "extraneous input '!' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          usr:User = User.allInstance()->any(u | u.UserID = uid), bcp:BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode), bk:Book = bcp.BookBelongs, ln:Loan = Loan.allInstance()->any(l | l.LoanedUser = usr and l.LoanedCopy = bcp)\n            \n            precondition:\n          !usr.oclIsUndefined() and !bcp.oclIsUndefined() and usr.BorrowStatus = BorrowStatus::NORMAL and bcp.Status = CopyStatus::AVAILABLE and !ln.oclIsUndefined()\n            \n            postcondition:\n          let ln:Loan in ln.oclIsNew() and Loan.allInstance()->includes(ln) and ln.LoanedUser = usr and ln.LoanedCopy = bcp and ln.LoanDate = currentDate and ln.ReturnDate = null and ln.IsReturned = false and ln.OverDueFee = 0.0 and bcp.Status = CopyStatus::LOANED and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "CurrentLoanRequest: LoanRequest, CurrentLoanRequests: Set(LoanRequest)",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequests->includes(CurrentLoanRequest) and CurrentLoanRequest.Status = SUBMITTED",
+        "postcondition": "let req:LoanRequest = CurrentLoanRequest in req.Status = REFERENCESVALIDATED and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {\n\tdefinition:\n\t\tCurrentLoanRequest: LoanRequest,\n\t\tCurrentLoanRequests: Set(LoanRequest)\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tCurrentLoanRequests->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.Status = SUBMITTED\n\tpostcondition:\n\t\tlet req: LoanRequest = CurrentLoanRequest in\n\t\treq.Status = REFERENCESVALIDATED and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: SUBMITTED"
+        }
+      ]
+    }
+  }
+]

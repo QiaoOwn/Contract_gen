@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "targetItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), exists:Boolean = Item.allInstance()->exists(o | o.Barcode = barcode)",
+        "precondition": "barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real) and price >= 0 and stocknumber >= 0 and orderprice >= 0",
+        "postcondition": "if exists then targetItem.Name = name and targetItem.Price = price and targetItem.StockNumber = stocknumber and targetItem.OrderPrice = orderprice and result = true else result = false endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 78,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 13,
+          "msg": "mismatched input 'exists' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::modifyItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          targetItem:Item = Item.allInstance()->any(o | o.Barcode = barcode), exists:Boolean = Item.allInstance()->exists(o | o.Barcode = barcode)\n            \n            precondition:\n          barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real) and price >= 0 and stocknumber >= 0 and orderprice >= 0\n            \n            postcondition:\n          if exists then targetItem.Name = name and targetItem.Price = price and targetItem.StockNumber = stocknumber and targetItem.OrderPrice = orderprice and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

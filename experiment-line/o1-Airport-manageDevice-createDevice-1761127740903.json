@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "device:Device = Device.allInstance()->any(d | d.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = contactsid)",
+        "precondition": "staff.oclIsUndefined() = false",
+        "postcondition": "if device.oclIsUndefined() then let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = staff else device.Contacts = staff endif and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 281,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {\n          definition:\n          device:Device = Device.allInstance()->any(d | d.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = contactsid)\n            \n            precondition:\n          staff.oclIsUndefined() = false\n            \n            postcondition:\n          if device.oclIsUndefined() then let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = staff else device.Contacts = staff endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

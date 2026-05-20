@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id),\nnewCashDesk:CashDesk = CashDesk()",
+        "precondition": "CashDesk.allInstance()->excludes(cashDesk)",
+        "postcondition": "let cashDesk:CashDesk in cashDesk.oclIsNew() and CashDesk.allInstance()->includes(cashDesk) and cashDesk.Id = id and cashDesk.Name = name and cashDesk.IsOpened = isopened and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id: Integer,name: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id),\n\t\tnewCashDesk: CashDesk = CashDesk()\n\tprecondition:\n\t\tCashDesk.allInstance()->excludes(cashDesk)\n\tpostcondition:\n\t\tlet cashDesk: CashDesk in\n\t\tcashDesk.oclIsNew() and\n\t\tCashDesk.allInstance()->includes(cashDesk) and\n\t\tcashDesk.Id = id and\n\t\tcashDesk.Name = name and\n\t\tcashDesk.IsOpened = isopened and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentRequestExist:Boolean = if CurrentLoanRequest.oclIsUndefined() then false else true endif",
+        "precondition": "currentRequestExist = true",
+        "postcondition": "CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = currentRequestExist"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n\tdefinition:\n\t\tcurrentRequestExist: Boolean = if CurrentLoanRequest.oclIsUndefined() \n\t\tthen false \n\t\telse true \n\t\tendif \n\tprecondition:\n\t\tcurrentRequestExist = true\n\tpostcondition:\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::APPROVED and\n\t\tresult = currentRequestExist\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

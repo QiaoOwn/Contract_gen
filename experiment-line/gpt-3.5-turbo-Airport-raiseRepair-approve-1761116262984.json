@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->any(o | o.StaffId = sid and o.Suggestion = suggestion), isSuccessful:Boolean = reject = false",
+        "precondition": "repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, staff.Role.oclIsTypeOf(Integer), approvalHistory.oclIsUndefined() = bool, repair.Process.oclIsTypeOf(Integer)",
+        "postcondition": "if reject = false then if repair.Process = 0 and staff.Role = 1 then repair.Process = 1 endif else repair.Process = 5 endif, ApprovalHistory.allInstance()->includes(approvalHistory), repair.oclIsNew()"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 40,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allInstance()->any(o | o.StaffId = sid and o.Suggestion = suggestion), isSuccessful:Boolean = reject = false\n            \n            precondition:\n          repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, staff.Role.oclIsTypeOf(Integer), approvalHistory.oclIsUndefined() = bool, repair.Process.oclIsTypeOf(Integer)\n            \n            postcondition:\n          if reject = false then if repair.Process = 0 and staff.Role = 1 then repair.Process = 1 endif else repair.Process = 5 endif, ApprovalHistory.allInstance()->includes(approvalHistory), repair.oclIsNew()\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

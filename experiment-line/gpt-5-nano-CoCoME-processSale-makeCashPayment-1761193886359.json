@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Sale) = Sale.allInstance()->select(o | o = CurrentSale and o.IsComplete = false and o.IsReadytoPay = true and amount >= o.Amount)",
+        "precondition": "obs:Set(Sale) = Sale.allInstance()->select(o | o = CurrentSale and o.IsComplete = false and o.IsReadytoPay = true and amount >= o.Amount)\nobs->notEmpty() and obs->forAll(o | o.IsComplete = false and o.IsReadytoPay = true and amount >= o.Amount)",
+        "postcondition": "let newPayment: CashPayment in newPayment.oclIsNew() and newPayment.Balance = amount - obs->any(o | o).Amount and newPayment.BelongedSale = obs->any(o | o) and obs->any(o | o).AssoicatedPayment = newPayment and obs->any(o | o).IsComplete = true and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 24,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          obs:Set(Sale) = Sale.allInstance()->select(o | o = CurrentSale and o.IsComplete = false and o.IsReadytoPay = true and amount >= o.Amount)\n            \n            precondition:\n          obs:Set(Sale) = Sale.allInstance()->select(o | o = CurrentSale and o.IsComplete = false and o.IsReadytoPay = true and amount >= o.Amount)\nobs->notEmpty() and obs->forAll(o | o.IsComplete = false and o.IsReadytoPay = true and amount >= o.Amount)\n            \n            postcondition:\n          let newPayment: CashPayment in newPayment.oclIsNew() and newPayment.Balance = amount - obs->any(o | o).Amount and newPayment.BelongedSale = obs->any(o | o) and obs->any(o | o).AssoicatedPayment = newPayment and obs->any(o | o).IsComplete = true and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "request:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id), approvalLetter:ApprovalLetter = ApprovalLetter.allInstance()->select(o | o.Content = 'ApprovalLetterContent')->first()",
+        "precondition": "request.oclIsUndefined() = bool",
+        "postcondition": "let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew(), LoanRequest.allInstance()->includes(request), request.AttachedApprovalLetter = approvalLetter, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 195,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 72,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {\n          definition:\n          request:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id), approvalLetter:ApprovalLetter = ApprovalLetter.allInstance()->select(o | o.Content = 'ApprovalLetterContent')->first()\n            \n            precondition:\n          request.oclIsUndefined() = bool\n            \n            postcondition:\n          let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew(), LoanRequest.allInstance()->includes(request), request.AttachedApprovalLetter = approvalLetter, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

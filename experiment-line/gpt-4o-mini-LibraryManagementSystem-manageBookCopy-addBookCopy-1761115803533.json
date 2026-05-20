@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newCopy:BookCopy = BookCopy.allInstance()->select(o | o.Barcode = barcode)->first() if newCopy.oclIsUndefined() then newCopy:BookCopy = BookCopy.new() endif, newCopy.Status = CopyStatus.AVAILABLE, newCopy.Location = location, newCopy.Barcode = barcode",
+        "precondition": "BookCopy.allInstance()->excludes(newCopy) and barcode.oclIsUndefined() = false",
+        "postcondition": "BookCopy.allInstance()->includes(newCopy) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 84,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          newCopy:BookCopy = BookCopy.allInstance()->select(o | o.Barcode = barcode)->first() if newCopy.oclIsUndefined() then newCopy:BookCopy = BookCopy.new() endif, newCopy.Status = CopyStatus.AVAILABLE, newCopy.Location = location, newCopy.Barcode = barcode\n            \n            precondition:\n          BookCopy.allInstance()->excludes(newCopy) and barcode.oclIsUndefined() = false\n            \n            postcondition:\n          BookCopy.allInstance()->includes(newCopy) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

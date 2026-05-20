@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = CurrentLoanRequests->any(o | o.RequestID = id), approvalLetter:ApprovalLetter = ApprovalLetter.allInstance()->any(o | o.Content = 'ApprovalLetterContent')",
+        "precondition": "CurrentLoanRequests->select(o | o.RequestID = id).isEmpty() = false",
+        "postcondition": "let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.AttachedApprovalLetter = approvalLetter and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 59,
+          "msg": "mismatched input '.' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = CurrentLoanRequests->any(o | o.RequestID = id), approvalLetter:ApprovalLetter = ApprovalLetter.allInstance()->any(o | o.Content = 'ApprovalLetterContent')\n            \n            precondition:\n          CurrentLoanRequests->select(o | o.RequestID = id).isEmpty() = false\n            \n            postcondition:\n          let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.AttachedApprovalLetter = approvalLetter and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

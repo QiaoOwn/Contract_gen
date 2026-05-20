@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(s | s.Id = id), exists:Boolean = if store.oclIsUndefined() then false else true endif, isSuccess:Boolean = true",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "exists = false and let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and result = isSuccess or exists = true and Store.allInstance()->includes(store) and result = isSuccess"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 65,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          store:Store = Store.allInstance()->any(s | s.Id = id), exists:Boolean = if store.oclIsUndefined() then false else true endif, isSuccess:Boolean = true\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and address.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          exists = false and let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and result = isSuccess or exists = true and Store.allInstance()->includes(store) and result = isSuccess\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

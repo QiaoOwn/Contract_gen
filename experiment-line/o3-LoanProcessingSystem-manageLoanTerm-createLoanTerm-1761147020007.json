@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "lt:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)",
+        "precondition": "itemid.oclIsTypeOf(Integer) and content.oclIsTypeOf(String)",
+        "postcondition": "if lt.oclIsUndefined() then let newTerm:LoanTerm in newTerm.oclIsNew() and LoanTerm.allInstance()->includes(newTerm) and newTerm.ItemID = itemid and newTerm.Content = content and result = true else result = false endif"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid: Integer,content: String): Boolean {\n\tdefinition:\n\t\tlt: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = itemid and\n\t\to.Content = content)\n\tprecondition:\n\t\titemid.oclIsTypeOf(Integer) and\n\t\tcontent.oclIsTypeOf(String)\n\tpostcondition:\n\t\tif lt.oclIsUndefined() \n\t\tthen let newTerm: LoanTerm in\n\t\tnewTerm.oclIsNew() and\n\t\tLoanTerm.allInstance()->includes(newTerm) and\n\t\tnewTerm.ItemID = itemid and\n\t\tnewTerm.Content = content and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

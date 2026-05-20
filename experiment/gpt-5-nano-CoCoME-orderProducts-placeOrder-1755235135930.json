@@ -1,0 +1,286 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "validOrderProduct:Boolean = if CurrentOrderProduct.oclIsUndefined() then false else (CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()) endif",
+        "precondition": "CurrentOrderProduct.oclIsUndefined() = false and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()",
+        "postcondition": "result = validOrderProduct"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 247,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 211,
+          "msg": "mismatched input '->' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          validOrderProduct:Boolean = if CurrentOrderProduct.oclIsUndefined() then false else (CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()) endif\n            \n            precondition:\n          CurrentOrderProduct.oclIsUndefined() = false and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()\n            \n            postcondition:\n          result = validOrderProduct\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "validOrderProduct:Boolean = if CurrentOrderProduct.oclIsUndefined() then false else (CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED) endif",
+        "precondition": "CurrentOrderProduct.oclIsUndefined() = false and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED",
+        "postcondition": "result = validOrderProduct"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n\tdefinition:\n\t\tvalidOrderProduct: Boolean = if CurrentOrderProduct.oclIsUndefined() \n\t\tthen false \n\t\telse (CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED) \n\t\tendif \n\tprecondition:\n\t\tCurrentOrderProduct.oclIsUndefined() = false and\n\t\tCurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED\n\tpostcondition:\n\t\tresult = validOrderProduct\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input 'and' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input 'and' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = if CurrentOrderProduct.oclIsUndefined() then false else (CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (CurrentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif",
+        "precondition": "CurrentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "currentOrderProductValid = result and result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input 'and' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = if CurrentOrderProduct.oclIsUndefined() then false else (CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (CurrentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif\n            \n            precondition:\n          CurrentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          currentOrderProductValid = result and result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input 'and' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else ((currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())) endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 161,
+          "msg": "mismatched input 'and' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else ((currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())) endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input 'and' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = if currentOrderProduct.oclIsUndefined() then false else (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "currentOrderProductValid = result and result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 104,
+          "msg": "mismatched input 'and' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          currentOrderProductValid = result and result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct: OrderProduct = CurrentOrderProduct, currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "currentOrderProductValid = result and result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 161,
+          "msg": "mismatched input 'and' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct: OrderProduct = CurrentOrderProduct, currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          currentOrderProductValid = result and result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct: OrderProduct, currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "currentOrderProductValid = result and result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 139,
+          "msg": "mismatched input 'and' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct: OrderProduct, currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          currentOrderProductValid = result and result = currentOrderProductValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct: OrderProduct, currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "currentOrderProductValid = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) and result = currentOrderProductValid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 139,
+          "msg": "mismatched input 'and' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 37,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 70,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct: OrderProduct, currentOrderProductValid:Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum())\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          currentOrderProductValid = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(oe | oe.SubAmount)->sum()) and result = currentOrderProductValid\n            \n        }"
+    }
+  }
+]

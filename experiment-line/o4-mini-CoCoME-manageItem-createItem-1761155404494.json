@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "true",
+        "postcondition": "let newItem:Item in newItem.oclIsNew() and (item.oclIsUndefined() = true implies (Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true)) and (item.oclIsUndefined() = false implies result = false)"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 83,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 301,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          true\n            \n            postcondition:\n          let newItem:Item in newItem.oclIsNew() and (item.oclIsUndefined() = true implies (Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true)) and (item.oclIsUndefined() = false implies result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

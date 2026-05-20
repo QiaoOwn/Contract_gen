@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundOrderSet:Set(OrderProduct) = OrderProduct.allInstance()->select(o:OrderProduct | o.Id = orderid), foundOrder:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct | o.Id = orderid), needCreate:Boolean = if foundOrderSet.isEmpty() = true then true else false endif, succ:Boolean = true",
+        "precondition": "orderid.oclIsTypeOf(Integer) and OrderProduct.allInstance()->isUnique(o:OrderProduct | o.Id)",
+        "postcondition": "needCreate = false and self.CurrentOrderProduct = foundOrder and result = succ or needCreate = true and (let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.OrderStatus = OrderStatus::NEW and newOrder.Time = ThirdPartyServices.getCurrentTime() and self.CurrentOrderProduct = newOrder and result = succ)"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 338,
+          "msg": "extraneous input '(' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 398,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          foundOrderSet:Set(OrderProduct) = OrderProduct.allInstance()->select(o:OrderProduct | o.Id = orderid), foundOrder:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct | o.Id = orderid), needCreate:Boolean = if foundOrderSet.isEmpty() = true then true else false endif, succ:Boolean = true\n            \n            precondition:\n          orderid.oclIsTypeOf(Integer) and OrderProduct.allInstance()->isUnique(o:OrderProduct | o.Id)\n            \n            postcondition:\n          needCreate = false and self.CurrentOrderProduct = foundOrder and result = succ or needCreate = true and (let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.OrderStatus = OrderStatus::NEW and newOrder.Time = ThirdPartyServices.getCurrentTime() and self.CurrentOrderProduct = newOrder and result = succ)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

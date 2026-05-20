@@ -1,0 +1,313 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), newCashier:Cashier",
+        "precondition": "findedCashier.oclIsUndefined() = false or findedCashier.oclIsUndefined() = true",
+        "postcondition": "let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or findedCashier.Id = id and findedCashier.Name = name and result = true or result = false"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tfindedCashier: Cashier = Cashier.allInstance()->any(o|o.Id = id),\n\t\tnewCashier: Cashier\n\tprecondition:\n\t\tfindedCashier.oclIsUndefined() = false or\n\t\tfindedCashier.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet newCashier: Cashier in\n\t\tnewCashier.oclIsNew() and\n\t\tCashier.allInstance()->includes(newCashier) and\n\t\tnewCashier.Id = id and\n\t\tnewCashier.Name = name and\n\t\tresult = true or\n\t\tfindedCashier.Id = id and\n\t\tfindedCashier.Name = name and\n\t\tresult = true or\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  OrderStatus,\n  Store,\n  ProductCatalog,\n  CashDesk,\n  Sale,\n  Cashier,\n  SalesLineItem,\n  Item,\n  Payment,\n  CashPayment,\n  CardPayment,\n  OrderEntry,\n  Supplier,\n  OrderProduct,\n  getRepository,\n};\n",
+        "originalService": "class ManageCashierCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cashier with provided id,\n   *if the cashier not exist,\n   *create the cashier with the provided and other info*/\n  createCashier(id: number, name: string): boolean {\n    /*Definition Start*/\n    let findedCashier: Cashier = l({\n      logic: () =>\n        getRepository(Cashier).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"Cashier.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let newCashier: Cashier;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(findedCashier) === false,\n        description: \"findedCashier.oclIsUndefined()=false\",\n      })\n        .or({\n          logic: () => StandardOPs.oclIsUndefined(findedCashier) === true,\n          description: \"findedCashier.oclIsUndefined()=true\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashier: Cashier;\n    return l({\n      execute: () => (newCashier = new Cashier()),\n      description: \"newCashier.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(Cashier).push(newCashier),\n        description: \"Cashier.allInstance()->includes(newCashier)\",\n      })\n      .and({\n        execute: () => (newCashier.Id = id),\n        description: \"newCashier.Id=id\",\n      })\n      .and({\n        execute: () => (newCashier.Name = name),\n        description: \"newCashier.Name=name\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .or({\n        execute: () => (findedCashier.Id = id),\n        description: \"findedCashier.Id=id\",\n      })\n      .and({\n        execute: () => (findedCashier.Name = name),\n        description: \"findedCashier.Name=name\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .or({\n        execute: () => false,\n        description: \"result=false\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { ManageCashierCRUDService_AutoGenerated };\n",
+        "entity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class ManageCashierCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cashier with provided id,\n   *if the cashier not exist,\n   *create the cashier with the provided and other info*/\n  createCashier(id: number, name: string): boolean {\n    /*Definition Start*/\n    let findedCashier: Cashier = l({\n      logic: () =>\n        getRepository(Cashier).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"Cashier.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let newCashier: Cashier;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(findedCashier) === false,\n        description: \"findedCashier.oclIsUndefined()=false\",\n      })\n        .or({\n          logic: () => StandardOPs.oclIsUndefined(findedCashier) === true,\n          description: \"findedCashier.oclIsUndefined()=true\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashier: Cashier;\n    return l({\n      execute: () => (newCashier = new Cashier()),\n      description: \"newCashier.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(Cashier).push(newCashier),\n        description: \"Cashier.allInstance()->includes(newCashier)\",\n      })\n      .and({\n        execute: () => (newCashier.Id = id),\n        description: \"newCashier.Id=id\",\n      })\n      .and({\n        execute: () => (newCashier.Name = name),\n        description: \"newCashier.Name=name\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .or({\n        execute: () => (findedCashier.Id = id),\n        description: \"findedCashier.Id=id\",\n      })\n      .and({\n        execute: () => (findedCashier.Name = name),\n        description: \"findedCashier.Name=name\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .or({\n        execute: () => false,\n        description: \"result=false\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass ManageCashierCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cashier with provided id,\n   *if the cashier not exist,\n   *create the cashier with the provided and other info*/\n  createCashier(id: number, name: string): boolean {\n    /*Definition Start*/\n    let findedCashier: Cashier = l({\n      logic: () =>\n        getRepository(Cashier).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"Cashier.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let newCashier: Cashier;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(findedCashier) === false,\n        description: \"findedCashier.oclIsUndefined()=false\",\n      })\n        .or({\n          logic: () => StandardOPs.oclIsUndefined(findedCashier) === true,\n          description: \"findedCashier.oclIsUndefined()=true\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashier: Cashier;\n    return l({\n      execute: () => (newCashier = new Cashier()),\n      description: \"newCashier.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(Cashier).push(newCashier),\n        description: \"Cashier.allInstance()->includes(newCashier)\",\n      })\n      .and({\n        execute: () => (newCashier.Id = id),\n        description: \"newCashier.Id=id\",\n      })\n      .and({\n        execute: () => (newCashier.Name = name),\n        description: \"newCashier.Name=name\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .or({\n        execute: () => (findedCashier.Id = id),\n        description: \"findedCashier.Id=id\",\n      })\n      .and({\n        execute: () => (findedCashier.Name = name),\n        description: \"findedCashier.Name=name\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .or({\n        execute: () => false,\n        description: \"result=false\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 196,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'newCashier'.",
+          "code": 2451
+        },
+        {
+          "line": 216,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'newCashier'.",
+          "code": 2451
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), newCashier:Cashier",
+        "precondition": "findedCashier.oclIsUndefined() = false or findedCashier.oclIsUndefined() = true",
+        "postcondition": "(findedCashier.oclIsUndefined() = true and (let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name)) or (findedCashier.oclIsUndefined() = false and findedCashier.Id = id and findedCashier.Name = name) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 202,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), newCashier:Cashier\n            \n            precondition:\n          findedCashier.oclIsUndefined() = false or findedCashier.oclIsUndefined() = true\n            \n            postcondition:\n          (findedCashier.oclIsUndefined() = true and (let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name)) or (findedCashier.oclIsUndefined() = false and findedCashier.Id = id and findedCashier.Name = name) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "(isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name) or (isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 38,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          (isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name) or (isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 37,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 37,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 37,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "(isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) or (isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 38,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          (isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) or (isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 37,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "isCashierExist = false and (let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) or isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tfindedCashier: Cashier = Cashier.allInstance()->any(o|o.Id = id),\n\t\tisCashierExist: Boolean = if findedCashier.oclIsUndefined() \n\t\tthen false \n\t\telse true \n\t\tendif \n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tisCashierExist = false and\n\t\t(let newCashier: Cashier in\n\t\tnewCashier.oclIsNew() and\n\t\tCashier.allInstance()->includes(newCashier) and\n\t\tnewCashier.Id = id and\n\t\tnewCashier.Name = name and\n\t\tresult = true) or\n\t\tisCashierExist = true and\n\t\tfindedCashier.Id = id and\n\t\tfindedCashier.Name = name and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property body of ArrowFunctionExpression expected node to be of a type [\"BlockStatement\",\"Expression\"] but instead got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif",
+        "precondition": "true",
+        "postcondition": "(not isCashierExist) implies (let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) and isCashierExist implies (findedCashier.Id = id and findedCashier.Name = name and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 15,
+          "msg": "extraneous input 'isCashierExist' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = if findedCashier.oclIsUndefined() then false else true endif\n            \n            precondition:\n          true\n            \n            postcondition:\n          (not isCashierExist) implies (let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) and isCashierExist implies (findedCashier.Id = id and findedCashier.Name = name and result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = findedCashier.oclIsUndefined() = false",
+        "precondition": "true",
+        "postcondition": "(isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) or (isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 38,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          findedCashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), isCashierExist:Boolean = findedCashier.oclIsUndefined() = false\n            \n            precondition:\n          true\n            \n            postcondition:\n          (isCashierExist = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true) or (isCashierExist = true and findedCashier.Id = id and findedCashier.Name = name and result = true)\n            \n        }"
+    }
+  }
+]

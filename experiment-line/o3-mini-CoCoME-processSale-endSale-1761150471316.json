@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLineItems:Set(SalesLineItem) = currentSale.ContainedSalesLine",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = false",
+        "postcondition": "currentSale.Amount = salesLineItems->collect(o:SalesLineItem|o.Subamount)->sum and currentSale.IsReadytoPay = true and result = currentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 83,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLineItems:Set(SalesLineItem) = currentSale.ContainedSalesLine\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = false\n            \n            postcondition:\n          currentSale.Amount = salesLineItems->collect(o:SalesLineItem|o.Subamount)->sum and currentSale.IsReadytoPay = true and result = currentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentSale"
+        }
+      ]
+    }
+  }
+]

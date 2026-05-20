@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.oclIsNew() and o.OrderStatus = OrderStatus.REQUESTED), sumAmount:Real = currentOrderProduct.ContainedEntries->collect(entry | entry.SubAmount)->sum()",
+        "precondition": "currentOrderProduct.oclIsUndefined() = bool",
+        "postcondition": "currentOrderProduct.OrderStatus = OrderStatus.REQUESTED and currentOrderProduct.Amount = sumAmount and result = currentOrderProduct.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 225,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.oclIsNew() and o.OrderStatus = OrderStatus.REQUESTED), sumAmount:Real = currentOrderProduct.ContainedEntries->collect(entry | entry.SubAmount)->sum()\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = bool\n            \n            postcondition:\n          currentOrderProduct.OrderStatus = OrderStatus.REQUESTED and currentOrderProduct.Amount = sumAmount and result = currentOrderProduct.oclIsNew()\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: OrderStatus"
+        }
+      ]
+    }
+  }
+]

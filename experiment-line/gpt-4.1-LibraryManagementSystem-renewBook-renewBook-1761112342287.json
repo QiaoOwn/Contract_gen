@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loan:Loan = Loan.allInstance()->any(l | l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false), user:User = loan.LoanedUser, copy:BookCopy = loan.LoanedCopy",
+        "precondition": "loan.oclIsUndefined() = false and user.BorrowStatus = User::BorrowStatus_NORMAL and copy.Status = BookCopy::CopyStatus_LOANED and loan.DueDate >= Date.now() and loan.RenewedTimes < self.MaxRenewTimes",
+        "postcondition": "loan.RenewedTimes = loan.RenewedTimes + 1 and loan.RenewDate = Date.now() and loan.DueDate = loan.DueDate + self.RenewPeriod and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 156,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          loan:Loan = Loan.allInstance()->any(l | l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false), user:User = loan.LoanedUser, copy:BookCopy = loan.LoanedCopy\n            \n            precondition:\n          loan.oclIsUndefined() = false and user.BorrowStatus = User::BorrowStatus_NORMAL and copy.Status = BookCopy::CopyStatus_LOANED and loan.DueDate >= Date.now() and loan.RenewedTimes < self.MaxRenewTimes\n            \n            postcondition:\n          loan.RenewedTimes = loan.RenewedTimes + 1 and loan.RenewDate = Date.now() and loan.DueDate = loan.DueDate + self.RenewPeriod and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newOrderProduct:OrderProduct = OrderProduct.allInstance()->select(o | o.Id = orderid)->any()\nif newOrderProduct.oclIsUndefined() then\n    newOrderProduct:OrderProduct = OrderProduct.allInstance()->create(\n        Id = orderid,\n        Time = Date.now,\n        OrderStatus = OrderStatus::NEW\n    )\nendif",
+        "precondition": "OrderProduct.allInstance()->excludes(newOrderProduct)",
+        "postcondition": "OrderProduct.allInstance()->includes(newOrderProduct) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          newOrderProduct:OrderProduct = OrderProduct.allInstance()->select(o | o.Id = orderid)->any()\nif newOrderProduct.oclIsUndefined() then\n    newOrderProduct:OrderProduct = OrderProduct.allInstance()->create(\n        Id = orderid,\n        Time = Date.now,\n        OrderStatus = OrderStatus::NEW\n    )\nendif\n            \n            precondition:\n          OrderProduct.allInstance()->excludes(newOrderProduct)\n            \n            postcondition:\n          OrderProduct.allInstance()->includes(newOrderProduct) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

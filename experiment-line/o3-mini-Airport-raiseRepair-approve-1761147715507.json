@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false and (reject = true or reject = false and (repair.Process = 0 and staff.Role = 1 or repair.Process = 1 and staff.Role = 2 or repair.Process = 2 and staff.Role = 3))",
+        "postcondition": "let ah:ApprovalHistory in ah.oclIsNew() and In the post condition, ApprovalHistory.allInstance()->includes(ah) and (reject = true and repair.Process = 5 or reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3) and result = ah"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 57,
+          "msg": "mismatched input 'the' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false and (reject = true or reject = false and (repair.Process = 0 and staff.Role = 1 or repair.Process = 1 and staff.Role = 2 or repair.Process = 2 and staff.Role = 3))\n            \n            postcondition:\n          let ah:ApprovalHistory in ah.oclIsNew() and In the post condition, ApprovalHistory.allInstance()->includes(ah) and (reject = true and repair.Process = 5 or reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3) and result = ah\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: In"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existing:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+        "precondition": "orderid.oclIsTypeOf(Integer)",
+        "postcondition": "existing.oclIsUndefined() = true and let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.OrderStatus = OrderStatus::NEW and newOrder.Time = now and self.CurrentOrderProduct = newOrder and result = true or existing.oclIsUndefined() = false and result = false and self.CurrentOrderProduct = existing"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 47,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 59,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          existing:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)\n            \n            precondition:\n          orderid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          existing.oclIsUndefined() = true and let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.OrderStatus = OrderStatus::NEW and newOrder.Time = now and self.CurrentOrderProduct = newOrder and result = true or existing.oclIsUndefined() = false and result = false and self.CurrentOrderProduct = existing\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

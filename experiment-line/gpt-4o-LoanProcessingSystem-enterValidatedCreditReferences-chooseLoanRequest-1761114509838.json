@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchedRequest:LoanRequest = CurrentLoanRequests->any(lr | lr.RequestID = requestid)",
+        "precondition": "not CurrentLoanRequests->isEmpty() and CurrentLoanRequests->exists(lr | lr.RequestID = requestid)",
+        "postcondition": "CurrentLoanRequest = matchedRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'CurrentLoanRequests' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          matchedRequest:LoanRequest = CurrentLoanRequests->any(lr | lr.RequestID = requestid)\n            \n            precondition:\n          not CurrentLoanRequests->isEmpty() and CurrentLoanRequests->exists(lr | lr.RequestID = requestid)\n            \n            postcondition:\n          CurrentLoanRequest = matchedRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

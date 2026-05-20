@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card: BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardExists:Boolean = (card.oclIsUndefined() = false)",
+        "precondition": "card.oclIsUndefined() = true or card.oclIsUndefined() = false",
+        "postcondition": "InputCard = card and CardIDValidated = cardExists and result = cardExists"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid),\n\t\tcardExists: Boolean = (card.oclIsUndefined() = false)\n\tprecondition:\n\t\tcard.oclIsUndefined() = true or\n\t\tcard.oclIsUndefined() = false\n\tpostcondition:\n\t\tInputCard = card and\n\t\tCardIDValidated = cardExists and\n\t\tresult = cardExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

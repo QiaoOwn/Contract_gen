@@ -1,0 +1,351 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid).oclIsUndefined() ? LoanRequest.create() : null , newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->includes(loanRequest);",
+        "postcondition": "if loanRequest.oclIsUndefined() then LoanRequest.allInstance()->includes(newLoanRequest) and result = true else result = (loanRequest.oclIsUndefined() and loanRequest.RequestID = requestid) endif."
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 185,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 131,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 198,
+          "msg": "extraneous input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 205,
+          "msg": "extraneous input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid).oclIsUndefined() ? LoanRequest.create() : null , newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->includes(loanRequest);\n            \n            postcondition:\n          if loanRequest.oclIsUndefined() then LoanRequest.allInstance()->includes(newLoanRequest) and result = true else result = (loanRequest.oclIsUndefined() and loanRequest.RequestID = requestid) endif.\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->includes(loanRequest);",
+        "postcondition": "newLoanRequest.oclIsNew() and result = true or (loanRequest.RequestID = requestid and result = loanRequest.oclIsUndefined()) || result = true."
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 135,
+          "msg": "mismatched input '|' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->includes(loanRequest);\n            \n            postcondition:\n          newLoanRequest.oclIsNew() and result = true or (loanRequest.RequestID = requestid and result = loanRequest.oclIsUndefined()) || result = true.\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created or (loanRequest.RequestID = requestid and result = loanRequest.oclIsUndefined()) or result = true."
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 187,
+          "msg": "extraneous input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created or (loanRequest.RequestID = requestid and result = loanRequest.oclIsUndefined()) or result = true.\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created or (loanRequest.RequestID = requestid and result = loanRequest.oclIsUndefined()) or result = true."
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 187,
+          "msg": "extraneous input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created or (loanRequest.RequestID = requestid and result = loanRequest.oclIsUndefined()) or result = true.\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in result = created and (loanRequest.oclIsUndefined() implies (LoanRequest.allInstance()->includes(newLoanRequest))) or (not loanRequest.oclIsUndefined() implies (loanRequest.RequestID = requestid)) and result = true."
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 112,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 183,
+          "msg": "mismatched input 'loanRequest' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 274,
+          "msg": "extraneous input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in result = created and (loanRequest.oclIsUndefined() implies (LoanRequest.allInstance()->includes(newLoanRequest))) or (not loanRequest.oclIsUndefined() implies (loanRequest.RequestID = requestid)) and result = true.\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and (loanRequest.oclIsUndefined() implies (LoanRequest.allInstance()->includes(newLoanRequest))) or (loanRequest.oclIsUndefined() implies (loanRequest.RequestID = requestid)) and result = true."
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 124,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 220,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 282,
+          "msg": "extraneous input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(); newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and (loanRequest.oclIsUndefined() implies (LoanRequest.allInstance()->includes(newLoanRequest))) or (loanRequest.oclIsUndefined() implies (loanRequest.RequestID = requestid)) and result = true.\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and bool implies (LoanRequest.allInstance()->includes(newLoanRequest));"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 122,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 99,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and bool implies (LoanRequest.allInstance()->includes(newLoanRequest));\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and bool implies (LoanRequest.allInstance()->includes(newLoanRequest));"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 122,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 99,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and bool implies (LoanRequest.allInstance()->includes(newLoanRequest));\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and bool implies (LoanRequest.allInstance()->includes(newLoanRequest));"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 122,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 99,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and bool implies (LoanRequest.allInstance()->includes(newLoanRequest));\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and LoanRequest.allInstance()->includes(newLoanRequest);"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 122,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and result = created and LoanRequest.allInstance()->includes(newLoanRequest);\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and LoanRequest.allInstance()->includes(newLoanRequest) and result = created;"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 209,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and LoanRequest.allInstance()->includes(newLoanRequest) and result = created;\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and LoanRequest.allInstance()->includes(newLoanRequest) and result = created;"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 209,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          bool:Boolean = LoanRequest.allInstance()->includes(loanRequest), loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;\n            \n            precondition:\n          loanRequest.oclIsUndefined() = bool, bool = LoanRequest.allInstance()->excludes(loanRequest);\n            \n            postcondition:\n          let created:Boolean = newLoanRequest.oclIsNew() in created and LoanRequest.allInstance()->includes(newLoanRequest) and result = created;\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bool:loanExists = LoanRequest.allInstance()->includes(loanRequest), loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create(), newLoanRequest.Status = LoanRequestStatus.SUBMITTED, newLoanRequest.RequestID = requestid, newLoanRequest.Name = name, newLoanRequest.LoanAmount = loanamount, newLoanRequest.LoanPurpose = loanpurpose, newLoanRequest.Income = income, newLoanRequest.PhoneNumber = phonenumber, newLoanRequest.PostalAddress = postaladdress, newLoanRequest.ZipCode = zipcode, newLoanRequest.Email = email, newLoanRequest.WorkReferences = workreferences, newLoanRequest.CreditReferences = creditreferences, newLoanRequest.CheckingAccountNumber = checkingaccountnumber, newLoanRequest.SecurityNumber = securitynumber;",
+        "precondition": "loanRequest.oclIsUndefined() = loanExists, loanExists = LoanRequest.allInstance()->excludes(loanRequest);",
+        "postcondition": "let created:Boolean = newLoanRequest.oclIsNew() in created and LoanRequest.allInstance()->includes(newLoanRequest) and result = created;"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesks:Set(CashDesk) = CashDesk.allInstance(), selectedCashDesk:CashDesk = cashDesks->any(c | c.Id = id)",
+        "precondition": "CashDesk.allInstance()->includes(selectedCashDesk)",
+        "postcondition": "selectedCashDesk.oclIsUndefined() = false and self.result = selectedCashDesk"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 68,
+          "msg": "no viable alternative at input 'self.result='"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::queryCashDesk(id:Integer): CashDesk {\n          definition:\n          cashDesks:Set(CashDesk) = CashDesk.allInstance(), selectedCashDesk:CashDesk = cashDesks->any(c | c.Id = id)\n            \n            precondition:\n          CashDesk.allInstance()->includes(selectedCashDesk)\n            \n            postcondition:\n          selectedCashDesk.oclIsUndefined() = false and self.result = selectedCashDesk\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

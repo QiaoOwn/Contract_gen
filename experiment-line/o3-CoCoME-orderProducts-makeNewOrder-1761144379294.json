@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "ops:Set(OrderProduct) = OrderProduct.allInstance()->select(o | o.Id = orderid), op:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+        "precondition": "true",
+        "postcondition": "if op.oclIsUndefined() then\n  let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.Time = ThirdPartyServices.currentTime() and newOrder.OrderStatus = OrderStatus::NEW and self.CurrentOrderProduct = newOrder and result = true\nelse\n  self.CurrentOrderProduct = op and result = true\nendif"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 10,
+          "column": 178,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          ops:Set(OrderProduct) = OrderProduct.allInstance()->select(o | o.Id = orderid), op:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          if op.oclIsUndefined() then\n  let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.Time = ThirdPartyServices.currentTime() and newOrder.OrderStatus = OrderStatus::NEW and self.CurrentOrderProduct = newOrder and result = true\nelse\n  self.CurrentOrderProduct = op and result = true\nendif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

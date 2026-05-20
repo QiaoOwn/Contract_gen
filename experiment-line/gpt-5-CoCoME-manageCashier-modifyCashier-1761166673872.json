@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "targetCashiers:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashierExists:Boolean = if targetCashiers.size() = 1 then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and Cashier.allInstance()->isUnique(o:Cashier | o.Id)",
+        "postcondition": "targetCashiers->forAll(o:Cashier| o.Name = name) and result = cashierExists"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashierCRUDService::modifyCashier(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\ttargetCashiers: Set(Cashier) = Cashier.allInstance()->select(o|o.Id = id),\n\t\tcashierExists: Boolean = if targetCashiers.size() = 1 \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tCashier.allInstance()->isUnique(o: Cashier|o.Id)\n\tpostcondition:\n\t\ttargetCashiers->forAll(o: Cashier|o.Name = name) and\n\t\tresult = cashierExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,326 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newRequest:LoanRequest = if existingRequest.oclIsUndefined() then LoanRequest.create() else existingRequest endif",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "if existingRequest.oclIsUndefined() then LoanRequest.allInstance()->includes(newRequest) and CurrentLoanRequest = newRequest else CurrentLoanRequest = existingRequest endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 185,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newRequest:LoanRequest = if existingRequest.oclIsUndefined() then LoanRequest.create() else existingRequest endif\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          if existingRequest.oclIsUndefined() then LoanRequest.allInstance()->includes(newRequest) and CurrentLoanRequest = newRequest else CurrentLoanRequest = existingRequest endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = if existingRequest.oclIsUndefined() then newRequest else existingRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = if existingRequest.oclIsUndefined() then newRequest else existingRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 207,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "result = isExisting and CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 207,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 55,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 69,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          result = isExisting and CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 207,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 207,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = if isExisting then existingRequest else newRequest endif and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 207,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined() = false, newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 199,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "isExisting = false and LoanRequest.allInstance()->excludes(existingRequest)",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 199,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          isExisting = false and LoanRequest.allInstance()->excludes(existingRequest)\n            \n            postcondition:\n          CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isExisting\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting = false",
+        "precondition": "isExisting",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 199,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting = false\n            \n            precondition:\n          isExisting\n            \n            postcondition:\n          CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting = false",
+        "precondition": "isExisting",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 199,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting = false\n            \n            precondition:\n          isExisting\n            \n            postcondition:\n          CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting = false",
+        "precondition": "isExisting",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 199,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting = false\n            \n            precondition:\n          isExisting\n            \n            postcondition:\n          CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), isExisting:Boolean = existingRequest.oclIsUndefined(), newRequest:LoanRequest = LoanRequest.create(), isNew:Boolean = isExisting",
+        "precondition": "isExisting = false",
+        "postcondition": "CurrentLoanRequest = newRequest and LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

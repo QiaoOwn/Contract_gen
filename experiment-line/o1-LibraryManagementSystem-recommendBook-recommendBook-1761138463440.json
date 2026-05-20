@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(x|x.UserID=uid)",
+        "precondition": "u.oclIsUndefined()=false",
+        "postcondition": "let b:Book in b.oclIsNew() and Book.allInstance()->includes(b) and b.CallNo=callNo and b.Title=title and b.Edition=edition and b.Author=author and b.Publisher=publisher and b.Description=description and b.ISBn=isbn and let rb:RecommendBook in rb.oclIsNew() and RecommendBook.allInstance()->includes(rb) and rb.RecommendUser=u and u.RecommendedBook->includes(rb) and result=true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 229,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 235,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(x|x.UserID=uid)\n            \n            precondition:\n          u.oclIsUndefined()=false\n            \n            postcondition:\n          let b:Book in b.oclIsNew() and Book.allInstance()->includes(b) and b.CallNo=callNo and b.Title=title and b.Edition=edition and b.Author=author and b.Publisher=publisher and b.Description=description and b.ISBn=isbn and let rb:RecommendBook in rb.oclIsNew() and RecommendBook.allInstance()->includes(rb) and rb.RecommendUser=u and u.RecommendedBook->includes(rb) and result=true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

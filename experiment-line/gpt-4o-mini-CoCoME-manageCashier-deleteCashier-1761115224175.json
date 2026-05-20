@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id)",
+        "precondition": "cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id)\ncheckCashierExists: Boolean = if cashier.oclIsUndefined() then false else true endif\ncheckCashierExists = true",
+        "postcondition": "result = checkCashierExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 7,
+          "column": 0,
+          "msg": "mismatched input 'checkCashierExists' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::deleteCashier(id:Integer): Boolean {\n          definition:\n          cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id)\ncheckCashierExists: Boolean = if cashier.oclIsUndefined() then false else true endif\ncheckCashierExists = true\n            \n            postcondition:\n          result = checkCashierExists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: checkCashierExists"
+        }
+      ]
+    }
+  }
+]

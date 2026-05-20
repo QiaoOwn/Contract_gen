@@ -1,0 +1,281 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED",
+        "postcondition": "currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum() and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 101,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED\n            \n            postcondition:\n          currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum() and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = currentOrderProduct.Amount = amountSum"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 89,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = currentOrderProduct.Amount = amountSum\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o:OrderEntry | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 161,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o:OrderEntry | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif\n            \n            precondition:\n          currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true\n            \n            postcondition:\n          currentOrderProduct.Amount = amountSum and result = amountMatch\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = self.CurrentOrderProduct, amountSum:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount).sum(), amountMatch:Boolean = if currentOrderProduct.Amount = amountSum then true else false endif",
+        "precondition": "currentOrderProduct.oclIsUndefined() = false and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and amountMatch = true",
+        "postcondition": "currentOrderProduct.Amount = amountSum and result = amountMatch"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  }
+]

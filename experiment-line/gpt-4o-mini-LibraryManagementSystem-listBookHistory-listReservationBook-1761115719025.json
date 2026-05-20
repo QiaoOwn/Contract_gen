@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedBooks:Set(BookCopy) = User.allInstance()->select(u | u.UserID = uid).ReservedBook->collect(r | r.ReservedCopy)",
+        "precondition": "User.allInstance()->includes(u) and u.UserID = uid",
+        "postcondition": "let reservedBooks:Set(BookCopy) in User.allInstance()->select(u | u.UserID = uid).ReservedBook->forAll(r | reservedBooks->includes(r.ReservedCopy)) and result = reservedBooks"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 86,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 91,
+          "msg": "mismatched input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {\n          definition:\n          reservedBooks:Set(BookCopy) = User.allInstance()->select(u | u.UserID = uid).ReservedBook->collect(r | r.ReservedCopy)\n            \n            precondition:\n          User.allInstance()->includes(u) and u.UserID = uid\n            \n            postcondition:\n          let reservedBooks:Set(BookCopy) in User.allInstance()->select(u | u.UserID = uid).ReservedBook->forAll(r | reservedBooks->includes(r.ReservedCopy)) and result = reservedBooks\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: u"
+        }
+      ]
+    }
+  }
+]

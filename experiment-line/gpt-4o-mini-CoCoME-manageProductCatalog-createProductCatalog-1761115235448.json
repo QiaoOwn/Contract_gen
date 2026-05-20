@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newCatalog:ProductCatalog = ProductCatalog{Id = id, Name = name}",
+        "precondition": "obs:Set(ProductCatalog) = ProductCatalog.allInstance()->select(o | o.Id = id) and obs.isEmpty() = true",
+        "postcondition": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 52,
+          "msg": "mismatched input '{' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          newCatalog:ProductCatalog = ProductCatalog{Id = id, Name = name}\n            \n            precondition:\n          obs:Set(ProductCatalog) = ProductCatalog.allInstance()->select(o | o.Id = id) and obs.isEmpty() = true\n            \n            postcondition:\n          let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ProductCatalog"
+        }
+      ]
+    }
+  }
+]

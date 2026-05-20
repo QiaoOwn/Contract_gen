@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingItems:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), willCreate:Boolean = if existingItems.size() = 0 then true else false endif",
+        "precondition": "barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real) and price >= 0 and stocknumber >= 0 and orderprice >= 0",
+        "postcondition": "if willCreate then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice else true endif and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 280,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          existingItems:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), willCreate:Boolean = if existingItems.size() = 0 then true else false endif\n            \n            precondition:\n          barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real) and price >= 0 and stocknumber >= 0 and orderprice >= 0\n            \n            postcondition:\n          if willCreate then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice else true endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

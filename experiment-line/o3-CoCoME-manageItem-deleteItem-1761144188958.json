@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "barcode.oclIsTypeOf(Integer)",
+        "postcondition": "(item.oclIsUndefined() = false and result = true) or (item.oclIsUndefined() = true and result = false)"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 60,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          barcode.oclIsTypeOf(Integer)\n            \n            postcondition:\n          (item.oclIsUndefined() = false and result = true) or (item.oclIsUndefined() = true and result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid)",
+        "precondition": "userid.oclIsTypeOf(Integer) and User.allInstance()->isUnique(u:User | u.UserID)",
+        "postcondition": "if user.oclIsUndefined() = false then User.allInstance()->excludes(user) and user.OwnedCard@pre->forAll(c:BankCard | c.BelongedUser = null) and result = true else result = false endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::deleteUser(userid: Integer): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = userid)\n\tprecondition:\n\t\tuserid.oclIsTypeOf(Integer) and\n\t\tUser.allInstance()->isUnique(u: User|u.UserID)\n\tpostcondition:\n\t\tif user.oclIsUndefined() = false \n\t\tthen User.allInstance()->excludes(user) and\n\t\tuser.OwnedCard@pre->forAll(c: BankCard|c.BelongedUser = null) and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

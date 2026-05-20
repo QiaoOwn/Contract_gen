@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and user.ReservedBook->isUnique(r | r.ReservedCopy) = false",
+        "postcondition": "let reserve:Reserve in reserve.oclIsNew() and book.ReservationRecord->includes(reserve) and user.ReservedBook->includes(reserve) and reserve.ReservedUser = user and reserve.ReservedCopy = book and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tuser.ReservedBook->isUnique(r|r.ReservedCopy) = false\n\tpostcondition:\n\t\tlet reserve: Reserve in\n\t\treserve.oclIsNew() and\n\t\tbook.ReservationRecord->includes(reserve) and\n\t\tuser.ReservedBook->includes(reserve) and\n\t\treserve.ReservedUser = user and\n\t\treserve.ReservedCopy = book and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

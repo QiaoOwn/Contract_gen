@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.CurrentCashDesk.oclIsUndefined() = false and self.CurrentCashDesk.IsOpened = true and (CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = true)",
+        "postcondition": "let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = self.CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and In the post condition, Sale.allInstance()->includes(sale) and CurrentSale = sale and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 157,
+          "msg": "mismatched input 'the' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          \n            precondition:\n          self.CurrentCashDesk.oclIsUndefined() = false and self.CurrentCashDesk.IsOpened = true and (CurrentSale.oclIsUndefined() or CurrentSale.IsComplete = true)\n            \n            postcondition:\n          let sale:Sale in sale.oclIsNew() and sale.BelongedCashDesk = self.CurrentCashDesk and sale.IsComplete = false and sale.IsReadytoPay = false and In the post condition, Sale.allInstance()->includes(sale) and CurrentSale = sale and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

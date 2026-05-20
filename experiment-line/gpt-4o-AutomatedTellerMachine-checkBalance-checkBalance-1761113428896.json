@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = BankCard.allInstance()->includes(self.InputCard)",
+        "precondition": "self.PasswordValidated = true and self.CardIDValidated = true and inputCardExists = true",
+        "postcondition": "result = self.InputCard.Balance"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 69,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::checkBalance(): Real {\n          definition:\n          inputCardExists:Boolean = BankCard.allInstance()->includes(self.InputCard)\n            \n            precondition:\n          self.PasswordValidated = true and self.CardIDValidated = true and inputCardExists = true\n            \n            postcondition:\n          result = self.InputCard.Balance\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

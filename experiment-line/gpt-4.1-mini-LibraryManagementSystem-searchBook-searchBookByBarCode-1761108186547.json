@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "copyBook:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), result:Set(Book) = Set{}",
+        "precondition": "copyBook->size() <> 0",
+        "postcondition": "result = copyBook.BookBelongs"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 92,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 20,
+          "msg": "no viable alternative at input 'copyBook->size()'"
+        }
+      ],
+      "contract": "Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {\n          definition:\n          copyBook:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), result:Set(Book) = Set{}\n            \n            precondition:\n          copyBook->size() <> 0\n            \n            postcondition:\n          result = copyBook.BookBelongs\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property body of ArrowFunctionExpression expected node to be of a type [\"BlockStatement\",\"Expression\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

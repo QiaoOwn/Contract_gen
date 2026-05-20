@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundOp:OrderProduct = OrderProduct.allInstance()->any(o | o.Id=orderid)",
+        "precondition": "",
+        "postcondition": "foundOp.oclIsUndefined() and let createdOp:OrderProduct in createdOp.oclIsNew() and OrderProduct.allInstance()->includes(createdOp) and createdOp.Id=orderid and createdOp.Time=ThirdPartyServices.getCurrentTime() and createdOp.OrderStatus=OrderStatus::NEW and CurrentOrderProduct=createdOp and result=true or foundOp.oclIsUndefined()=false and CurrentOrderProduct=foundOp and result=false"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 39,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 7,
+          "column": 52,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          foundOp:OrderProduct = OrderProduct.allInstance()->any(o | o.Id=orderid)\n            \n            \n            postcondition:\n          foundOp.oclIsUndefined() and let createdOp:OrderProduct in createdOp.oclIsNew() and OrderProduct.allInstance()->includes(createdOp) and createdOp.Id=orderid and createdOp.Time=ThirdPartyServices.getCurrentTime() and createdOp.OrderStatus=OrderStatus::NEW and CurrentOrderProduct=createdOp and result=true or foundOp.oclIsUndefined()=false and CurrentOrderProduct=foundOp and result=false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

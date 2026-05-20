@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = uid), bc:BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.IsReturned = false and l.LoanedCopy = bc and l.LoanedUser = u), activeReserves:Set(Reserve) = Reserve.allInstance()->select(r | r.ReservedCopy = bc and r.IsReserveClosed = false and r.ReservedUser <> u), renewDays:Integer = self.RenewPeriodDays, maxRenewTimes:Integer = self.MaxRenewTimes",
+        "precondition": "User.allInstance()->includes(u) and BookCopy.allInstance()->includes(bc) and Loan.allInstance()->includes(loan) and bc.Status = CopyStatus::LOANED and u.BorrowStatus = BorrowStatus::NORMAL and loan.IsReturned = false and activeReserves.isEmpty() = true and loan.OverDue3Days = false and loan.OverDue10Days = false and loan.OverDue17Days = false and loan.OverDue31Days = false and loan.RenewedTimes < maxRenewTimes",
+        "postcondition": "loan.RenewedTimes = loan.RenewedTimes + 1 and loan.RenewDate = ThirdPartyServices.currentDate() and loan.DueDate = ThirdPartyServices.addDays(loan.DueDate, renewDays) and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 103,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = uid), bc:BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.IsReturned = false and l.LoanedCopy = bc and l.LoanedUser = u), activeReserves:Set(Reserve) = Reserve.allInstance()->select(r | r.ReservedCopy = bc and r.IsReserveClosed = false and r.ReservedUser <> u), renewDays:Integer = self.RenewPeriodDays, maxRenewTimes:Integer = self.MaxRenewTimes\n            \n            precondition:\n          User.allInstance()->includes(u) and BookCopy.allInstance()->includes(bc) and Loan.allInstance()->includes(loan) and bc.Status = CopyStatus::LOANED and u.BorrowStatus = BorrowStatus::NORMAL and loan.IsReturned = false and activeReserves.isEmpty() = true and loan.OverDue3Days = false and loan.OverDue10Days = false and loan.OverDue17Days = false and loan.OverDue31Days = false and loan.RenewedTimes < maxRenewTimes\n            \n            postcondition:\n          loan.RenewedTimes = loan.RenewedTimes + 1 and loan.RenewDate = ThirdPartyServices.currentDate() and loan.DueDate = ThirdPartyServices.addDays(loan.DueDate, renewDays) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

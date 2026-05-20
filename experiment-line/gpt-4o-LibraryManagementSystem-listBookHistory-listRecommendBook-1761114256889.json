@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.Name = uid)",
+        "precondition": "User.allInstance()->exists(u | u.uid = uid)",
+        "postcondition": "let recommendedBooks:Set(RecommendBook) = user.RecommendBook in result = recommendedBooks and user.oclIsTypeOf(User) and user.oclIsUndefined() = false"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ListBookHistory::listRecommendBook(uid: String): Set(RecommendBook) {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(u|u.Name = uid)\n\tprecondition:\n\t\tUser.allInstance()->exists(u|u.uid = uid)\n\tpostcondition:\n\t\tlet recommendedBooks: Set(RecommendBook) = user.RecommendBook in\n\t\tresult = recommendedBooks and\n\t\tuser.oclIsTypeOf(User) and\n\t\tuser.oclIsUndefined() = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

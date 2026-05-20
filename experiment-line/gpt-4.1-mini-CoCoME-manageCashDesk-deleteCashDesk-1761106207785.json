@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cd:Set(CashDesk) = CashDesk.allInstance()->select(o | o.Id = id)",
+        "precondition": "cd->size() <> 0",
+        "postcondition": "result = (cd->size() <> 0)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "no viable alternative at input 'cd->size()'"
+        },
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 24,
+          "msg": "no viable alternative at input 'cd->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {\n          definition:\n          cd:Set(CashDesk) = CashDesk.allInstance()->select(o | o.Id = id)\n            \n            precondition:\n          cd->size() <> 0\n            \n            postcondition:\n          result = (cd->size() <> 0)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

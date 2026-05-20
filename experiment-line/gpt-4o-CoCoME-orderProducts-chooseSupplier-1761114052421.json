@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "supplier:Supplier = Supplier.allInstance()->any(s | s.id = supplierID), suppliers:Set(Supplier) = Supplier.allInstance()->select(s | s.id = supplierID)",
+        "precondition": "suppliers.isEmpty() = false and self.currentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "ClassName.allInstance()->includes(currentOrderProduct) and self.currentOrderProduct.supplier = supplier and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::chooseSupplier(supplierID: Integer): Boolean {\n\tdefinition:\n\t\tsupplier: Supplier = Supplier.allInstance()->any(s|s.id = supplierID),\n\t\tsuppliers: Set(Supplier) = Supplier.allInstance()->select(s|s.id = supplierID)\n\tprecondition:\n\t\tsuppliers.isEmpty() = false and\n\t\tself.currentOrderProduct.oclIsUndefined() = false\n\tpostcondition:\n\t\tClassName.allInstance()->includes(currentOrderProduct) and\n\t\tself.currentOrderProduct.supplier = supplier and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentOrderProduct"
+        }
+      ]
+    }
+  }
+]

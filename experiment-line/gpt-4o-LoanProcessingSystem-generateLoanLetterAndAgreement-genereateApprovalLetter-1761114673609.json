@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+        "precondition": "LoanRequest.allInstance()->exists(o | o.RequestID = id)",
+        "postcondition": "CurrentApprovalLetter.oclIsNew() and CurrentApprovalLetter.Content = \"ApprovalLetterContent\" and \nApprovalLetter.allInstance()->includes(CurrentApprovalLetter) and \ncurrentLoanRequest = currentLoanRequests->any(o| o.RequestID = id) and \ncurrentLoanRequest.AttachedApprovalLetter = CurrentApprovalLetter and result = CurrentApprovalLetter"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id: Integer): Boolean {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = LoanRequest.allInstance()->any(o|o.RequestID = id)\n\tprecondition:\n\t\tLoanRequest.allInstance()->exists(o|o.RequestID = id)\n\tpostcondition:\n\t\tCurrentApprovalLetter.oclIsNew() and\n\t\tCurrentApprovalLetter.Content = \"ApprovalLetterContent\" and\n\t\tApprovalLetter.allInstance()->includes(CurrentApprovalLetter) and\n\t\tcurrentLoanRequest = currentLoanRequests->any(o|o.RequestID = id) and\n\t\tcurrentLoanRequest.AttachedApprovalLetter = CurrentApprovalLetter and\n\t\tresult = CurrentApprovalLetter\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentApprovalLetter"
+        }
+      ]
+    }
+  }
+]

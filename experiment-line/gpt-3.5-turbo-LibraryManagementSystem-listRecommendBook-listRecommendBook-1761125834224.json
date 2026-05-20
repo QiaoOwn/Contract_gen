@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "recommendedBooks:Set(RecommendBook) = User.allInstance()->select(u | u.UserID = uid).RecommendedBook",
+        "precondition": "User.allInstance()->includes(User.allInstance()->select(u | u.UserID = uid))",
+        "postcondition": "let newBook:RecommendBook in newBook.oclIsNew() and User.allInstance()->select(u | u.UserID = uid).RecommendedBook->includes(newBook) and result = User.allInstance()->select(u | u.UserID = uid).RecommendedBook"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 94,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 108,
+          "msg": "mismatched input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::listRecommendBook(uid:String): Set(RecommendBook) {\n          definition:\n          recommendedBooks:Set(RecommendBook) = User.allInstance()->select(u | u.UserID = uid).RecommendedBook\n            \n            precondition:\n          User.allInstance()->includes(User.allInstance()->select(u | u.UserID = uid))\n            \n            postcondition:\n          let newBook:RecommendBook in newBook.oclIsNew() and User.allInstance()->select(u | u.UserID = uid).RecommendedBook->includes(newBook) and result = User.allInstance()->select(u | u.UserID = uid).RecommendedBook\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  }
+]

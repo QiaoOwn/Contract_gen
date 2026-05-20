@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), loanCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode), loan:Loan = user.LoanedBook->any(l | l.LoanedCopy = loanCopy and l.IsReturned = false)",
+        "precondition": "(User.allInstance()->includes(loggedInUser)) and (BookCopy.allInstance()->includes(loanCopy)) and loanCopy.Status = CopyStatus.LOANED and user.BorrowStatus = BorrowStatus.NORMAL and loan.LoanCopy = loanCopy and loan.LoanedUser = user and loan.IsReturned = false",
+        "postcondition": "let renewedLoan:Loan in renewedLoan.oclIsNew() and LibraryManagementSystemSystem.allInstance()->includes(self) and self.LoanedBook->includes(renewedLoan) and renewedLoan.LoanDate = now() and renewedLoan.LoanLibrarian = self and renewedLoan.LoanDate = old loan.DueDate and renewedLoan.DueDate = renewedLoan.LoanDate.addDays(30) and renewedLoan.RenewedTimes = old loan.RenewedTimes + 1 and renewedLoan.LoanCopy = loanCopy and result = (LibraryManagementSystemSystem.allInstance()->exists(lib | lib.LoanedBook->includes(renewedLoan)))"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 55,
+          "msg": "mismatched input 'and' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), loanCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode), loan:Loan = user.LoanedBook->any(l | l.LoanedCopy = loanCopy and l.IsReturned = false)\n            \n            precondition:\n          (User.allInstance()->includes(loggedInUser)) and (BookCopy.allInstance()->includes(loanCopy)) and loanCopy.Status = CopyStatus.LOANED and user.BorrowStatus = BorrowStatus.NORMAL and loan.LoanCopy = loanCopy and loan.LoanedUser = user and loan.IsReturned = false\n            \n            postcondition:\n          let renewedLoan:Loan in renewedLoan.oclIsNew() and LibraryManagementSystemSystem.allInstance()->includes(self) and self.LoanedBook->includes(renewedLoan) and renewedLoan.LoanDate = now() and renewedLoan.LoanLibrarian = self and renewedLoan.LoanDate = old loan.DueDate and renewedLoan.DueDate = renewedLoan.LoanDate.addDays(30) and renewedLoan.RenewedTimes = old loan.RenewedTimes + 1 and renewedLoan.LoanCopy = loanCopy and result = (LibraryManagementSystemSystem.allInstance()->exists(lib | lib.LoanedBook->includes(renewedLoan)))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

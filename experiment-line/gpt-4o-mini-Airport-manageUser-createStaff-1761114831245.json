@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(o | o.Id = id), boss:Staff = Staff.allInstance()->any(o | o.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.allInstance()->create() else staff endif",
+        "precondition": "staff.oclIsUndefined() = false and boss.oclIsUndefined() = false",
+        "postcondition": "if staff.oclIsUndefined() then Staff.allInstance()->includes(newStaff) and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 192,
+          "msg": "no viable alternative at input 'Staff.allInstance()->create'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(o | o.Id = id), boss:Staff = Staff.allInstance()->any(o | o.Id = bossid), newStaff:Staff = if staff.oclIsUndefined() then Staff.allInstance()->create() else staff endif\n            \n            precondition:\n          staff.oclIsUndefined() = false and boss.oclIsUndefined() = false\n            \n            postcondition:\n          if staff.oclIsUndefined() then Staff.allInstance()->includes(newStaff) and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

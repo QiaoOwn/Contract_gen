@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+        "precondition": "CardID.allInstance()->excludes(InputCard.CardID) and CardID.allInstance()->isUnique(cardid)",
+        "postcondition": "let card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid) in result = cardIDValidated = not card.oclIsUndefined() and (if cardIDValidated then InputCard = card else InputCard = null endif)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 50,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 109,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)\n            \n            precondition:\n          CardID.allInstance()->excludes(InputCard.CardID) and CardID.allInstance()->isUnique(cardid)\n            \n            postcondition:\n          let card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid) in result = cardIDValidated = not card.oclIsUndefined() and (if cardIDValidated then InputCard = card else InputCard = null endif)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

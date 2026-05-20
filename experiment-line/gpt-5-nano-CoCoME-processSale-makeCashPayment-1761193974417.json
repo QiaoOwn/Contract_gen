@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "amount: Real",
+        "precondition": "(CurrentSale.oclIsUndefined() = false) and (CurrentSale.IsComplete = false) and (CurrentSale.IsReadytoPay = true) and (amount >= CurrentSale.Amount)",
+        "postcondition": "let payment: CashPayment in payment.oclIsNew() and payment.AmountTendered = amount and payment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = payment and CurrentSale.IsComplete = true and payment.Balance = amount - CurrentSale.Amount and CurrentSale.Time = now() and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 49,
+          "msg": "mismatched input 'and' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          amount: Real\n            \n            precondition:\n          (CurrentSale.oclIsUndefined() = false) and (CurrentSale.IsComplete = false) and (CurrentSale.IsReadytoPay = true) and (amount >= CurrentSale.Amount)\n            \n            postcondition:\n          let payment: CashPayment in payment.oclIsNew() and payment.AmountTendered = amount and payment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = payment and CurrentSale.IsComplete = true and payment.Balance = amount - CurrentSale.Amount and CurrentSale.Time = now() and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

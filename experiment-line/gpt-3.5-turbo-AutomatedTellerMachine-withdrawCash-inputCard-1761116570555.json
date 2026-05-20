@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid),\nvalidated:Boolean = if card.oclIsUndefined() then false else true endif",
+        "precondition": "inputCard.oclIsUndefined() = InputCard and validated = true",
+        "postcondition": "result = validated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid),\n\t\tvalidated: Boolean = if card.oclIsUndefined() \n\t\tthen false \n\t\telse true \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = InputCard and\n\t\tvalidated = true\n\tpostcondition:\n\t\tresult = validated\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: inputCard"
+        }
+      ]
+    }
+  }
+]

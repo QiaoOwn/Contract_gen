@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CurrentStore.AssociationCashdeskes->any(c | c.Id = cashDeskID)",
+        "precondition": "not cashDesk.oclIsUndefined() and not cashDesk.IsOpened and not CurrentStore.oclIsUndefined() and CurrentStore.IsOpened",
+        "postcondition": "let result:Boolean in cashDesk.IsOpened = true and CurrentCashDesk = cashDesk"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'cashDesk' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          cashDesk:CashDesk = CurrentStore.AssociationCashdeskes->any(c | c.Id = cashDeskID)\n            \n            precondition:\n          not cashDesk.oclIsUndefined() and not cashDesk.IsOpened and not CurrentStore.oclIsUndefined() and CurrentStore.IsOpened\n            \n            postcondition:\n          let result:Boolean in cashDesk.IsOpened = true and CurrentCashDesk = cashDesk\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

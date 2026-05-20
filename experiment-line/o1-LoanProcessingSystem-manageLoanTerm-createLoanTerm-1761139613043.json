@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)",
+        "precondition": "",
+        "postcondition": "if foundTerm.oclIsUndefined() then let newTerm:LoanTerm in newTerm.oclIsNew() and LoanTerm.allInstance()->includes(newTerm) and newTerm.ItemID = itemid and newTerm.Content = content and result = true else result = false endif"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          foundTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)\n            \n            \n            postcondition:\n          if foundTerm.oclIsUndefined() then let newTerm:LoanTerm in newTerm.oclIsNew() and LoanTerm.allInstance()->includes(newTerm) and newTerm.ItemID = itemid and newTerm.Content = content and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentCashPayment:CashPayment = CashPayment.allInstance()->any(o | o.BelongedSale = CurrentSale), bool:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete or CurrentSale.IsReadytoPay or amount < CurrentSale.Amount",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and Sale.allInstance()->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = DateTime.now() and currentCashPayment.BelongedSale = CurrentSale and currentCashPayment.AmountTendered = amount and currentCashPayment.Balance = amount - CurrentSale.Amount"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 193,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentCashPayment:CashPayment = CashPayment.allInstance()->any(o | o.BelongedSale = CurrentSale), bool:Boolean = CurrentSale.oclIsUndefined() or CurrentSale.IsComplete or CurrentSale.IsReadytoPay or amount < CurrentSale.Amount\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let currentCashPayment:CashPayment in currentCashPayment.oclIsNew() and Sale.allInstance()->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = DateTime.now() and currentCashPayment.BelongedSale = CurrentSale and currentCashPayment.AmountTendered = amount and currentCashPayment.Balance = amount - CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "email:String = email",
+        "precondition": "email.oclIsUndefined() = bool",
+        "postcondition": "let obs:Set(User) in obs = User.allInstance()->select(o | o.Email = email), ThirdPartyServices.sendNotificationEmail(email) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 84,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ThirdPartyServices::sendNotificationEmail(email:String): Boolean {\n          definition:\n          email:String = email\n            \n            precondition:\n          email.oclIsUndefined() = bool\n            \n            postcondition:\n          let obs:Set(User) in obs = User.allInstance()->select(o | o.Email = email), ThirdPartyServices.sendNotificationEmail(email) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

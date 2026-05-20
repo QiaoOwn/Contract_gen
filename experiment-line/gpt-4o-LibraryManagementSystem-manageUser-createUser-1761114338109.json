@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "User.allInstance()->excludes(user | user.UserID = userid)",
+        "postcondition": "let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Sex = sex and newUser.Password = password and newUser.Email = email and newUser.Faculty = faculty and newUser.LoanedNumber = loanednumber and newUser.BorrowStatus = borrowstatus and newUser.SuspensionDays = suspensiondays and newUser.OverDueFee = overduefee and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 44,
+          "msg": "mismatched input '|' expecting ')'"
+        },
+        {
+          "line": 4,
+          "column": 66,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:String,name:String,sex:Sex [M|F],password:String,email:String,faculty:String,loanednumber:Integer,borrowstatus:BorrowStatus [NORMAL|SUSPEND],suspensiondays:Integer,overduefee:Real): Boolean {\n          \n            precondition:\n          User.allInstance()->excludes(user | user.UserID = userid)\n            \n            postcondition:\n          let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Sex = sex and newUser.Password = password and newUser.Email = email and newUser.Faculty = faculty and newUser.LoanedNumber = loanednumber and newUser.BorrowStatus = borrowstatus and newUser.SuspensionDays = suspensiondays and newUser.OverDueFee = overduefee and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

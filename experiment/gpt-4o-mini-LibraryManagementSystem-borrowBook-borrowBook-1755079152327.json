@@ -1,0 +1,246 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = BookCopy.allInstance()->any(b | b.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedCopy = book and l.LoanedUser = user), isEligible:Boolean = user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and loan.oclIsUndefined() = true and user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: Book = BookCopy.allInstance()->any(b|b.Barcode = barcode),\n\t\tloan: Loan = Loan.allInstance()->any(l|l.LoanedCopy = book and\n\t\tl.LoanedUser = user),\n\t\tisEligible: Boolean = user.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5\n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tloan.oclIsUndefined() = true and\n\t\tuser.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.LoanedRecord->includes(newLoan) and\n\t\tuser.LoanedNumber = user.LoanedNumber+1 and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedCopy = book and l.LoanedUser = user), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus) and user.LoanedNumber < 5",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and loan.oclIsUndefined() = true and user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: Book = Book.allInstance()->any(b|b.Barcode = barcode),\n\t\tloan: Loan = Loan.allInstance()->any(l|l.LoanedCopy = book and\n\t\tl.LoanedUser = user),\n\t\tisEligible: Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus) and\n\t\tuser.LoanedNumber<5\n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tloan.oclIsUndefined() = true and\n\t\tuser.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.LoanedRecord->includes(newLoan) and\n\t\tuser.LoanedNumber = user.LoanedNumber+1 and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedCopy = book and l.LoanedUser = user), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and loan.oclIsUndefined() = true and user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 278,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedCopy = book and l.LoanedUser = user), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5\n            \n            precondition:\n          user.oclIsUndefined() = false and book.oclIsUndefined() = false and loan.oclIsUndefined() = true and user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 and loan.oclIsUndefined() = true",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true, isEligible = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 192,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 192,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5\n            \n            precondition:\n          user.oclIsUndefined() = false and book.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 and loan.oclIsUndefined() = true\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true, isEligible = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5, isEligibleCheck:Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 then true else false endif",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligibleCheck = true and loan.oclIsUndefined() = true",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = isEligibleCheck and isEligibleCheck = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 192,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5, isEligibleCheck:Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 then true else false endif\n            \n            precondition:\n          user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligibleCheck = true and loan.oclIsUndefined() = true\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = isEligibleCheck and isEligibleCheck = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligible = true and loan.oclIsUndefined() = true",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = isEligible and isEligible = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 192,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = user.BorrowStatus.oclIsTypeOf(BorrowStatus.NORMAL) and user.LoanedNumber < 5\n            \n            precondition:\n          user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligible = true and loan.oclIsUndefined() = true\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = isEligible and isEligible = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 then true else false endif",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligible = true and loan.oclIsUndefined() = true",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = isEligible and isEligible = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: Book = Book.allInstance()->any(b|b.Barcode = barcode),\n\t\tisEligible: Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5 \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tisEligible = true and\n\t\tloan.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.LoanedRecord->includes(newLoan) and\n\t\tuser.LoanedNumber = user.LoanedNumber+1 and\n\t\tresult = isEligible and\n\t\tisEligible = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 then true else false endif",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligible = true and loan.oclIsUndefined() = true",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: Book = Book.allInstance()->any(b|b.Barcode = barcode),\n\t\tisEligible: Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5 \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tisEligible = true and\n\t\tloan.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.LoanedRecord->includes(newLoan) and\n\t\tuser.LoanedNumber = user.LoanedNumber+1 and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 then true else false endif",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligible = true and Loan.allInstance()->excludes(newLoan)",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: Book = Book.allInstance()->any(b|b.Barcode = barcode),\n\t\tisEligible: Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5 \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tisEligible = true and\n\t\tLoan.allInstance()->excludes(newLoan)\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.LoanedRecord->includes(newLoan) and\n\t\tuser.LoanedNumber = user.LoanedNumber+1 and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), book:Book = Book.allInstance()->any(b | b.Barcode = barcode), isEligible:Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and user.LoanedNumber < 5 then true else false endif",
+        "precondition": "user.oclIsUndefined() = false and book.oclIsUndefined() = false and isEligible = true and Loan.allInstance()->excludes(newLoan)",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Book.allInstance()->includes(book) and book.LoanedRecord->includes(newLoan) and user.LoanedNumber = user.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = uid),\n\t\tbook: Book = Book.allInstance()->any(b|b.Barcode = barcode),\n\t\tisEligible: Boolean = if user.BorrowStatus = BorrowStatus.NORMAL and\n\t\tuser.LoanedNumber<5 \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tbook.oclIsUndefined() = false and\n\t\tisEligible = true and\n\t\tLoan.allInstance()->excludes(newLoan)\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.LoanedRecord->includes(newLoan) and\n\t\tuser.LoanedNumber = user.LoanedNumber+1 and\n\t\tresult = true\n}"
+    }
+  }
+]

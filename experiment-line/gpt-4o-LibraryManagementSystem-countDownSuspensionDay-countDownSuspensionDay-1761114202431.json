@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.BorrowStatus = BorrowStatus::SUSPEND and u.SuspensionDays > 0)",
+        "precondition": "overdueUsers->notEmpty() and overdueUsers->forAll(user: User | user.BorrowStatus = BorrowStatus::SUSPEND and user.SuspensionDays > 0)",
+        "postcondition": "overdueUsers->forAll(user: User | user.SuspensionDays = user.SuspensionDays@pre - 1)\nuser.SuspensionDays = 0 implies user.BorrowStatus = BorrowStatus::NORMAL"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 24,
+          "msg": "no viable alternative at input 'overdueUsers->notEmpty()'"
+        },
+        {
+          "line": 10,
+          "column": 0,
+          "msg": "mismatched input 'user' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          overdueUsers:Set(User) = User.allInstance()->select(u | u.BorrowStatus = BorrowStatus::SUSPEND and u.SuspensionDays > 0)\n            \n            precondition:\n          overdueUsers->notEmpty() and overdueUsers->forAll(user: User | user.BorrowStatus = BorrowStatus::SUSPEND and user.SuspensionDays > 0)\n            \n            postcondition:\n          overdueUsers->forAll(user: User | user.SuspensionDays = user.SuspensionDays@pre - 1)\nuser.SuspensionDays = 0 implies user.BorrowStatus = BorrowStatus::NORMAL\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

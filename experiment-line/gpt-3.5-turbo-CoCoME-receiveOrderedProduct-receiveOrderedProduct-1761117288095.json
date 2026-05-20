@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries.BelongedItem, quantityIncreasing:Boolean = entries.Quantity>0",
+        "precondition": "ob.oclIsUndefined() = orderProduct, orderProduct.OrderStatus = OrderStatus::RECEIVED, entries.isEmpty() = false, item.StockNumber + entries.Quantity > 0",
+        "postcondition": "item.StockNumber = item.StockNumber + entries.Quantity and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 44,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries.BelongedItem, quantityIncreasing:Boolean = entries.Quantity>0\n            \n            precondition:\n          ob.oclIsUndefined() = orderProduct, orderProduct.OrderStatus = OrderStatus::RECEIVED, entries.isEmpty() = false, item.StockNumber + entries.Quantity > 0\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + entries.Quantity and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ob"
+        }
+      ]
+    }
+  }
+]

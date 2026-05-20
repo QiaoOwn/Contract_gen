@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "uid:String, barcode:String",
+        "precondition": "let u:User = User.allInstance()->any(o | o.UserID = uid) in let bc:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) in (u.oclIsUndefined() = false) and (bc.oclIsUndefined() = false)",
+        "postcondition": "let u:User = User.allInstance()->any(o | o.UserID = uid) in let bc:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) in let valid: Boolean = (u.oclIsUndefined() = false) and (bc.oclIsUndefined() = false) in result = valid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 173,
+          "msg": "mismatched input 'and' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          uid:String, barcode:String\n            \n            precondition:\n          let u:User = User.allInstance()->any(o | o.UserID = uid) in let bc:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) in (u.oclIsUndefined() = false) and (bc.oclIsUndefined() = false)\n            \n            postcondition:\n          let u:User = User.allInstance()->any(o | o.UserID = uid) in let bc:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode) in let valid: Boolean = (u.oclIsUndefined() = false) and (bc.oclIsUndefined() = false) in result = valid\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

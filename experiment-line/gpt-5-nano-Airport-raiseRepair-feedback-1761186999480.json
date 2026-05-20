@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "repair.RaiseStaff = staff and staff.Role = 0 and repair.Process = 7",
+        "postcondition": "let succ:Boolean = score >= 3 in repair.Score = score and repair.Close = succ and repair.Description = des and repair.Process = (if succ then repair.Process else 0 endif) and result = succ"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 138,
+          "msg": "mismatched input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          repair.RaiseStaff = staff and staff.Role = 0 and repair.Process = 7\n            \n            postcondition:\n          let succ:Boolean = score >= 3 in repair.Score = score and repair.Close = succ and repair.Description = des and repair.Process = (if succ then repair.Process else 0 endif) and result = succ\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

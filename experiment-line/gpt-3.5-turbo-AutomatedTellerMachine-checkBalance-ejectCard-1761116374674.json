@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = InputCard.CardID and o.Password = InputCard.Password), isValid:Boolean = PasswordValidated = true",
+        "precondition": "InputCard.oclIsUndefined() = false and PasswordValidated = true",
+        "postcondition": "let result:Boolean in result = InputCard.oclIsNew() and InputCard.Balance = 0 and InputCard.Password = null and InputCard.CardStatus = NORMAL and result"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = InputCard.CardID and o.Password = InputCard.Password), isValid:Boolean = PasswordValidated = true\n            \n            precondition:\n          InputCard.oclIsUndefined() = false and PasswordValidated = true\n            \n            postcondition:\n          let result:Boolean in result = InputCard.oclIsNew() and InputCard.Balance = 0 and InputCard.Password = null and InputCard.CardStatus = NORMAL and result\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: NORMAL"
+        }
+      ]
+    }
+  }
+]

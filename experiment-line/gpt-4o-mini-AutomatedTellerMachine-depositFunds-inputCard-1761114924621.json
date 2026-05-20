@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardIdValidated:Boolean = if inputCard.oclIsUndefined() then false else true endif",
+        "precondition": "Card.allInstance()->includes(inputCard)",
+        "postcondition": "inputCard.oclIsUndefined() = not cardIdValidated and result = cardIdValidated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 43,
+          "msg": "mismatched input 'cardIdValidated' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardIdValidated:Boolean = if inputCard.oclIsUndefined() then false else true endif\n            \n            precondition:\n          Card.allInstance()->includes(inputCard)\n            \n            postcondition:\n          inputCard.oclIsUndefined() = not cardIdValidated and result = cardIdValidated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

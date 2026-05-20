@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "barcode: Integer, quantity: Integer, sl: SalesLineItem",
+        "precondition": "ob:Item = Item.allInstance()->any(o | o.Barcode = barcode) and CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and ob.oclIsUndefined() = false and ob.StockNumber > 0 and ob.StockNumber >= quantity",
+        "postcondition": "let sl:SalesLineItem in sl.oclIsNew() and CurrentSale.ContainedSalesLine->includes(sl) and sl.BelongedItem = ob and sl.BelongedSale = CurrentSale and sl.Quantity = quantity and sl.Subamount = ob.Price * quantity and ob.StockNumber = ob.StockNumber - quantity and CurrentSaleLine = sl and SalesLineItem.allInstance()->includes(sl) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 8,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          barcode: Integer, quantity: Integer, sl: SalesLineItem\n            \n            precondition:\n          ob:Item = Item.allInstance()->any(o | o.Barcode = barcode) and CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and ob.oclIsUndefined() = false and ob.StockNumber > 0 and ob.StockNumber >= quantity\n            \n            postcondition:\n          let sl:SalesLineItem in sl.oclIsNew() and CurrentSale.ContainedSalesLine->includes(sl) and sl.BelongedItem = ob and sl.BelongedSale = CurrentSale and sl.Quantity = quantity and sl.Subamount = ob.Price * quantity and ob.StockNumber = ob.StockNumber - quantity and CurrentSaleLine = sl and SalesLineItem.allInstance()->includes(sl) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ob"
+        }
+      ]
+    }
+  }
+]

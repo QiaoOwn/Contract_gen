@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Status = CopyStatus.LIBUSEONLY and o.LoanedRecord->forAll(l | l.IsReturned = false))",
+        "precondition": "User.allInstance()->select(u | u.UserID = uid).isEmpty() = false",
+        "postcondition": "BookCopy.allInstance()->includes(overdueBooks) and result = overdueBooks"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 56,
+          "msg": "mismatched input '.' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Status = CopyStatus.LIBUSEONLY and o.LoanedRecord->forAll(l | l.IsReturned = false))\n            \n            precondition:\n          User.allInstance()->select(u | u.UserID = uid).isEmpty() = false\n            \n            postcondition:\n          BookCopy.allInstance()->includes(overdueBooks) and result = overdueBooks\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CopyStatus"
+        }
+      ]
+    }
+  }
+]

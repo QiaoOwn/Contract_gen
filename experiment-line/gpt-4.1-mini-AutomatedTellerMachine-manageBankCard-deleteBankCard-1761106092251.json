@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:Set(BankCard) = BankCard.allInstance()->select(c | c.CardID = cardid), targetCard:BankCard = bankCard->any(true)",
+        "precondition": "bankCard->isEmpty() = false",
+        "postcondition": "BankCard.allInstance()->excludes(targetCard) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 126,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 20,
+          "msg": "no viable alternative at input 'bankCard->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::deleteBankCard(cardid:Integer): Boolean {\n          definition:\n          bankCard:Set(BankCard) = BankCard.allInstance()->select(c | c.CardID = cardid), targetCard:BankCard = bankCard->any(true)\n            \n            precondition:\n          bankCard->isEmpty() = false\n            \n            postcondition:\n          BankCard.allInstance()->excludes(targetCard) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

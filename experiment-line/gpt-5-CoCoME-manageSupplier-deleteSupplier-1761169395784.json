@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchingSuppliers:Set(Supplier) = Supplier.allInstance()->select(o | o.Id = id), existsSupplier:Boolean = if matchingSuppliers.isEmpty() = false then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer) and Supplier.allInstance()->isUnique(o:Supplier | o.Id)",
+        "postcondition": "result = existsSupplier"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageSupplierCRUDService::deleteSupplier(id: Integer): Boolean {\n\tdefinition:\n\t\tmatchingSuppliers: Set(Supplier) = Supplier.allInstance()->select(o|o.Id = id),\n\t\texistsSupplier: Boolean = if matchingSuppliers.isEmpty() = false \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tSupplier.allInstance()->isUnique(o: Supplier|o.Id)\n\tpostcondition:\n\t\tresult = existsSupplier\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

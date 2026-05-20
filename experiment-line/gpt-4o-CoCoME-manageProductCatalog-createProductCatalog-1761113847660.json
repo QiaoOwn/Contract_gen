@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(c | c.Id = id),\nnewCatalog:Boolean = catalog.oclIsUndefined()",
+        "precondition": "ProductCatalog.allInstance()->excludes(catalog) = newCatalog",
+        "postcondition": "let newCatalogObj:ProductCatalog in newCatalogObj.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalogObj) and newCatalogObj.Id = id and newCatalogObj.Name = name and result = newCatalog"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tcatalog: ProductCatalog = ProductCatalog.allInstance()->any(c|c.Id = id),\n\t\tnewCatalog: Boolean = catalog.oclIsUndefined()\n\tprecondition:\n\t\tProductCatalog.allInstance()->excludes(catalog) = newCatalog\n\tpostcondition:\n\t\tlet newCatalogObj: ProductCatalog in\n\t\tnewCatalogObj.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(newCatalogObj) and\n\t\tnewCatalogObj.Id = id and\n\t\tnewCatalogObj.Name = name and\n\t\tresult = newCatalog\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

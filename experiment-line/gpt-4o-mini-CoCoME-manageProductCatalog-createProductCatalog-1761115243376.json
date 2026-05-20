@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isCatalogExist:Boolean = catalog.oclIsUndefined()",
+        "precondition": "ProductCatalog.allInstance()->includes(catalog) = false",
+        "postcondition": "if isCatalogExist then let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and newCatalog.Id = id and newCatalog.Name = name and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tcatalog: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id),\n\t\tisCatalogExist: Boolean = catalog.oclIsUndefined()\n\tprecondition:\n\t\tProductCatalog.allInstance()->includes(catalog) = false\n\tpostcondition:\n\t\tif isCatalogExist \n\t\tthen let newCatalog: ProductCatalog in\n\t\tnewCatalog.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(newCatalog) and\n\t\tnewCatalog.Id = id and\n\t\tnewCatalog.Name = name and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

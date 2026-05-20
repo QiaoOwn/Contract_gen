@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "payment:CashPayment = CashPayment()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let payment:CashPayment in payment.oclIsNew() and Sale.allInstance()->includes(CurrentSale) and CurrentSale.AssociatedPayment = payment and CurrentSale.BelongedStore.AssociatedSales->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = Date::now() and payment.Balance = amount - CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 272,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          payment:CashPayment = CashPayment()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let payment:CashPayment in payment.oclIsNew() and Sale.allInstance()->includes(CurrentSale) and CurrentSale.AssociatedPayment = payment and CurrentSale.BelongedStore.AssociatedSales->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = Date::now() and payment.Balance = amount - CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

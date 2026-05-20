@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(l | l.ItemID = termid)",
+        "precondition": "not CurrentLoanRequest.oclIsUndefined() and LoanTerm.allInstance()->exists(l | l.ItemID = termid)",
+        "postcondition": "let loanTerm:LoanTerm in loanTerm.oclIsNew() and LoanTerm.allInstance()->includes(loanTerm) and CurrentLoanRequest.AttachedLoanTerms->includes(loanTerm) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'CurrentLoanRequest' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(l | l.ItemID = termid)\n            \n            precondition:\n          not CurrentLoanRequest.oclIsUndefined() and LoanTerm.allInstance()->exists(l | l.ItemID = termid)\n            \n            postcondition:\n          let loanTerm:LoanTerm in loanTerm.oclIsNew() and LoanTerm.allInstance()->includes(loanTerm) and CurrentLoanRequest.AttachedLoanTerms->includes(loanTerm) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

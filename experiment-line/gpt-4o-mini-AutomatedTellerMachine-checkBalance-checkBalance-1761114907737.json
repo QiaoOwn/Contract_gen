@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = InputCard.CardID and o.Password = InputCard.Password), isValidated:Boolean = PasswordValidated and CardIDValidated",
+        "precondition": "inputCard.oclIsUndefined() = bool and isValidated = true",
+        "postcondition": "BankCard.allInstance()->includes(inputCard) and result = inputCard.Balance"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::checkBalance(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = InputCard.CardID and\n\t\to.Password = InputCard.Password),\n\t\tisValidated: Boolean = PasswordValidated and\n\t\tCardIDValidated\n\tprecondition:\n\t\tinputCard.oclIsUndefined() = bool and\n\t\tisValidated = true\n\tpostcondition:\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tresult = inputCard.Balance\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = id), newApprovalLetter:ApprovalLetter, exists:Boolean = not loanRequest.oclIsUndefined()",
+        "precondition": "exists = true",
+        "postcondition": "let newApprovalLetter:ApprovalLetter in newApprovalLetter.oclIsNew() and ApprovalLetter.allInstance()->includes(newApprovalLetter) and newApprovalLetter.Content = 'ApprovalLetterContent' and loanRequest.AttachedApprovalLetter = newApprovalLetter and self.CurrentApprovalLetter = newApprovalLetter and self.CurrentLoanRequest = loanRequest and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 126,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 147,
+          "msg": "mismatched input 'loanRequest' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = id), newApprovalLetter:ApprovalLetter, exists:Boolean = not loanRequest.oclIsUndefined()\n            \n            precondition:\n          exists = true\n            \n            postcondition:\n          let newApprovalLetter:ApprovalLetter in newApprovalLetter.oclIsNew() and ApprovalLetter.allInstance()->includes(newApprovalLetter) and newApprovalLetter.Content = 'ApprovalLetterContent' and loanRequest.AttachedApprovalLetter = newApprovalLetter and self.CurrentApprovalLetter = newApprovalLetter and self.CurrentLoanRequest = loanRequest and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

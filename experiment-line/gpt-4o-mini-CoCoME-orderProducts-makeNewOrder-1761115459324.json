@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)\\nbool:Boolean = orderProduct.oclIsUndefined()\\nif bool then\\n    orderProduct:OrderProduct = OrderProduct allInstance()->select(o | o.Id = orderid)\\n    orderProduct = OrderProduct{Id=orderid, OrderStatus=OrderStatus::NEW, Time=Date::now()}\\nendif",
+        "precondition": "OrderProduct.allInstance()->excludes(orderProduct)",
+        "postcondition": "result = bool and Store.allInstance()->includes(orderProduct)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 90,
+          "msg": "mismatched input 'nbool' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)\\nbool:Boolean = orderProduct.oclIsUndefined()\\nif bool then\\n    orderProduct:OrderProduct = OrderProduct allInstance()->select(o | o.Id = orderid)\\n    orderProduct = OrderProduct{Id=orderid, OrderStatus=OrderStatus::NEW, Time=Date::now()}\\nendif\n            \n            precondition:\n          OrderProduct.allInstance()->excludes(orderProduct)\n            \n            postcondition:\n          result = bool and Store.allInstance()->includes(orderProduct)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

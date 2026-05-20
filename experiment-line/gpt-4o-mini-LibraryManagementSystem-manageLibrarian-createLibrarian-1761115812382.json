@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "librarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid), result:Boolean = false",
+        "precondition": "librarian.oclIsUndefined() and Librarian.allInstance()->excludes(librarianid)",
+        "postcondition": "let newLibrarian:Librarian in newLibrarian.oclIsNew() and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true and Librarian.allInstance()->includes(newLibrarian)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 95,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageLibrarianCRUDService::createLibrarian(librarianid:String,name:String,password:String): Boolean {\n          definition:\n          librarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid), result:Boolean = false\n            \n            precondition:\n          librarian.oclIsUndefined() and Librarian.allInstance()->excludes(librarianid)\n            \n            postcondition:\n          let newLibrarian:Librarian in newLibrarian.oclIsNew() and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true and Librarian.allInstance()->includes(newLibrarian)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

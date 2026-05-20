@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance()->select(o:User | o.UserID = userid), theUser:User = if users.size() = 1 then users->any(o:User | true) else null endif",
+        "precondition": "userid.oclIsTypeOf(Integer) and User.allInstance()->isUnique(o:User | o.UserID)",
+        "postcondition": "result = theUser"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::queryUser(userid:Integer): User {\n          definition:\n          users:Set(User) = User.allInstance()->select(o:User | o.UserID = userid), theUser:User = if users.size() = 1 then users->any(o:User | true) else null endif\n            \n            precondition:\n          userid.oclIsTypeOf(Integer) and User.allInstance()->isUnique(o:User | o.UserID)\n            \n            postcondition:\n          result = theUser\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

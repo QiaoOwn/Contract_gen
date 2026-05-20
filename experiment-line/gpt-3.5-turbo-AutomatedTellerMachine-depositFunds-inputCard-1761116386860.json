@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), isValid:Boolean = card.oclIsUndefined() = false",
+        "precondition": "card.oclIsUndefined() = bool",
+        "postcondition": "card.oclIsNew(), inputCard = card, result = isValid"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 25,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), isValid:Boolean = card.oclIsUndefined() = false\n            \n            precondition:\n          card.oclIsUndefined() = bool\n            \n            postcondition:\n          card.oclIsNew(), inputCard = card, result = isValid\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "recommendedBook:RecommendBook = RecommendBook.allInstance()->any(o | o.RecommendUser.UserID = uid and o.CallNo = callNo), book:Book = Book.allInstance()->any(o | o.Title = title and o.Edition = edition and o.Author = author and o.Publisher = publisher and o.Description = description and o.ISBn = isbn), isUnique:Boolean = RecommendBook.allInstance()->isUnique(o | o. RecommendDate)",
+        "precondition": "uid.oclIsUndefined() = bool, callNo.oclIsUndefined() = bool, title.oclIsUndefined() = bool, edition.oclIsUndefined() = bool, author.oclIsUndefined() = bool, publisher.oclIsUndefined() = bool, description.oclIsUndefined() = bool, isbn.oclIsUndefined() = bool, User.allInstance()->includes(recommendedBook)",
+        "postcondition": "let recommendedBook:RecommendBook in recommendedBook.oclIsNew(), User.RecommendedBook->includes(recommendedBook), Book.Copys->forAll(c:BookCopy|c.Location = recommendedBook) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 314,
+          "msg": "mismatched input 'isUnique' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 37,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          recommendedBook:RecommendBook = RecommendBook.allInstance()->any(o | o.RecommendUser.UserID = uid and o.CallNo = callNo), book:Book = Book.allInstance()->any(o | o.Title = title and o.Edition = edition and o.Author = author and o.Publisher = publisher and o.Description = description and o.ISBn = isbn), isUnique:Boolean = RecommendBook.allInstance()->isUnique(o | o. RecommendDate)\n            \n            precondition:\n          uid.oclIsUndefined() = bool, callNo.oclIsUndefined() = bool, title.oclIsUndefined() = bool, edition.oclIsUndefined() = bool, author.oclIsUndefined() = bool, publisher.oclIsUndefined() = bool, description.oclIsUndefined() = bool, isbn.oclIsUndefined() = bool, User.allInstance()->includes(recommendedBook)\n            \n            postcondition:\n          let recommendedBook:RecommendBook in recommendedBook.oclIsNew(), User.RecommendedBook->includes(recommendedBook), Book.Copys->forAll(c:BookCopy|c.Location = recommendedBook) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

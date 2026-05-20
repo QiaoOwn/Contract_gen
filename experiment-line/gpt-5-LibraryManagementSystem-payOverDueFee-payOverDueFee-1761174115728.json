@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = uid), newOverdueFee:Real = u.OverDueFee - fee, paidInFull:Boolean = if newOverdueFee = 0 then true else false endif, opSuccess:Boolean = true",
+        "precondition": "u.oclIsUndefined() = false and User.allInstance()->includes(u) and fee > 0 and u.OverDueFee >= fee",
+        "postcondition": "u.OverDueFee = u.OverDueFee@pre - fee and u.BorrowStatus = if paidInFull then BorrowStatus::NORMAL else u.BorrowStatus@pre endif and result = opSuccess"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 98,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 69,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 83,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = uid), newOverdueFee:Real = u.OverDueFee - fee, paidInFull:Boolean = if newOverdueFee = 0 then true else false endif, opSuccess:Boolean = true\n            \n            precondition:\n          u.oclIsUndefined() = false and User.allInstance()->includes(u) and fee > 0 and u.OverDueFee >= fee\n            \n            postcondition:\n          u.OverDueFee = u.OverDueFee@pre - fee and u.BorrowStatus = if paidInFull then BorrowStatus::NORMAL else u.BorrowStatus@pre endif and result = opSuccess\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: paidInFull"
+        }
+      ]
+    }
+  }
+]

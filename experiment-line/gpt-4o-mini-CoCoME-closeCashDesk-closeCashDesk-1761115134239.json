@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(CashDesk) = CashDesk.allInstance()->select(c | c.Id = cashDeskID and c.IsOpened = true), cashDesk:Boolean = obs.size() > 0",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = bool and CurrentStore.oclIsUndefined() = bool and ClassName.allInstance()->includes(CurrentStore) and ClassName.allInstance()->includes(CurrentCashDesk)",
+        "postcondition": "let ob:CashDesk in ob.oclIsNew() and ClassName.allInstance()->includes(ob) and ob.IsOpened = false and result = cashDesk"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID: Integer): Boolean {\n\tdefinition:\n\t\tobs: Set(CashDesk) = CashDesk.allInstance()->select(c|c.Id = cashDeskID and\n\t\tc.IsOpened = true),\n\t\tcashDesk: Boolean = obs.size()>0\n\tprecondition:\n\t\tCurrentCashDesk.oclIsUndefined() = bool and\n\t\tCurrentStore.oclIsUndefined() = bool and\n\t\tClassName.allInstance()->includes(CurrentStore) and\n\t\tClassName.allInstance()->includes(CurrentCashDesk)\n\tpostcondition:\n\t\tlet ob: CashDesk in\n\t\tob.oclIsNew() and\n\t\tClassName.allInstance()->includes(ob) and\n\t\tob.IsOpened = false and\n\t\tresult = cashDesk\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

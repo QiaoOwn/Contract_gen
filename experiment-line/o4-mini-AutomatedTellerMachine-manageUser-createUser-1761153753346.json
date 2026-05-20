@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.userID = userid)",
+        "precondition": "true",
+        "postcondition": "user.oclIsUndefined() = true and let newUser:User in newUser.oclIsNew() and newUser.userID = userid and newUser.name = name and newUser.address = address and User.allInstance()->includes(newUser) and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 43,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 54,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.userID = userid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          user.oclIsUndefined() = true and let newUser:User in newUser.oclIsNew() and newUser.userID = userid and newUser.name = name and newUser.address = address and User.allInstance()->includes(newUser) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

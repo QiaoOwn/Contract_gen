@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard)",
+        "postcondition": "let inputCard:BankCard in inputCard.oclIsNew() and BankCard.allInstance()->excludes(self.InputCard) and self.IsWithdraw = false and self.WithdrawedNumber = 0"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 95,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 7,
+          "column": 94,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          \n            precondition:\n          self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard)\n            \n            postcondition:\n          let inputCard:BankCard in inputCard.oclIsNew() and BankCard.allInstance()->excludes(self.InputCard) and self.IsWithdraw = false and self.WithdrawedNumber = 0\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

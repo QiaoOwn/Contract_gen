@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(copy | copy.LoanedRecord->exists(loan | loan.OverDueFee > 0))",
+        "precondition": "uid.oclIsUndefined() = bool",
+        "postcondition": "BookCopy.allInstance()->includes(overdueBook) and result = overdueBooks"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid: String): Set(BookCopy) {\n\tdefinition:\n\t\toverdueBooks: Set(BookCopy) = BookCopy.allInstance()->select(copy|copy.LoanedRecord->exists(loan|loan.OverDueFee>0))\n\tprecondition:\n\t\tuid.oclIsUndefined() = bool\n\tpostcondition:\n\t\tBookCopy.allInstance()->includes(overdueBook) and\n\t\tresult = overdueBooks\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid),\nnewUser:User = User.allInstance()->any(o | o.UserID = 0)",
+        "precondition": "user.oclIsUndefined() = bool or User.allInstance()->excludes(user)",
+        "postcondition": "let newUser:User in newUser.oclIsNew(), User.allInstance()->includes(newUser), result = (user.oclIsUndefined() implies (newUser.Name = name and newUser.Address = address))"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 10,
+          "column": 48,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid),\nnewUser:User = User.allInstance()->any(o | o.UserID = 0)\n            \n            precondition:\n          user.oclIsUndefined() = bool or User.allInstance()->excludes(user)\n            \n            postcondition:\n          let newUser:User in newUser.oclIsNew(), User.allInstance()->includes(newUser), result = (user.oclIsUndefined() implies (newUser.Name = name and newUser.Address = address))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

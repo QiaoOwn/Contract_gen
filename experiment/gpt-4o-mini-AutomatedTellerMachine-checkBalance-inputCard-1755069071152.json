@@ -1,0 +1,235 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId)",
+        "precondition": "card.oclIsUndefined() = PasswordValidated and cardIDValidated = card.size() <> 0",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 86,
+          "msg": "mismatched input '<>' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId)\n            \n            precondition:\n          card.oclIsUndefined() = PasswordValidated and cardIDValidated = card.size() <> 0\n            \n            postcondition:\n          let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId), cardExists:Boolean = card.size() <> 0",
+        "precondition": "PasswordValidated = card.oclIsUndefined() and cardIDValidated = card.size() <> 0",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and result = true and cardExists = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 86,
+          "msg": "mismatched input '<>' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId), cardExists:Boolean = card.size() <> 0\n            \n            precondition:\n          PasswordValidated = card.oclIsUndefined() and cardIDValidated = card.size() <> 0\n            \n            postcondition:\n          let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and result = true and cardExists = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId), cardExists:Boolean = card.size() <> 0, isPasswordValidated:Boolean = PasswordValidated, isCardValid:Boolean = cardExists",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and result = isCardValid and isCardValid = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = cardId),\n\t\tcardExists: Boolean = card.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated,\n\t\tisCardValid: Boolean = cardExists\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tresult = isCardValid and\n\t\tisCardValid = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardId"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId), cardExists:Boolean = card.size() <> 0, isPasswordValidated:Boolean = PasswordValidated",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and isCardValid = true and result = isCardValid"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = cardId),\n\t\tcardExists: Boolean = card.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tisCardValid = true and\n\t\tresult = isCardValid\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardId"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardId), cardExists:Boolean = card.size() <> 0, isPasswordValidated:Boolean = PasswordValidated",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and isCardValid = true and result = isCardValid"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = cardId),\n\t\tcardExists: Boolean = card.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tisCardValid = true and\n\t\tresult = isCardValid\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardId"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = inputCard.CardID), cardExists:Boolean = card.size() <> 0, isPasswordValidated:Boolean = PasswordValidated",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and cardExists = true and result = cardExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = inputCard.CardID),\n\t\tcardExists: Boolean = card.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tcardExists = true and\n\t\tresult = cardExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: inputCard"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardID), cardExists:Boolean = card.size() <> 0, isPasswordValidated:Boolean = PasswordValidated",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and cardExists = true and result = cardExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = cardID),\n\t\tcardExists: Boolean = card.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tcardExists = true and\n\t\tresult = cardExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardID"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardID), cardExists:Boolean = card.size() <> 0, isPasswordValidated:Boolean = PasswordValidated",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and cardExists = true and result = cardExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = cardID),\n\t\tcardExists: Boolean = card.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tcardExists = true and\n\t\tresult = cardExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardID"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardID), cardExists:Boolean = bankCard.size() <> 0, isPasswordValidated:Boolean = PasswordValidated",
+        "precondition": "isPasswordValidated = card.oclIsUndefined() and isCardValid = false",
+        "postcondition": "let card:BankCard in card.oclIsNew() and BankCard.allInstance()->includes(card) and cardExists = true and result = cardExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tbankCard: Set(BankCard) = BankCard.allInstance()->select(o|o.CardID = cardID),\n\t\tcardExists: Boolean = bankCard.size()<>0,\n\t\tisPasswordValidated: Boolean = PasswordValidated\n\tprecondition:\n\t\tisPasswordValidated = card.oclIsUndefined() and\n\t\tisCardValid = false\n\tpostcondition:\n\t\tlet card: BankCard in\n\t\tcard.oclIsNew() and\n\t\tBankCard.allInstance()->includes(card) and\n\t\tcardExists = true and\n\t\tresult = cardExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cardID"
+        }
+      ]
+    }
+  }
+]

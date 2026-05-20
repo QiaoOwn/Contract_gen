@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "st:Staff = Staff.allInstance()->any(o | o.Id = id), boss:Staff = Staff.allInstance()->any(o | o.Id = bossid)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and pswd.oclIsTypeOf(String) and phone.oclIsTypeOf(String) and role.oclIsTypeOf(Integer) and bossid.oclIsTypeOf(Integer) and boss.oclIsUndefined() = false and Staff.allInstance()->includes(boss) and Staff.allInstance()->isUnique(o:Staff | o.Id)",
+        "postcondition": "if st.oclIsUndefined() = true then let s:Staff in s.oclIsNew() and Staff.allInstance()->includes(s) and s.Id = id and s.Name = name and s.Password = pswd and s.Phone = phone and s.Role = role and s.Boss = boss and result = true else st.Boss = boss and result = true endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createStaff(id: Integer,name: String,pswd: String,phone: String,role: Integer,bossid: Integer): Boolean {\n\tdefinition:\n\t\tst: Staff = Staff.allInstance()->any(o|o.Id = id),\n\t\tboss: Staff = Staff.allInstance()->any(o|o.Id = bossid)\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tpswd.oclIsTypeOf(String) and\n\t\tphone.oclIsTypeOf(String) and\n\t\trole.oclIsTypeOf(Integer) and\n\t\tbossid.oclIsTypeOf(Integer) and\n\t\tboss.oclIsUndefined() = false and\n\t\tStaff.allInstance()->includes(boss) and\n\t\tStaff.allInstance()->isUnique(o: Staff|o.Id)\n\tpostcondition:\n\t\tif st.oclIsUndefined() = true \n\t\tthen let s: Staff in\n\t\ts.oclIsNew() and\n\t\tStaff.allInstance()->includes(s) and\n\t\ts.Id = id and\n\t\ts.Name = name and\n\t\ts.Password = pswd and\n\t\ts.Phone = phone and\n\t\ts.Role = role and\n\t\ts.Boss = boss and\n\t\tresult = true \n\t\telse st.Boss = boss and\n\t\tresult = true \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

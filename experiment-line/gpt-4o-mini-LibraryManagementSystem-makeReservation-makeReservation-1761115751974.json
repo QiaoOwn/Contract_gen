@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "reservedUser:User = User.allInstance()->any(u | u.UserID = uid), reservedCopy:BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode), reservedUser.oclIsUndefined() = bool false, reservedCopy.oclIsUndefined() = bool false, reservedUser.LoanedNumber < 5, reservedCopy.Status = CopyStatus.AVAILABLE",
+        "postcondition": "let newReserve:Reserve in newReserve.oclIsNew(), BookCopy.allInstance()->includes(newReserve.ReservedCopy), User.allInstance()->includes(newReserve.ReservedUser), newReserve.ReservedUser = reservedUser, newReserve.ReservedCopy = reservedCopy"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 22,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 4,
+          "column": 73,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          \n            precondition:\n          reservedUser:User = User.allInstance()->any(u | u.UserID = uid), reservedCopy:BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode), reservedUser.oclIsUndefined() = bool false, reservedCopy.oclIsUndefined() = bool false, reservedUser.LoanedNumber < 5, reservedCopy.Status = CopyStatus.AVAILABLE\n            \n            postcondition:\n          let newReserve:Reserve in newReserve.oclIsNew(), BookCopy.allInstance()->includes(newReserve.ReservedCopy), User.allInstance()->includes(newReserve.ReservedUser), newReserve.ReservedUser = reservedUser, newReserve.ReservedCopy = reservedCopy\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: reservedUser"
+        }
+      ]
+    }
+  }
+]

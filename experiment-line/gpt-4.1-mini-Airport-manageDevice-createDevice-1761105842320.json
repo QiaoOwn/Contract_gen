@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "dev:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid)",
+        "precondition": "dev.oclIsUndefined() = true or staff.oclIsUndefined() = true",
+        "postcondition": "let newDev:Device in newDev.oclIsNew() and Device.allInstance()->includes(newDev) and newDev.Id = id and newDev.Name = name and newDev.Location = location and newDev.Contacts = staff and dev <> null or (dev = null and newDev.oclIsNew()) and result = true or (dev <> null and staff <> null and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AirportSystem::createDevice(id: Integer,name: String,location: String,contactsid: Integer): Boolean {\n\tdefinition:\n\t\tdev: Device = Device.allInstance()->any(o|o.Id = id),\n\t\tstaff: Staff = Staff.allInstance()->any(o|o.Id = contactsid)\n\tprecondition:\n\t\tdev.oclIsUndefined() = true or\n\t\tstaff.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet newDev: Device in\n\t\tnewDev.oclIsNew() and\n\t\tDevice.allInstance()->includes(newDev) and\n\t\tnewDev.Id = id and\n\t\tnewDev.Name = name and\n\t\tnewDev.Location = location and\n\t\tnewDev.Contacts = staff and\n\t\tdev<>null or\n\t\t(dev = null and\n\t\tnewDev.oclIsNew()) and\n\t\tresult = true or\n\t\t(dev<>null and\n\t\tstaff<>null and\n\t\tresult = true)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Unexpected token (59:27)\n  57 |       description: \"newDev.Contacts=staff\"\n  58 |     }).and({\n> 59 |       execute: () => dev <> undefined,\n     |                           ^\n  60 |       description: \"dev<>null\"\n  61 |     }).or({\n  62 |       execute: () => l({"
+        }
+      ]
+    }
+  }
+]

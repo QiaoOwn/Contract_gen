@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "ob:CashDesk = CashDesk.allInstance()->any(c | c.Id = id), toCreate:Boolean = if ob.oclIsUndefined() then true else false endif",
+        "precondition": "",
+        "postcondition": "toCreate = false and result = true or let newCD:CashDesk in newCD.oclIsNew() and newCD.Id = id and newCD.Name = name and newCD.IsOpened = isopened and CashDesk.allInstance()->includes(newCD) and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 48,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 7,
+          "column": 57,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          ob:CashDesk = CashDesk.allInstance()->any(c | c.Id = id), toCreate:Boolean = if ob.oclIsUndefined() then true else false endif\n            \n            \n            postcondition:\n          toCreate = false and result = true or let newCD:CashDesk in newCD.oclIsNew() and newCD.Id = id and newCD.Name = name and newCD.IsOpened = isopened and CashDesk.allInstance()->includes(newCD) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

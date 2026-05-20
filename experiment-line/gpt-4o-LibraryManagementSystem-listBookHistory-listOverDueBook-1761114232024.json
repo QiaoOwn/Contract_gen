@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), overdueLoans:Set(Loan) = user.LoanedBook->select(loan | loan.OverDue3Days or loan.OverDue10Days or loan.OverDue17Days or loan.OverDue31Days)",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "overdueBooks:Set(BookCopy) = overdueLoans->collect(loan | loan.LoanedCopy), result = overdueBooks"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 22,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), overdueLoans:Set(Loan) = user.LoanedBook->select(loan | loan.OverDue3Days or loan.OverDue10Days or loan.OverDue17Days or loan.OverDue31Days)\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          overdueBooks:Set(BookCopy) = overdueLoans->collect(loan | loan.LoanedCopy), result = overdueBooks\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: overdueBooks"
+        }
+      ]
+    }
+  }
+]

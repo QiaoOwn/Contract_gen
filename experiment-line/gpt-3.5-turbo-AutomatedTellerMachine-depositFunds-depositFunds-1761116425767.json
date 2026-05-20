@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = InputCard\nvalidCard:Boolean = card.oclIsUndefined() = false and card.Password = PasswordValidated and card.CardID = InputCard.CardID\n",
+        "precondition": "validCard = true and DepositedNumber >= 100 and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let card:BankCard in card.Balance = card.Balance + quantity and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'validCard' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          card:BankCard = InputCard\nvalidCard:Boolean = card.oclIsUndefined() = false and card.Password = PasswordValidated and card.CardID = InputCard.CardID\n\n            \n            precondition:\n          validCard = true and DepositedNumber >= 100 and BankCard.allInstance()->includes(InputCard)\n            \n            postcondition:\n          let card:BankCard in card.Balance = card.Balance + quantity and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: validCard"
+        }
+      ]
+    }
+  }
+]

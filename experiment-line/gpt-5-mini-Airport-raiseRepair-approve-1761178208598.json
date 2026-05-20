@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "let hist:ApprovalHistory in hist.oclIsNew() and hist.StaffId = sid and hist.Reject = reject and hist.Suggestion = suggestion and repair.History->includes(hist) and repair.Process = (if reject = true then 5 else if repair.Process = 0 and staff.Role = 1 then 1 else if repair.Process = 1 and staff.Role = 2 then 2 else if repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif endif endif) and result = hist"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 191,
+          "msg": "mismatched input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 262,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          let hist:ApprovalHistory in hist.oclIsNew() and hist.StaffId = sid and hist.Reject = reject and hist.Suggestion = suggestion and repair.History->includes(hist) and repair.Process = (if reject = true then 5 else if repair.Process = 0 and staff.Role = 1 then 1 else if repair.Process = 1 and staff.Role = 2 then 2 else if repair.Process = 2 and staff.Role = 3 then 3 else repair.Process endif endif endif endif) and result = hist\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

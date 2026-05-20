@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = loanRequest.AttachedLoanTerms->any(o | o.ItemID = itemid)",
+        "precondition": "loanRequest.AttachedLoanTerms->includes(loanTerm) and loanTerm.ItemID = itemid",
+        "postcondition": "result = loanTerm"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid: Integer): LoanTerm {\n\tdefinition:\n\t\tloanTerm: LoanTerm = loanRequest.AttachedLoanTerms->any(o|o.ItemID = itemid)\n\tprecondition:\n\t\tloanRequest.AttachedLoanTerms->includes(loanTerm) and\n\t\tloanTerm.ItemID = itemid\n\tpostcondition:\n\t\tresult = loanTerm\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: loanRequest"
+        }
+      ]
+    }
+  }
+]

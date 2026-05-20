@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "CurrentLoanRequests: Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::SUBMITTED)\nCurrentLoanRequests.isEmpty() = false",
+        "postcondition": "LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = CurrentLoanRequests"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 29,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 4,
+          "column": 34,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 4,
+          "column": 48,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::listSubmitedLoanRequest(): Set(LoanRequest) {\n          \n            precondition:\n          CurrentLoanRequests: Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::SUBMITTED)\nCurrentLoanRequests.isEmpty() = false\n            \n            postcondition:\n          LoanRequest.allInstance()->includes(CurrentLoanRequest) and result = CurrentLoanRequests\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequests"
+        }
+      ]
+    }
+  }
+]

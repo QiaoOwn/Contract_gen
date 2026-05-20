@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo)",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->excludes(book)",
+        "postcondition": "let recommendation:RecommendBook in recommendation.oclIsNew() and RecommendationBook.allInstance()->includes(recommendation) and recommendation.RecommendUser = user and book.Copys = book.Copys and recommendation.RecommendDate = self.currentDate() and result = (recommendation.RecommendUser = user)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 254,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo)\n            \n            precondition:\n          User.allInstance()->includes(user) and Book.allInstance()->excludes(book)\n            \n            postcondition:\n          let recommendation:RecommendBook in recommendation.oclIsNew() and RecommendationBook.allInstance()->includes(recommendation) and recommendation.RecommendUser = user and book.Copys = book.Copys and recommendation.RecommendDate = self.currentDate() and result = (recommendation.RecommendUser = user)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

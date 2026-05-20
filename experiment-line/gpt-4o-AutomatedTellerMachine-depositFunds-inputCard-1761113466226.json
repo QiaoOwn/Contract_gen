@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:Integer = cardid",
+        "precondition": "BankCard.allInstance()->isUnique(CardID) and BankCard.allInstance()->exists(c | c.CardID = cardid)",
+        "postcondition": "let cardInBank:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid) in self.PasswordValidated = if cardid = card.CardID then true else false endif \nresult = if cardid = card.CardID then true else false endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 115,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 125,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          inputCard:Integer = cardid\n            \n            precondition:\n          BankCard.allInstance()->isUnique(CardID) and BankCard.allInstance()->exists(c | c.CardID = cardid)\n            \n            postcondition:\n          let cardInBank:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid) in self.PasswordValidated = if cardid = card.CardID then true else false endif \nresult = if cardid = card.CardID then true else false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

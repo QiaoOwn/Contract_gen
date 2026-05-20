@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "true",
+        "postcondition": "let newCatalog:ProductCatalog in pc.oclIsUndefined() and newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and newCatalog.Id = id and newCatalog.Name = name and result = true or pc.oclIsUndefined() = false and result = false"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tpc: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tlet newCatalog: ProductCatalog in\n\t\tpc.oclIsUndefined() and\n\t\tnewCatalog.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(newCatalog) and\n\t\tnewCatalog.Id = id and\n\t\tnewCatalog.Name = name and\n\t\tresult = true or\n\t\tpc.oclIsUndefined() = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

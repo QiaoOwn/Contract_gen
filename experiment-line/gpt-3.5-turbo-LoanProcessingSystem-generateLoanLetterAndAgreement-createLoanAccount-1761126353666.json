@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), newLoanAccount:LoanAccount = LoanAccount(LoanAccountID = loanaccountid, Balance = balance, Status = status)",
+        "precondition": "loanAccount.oclIsUndefined() = bool",
+        "postcondition": "if loanAccount.oclIsUndefined() then LoanAccount.allInstance()->includes(newLoanAccount) and result = true else result = false endif"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 160,
+          "msg": "mismatched input '=' expecting {')', ','}"
+        },
+        {
+          "line": 3,
+          "column": 211,
+          "msg": "extraneous input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), newLoanAccount:LoanAccount = LoanAccount(LoanAccountID = loanaccountid, Balance = balance, Status = status)\n            \n            precondition:\n          loanAccount.oclIsUndefined() = bool\n            \n            postcondition:\n          if loanAccount.oclIsUndefined() then LoanAccount.allInstance()->includes(newLoanAccount) and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

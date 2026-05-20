@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(self.InputCard) and self.PasswordValidated = true and self.CardIDValidated = true and self.InputCard.Balance >= quantity",
+        "postcondition": "self.InputCard.Balance = self.InputCard.Balance@pre - quantity and self.WithdrawedNumber = quantity and self.IsWithdraw = true and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 87,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::withdrawCash(quantity:Integer): Boolean {\n          \n            precondition:\n          self.InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(self.InputCard) and self.PasswordValidated = true and self.CardIDValidated = true and self.InputCard.Balance >= quantity\n            \n            postcondition:\n          self.InputCard.Balance = self.InputCard.Balance@pre - quantity and self.WithdrawedNumber = quantity and self.IsWithdraw = true and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

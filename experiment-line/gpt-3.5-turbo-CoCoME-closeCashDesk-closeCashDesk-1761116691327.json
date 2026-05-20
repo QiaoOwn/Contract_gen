@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), store:Store = CurrentStore",
+        "precondition": "cashDesk.oclIsUndefined() = false and cashDesk.IsOpened = true and CurrentStore.oclIsUndefined() = false",
+        "postcondition": "let closedCashDesk:CashDesk in closedCashDesk.oclIsNew() and ClosedCashDesk = cashDesk and cashDesk.IsOpened = false and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID: Integer): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = cashDeskID),\n\t\tstore: Store = CurrentStore\n\tprecondition:\n\t\tcashDesk.oclIsUndefined() = false and\n\t\tcashDesk.IsOpened = true and\n\t\tCurrentStore.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet closedCashDesk: CashDesk in\n\t\tclosedCashDesk.oclIsNew() and\n\t\tClosedCashDesk = cashDesk and\n\t\tcashDesk.IsOpened = false and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ClosedCashDesk"
+        }
+      ]
+    }
+  }
+]

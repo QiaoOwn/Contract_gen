@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequestScore:Integer = CurrentLoanRequest.CreditScore",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "loanRequestScore = CurrentLoanRequest.CreditScore and result = loanRequestScore"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tloanRequestScore: Integer = CurrentLoanRequest.CreditScore\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and\n\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tloanRequestScore = CurrentLoanRequest.CreditScore and\n\t\tresult = loanRequestScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

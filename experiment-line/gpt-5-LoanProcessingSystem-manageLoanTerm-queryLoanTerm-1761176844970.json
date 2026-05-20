@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o:LoanTerm | o.ItemID = itemid)",
+        "precondition": "itemid.oclIsTypeOf(Integer) and LoanRequest.allInstance()->includes(self.currentLoanRequest) and term.oclIsUndefined() = false and LoanTerm.allInstance()->includes(term) and self.currentLoanRequest.AttachedLoanTerms->includes(term)",
+        "postcondition": "result = term"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 78,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid:Integer): LoanTerm {\n          definition:\n          term:LoanTerm = LoanTerm.allInstance()->any(o:LoanTerm | o.ItemID = itemid)\n            \n            precondition:\n          itemid.oclIsTypeOf(Integer) and LoanRequest.allInstance()->includes(self.currentLoanRequest) and term.oclIsUndefined() = false and LoanTerm.allInstance()->includes(term) and self.currentLoanRequest.AttachedLoanTerms->includes(term)\n            \n            postcondition:\n          result = term\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.currentLoanRequest"
+        }
+      ]
+    }
+  }
+]

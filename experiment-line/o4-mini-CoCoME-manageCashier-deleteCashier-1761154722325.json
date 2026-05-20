@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Cashier) = Cashier.allInstance()->select(c | c.id = id), exists:Boolean = obs->size() > 0",
+        "precondition": "true",
+        "postcondition": "result = exists"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 75,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 97,
+          "msg": "no viable alternative at input 'obs->size()'"
+        },
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::deleteCashier(id:Integer): Boolean {\n          definition:\n          obs:Set(Cashier) = Cashier.allInstance()->select(c | c.id = id), exists:Boolean = obs->size() > 0\n            \n            precondition:\n          true\n            \n            postcondition:\n          result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = uid), bookCandidates:Set(Book) = Book.allInstance()->select(o | o.ISBn = isbn)",
+        "precondition": "u.oclIsUndefined() = false and bookCandidates.isEmpty() = true",
+        "postcondition": "let newRec:RecommendBook in newRec.oclIsNew() and RecommendBook.allInstance()->includes(newRec) and newRec.RecommendUser = u and u.RecommendedBook->includes(newRec) and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 179,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 190,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = uid), bookCandidates:Set(Book) = Book.allInstance()->select(o | o.ISBn = isbn)\n            \n            precondition:\n          u.oclIsUndefined() = false and bookCandidates.isEmpty() = true\n            \n            postcondition:\n          let newRec:RecommendBook in newRec.oclIsNew() and RecommendBook.allInstance()->includes(newRec) and newRec.RecommendUser = u and u.RecommendedBook->includes(newRec) and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

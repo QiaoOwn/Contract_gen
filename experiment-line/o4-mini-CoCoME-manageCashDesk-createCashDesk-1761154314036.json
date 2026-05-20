@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cd:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) = true and name.oclIsTypeOf(String) = true and isopened.oclIsTypeOf(Boolean) = true and CashDesk.allInstance()->isUnique(o | o.Id)",
+        "postcondition": "cd.oclIsUndefined() = true and let newCd:CashDesk in newCd.oclIsNew() and CashDesk.allInstance()->includes(newCd) and newCd.Id = id and newCd.Name = name and newCd.IsOpened = isopened and result = true or cd.oclIsUndefined() = false and result = false"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 41,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 50,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cd:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) = true and name.oclIsTypeOf(String) = true and isopened.oclIsTypeOf(Boolean) = true and CashDesk.allInstance()->isUnique(o | o.Id)\n            \n            postcondition:\n          cd.oclIsUndefined() = true and let newCd:CashDesk in newCd.oclIsNew() and CashDesk.allInstance()->includes(newCd) and newCd.Id = id and newCd.Name = name and newCd.IsOpened = isopened and result = true or cd.oclIsUndefined() = false and result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

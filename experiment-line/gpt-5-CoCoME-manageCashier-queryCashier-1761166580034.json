@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchingCashiers:Set(Cashier) = Cashier.allInstance()->select(o:Cashier | o.Id = id), foundCashier:Cashier = matchingCashiers->any(o:Cashier | true)",
+        "precondition": "id.oclIsTypeOf(Integer) and matchingCashiers.size() = 1",
+        "postcondition": "result = foundCashier"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 153,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::queryCashier(id:Integer): Cashier {\n          definition:\n          matchingCashiers:Set(Cashier) = Cashier.allInstance()->select(o:Cashier | o.Id = id), foundCashier:Cashier = matchingCashiers->any(o:Cashier | true)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and matchingCashiers.size() = 1\n            \n            postcondition:\n          result = foundCashier\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

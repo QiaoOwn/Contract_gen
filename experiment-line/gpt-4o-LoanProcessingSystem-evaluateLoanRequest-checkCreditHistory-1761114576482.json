@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "creditHistory:CreditHistory = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "not CurrentLoanRequest.oclIsUndefined() and not creditHistory.oclIsUndefined()",
+        "postcondition": "result = creditHistory"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'CurrentLoanRequest' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::checkCreditHistory(): CreditHistory {\n          definition:\n          creditHistory:CreditHistory = CurrentLoanRequest.RequestedCreditHistory\n            \n            precondition:\n          not CurrentLoanRequest.oclIsUndefined() and not creditHistory.oclIsUndefined()\n            \n            postcondition:\n          result = creditHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

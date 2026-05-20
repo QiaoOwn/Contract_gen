@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "definition: itemId: Integer, content: String",
+        "precondition": "itemId.oclIsTypeOf(Integer) and content.oclIsTypeOf(String)",
+        "postcondition": "result = LoanTerm.allInstance()->exists(o | o.ItemID = itemId and o.Content = content)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'definition' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 28,
+          "msg": "missing 'precondition' at ':'"
+        },
+        {
+          "line": 3,
+          "column": 30,
+          "msg": "mismatched input 'Integer' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          definition: itemId: Integer, content: String\n            \n            precondition:\n          itemId.oclIsTypeOf(Integer) and content.oclIsTypeOf(String)\n            \n            postcondition:\n          result = LoanTerm.allInstance()->exists(o | o.ItemID = itemId and o.Content = content)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: itemId"
+        }
+      ]
+    }
+  }
+]

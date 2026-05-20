@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundItem: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "barcode >= 0 and quantity > 0 and CurrentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "let newOE: OrderEntry in CurrentOrderProduct.ContainedEntries = CurrentOrderProduct.ContainedEntries->including(newOE) and newOE.Item = foundItem and newOE.Quantity = quantity and newOE.SubAmount = foundItem.Price * quantity and newOE.oclIsNew() and OrderEntry.allInstance()->includes(newOE) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 112,
+          "msg": "no viable alternative at input 'CurrentOrderProduct.ContainedEntries->including'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          foundItem: Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          barcode >= 0 and quantity > 0 and CurrentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          let newOE: OrderEntry in CurrentOrderProduct.ContainedEntries = CurrentOrderProduct.ContainedEntries->including(newOE) and newOE.Item = foundItem and newOE.Quantity = quantity and newOE.SubAmount = foundItem.Price * quantity and newOE.oclIsNew() and OrderEntry.allInstance()->includes(newOE) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

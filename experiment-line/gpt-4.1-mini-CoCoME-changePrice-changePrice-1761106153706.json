@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obItem:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode)",
+        "precondition": "obItem->isEmpty() = false",
+        "postcondition": "obItem->forAll(o | o.Price = newPrice) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 18,
+          "msg": "no viable alternative at input 'obItem->isEmpty()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {\n          definition:\n          obItem:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode)\n            \n            precondition:\n          obItem->isEmpty() = false\n            \n            postcondition:\n          obItem->forAll(o | o.Price = newPrice) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

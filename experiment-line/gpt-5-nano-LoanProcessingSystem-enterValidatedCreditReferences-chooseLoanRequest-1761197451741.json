@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "requestid: Integer, obs: LoanRequest = CurrentLoanRequests->any(o | o.RequestID = requestid)",
+        "precondition": "CurrentLoanRequests->exists(o | o.RequestID = requestid)",
+        "postcondition": "CurrentLoanRequest = obs and result = CurrentLoanRequest"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid: Integer): LoanRequest {\n\tdefinition:\n\t\trequestid: Integer,\n\t\tobs: LoanRequest = CurrentLoanRequests->any(o|o.RequestID = requestid)\n\tprecondition:\n\t\tCurrentLoanRequests->exists(o|o.RequestID = requestid)\n\tpostcondition:\n\t\tCurrentLoanRequest = obs and\n\t\tresult = CurrentLoanRequest\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,241 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "book.oclIsUndefined() = bool, uid.oclIsUndefined() = bool, User.allInstance()->includes(ob)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew(), User.ReservedBook->includes(ob), ob.ReservedCopy = book, ob.ReservedUser.UserID = uid, result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 38,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          book.oclIsUndefined() = bool, uid.oclIsUndefined() = bool, User.allInstance()->includes(ob)\n            \n            postcondition:\n          let ob:Reserve in ob.oclIsNew(), User.ReservedBook->includes(ob), ob.ReservedCopy = book, ob.ReservedUser.UserID = uid, result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false",
+        "precondition": "isBookAvailable = true and uid.oclIsUndefined() = false and User.allInstance()->includes(ob)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew(), User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 41,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          isBookAvailable = true and uid.oclIsUndefined() = false and User.allInstance()->includes(ob)\n            \n            postcondition:\n          let ob:Reserve in ob.oclIsNew(), User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false",
+        "precondition": "isBookAvailable = true and uid.oclIsUndefined() = false and User.allInstance()->includes(ob)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = ob = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 154,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          isBookAvailable = true and uid.oclIsUndefined() = false and User.allInstance()->includes(ob)\n            \n            postcondition:\n          let ob:Reserve in ob.oclIsNew() and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = ob = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = uid.oclIsUndefined() = false",
+        "precondition": "isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = ob = true and isBookAvailable = true and isUserValid = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 154,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = uid.oclIsUndefined() = false\n            \n            precondition:\n          isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)\n            \n            postcondition:\n          let ob:Reserve in ob.oclIsNew() and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = ob = true and isBookAvailable = true and isUserValid = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = uid.oclIsUndefined() = false",
+        "precondition": "isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true and isBookAvailable = true and isUserValid = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tres: Reserve = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode),\n\t\tisBookAvailable: Boolean = book.oclIsUndefined() = false,\n\t\tisUserValid: Boolean = uid.oclIsUndefined() = false\n\tprecondition:\n\t\tisBookAvailable = true and\n\t\tisUserValid = true and\n\t\tUser.allInstance()->includes(uid)\n\tpostcondition:\n\t\tlet ob: Reserve in\n\t\tob.oclIsNew() and\n\t\tUser.ReservedBook->includes(ob) and\n\t\tob.ReservedCopy = book and\n\t\tob.ReservedUser.UserID = uid and\n\t\tresult = true and\n\t\tisBookAvailable = true and\n\t\tisUserValid = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = User.allInstance()->includes(uid)",
+        "precondition": "isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tres: Reserve = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode),\n\t\tisBookAvailable: Boolean = book.oclIsUndefined() = false,\n\t\tisUserValid: Boolean = User.allInstance()->includes(uid)\n\tprecondition:\n\t\tisBookAvailable = true and\n\t\tisUserValid = true and\n\t\tUser.allInstance()->includes(uid)\n\tpostcondition:\n\t\tlet ob: Reserve in\n\t\tob.oclIsNew() and\n\t\tUser.ReservedBook->includes(ob) and\n\t\tob.ReservedCopy = book and\n\t\tob.ReservedUser.UserID = uid and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = User.allInstance()->includes(uid)",
+        "precondition": "isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.allInstance()->includes(uid) and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tres: Reserve = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode),\n\t\tisBookAvailable: Boolean = book.oclIsUndefined() = false,\n\t\tisUserValid: Boolean = User.allInstance()->includes(uid)\n\tprecondition:\n\t\tisBookAvailable = true and\n\t\tisUserValid = true and\n\t\tUser.allInstance()->includes(uid)\n\tpostcondition:\n\t\tlet ob: Reserve in\n\t\tob.oclIsNew() and\n\t\tUser.allInstance()->includes(uid) and\n\t\tUser.ReservedBook->includes(ob) and\n\t\tob.ReservedCopy = book and\n\t\tob.ReservedUser.UserID = uid and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = User.allInstance()->includes(uid)",
+        "precondition": "isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.allInstance()->includes(uid) and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tres: Reserve = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode),\n\t\tisBookAvailable: Boolean = book.oclIsUndefined() = false,\n\t\tisUserValid: Boolean = User.allInstance()->includes(uid)\n\tprecondition:\n\t\tisBookAvailable = true and\n\t\tisUserValid = true and\n\t\tUser.allInstance()->includes(uid)\n\tpostcondition:\n\t\tlet ob: Reserve in\n\t\tob.oclIsNew() and\n\t\tUser.allInstance()->includes(uid) and\n\t\tUser.ReservedBook->includes(ob) and\n\t\tob.ReservedCopy = book and\n\t\tob.ReservedUser.UserID = uid and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = User.allInstance()->includes(uid)",
+        "precondition": "isBookAvailable = true and isUserValid = true and User.allInstance()->includes(uid)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.allInstance()->includes(uid) and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tres: Reserve = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode),\n\t\tisBookAvailable: Boolean = book.oclIsUndefined() = false,\n\t\tisUserValid: Boolean = User.allInstance()->includes(uid)\n\tprecondition:\n\t\tisBookAvailable = true and\n\t\tisUserValid = true and\n\t\tUser.allInstance()->includes(uid)\n\tpostcondition:\n\t\tlet ob: Reserve in\n\t\tob.oclIsNew() and\n\t\tUser.allInstance()->includes(uid) and\n\t\tUser.ReservedBook->includes(ob) and\n\t\tob.ReservedCopy = book and\n\t\tob.ReservedUser.UserID = uid and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "res:Reserve = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid), book:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), isBookAvailable:Boolean = book.oclIsUndefined() = false, isUserValid:Boolean = User.allInstance()->includes(uid)",
+        "precondition": "isBookAvailable = true and isUserValid = true",
+        "postcondition": "let ob:Reserve in ob.oclIsNew() and User.allInstance()->includes(uid) and User.ReservedBook->includes(ob) and ob.ReservedCopy = book and ob.ReservedUser.UserID = uid and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tres: Reserve = Reserve.allInstance()->select(o|o.ReservedUser.UserID = uid),\n\t\tbook: BookCopy = BookCopy.allInstance()->any(o|o.Barcode = barcode),\n\t\tisBookAvailable: Boolean = book.oclIsUndefined() = false,\n\t\tisUserValid: Boolean = User.allInstance()->includes(uid)\n\tprecondition:\n\t\tisBookAvailable = true and\n\t\tisUserValid = true\n\tpostcondition:\n\t\tlet ob: Reserve in\n\t\tob.oclIsNew() and\n\t\tUser.allInstance()->includes(uid) and\n\t\tUser.ReservedBook->includes(ob) and\n\t\tob.ReservedCopy = book and\n\t\tob.ReservedUser.UserID = uid and\n\t\tresult = true\n}"
+    }
+  }
+]

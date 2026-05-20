@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "callNo: String, barcode: String, location: String",
+        "precondition": "callNo.oclIsTypeOf(String) and barcode.size() > 0 and location.size() > 0 and Book.allInstance()->exists(b | b.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in (ob.oclIsNew() and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs.CallNo = callNo and BookCopy.allInstance()->includes(ob) and result = ob.oclIsNew())"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo: String,barcode: String,location: String): Boolean {\n\tdefinition:\n\t\tcallNo: String,\n\t\tbarcode: String,\n\t\tlocation: String\n\tprecondition:\n\t\tcallNo.oclIsTypeOf(String) and\n\t\tbarcode.size()>0 and\n\t\tlocation.size()>0 and\n\t\tBook.allInstance()->exists(b|b.CallNo = callNo)\n\tpostcondition:\n\t\tlet ob: BookCopy in\n\t\t(ob.oclIsNew() and\n\t\tob.Barcode = barcode and\n\t\tob.Location = location and\n\t\tob.BookBelongs.CallNo = callNo and\n\t\tBookCopy.allInstance()->includes(ob) and\n\t\tresult = ob.oclIsNew())\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

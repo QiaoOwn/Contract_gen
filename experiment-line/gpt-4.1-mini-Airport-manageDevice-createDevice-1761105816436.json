@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid), newDevice:Device",
+        "precondition": "staff.oclIsUndefined() = false",
+        "postcondition": "(device.oclIsUndefined() = false and device.Name = name and device.Location = location and device.Contacts = staff and result = true) or (device.oclIsUndefined() = true and newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = staff and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 144,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {\n          definition:\n          device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid), newDevice:Device\n            \n            precondition:\n          staff.oclIsUndefined() = false\n            \n            postcondition:\n          (device.oclIsUndefined() = false and device.Name = name and device.Location = location and device.Contacts = staff and result = true) or (device.oclIsUndefined() = true and newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = staff and result = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

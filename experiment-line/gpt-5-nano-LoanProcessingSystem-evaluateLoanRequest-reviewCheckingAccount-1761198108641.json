@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "definition: obs:CheckingAccount = CurrentLoanRequest.RequestedCAHistory, result:CheckingAccount",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+        "postcondition": "result = obs"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'definition' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 25,
+          "msg": "missing 'precondition' at ':'"
+        },
+        {
+          "line": 3,
+          "column": 81,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {\n          definition:\n          definition: obs:CheckingAccount = CurrentLoanRequest.RequestedCAHistory, result:CheckingAccount\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false\n            \n            postcondition:\n          result = obs\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

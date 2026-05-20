@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = userid)",
+        "precondition": "users->excludes(user) or users->includes(user)",
+        "postcondition": "let newUser:User in \n(User.allInstance()->excludes(user) and (newUser.oclIsNew() and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true)) or (result = false)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 10,
+          "column": 162,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = userid)\n            \n            precondition:\n          users->excludes(user) or users->includes(user)\n            \n            postcondition:\n          let newUser:User in \n(User.allInstance()->excludes(user) and (newUser.oclIsNew() and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true)) or (result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

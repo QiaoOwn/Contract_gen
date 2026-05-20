@@ -1,0 +1,265 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo)",
+        "precondition": "User.allInstance()->includes(user) and user.oclIsTypeOf(User) and Book.allInstance()->includes(book) and book.oclIsTypeOf(Book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = now() and book.Copys->includes(copy) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid: String,callNo: String,title: String,edition: String,author: String,publisher: String,description: String,isbn: String): Boolean {\n\tdefinition:\n\t\tusers: Set(User) = User.allInstance(),\n\t\tuser: User = users->any(u|u.UserID = uid),\n\t\tbooks: Set(Book) = Book.allInstance(),\n\t\tbook: Book = books->any(b|b.CallNo = callNo)\n\tprecondition:\n\t\tUser.allInstance()->includes(user) and\n\t\tuser.oclIsTypeOf(User) and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.oclIsTypeOf(Book)\n\tpostcondition:\n\t\tlet recommendBook: RecommendBook in\n\t\trecommendBook.oclIsNew() and\n\t\tRecommendBook.allInstance()->includes(recommendBook) and\n\t\tuser.RecommendedBook->includes(recommendBook) and\n\t\trecommendBook.RecommendDate = now() and\n\t\tbook.Copys->includes(copy) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: copy"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus.AVAILABLE)",
+        "precondition": "User.allInstance()->includes(user) and user.oclIsTypeOf(User) and Book.allInstance()->includes(book) and book.oclIsTypeOf(Book) and book.Copys->includes(copy)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = now() and book.Copys->includes(copy) and result = true and copy.Status = CopyStatus.INPROCESSING"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid: String,callNo: String,title: String,edition: String,author: String,publisher: String,description: String,isbn: String): Boolean {\n\tdefinition:\n\t\tusers: Set(User) = User.allInstance(),\n\t\tuser: User = users->any(u|u.UserID = uid),\n\t\tbooks: Set(Book) = Book.allInstance(),\n\t\tbook: Book = books->any(b|b.CallNo = callNo),\n\t\tcopies: Set(BookCopy) = book.Copys,\n\t\tcopy: BookCopy = copies->any(c|c.Status = CopyStatus.AVAILABLE)\n\tprecondition:\n\t\tUser.allInstance()->includes(user) and\n\t\tuser.oclIsTypeOf(User) and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.oclIsTypeOf(Book) and\n\t\tbook.Copys->includes(copy)\n\tpostcondition:\n\t\tlet recommendBook: RecommendBook in\n\t\trecommendBook.oclIsNew() and\n\t\tRecommendBook.allInstance()->includes(recommendBook) and\n\t\tuser.RecommendedBook->includes(recommendBook) and\n\t\trecommendBook.RecommendDate = now() and\n\t\tbook.Copys->includes(copy) and\n\t\tresult = true and\n\t\tcopy.Status = CopyStatus.INPROCESSING\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CopyStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = BookCopyStatus.AVAILABLE)",
+        "precondition": "User.allInstance()->includes(user) and user.oclIsTypeOf(User) and Book.allInstance()->includes(book) and book.oclIsTypeOf(Book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = now() and book.Copys->includes(copy) and copy.Status = BookCopyStatus.INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid: String,callNo: String,title: String,edition: String,author: String,publisher: String,description: String,isbn: String): Boolean {\n\tdefinition:\n\t\tusers: Set(User) = User.allInstance(),\n\t\tuser: User = users->any(u|u.UserID = uid),\n\t\tbooks: Set(Book) = Book.allInstance(),\n\t\tbook: Book = books->any(b|b.CallNo = callNo),\n\t\tcopies: Set(BookCopy) = book.Copys,\n\t\tcopy: BookCopy = copies->any(c|c.Status = BookCopyStatus.AVAILABLE)\n\tprecondition:\n\t\tUser.allInstance()->includes(user) and\n\t\tuser.oclIsTypeOf(User) and\n\t\tBook.allInstance()->includes(book) and\n\t\tbook.oclIsTypeOf(Book)\n\tpostcondition:\n\t\tlet recommendBook: RecommendBook in\n\t\trecommendBook.oclIsNew() and\n\t\tRecommendBook.allInstance()->includes(recommendBook) and\n\t\tuser.RecommendedBook->includes(recommendBook) and\n\t\trecommendBook.RecommendDate = now() and\n\t\tbook.Copys->includes(copy) and\n\t\tcopy.Status = BookCopyStatus.INPROCESSING and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BookCopyStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus.AVAILABLE)",
+        "precondition": "User.allInstance()->includes(user) and user.oclIsTypeOf(User) and Book.allInstance()->includes(book) and book.oclIsTypeOf(Book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew(), RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = now() and book.Copys->includes(copy) and copy.Status = CopyStatus.INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 69,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus.AVAILABLE)\n            \n            precondition:\n          User.allInstance()->includes(user) and user.oclIsTypeOf(User) and Book.allInstance()->includes(book) and book.oclIsTypeOf(Book)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew(), RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = now() and book.Copys->includes(copy) and copy.Status = CopyStatus.INPROCESSING and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE)",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->includes(book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = now() and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid: String,callNo: String,title: String,edition: String,author: String,publisher: String,description: String,isbn: String): Boolean {\n\tdefinition:\n\t\tusers: Set(User) = User.allInstance(),\n\t\tuser: User = users->any(u|u.UserID = uid),\n\t\tbooks: Set(Book) = Book.allInstance(),\n\t\tbook: Book = books->any(b|b.CallNo = callNo),\n\t\tcopies: Set(BookCopy) = book.Copys,\n\t\tcopy: BookCopy = copies->any(c|c.Status = CopyStatus::AVAILABLE)\n\tprecondition:\n\t\tUser.allInstance()->includes(user) and\n\t\tBook.allInstance()->includes(book)\n\tpostcondition:\n\t\tlet recommendBook: RecommendBook in\n\t\trecommendBook.oclIsNew() and\n\t\tRecommendBook.allInstance()->includes(recommendBook) and\n\t\tuser.RecommendedBook->includes(recommendBook) and\n\t\trecommendBook.RecommendDate = now() and\n\t\tbook.Copys->includes(copy) and\n\t\tcopy.Status = CopyStatus::INPROCESSING and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The user account*/\nclass User {\n  /*User ID*/\n  UserID: string;\n  /*Name*/\n  Name: string;\n  /*Sex*/\n  Sex: Sex;\n  /*Password*/\n  Password: string;\n  /*Email*/\n  Email: string;\n  /*Faculty*/\n  Faculty: string;\n  /*Number of loaned books*/\n  LoanedNumber: number;\n  /*Borrow status*/\n  BorrowStatus: BorrowStatus;\n  /*Suspension days*/\n  SuspensionDays: number;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Loans made by the user*/\n  LoanedBook: Loan[];\n  /*Reservations made by the user*/\n  ReservedBook: Reserve[];\n  /*Books recommended by the user*/\n  RecommendedBook: RecommendBook[];\n}\n/*The student account*/\nclass Student extends User {\n  /*Major*/\n  Major: string;\n  /*Programme*/\n  Programme: Programme;\n  /*Registration status*/\n  RegistrationStatus: Programme;\n}\n/*The faculty account*/\nclass Faculty extends User {\n  /*Position*/\n  Position: Position;\n  /*Status*/\n  Status: Status;\n}\n/*Books owned by the library*/\nclass Book {\n  /*Call Number*/\n  CallNo: string;\n  /*Title*/\n  Title: string;\n  /*Edition*/\n  Edition: string;\n  /*Author*/\n  Author: string;\n  /*Publisher*/\n  Publisher: string;\n  /*Description*/\n  Description: string;\n  /*ISBN*/\n  ISBn: string;\n  /*Number of copies*/\n  CopyNum: number;\n  /*Copies of the book*/\n  Copys: BookCopy[];\n  /*Subjects of the book*/\n  Subject: Subject[];\n}\n/*The subject of books*/\nclass Subject {\n  /*Subject name*/\n  Name: string;\n  /*Super subject*/\n  SuperSubject: Subject;\n  /*Sub subjects*/\n  SubSubject: Subject;\n}\n/*The copy of a book for borrowing*/\nclass BookCopy {\n  /*Barcode*/\n  Barcode: string;\n  /*Status*/\n  Status: CopyStatus;\n  /*Location*/\n  Location: string;\n  /*Is reserved*/\n  IsReserved: boolean;\n  /*The book this copy belongs to*/\n  BookBelongs: Book;\n  /*Loan records of this copy*/\n  LoanedRecord: Loan[];\n  /*Reservation records of this copy*/\n  ReservationRecord: Reserve[];\n}\n/*The record of borrowing books*/\nclass Loan {\n  /*Loan date*/\n  LoanDate: dayjs.Dayjs;\n  /*Renew date*/\n  RenewDate: dayjs.Dayjs;\n  /*Due date*/\n  DueDate: dayjs.Dayjs;\n  /*Return date*/\n  ReturnDate: dayjs.Dayjs;\n  /*Number of times renewed*/\n  RenewedTimes: number;\n  /*Is returned*/\n  IsReturned: boolean;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Overdue for 3 days*/\n  OverDue3Days: boolean;\n  /*Overdue for 10 days*/\n  OverDue10Days: boolean;\n  /*Overdue for 17 days*/\n  OverDue17Days: boolean;\n  /*Overdue for 31 days*/\n  OverDue31Days: boolean;\n  /*User who loaned the book*/\n  LoanedUser: User;\n  /*The copy loaned*/\n  LoanedCopy: BookCopy;\n  /*Librarian who processed the loan*/\n  LoanLibrarian: Librarian;\n  /*Librarian who processed the return*/\n  ReturnLibrarian: Librarian;\n}\n/*The record of book reservation*/\nclass Reserve {\n  /*Reservation date*/\n  ReserveDate: dayjs.Dayjs;\n  /*Is reservation closed*/\n  IsReserveClosed: boolean;\n  /*Reserved copy*/\n  ReservedCopy: BookCopy;\n  /*User who made the reservation*/\n  ReservedUser: User;\n}\n/*The book recommended by users to the library*/\nclass RecommendBook extends Book {\n  /*Recommendation date*/\n  RecommendDate: dayjs.Dayjs;\n  /*User who recommended the book*/\n  RecommendUser: User;\n}\n/*The administrator account*/\nclass Administrator {\n  /*Administrator ID*/\n  AdminID: string;\n  /*Username*/\n  UserName: string;\n  /*Password*/\n  Password: string;\n}\n/*The librarian account*/\nclass Librarian {\n  /*Librarian ID*/\n  LibrarianID: string;\n  /*Name*/\n  Name: string;\n  /*Password*/\n  Password: string;\n}\nenum Sex {\n  M = \"M\",\n  F = \"F\",\n}\nenum BorrowStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n}\nenum Programme {\n  BACHELOR = \"BACHELOR\",\n  MASTER = \"MASTER\",\n  PHD = \"PHD\",\n}\nenum Position {\n  ASSISTANTPROFESSORS = \"ASSISTANTPROFESSORS\",\n  ASSOCIATEPROFESSOR = \"ASSOCIATEPROFESSOR\",\n  PROFESSOR = \"PROFESSOR\",\n  CHAIRPROFESSOR = \"CHAIRPROFESSOR\",\n}\nenum Status {\n  HASRETIRED = \"HASRETIRED\",\n  INPOSITION = \"INPOSITION\",\n}\nenum CopyStatus {\n  AVAILABLE = \"AVAILABLE\",\n  INPROCESSING = \"INPROCESSING\",\n  LIBUSEONLY = \"LIBUSEONLY\",\n  ONHOLDSHELF = \"ONHOLDSHELF\",\n  LOANED = \"LOANED\",\n}\nconst map = new Map();\nmap.set(User, []);\nmap.set(Student, []);\nmap.set(Faculty, []);\nmap.set(Book, []);\nmap.set(Subject, []);\nmap.set(BookCopy, []);\nmap.set(Loan, []);\nmap.set(Reserve, []);\nmap.set(RecommendBook, []);\nmap.set(Administrator, []);\nmap.set(Librarian, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  Sex,\n  BorrowStatus,\n  Programme,\n  Position,\n  Status,\n  CopyStatus,\n  User,\n  Student,\n  Faculty,\n  Book,\n  Subject,\n  BookCopy,\n  Loan,\n  Reserve,\n  RecommendBook,\n  Administrator,\n  Librarian,\n  getRepository,\n};\n",
+        "originalService": "class LibraryManagementSystemSystem_AutoGenerated {\n  /*The user recommends books to the library.*/\n  recommendBook(\n    uid: string,\n    callNo: string,\n    title: string,\n    edition: string,\n    author: string,\n    publisher: string,\n    description: string,\n    isbn: string,\n  ): boolean {\n    /*Definition Start*/\n    let users: User[] = l({\n      logic: () => getRepository(User),\n      description: \"User.allInstance()\",\n    }).build().pass;\n    let user: User = l({\n      logic: () =>\n        users.find(\n          (u: any) =>\n            l({\n              logic: () => u.UserID === uid,\n              description: \"u.UserID=uid\",\n            }).build().pass,\n        ),\n      description: \"users->any(u|u.UserID=uid)\",\n    }).build().pass;\n    let books: Book[] = l({\n      logic: () => getRepository(Book),\n      description: \"Book.allInstance()\",\n    }).build().pass;\n    let book: Book = l({\n      logic: () =>\n        books.find(\n          (b: any) =>\n            l({\n              logic: () => b.CallNo === callNo,\n              description: \"b.CallNo=callNo\",\n            }).build().pass,\n        ),\n      description: \"books->any(b|b.CallNo=callNo)\",\n    }).build().pass;\n    let copies: BookCopy[] = l({\n      logic: () => book.Copys,\n      description: \"book.Copys\",\n    }).build().pass;\n    let copy: BookCopy = l({\n      logic: () =>\n        copies.find(\n          (c: any) =>\n            l({\n              logic: () => c.Status === CopyStatus.AVAILABLE,\n              description: \"c.Status=CopyStatus::AVAILABLE\",\n            }).build().pass,\n        ),\n      description: \"copies->any(c|c.Status=CopyStatus::AVAILABLE)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => getRepository(User).includes(user),\n        description: \"User.allInstance()->includes(user)\",\n      })\n        .and({\n          logic: () => getRepository(Book).includes(book),\n          description: \"Book.allInstance()->includes(book)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let recommendBook: RecommendBook;\n    return l({\n      execute: () => (recommendBook = new RecommendBook()),\n      description: \"recommendBook.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(RecommendBook).push(recommendBook),\n        description: \"RecommendBook.allInstance()->includes(recommendBook)\",\n      })\n      .and({\n        execute: () => user.RecommendedBook.push(recommendBook),\n        description: \"user.RecommendedBook->includes(recommendBook)\",\n      })\n      .and({\n        execute: () => (recommendBook.RecommendDate = now()),\n        description: \"recommendBook.RecommendDate=now()\",\n      })\n      .and({\n        execute: () => book.Copys.push(copy),\n        description: \"book.Copys->includes(copy)\",\n      })\n      .and({\n        execute: () => (copy.Status = CopyStatus.INPROCESSING),\n        description: \"copy.Status=CopyStatus::INPROCESSING\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { LibraryManagementSystemSystem_AutoGenerated };\n",
+        "entity": "/*The user account*/\nclass User {\n  /*User ID*/\n  UserID: string;\n  /*Name*/\n  Name: string;\n  /*Sex*/\n  Sex: Sex;\n  /*Password*/\n  Password: string;\n  /*Email*/\n  Email: string;\n  /*Faculty*/\n  Faculty: string;\n  /*Number of loaned books*/\n  LoanedNumber: number;\n  /*Borrow status*/\n  BorrowStatus: BorrowStatus;\n  /*Suspension days*/\n  SuspensionDays: number;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Loans made by the user*/\n  LoanedBook: Loan[];\n  /*Reservations made by the user*/\n  ReservedBook: Reserve[];\n  /*Books recommended by the user*/\n  RecommendedBook: RecommendBook[];\n}\n/*The student account*/\nclass Student extends User {\n  /*Major*/\n  Major: string;\n  /*Programme*/\n  Programme: Programme;\n  /*Registration status*/\n  RegistrationStatus: Programme;\n}\n/*The faculty account*/\nclass Faculty extends User {\n  /*Position*/\n  Position: Position;\n  /*Status*/\n  Status: Status;\n}\n/*Books owned by the library*/\nclass Book {\n  /*Call Number*/\n  CallNo: string;\n  /*Title*/\n  Title: string;\n  /*Edition*/\n  Edition: string;\n  /*Author*/\n  Author: string;\n  /*Publisher*/\n  Publisher: string;\n  /*Description*/\n  Description: string;\n  /*ISBN*/\n  ISBn: string;\n  /*Number of copies*/\n  CopyNum: number;\n  /*Copies of the book*/\n  Copys: BookCopy[];\n  /*Subjects of the book*/\n  Subject: Subject[];\n}\n/*The subject of books*/\nclass Subject {\n  /*Subject name*/\n  Name: string;\n  /*Super subject*/\n  SuperSubject: Subject;\n  /*Sub subjects*/\n  SubSubject: Subject;\n}\n/*The copy of a book for borrowing*/\nclass BookCopy {\n  /*Barcode*/\n  Barcode: string;\n  /*Status*/\n  Status: CopyStatus;\n  /*Location*/\n  Location: string;\n  /*Is reserved*/\n  IsReserved: boolean;\n  /*The book this copy belongs to*/\n  BookBelongs: Book;\n  /*Loan records of this copy*/\n  LoanedRecord: Loan[];\n  /*Reservation records of this copy*/\n  ReservationRecord: Reserve[];\n}\n/*The record of borrowing books*/\nclass Loan {\n  /*Loan date*/\n  LoanDate: dayjs.Dayjs;\n  /*Renew date*/\n  RenewDate: dayjs.Dayjs;\n  /*Due date*/\n  DueDate: dayjs.Dayjs;\n  /*Return date*/\n  ReturnDate: dayjs.Dayjs;\n  /*Number of times renewed*/\n  RenewedTimes: number;\n  /*Is returned*/\n  IsReturned: boolean;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Overdue for 3 days*/\n  OverDue3Days: boolean;\n  /*Overdue for 10 days*/\n  OverDue10Days: boolean;\n  /*Overdue for 17 days*/\n  OverDue17Days: boolean;\n  /*Overdue for 31 days*/\n  OverDue31Days: boolean;\n  /*User who loaned the book*/\n  LoanedUser: User;\n  /*The copy loaned*/\n  LoanedCopy: BookCopy;\n  /*Librarian who processed the loan*/\n  LoanLibrarian: Librarian;\n  /*Librarian who processed the return*/\n  ReturnLibrarian: Librarian;\n}\n/*The record of book reservation*/\nclass Reserve {\n  /*Reservation date*/\n  ReserveDate: dayjs.Dayjs;\n  /*Is reservation closed*/\n  IsReserveClosed: boolean;\n  /*Reserved copy*/\n  ReservedCopy: BookCopy;\n  /*User who made the reservation*/\n  ReservedUser: User;\n}\n/*The book recommended by users to the library*/\nclass RecommendBook extends Book {\n  /*Recommendation date*/\n  RecommendDate: dayjs.Dayjs;\n  /*User who recommended the book*/\n  RecommendUser: User;\n}\n/*The administrator account*/\nclass Administrator {\n  /*Administrator ID*/\n  AdminID: string;\n  /*Username*/\n  UserName: string;\n  /*Password*/\n  Password: string;\n}\n/*The librarian account*/\nclass Librarian {\n  /*Librarian ID*/\n  LibrarianID: string;\n  /*Name*/\n  Name: string;\n  /*Password*/\n  Password: string;\n}\nenum Sex {\n  M = \"M\",\n  F = \"F\",\n}\nenum BorrowStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n}\nenum Programme {\n  BACHELOR = \"BACHELOR\",\n  MASTER = \"MASTER\",\n  PHD = \"PHD\",\n}\nenum Position {\n  ASSISTANTPROFESSORS = \"ASSISTANTPROFESSORS\",\n  ASSOCIATEPROFESSOR = \"ASSOCIATEPROFESSOR\",\n  PROFESSOR = \"PROFESSOR\",\n  CHAIRPROFESSOR = \"CHAIRPROFESSOR\",\n}\nenum Status {\n  HASRETIRED = \"HASRETIRED\",\n  INPOSITION = \"INPOSITION\",\n}\nenum CopyStatus {\n  AVAILABLE = \"AVAILABLE\",\n  INPROCESSING = \"INPROCESSING\",\n  LIBUSEONLY = \"LIBUSEONLY\",\n  ONHOLDSHELF = \"ONHOLDSHELF\",\n  LOANED = \"LOANED\",\n}\nconst map = new Map();\nmap.set(User, []);\nmap.set(Student, []);\nmap.set(Faculty, []);\nmap.set(Book, []);\nmap.set(Subject, []);\nmap.set(BookCopy, []);\nmap.set(Loan, []);\nmap.set(Reserve, []);\nmap.set(RecommendBook, []);\nmap.set(Administrator, []);\nmap.set(Librarian, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class LibraryManagementSystemSystem_AutoGenerated {\n  /*The user recommends books to the library.*/\n  recommendBook(\n    uid: string,\n    callNo: string,\n    title: string,\n    edition: string,\n    author: string,\n    publisher: string,\n    description: string,\n    isbn: string,\n  ): boolean {\n    /*Definition Start*/\n    let users: User[] = l({\n      logic: () => getRepository(User),\n      description: \"User.allInstance()\",\n    }).build().pass;\n    let user: User = l({\n      logic: () =>\n        users.find(\n          (u: any) =>\n            l({\n              logic: () => u.UserID === uid,\n              description: \"u.UserID=uid\",\n            }).build().pass,\n        ),\n      description: \"users->any(u|u.UserID=uid)\",\n    }).build().pass;\n    let books: Book[] = l({\n      logic: () => getRepository(Book),\n      description: \"Book.allInstance()\",\n    }).build().pass;\n    let book: Book = l({\n      logic: () =>\n        books.find(\n          (b: any) =>\n            l({\n              logic: () => b.CallNo === callNo,\n              description: \"b.CallNo=callNo\",\n            }).build().pass,\n        ),\n      description: \"books->any(b|b.CallNo=callNo)\",\n    }).build().pass;\n    let copies: BookCopy[] = l({\n      logic: () => book.Copys,\n      description: \"book.Copys\",\n    }).build().pass;\n    let copy: BookCopy = l({\n      logic: () =>\n        copies.find(\n          (c: any) =>\n            l({\n              logic: () => c.Status === CopyStatus.AVAILABLE,\n              description: \"c.Status=CopyStatus::AVAILABLE\",\n            }).build().pass,\n        ),\n      description: \"copies->any(c|c.Status=CopyStatus::AVAILABLE)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => getRepository(User).includes(user),\n        description: \"User.allInstance()->includes(user)\",\n      })\n        .and({\n          logic: () => getRepository(Book).includes(book),\n          description: \"Book.allInstance()->includes(book)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let recommendBook: RecommendBook;\n    return l({\n      execute: () => (recommendBook = new RecommendBook()),\n      description: \"recommendBook.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(RecommendBook).push(recommendBook),\n        description: \"RecommendBook.allInstance()->includes(recommendBook)\",\n      })\n      .and({\n        execute: () => user.RecommendedBook.push(recommendBook),\n        description: \"user.RecommendedBook->includes(recommendBook)\",\n      })\n      .and({\n        execute: () => (recommendBook.RecommendDate = now()),\n        description: \"recommendBook.RecommendDate=now()\",\n      })\n      .and({\n        execute: () => book.Copys.push(copy),\n        description: \"book.Copys->includes(copy)\",\n      })\n      .and({\n        execute: () => (copy.Status = CopyStatus.INPROCESSING),\n        description: \"copy.Status=CopyStatus::INPROCESSING\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The user account*/\nclass User {\n  /*User ID*/\n  UserID: string;\n  /*Name*/\n  Name: string;\n  /*Sex*/\n  Sex: Sex;\n  /*Password*/\n  Password: string;\n  /*Email*/\n  Email: string;\n  /*Faculty*/\n  Faculty: string;\n  /*Number of loaned books*/\n  LoanedNumber: number;\n  /*Borrow status*/\n  BorrowStatus: BorrowStatus;\n  /*Suspension days*/\n  SuspensionDays: number;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Loans made by the user*/\n  LoanedBook: Loan[];\n  /*Reservations made by the user*/\n  ReservedBook: Reserve[];\n  /*Books recommended by the user*/\n  RecommendedBook: RecommendBook[];\n}\n/*The student account*/\nclass Student extends User {\n  /*Major*/\n  Major: string;\n  /*Programme*/\n  Programme: Programme;\n  /*Registration status*/\n  RegistrationStatus: Programme;\n}\n/*The faculty account*/\nclass Faculty extends User {\n  /*Position*/\n  Position: Position;\n  /*Status*/\n  Status: Status;\n}\n/*Books owned by the library*/\nclass Book {\n  /*Call Number*/\n  CallNo: string;\n  /*Title*/\n  Title: string;\n  /*Edition*/\n  Edition: string;\n  /*Author*/\n  Author: string;\n  /*Publisher*/\n  Publisher: string;\n  /*Description*/\n  Description: string;\n  /*ISBN*/\n  ISBn: string;\n  /*Number of copies*/\n  CopyNum: number;\n  /*Copies of the book*/\n  Copys: BookCopy[];\n  /*Subjects of the book*/\n  Subject: Subject[];\n}\n/*The subject of books*/\nclass Subject {\n  /*Subject name*/\n  Name: string;\n  /*Super subject*/\n  SuperSubject: Subject;\n  /*Sub subjects*/\n  SubSubject: Subject;\n}\n/*The copy of a book for borrowing*/\nclass BookCopy {\n  /*Barcode*/\n  Barcode: string;\n  /*Status*/\n  Status: CopyStatus;\n  /*Location*/\n  Location: string;\n  /*Is reserved*/\n  IsReserved: boolean;\n  /*The book this copy belongs to*/\n  BookBelongs: Book;\n  /*Loan records of this copy*/\n  LoanedRecord: Loan[];\n  /*Reservation records of this copy*/\n  ReservationRecord: Reserve[];\n}\n/*The record of borrowing books*/\nclass Loan {\n  /*Loan date*/\n  LoanDate: dayjs.Dayjs;\n  /*Renew date*/\n  RenewDate: dayjs.Dayjs;\n  /*Due date*/\n  DueDate: dayjs.Dayjs;\n  /*Return date*/\n  ReturnDate: dayjs.Dayjs;\n  /*Number of times renewed*/\n  RenewedTimes: number;\n  /*Is returned*/\n  IsReturned: boolean;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Overdue for 3 days*/\n  OverDue3Days: boolean;\n  /*Overdue for 10 days*/\n  OverDue10Days: boolean;\n  /*Overdue for 17 days*/\n  OverDue17Days: boolean;\n  /*Overdue for 31 days*/\n  OverDue31Days: boolean;\n  /*User who loaned the book*/\n  LoanedUser: User;\n  /*The copy loaned*/\n  LoanedCopy: BookCopy;\n  /*Librarian who processed the loan*/\n  LoanLibrarian: Librarian;\n  /*Librarian who processed the return*/\n  ReturnLibrarian: Librarian;\n}\n/*The record of book reservation*/\nclass Reserve {\n  /*Reservation date*/\n  ReserveDate: dayjs.Dayjs;\n  /*Is reservation closed*/\n  IsReserveClosed: boolean;\n  /*Reserved copy*/\n  ReservedCopy: BookCopy;\n  /*User who made the reservation*/\n  ReservedUser: User;\n}\n/*The book recommended by users to the library*/\nclass RecommendBook extends Book {\n  /*Recommendation date*/\n  RecommendDate: dayjs.Dayjs;\n  /*User who recommended the book*/\n  RecommendUser: User;\n}\n/*The administrator account*/\nclass Administrator {\n  /*Administrator ID*/\n  AdminID: string;\n  /*Username*/\n  UserName: string;\n  /*Password*/\n  Password: string;\n}\n/*The librarian account*/\nclass Librarian {\n  /*Librarian ID*/\n  LibrarianID: string;\n  /*Name*/\n  Name: string;\n  /*Password*/\n  Password: string;\n}\nenum Sex {\n  M = \"M\",\n  F = \"F\",\n}\nenum BorrowStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n}\nenum Programme {\n  BACHELOR = \"BACHELOR\",\n  MASTER = \"MASTER\",\n  PHD = \"PHD\",\n}\nenum Position {\n  ASSISTANTPROFESSORS = \"ASSISTANTPROFESSORS\",\n  ASSOCIATEPROFESSOR = \"ASSOCIATEPROFESSOR\",\n  PROFESSOR = \"PROFESSOR\",\n  CHAIRPROFESSOR = \"CHAIRPROFESSOR\",\n}\nenum Status {\n  HASRETIRED = \"HASRETIRED\",\n  INPOSITION = \"INPOSITION\",\n}\nenum CopyStatus {\n  AVAILABLE = \"AVAILABLE\",\n  INPROCESSING = \"INPROCESSING\",\n  LIBUSEONLY = \"LIBUSEONLY\",\n  ONHOLDSHELF = \"ONHOLDSHELF\",\n  LOANED = \"LOANED\",\n}\nconst map = new Map();\nmap.set(User, []);\nmap.set(Student, []);\nmap.set(Faculty, []);\nmap.set(Book, []);\nmap.set(Subject, []);\nmap.set(BookCopy, []);\nmap.set(Loan, []);\nmap.set(Reserve, []);\nmap.set(RecommendBook, []);\nmap.set(Administrator, []);\nmap.set(Librarian, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass LibraryManagementSystemSystem_AutoGenerated {\n  /*The user recommends books to the library.*/\n  recommendBook(\n    uid: string,\n    callNo: string,\n    title: string,\n    edition: string,\n    author: string,\n    publisher: string,\n    description: string,\n    isbn: string,\n  ): boolean {\n    /*Definition Start*/\n    let users: User[] = l({\n      logic: () => getRepository(User),\n      description: \"User.allInstance()\",\n    }).build().pass;\n    let user: User = l({\n      logic: () =>\n        users.find(\n          (u: any) =>\n            l({\n              logic: () => u.UserID === uid,\n              description: \"u.UserID=uid\",\n            }).build().pass,\n        ),\n      description: \"users->any(u|u.UserID=uid)\",\n    }).build().pass;\n    let books: Book[] = l({\n      logic: () => getRepository(Book),\n      description: \"Book.allInstance()\",\n    }).build().pass;\n    let book: Book = l({\n      logic: () =>\n        books.find(\n          (b: any) =>\n            l({\n              logic: () => b.CallNo === callNo,\n              description: \"b.CallNo=callNo\",\n            }).build().pass,\n        ),\n      description: \"books->any(b|b.CallNo=callNo)\",\n    }).build().pass;\n    let copies: BookCopy[] = l({\n      logic: () => book.Copys,\n      description: \"book.Copys\",\n    }).build().pass;\n    let copy: BookCopy = l({\n      logic: () =>\n        copies.find(\n          (c: any) =>\n            l({\n              logic: () => c.Status === CopyStatus.AVAILABLE,\n              description: \"c.Status=CopyStatus::AVAILABLE\",\n            }).build().pass,\n        ),\n      description: \"copies->any(c|c.Status=CopyStatus::AVAILABLE)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => getRepository(User).includes(user),\n        description: \"User.allInstance()->includes(user)\",\n      })\n        .and({\n          logic: () => getRepository(Book).includes(book),\n          description: \"Book.allInstance()->includes(book)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let recommendBook: RecommendBook;\n    return l({\n      execute: () => (recommendBook = new RecommendBook()),\n      description: \"recommendBook.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(RecommendBook).push(recommendBook),\n        description: \"RecommendBook.allInstance()->includes(recommendBook)\",\n      })\n      .and({\n        execute: () => user.RecommendedBook.push(recommendBook),\n        description: \"user.RecommendedBook->includes(recommendBook)\",\n      })\n      .and({\n        execute: () => (recommendBook.RecommendDate = now()),\n        description: \"recommendBook.RecommendDate=now()\",\n      })\n      .and({\n        execute: () => book.Copys.push(copy),\n        description: \"book.Copys->includes(copy)\",\n      })\n      .and({\n        execute: () => (copy.Status = CopyStatus.INPROCESSING),\n        description: \"copy.Status=CopyStatus::INPROCESSING\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 304,
+          "column": 55,
+          "msg": "Cannot find name 'now'.",
+          "code": 2304
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = Date.now()",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->includes(book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true and result = recommendBook != null and result = copy.Status = CopyStatus::INPROCESSING and result = user.RecommendedBook->includes(recommendBook) and result = recommendBook.RecommendDate = currentDate and result = book.Copys->includes(copy) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 298,
+          "msg": "mismatched input 'Date' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 342,
+          "msg": "mismatched input '!' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = Date.now()\n            \n            precondition:\n          User.allInstance()->includes(user) and Book.allInstance()->includes(book)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true and result = recommendBook != null and result = copy.Status = CopyStatus::INPROCESSING and result = user.RecommendedBook->includes(recommendBook) and result = recommendBook.RecommendDate = currentDate and result = book.Copys->includes(copy) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->includes(book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 339,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()\n            \n            precondition:\n          User.allInstance()->includes(user) and Book.allInstance()->includes(book)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->includes(book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 339,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()\n            \n            precondition:\n          User.allInstance()->includes(user) and Book.allInstance()->includes(book)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->includes(book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 339,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()\n            \n            precondition:\n          User.allInstance()->includes(user) and Book.allInstance()->includes(book)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = currentDate and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()",
+        "precondition": "User.allInstance()->includes(user) and Book.allInstance()->includes(book)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = LibraryManagementSystemSystem.currentDate() and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 339,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 252,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          users:Set(User) = User.allInstance(), user:User = users->any(u | u.UserID = uid), books:Set(Book) = Book.allInstance(), book:Book = books->any(b | b.CallNo = callNo), copies:Set(BookCopy) = book.Copys, copy:BookCopy = copies->any(c | c.Status = CopyStatus::AVAILABLE), currentDate:Date = LibraryManagementSystemSystem.currentDate()\n            \n            precondition:\n          User.allInstance()->includes(user) and Book.allInstance()->includes(book)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and user.RecommendedBook->includes(recommendBook) and recommendBook.RecommendDate = LibraryManagementSystemSystem.currentDate() and book.Copys->includes(copy) and copy.Status = CopyStatus::INPROCESSING and result = true\n            \n        }"
+    }
+  }
+]

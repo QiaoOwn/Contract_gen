@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newSale:Sale = Sale.allInstance()->any(o | o.IsComplete = false and o.IsReadytoPay = false) , saleCreated:Boolean = if newSale.oclIsNew() then true else false endif",
+        "precondition": "CurrentCashDesk.oclIsUndefined() = bool and CurrentCashDesk.IsOpened = true and (CashDesk.allInstance()->includes(CurrentCashDesk) and (Sale.allInstance()->isEmpty() or CurrentSale. IsComplete = true))",
+        "postcondition": "Sale.allInstance()->includes(newSale) and newSale.IsComplete = false and newSale.IsReadytoPay = false and result = saleCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 166,
+          "msg": "no viable alternative at input 'Sale.allInstance()->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          newSale:Sale = Sale.allInstance()->any(o | o.IsComplete = false and o.IsReadytoPay = false) , saleCreated:Boolean = if newSale.oclIsNew() then true else false endif\n            \n            precondition:\n          CurrentCashDesk.oclIsUndefined() = bool and CurrentCashDesk.IsOpened = true and (CashDesk.allInstance()->includes(CurrentCashDesk) and (Sale.allInstance()->isEmpty() or CurrentSale. IsComplete = true))\n            \n            postcondition:\n          Sale.allInstance()->includes(newSale) and newSale.IsComplete = false and newSale.IsReadytoPay = false and result = saleCreated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedUser = user and l.LoanedCopy = bookCopy and l.IsReturned = false), renewDays:Integer = 14",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.IsReturned = false",
+        "postcondition": "loan.DueDate = DateService.addDays(loan.DueDate@pre, renewDays) and loan.RenewedTimes = loan.RenewedTimes@pre + 1 and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 44,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedUser = user and l.LoanedCopy = bookCopy and l.IsReturned = false), renewDays:Integer = 14\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and loan.oclIsUndefined() = false and loan.IsReturned = false\n            \n            postcondition:\n          loan.DueDate = DateService.addDays(loan.DueDate@pre, renewDays) and loan.RenewedTimes = loan.RenewedTimes@pre + 1 and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: DateService"
+        }
+      ]
+    }
+  }
+]

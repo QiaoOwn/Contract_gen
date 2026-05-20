@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "cashDesk.oclIsUndefined() = false or cashDesk.oclIsUndefined() = true",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and (if cashDesk.oclIsUndefined() then newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened else true endif) and result = (not cashDesk.oclIsUndefined() or newCashDesk.oclIsNew())"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 269,
+          "msg": "mismatched input 'cashDesk' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          cashDesk.oclIsUndefined() = false or cashDesk.oclIsUndefined() = true\n            \n            postcondition:\n          let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and (if cashDesk.oclIsUndefined() then newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened else true endif) and result = (not cashDesk.oclIsUndefined() or newCashDesk.oclIsNew())\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termId)",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = bool or termId.oclIsUndefined() = bool or CurrentLoanRequests->isEmpty() = bool",
+        "postcondition": "if term.oclIsNew() then LoanTerm.allInstance()->includes(term) and CurrentLoanRequest.AttachedLoanTerms->includes(term) else CurrentLoanRequest.AttachedLoanTerms->excludes(term) endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 111,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->isEmpty()'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termId)\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = bool or termId.oclIsUndefined() = bool or CurrentLoanRequests->isEmpty() = bool\n            \n            postcondition:\n          if term.oclIsNew() then LoanTerm.allInstance()->includes(term) and CurrentLoanRequest.AttachedLoanTerms->includes(term) else CurrentLoanRequest.AttachedLoanTerms->excludes(term) endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: termId"
+        }
+      ]
+    }
+  }
+]

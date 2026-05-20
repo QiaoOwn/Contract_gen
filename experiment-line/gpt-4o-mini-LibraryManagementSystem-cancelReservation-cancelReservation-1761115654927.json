@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = Barcode.allInstance()->any(o | o.Barcode = barcode), uid:User = User.allInstance()->any(o | o.UserID = uid)",
+        "precondition": "reservedCopy.oclIsUndefined() = bool and User.allInstance()->includes(uid)",
+        "postcondition": "let isNew:Boolean in isNew = reservedCopy.oclIsNew() and result = (reservedCopy.IsReserved = false and reservedCopy.ReservationRecord->excludes(self) and User.allInstance()->includes(uid))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 76,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 101,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          reservedCopy:BookCopy = Barcode.allInstance()->any(o | o.Barcode = barcode), uid:User = User.allInstance()->any(o | o.UserID = uid)\n            \n            precondition:\n          reservedCopy.oclIsUndefined() = bool and User.allInstance()->includes(uid)\n            \n            postcondition:\n          let isNew:Boolean in isNew = reservedCopy.oclIsNew() and result = (reservedCopy.IsReserved = false and reservedCopy.ReservationRecord->excludes(self) and User.allInstance()->includes(uid))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

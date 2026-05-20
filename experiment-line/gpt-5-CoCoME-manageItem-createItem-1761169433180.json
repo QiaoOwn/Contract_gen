@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "items:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = if items.size() > 0 then true else false endif",
+        "precondition": "barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real)",
+        "postcondition": "if exists = false then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true else result = true endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 81,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 13,
+          "msg": "mismatched input 'exists' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          items:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = if items.size() > 0 then true else false endif\n            \n            precondition:\n          barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real)\n            \n            postcondition:\n          if exists = false then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true else result = true endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

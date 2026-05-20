@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundLA:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), isCreated:Boolean = if foundLA.oclIsUndefined() then true else false endif",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "if isCreated then let newLA:LoanAccount in newLA.oclIsNew() and LoanAccount.allInstance()->includes(newLA) and newLA.LoanAccountID = loanaccountid and newLA.Balance = balance and newLA.Status = status and result = isCreated else result = isCreated endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tfoundLA: LoanAccount = LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid),\n\t\tisCreated: Boolean = if foundLA.oclIsUndefined() \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tloanaccountid.oclIsTypeOf(Integer) and\n\t\tbalance.oclIsTypeOf(Real) and\n\t\tstatus.oclIsTypeOf(LoanAccountStatus)\n\tpostcondition:\n\t\tif isCreated \n\t\tthen let newLA: LoanAccount in\n\t\tnewLA.oclIsNew() and\n\t\tLoanAccount.allInstance()->includes(newLA) and\n\t\tnewLA.LoanAccountID = loanaccountid and\n\t\tnewLA.Balance = balance and\n\t\tnewLA.Status = status and\n\t\tresult = isCreated \n\t\telse result = isCreated \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

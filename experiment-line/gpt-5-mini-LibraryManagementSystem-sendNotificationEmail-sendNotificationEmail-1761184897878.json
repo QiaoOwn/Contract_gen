@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.Email = email)",
+        "precondition": "email.oclIsTypeOf(String) and user.oclIsUndefined() = false",
+        "postcondition": "result = ThirdPartyServices.sendNotificationEmail(email)"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 59,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ThirdPartyServices::sendNotificationEmail(email:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.Email = email)\n            \n            precondition:\n          email.oclIsTypeOf(String) and user.oclIsUndefined() = false\n            \n            postcondition:\n          result = ThirdPartyServices.sendNotificationEmail(email)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

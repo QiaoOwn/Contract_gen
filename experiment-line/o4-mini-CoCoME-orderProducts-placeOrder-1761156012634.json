@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "entriesSubAmountSum:Real = CurrentOrderProduct.ContainedEntries->collect(entry|entry.SubAmount)->sum(), isRequestedAndSumMatch:Boolean = CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = entriesSubAmountSum",
+        "precondition": "CurrentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "isRequestedAndSumMatch = true and result = isRequestedAndSumMatch"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          entriesSubAmountSum:Real = CurrentOrderProduct.ContainedEntries->collect(entry|entry.SubAmount)->sum(), isRequestedAndSumMatch:Boolean = CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and CurrentOrderProduct.Amount = entriesSubAmountSum\n            \n            precondition:\n          CurrentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          isRequestedAndSumMatch = true and result = isRequestedAndSumMatch\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

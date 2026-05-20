@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Set(Store) = Store.allInstance()->select(s | s.Id = id)",
+        "precondition": "store->isEmpty() or Store.allInstance()->includes(store->any(s | s.Id = id))",
+        "postcondition": "if store.isEmpty() then let newStore:Store in newStore.oclIsNew() and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and Store.allInstance()->includes(newStore) and result = true else result = false endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "no viable alternative at input 'store->isEmpty()'"
+        },
+        {
+          "line": 6,
+          "column": 65,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 84,
+          "msg": "mismatched input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          store:Set(Store) = Store.allInstance()->select(s | s.Id = id)\n            \n            precondition:\n          store->isEmpty() or Store.allInstance()->includes(store->any(s | s.Id = id))\n            \n            postcondition:\n          if store.isEmpty() then let newStore:Store in newStore.oclIsNew() and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and Store.allInstance()->includes(newStore) and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

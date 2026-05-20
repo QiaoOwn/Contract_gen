@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), sameBook:Set(Book) = Book.allInstance()->select(b | b.CallNo = callNo)",
+        "precondition": "user.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL and sameBook.isEmpty() = true",
+        "postcondition": "let newBook:Book in newBook.oclIsNew() and let recommend:RecommendBook in recommend.oclIsNew() and Book.allInstance()->includes(newBook) and RecommendBook.allInstance()->includes(recommend) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and recommend.RecommendUser = user and user.RecommendedBook->includes(recommend) and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 53,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 66,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), sameBook:Set(Book) = Book.allInstance()->select(b | b.CallNo = callNo)\n            \n            precondition:\n          user.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL and sameBook.isEmpty() = true\n            \n            postcondition:\n          let newBook:Book in newBook.oclIsNew() and let recommend:RecommendBook in recommend.oclIsNew() and Book.allInstance()->includes(newBook) and RecommendBook.allInstance()->includes(recommend) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and recommend.RecommendUser = user and user.RecommendedBook->includes(recommend) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

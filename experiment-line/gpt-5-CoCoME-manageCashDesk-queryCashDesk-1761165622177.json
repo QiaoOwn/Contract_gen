@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cdes:Set(CashDesk) = CashDesk.allInstance()->select(c:CashDesk | c.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer)",
+        "postcondition": "if cdes.isEmpty() = false then result = cdes->any(c:CashDesk | true) else result = null endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::queryCashDesk(id:Integer): CashDesk {\n          definition:\n          cdes:Set(CashDesk) = CashDesk.allInstance()->select(c:CashDesk | c.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer)\n            \n            postcondition:\n          if cdes.isEmpty() = false then result = cdes->any(c:CashDesk | true) else result = null endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

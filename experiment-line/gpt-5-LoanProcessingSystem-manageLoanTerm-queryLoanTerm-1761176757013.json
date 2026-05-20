@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "terms:Set(LoanTerm) = self.currentLoanRequest.AttachedLoanTerms->select(o | o.ItemID = itemid), term:LoanTerm = terms->any(t | true)",
+        "precondition": "terms.isEmpty() = false and term.oclIsTypeOf(LoanTerm) and term.ItemID = itemid and self.currentLoanRequest.AttachedLoanTerms->includes(term)",
+        "postcondition": "result = term"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 137,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid:Integer): LoanTerm {\n          definition:\n          terms:Set(LoanTerm) = self.currentLoanRequest.AttachedLoanTerms->select(o | o.ItemID = itemid), term:LoanTerm = terms->any(t | true)\n            \n            precondition:\n          terms.isEmpty() = false and term.oclIsTypeOf(LoanTerm) and term.ItemID = itemid and self.currentLoanRequest.AttachedLoanTerms->includes(term)\n            \n            postcondition:\n          result = term\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

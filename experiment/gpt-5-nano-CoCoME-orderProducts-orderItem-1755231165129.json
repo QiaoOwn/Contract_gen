@@ -1,0 +1,260 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "quantity > 0",
+        "postcondition": "let item: Item = Item.allInstance()->any(o | o.Barcode = barcode) in if item.oclIsUndefined() = false then (CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item) implies (CurrentOrderProduct.ContainedEntries->select(e | e.Item = item)->first().Quantity = quantity and CurrentOrderProduct.ContainedEntries->select(e | e.Item = item)->first().SubAmount = item.Price * quantity)) else (let oe: OrderEntry in oe.oclIsNew() and oe.Item = item and oe.Quantity = quantity and oe.SubAmount = item.Price * quantity and CurrentOrderProduct.ContainedEntries->including(oe)) endif and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 182,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 568,
+          "msg": "no viable alternative at input 'CurrentOrderProduct.ContainedEntries->including'"
+        },
+        {
+          "line": 9,
+          "column": 581,
+          "msg": "extraneous input ')' expecting 'endif'"
+        },
+        {
+          "line": 9,
+          "column": 589,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item: Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          quantity > 0\n            \n            postcondition:\n          let item: Item = Item.allInstance()->any(o | o.Barcode = barcode) in if item.oclIsUndefined() = false then (CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item) implies (CurrentOrderProduct.ContainedEntries->select(e | e.Item = item)->first().Quantity = quantity and CurrentOrderProduct.ContainedEntries->select(e | e.Item = item)->first().SubAmount = item.Price * quantity)) else (let oe: OrderEntry in oe.oclIsNew() and oe.Item = item and oe.Quantity = quantity and oe.SubAmount = item.Price * quantity and CurrentOrderProduct.ContainedEntries->including(oe)) endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "quantity > 0",
+        "postcondition": "let item: Item = Item.allInstance()->any(o | o.Barcode = barcode) in (item.oclIsUndefined() = false and CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item) and CurrentOrderProduct.ContainedEntries->first().Quantity = quantity and CurrentOrderProduct.ContainedEntries->first().SubAmount = item.Price * quantity) and (let oe: OrderEntry in oe.oclIsNew() and oe.Item = item and oe.Quantity = quantity and oe.SubAmount = item.Price * quantity and CurrentOrderProduct.ContainedEntries->including(oe)) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 220,
+          "msg": "no viable alternative at input 'CurrentOrderProduct.ContainedEntries->first'"
+        },
+        {
+          "line": 9,
+          "column": 227,
+          "msg": "mismatched input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item: Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          quantity > 0\n            \n            postcondition:\n          let item: Item = Item.allInstance()->any(o | o.Barcode = barcode) in (item.oclIsUndefined() = false and CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item) and CurrentOrderProduct.ContainedEntries->first().Quantity = quantity and CurrentOrderProduct.ContainedEntries->first().SubAmount = item.Price * quantity) and (let oe: OrderEntry in oe.oclIsNew() and oe.Item = item and oe.Quantity = quantity and oe.SubAmount = item.Price * quantity and CurrentOrderProduct.ContainedEntries->including(oe)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "quantity > 0",
+        "postcondition": "let item: Item = Item.allInstance()->any(o | o.Barcode = barcode) in (item.oclIsUndefined() = false and CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item and e.Quantity = quantity and e.SubAmount = item.Price * quantity) and CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item) and result = true)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tquantity>0\n\tpostcondition:\n\t\tlet item: Item = Item.allInstance()->any(o|o.Barcode = barcode) in\n\t\t(item.oclIsUndefined() = false and\n\t\tCurrentOrderProduct.ContainedEntries->exists(e|e.Item = item and\n\t\te.Quantity = quantity and\n\t\te.SubAmount = item.Price*quantity) and\n\t\tCurrentOrderProduct.ContainedEntries->exists(e|e.Item = item) and\n\t\tresult = true)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "quantity > 0",
+        "postcondition": "let item: Item = Item.allInstance()->any(o | o.Barcode = barcode) in (item.oclIsUndefined() = false and CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item and e.Quantity = quantity and e.SubAmount = item.Price * quantity) and result = true)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tquantity>0\n\tpostcondition:\n\t\tlet item: Item = Item.allInstance()->any(o|o.Barcode = barcode) in\n\t\t(item.oclIsUndefined() = false and\n\t\tCurrentOrderProduct.ContainedEntries->exists(e|e.Item = item and\n\t\te.Quantity = quantity and\n\t\te.SubAmount = item.Price*quantity) and\n\t\tresult = true)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "quantity > 0",
+        "postcondition": "item.oclIsUndefined() = false and CurrentOrderProduct.ContainedEntries->exists(e | e.Item = item and e.Quantity = quantity and e.SubAmount = item.Price * quantity) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tquantity>0\n\tpostcondition:\n\t\titem.oclIsUndefined() = false and\n\t\tCurrentOrderProduct.ContainedEntries->exists(e|e.Item = item and\n\t\te.Quantity = quantity and\n\t\te.SubAmount = item.Price*quantity) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "quantity > 0",
+        "postcondition": "CurrentOrderProduct.ContainedEntries->exists(e | e.Item.Barcode = barcode and e.Quantity = quantity and e.SubAmount = e.Item.Price * quantity) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tquantity>0\n\tpostcondition:\n\t\tCurrentOrderProduct.ContainedEntries->exists(e|e.Item.Barcode = barcode and\n\t\te.Quantity = quantity and\n\t\te.SubAmount = e.Item.Price*quantity) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode), CurrentOrderProduct: OrderProduct = OrderProduct.allInstance()->any(o | true)",
+        "precondition": "quantity > 0",
+        "postcondition": "CurrentOrderProduct.ContainedEntries->exists(e | e.Item.Barcode = barcode and e.Quantity = quantity and e.SubAmount = e.Item.Price * quantity) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 145,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item: Item = Item.allInstance()->any(o | o.Barcode = barcode), CurrentOrderProduct: OrderProduct = OrderProduct.allInstance()->any(o | true)\n            \n            precondition:\n          quantity > 0\n            \n            postcondition:\n          CurrentOrderProduct.ContainedEntries->exists(e | e.Item.Barcode = barcode and e.Quantity = quantity and e.SubAmount = e.Item.Price * quantity) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode), ok: Boolean = true",
+        "precondition": "quantity > 0",
+        "postcondition": "CurrentOrderProduct.ContainedEntries->exists(e | e.Item.Barcode = barcode and e.Quantity = quantity and e.SubAmount = e.Item.Price * quantity) and result = ok"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode),\n\t\tok: Boolean = true\n\tprecondition:\n\t\tquantity>0\n\tpostcondition:\n\t\tCurrentOrderProduct.ContainedEntries->exists(e|e.Item.Barcode = barcode and\n\t\te.Quantity = quantity and\n\t\te.SubAmount = e.Item.Price*quantity) and\n\t\tresult = ok\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct: OrderProduct = CurrentOrderProduct, item: Item = Item.allInstance()->any(o | o.Barcode = barcode), ok: Boolean = true",
+        "precondition": "quantity > 0",
+        "postcondition": "let newEntry: OrderEntry in newEntry.oclIsNew() and newEntry.Item = item and newEntry.Quantity = quantity and newEntry.SubAmount = item.Price * quantity and currentOrderProduct.ContainedEntries->includes(newEntry) and result = ok"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\tcurrentOrderProduct: OrderProduct = CurrentOrderProduct,\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode),\n\t\tok: Boolean = true\n\tprecondition:\n\t\tquantity>0\n\tpostcondition:\n\t\tlet newEntry: OrderEntry in\n\t\tnewEntry.oclIsNew() and\n\t\tnewEntry.Item = item and\n\t\tnewEntry.Quantity = quantity and\n\t\tnewEntry.SubAmount = item.Price*quantity and\n\t\tcurrentOrderProduct.ContainedEntries->includes(newEntry) and\n\t\tresult = ok\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct: OrderProduct = CurrentOrderProduct, barcode: Integer, quantity: Integer, item: Item = Item.allInstance()->any(o | o.Barcode = barcode), ok: Boolean = true",
+        "precondition": "quantity > 0",
+        "postcondition": "let newEntry: OrderEntry in newEntry.oclIsNew() and newEntry.Item = item and newEntry.Quantity = quantity and newEntry.SubAmount = item.Price * quantity and currentOrderProduct.ContainedEntries->includes(newEntry) and result = ok"
+      },
+      "model": "gpt-5-nano"
+    }
+  }
+]

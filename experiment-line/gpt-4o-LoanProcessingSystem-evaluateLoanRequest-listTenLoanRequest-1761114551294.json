@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "validatedLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::REFERENCESVALIDATED)",
+        "precondition": "validatedLoanRequests->isEmpty() = false",
+        "postcondition": "CurrentLoanRequests = validatedLoanRequests and result = CurrentLoanRequests"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 33,
+          "msg": "no viable alternative at input 'validatedLoanRequests->isEmpty()'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {\n          definition:\n          validatedLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::REFERENCESVALIDATED)\n            \n            precondition:\n          validatedLoanRequests->isEmpty() = false\n            \n            postcondition:\n          CurrentLoanRequests = validatedLoanRequests and result = CurrentLoanRequests\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

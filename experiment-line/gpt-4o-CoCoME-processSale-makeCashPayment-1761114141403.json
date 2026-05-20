@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = self.CurrentSale.Belongedstore, newCashPayment:CashPayment, currentTime:Date = Date::now()",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+        "postcondition": "let newCashPayment:CashPayment in newCashPayment.oclIsNew() and CashPayment.allInstance()->includes(newCashPayment) and newCashPayment.AmountTendered = amount and newCashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = newCashPayment and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = currentTime and newCashPayment.Balance = amount - self.CurrentSale.Amount and currentStore.Sales->includes(self.CurrentSale) and true = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 110,
+          "msg": "mismatched input 'Date' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 450,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 472,
+          "msg": "mismatched input 'true' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentStore:Store = self.CurrentSale.Belongedstore, newCashPayment:CashPayment, currentTime:Date = Date::now()\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount\n            \n            postcondition:\n          let newCashPayment:CashPayment in newCashPayment.oclIsNew() and CashPayment.allInstance()->includes(newCashPayment) and newCashPayment.AmountTendered = amount and newCashPayment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = newCashPayment and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = currentTime and newCashPayment.Balance = amount - self.CurrentSale.Amount and currentStore.Sales->includes(self.CurrentSale) and true = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

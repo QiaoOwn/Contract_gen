@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCardExists:Boolean = if BankCard.allInstance()->includes(InputCard) then true else false endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and inputCardExists = true",
+        "postcondition": "CardIDValidated = false and PasswordValidated = false and InputCard.CardStatus = NORMAL and InputCard.Catalog = DESPOSIT and InputCard.Balance = 0.0 and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n\tdefinition:\n\t\tinputCardExists: Boolean = if BankCard.allInstance()->includes(InputCard) \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tCardIDValidated = true and\n\t\tPasswordValidated = true and\n\t\tinputCardExists = true\n\tpostcondition:\n\t\tCardIDValidated = false and\n\t\tPasswordValidated = false and\n\t\tInputCard.CardStatus = NORMAL and\n\t\tInputCard.Catalog = DESPOSIT and\n\t\tInputCard.Balance = 0.0 and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: NORMAL"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,406 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = false",
+        "postcondition": "Item.allInstance()->includes(result) and result.Barcode = barcode"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 39,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = false\n            \n            postcondition:\n          Item.allInstance()->includes(result) and result.Barcode = barcode\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode, exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists",
+        "postcondition": "result = obs->any() and Item.allInstance()->includes(result) and result.Barcode = barcode"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 76,
+          "msg": "missing ')' at ','"
+        },
+        {
+          "line": 3,
+          "column": 78,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 28,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 63,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode, exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists\n            \n            postcondition:\n          result = obs->any() and Item.allInstance()->includes(result) and result.Barcode = barcode\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists",
+        "postcondition": "obs->any() and result = obs->any() and Item.allInstance()->includes(result) and result.Barcode = barcode"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 43,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 78,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists\n            \n            postcondition:\n          obs->any() and result = obs->any() and Item.allInstance()->includes(result) and result.Barcode = barcode\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists",
+        "postcondition": "let found:Item = obs->any() in result = found and Item.allInstance()->includes(result) and result.Barcode = barcode"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 89,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists\n            \n            postcondition:\n          let found:Item = obs->any() in result = found and Item.allInstance()->includes(result) and result.Barcode = barcode\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists",
+        "postcondition": "let found:Item = obs->any() in found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists\n            \n            postcondition:\n          let found:Item = obs->any() in found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = false",
+        "postcondition": "let found:Item = obs->any() in found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists = false\n            \n            postcondition:\n          let found:Item = obs->any() in found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = false",
+        "postcondition": "let found:Item = obs->any() in found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists = false\n            \n            postcondition:\n          let found:Item = obs->any() in found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = false",
+        "postcondition": "let found:Item = obs->any() in found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists = false\n            \n            postcondition:\n          let found:Item = obs->any() in found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = false",
+        "postcondition": "let found:Item = obs->any() in found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists = false\n            \n            postcondition:\n          let found:Item = obs->any() in found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = false",
+        "postcondition": "let found:Item = obs->any() in found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists = false\n            \n            postcondition:\n          let found:Item = obs->any() in found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), found:Item = obs->any()",
+        "precondition": "obs.isEmpty() = false",
+        "postcondition": "found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 101,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), found:Item = obs->any()\n            \n            precondition:\n          obs.isEmpty() = false\n            \n            postcondition:\n          found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), found:Item = obs->any(), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = true",
+        "postcondition": "found.Barcode = barcode and result = found"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 101,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 3,
+          "column": 104,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), found:Item = obs->any(), exists:Boolean = obs.isEmpty() = false\n            \n            precondition:\n          exists = true\n            \n            postcondition:\n          found.Barcode = barcode and result = found\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), found:Item = obs->any(), exists:Boolean = obs.isEmpty() = false",
+        "precondition": "exists = true",
+        "postcondition": "result = found and found.Barcode = barcode"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "true",
+        "postcondition": "if pc.oclIsUndefined() then let newPc:ProductCatalog in newPc.oclIsNew() and newPc.Id = id and newPc.Name = name and ProductCatalog.allInstance()->includes(newPc) else true endif and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 189,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          true\n            \n            postcondition:\n          if pc.oclIsUndefined() then let newPc:ProductCatalog in newPc.oclIsNew() and newPc.Id = id and newPc.Name = name and ProductCatalog.allInstance()->includes(newPc) else true endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

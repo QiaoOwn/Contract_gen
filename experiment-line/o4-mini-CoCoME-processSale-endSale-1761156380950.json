@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem) = currentSale.containedSalesLine, sumSubamount:Real = salesLines->collect(o | o.subamount)->sum()",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.isComplete = false and currentSale.isReadytoPay = false",
+        "postcondition": "currentSale.amount = sumSubamount and currentSale.isReadytoPay = true and result = sumSubamount"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 130,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem) = currentSale.containedSalesLine, sumSubamount:Real = salesLines->collect(o | o.subamount)->sum()\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.isComplete = false and currentSale.isReadytoPay = false\n            \n            postcondition:\n          currentSale.amount = sumSubamount and currentSale.isReadytoPay = true and result = sumSubamount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentSale"
+        }
+      ]
+    }
+  }
+]

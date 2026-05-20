@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), reservedBookCopies:Set(BookCopy) = user.ReservedBook.ReservedCopy",
+        "precondition": "obs:Set(User) = User.allInstance()->select(u | u.UserID = uid)\nobs.isEmpty() = false",
+        "postcondition": "result = reservedBookCopies"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 24,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), reservedBookCopies:Set(BookCopy) = user.ReservedBook.ReservedCopy\n            \n            precondition:\n          obs:Set(User) = User.allInstance()->select(u | u.UserID = uid)\nobs.isEmpty() = false\n            \n            postcondition:\n          result = reservedBookCopies\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: obs"
+        }
+      ]
+    }
+  }
+]

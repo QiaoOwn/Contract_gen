@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Loan = Loan.allInstance()->any(o | o.LoanID = loanid), isClosed:Boolean = if obs.oclIsUndefined() then false else obs.Status = CLOSED endif",
+        "precondition": "Loan.allInstance()->includes(obs) and obs.Status = LSOPEN",
+        "postcondition": "obs.Status = CLOSED and result = isClosed"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LoanProcessingSystemSystem::closeOutLoan(loanid: Integer): Boolean {\n\tdefinition:\n\t\tobs: Loan = Loan.allInstance()->any(o|o.LoanID = loanid),\n\t\tisClosed: Boolean = if obs.oclIsUndefined() \n\t\tthen false \n\t\telse obs.Status = CLOSED \n\t\tendif \n\tprecondition:\n\t\tLoan.allInstance()->includes(obs) and\n\t\tobs.Status = LSOPEN\n\tpostcondition:\n\t\tobs.Status = CLOSED and\n\t\tresult = isClosed\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CLOSED"
+        }
+      ]
+    }
+  }
+]

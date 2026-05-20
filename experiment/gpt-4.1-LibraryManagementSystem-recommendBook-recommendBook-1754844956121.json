@@ -1,0 +1,336 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), recommendBook:RecommendBook, book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and let book:Book in (if isExist = true then RecommendBook.allInstance()->includes(recommendBook) and result = true else let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and recommendBook.RecommendUser = user and result = true endif)"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 170,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 178,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), recommendBook:RecommendBook, book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and let book:Book in (if isExist = true then RecommendBook.allInstance()->includes(recommendBook) and result = true else let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and recommendBook.RecommendUser = user and result = true endif)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and (isExist = true implies result = true) and (isExist = false implies (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and result = true))"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 186,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 230,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 545,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and (isExist = true implies result = true) and (isExist = false implies (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and result = true))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and (isExist = true and result = true or isExist = false and (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and result = true))"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid: String,callNo: String,title: String,edition: String,author: String,publisher: String,description: String,isbn: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(u|u.UserID = uid),\n\t\tbook: Book = Book.allInstance()->any(b|b.CallNo = callNo),\n\t\tisExist: Boolean = if book.oclIsUndefined() \n\t\tthen false \n\t\telse true \n\t\tendif \n\tprecondition:\n\t\tuser.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet recommendBook: RecommendBook in\n\t\trecommendBook.oclIsNew() and\n\t\tRecommendBook.allInstance()->includes(recommendBook) and\n\t\trecommendBook.RecommendUser = user and\n\t\t(isExist = true and\n\t\tresult = true or\n\t\tisExist = false and\n\t\t(let newBook: Book in\n\t\tnewBook.oclIsNew() and\n\t\tBook.allInstance()->includes(newBook) and\n\t\tnewBook.CallNo = callNo and\n\t\tnewBook.Title = title and\n\t\tnewBook.Edition = edition and\n\t\tnewBook.Author = author and\n\t\tnewBook.Publisher = publisher and\n\t\tnewBook.Description = description and\n\t\tnewBook.ISBn = isbn and\n\t\tresult = true))\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property body of ArrowFunctionExpression expected node to be of a type [\"BlockStatement\",\"Expression\"] but instead got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "isExist = true and (let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true) or isExist = false and (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true)"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 522,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 539,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 695,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isExist:Boolean = if book.oclIsUndefined() then false else true endif\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          isExist = true and (let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true) or isExist = false and (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existBook:Boolean = if book.oclIsUndefined() then false else true endif",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "existBook = true and (let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true) or existBook = false and (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true)"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 526,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 543,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 699,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existBook:Boolean = if book.oclIsUndefined() then false else true endif\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          existBook = true and (let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true) or existBook = false and (let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existBook:Boolean = if book.oclIsUndefined() then false else true endif",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "existBook = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or existBook = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 138,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 149,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existBook:Boolean = if book.oclIsUndefined() then false else true endif\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          existBook = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or existBook = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existBook:Boolean = book.oclIsUndefined() = false",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "existBook = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or existBook = false and Book.allInstance()->excludes(book) and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 177,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 188,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existBook:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          existBook = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or existBook = false and Book.allInstance()->excludes(book) and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and Book.allInstance()->excludes(book) and BookCopy.allInstance()->excludes(book) and newBook:Book = Book.allInstance()->any(b | b.CallNo = callNo) and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and recommendBook:RecommendBook = RecommendBook.allInstance()->any(r | r.RecommendUser = user) and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 231,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and Book.allInstance()->excludes(book) and BookCopy.allInstance()->excludes(book) and newBook:Book = Book.allInstance()->any(b | b.CallNo = callNo) and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and recommendBook:RecommendBook = RecommendBook.allInstance()->any(r | r.RecommendUser = user) and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 153,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and Book.allInstance()->excludes(book) and RecommendBook.allInstance()->excludes(recommendBook) and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let newRecommendBook:RecommendBook in newRecommendBook.oclIsNew() and RecommendBook.allInstance()->includes(newRecommendBook) and newRecommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 238,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 249,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and Book.allInstance()->excludes(book) and RecommendBook.allInstance()->excludes(recommendBook) and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let newRecommendBook:RecommendBook in newRecommendBook.oclIsNew() and RecommendBook.allInstance()->includes(newRecommendBook) and newRecommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let newRecommendBook:RecommendBook in newRecommendBook.oclIsNew() and RecommendBook.allInstance()->includes(newRecommendBook) and newRecommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 142,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 153,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isBookExist:Boolean = book.oclIsUndefined() = false\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          isBookExist = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or isBookExist = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let newRecommendBook:RecommendBook in newRecommendBook.oclIsNew() and RecommendBook.allInstance()->includes(newRecommendBook) and newRecommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), bookSet:Set(Book) = Book.allInstance()->select(b | b.CallNo = callNo), bookExists:Boolean = bookSet.isEmpty() = false",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "bookExists = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or bookExists = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let newRecommendBook:RecommendBook in newRecommendBook.oclIsNew() and RecommendBook.allInstance()->includes(newRecommendBook) and newRecommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 140,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 151,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), bookSet:Set(Book) = Book.allInstance()->select(b | b.CallNo = callNo), bookExists:Boolean = bookSet.isEmpty() = false\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          bookExists = true and RecommendBook.allInstance()->exists(r | r.RecommendUser = user) and result = true or bookExists = false and let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callNo and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and let newRecommendBook:RecommendBook in newRecommendBook.oclIsNew() and RecommendBook.allInstance()->includes(newRecommendBook) and newRecommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  }
+]

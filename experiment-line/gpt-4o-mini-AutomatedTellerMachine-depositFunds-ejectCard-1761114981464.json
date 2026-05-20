@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = InputCard.CardID and o.Password = Password), isDeposit:Boolean = true",
+        "precondition": "InputCard.oclIsUndefined() = false and PasswordValidated = true and CardIDValidated = true",
+        "postcondition": "inputCard.Balance = inputCard.Balance - DepositedNumber and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = InputCard.CardID and\n\t\to.Password = Password),\n\t\tisDeposit: Boolean = true\n\tprecondition:\n\t\tInputCard.oclIsUndefined() = false and\n\t\tPasswordValidated = true and\n\t\tCardIDValidated = true\n\tpostcondition:\n\t\tinputCard.Balance = inputCard.Balance-DepositedNumber and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  }
+]

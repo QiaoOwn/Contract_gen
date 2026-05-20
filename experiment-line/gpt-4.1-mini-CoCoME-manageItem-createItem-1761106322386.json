@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "item.oclIsUndefined() = true or item.oclIsUndefined() = false",
+        "postcondition": "(item.oclIsNew() and item.Barcode = barcode and item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice) or (not item.oclIsNew() and item.Barcode = barcode and item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 167,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          item.oclIsUndefined() = true or item.oclIsUndefined() = false\n            \n            postcondition:\n          (item.oclIsNew() and item.Barcode = barcode and item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice) or (not item.oclIsNew() and item.Barcode = barcode and item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

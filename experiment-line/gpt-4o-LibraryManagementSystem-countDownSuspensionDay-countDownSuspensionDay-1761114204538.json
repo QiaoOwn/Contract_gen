@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0)",
+        "precondition": "users.size() > 0",
+        "postcondition": "users->forAll(u:User | u.SuspensionDays = u.SuspensionDays - 1) and users->forAll(u:User | if u.SuspensionDays = 0 then u.BorrowStatus = BorrowStatus::SUSPEND endif)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\tusers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0)\n\tprecondition:\n\t\tusers.size()>0\n\tpostcondition:\n\t\tusers->forAll(u: User|u.SuspensionDays = u.SuspensionDays-1) and\n\t\tusers->forAll(u: User|if u.SuspensionDays = 0 \n\t\tthen u.BorrowStatus = BorrowStatus::SUSPEND \n\t\tendif )\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

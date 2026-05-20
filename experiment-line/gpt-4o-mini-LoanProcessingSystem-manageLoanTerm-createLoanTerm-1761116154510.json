@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content)->any()",
+        "precondition": "LoanTerm.allInstance()->excludes(loanTerm)",
+        "postcondition": "(loanTerm.oclIsNew() and LoanTerm.allInstance()->includes(loanTerm)) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 107,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 79,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content)->any()\n            \n            precondition:\n          LoanTerm.allInstance()->excludes(loanTerm)\n            \n            postcondition:\n          (loanTerm.oclIsNew() and LoanTerm.allInstance()->includes(loanTerm)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

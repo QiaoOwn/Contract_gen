@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.ID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100",
+        "precondition": "cardExists = true and quantityIsValid = true",
+        "postcondition": "inputCard.Balance = inputCard.Balance + quantity and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity: Real): Boolean {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.Password = PasswordValidated and\n\t\to.CardStatus = CardStatus.NORMAL and\n\t\to.BelongedUser.ID = CardIDValidated),\n\t\tobs: Set(BankCard) = BankCard.allInstance()->select(o|o.Password = PasswordValidated),\n\t\tcardExists: Boolean = obs->includes(inputCard),\n\t\tquantityIsValid: Boolean = quantity>=100\n\tprecondition:\n\t\tcardExists = true and\n\t\tquantityIsValid = true\n\tpostcondition:\n\t\tinputCard.Balance = inputCard.Balance+quantity and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CardStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100",
+        "precondition": "cardExists = true and quantityIsValid = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 12,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100\n            \n            precondition:\n          cardExists = true and quantityIsValid = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100\nisValid:Boolean = cardExists and quantityIsValid",
+        "precondition": "isValid = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity and result = isValid"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 0,
+          "msg": "mismatched input 'isValid' expecting 'precondition'"
+        },
+        {
+          "line": 13,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100\nisValid:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          isValid = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity and result = isValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100,\nvalidityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result = validityCheck and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 13,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100,\nvalidityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result = validityCheck and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100,\\nvalidityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity,\nresult = validityCheck"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 12,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated),\nobs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated),\ncardExists:Boolean = obs->includes(inputCard),\nquantityIsValid:Boolean = quantity >= 100,\\nvalidityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity,\nresult = validityCheck\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, validityCheck and result = validityCheck"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, validityCheck and result = validityCheck\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, validityCheck and result = validityCheck"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, validityCheck and result = validityCheck\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, validityCheck, result = validityCheck and validityCheck = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, validityCheck, result = validityCheck and validityCheck = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result = validityCheck and validityCheck = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result = validityCheck and validityCheck = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result = validityCheck and result = validityCheck"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result = validityCheck and result = validityCheck\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result:Boolean = validityCheck, result = validityCheck"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result:Boolean = validityCheck, result = validityCheck\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid",
+        "precondition": "validityCheck = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result:Boolean = validityCheck and result = validityCheck"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardStatus = CardStatus.NORMAL and o.BelongedUser.UserID = CardIDValidated), obs:Set(BankCard) = BankCard.allInstance()->select(o | o.Password = PasswordValidated), cardExists:Boolean = obs->includes(inputCard), quantityIsValid:Boolean = quantity >= 100, validityCheck:Boolean = cardExists and quantityIsValid\n            \n            precondition:\n          validityCheck = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew(), inputCard.Balance = inputCard.Balance + quantity, result:Boolean = validityCheck and result = validityCheck\n            \n        }"
+    }
+  }
+]

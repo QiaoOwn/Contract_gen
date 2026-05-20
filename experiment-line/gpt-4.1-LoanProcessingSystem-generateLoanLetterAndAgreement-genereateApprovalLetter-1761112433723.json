@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "ob:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+        "precondition": "obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.RequestID = id), obs.isEmpty() = false",
+        "postcondition": "let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and approvalLetter.Content = \"ApprovalLetterContent\" and ApprovalLetter.allInstance()->includes(approvalLetter) and ob.AttachedApprovalLetter = approvalLetter and self.CurrentApprovalLetter = approvalLetter and self.CurrentLoanRequest = ob and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 31,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {\n          definition:\n          ob:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)\n            \n            precondition:\n          obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.RequestID = id), obs.isEmpty() = false\n            \n            postcondition:\n          let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and approvalLetter.Content = \"ApprovalLetterContent\" and ApprovalLetter.allInstance()->includes(approvalLetter) and ob.AttachedApprovalLetter = approvalLetter and self.CurrentApprovalLetter = approvalLetter and self.CurrentLoanRequest = ob and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: obs"
+        }
+      ]
+    }
+  }
+]

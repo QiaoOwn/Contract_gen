@@ -1,0 +1,300 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and ClassName.allInstance()->includes(inputCard)",
+        "postcondition": "cleared = true and result = (PasswordValidated and ClassName.allInstance()->includes(inputCard))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 38,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 105,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and ClassName.allInstance()->includes(inputCard)\n            \n            postcondition:\n          cleared = true and result = (PasswordValidated and ClassName.allInstance()->includes(inputCard))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and ClassName.allInstance()->includes(inputCard)",
+        "postcondition": "cleared = true and result = (PasswordValidated and ClassName.allInstance()->includes(inputCard))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 38,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 105,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and ClassName.allInstance()->includes(inputCard)\n            \n            postcondition:\n          cleared = true and result = (PasswordValidated and ClassName.allInstance()->includes(inputCard))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false, isValid:Boolean = PasswordValidated and ClassName.allInstance()->includes(inputCard)",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and ClassName.allInstance()->includes(inputCard)",
+        "postcondition": "cleared = true and result = isValid and (PasswordValidated and ClassName.allInstance()->includes(inputCard))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.Password = PasswordValidated and\n\t\to.CardID = InputCard.CardID),\n\t\tisDeposit: Boolean = true,\n\t\tcleared: Boolean = false,\n\t\tisValid: Boolean = PasswordValidated and\n\t\tClassName.allInstance()->includes(inputCard)\n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false and\n\t\tPasswordValidated = true and\n\t\tClassName.allInstance()->includes(inputCard)\n\tpostcondition:\n\t\tcleared = true and\n\t\tresult = isValid and\n\t\t(PasswordValidated and\n\t\tClassName.allInstance()->includes(inputCard))\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport { CardStatus, CardCatalog, BankCard, User, getRepository };\n",
+        "originalService": "class AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist,\n   *the input card info and withdraw status\n   *and number should be cleared*/\n  ejectCard(): boolean {\n    /*Definition Start*/\n    let inputCard: BankCard = l({\n      logic: () =>\n        getRepository(BankCard).find(\n          (o: any) =>\n            l({\n              logic: () => o.Password === this.PasswordValidated,\n              description: \"o.Password=PasswordValidated\",\n            })\n              .and({\n                logic: () => o.CardID === this.InputCard.CardID,\n                description: \"o.CardID=InputCard.CardID\",\n              })\n              .build().pass,\n        ),\n      description:\n        \"BankCard.allInstance()->any(o|o.Password=PasswordValidatedando.CardID=InputCard.CardID)\",\n    }).build().pass;\n    let isDeposit: boolean = l({\n      logic: () => true,\n      description: \"true\",\n    }).build().pass;\n    let cleared: boolean = l({\n      logic: () => false,\n      description: \"false\",\n    }).build().pass;\n    let isValid: boolean = l({\n      logic: () => this.PasswordValidated,\n      description: \"PasswordValidated\",\n    })\n      .and({\n        logic: () => getRepository(ClassName).includes(inputCard),\n        description: \"ClassName.allInstance()->includes(inputCard)\",\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(inputCard) === false,\n        description: \"inputCard.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(ClassName).includes(inputCard),\n          description: \"ClassName.allInstance()->includes(inputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => (cleared = true),\n      description: \"cleared=true\",\n    })\n      .and({\n        execute: () => isValid,\n        description: \"result=isValid\",\n      })\n      .and({\n        execute: () =>\n          l({\n            execute: () => this.PasswordValidated,\n            description: \"PasswordValidated\",\n          }).and({\n            execute: () => getRepository(ClassName).push(inputCard),\n            description: \"ClassName.allInstance()->includes(inputCard)\",\n          }),\n        description:\n          \"(PasswordValidatedandClassName.allInstance()->includes(inputCard))\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { AutomatedTellerMachineSystem_AutoGenerated };\n",
+        "entity": "/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist,\n   *the input card info and withdraw status\n   *and number should be cleared*/\n  ejectCard(): boolean {\n    /*Definition Start*/\n    let inputCard: BankCard = l({\n      logic: () =>\n        getRepository(BankCard).find(\n          (o: any) =>\n            l({\n              logic: () => o.Password === this.PasswordValidated,\n              description: \"o.Password=PasswordValidated\",\n            })\n              .and({\n                logic: () => o.CardID === this.InputCard.CardID,\n                description: \"o.CardID=InputCard.CardID\",\n              })\n              .build().pass,\n        ),\n      description:\n        \"BankCard.allInstance()->any(o|o.Password=PasswordValidatedando.CardID=InputCard.CardID)\",\n    }).build().pass;\n    let isDeposit: boolean = l({\n      logic: () => true,\n      description: \"true\",\n    }).build().pass;\n    let cleared: boolean = l({\n      logic: () => false,\n      description: \"false\",\n    }).build().pass;\n    let isValid: boolean = l({\n      logic: () => this.PasswordValidated,\n      description: \"PasswordValidated\",\n    })\n      .and({\n        logic: () => getRepository(ClassName).includes(inputCard),\n        description: \"ClassName.allInstance()->includes(inputCard)\",\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(inputCard) === false,\n        description: \"inputCard.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(ClassName).includes(inputCard),\n          description: \"ClassName.allInstance()->includes(inputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => (cleared = true),\n      description: \"cleared=true\",\n    })\n      .and({\n        execute: () => isValid,\n        description: \"result=isValid\",\n      })\n      .and({\n        execute: () =>\n          l({\n            execute: () => this.PasswordValidated,\n            description: \"PasswordValidated\",\n          }).and({\n            execute: () => getRepository(ClassName).push(inputCard),\n            description: \"ClassName.allInstance()->includes(inputCard)\",\n          }),\n        description:\n          \"(PasswordValidatedandClassName.allInstance()->includes(inputCard))\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist,\n   *the input card info and withdraw status\n   *and number should be cleared*/\n  ejectCard(): boolean {\n    /*Definition Start*/\n    let inputCard: BankCard = l({\n      logic: () =>\n        getRepository(BankCard).find(\n          (o: any) =>\n            l({\n              logic: () => o.Password === this.PasswordValidated,\n              description: \"o.Password=PasswordValidated\",\n            })\n              .and({\n                logic: () => o.CardID === this.InputCard.CardID,\n                description: \"o.CardID=InputCard.CardID\",\n              })\n              .build().pass,\n        ),\n      description:\n        \"BankCard.allInstance()->any(o|o.Password=PasswordValidatedando.CardID=InputCard.CardID)\",\n    }).build().pass;\n    let isDeposit: boolean = l({\n      logic: () => true,\n      description: \"true\",\n    }).build().pass;\n    let cleared: boolean = l({\n      logic: () => false,\n      description: \"false\",\n    }).build().pass;\n    let isValid: boolean = l({\n      logic: () => this.PasswordValidated,\n      description: \"PasswordValidated\",\n    })\n      .and({\n        logic: () => getRepository(ClassName).includes(inputCard),\n        description: \"ClassName.allInstance()->includes(inputCard)\",\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(inputCard) === false,\n        description: \"inputCard.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(ClassName).includes(inputCard),\n          description: \"ClassName.allInstance()->includes(inputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => (cleared = true),\n      description: \"cleared=true\",\n    })\n      .and({\n        execute: () => isValid,\n        description: \"result=isValid\",\n      })\n      .and({\n        execute: () =>\n          l({\n            execute: () => this.PasswordValidated,\n            description: \"PasswordValidated\",\n          }).and({\n            execute: () => getRepository(ClassName).push(inputCard),\n            description: \"ClassName.allInstance()->includes(inputCard)\",\n          }),\n        description:\n          \"(PasswordValidatedandClassName.allInstance()->includes(inputCard))\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 92,
+          "column": 36,
+          "msg": "Cannot find name 'ClassName'.",
+          "code": 2304
+        },
+        {
+          "line": 109,
+          "column": 38,
+          "msg": "Cannot find name 'ClassName'.",
+          "code": 2304
+        },
+        {
+          "line": 119,
+          "column": 5,
+          "msg": "Type 'number' is not assignable to type 'boolean'.",
+          "code": 2322
+        },
+        {
+          "line": 133,
+          "column": 42,
+          "msg": "Cannot find name 'ClassName'.",
+          "code": 2304
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false, isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard)",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and (PasswordValidated and BankCard.allInstance()->includes(inputCard))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isDeposit:Boolean = true, cleared:Boolean = false, isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard)\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and (PasswordValidated and BankCard.allInstance()->includes(inputCard))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and (PasswordValidated and BankCard.allInstance()->includes(inputCard))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and (PasswordValidated and BankCard.allInstance()->includes(inputCard))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and (PasswordValidated and BankCard.allInstance()->includes(inputCard))"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and (PasswordValidated and BankCard.allInstance()->includes(inputCard))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and PasswordValidated and BankCard.allInstance()->includes(inputCard)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and PasswordValidated and BankCard.allInstance()->includes(inputCard)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and inputCard = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true and result = isValid and inputCard = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true, result = isValid and inputCard = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true, result = isValid and inputCard = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true, inputCard = ob, result = isValid and result = cleared"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false\n            \n            precondition:\n          inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)\n            \n            postcondition:\n          let ob:BankCard in ob.oclIsNew(), cleared = true, inputCard = ob, result = isValid and result = cleared\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isValid:Boolean = PasswordValidated and BankCard.allInstance()->includes(inputCard), cleared:Boolean = false",
+        "precondition": "inputCard.oclIsUndefined() = false and PasswordValidated = true and BankCard.allInstance()->includes(inputCard)",
+        "postcondition": "let ob:BankCard in ob.oclIsNew(), cleared = true, inputCard = ob, result = isValid and result = cleared"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

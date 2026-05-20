@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "lib:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid)",
+        "precondition": "Librarian.allInstance()->excludes(lib) and self.librarianid.oclIsTypeOf(String) and self.name.oclIsTypeOf(String) and self.password.oclIsTypeOf(String)",
+        "postcondition": "let newLib:Librarian in newLib.oclIsNew() and newLib.LibrarianID = librarianid and newLib.Name = name and newLib.Password = password and Librarian.allInstance()->includes(newLib) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLibrarianCRUDService::createLibrarian(librarianid: String,name: String,password: String): Boolean {\n\tdefinition:\n\t\tlib: Librarian = Librarian.allInstance()->any(o|o.LibrarianID = librarianid)\n\tprecondition:\n\t\tLibrarian.allInstance()->excludes(lib) and\n\t\tself.librarianid.oclIsTypeOf(String) and\n\t\tself.name.oclIsTypeOf(String) and\n\t\tself.password.oclIsTypeOf(String)\n\tpostcondition:\n\t\tlet newLib: Librarian in\n\t\tnewLib.oclIsNew() and\n\t\tnewLib.LibrarianID = librarianid and\n\t\tnewLib.Name = name and\n\t\tnewLib.Password = password and\n\t\tLibrarian.allInstance()->includes(newLib) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

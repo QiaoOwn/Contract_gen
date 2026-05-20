@@ -1,0 +1,301 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "let exists: Boolean = Cashier.allInstance()->select(o | o.Id = id)->size() > 0 in (result = exists)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 76,
+          "msg": "mismatched input '->' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          let exists: Boolean = Cashier.allInstance()->select(o | o.Id = id)->size() > 0 in (result = exists)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "let existsFlag: Boolean = cashierSet->size() > 0 in (result = existsFlag)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 48,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          let existsFlag: Boolean = cashierSet->size() > 0 in (result = existsFlag)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->size() > 0",
+        "precondition": "id >= 0",
+        "postcondition": "result = existsFlag"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 165,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->size() > 0\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          result = existsFlag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->isEmpty() = false",
+        "precondition": "id >= 0",
+        "postcondition": "existsFlag = cashierSet->isEmpty() = false and result = existsFlag"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 165,
+          "msg": "no viable alternative at input 'cashierSet->isEmpty()'"
+        },
+        {
+          "line": 9,
+          "column": 35,
+          "msg": "no viable alternative at input 'cashierSet->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->isEmpty() = false\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          existsFlag = cashierSet->isEmpty() = false and result = existsFlag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->size() > 0",
+        "precondition": "id >= 0",
+        "postcondition": "existsFlag = cashierSet->size() > 0 and result = existsFlag"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 165,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        },
+        {
+          "line": 9,
+          "column": 35,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->size() > 0\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          existsFlag = cashierSet->size() > 0 and result = existsFlag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "let existsFlag:Boolean = cashierSet->size() > 0 in existsFlag and result = existsFlag"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 47,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          let existsFlag:Boolean = cashierSet->size() > 0 in existsFlag and result = existsFlag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->size() > 0",
+        "precondition": "id >= 0",
+        "postcondition": "result = existsFlag"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 165,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashier:Cashier = cashierSet->any(o | o.Id = id), existsFlag:Boolean = cashierSet->size() > 0\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          result = existsFlag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "result = cashierSet->size() > 0"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 31,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          result = cashierSet->size() > 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), exists:Boolean = cashierSet->size() > 0",
+        "precondition": "id >= 0",
+        "postcondition": "result = exists"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 82,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 111,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        },
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), exists:Boolean = cashierSet->size() > 0\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          result = exists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashierExists:Boolean = cashierSet->size() > 0",
+        "precondition": "id >= 0",
+        "postcondition": "result = cashierExists"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 118,
+          "msg": "no viable alternative at input 'cashierSet->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), cashierExists:Boolean = cashierSet->size() > 0\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          result = cashierExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "let existingCashiers:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id) in result = existingCashiers->size() > 0"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 121,
+          "msg": "no viable alternative at input 'existingCashiers->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          let existingCashiers:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id) in result = existingCashiers->size() > 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)",
+        "precondition": "id >= 0",
+        "postcondition": "let existingCashiers:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id) in result = existingCashiers.size() > 0"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 127,
+          "msg": "mismatched input '>' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)\n            \n            precondition:\n          id >= 0\n            \n            postcondition:\n          let existingCashiers:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id) in result = existingCashiers.size() > 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashierSet:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), existsBoolean:Boolean = cashierSet.isEmpty() = false",
+        "precondition": "id >= 0",
+        "postcondition": "result = existsBoolean"
+      },
+      "model": "gpt-5-nano"
+    }
+  }
+]

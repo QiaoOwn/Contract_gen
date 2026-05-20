@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = uid), bc:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "u.oclIsUndefined() = false and bc.oclIsUndefined() = false and User.allInstance()->includes(u) and BookCopy.allInstance()->includes(bc) and u.BorrowStatus = BorrowStatus::NORMAL and bc.Status = CopyStatus::AVAILABLE and bc.IsReserved = false",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and Loan.allInstance()->includes(newLoan) and newLoan.LoanedUser = u and newLoan.LoanedCopy = bc and u.LoanedBook->includes(newLoan) and bc.LoanedRecord->includes(newLoan) and newLoan.LoanDate = ThirdPartyServices.getCurrentDate() and newLoan.DueDate = ThirdPartyServices.addDays(newLoan.LoanDate, 14) and newLoan.RenewedTimes = 0 and newLoan.IsReturned = false and newLoan.OverDueFee = 0.0 and newLoan.OverDue3Days = false and newLoan.OverDue10Days = false and newLoan.OverDue17Days = false and newLoan.OverDue31Days = false and newLoan.RenewDate = null and newLoan.ReturnDate = null and bc.Status = CopyStatus::LOANED and bc.IsReserved = false and u.LoanedNumber = u.LoanedNumber + 1 and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 277,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = uid), bc:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          u.oclIsUndefined() = false and bc.oclIsUndefined() = false and User.allInstance()->includes(u) and BookCopy.allInstance()->includes(bc) and u.BorrowStatus = BorrowStatus::NORMAL and bc.Status = CopyStatus::AVAILABLE and bc.IsReserved = false\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew() and Loan.allInstance()->includes(newLoan) and newLoan.LoanedUser = u and newLoan.LoanedCopy = bc and u.LoanedBook->includes(newLoan) and bc.LoanedRecord->includes(newLoan) and newLoan.LoanDate = ThirdPartyServices.getCurrentDate() and newLoan.DueDate = ThirdPartyServices.addDays(newLoan.LoanDate, 14) and newLoan.RenewedTimes = 0 and newLoan.IsReturned = false and newLoan.OverDueFee = 0.0 and newLoan.OverDue3Days = false and newLoan.OverDue10Days = false and newLoan.OverDue17Days = false and newLoan.OverDue31Days = false and newLoan.RenewDate = null and newLoan.ReturnDate = null and bc.Status = CopyStatus::LOANED and bc.IsReserved = false and u.LoanedNumber = u.LoanedNumber + 1 and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

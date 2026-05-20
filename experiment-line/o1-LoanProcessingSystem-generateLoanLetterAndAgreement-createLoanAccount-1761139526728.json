@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID=loanaccountid)",
+        "precondition": "",
+        "postcondition": "if existingAccount.oclIsUndefined() then let newAccount:LoanAccount in newAccount.oclIsNew() and newAccount.LoanAccountID=loanaccountid and newAccount.Balance=balance and newAccount.Status=status and LoanAccount.allInstance()->includes(newAccount) else true endif and result=true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 274,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          existingAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID=loanaccountid)\n            \n            \n            postcondition:\n          if existingAccount.oclIsUndefined() then let newAccount:LoanAccount in newAccount.oclIsNew() and newAccount.LoanAccountID=loanaccountid and newAccount.Balance=balance and newAccount.Status=status and LoanAccount.allInstance()->includes(newAccount) else true endif and result=true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

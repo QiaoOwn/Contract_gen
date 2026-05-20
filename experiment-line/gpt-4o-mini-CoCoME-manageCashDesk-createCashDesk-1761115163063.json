@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), newCashDesk:CashDesk = if cashDesk.oclIsUndefined() then CashDesk() else null endif",
+        "precondition": "cashDesk.oclIsUndefined() = bool",
+        "postcondition": "if cashDesk.oclIsUndefined() then CashDesk.allInstance()->includes(newCashDesk) and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id: Integer,name: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id),\n\t\tnewCashDesk: CashDesk = if cashDesk.oclIsUndefined() \n\t\tthen CashDesk() \n\t\telse null \n\t\tendif \n\tprecondition:\n\t\tcashDesk.oclIsUndefined() = bool\n\tpostcondition:\n\t\tif cashDesk.oclIsUndefined() \n\t\tthen CashDesk.allInstance()->includes(newCashDesk) and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

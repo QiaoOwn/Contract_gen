@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "librarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid), existingLibrarians:Set(Librarian) = Librarian.allInstance(), isLibrarianExists:Boolean = existingLibrarians->includes(librarian)",
+        "precondition": "librarian.oclIsUndefined() = bool, isLibrarianExists = true",
+        "postcondition": "let newLibrarian:Librarian in newLibrarian.oclIsNew(), Librarian.allInstance()->includes(newLibrarian), newLibrarian.LibrarianID = librarianid, newLibrarian.Name = name, newLibrarian.Password = password, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageLibrarianCRUDService::createLibrarian(librarianid:String,name:String,password:String): Boolean {\n          definition:\n          librarian:Librarian = Librarian.allInstance()->any(o | o.LibrarianID = librarianid), existingLibrarians:Set(Librarian) = Librarian.allInstance(), isLibrarianExists:Boolean = existingLibrarians->includes(librarian)\n            \n            precondition:\n          librarian.oclIsUndefined() = bool, isLibrarianExists = true\n            \n            postcondition:\n          let newLibrarian:Librarian in newLibrarian.oclIsNew(), Librarian.allInstance()->includes(newLibrarian), newLibrarian.LibrarianID = librarianid, newLibrarian.Name = name, newLibrarian.Password = password, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

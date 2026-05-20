@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content)",
+        "precondition": "true",
+        "postcondition": "obs.isEmpty() = false and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid: Integer,content: String): Boolean {\n\tdefinition:\n\t\tobs: Set(LoanTerm) = LoanTerm.allInstance()->select(o|o.ItemID = itemid and\n\t\to.Content = content)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tobs.isEmpty() = false and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

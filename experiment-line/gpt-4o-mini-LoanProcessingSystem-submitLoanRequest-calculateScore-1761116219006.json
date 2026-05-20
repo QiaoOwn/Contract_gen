@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentRequestExists:Boolean = CurrentLoanRequest.oclIsUndefined() = false, requestedCAHistory:CheckingAccount = CurrentLoanRequest.RequestedCAHistory, requestedCreditHistory:CreditHistory = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "currentRequestExists and requestedCAHistory.oclIsUndefined() = false and requestedCreditHistory.oclIsUndefined() = false",
+        "postcondition": "CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = CurrentLoanRequest.CreditScore and CurrentLoanRequest.RequestedCAHistory = requestedCAHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentRequestExists: Boolean = CurrentLoanRequest.oclIsUndefined() = false,\n\t\trequestedCAHistory: CheckingAccount = CurrentLoanRequest.RequestedCAHistory,\n\t\trequestedCreditHistory: CreditHistory = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tcurrentRequestExists and\n\t\trequestedCAHistory.oclIsUndefined() = false and\n\t\trequestedCreditHistory.oclIsUndefined() = false\n\tpostcondition:\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\tresult = CurrentLoanRequest.CreditScore and\n\t\tCurrentLoanRequest.RequestedCAHistory = requestedCAHistory\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

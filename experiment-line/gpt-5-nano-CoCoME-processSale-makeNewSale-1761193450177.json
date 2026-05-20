@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentCashDesk: CashDesk = CashDesk.allInstance()->any(cd | cd.IsOpened = true)",
+        "precondition": "currentCashDesk.oclIsUndefined() = false and currentCashDesk.IsOpened = true and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)",
+        "postcondition": "let newSale: Sale in newSale.oclIsNew() and newSale.BelongedCashDesk = currentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and Sale.allInstance()->includes(newSale) and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n\tdefinition:\n\t\tcurrentCashDesk: CashDesk = CashDesk.allInstance()->any(cd|cd.IsOpened = true)\n\tprecondition:\n\t\tcurrentCashDesk.oclIsUndefined() = false and\n\t\tcurrentCashDesk.IsOpened = true and\n\t\t(CurrentSale.oclIsUndefined() = true or\n\t\tCurrentSale.IsComplete = true)\n\tpostcondition:\n\t\tlet newSale: Sale in\n\t\tnewSale.oclIsNew() and\n\t\tnewSale.BelongedCashDesk = currentCashDesk and\n\t\tnewSale.IsComplete = false and\n\t\tnewSale.IsReadytoPay = false and\n\t\tSale.allInstance()->includes(newSale) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "Item.allInstance()->includes(item) or Item.allInstance()->excludes(item)",
+        "postcondition": "let result:Boolean in if item.oclIsUndefined() then result = false else item.Price = newPrice and result = true endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          Item.allInstance()->includes(item) or Item.allInstance()->excludes(item)\n            \n            postcondition:\n          let result:Boolean in if item.oclIsUndefined() then result = false else item.Price = newPrice and result = true endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

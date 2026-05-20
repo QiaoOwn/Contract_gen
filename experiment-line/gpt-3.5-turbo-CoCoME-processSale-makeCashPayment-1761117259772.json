@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = Sale.allInstance()->any(o | o.IsComplete = false and o.IsReadytoPay = true), cashPayment:CashPayment = CashPayment.allInstance()->any() = CashPayment.create(), store:Store = CurrentSale.BelongedStore, bool:Boolean = if CurrentSale.Amount <= amount then true else false endif",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+        "postcondition": "let payment:CashPayment in payment.oclIsNew() and payment.AmountTendered = amount and payment.BelongedSale = CurrentSale and CurrentSale.AssociatedPayment = payment and store.Sales->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = Date::now() and payment.Balance = amount - CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 163,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 3,
+          "column": 185,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 271,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = Sale.allInstance()->any(o | o.IsComplete = false and o.IsReadytoPay = true), cashPayment:CashPayment = CashPayment.allInstance()->any() = CashPayment.create(), store:Store = CurrentSale.BelongedStore, bool:Boolean = if CurrentSale.Amount <= amount then true else false endif\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          let payment:CashPayment in payment.oclIsNew() and payment.AmountTendered = amount and payment.BelongedSale = CurrentSale and CurrentSale.AssociatedPayment = payment and store.Sales->includes(CurrentSale) and CurrentSale.IsComplete = true and CurrentSale.Time = Date::now() and payment.Balance = amount - CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

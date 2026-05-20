@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newStore:Store = Store.allInstance()->any(s | s.Id = storeId) = Store.allInstance()->includes(newStore)",
+        "precondition": "storeId:Integer = id\nstoreObs:Set(Store) = Store.allInstance()->select(s | s.Id = storeId)\nstoreObs.isEmpty() = bool",
+        "postcondition": "Store.allInstance()->includes(newStore) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 18,
+          "msg": "mismatched input 'Integer' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {\n          definition:\n          newStore:Store = Store.allInstance()->any(s | s.Id = storeId) = Store.allInstance()->includes(newStore)\n            \n            precondition:\n          storeId:Integer = id\nstoreObs:Set(Store) = Store.allInstance()->select(s | s.Id = storeId)\nstoreObs.isEmpty() = bool\n            \n            postcondition:\n          Store.allInstance()->includes(newStore) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: storeId"
+        }
+      ]
+    }
+  }
+]

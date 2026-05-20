@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "myLoanRequests: Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::SUBMITTED)",
+        "precondition": "myLoanRequests.isEmpty() = false",
+        "postcondition": "CurrentLoanRequests = myLoanRequests and result = CurrentLoanRequests"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EnterValidatedCreditReferencesModule::listSubmitedLoanRequest(): Set(LoanRequest) {\n\tdefinition:\n\t\tmyLoanRequests: Set(LoanRequest) = LoanRequest.allInstance()->select(o|o.Status = LoanRequestStatus::SUBMITTED)\n\tprecondition:\n\t\tmyLoanRequests.isEmpty() = false\n\tpostcondition:\n\t\tCurrentLoanRequests = myLoanRequests and\n\t\tresult = CurrentLoanRequests\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequests"
+        }
+      ]
+    }
+  }
+]

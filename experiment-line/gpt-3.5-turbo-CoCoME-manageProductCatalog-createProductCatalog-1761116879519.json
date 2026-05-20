@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(c | c.Id = id)\nif catalog.oclIsUndefined() then\n    catalog:ProductCatalog = ProductCatalog{\n        Id = id,\n        Name = name\n    }\nendif",
+        "precondition": "ProductCatalog.allInstance()->includes(catalog) = bool",
+        "postcondition": "ProductCatalog.allInstance()->includes(catalog) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'if' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(c | c.Id = id)\nif catalog.oclIsUndefined() then\n    catalog:ProductCatalog = ProductCatalog{\n        Id = id,\n        Name = name\n    }\nendif\n            \n            precondition:\n          ProductCatalog.allInstance()->includes(catalog) = bool\n            \n            postcondition:\n          ProductCatalog.allInstance()->includes(catalog) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

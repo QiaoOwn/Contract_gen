@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:Set(BankCard) = BankCard.allInstance()->any(o | o = InputCard), valid:Boolean = (CardIDValidated = true) and (PasswordValidated = true) and (InputCard.oclIsUndefined() = false)",
+        "precondition": "InputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true",
+        "postcondition": "InputCard = null and DepositedNumber = 0.0 and PasswordValidated = false and CardIDValidated = false and IsDeposit = false and result = valid"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 125,
+          "msg": "mismatched input 'and' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          inputCard:Set(BankCard) = BankCard.allInstance()->any(o | o = InputCard), valid:Boolean = (CardIDValidated = true) and (PasswordValidated = true) and (InputCard.oclIsUndefined() = false)\n            \n            precondition:\n          InputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          InputCard = null and DepositedNumber = 0.0 and PasswordValidated = false and CardIDValidated = false and IsDeposit = false and result = valid\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

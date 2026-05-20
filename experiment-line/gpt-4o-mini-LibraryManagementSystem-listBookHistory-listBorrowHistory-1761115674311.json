@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loans:Set(Loan) = Loan.allInstance()->select(o | o.loanedUser.UserID = uid)",
+        "precondition": "loans.isEmpty()",
+        "postcondition": "Loan.allInstance()->includes(loan) and result = loans"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ListBookHistory::listBorrowHistory(uid: String): Set(Loan) {\n\tdefinition:\n\t\tloans: Set(Loan) = Loan.allInstance()->select(o|o.loanedUser.UserID = uid)\n\tprecondition:\n\t\tloans.isEmpty()\n\tpostcondition:\n\t\tLoan.allInstance()->includes(loan) and\n\t\tresult = loans\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: loan"
+        }
+      ]
+    }
+  }
+]

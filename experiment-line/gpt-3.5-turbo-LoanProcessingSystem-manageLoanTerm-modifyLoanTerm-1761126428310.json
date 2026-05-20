@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemId), loanTerm:LoanTerm = term.oclIsUndefined() = false, termUpdated:Boolean = true, term.Content = content",
+        "precondition": "term.oclIsUndefined() = false",
+        "postcondition": "LoanTerm.allInstance()->includes(term) and term.Content = content and result = termUpdated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 161,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::modifyLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemId), loanTerm:LoanTerm = term.oclIsUndefined() = false, termUpdated:Boolean = true, term.Content = content\n            \n            precondition:\n          term.oclIsUndefined() = false\n            \n            postcondition:\n          LoanTerm.allInstance()->includes(term) and term.Content = content and result = termUpdated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: itemId"
+        }
+      ]
+    }
+  }
+]

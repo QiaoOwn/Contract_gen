@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest, requestedCAHistory:CheckingAccount = currentLoanRequest.RequestedCAHistory, requestedCreditHistory:CreditHistory = currentLoanRequest.RequestedCreditHistory, creditScoreValue:Integer = 100",
+        "precondition": "not CurrentLoanRequest.oclIsUndefined() and not currentLoanRequest.RequestedCAHistory.oclIsUndefined() and not currentLoanRequest.RequestedCreditHistory.oclIsUndefined() and currentLoanRequest.CreditScore = creditScoreValue and currentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "currentLoanRequest.CreditScore = creditScoreValue and result = currentLoanRequest.CreditScore and currentLoanRequest.RequestedCAHistory = requestedCAHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'CurrentLoanRequest' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n          definition:\n          currentLoanRequest:LoanRequest = CurrentLoanRequest, requestedCAHistory:CheckingAccount = currentLoanRequest.RequestedCAHistory, requestedCreditHistory:CreditHistory = currentLoanRequest.RequestedCreditHistory, creditScoreValue:Integer = 100\n            \n            precondition:\n          not CurrentLoanRequest.oclIsUndefined() and not currentLoanRequest.RequestedCAHistory.oclIsUndefined() and not currentLoanRequest.RequestedCreditHistory.oclIsUndefined() and currentLoanRequest.CreditScore = creditScoreValue and currentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n            \n            postcondition:\n          currentLoanRequest.CreditScore = creditScoreValue and result = currentLoanRequest.CreditScore and currentLoanRequest.RequestedCAHistory = requestedCAHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

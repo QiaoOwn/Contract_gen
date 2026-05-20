@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentCA:CheckingAccount = CurrentLoanRequest.RequestedCAHistory, loanRequestExist:Boolean = CurrentLoanRequest.oclIsUndefined()->not(), requestedCAHistoryExist:Boolean = currentCA.oclIsUndefined()->not()",
+        "precondition": "loanRequestExist and requestedCAHistoryExist",
+        "postcondition": "result = currentCA"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 139,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {\n          definition:\n          currentCA:CheckingAccount = CurrentLoanRequest.RequestedCAHistory, loanRequestExist:Boolean = CurrentLoanRequest.oclIsUndefined()->not(), requestedCAHistoryExist:Boolean = currentCA.oclIsUndefined()->not()\n            \n            precondition:\n          loanRequestExist and requestedCAHistoryExist\n            \n            postcondition:\n          result = currentCA\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

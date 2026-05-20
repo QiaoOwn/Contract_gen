@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)",
+        "precondition": "exists:Boolean = card.oclIsUndefined() = false",
+        "postcondition": "let exists:Boolean in card.oclIsUndefined() = false implies card.CardStatus = cardstatus and card.Catalog = catalog and card.Password = password and card.Balance = balance and result = true else result = false"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 62,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::modifyBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)\n            \n            precondition:\n          exists:Boolean = card.oclIsUndefined() = false\n            \n            postcondition:\n          let exists:Boolean in card.oclIsUndefined() = false implies card.CardStatus = cardstatus and card.Catalog = catalog and card.Password = password and card.Balance = balance and result = true else result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

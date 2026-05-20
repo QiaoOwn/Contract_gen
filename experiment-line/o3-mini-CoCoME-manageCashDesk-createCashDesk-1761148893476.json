@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "id > 0 and CashDesk.allInstance()->isUnique(o:CashDesk|o.Id)",
+        "postcondition": "cashDesk.oclIsUndefined() = false and CashDesk.allInstance()->includes(cashDesk) and result = true or cashDesk.oclIsUndefined() = true and let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 149,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 164,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          id > 0 and CashDesk.allInstance()->isUnique(o:CashDesk|o.Id)\n            \n            postcondition:\n          cashDesk.oclIsUndefined() = false and CashDesk.allInstance()->includes(cashDesk) and result = true or cashDesk.oclIsUndefined() = true and let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

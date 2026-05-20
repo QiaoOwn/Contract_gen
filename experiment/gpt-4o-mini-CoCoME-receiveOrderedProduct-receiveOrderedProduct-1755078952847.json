@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item)",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif",
+        "precondition": "isValid = true and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif\n            \n            precondition:\n          isValid = true and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = (orderProduct.OrderStatus = OrderStatus::RECEIVED)",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = (orderProduct.OrderStatus = OrderStatus::RECEIVED)\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = if orderProduct.oclIsUndefined() then false else true endif, isReceived:Boolean = if orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "precondition": "isValid = true and isReceived = true",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            precondition:\n          isValid = true and isReceived = true\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValid and result = isReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true",
+        "precondition": "isValidReceived",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived and result = isValidReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true\n            \n            precondition:\n          isValidReceived\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived and result = isValidReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true",
+        "precondition": "isValidReceived",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true\n            \n            precondition:\n          isValidReceived\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true",
+        "precondition": "isValidReceived",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true\n            \n            precondition:\n          isValidReceived\n            \n            postcondition:\n          items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, items:Set(Item) = entries->collect(e | e.Item), isValid:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isValidReceived:Boolean = isValid = true and isReceived = true",
+        "precondition": "isValidReceived",
+        "postcondition": "items->forAll(o:Item | o.StockNumber = o.StockNumber + entries->collect(e | e.Quantity)->sum()) and result = isValidReceived"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

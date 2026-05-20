@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequestAvailable:Boolean = if self.CurrentLoanRequest.oclIsUndefined() then false else true endif, \nrequestedCAHistoryAvailable:Boolean = if self.CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() then false else true endif, \nrequestedCreditHistoryAvailable:Boolean = if self.CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() then false else true endif",
+        "precondition": "currentLoanRequestAvailable and requestedCAHistoryAvailable and requestedCreditHistoryAvailable",
+        "postcondition": "self.CurrentLoanRequest.CreditScore = 100 and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = self.CurrentLoanRequest.CreditScore and self.CurrentLoanRequest.RequestedCAHistory = self.CurrentLoanRequest.RequestedCAHistory"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 83,
+          "msg": "mismatched input '.' expecting 'then'"
+        },
+        {
+          "line": 5,
+          "column": 91,
+          "msg": "mismatched input '.' expecting 'then'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n          definition:\n          currentLoanRequestAvailable:Boolean = if self.CurrentLoanRequest.oclIsUndefined() then false else true endif, \nrequestedCAHistoryAvailable:Boolean = if self.CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() then false else true endif, \nrequestedCreditHistoryAvailable:Boolean = if self.CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() then false else true endif\n            \n            precondition:\n          currentLoanRequestAvailable and requestedCAHistoryAvailable and requestedCreditHistoryAvailable\n            \n            postcondition:\n          self.CurrentLoanRequest.CreditScore = 100 and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = self.CurrentLoanRequest.CreditScore and self.CurrentLoanRequest.RequestedCAHistory = self.CurrentLoanRequest.RequestedCAHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "lt:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)",
+        "precondition": "true",
+        "postcondition": "lt.oclIsUndefined() = true and let newLt:LoanTerm in newLt.oclIsNew() and LoanTerm.allInstance()->includes(newLt) and newLt.ItemID = itemid and newLt.Content = content and result = true or lt.oclIsUndefined() = false and lt.ItemID = itemid and lt.Content = content and result = true"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 41,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 50,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          lt:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)\n            \n            precondition:\n          true\n            \n            postcondition:\n          lt.oclIsUndefined() = true and let newLt:LoanTerm in newLt.oclIsNew() and LoanTerm.allInstance()->includes(newLt) and newLt.ItemID = itemid and newLt.Content = content and result = true or lt.oclIsUndefined() = false and lt.ItemID = itemid and lt.Content = content and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

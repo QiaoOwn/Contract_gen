@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:Set(User) = User.allInstance()->select(u | u.UserID = uid), reservingUser:User = user->any(true), copy:Set(BookCopy) = BookCopy.allInstance()->select(bc | bc.Barcode = barcode), reservedCopy:BookCopy = copy->any(true), reservingRecord:Set(Reserve) = reservingUser.ReservedBook->select(r | r.ReservedCopy = reservedCopy and r.IsReserveClosed = false)",
+        "precondition": "reservingUser.oclIsUndefined() = false and reservedCopy.oclIsUndefined() = false and reservingRecord->isEmpty() = true",
+        "postcondition": "if reservingRecord->isEmpty() then result = true else result = false endif"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 106,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 3,
+          "column": 227,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 112,
+          "msg": "no viable alternative at input 'reservingRecord->isEmpty()'"
+        },
+        {
+          "line": 9,
+          "column": 30,
+          "msg": "no viable alternative at input 'reservingRecord->isEmpty()'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          user:Set(User) = User.allInstance()->select(u | u.UserID = uid), reservingUser:User = user->any(true), copy:Set(BookCopy) = BookCopy.allInstance()->select(bc | bc.Barcode = barcode), reservedCopy:BookCopy = copy->any(true), reservingRecord:Set(Reserve) = reservingUser.ReservedBook->select(r | r.ReservedCopy = reservedCopy and r.IsReserveClosed = false)\n            \n            precondition:\n          reservingUser.oclIsUndefined() = false and reservedCopy.oclIsUndefined() = false and reservingRecord->isEmpty() = true\n            \n            postcondition:\n          if reservingRecord->isEmpty() then result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

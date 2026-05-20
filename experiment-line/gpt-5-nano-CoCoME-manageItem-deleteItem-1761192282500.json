@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "true",
+        "postcondition": "let isFound: Boolean = obs.oclIsUndefined() = false in result = isFound"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageItemCRUDService::deleteItem(barcode: Integer): Boolean {\n\tdefinition:\n\t\tobs: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tlet isFound: Boolean = obs.oclIsUndefined() = false in\n\t\tresult = isFound\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

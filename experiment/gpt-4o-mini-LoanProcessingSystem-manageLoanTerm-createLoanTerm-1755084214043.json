@@ -1,0 +1,366 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content)",
+        "precondition": "obs.size() = 0 and LoanTerm.allInstance()->excludes(obs)",
+        "postcondition": "if obs.isEmpty() then let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and ob.ItemID = itemId and ob.Content = content and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid: Integer,content: String): Boolean {\n\tdefinition:\n\t\tobs: Set(LoanTerm) = LoanTerm.allInstance()->select(o|o.ItemID = itemId and\n\t\to.Content = content)\n\tprecondition:\n\t\tobs.size() = 0 and\n\t\tLoanTerm.allInstance()->excludes(obs)\n\tpostcondition:\n\t\tif obs.isEmpty() \n\t\tthen let ob: LoanTerm in\n\t\tob.oclIsNew() and\n\t\tLoanTerm.allInstance()->includes(ob) and\n\t\tob.ItemID = itemId and\n\t\tob.Content = content and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: itemId"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = false",
+        "precondition": "obs.size() = 0 and LoanTerm.allInstance()->excludes(obs)",
+        "postcondition": "if obs.isEmpty() then let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and ob.ItemID = itemId and ob.Content = content and result = true endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = false\n            \n            precondition:\n          obs.size() = 0 and LoanTerm.allInstance()->excludes(obs)\n            \n            postcondition:\n          if obs.isEmpty() then let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and ob.ItemID = itemId and ob.Content = content and result = true endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = false",
+        "precondition": "obs.size() = 0 and LoanTerm.allInstance()->excludes(obs)",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and obs.isEmpty() implies (ob.ItemID = itemId and ob.Content = content and result = true)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 102,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = false\n            \n            precondition:\n          obs.size() = 0 and LoanTerm.allInstance()->excludes(obs)\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and obs.isEmpty() implies (ob.ItemID = itemId and ob.Content = content and result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = true, exists:Boolean = obs.size() > 0",
+        "precondition": "exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and not exists",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and result = true and (ob.ItemID = itemId and ob.Content = content)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = true, exists:Boolean = obs.size() > 0\n            \n            precondition:\n          exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and not exists\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and LoanTerm.allInstance()->includes(ob) and result = true and (ob.ItemID = itemId and ob.Content = content)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = true, exists:Boolean = obs.size() > 0",
+        "precondition": "exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and exists = false",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and (ob.ItemID = itemId and ob.Content = content) and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = true, exists:Boolean = obs.size() > 0\n            \n            precondition:\n          exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and exists = false\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and (ob.ItemID = itemId and ob.Content = content) and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = true, exists:Boolean = obs.size() > 0",
+        "precondition": "exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and exists = false",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemId and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), result:Boolean = true, exists:Boolean = obs.size() > 0\n            \n            precondition:\n          exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and exists = false\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemId and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false",
+        "precondition": "exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and exists = false",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemId and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false\n            \n            precondition:\n          exists = obs.size() > 0 and LoanTerm.allInstance()->excludes(obs) and exists = false\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemId and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false",
+        "precondition": "exists and LoanTerm.allInstance()->excludes(obs) and exists = false",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false\n            \n            precondition:\n          exists and LoanTerm.allInstance()->excludes(obs) and exists = false\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false",
+        "precondition": "exists and LoanTerm.allInstance()->excludes(obs) and exists = false",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false\n            \n            precondition:\n          exists and LoanTerm.allInstance()->excludes(obs) and exists = false\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false",
+        "precondition": "exists and LoanTerm.allInstance()->excludes(obs)",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and (result = true)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false\n            \n            precondition:\n          exists and LoanTerm.allInstance()->excludes(obs)\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and (result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false",
+        "precondition": "exists = false and LoanTerm.allInstance()->excludes(obs)",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false\n            \n            precondition:\n          exists = false and LoanTerm.allInstance()->excludes(obs)\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false",
+        "precondition": "exists = false and LoanTerm.allInstance()->excludes(obs)",
+        "postcondition": "let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 109,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 142,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), exists:Boolean = obs.size() > 0, result:Boolean = false\n            \n            precondition:\n          exists = false and LoanTerm.allInstance()->excludes(obs)\n            \n            postcondition:\n          let ob:LoanTerm in ob.oclIsNew() and ob.ItemID = itemid and ob.Content = content and LoanTerm.allInstance()->includes(ob) and result = true\n            \n        }"
+    }
+  }
+]

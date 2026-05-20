@@ -1,0 +1,281 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequest:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid)",
+        "precondition": "true",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest->any(true) and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 56,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequest:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest->any(true) and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequest:LoanRequest = selectedLoanRequestTemp->any(true), selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid)",
+        "precondition": "selectedLoanRequest.oclIsUndefined() = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 73,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequest:LoanRequest = selectedLoanRequestTemp->any(true), selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid)\n            \n            precondition:\n          selectedLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->isEmpty() then null else selectedLoanRequestTemp->any(true) endif",
+        "precondition": "selectedLoanRequest.oclIsUndefined() = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 173,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->isEmpty()'"
+        },
+        {
+          "line": 3,
+          "column": 227,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->isEmpty() then null else selectedLoanRequestTemp->any(true) endif\n            \n            precondition:\n          selectedLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->size() = 0 then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif",
+        "precondition": "selectedLoanRequest.oclIsUndefined() = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 173,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->size() = 0 then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif\n            \n            precondition:\n          selectedLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->size() = 0 then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif, isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequest.oclIsUndefined() then true else false endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 173,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->size() = 0 then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif, isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequest.oclIsUndefined() then true else false endif\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->size() = 0 then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif, isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequest.oclIsUndefined() then true else false endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 173,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->size() = 0 then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif, isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequest.oclIsUndefined() then true else false endif\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->isEmpty() then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif, isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequest.oclIsUndefined() then true else false endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 173,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->isEmpty()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), selectedLoanRequest:LoanRequest = if selectedLoanRequestTemp->isEmpty() then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif, isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequest.oclIsUndefined() then true else false endif\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequestTemp->size() = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestUndefined then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 180,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequestTemp->size() = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestUndefined then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequestTemp->size() = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestUndefined then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 180,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequestTemp->size() = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestUndefined then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequestTemp->size() = 0 then true else false endif, selectedLoanRequest:LoanRequest = selectedLoanRequestTemp->any(o | o.RequestID = requestid)",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 180,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestUndefined:Boolean = if selectedLoanRequestTemp->size() = 0 then true else false endif, selectedLoanRequest:LoanRequest = selectedLoanRequestTemp->any(o | o.RequestID = requestid)\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestSize:Integer = selectedLoanRequestTemp->size(), isSelectedLoanRequestUndefined:Boolean = if isSelectedLoanRequestSize = 0 then true else false endif, selectedLoanRequest:LoanRequest = selectedLoanRequestTemp->any(o | o.RequestID = requestid)",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestSize:Integer = selectedLoanRequestTemp->size(), isSelectedLoanRequestUndefined:Boolean = if isSelectedLoanRequestSize = 0 then true else false endif, selectedLoanRequest:LoanRequest = selectedLoanRequestTemp->any(o | o.RequestID = requestid)\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestSize:Integer = selectedLoanRequestTemp->size(), isSelectedLoanRequestUndefined:Boolean = if isSelectedLoanRequestSize = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestSize <> 0 then selectedLoanRequestTemp->any(o | o.RequestID = requestid) else null endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "no viable alternative at input 'selectedLoanRequestTemp->size()'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          definition:\n          selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestSize:Integer = selectedLoanRequestTemp->size(), isSelectedLoanRequestUndefined:Boolean = if isSelectedLoanRequestSize = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestSize <> 0 then selectedLoanRequestTemp->any(o | o.RequestID = requestid) else null endif\n            \n            precondition:\n          isSelectedLoanRequestUndefined = false\n            \n            postcondition:\n          CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "selectedLoanRequestTemp:Set(LoanRequest) = CurrentLoanRequests->select(o | o.RequestID = requestid), isSelectedLoanRequestSize:Integer = selectedLoanRequestTemp->size(), isSelectedLoanRequestUndefined:Boolean = if isSelectedLoanRequestSize = 0 then true else false endif, selectedLoanRequest:LoanRequest = if isSelectedLoanRequestUndefined then null else selectedLoanRequestTemp->any(o | o.RequestID = requestid) endif",
+        "precondition": "isSelectedLoanRequestUndefined = false",
+        "postcondition": "CurrentLoanRequest = selectedLoanRequest and result = CurrentLoanRequest"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  }
+]

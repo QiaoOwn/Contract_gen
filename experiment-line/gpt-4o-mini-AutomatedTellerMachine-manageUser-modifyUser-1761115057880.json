@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = userid), isCardFound:Boolean = card.oclIsUndefined()",
+        "precondition": "card.oclIsUndefined() = bool",
+        "postcondition": "if not isCardFound then card.Name = name and card.Address = address and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 17,
+          "msg": "extraneous input 'isCardFound' expecting 'then'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::modifyUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(o | o.CardID = userid), isCardFound:Boolean = card.oclIsUndefined()\n            \n            precondition:\n          card.oclIsUndefined() = bool\n            \n            postcondition:\n          if not isCardFound then card.Name = name and card.Address = address and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

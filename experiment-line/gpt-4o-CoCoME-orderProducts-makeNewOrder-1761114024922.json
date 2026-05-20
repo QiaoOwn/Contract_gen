@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct: OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid), currentDate: Date = Date.now()",
+        "precondition": "OrderProduct.allInstance()->excludes(orderProduct)",
+        "postcondition": "let newOrderProduct:OrderProduct in newOrderProduct.oclIsNew() and newOrderProduct.Id = orderid and newOrderProduct.OrderStatus = OrderStatus::NEW and newOrderProduct.Time = currentDate and OrderProduct.allInstance()->includes(newOrderProduct) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 112,
+          "msg": "mismatched input 'Date' expecting {'(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          orderProduct: OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid), currentDate: Date = Date.now()\n            \n            precondition:\n          OrderProduct.allInstance()->excludes(orderProduct)\n            \n            postcondition:\n          let newOrderProduct:OrderProduct in newOrderProduct.oclIsNew() and newOrderProduct.Id = orderid and newOrderProduct.OrderStatus = OrderStatus::NEW and newOrderProduct.Time = currentDate and OrderProduct.allInstance()->includes(newOrderProduct) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

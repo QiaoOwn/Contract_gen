@@ -1,0 +1,285 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), newCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "cashDesk.oclIsUndefined() = false and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "if cashDesk.oclIsUndefined() then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id: Integer,name: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id),\n\t\tnewCashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id)\n\tprecondition:\n\t\tcashDesk.oclIsUndefined() = false and\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tisopened.oclIsTypeOf(Boolean)\n\tpostcondition:\n\t\tif cashDesk.oclIsUndefined() \n\t\tthen let newCashDesk: CashDesk in\n\t\tnewCashDesk.oclIsNew() and\n\t\tCashDesk.allInstance()->includes(newCashDesk) and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), newCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "cashDesk.oclIsUndefined() = false and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id: Integer,name: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id),\n\t\tnewCashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id)\n\tprecondition:\n\t\tcashDesk.oclIsUndefined() = false and\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tisopened.oclIsTypeOf(Boolean)\n\tpostcondition:\n\t\tlet newCashDesk: CashDesk in\n\t\tnewCashDesk.oclIsNew() and\n\t\tCashDesk.allInstance()->includes(newCashDesk) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  OrderStatus,\n  Store,\n  ProductCatalog,\n  CashDesk,\n  Sale,\n  Cashier,\n  SalesLineItem,\n  Item,\n  Payment,\n  CashPayment,\n  CardPayment,\n  OrderEntry,\n  Supplier,\n  OrderProduct,\n  getRepository,\n};\n",
+        "originalService": "class ManageCashDeskCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cash desk with provided id,\n   *if the cash desk not exist,\n   *create the cash desk with the provided and other info*/\n  createCashDesk(id: number, name: string, isopened: boolean): boolean {\n    /*Definition Start*/\n    let cashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let newCashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(cashDesk) === false,\n        description: \"cashDesk.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(id, Integer),\n          description: \"id.oclIsTypeOf(Integer)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(name, String),\n          description: \"name.oclIsTypeOf(String)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(isopened, Boolean),\n          description: \"isopened.oclIsTypeOf(Boolean)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashDesk: CashDesk;\n    return l({\n      execute: () => (newCashDesk = new CashDesk()),\n      description: \"newCashDesk.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(CashDesk).push(newCashDesk),\n        description: \"CashDesk.allInstance()->includes(newCashDesk)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { ManageCashDeskCRUDService_AutoGenerated };\n",
+        "entity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class ManageCashDeskCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cash desk with provided id,\n   *if the cash desk not exist,\n   *create the cash desk with the provided and other info*/\n  createCashDesk(id: number, name: string, isopened: boolean): boolean {\n    /*Definition Start*/\n    let cashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let newCashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(cashDesk) === false,\n        description: \"cashDesk.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(id, Integer),\n          description: \"id.oclIsTypeOf(Integer)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(name, String),\n          description: \"name.oclIsTypeOf(String)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(isopened, Boolean),\n          description: \"isopened.oclIsTypeOf(Boolean)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashDesk: CashDesk;\n    return l({\n      execute: () => (newCashDesk = new CashDesk()),\n      description: \"newCashDesk.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(CashDesk).push(newCashDesk),\n        description: \"CashDesk.allInstance()->includes(newCashDesk)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass ManageCashDeskCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cash desk with provided id,\n   *if the cash desk not exist,\n   *create the cash desk with the provided and other info*/\n  createCashDesk(id: number, name: string, isopened: boolean): boolean {\n    /*Definition Start*/\n    let cashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let newCashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(cashDesk) === false,\n        description: \"cashDesk.oclIsUndefined()=false\",\n      })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(id, Integer),\n          description: \"id.oclIsTypeOf(Integer)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(name, String),\n          description: \"name.oclIsTypeOf(String)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(isopened, Boolean),\n          description: \"isopened.oclIsTypeOf(Boolean)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashDesk: CashDesk;\n    return l({\n      execute: () => (newCashDesk = new CashDesk()),\n      description: \"newCashDesk.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(CashDesk).push(newCashDesk),\n        description: \"CashDesk.allInstance()->includes(newCashDesk)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 196,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'newCashDesk'.",
+          "code": 2451
+        },
+        {
+          "line": 216,
+          "column": 52,
+          "msg": "Cannot find name 'Integer'.",
+          "code": 2304
+        },
+        {
+          "line": 234,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'newCashDesk'.",
+          "code": 2451
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id: Integer,name: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tcashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id),\n\t\texistingCashDesk: CashDesk = CashDesk.allInstance()->any(o|o.Id = id)\n\tprecondition:\n\t\texistingCashDesk.oclIsUndefined() = true and\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tisopened.oclIsTypeOf(Boolean)\n\tpostcondition:\n\t\tlet newCashDesk: CashDesk in\n\t\tnewCashDesk.oclIsNew() and\n\t\tCashDesk.allInstance()->includes(newCashDesk) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  OrderStatus,\n  Store,\n  ProductCatalog,\n  CashDesk,\n  Sale,\n  Cashier,\n  SalesLineItem,\n  Item,\n  Payment,\n  CashPayment,\n  CardPayment,\n  OrderEntry,\n  Supplier,\n  OrderProduct,\n  getRepository,\n};\n",
+        "originalService": "class ManageCashDeskCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cash desk with provided id,\n   *if the cash desk not exist,\n   *create the cash desk with the provided and other info*/\n  createCashDesk(id: number, name: string, isopened: boolean): boolean {\n    /*Definition Start*/\n    let cashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let existingCashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(existingCashDesk) === true,\n        description: \"existingCashDesk.oclIsUndefined()=true\",\n      })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(id, Integer),\n          description: \"id.oclIsTypeOf(Integer)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(name, String),\n          description: \"name.oclIsTypeOf(String)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(isopened, Boolean),\n          description: \"isopened.oclIsTypeOf(Boolean)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashDesk: CashDesk;\n    return l({\n      execute: () => (newCashDesk = new CashDesk()),\n      description: \"newCashDesk.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(CashDesk).push(newCashDesk),\n        description: \"CashDesk.allInstance()->includes(newCashDesk)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { ManageCashDeskCRUDService_AutoGenerated };\n",
+        "entity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class ManageCashDeskCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cash desk with provided id,\n   *if the cash desk not exist,\n   *create the cash desk with the provided and other info*/\n  createCashDesk(id: number, name: string, isopened: boolean): boolean {\n    /*Definition Start*/\n    let cashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let existingCashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(existingCashDesk) === true,\n        description: \"existingCashDesk.oclIsUndefined()=true\",\n      })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(id, Integer),\n          description: \"id.oclIsTypeOf(Integer)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(name, String),\n          description: \"name.oclIsTypeOf(String)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(isopened, Boolean),\n          description: \"isopened.oclIsTypeOf(Boolean)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashDesk: CashDesk;\n    return l({\n      execute: () => (newCashDesk = new CashDesk()),\n      description: \"newCashDesk.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(CashDesk).push(newCashDesk),\n        description: \"CashDesk.allInstance()->includes(newCashDesk)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass ManageCashDeskCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the cash desk with provided id,\n   *if the cash desk not exist,\n   *create the cash desk with the provided and other info*/\n  createCashDesk(id: number, name: string, isopened: boolean): boolean {\n    /*Definition Start*/\n    let cashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let existingCashDesk: CashDesk = l({\n      logic: () =>\n        getRepository(CashDesk).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"CashDesk.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(existingCashDesk) === true,\n        description: \"existingCashDesk.oclIsUndefined()=true\",\n      })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(id, Integer),\n          description: \"id.oclIsTypeOf(Integer)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(name, String),\n          description: \"name.oclIsTypeOf(String)\",\n        })\n        .and({\n          logic: () => StandardOPs.oclIsTypeOf(isopened, Boolean),\n          description: \"isopened.oclIsTypeOf(Boolean)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let newCashDesk: CashDesk;\n    return l({\n      execute: () => (newCashDesk = new CashDesk()),\n      description: \"newCashDesk.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(CashDesk).push(newCashDesk),\n        description: \"CashDesk.allInstance()->includes(newCashDesk)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 216,
+          "column": 52,
+          "msg": "Cannot find name 'Integer'.",
+          "code": 2304
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "cashDesk.oclIsUndefined() = true and let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 47,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 62,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          cashDesk.oclIsUndefined() = true and let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and isNew = true and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and isNew = true and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = isNew = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 130,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = isNew = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and isNew = true and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and isNew = true and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true and isNew = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and result = true and isNew = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "result = true and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 172,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = CashDesk.allInstance()->select(o | o.Id = id)->first()\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          result = true and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.oclIsNew()\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = if existingCashDesk.oclIsUndefined() then CashDesk() else CashDesk.allInstance()->select(o | o.Id = id)->first() endif",
+        "precondition": "existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "result = true and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 230,
+          "msg": "mismatched input '->' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isNew:Boolean = true, newCashDesk:CashDesk = if existingCashDesk.oclIsUndefined() then CashDesk() else CashDesk.allInstance()->select(o | o.Id = id)->first() endif\n            \n            precondition:\n          existingCashDesk.oclIsUndefined() = true and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          result = true and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.oclIsNew()\n            \n        }"
+    }
+  }
+]

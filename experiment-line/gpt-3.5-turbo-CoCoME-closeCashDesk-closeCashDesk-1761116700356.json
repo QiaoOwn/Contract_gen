@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), isOpened:Boolean = cashDesk.IsOpened, currentStoreExists:Boolean = not CurrentStore.oclIsUndefined()",
+        "precondition": "cashDesk.oclIsUndefined() = false, isOpened = true, currentStoreExists = true, CurrentStore.AssociationCashdeskes->includes(cashDesk)",
+        "postcondition": "cashDesk.IsOpened = false, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 153,
+          "msg": "mismatched input 'CurrentStore' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 35,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), isOpened:Boolean = cashDesk.IsOpened, currentStoreExists:Boolean = not CurrentStore.oclIsUndefined()\n            \n            precondition:\n          cashDesk.oclIsUndefined() = false, isOpened = true, currentStoreExists = true, CurrentStore.AssociationCashdeskes->includes(cashDesk)\n            \n            postcondition:\n          cashDesk.IsOpened = false, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

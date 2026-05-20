@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loan:Loan = Loan.allInstance()->any(l | l.LoanID = loanid and l.Status = LSOPEN)",
+        "precondition": "loan.oclIsUndefined() = false",
+        "postcondition": "loan.RemainAmountToPay = loan.RemainAmountToPay - loan.RepaymentAmount and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LoanProcessingSystemSystem::loanPayment(loanid: Integer): Boolean {\n\tdefinition:\n\t\tloan: Loan = Loan.allInstance()->any(l|l.LoanID = loanid and\n\t\tl.Status = LSOPEN)\n\tprecondition:\n\t\tloan.oclIsUndefined() = false\n\tpostcondition:\n\t\tloan.RemainAmountToPay = loan.RemainAmountToPay-loan.RepaymentAmount and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: LSOPEN"
+        }
+      ]
+    }
+  }
+]

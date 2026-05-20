@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), overdueLoans:Set(Loan) = user.LoanedBook->select(l | l.IsReturned = false and l.DueDate < Date.now()), overdueCopies:Set(BookCopy) = overdueLoans->collect(l | l.LoanedCopy)",
+        "precondition": "uid.oclIsTypeOf(String) and User.allInstance()->exists(u | u.UserID = uid)",
+        "postcondition": "result = overdueCopies"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input 'Date' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 3,
+          "column": 167,
+          "msg": "mismatched input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), overdueLoans:Set(Loan) = user.LoanedBook->select(l | l.IsReturned = false and l.DueDate < Date.now()), overdueCopies:Set(BookCopy) = overdueLoans->collect(l | l.LoanedCopy)\n            \n            precondition:\n          uid.oclIsTypeOf(String) and User.allInstance()->exists(u | u.UserID = uid)\n            \n            postcondition:\n          result = overdueCopies\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

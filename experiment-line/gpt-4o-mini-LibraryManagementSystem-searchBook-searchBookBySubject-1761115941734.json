@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "searchedBooks:Set(Book) = Book.allInstance()->select(b | b.Subject->includes(subject))",
+        "precondition": "subject.oclIsUndefined() = bool",
+        "postcondition": "let result:Set(Book) in Book.allInstance()->includes(result)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 63,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract SearchBook::searchBookBySubject(subject:String): Set(Book) {\n          definition:\n          searchedBooks:Set(Book) = Book.allInstance()->select(b | b.Subject->includes(subject))\n            \n            precondition:\n          subject.oclIsUndefined() = bool\n            \n            postcondition:\n          let result:Set(Book) in Book.allInstance()->includes(result)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

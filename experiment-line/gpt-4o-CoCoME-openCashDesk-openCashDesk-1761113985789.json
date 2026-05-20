@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesks:Set(CashDesk) = CashDesk.allInstance(), targetCashDesk:CashDesk = cashDesks->any(c | c.Id = cashDeskId)",
+        "precondition": "CashDesk.allInstance()->exists(cashDesk | cashDesk.Id = self.targetId) and CashDesk.allInstance()->any(cashDesk | cashDesk.Id = targetId).oclIsUndefined() and CurrentCashDesk.oclIsUndefined() = false and result = true",
+        "postcondition": "CurrentCashDesk = target and target.oclIsNew() and CashDesk.allInstance()->includes(target) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 147,
+          "msg": "mismatched input '.' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          cashDesks:Set(CashDesk) = CashDesk.allInstance(), targetCashDesk:CashDesk = cashDesks->any(c | c.Id = cashDeskId)\n            \n            precondition:\n          CashDesk.allInstance()->exists(cashDesk | cashDesk.Id = self.targetId) and CashDesk.allInstance()->any(cashDesk | cashDesk.Id = targetId).oclIsUndefined() and CurrentCashDesk.oclIsUndefined() = false and result = true\n            \n            postcondition:\n          CurrentCashDesk = target and target.oclIsNew() and CashDesk.allInstance()->includes(target) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cashDeskId"
+        }
+      ]
+    }
+  }
+]

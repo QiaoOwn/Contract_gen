@@ -1,0 +1,2498 @@
+[
+  {
+    "ocl": "dev:Device = Device.allInstance()->any(u:Device | u.Id = id),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = contactsid)",
+    "candidate": "dev:Device = Device.allInstance()->any(d | d.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = contactsid)",
+    "service": "AirportSystem",
+    "useCase": "manageDevice",
+    "operation": "createDevice",
+    "cosineSimilarity": 0.9391920311486629
+  },
+  {
+    "ocl": "dev.oclIsUndefined() = true and sta.oclIsUndefined() = false",
+    "candidate": "dev.oclIsUndefined() = true and staff.oclIsUndefined() = false",
+    "service": "AirportSystem",
+    "useCase": "manageDevice",
+    "operation": "createDevice",
+    "cosineSimilarity": 0.9201539538128417
+  },
+  {
+    "ocl": "let d:Device in\n                     d.oclIsNew() and\n                     d.Id = id and\n                     d.Name = name and\n                     d.Location = location and\n                     d.Contacts = sta and\n                     Device.allInstance()->includes(dev) and result = true",
+    "candidate": "let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = staff and result = true",
+    "service": "AirportSystem",
+    "useCase": "manageDevice",
+    "operation": "createDevice",
+    "cosineSimilarity": 0.8724912786740676
+  },
+  {
+    "ocl": "sta:Staff = Staff.allInstance()->any(u:Staff | u.Id = id),\n                 bo:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = bossid)",
+    "candidate": "staff:Staff = Staff.allInstance()->any(s | s.Id = id), boss:Staff = Staff.allInstance()->any(b | b.Id = bossid)",
+    "service": "AirportSystem",
+    "useCase": "manageUser",
+    "operation": "createStaff",
+    "cosineSimilarity": 0.9039739399951664
+  },
+  {
+    "ocl": "sta.oclIsUndefined() = true",
+    "candidate": "staff.oclIsUndefined() = true and boss.oclIsUndefined() = false",
+    "service": "AirportSystem",
+    "useCase": "manageUser",
+    "operation": "createStaff",
+    "cosineSimilarity": 0.7258455397387537
+  },
+  {
+    "ocl": "let s:Staff in\n                     s.oclIsNew() and\n                     s.Id = id and\n                     s.Name = name and\n                     s.Password = pswd and\n                     s.Phone = phone and\n                     s.Role = role and\n                     if bo.oclIsUndefined() = false then s.Boss = bo endif and\n                     Staff.allInstance()->includes(s) and result = true",
+    "candidate": "let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss and result = true",
+    "service": "AirportSystem",
+    "useCase": "manageUser",
+    "operation": "createStaff",
+    "cosineSimilarity": 0.8921445009085676
+  },
+  {
+    "ocl": "rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = rid),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid)",
+    "candidate": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "approve",
+    "cosineSimilarity": 0.9052256788713904
+  },
+  {
+    "ocl": "rep.oclIsUndefined() = false and sta.oclIsUndefined() = false",
+    "candidate": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "approve",
+    "cosineSimilarity": 0.7960252420389665
+  },
+  {
+    "ocl": "let ah:ApprovalHistory in\n\t\t\tah.oclIsNew() and\n\t\t\tah.Reject = reject and\n\t\t\tah.Suggestion = suggestion and\n\t\t\tApprovalHistory.allInstance()->includes(ah) and\n\t\t\trep.History->includes(ah) and\n\t\t\tif\n\t\t\t\treject <> false\n\t\t\tthen\n\t\t\t\tif\n\t\t\t\t\trep.Process = 0 and // STAFFREQUEST\n\t\t\t\t\tsta.Role = 1 // MASTER\n\t\t\t\tthen\n\t\t\t\t\trep.Process = 1 // MASTERAPPROVE\n\t\t\t\telse\n\t\t\t\t\tif\n\t\t\t\t\t\trep.Process = 1 and // MASTERAPPROVE\n\t\t\t\t\t\tsta.Role = 2 // MANAGER\n\t\t\t\t\tthen\n\t\t\t\t\t\trep.Process = 2 // MANAGERAPPROVE\n\t\t\t\t\telse\n\t\t\t\t\t\tif\n\t\t\t\t\t\t\trep.Process = 2 and // MANAGERAPPROVE\n\t\t\t\t\t\t\tsta.Role = 3 // WORKER\n\t\t\t\t\t\tthen\n\t\t\t\t\t\t\trep.Process = 3 // WORKERAPPROVE\n\t\t\t\t\t\tendif\n\t\t\t\t\tendif\n\t\t\t\tendif\n\t\t\telse\n\t\t\t\trep.Process = 5 // REJECT\n\t\t\tendif and\n\t\t\tRepair.allInstance()->includes(rep) and\n\t\t\tresult = ah",
+    "candidate": "let newHistory:ApprovalHistory in newHistory.oclIsNew() and ApprovalHistory.allInstance()->includes(newHistory) and newHistory.StaffId = sid and newHistory.Reject = reject and newHistory.Suggestion = suggestion and repair.History->includes(newHistory) and (reject = true and repair.Process = 5 or reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3) and result = newHistory",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "approve",
+    "cosineSimilarity": 0.8090011443890333
+  },
+  {
+    "ocl": "rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = id),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid)",
+    "candidate": "repair:Repair = Repair.allInstance()->any(r | r.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "feedback",
+    "cosineSimilarity": 0.8943918577614893
+  },
+  {
+    "ocl": "rep.RaiseStaff = sta and sta.Role = 0 and rep.Process = 7",
+    "candidate": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false and repair.RaiseStaff = staff and staff.Role = 0 and repair.Process = 7",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "feedback",
+    "cosineSimilarity": 0.6565927266478241
+  },
+  {
+    "ocl": "rep.Score = score and\n                    if score >= 3 then rep.Close = true\n                    else rep.Close = false and rep.Description = des and rep.Process = 0 endif and\n                    Repair.allInstance()->includes(rep) and result = true",
+    "candidate": "repair.Score = score and (score >= 3 and (repair.Close = true) or score < 3 and (repair.Close = false and repair.Description = des and repair.Process = 0)) and result = true",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "feedback",
+    "cosineSimilarity": 0.8571512607274065
+  },
+  {
+    "ocl": "rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = id),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid),\n                 dev:Device = Device.allInstance()->any(uuu:Device | uuu.Id = did)",
+    "candidate": "repair:Repair = Repair.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), device:Device = Device.allInstance()->any(o | o.Id = did)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "finishRepair",
+    "cosineSimilarity": 0.8981102136768182
+  },
+  {
+    "ocl": "dev.Contacts = sta and sta.Role = 3",
+    "candidate": "device.Contacts = staff and staff.Role = 3 and Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff) and Device.allInstance()->includes(device)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "finishRepair",
+    "cosineSimilarity": 0.5778276137064403
+  },
+  {
+    "ocl": "rep.Process = 7 and result = true",
+    "candidate": "repair.Process = 7 and result = true",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "finishRepair",
+    "cosineSimilarity": 0.8654161930146909
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "PasswordValidated = true and CardIDValidated = true and InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(InputCard)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "checkBalance",
+    "cosineSimilarity": 0.802087001825416
+  },
+  {
+    "ocl": "\n      result = self.InputCard.Balance\n    ",
+    "candidate": "result = InputCard.Balance",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "checkBalance",
+    "cosineSimilarity": 0.8549204570980756
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "self.InputCard.oclIsUndefined() = false and self.CardIDValidated = true and self.PasswordValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "ejectCard",
+    "cosineSimilarity": 0.8464728734940624
+  },
+  {
+    "ocl": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    ",
+    "candidate": "self.InputCard.Balance = 0.0 and self.InputCard.CardStatus = normalStatus and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "ejectCard",
+    "cosineSimilarity": 0.7294041639172227
+  },
+  {
+    "ocl": "bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)",
+    "candidate": "findCard:BankCard = BankCard.allInstance()->any(card | card.CardID = cardid)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.9273556764700068
+  },
+  {
+    "ocl": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+    "candidate": "findCard.oclIsUndefined() = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.7109527013553679
+  },
+  {
+    "ocl": "\n          if bc.BelongedUser.oclIsUndefined()=false then\n            self.CardIDValidated = true and\n            self.InputCard = bc and\n            result = true\n          else\n            self.CardIDValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "self.InputCard = findCard and self.CardIDValidated = true and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.6793495161320672
+  },
+  {
+    "ocl": "\n          self.CardIDValidated = true and\n          self.InputCard.oclIsUndefined() = false\n        ",
+    "candidate": "inputCard.oclIsUndefined() = false and self.CardIDValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputPassword",
+    "cosineSimilarity": 0.8290726534193645
+  },
+  {
+    "ocl": "\n          if self.InputCard.Password = password then\n            self.PasswordValidated = true and\n            result = true\n          else\n            self.PasswordValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "result = passwordEquals",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputPassword",
+    "cosineSimilarity": 0.5250879364118837
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false and\n      quantity >= 100\n    ",
+    "candidate": "self.PasswordValidated = true and self.CardIDValidated = true and self.InputCard.oclIsUndefined() = false and quantity >= 100",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "depositFunds",
+    "cosineSimilarity": 0.9286084830549947
+  },
+  {
+    "ocl": "\n      self.InputCard.Balance = self.InputCard.Balance@pre + quantity and\n      self.IsDeposit = true and\n      self.DepositedNumber = quantity and\n      result = true\n    ",
+    "candidate": "self.InputCard.Balance = self.InputCard.Balance@pre + quantity and self.DepositedNumber = quantity and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "depositFunds",
+    "cosineSimilarity": 0.9046894935339099
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "self.InputCard.oclIsUndefined() = false and self.CardIDValidated = true and self.PasswordValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "ejectCard",
+    "cosineSimilarity": 0.8464728734940624
+  },
+  {
+    "ocl": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    ",
+    "candidate": "self.InputCard.Balance = 0 and self.DepositedNumber = 0 and self.PasswordValidated = false and self.CardIDValidated = false and self.IsDeposit = false and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "ejectCard",
+    "cosineSimilarity": 0.8665272875743442
+  },
+  {
+    "ocl": "bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)",
+    "candidate": "inputCard:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.9124128968777538
+  },
+  {
+    "ocl": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+    "candidate": "inputCard.oclIsUndefined() = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.6258506451715542
+  },
+  {
+    "ocl": "\n          if bc.BelongedUser.oclIsUndefined()=false then\n            self.CardIDValidated = true and\n            self.InputCard = bc and\n            result = true\n          else\n            self.CardIDValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "self.CardIDValidated = true and self.InputCard = inputCard and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.6848635377824905
+  },
+  {
+    "ocl": "\n          self.CardIDValidated = true and\n          self.InputCard.oclIsUndefined() = false\n        ",
+    "candidate": "inputCard.oclIsUndefined() = false and self.CardIDValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputPassword",
+    "cosineSimilarity": 0.8290726534193645
+  },
+  {
+    "ocl": "\n          if self.InputCard.Password = password then\n            self.PasswordValidated = true and\n            result = true\n          else\n            self.PasswordValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "result = isValidPassword",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputPassword",
+    "cosineSimilarity": 0.5898778496746718
+  },
+  {
+    "ocl": "\n      self.CardIDValidated = true and\n      self.PasswordValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "inputCard.CardID = self.InputCard.CardID and inputCard.Password = self.InputCard.Password and exist = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "printReceipt",
+    "cosineSimilarity": 0.7798920012151332
+  },
+  {
+    "ocl": "\n      if\n\t\t\t\tself.IsWithdraw = true\n\t\t\tthen\n\t\t\t\tresult = self.WithdrawedNumber\n\t\t\telse\n\t\t\t\tif\n\t\t\t\t\tself.IsDeposit = true\n\t\t\t\tthen\n\t\t\t\t\tresult = self.DepositedNumber\n\t\t\t\telse\n\t\t\t\t\tresult = 0\n\t\t\t\tendif\n\t\t\tendif\n    ",
+    "candidate": "if self.IsDeposit = false then result = self.DepositedNumber else if self.IsDeposit = true then result = self.DepositedNumber else result = 0 endif endif",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "printReceipt",
+    "cosineSimilarity": 0.8470749286691972
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "createBankCard",
+    "cosineSimilarity": 0.8710078690879927
+  },
+  {
+    "ocl": "\n      bankcard.oclIsUndefined() = true\n    ",
+    "candidate": "card.oclIsUndefined() or card.CardID = cardid",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "createBankCard",
+    "cosineSimilarity": 0.6856092681408552
+  },
+  {
+    "ocl": "\n      let ban:BankCard in\n      ban.oclIsNew() and\n      ban.CardID = cardid and\n      ban.CardStatus = cardstatus and\n      ban.Catalog = catalog and\n      ban.Password = password and\n      ban.Balance = balance and\n      BankCard.allInstance()->includes(ban) and\n      result = true\n    ",
+    "candidate": "let newCard:BankCard in newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance and result = true",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "createBankCard",
+    "cosineSimilarity": 0.830312248984324
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "deleteBankCard",
+    "cosineSimilarity": 0.8710078690879927
+  },
+  {
+    "ocl": "\n     bankcard.oclIsUndefined() = false and\n\t\t\tBankCard.allInstance()->includes(bankcard)\n    ",
+    "candidate": "card.oclIsUndefined() = false",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "deleteBankCard",
+    "cosineSimilarity": 0.6679675888644252
+  },
+  {
+    "ocl": "\n     BankCard.allInstance()->excludes(bankcard) and\n\t\t\tresult = true\n    ",
+    "candidate": "BankCard.allInstance()->excludes(card) and result = true",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "deleteBankCard",
+    "cosineSimilarity": 0.883770257059847
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "modifyBankCard",
+    "cosineSimilarity": 0.8710078690879927
+  },
+  {
+    "ocl": "\n      bankcard.oclIsUndefined() = false\n    ",
+    "candidate": "card.oclIsUndefined() = false",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "modifyBankCard",
+    "cosineSimilarity": 0.8183107572220164
+  },
+  {
+    "ocl": "\n      \tbankcard.CardID = cardid and\n        bankcard.CardStatus = cardstatus and\n        bankcard.Catalog = catalog and\n        bankcard.Password = password and\n        bankcard.Balance = balance and\n        result = true\n    ",
+    "candidate": "card.CardStatus = cardstatus and card.Catalog = catalog and card.Password = password and card.Balance = balance and result = true",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "modifyBankCard",
+    "cosineSimilarity": 0.8871494077362204
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "queryBankCard",
+    "cosineSimilarity": 0.883604394732726
+  },
+  {
+    "ocl": "\n     bankcard.oclIsUndefined() = false\n    ",
+    "candidate": "card.oclIsUndefined() = false",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "queryBankCard",
+    "cosineSimilarity": 0.7965788365379974
+  },
+  {
+    "ocl": "\n      result = bankcard\n    ",
+    "candidate": "result = card",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "queryBankCard",
+    "cosineSimilarity": 0.5762576759218562
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser",
+    "cosineSimilarity": 0.8983059037397368
+  },
+  {
+    "ocl": "\n      user.oclIsUndefined() = true\n    ",
+    "candidate": "user.oclIsUndefined() = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser",
+    "cosineSimilarity": 0.8722836437666018
+  },
+  {
+    "ocl": "\n      let use:User in\n      use.oclIsNew() and\n      use.UserID = userid and\n      use.Name = name and\n      use.Address = address and\n      User.allInstance()->includes(use) and\n      result = true\n    ",
+    "candidate": "let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser",
+    "cosineSimilarity": 0.8097024109930056
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "deleteUser",
+    "cosineSimilarity": 0.8983059037397368
+  },
+  {
+    "ocl": "\n     user.oclIsUndefined() = false\n    ",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "deleteUser",
+    "cosineSimilarity": 0.864906653769405
+  },
+  {
+    "ocl": "\n      User.allInstance()->excludes(user) and\n\t  result = true\n    ",
+    "candidate": "User.allInstance()->excludes(user) and result = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "deleteUser",
+    "cosineSimilarity": 0.9115431957844834
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "u:User = User.allInstance()->any(o | o.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "modifyUser",
+    "cosineSimilarity": 0.8539791961047627
+  },
+  {
+    "ocl": "\n      user.oclIsUndefined() = false\n    ",
+    "candidate": "u.oclIsUndefined() = false",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "modifyUser",
+    "cosineSimilarity": 0.7342255293725168
+  },
+  {
+    "ocl": "\n        user.UserID = userid and\n        user.Name = name and\n        user.Address = address and\n        result = true\n    ",
+    "candidate": "u.Name = name and u.Address = address and result = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "modifyUser",
+    "cosineSimilarity": 0.7109932142743568
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "queryUser",
+    "cosineSimilarity": 0.8983059037397368
+  },
+  {
+    "ocl": "\n      user.oclIsUndefined() = false\n    ",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "queryUser",
+    "cosineSimilarity": 0.8758869068867148
+  },
+  {
+    "ocl": "\n      result = user\n    ",
+    "candidate": "result = user",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "queryUser",
+    "cosineSimilarity": 0.8144176706495739
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "self.CardIDValidated = true and self.PasswordValidated = true and self.InputCard.oclIsUndefined() = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "ejectCard",
+    "cosineSimilarity": 0.8927276013007738
+  },
+  {
+    "ocl": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    ",
+    "candidate": "self.InputCard.CardID = 0 and self.InputCard.Password = 0 and self.WithdrawedNumber = 0.0 and self.IsWithdraw = false and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "ejectCard",
+    "cosineSimilarity": 0.8832291003404595
+  },
+  {
+    "ocl": "bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)",
+    "candidate": "inputCard:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.9303381536282158
+  },
+  {
+    "ocl": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+    "candidate": "BankCard.allInstance()->includes(inputCard)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.5116196224919013
+  },
+  {
+    "ocl": "\n           if bc.BelongedUser.oclIsUndefined()=false then\n             self.CardIDValidated = true and\n             self.InputCard = bc and\n             result = true\n           else\n             self.CardIDValidated = false and\n             result = false\n           endif\n         ",
+    "candidate": "CardIDValidated = true and self.InputCard = inputCard and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputCard",
+    "cosineSimilarity": 0.6625583043624116
+  },
+  {
+    "ocl": "\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "self.InputCard.oclIsUndefined() = false and self.CardIDValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputPassword",
+    "cosineSimilarity": 0.8502489681215395
+  },
+  {
+    "ocl": "\n      if self.InputCard.Password = password then\n        self.PasswordValidated = true and\n        result = true\n      else\n        self.PasswordValidated = false and\n        result = false\n      endif\n    ",
+    "candidate": "result = isValid",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputPassword",
+    "cosineSimilarity": 0.40319281768529297
+  },
+  {
+    "ocl": "\n      self.CardIDValidated = true and\n      self.PasswordValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "self.InputCard.oclIsUndefined() = false and self.CardIDValidated = true and self.PasswordValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "printReceipt",
+    "cosineSimilarity": 0.8640584503810101
+  },
+  {
+    "ocl": "\n      if\n\t\t\t\tself.IsWithdraw = true\n\t\t\tthen\n\t\t\t\tresult = self.WithdrawedNumber\n\t\t\telse\n\t\t\t\tif\n\t\t\t\t\tself.IsDeposit = true\n\t\t\t\tthen\n\t\t\t\t\tresult = self.DepositedNumber\n\t\t\t\telse\n\t\t\t\t\tresult = 0\n\t\t\t\tendif\n\t\t\tendif\n    ",
+    "candidate": "if self.IsWithdraw = true then result = self.WithdrawedNumber else if self.IsDeposit = true then result = self.DepositedNumber else result = 0 endif endif",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "printReceipt",
+    "cosineSimilarity": 0.9387868512984611
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false and\n      self.InputCard.Balance >= quantity\n    ",
+    "candidate": "self.PasswordValidated = true and self.CardIDValidated = true and self.InputCard.Balance >= quantity",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "withdrawCash",
+    "cosineSimilarity": 0.9159816867742412
+  },
+  {
+    "ocl": "\n      self.InputCard.Balance = self.InputCard.Balance@pre - quantity and\n      self.WithdrawedNumber = quantity and\n      self.IsWithdraw = true and\n      result = true\n    ",
+    "candidate": "self.InputCard.Balance = self.InputCard.Balance@pre - quantity and self.WithdrawedNumber = quantity and self.IsWithdraw = true and result = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "withdrawCash",
+    "cosineSimilarity": 0.9262218123153992
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+    "service": "CoCoMESystem",
+    "useCase": "changePrice",
+    "operation": "changePrice",
+    "cosineSimilarity": 0.9546967881271714
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "item.oclIsUndefined() = false",
+    "service": "CoCoMESystem",
+    "useCase": "changePrice",
+    "operation": "changePrice",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "\nitem.Price = newPrice and\nresult = true",
+    "candidate": "item.Price = newPrice and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "changePrice",
+    "operation": "changePrice",
+    "cosineSimilarity": 0.9220201418925311
+  },
+  {
+    "ocl": "cd:CashDesk = CashDesk.allInstance()->any(s:CashDesk | s.Id = cashDeskID)",
+    "candidate": "cashDesk:CashDesk = CashDesk.allInstance()->any(cd | cd.Id = cashDeskID)",
+    "service": "CoCoMESystem",
+    "useCase": "closeCashDesk",
+    "operation": "closeCashDesk",
+    "cosineSimilarity": 0.9288874513778592
+  },
+  {
+    "ocl": "\ncd.oclIsUndefined() = false and\ncd.IsOpened = true and\nCurrentStore.oclIsUndefined() = false and\nCurrentStore.IsOpened = true",
+    "candidate": "cashDesk.oclIsUndefined() = false and cashDesk.IsOpened = true and self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.AssociationCashdeskes->includes(cashDesk) and self.CurrentCashDesk = cashDesk",
+    "service": "CoCoMESystem",
+    "useCase": "closeCashDesk",
+    "operation": "closeCashDesk",
+    "cosineSimilarity": 0.7031428182009785
+  },
+  {
+    "ocl": "\nself.CurrentCashDesk = cd and\ncd.IsOpened = false and\nresult = true",
+    "candidate": "cashDesk.IsOpened = false and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "closeCashDesk",
+    "operation": "closeCashDesk",
+    "cosineSimilarity": 0.7437180560590956
+  },
+  {
+    "ocl": "sto:Store = Store.allInstance()->any(s:Store | s.Id = storeID)",
+    "candidate": "store:Store = Store.allInstance()->any(s | s.Id = storeID)",
+    "service": "CoCoMESystem",
+    "useCase": "closeStore",
+    "operation": "closeStore",
+    "cosineSimilarity": 0.9665206160990122
+  },
+  {
+    "ocl": "\nsto.oclIsUndefined() = false and\nsto.IsOpened = true",
+    "candidate": "store.oclIsUndefined() = false and store.IsOpened = true",
+    "service": "CoCoMESystem",
+    "useCase": "closeStore",
+    "operation": "closeStore",
+    "cosineSimilarity": 0.7477786431609548
+  },
+  {
+    "ocl": "\nsto.IsOpened = false and\nresult = true",
+    "candidate": "store.IsOpened = false and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "closeStore",
+    "operation": "closeStore",
+    "cosineSimilarity": 0.8015920990023419
+  },
+  {
+    "ocl": "true",
+    "candidate": "true",
+    "service": "CoCoMESystem",
+    "useCase": "listSuppliers",
+    "operation": "listSuppliers",
+    "cosineSimilarity": 0.9999999999999998
+  },
+  {
+    "ocl": "result = Supplier.allInstance()",
+    "candidate": "result = suppliers",
+    "service": "CoCoMESystem",
+    "useCase": "listSuppliers",
+    "operation": "listSuppliers",
+    "cosineSimilarity": 0.6433777547521968
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "createCashDesk",
+    "cosineSimilarity": 0.9116969466007144
+  },
+  {
+    "ocl": "cashdesk.oclIsUndefined() = true",
+    "candidate": "cashDesk.oclIsUndefined() = true",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "createCashDesk",
+    "cosineSimilarity": 0.9546407518552473
+  },
+  {
+    "ocl": "\nlet cas:CashDesk in\ncas.oclIsNew() and\ncas.Id = id and\ncas.Name = name and\ncas.IsOpened = isopened and\nCashDesk.allInstance()->includes(cas) and\nresult = true",
+    "candidate": "let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and result = true",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "createCashDesk",
+    "cosineSimilarity": 0.8564962998939268
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "cashDesk:CashDesk = CashDesk.allInstance()->any(cd | cd.Id = id)",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "deleteCashDesk",
+    "cosineSimilarity": 0.8902321923090315
+  },
+  {
+    "ocl": "\ncashdesk.oclIsUndefined() = false and\nCashDesk.allInstance()->includes(cashdesk)",
+    "candidate": "cashDesk.oclIsUndefined() = false",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "deleteCashDesk",
+    "cosineSimilarity": 0.7744979382041836
+  },
+  {
+    "ocl": "\nCashDesk.allInstance()->excludes(cashdesk) and\nresult = true",
+    "candidate": "result = true",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "deleteCashDesk",
+    "cosineSimilarity": 0.4953597748664425
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "cashDesk:CashDesk = CashDesk.allInstance()->any(c | c.Id = id)",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "modifyCashDesk",
+    "cosineSimilarity": 0.9369877998345562
+  },
+  {
+    "ocl": "cashdesk.oclIsUndefined() = false",
+    "candidate": "cashDesk.oclIsUndefined() = false",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "modifyCashDesk",
+    "cosineSimilarity": 0.9550043272066827
+  },
+  {
+    "ocl": "\ncashdesk.Id = id and\ncashdesk.Name = name and\ncashdesk.IsOpened = isopened and\nresult = true",
+    "candidate": "cashDesk.Name = name and cashDesk.IsOpened = isopened and result = true",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "modifyCashDesk",
+    "cosineSimilarity": 0.8289593629445947
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "cashDesk:CashDesk = CashDesk.allInstance()->any(c | c.Id = id)",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "queryCashDesk",
+    "cosineSimilarity": 0.9369877998345562
+  },
+  {
+    "ocl": "cashdesk.oclIsUndefined() = false",
+    "candidate": "cashDesk.oclIsUndefined() = false",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "queryCashDesk",
+    "cosineSimilarity": 0.9549808842813214
+  },
+  {
+    "ocl": "result = cashdesk",
+    "candidate": "result = cashDesk",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "queryCashDesk",
+    "cosineSimilarity": 0.957592589555329
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "cashier:Cashier = Cashier.allInstance()->any(c | c.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "createCashier",
+    "cosineSimilarity": 0.9400155319813047
+  },
+  {
+    "ocl": "cashier.oclIsUndefined() = true",
+    "candidate": "cashier.oclIsUndefined() = true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "createCashier",
+    "cosineSimilarity": 0.9999999999999998
+  },
+  {
+    "ocl": "\nlet cas:Cashier in\ncas.oclIsNew() and\ncas.Id = id and\ncas.Name = name and\nCashier.allInstance()->includes(cas) and\nresult = true",
+    "candidate": "let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "createCashier",
+    "cosineSimilarity": 0.849744631699386
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "cashier:Cashier = Cashier.allInstance()->any(c | c.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "deleteCashier",
+    "cosineSimilarity": 0.9400155319813047
+  },
+  {
+    "ocl": "\ncashier.oclIsUndefined() = false and\nCashier.allInstance()->includes(cashier)",
+    "candidate": "cashier.oclIsUndefined() = false",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "deleteCashier",
+    "cosineSimilarity": 0.7859721020505337
+  },
+  {
+    "ocl": "\nCashier.allInstance()->excludes(cashier) and\nresult = true",
+    "candidate": "result = true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "deleteCashier",
+    "cosineSimilarity": 0.4877187188550525
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "cashier:Cashier = Cashier.allInstance()->any(c | c.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "modifyCashier",
+    "cosineSimilarity": 0.9400155319813047
+  },
+  {
+    "ocl": "cashier.oclIsUndefined() = false",
+    "candidate": "cashier.oclIsUndefined() = false",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "modifyCashier",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "\ncashier.Id = id and\ncashier.Name = name and\nresult = true",
+    "candidate": "cashier.Name = name and result = true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "modifyCashier",
+    "cosineSimilarity": 0.8200150810567319
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "cashier:Cashier = Cashier.allInstance()->any(c | c.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "queryCashier",
+    "cosineSimilarity": 0.9400155319813047
+  },
+  {
+    "ocl": "cashier.oclIsUndefined() = false",
+    "candidate": "cashier.oclIsUndefined() = false",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "queryCashier",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "result = cashier",
+    "candidate": "result = cashier",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "queryCashier",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(i | i.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "createItem",
+    "cosineSimilarity": 0.9420180000531938
+  },
+  {
+    "ocl": "item.oclIsUndefined() = true",
+    "candidate": "item.oclIsUndefined()",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "createItem",
+    "cosineSimilarity": 0.9589951183043357
+  },
+  {
+    "ocl": "\nlet ite:Item in\nite.oclIsNew() and\nite.Barcode = barcode and\nite.Name = name and\nite.Price = price and\nite.StockNumber = stocknumber and\nite.OrderPrice = orderprice and\nItem.allInstance()->includes(ite) and\nresult = true",
+    "candidate": "let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice and result = true",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "createItem",
+    "cosineSimilarity": 0.829144926202119
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "deleteItem",
+    "cosineSimilarity": 0.9231663416823811
+  },
+  {
+    "ocl": "\nitem.oclIsUndefined() = false and\nItem.allInstance()->includes(item)",
+    "candidate": "item.oclIsUndefined() = false",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "deleteItem",
+    "cosineSimilarity": 0.690162637338429
+  },
+  {
+    "ocl": "\nItem.allInstance()->excludes(item) and\nresult = true",
+    "candidate": "result = true",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "deleteItem",
+    "cosineSimilarity": 0.4315013943920155
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "modifyItem",
+    "cosineSimilarity": 0.9231663416823811
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "item.oclIsUndefined() = false",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "modifyItem",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "\nitem.Barcode = barcode and\nitem.Name = name and\nitem.Price = price and\nitem.StockNumber = stocknumber and\nitem.OrderPrice = orderprice and\nresult = true",
+    "candidate": "item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice and result = true",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "modifyItem",
+    "cosineSimilarity": 0.8356112970110726
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(i | i.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "queryItem",
+    "cosineSimilarity": 0.9420180000531938
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "item.oclIsUndefined() = false",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "queryItem",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "result = item",
+    "candidate": "result = item",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "queryItem",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(c | c.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "createProductCatalog",
+    "cosineSimilarity": 0.9014215707567276
+  },
+  {
+    "ocl": "productcatalog.oclIsUndefined() = true",
+    "candidate": "catalog.oclIsUndefined()",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "createProductCatalog",
+    "cosineSimilarity": 0.8250674502117739
+  },
+  {
+    "ocl": "\nlet pro:ProductCatalog in\npro.oclIsNew() and\npro.Id = id and\npro.Name = name and\nProductCatalog.allInstance()->includes(pro) and\nresult = true",
+    "candidate": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and newCatalog.Id = id and newCatalog.Name = name and result = true",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "createProductCatalog",
+    "cosineSimilarity": 0.8348067613044017
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(c | c.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "deleteProductCatalog",
+    "cosineSimilarity": 0.9014215707567276
+  },
+  {
+    "ocl": "\nproductcatalog.oclIsUndefined() = false and\nProductCatalog.allInstance()->includes(productcatalog)",
+    "candidate": "catalog.oclIsUndefined() = false",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "deleteProductCatalog",
+    "cosineSimilarity": 0.700096457128226
+  },
+  {
+    "ocl": "\nProductCatalog.allInstance()->excludes(productcatalog) and\nresult = true",
+    "candidate": "result = true",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "deleteProductCatalog",
+    "cosineSimilarity": 0.44569608331624555
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "modifyProductCatalog",
+    "cosineSimilarity": 0.8934308581870603
+  },
+  {
+    "ocl": "productcatalog.oclIsUndefined() = false",
+    "candidate": "catalog.oclIsUndefined() = false and catalog.Id = id",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "modifyProductCatalog",
+    "cosineSimilarity": 0.7788743959366967
+  },
+  {
+    "ocl": "\nproductcatalog.Id = id and\nproductcatalog.Name = name and\nresult = true",
+    "candidate": "catalog.Name = name and result = true",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "modifyProductCatalog",
+    "cosineSimilarity": 0.700156432191835
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(c | c.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "queryProductCatalog",
+    "cosineSimilarity": 0.9014215707567276
+  },
+  {
+    "ocl": "productcatalog.oclIsUndefined() = false",
+    "candidate": "catalog.oclIsUndefined() = false",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "queryProductCatalog",
+    "cosineSimilarity": 0.870393524529864
+  },
+  {
+    "ocl": "result = productcatalog",
+    "candidate": "result = catalog",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "queryProductCatalog",
+    "cosineSimilarity": 0.8068810578910462
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "store:Store = Store.allInstance()->any(s | s.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "createStore",
+    "cosineSimilarity": 0.9325120710970265
+  },
+  {
+    "ocl": "store.oclIsUndefined() = true",
+    "candidate": "store.oclIsUndefined()",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "createStore",
+    "cosineSimilarity": 0.9506660023684492
+  },
+  {
+    "ocl": "\nlet sto:Store in\nsto.oclIsNew() and\nsto.Id = id and\nsto.Name = name and\nsto.Address = address and\nsto.IsOpened = isopened and\nStore.allInstance()->includes(sto) and\nresult = true",
+    "candidate": "let newStore:Store in newStore.oclIsNew() and Store.allInstance()->includes(newStore) and newStore.Id = id and newStore.Name = name and newStore.Address = address and newStore.IsOpened = isopened and result = true",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "createStore",
+    "cosineSimilarity": 0.85342745926652
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "store:Store = Store.allInstance()->any(s | s.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "deleteStore",
+    "cosineSimilarity": 0.9325120710970265
+  },
+  {
+    "ocl": "\nstore.oclIsUndefined() = false and\nStore.allInstance()->includes(store)",
+    "candidate": "store.oclIsUndefined() = false",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "deleteStore",
+    "cosineSimilarity": 0.7676994237792477
+  },
+  {
+    "ocl": "\nStore.allInstance()->excludes(store) and\nresult = true",
+    "candidate": "Store.allInstance()->excludes(store) and result = true",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "deleteStore",
+    "cosineSimilarity": 0.9564824057593515
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "store:Store = Store.allInstance()->any(s | s.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "modifyStore",
+    "cosineSimilarity": 0.9325120710970265
+  },
+  {
+    "ocl": "store.oclIsUndefined() = false",
+    "candidate": "store.oclIsUndefined() = false",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "modifyStore",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "\nstore.Id = id and\nstore.Name = name and\nstore.Address = address and\nstore.IsOpened = isopened and\nresult = true",
+    "candidate": "store.Name = name and store.Address = address and store.IsOpened = isopened and result = true",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "modifyStore",
+    "cosineSimilarity": 0.874841223555199
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "store:Store = Store.allInstance()->any(s | s.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "queryStore",
+    "cosineSimilarity": 0.9325120710970265
+  },
+  {
+    "ocl": "store.oclIsUndefined() = false",
+    "candidate": "store.oclIsUndefined() = false",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "queryStore",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "result = store",
+    "candidate": "result = store",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "queryStore",
+    "cosineSimilarity": 0.9999999999999999
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "createSupplier",
+    "cosineSimilarity": 0.9276179358569557
+  },
+  {
+    "ocl": "supplier.oclIsUndefined() = true",
+    "candidate": "supplier.oclIsUndefined() = true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "createSupplier",
+    "cosineSimilarity": 0.9999999999999998
+  },
+  {
+    "ocl": "\nlet sup:Supplier in\nsup.oclIsNew() and\nsup.Id = id and\nsup.Name = name and\nSupplier.allInstance()->includes(sup) and\nresult = true",
+    "candidate": "let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name and result = true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "createSupplier",
+    "cosineSimilarity": 0.8096504731721126
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "supplier:Supplier = Supplier.allInstance()->any(s | s.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "deleteSupplier",
+    "cosineSimilarity": 0.9538996117433888
+  },
+  {
+    "ocl": "\nsupplier.oclIsUndefined() = false and\nSupplier.allInstance()->includes(supplier)",
+    "candidate": "supplier.oclIsUndefined() = false",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "deleteSupplier",
+    "cosineSimilarity": 0.7519698778780112
+  },
+  {
+    "ocl": "\nSupplier.allInstance()->excludes(supplier) and\nresult = true",
+    "candidate": "result = true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "deleteSupplier",
+    "cosineSimilarity": 0.4121564716365079
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "supplier:Supplier = Supplier.allInstance()->any(s | s.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "modifySupplier",
+    "cosineSimilarity": 0.9538996117433888
+  },
+  {
+    "ocl": "supplier.oclIsUndefined() = false",
+    "candidate": "supplier.oclIsUndefined() = false",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "modifySupplier",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "\nsupplier.Id = id and\nsupplier.Name = name and\nresult = true",
+    "candidate": "supplier.Name = name and result = true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "modifySupplier",
+    "cosineSimilarity": 0.7850864290473146
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "supplier:Supplier = Supplier.allInstance()->any(s | s.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "querySupplier",
+    "cosineSimilarity": 0.9538996117433888
+  },
+  {
+    "ocl": "supplier.oclIsUndefined() = false",
+    "candidate": "supplier.oclIsUndefined() = false",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "querySupplier",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "result = supplier",
+    "candidate": "result = supplier",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "querySupplier",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "cd:CashDesk = CashDesk.allInstance()->any(s:CashDesk | s.Id = cashDeskID)",
+    "candidate": "cashDesk:CashDesk = CashDesk.allInstance()->any(cashDesk | cashDesk.Id = cashDeskID)",
+    "service": "CoCoMESystem",
+    "useCase": "openCashDesk",
+    "operation": "openCashDesk",
+    "cosineSimilarity": 0.9404230203863277
+  },
+  {
+    "ocl": "\ncd.oclIsUndefined() = false and\ncd.IsOpened = false and\nCurrentStore.oclIsUndefined() = false and\nCurrentStore.IsOpened = true",
+    "candidate": "cashDesk.oclIsUndefined() = false and cashDesk.IsOpened = false and self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.IsOpened = true",
+    "service": "CoCoMESystem",
+    "useCase": "openCashDesk",
+    "operation": "openCashDesk",
+    "cosineSimilarity": 0.7687023037271943
+  },
+  {
+    "ocl": "\nself.CurrentCashDesk = cd and\ncd.IsOpened = true and\nresult = true",
+    "candidate": "self.CurrentCashDesk = cashDesk and cashDesk.IsOpened = true and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "openCashDesk",
+    "operation": "openCashDesk",
+    "cosineSimilarity": 0.849473546168279
+  },
+  {
+    "ocl": "sto:Store = Store.allInstance()->any(s:Store | s.Id = storeID)",
+    "candidate": "store:Store = Store.allInstance()->any(s | s.Id = storeID)",
+    "service": "CoCoMESystem",
+    "useCase": "openStore",
+    "operation": "openStore",
+    "cosineSimilarity": 0.9665206160990122
+  },
+  {
+    "ocl": "\nsto.oclIsUndefined() = false and\nsto.IsOpened = false",
+    "candidate": "store.oclIsUndefined() = false and store.IsOpened = false",
+    "service": "CoCoMESystem",
+    "useCase": "openStore",
+    "operation": "openStore",
+    "cosineSimilarity": 0.7565831414307629
+  },
+  {
+    "ocl": "\nself.CurrentStore = sto and\nsto.IsOpened = true and\nresult = true",
+    "candidate": "self.CurrentStore = store and store.IsOpened = true and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "openStore",
+    "operation": "openStore",
+    "cosineSimilarity": 0.8562571405453363
+  },
+  {
+    "ocl": "sup:Supplier = Supplier.allInstance()->any(s:Supplier | s.Id = supplierID)",
+    "candidate": "suplr:Supplier = Supplier.allInstance()->any(s | s.Id = supplierID), orderProduct:OrderProduct = CurrentOrderProduct",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "chooseSupplier",
+    "cosineSimilarity": 0.8053253517282253
+  },
+  {
+    "ocl": "\nsup.oclIsUndefined() = false and\nCurrentOrderProduct.oclIsUndefined() = false",
+    "candidate": "suplr.oclIsUndefined() = false and orderProduct.oclIsUndefined() = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "chooseSupplier",
+    "cosineSimilarity": 0.8785461465482952
+  },
+  {
+    "ocl": "\nCurrentOrderProduct.Supplier = sup and\nresult = true",
+    "candidate": "orderProduct.Supplier = suplr and result = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "chooseSupplier",
+    "cosineSimilarity": 0.8432880041858962
+  },
+  {
+    "ocl": "true",
+    "candidate": "outOfStockItems.isEmpty() = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "listAllOutOfStoreProducts",
+    "cosineSimilarity": 0.28097299993835767
+  },
+  {
+    "ocl": "\nresult = Item.allInstance()->select(item:Item | item.StockNumber = 0)",
+    "candidate": "result = outOfStockItems",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "listAllOutOfStoreProducts",
+    "cosineSimilarity": 0.5602146448651717
+  },
+  {
+    "ocl": "o:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct | o.Id = orderid)",
+    "candidate": "order:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "makeNewOrder",
+    "cosineSimilarity": 0.966355494031101
+  },
+  {
+    "ocl": "o.oclIsUndefined() = true",
+    "candidate": "order.oclIsUndefined() = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "makeNewOrder",
+    "cosineSimilarity": 0.8753195828720333
+  },
+  {
+    "ocl": "\nlet op:OrderProduct in\nop.oclIsNew() and\nop.OrderStatus = OrderStatus::NEW and\nop.Id = orderid and\nop.Time.isEqual(Now) and\nOrderProduct.allInstance()->includes(op) and\nself.CurrentOrderProduct = op and\nresult = true",
+    "candidate": "let newOrder:OrderProduct in newOrder.oclIsNew() and OrderProduct.allInstance()->includes(newOrder) and newOrder.Id = orderid and newOrder.OrderStatus = OrderStatus::NEW and result = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "makeNewOrder",
+    "cosineSimilarity": 0.8583983944827138
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), isItemExist:Boolean = Item.allInstance()->includes(item)",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "orderItem",
+    "cosineSimilarity": 0.8881489686425711
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "isItemExist = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "orderItem",
+    "cosineSimilarity": 0.5831025587200132
+  },
+  {
+    "ocl": "\nlet order:OrderEntry in\norder.oclIsNew() and\norder.Quantity = quantity and\norder.SubAmount = item.OrderPrice * quantity and\norder.Item = item and\nOrderEntry.allInstance()->includes(order) and\nCurrentOrderProduct.ContainedEntries->includes(order) and\nresult = true",
+    "candidate": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and orderEntry.Quantity = quantity and orderEntry.SubAmount = item.Price * quantity and orderEntry.Item = item and CurrentOrderProduct.ContainedEntries->includes(orderEntry) and result = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "orderItem",
+    "cosineSimilarity": 0.9167401992178417
+  },
+  {
+    "ocl": "CurrentOrderProduct.oclIsUndefined() = false",
+    "candidate": "currentOrderProduct.oclIsUndefined() = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "placeOrder",
+    "cosineSimilarity": 0.9443825318112921
+  },
+  {
+    "ocl": "\nCurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and\nCurrentOrderProduct.ContainedEntries->forAll(o:OrderEntry |\n  CurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + o.SubAmount)\nand\nresult = true",
+    "candidate": "currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = calcAmount and result = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "placeOrder",
+    "cosineSimilarity": 0.7897101810822397
+  },
+  {
+    "ocl": "\nsls:Set(SalesLineItem) = CurrentSale.ContainedSalesLine,\nsub:Set(Real) = sls->collect(s:SalesLineItem | s.Subamount)",
+    "candidate": "salesLineItems:Set(SalesLineItem) = self.CurrentSale.ContainedSalesLine, subamounts:Collection(Real) = salesLineItems.Subamount, amount:Real = subamounts.sum()",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "endSale",
+    "cosineSimilarity": 0.833390903193646
+  },
+  {
+    "ocl": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nCurrentSale.IsReadytoPay = false",
+    "candidate": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "endSale",
+    "cosineSimilarity": 0.8962015299016575
+  },
+  {
+    "ocl": "\nCurrentSale.Amount = sub.sum() and\nCurrentSale.IsReadytoPay = true and\nresult = CurrentSale.Amount",
+    "candidate": "self.CurrentSale.Amount = amount and self.CurrentSale.IsReadytoPay = true and result = amount",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "endSale",
+    "cosineSimilarity": 0.8010058164409184
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)",
+    "candidate": "sale:Sale = Sale.allInstance()->any(s | s.IsComplete = false), item:Item = Item.allInstance()->any(i | i.Barcode = barcode), itemExist:Boolean = Item.allInstance()->includes(item), saleExist:Boolean = Sale.allInstance()->includes(sale), saleNotComplete:Boolean = sale.IsComplete = false, stockAvailable:Boolean = item.StockNumber > 0, valid:Boolean = saleExist and saleNotComplete and itemExist and stockAvailable",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "enterItem",
+    "cosineSimilarity": 0.6648775812231114
+  },
+  {
+    "ocl": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nitem.oclIsUndefined() = false and\nitem.StockNumber > 0",
+    "candidate": "valid",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "enterItem",
+    "cosineSimilarity": 0.344042556219083
+  },
+  {
+    "ocl": "\nlet sli:SalesLineItem in\nsli.oclIsNew() and\nself.CurrentSaleLine = sli and\nsli.BelongedSale = CurrentSale and\nCurrentSale.ContainedSalesLine->includes(sli) and\nsli.Quantity = quantity and\nsli.BelongedItem = item and\nitem.StockNumber = item.StockNumber@pre - quantity and\nsli.Subamount = item.Price * quantity and\nSalesLineItem.allInstance()->includes(sli) and\nresult = true",
+    "candidate": "let createdSalesLineItem:SalesLineItem in createdSalesLineItem.oclIsNew() and SalesLineItem.allInstance()->includes(createdSalesLineItem) and createdSalesLineItem.Quantity = quantity and createdSalesLineItem.Subamount = item.Price * quantity and createdSalesLineItem.BelongedSale = sale and sale.ContainedSalesLine->includes(createdSalesLineItem) and item.StockNumber = item.StockNumber@pre - quantity and result = true",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "enterItem",
+    "cosineSimilarity": 0.8589030800598558
+  },
+  {
+    "ocl": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nCurrentSale.IsReadytoPay = true and\namount >= CurrentSale.Amount",
+    "candidate": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeCashPayment",
+    "cosineSimilarity": 0.9011344697244565
+  },
+  {
+    "ocl": "\nlet cp:CashPayment in\ncp.oclIsNew() and\ncp.AmountTendered = amount and\ncp.BelongedSale = CurrentSale and\nCurrentSale.AssoicatedPayment = cp and\nCurrentSale.Belongedstore = CurrentStore and\nCurrentStore.Sales->includes(CurrentSale) and\nCurrentSale.IsComplete = true and\nCurrentSale.Time.isEqual(Now) and\ncp.Balance = amount - CurrentSale.Amount and\nCashPayment.allInstance()->includes(cp) and\nresult = true",
+    "candidate": "cashPayment.oclIsNew() and payment.oclIsNew() and payment.AmountTendered = amount and payment.BelongedSale = self.CurrentSale and cashPayment.Balance = amount - self.CurrentSale.Amount and self.CurrentSale.AssoicatedPayment = payment and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now and self.CurrentSale.Belongedstore = currentStore and Store.allInstance()->includes(currentStore) and result = true",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeCashPayment",
+    "cosineSimilarity": 0.8697340278564479
+  },
+  {
+    "ocl": "\n    CurrentCashDesk.oclIsUndefined() = false and\n    CurrentCashDesk.IsOpened = true and\n    (CurrentSale.oclIsUndefined() = true or\n    (CurrentSale.oclIsUndefined() = false and\n        CurrentSale.IsComplete = true\n    )\n    )",
+    "candidate": "currentCashDesk.oclIsUndefined() = false and currentCashDesk.IsOpened = true and (currentSale.oclIsUndefined() = true or currentSale.IsComplete = true)",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeNewSale",
+    "cosineSimilarity": 0.9280307664763275
+  },
+  {
+    "ocl": "\n    let s:Sale in\n    s.oclIsNew() and\n    s.BelongedCashDesk = CurrentCashDesk and\n    CurrentCashDesk.ContainedSales->includes(s) and\n    s.IsComplete = false and\n    s.IsReadytoPay = false and\n    Sale.allInstance()->includes(s) and\n    self.CurrentSale = s and\n    result = true",
+    "candidate": "let newSale:Sale in newSale.oclIsNew() and Sale.allInstance()->includes(newSale) and newSale.BelongedCashDesk = currentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and ProcessSaleService.CurrentSale = newSale and result = true",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeNewSale",
+    "cosineSimilarity": 0.8964756575040232
+  },
+  {
+    "ocl": "op:OrderProduct = OrderProduct.allInstance()->any(i:OrderProduct | i.Id = orderID)",
+    "candidate": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, entryItems:Set(Item) = entries->collect(e | e.Item)",
+    "service": "CoCoMESystem",
+    "useCase": "receiveOrderedProduct",
+    "operation": "receiveOrderedProduct",
+    "cosineSimilarity": 0.7581903736403754
+  },
+  {
+    "ocl": "op.oclIsUndefined() = false",
+    "candidate": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+    "service": "CoCoMESystem",
+    "useCase": "receiveOrderedProduct",
+    "operation": "receiveOrderedProduct",
+    "cosineSimilarity": 0.4800587537429323
+  },
+  {
+    "ocl": "\nop.OrderStatus = OrderStatus::RECEIVED and\nop.ContainedEntries->forAll(oe:OrderEntry |\n  oe.Item.StockNumber = oe.Item.StockNumber@pre + oe.Quantity)\nand\nresult = true",
+    "candidate": "entries->forAll(e:OrderEntry|e.Item.StockNumber = e.Item.StockNumber@pre + e.Quantity) and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "receiveOrderedProduct",
+    "operation": "receiveOrderedProduct",
+    "cosineSimilarity": 0.7983536808993803
+  },
+  {
+    "ocl": "true",
+    "candidate": "true",
+    "service": "CoCoMESystem",
+    "useCase": "showStockReports",
+    "operation": "showStockReports",
+    "cosineSimilarity": 0.9999999999999998
+  },
+  {
+    "ocl": "result = Item.allInstance()",
+    "candidate": "result = items",
+    "service": "CoCoMESystem",
+    "useCase": "showStockReports",
+    "operation": "showStockReports",
+    "cosineSimilarity": 0.5461616446543152
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    stu:Student = Student.allInstance()->any(s:Student | s.UserID = uid),\n    fac:Faculty = Faculty.allInstance()->any(f:Faculty | f.UserID = uid),\n    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode),\n    res:Reserve = Reserve.allInstance()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user and r.IsReserveClosed = false)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), copy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode), normalStatus:BorrowStatus = BorrowStatus::NORMAL, availableStatus:CopyStatus = CopyStatus::AVAILABLE, loanedStatus:CopyStatus = CopyStatus::LOANED",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "borrowBook",
+    "operation": "borrowBook",
+    "cosineSimilarity": 0.7621561362370207
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    user.BorrowStatus = BorrowStatus::NORMAL and\n    user.SuspensionDays = 0 and\n    if\n      user.oclIsTypeOf(Student)\n    then\n      if\n        stu.Programme = Programme::BACHELOR\n      then\n        stu.LoanedNumber < 20\n      else\n        if\n          stu.Programme = Programme::MASTER\n        then\n          stu.LoanedNumber < 40\n        else\n          stu.LoanedNumber < 60\n        endif\n      endif\n    else\n      fac.LoanedNumber < 60\n    endif and\n    (copy.Status = CopyStatus::AVAILABLE or\n      (copy.Status = CopyStatus::ONHOLDSHELF and\n        copy.IsReserved = true and\n        res.oclIsUndefined() = false and\n        res.IsReserveClosed = false\n      )\n    )",
+    "candidate": "user.oclIsUndefined() = false and copy.oclIsUndefined() = false and user.BorrowStatus = normalStatus and copy.Status = availableStatus and user.OverDueFee = 0.0 and copy.IsReserved = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "borrowBook",
+    "operation": "borrowBook",
+    "cosineSimilarity": 0.8192647161590305
+  },
+  {
+    "ocl": "\n    let loan:Loan in\n    loan.oclIsNew() and\n    loan.LoanedUser = user and\n    loan.LoanedCopy = copy and\n    loan.IsReturned = false and\n    loan.LoanDate = Today and\n    user.LoanedNumber = user.LoanedNumber@pre + 1 and\n    user.LoanedBook->includes(loan) and\n    copy.LoanedRecord->includes(loan) and\n    if\n      user.oclIsTypeOf(Student)\n    then\n      loan.DueDate = Today.After(30)\n    else\n      loan.DueDate = Today.After(60)\n    endif and\n    if\n      copy.Status@pre = CopyStatus::ONHOLDSHELF\n    then\n      copy.IsReserved = false and\n      res.IsReserveClosed = true\n    endif and\n    copy.Status = CopyStatus::LOANED and\n    loan.OverDue3Days = false and\n    loan.OverDue10Days = false and\n    loan.OverDue17Days = false and\n    loan.OverDue31Days = false and\n    Loan.allInstance()->includes(loan) and\n    result = true",
+    "candidate": "let loan:Loan in loan.oclIsNew() and Loan.allInstance()->includes(loan) and loan.LoanedUser = user and loan.LoanedCopy = copy and loan.IsReturned = false and copy.Status = loanedStatus and user.LoanedBook->includes(loan) and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "borrowBook",
+    "operation": "borrowBook",
+    "cosineSimilarity": 0.8759757558934165
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode),\n    res:Reserve = Reserve.allInstance()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), reserve:Reserve = Reserve.allInstance()->any(r | r.ReservedUser = user and r.ReservedCopy.Barcode = barcode and r.IsReserveClosed = false)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "cancelReservation",
+    "operation": "cancelReservation",
+    "cosineSimilarity": 0.8812918247764376
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    copy.Status = CopyStatus::LOANED and\n    copy.IsReserved = true and\n    res.oclIsUndefined() = false and\n    res.IsReserveClosed = false",
+    "candidate": "user.oclIsUndefined() = false and reserve.oclIsUndefined() = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "cancelReservation",
+    "operation": "cancelReservation",
+    "cosineSimilarity": 0.7093658993805351
+  },
+  {
+    "ocl": "\n    copy.IsReserved = false and\n    res.IsReserveClosed = true and\n    result = true",
+    "candidate": "reserve.IsReserveClosed = true and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "cancelReservation",
+    "operation": "cancelReservation",
+    "cosineSimilarity": 0.7704204030924787
+  },
+  {
+    "ocl": "users:Set(User) = User.allInstance()->select(u:User | u.SuspensionDays > 0)",
+    "candidate": "users:Set(User) = User.allInstance()->select(u | u.BorrowStatus = BorrowStatus::SUSPEND and u.SuspensionDays > 0)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "countDownSuspensionDay",
+    "operation": "countDownSuspensionDay",
+    "cosineSimilarity": 0.8930343044824482
+  },
+  {
+    "ocl": "true",
+    "candidate": "users.isEmpty() = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "countDownSuspensionDay",
+    "operation": "countDownSuspensionDay",
+    "cosineSimilarity": 0.3311251938937135
+  },
+  {
+    "ocl": "users->forAll(u:User |\n\t\t\t\tu.SuspensionDays = u.SuspensionDays@pre - 1 and\n\t\t\t\tif\n\t\t\t\t\tu.BorrowStatus = BorrowStatus::SUSPEND and\n\t\t\t\t\tu.OverDueFee = 0 and\n\t\t\t\t\tu.SuspensionDays = 0\n\t\t\t\tthen\n\t\t\t\t\tu.BorrowStatus = BorrowStatus::NORMAL\n\t\t\t\tendif\n\t\t\t)",
+    "candidate": "users->forAll(u:User | u.SuspensionDays = u.SuspensionDays@pre - 1 and (if u.SuspensionDays@pre = 1 then u.BorrowStatus = BorrowStatus::NORMAL else u.BorrowStatus = u.BorrowStatus@pre endif))",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "countDownSuspensionDay",
+    "operation": "countDownSuspensionDay",
+    "cosineSimilarity": 0.9637476593223119
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), loans:Set(Loan) = user.LoanedBook",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listBorrowHistory",
+    "cosineSimilarity": 0.7790543899425943
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listBorrowHistory",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "result = user.LoanedBook",
+    "candidate": "result = loans",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listBorrowHistory",
+    "cosineSimilarity": 0.6129864852887937
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), currentLoans:Set(Loan) = user.LoanedBook->select(l | l.IsReturned = false)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listHodingBook",
+    "cosineSimilarity": 0.7599581867245362
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listHodingBook",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "result = user.LoanedBook->select(l:Loan | l.IsReturned = false)",
+    "candidate": "result = currentLoans",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listHodingBook",
+    "cosineSimilarity": 0.5709972086285503
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    loans:Set(Loan) = user.LoanedBook->select(l:Loan | l.IsReturned = false and l.OverDueFee > 0)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid),overdueLoans:Set(Loan) = user.LoanedBook->select(l | l.IsReturned = false),overdueBookCopys:Set(BookCopy) = overdueLoans->collect(l | l.LoanedCopy)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listOverDueBook",
+    "cosineSimilarity": 0.9123856476785973
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and loans.oclIsUndefined() = false",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listOverDueBook",
+    "cosineSimilarity": 0.8375417605701828
+  },
+  {
+    "ocl": "result = loans->collect(l:Loan | l.LoanedCopy)",
+    "candidate": "result = overdueBookCopys",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listOverDueBook",
+    "cosineSimilarity": 0.47908117790446386
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    rBooks:Set(RecommendBook) = user.RecommendedBook",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), recommendBooks:Set(RecommendBook) = user.RecommendedBook",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listRecommendBook",
+    "cosineSimilarity": 0.9706534449375055
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listRecommendBook",
+    "cosineSimilarity": 0.8472902870936817
+  },
+  {
+    "ocl": "result = rBooks",
+    "candidate": "result = recommendBooks",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listRecommendBook",
+    "cosineSimilarity": 0.7460127718849632
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    res:Set(Reserve) = user.ReservedBook",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), reservedRes: Set(Reserve) = user.ReservedBook, reservedCopies: Set(BookCopy) = reservedRes->collect(r | r.ReservedCopy)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listReservationBook",
+    "cosineSimilarity": 0.9283493270493604
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and res.oclIsUndefined() = false",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listReservationBook",
+    "cosineSimilarity": 0.9507211293147887
+  },
+  {
+    "ocl": "result = res->collect(r:Reserve | r.ReservedCopy)",
+    "candidate": "result = reservedCopies",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listReservationBook",
+    "cosineSimilarity": 0.7148718479761509
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n     rBooks:Set(RecommendBook) = user.RecommendedBook",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), recommends:Set(RecommendBook) = user.RecommendedBook",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "listRecommendBook",
+    "operation": "listRecommendBook",
+    "cosineSimilarity": 0.9511338832133936
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false",
+    "candidate": "user.oclIsUndefined() = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "listRecommendBook",
+    "operation": "listRecommendBook",
+    "cosineSimilarity": 0.8472902870936817
+  },
+  {
+    "ocl": "result = rBooks",
+    "candidate": "result = recommends",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "listRecommendBook",
+    "operation": "listRecommendBook",
+    "cosineSimilarity": 0.47759170371222953
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode), reserve:Reserve = Reserve.allInstance()->any(r | r.ReservedUser = user and r.ReservedCopy = bookCopy and r.IsReserveClosed = false)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "makeReservation",
+    "operation": "makeReservation",
+    "cosineSimilarity": 0.8981047912239455
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    copy.Status = CopyStatus::LOANED and\n    copy.IsReserved = false",
+    "candidate": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and bookCopy.Status = CopyStatus::AVAILABLE and bookCopy.IsReserved = false and reserve.oclIsUndefined() = true and user.BorrowStatus = BorrowStatus::NORMAL",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "makeReservation",
+    "operation": "makeReservation",
+    "cosineSimilarity": 0.837663493349185
+  },
+  {
+    "ocl": "\n    let res:Reserve in\n    res.oclIsNew() and\n    copy.IsReserved = true and\n    res.IsReserveClosed = false and\n    res.ReserveDate.isEqual(Today) and\n    res.ReservedUser = user and\n    res.ReservedCopy = copy and\n    user.ReservedBook->includes(res) and\n    copy.ReservationRecord->includes(res) and\n    Reserve.allInstance()->includes(res) and\n    result = true",
+    "candidate": "let newReserve:Reserve in newReserve.oclIsNew() and Reserve.allInstance()->includes(newReserve) and newReserve.ReservedUser = user and newReserve.ReservedCopy = bookCopy and newReserve.IsReserveClosed = false and bookCopy.IsReserved = true and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "makeReservation",
+    "operation": "makeReservation",
+    "cosineSimilarity": 0.8836251679106212
+  },
+  {
+    "ocl": "book:Book = Book.allInstance()->any(boo:Book | boo.CallNo = callno)",
+    "candidate": "obs:Set(Book) = Book.allInstance(), existsBook:Boolean = obs->exists(o | o.CallNo = callno)",
+    "service": "ManageBookCRUDService",
+    "useCase": "manageBook",
+    "operation": "createBook",
+    "cosineSimilarity": 0.7361213285275389
+  },
+  {
+    "ocl": "book.oclIsUndefined() = true",
+    "candidate": "existsBook = false",
+    "service": "ManageBookCRUDService",
+    "useCase": "manageBook",
+    "operation": "createBook",
+    "cosineSimilarity": 0.5860271499103282
+  },
+  {
+    "ocl": "\n    let boo:Book in\n    boo.oclIsNew() and\n    boo.CallNo = callno and\n    boo.Title = title and\n    boo.Edition = edition and\n    boo.Author = author and\n    boo.Publisher = publisher and\n    boo.Description = description and\n    boo.ISBn = isbn and\n    boo.CopyNum = copynum and\n    Book.allInstance()->includes(boo) and\n    result = true",
+    "candidate": "let newBook:Book in newBook.oclIsNew() and Book.allInstance()->includes(newBook) and newBook.CallNo = callno and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and newBook.CopyNum = copynum and result = true",
+    "service": "ManageBookCRUDService",
+    "useCase": "manageBook",
+    "operation": "createBook",
+    "cosineSimilarity": 0.8280875360867915
+  },
+  {
+    "ocl": "\n    book:Book = Book.allInstance()->any(b:Book | b.CallNo = callNo),\n    bc:BookCopy = book.Copys->any(c:BookCopy | c.Barcode = barcode)",
+    "candidate": "book:Book = Book.allInstance()->any(b | b.CallNo = callNo), existCopy:BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode), availableStatus:CopyStatus = CopyStatus::AVAILABLE",
+    "service": "ManageBookCopyCRUDService",
+    "useCase": "manageBookCopy",
+    "operation": "addBookCopy",
+    "cosineSimilarity": 0.8608579363230331
+  },
+  {
+    "ocl": "\n    book.oclIsUndefined() = false and\n    bc.oclIsUndefined() = true",
+    "candidate": "book.oclIsUndefined() = false and existCopy.oclIsUndefined() = true",
+    "service": "ManageBookCopyCRUDService",
+    "useCase": "manageBookCopy",
+    "operation": "addBookCopy",
+    "cosineSimilarity": 0.7792037157113595
+  },
+  {
+    "ocl": "\n    let copy:BookCopy in\n    copy.oclIsNew() and\n    copy.Barcode = barcode and\n    copy.Status = CopyStatus::AVAILABLE and\n    copy.Location = location and\n    copy.IsReserved = false and\n    book.Copys->includes(copy) and\n    copy.BookBelongs = book and\n    book.CopyNum = book.CopyNum@pre + 1 and\n    BookCopy.allInstance()->includes(copy) and\n    result = true",
+    "candidate": "let newCopy:BookCopy in newCopy.oclIsNew() and BookCopy.allInstance()->includes(newCopy) and newCopy.Barcode = barcode and newCopy.Location = location and newCopy.Status = availableStatus and newCopy.IsReserved = false and newCopy.BookBelongs = book and book.Copys->includes(newCopy) and result = true",
+    "service": "ManageBookCopyCRUDService",
+    "useCase": "manageBookCopy",
+    "operation": "addBookCopy",
+    "cosineSimilarity": 0.9254416921074852
+  },
+  {
+    "ocl": "librarian:Librarian = Librarian.allInstance()->any(lib:Librarian | lib.LibrarianID = librarianid)",
+    "candidate": "librarians:Set(Librarian) = Librarian.allInstance(), existsLibrarian:Librarian = librarians->any(l | l.LibrarianID = librarianid)",
+    "service": "ManageLibrarianCRUDService",
+    "useCase": "manageLibrarian",
+    "operation": "createLibrarian",
+    "cosineSimilarity": 0.909454957406983
+  },
+  {
+    "ocl": "librarian.oclIsUndefined() = true",
+    "candidate": "existsLibrarian.oclIsUndefined() = true",
+    "service": "ManageLibrarianCRUDService",
+    "useCase": "manageLibrarian",
+    "operation": "createLibrarian",
+    "cosineSimilarity": 0.9192945293278021
+  },
+  {
+    "ocl": "\n    let lib:Librarian in\n    lib.oclIsNew() and\n    lib.LibrarianID = librarianid and\n    lib.Name = name and\n    lib.Password = password and\n    Librarian.allInstance()->includes(lib) and\n    result = true",
+    "candidate": "let newLibrarian:Librarian in newLibrarian.oclIsNew() and Librarian.allInstance()->includes(newLibrarian) and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true",
+    "service": "ManageLibrarianCRUDService",
+    "useCase": "manageLibrarian",
+    "operation": "createLibrarian",
+    "cosineSimilarity": 0.9047902409032907
+  },
+  {
+    "ocl": "subject:Subject = Subject.allInstance()->any(sub:Subject | sub.Name = name)",
+    "candidate": "subjects:Set(Subject) = Subject.allInstance(), existsSubject:Subject = subjects->any(s | s.Name = name)",
+    "service": "ManageSubjectCRUDService",
+    "useCase": "manageSubject",
+    "operation": "createSubject",
+    "cosineSimilarity": 0.7787980054022693
+  },
+  {
+    "ocl": "subject.oclIsUndefined() = true",
+    "candidate": "existsSubject.oclIsUndefined()",
+    "service": "ManageSubjectCRUDService",
+    "useCase": "manageSubject",
+    "operation": "createSubject",
+    "cosineSimilarity": 0.8584924776053358
+  },
+  {
+    "ocl": "\n    let sub:Subject in\n    sub.oclIsNew() and\n    sub.Name = name and\n    Subject.allInstance()->includes(sub) and\n    result = true",
+    "candidate": "let newSubject:Subject in newSubject.oclIsNew() and Subject.allInstance()->includes(newSubject) and newSubject.Name = name and result = true",
+    "service": "ManageSubjectCRUDService",
+    "useCase": "manageSubject",
+    "operation": "createSubject",
+    "cosineSimilarity": 0.8469221149883687
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(use:User | use.UserID = userid)",
+    "candidate": "newUser:User = User.allInstance()->any(u | u.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser",
+    "cosineSimilarity": 0.8921547654814438
+  },
+  {
+    "ocl": "user.oclIsUndefined() = true",
+    "candidate": "newUser.oclIsUndefined()",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser",
+    "cosineSimilarity": 0.8041691414532189
+  },
+  {
+    "ocl": "\n    let use:User in\n    use.oclIsNew() and\n    use.UserID = userid and\n    use.Name = name and\n    use.Sex = sex and\n    use.Password = password and\n    use.Email = email and\n    use.Faculty = faculty and\n    use.LoanedNumber = loanednumber and\n    use.BorrowStatus = borrowstatus and\n    use.SuspensionDays = suspensiondays and\n    use.OverDueFee = overduefee and\n    User.allInstance()->includes(use) and\n    result = true",
+    "candidate": "let createdUser:User in createdUser.oclIsNew() and User.allInstance()->includes(createdUser) and createdUser.UserID = userid and createdUser.Name = name and createdUser.Sex = sex and createdUser.Password = password and createdUser.Email = email and createdUser.Faculty = faculty and createdUser.LoanedNumber = loanednumber and createdUser.BorrowStatus = borrowstatus and createdUser.SuspensionDays = suspensiondays and createdUser.OverDueFee = overduefee and result = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser",
+    "cosineSimilarity": 0.8225187174408072
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n\t\t\tloans:Set(Loan) = Loan.allInstance()->select(l:Loan | l.LoanedUser = user and l.DueDate.isBefore(Today)and l.IsReturned = true and l.OverDueFee > 0)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "payOverDueFee",
+    "operation": "payOverDueFee",
+    "cosineSimilarity": 0.7839990434036023
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and\n\t\t\tloans.notEmpty() and\n\t\t\tfee >= user.OverDueFee",
+    "candidate": "user.OverDueFee >= fee and user.oclIsUndefined() = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "payOverDueFee",
+    "operation": "payOverDueFee",
+    "cosineSimilarity": 0.8365184347862821
+  },
+  {
+    "ocl": "user.OverDueFee = 0 and\n\t\t\tloans->forAll(l:Loan |\n\t\t\t\tl.OverDueFee = 0)\n\t\t\tand\n\t\t\tresult = true",
+    "candidate": "user.OverDueFee = user.OverDueFee - fee and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "payOverDueFee",
+    "operation": "payOverDueFee",
+    "cosineSimilarity": 0.7430021724529773
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    rb:RecommendBook = RecommendBook.allInstance()->any(r:RecommendBook | r.CallNo = callNo)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), obs:Set(RecommendBook) = user.RecommendedBook, books:Set(Book) = Book.allInstance()->select(b | b.CallNo = callNo)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "recommendBook",
+    "operation": "recommendBook",
+    "cosineSimilarity": 0.9002887461375415
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    rb.oclIsUndefined() = true",
+    "candidate": "user.oclIsUndefined() = false and books.isEmpty() = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "recommendBook",
+    "operation": "recommendBook",
+    "cosineSimilarity": 0.6850693138517893
+  },
+  {
+    "ocl": "\n    let r:RecommendBook in\n    r.oclIsNew() and\n    r.CallNo = callNo and\n    r.Title = title and\n    r.Edition = edition and\n    r.Author = author and\n    r.Publisher = publisher and\n    r.Description = description and\n    r.ISBn = isbn and\n    r.RecommendDate = Today and\n    r.RecommendUser = user and\n    user.RecommendedBook->includes(r) and\n    RecommendBook.allInstance()->includes(r) and\n    result = true",
+    "candidate": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "recommendBook",
+    "operation": "recommendBook",
+    "cosineSimilarity": 0.8359407647106102
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n\t\t\tstu:Student = Student.allInstance()->any(s:Student | s.UserID = uid),\n\t\t\tfac:Faculty = Faculty.allInstance()->any(f:Faculty | f.UserID = uid),\n\t\t\tcopy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),\n\t\t\tloan:Loan = Loan.allInstance()->any(l:Loan | l.LoanedUser = user and l.LoanedCopy = copy)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), copy:BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode), loan:Loan = Loan.allInstance()->any(l | l.LoanedUser = user and l.LoanedCopy = copy and l.IsReturned = false), statusLoaned:CopyStatus = CopyStatus::LOANED",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "renewBook",
+    "operation": "renewBook",
+    "cosineSimilarity": 0.9154017963351093
+  },
+  {
+    "ocl": "user.BorrowStatus = BorrowStatus::NORMAL and\n\t\t\tuser.oclIsUndefined() = false and\n\t\t\tcopy.oclIsUndefined() = false and\n\t\t\tloan.oclIsUndefined() = false and\n\t\t\tcopy.IsReserved = false and\n\t\t\tloan.DueDate.isAfter(Today) and\n\t\t\tif\n\t\t\t\tuser.oclIsTypeOf(Student)\n\t\t\tthen\n\t\t\t\tloan.RenewedTimes < 3\n\t\t\telse\n\t\t\t\tloan.RenewedTimes < 6\n\t\t\tendif and\n\t\t\tloan.OverDueFee = 0",
+    "candidate": "user.oclIsUndefined() = false and copy.oclIsUndefined() = false and loan.oclIsUndefined() = false and copy.Status = statusLoaned and loan.IsReturned = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "renewBook",
+    "operation": "renewBook",
+    "cosineSimilarity": 0.8144940458906924
+  },
+  {
+    "ocl": "loan.RenewedTimes = loan.RenewedTimes@pre + 1 and\n\t\t\tloan.RenewDate = Today and\n\t\t\tif\n\t\t\t\tuser.oclIsTypeOf(Student)\n\t\t\tthen\n\t\t\t\tif\n\t\t\t\t\tstu.Programme = Programme::BACHELOR\n\t\t\t\tthen\n\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(20)\n\t\t\t\telse\n\t\t\t\t\tif\n\t\t\t\t\t\tstu.Programme = Programme::MASTER\n\t\t\t\t\tthen\n\t\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(40)\n\t\t\t\t\telse\n\t\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(60)\n\t\t\t\t\tendif\n\t\t\t\tendif\n\t\t\telse\n\t\t\t\tloan.DueDate = loan.DueDate@pre.After(60)\n\t\t\tendif and\n\t\t\tresult = true",
+    "candidate": "loan.RenewedTimes = loan.RenewedTimes@pre + 1 and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "renewBook",
+    "operation": "renewBook",
+    "cosineSimilarity": 0.8382035344807227
+  },
+  {
+    "ocl": "authorname <> \"\"",
+    "candidate": "authorname.oclIsTypeOf(String)",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByAuthor",
+    "cosineSimilarity": 0.4995216198176869
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Author = authorname)",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByAuthor",
+    "cosineSimilarity": 0.5950453932669145
+  },
+  {
+    "ocl": "barcode.oclIsTypeOf(String)",
+    "candidate": "barcode.oclIsTypeOf(String)",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByBarCode",
+    "cosineSimilarity": 1.0000000000000002
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByBarCode",
+    "cosineSimilarity": 0.5880952735161362
+  },
+  {
+    "ocl": "iSBNnumber.oclIsTypeOf(String)",
+    "candidate": "iSBNnumber.oclIsTypeOf(String)",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByISBN",
+    "cosineSimilarity": 1
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.ISBn = iSBNnumber)",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByISBN",
+    "cosineSimilarity": 0.6230445953957418
+  },
+  {
+    "ocl": "subject.oclIsTypeOf(String)",
+    "candidate": "subject.oclIsTypeOf(String) and Subject.allInstance()->includes(subjectEntity)",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookBySubject",
+    "cosineSimilarity": 0.6927247561427201
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookBySubject",
+    "cosineSimilarity": 0.603480788806063
+  },
+  {
+    "ocl": "title <> \"\"",
+    "candidate": "books.isEmpty() = false",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByTitle",
+    "cosineSimilarity": 0.4113954621870084
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Title = title)",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByTitle",
+    "cosineSimilarity": 0.6100318143710874
+  },
+  {
+    "ocl": "email <> \"\"",
+    "candidate": "email.oclIsTypeOf(String)",
+    "service": "ThirdPartyServices",
+    "useCase": "sendNotificationEmail",
+    "operation": "sendNotificationEmail",
+    "cosineSimilarity": 0.3990409109635195
+  },
+  {
+    "ocl": "result = true",
+    "candidate": "result = true",
+    "service": "ThirdPartyServices",
+    "useCase": "sendNotificationEmail",
+    "operation": "sendNotificationEmail",
+    "cosineSimilarity": 0.9999999999999998
+  },
+  {
+    "ocl": "loan:Loan = Loan.allInstance()->any(loa:Loan | loa.LoanID = loanid)",
+    "candidate": "loan:Loan = Loan.allInstance()->any(l | l.LoanID = loanid)",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "closeOutLoan",
+    "operation": "closeOutLoan",
+    "cosineSimilarity": 0.9633103120242043
+  },
+  {
+    "ocl": "loan.oclIsUndefined() = false and\n\t\t\tloan.Status = LoanStatus::LSOPEN",
+    "candidate": "loan.oclIsUndefined() = false and loan.Status = LoanStatus::LSOPEN",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "closeOutLoan",
+    "operation": "closeOutLoan",
+    "cosineSimilarity": 0.98593490003555
+  },
+  {
+    "ocl": "loan.Status = LoanStatus::CLOSED and\n\t\t\tresult = true",
+    "candidate": "loan.Status = LoanStatus::CLOSED and result = true",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "closeOutLoan",
+    "operation": "closeOutLoan",
+    "cosineSimilarity": 0.985800737817109
+  },
+  {
+    "ocl": "rs:LoanRequest = self.CurrentLoanRequests->any(r:LoanRequest | r.RequestID = requestid)",
+    "candidate": "targetLoanRequest:LoanRequest = CurrentLoanRequests->any(lr | lr.RequestID = requestid)",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "chooseLoanRequest",
+    "cosineSimilarity": 0.8814605032757945
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "targetLoanRequest.oclIsUndefined() = false",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "chooseLoanRequest",
+    "cosineSimilarity": 0.6368598454585378
+  },
+  {
+    "ocl": "self.CurrentLoanRequest = rs and result = rs",
+    "candidate": "CurrentLoanRequest = targetLoanRequest and result = targetLoanRequest",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "chooseLoanRequest",
+    "cosineSimilarity": 0.6739415226265321
+  },
+  {
+    "ocl": "rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::SUBMITTED)",
+    "candidate": "submittedLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::SUBMITTED)",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "listSubmitedLoanRequest",
+    "cosineSimilarity": 0.9003254015551726
+  },
+  {
+    "ocl": "rs.size() > 0",
+    "candidate": "submittedLoanRequests.isEmpty() = false",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "listSubmitedLoanRequest",
+    "cosineSimilarity": 0.2837186596917439
+  },
+  {
+    "ocl": "self.CurrentLoanRequests = rs and\n\t\t\tresult = rs",
+    "candidate": "CurrentLoanRequests = submittedLoanRequests and result = submittedLoanRequests",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "listSubmitedLoanRequest",
+    "cosineSimilarity": 0.6983805374538254
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "markRequestValid",
+    "cosineSimilarity": 0.9106343273264654
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and\n\t\t\tresult = true",
+    "candidate": "CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and result = true",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "markRequestValid",
+    "cosineSimilarity": 0.9356013812121404
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = termid)",
+    "candidate": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), loanRequest:LoanRequest = CurrentLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "addLoanTerm",
+    "cosineSimilarity": 0.9050379303998315
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tloanterm.oclIsUndefined() = false",
+    "candidate": "loanRequest.oclIsUndefined() = false and loanTerm.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "addLoanTerm",
+    "cosineSimilarity": 0.9187952084208122
+  },
+  {
+    "ocl": "CurrentLoanRequest.AttachedLoanTerms->includes(loanterm) and\n\t\t\tresult = true",
+    "candidate": "loanRequest.AttachedLoanTerms->includes(loanTerm) and result = true",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "addLoanTerm",
+    "cosineSimilarity": 0.9464467256764523
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "approveLoanRequest",
+    "cosineSimilarity": 0.9106343273264654
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and\n\t\t\tresult = true",
+    "candidate": "CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = true",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "approveLoanRequest",
+    "cosineSimilarity": 0.9152103195610304
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false and ob.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "checkCreditHistory",
+    "cosineSimilarity": 0.864403257670367
+  },
+  {
+    "ocl": "result = CurrentLoanRequest.RequestedCreditHistory",
+    "candidate": "result = ob",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "checkCreditHistory",
+    "cosineSimilarity": 0.2560793695552634
+  },
+  {
+    "ocl": "rs:LoanRequest = self.CurrentLoanRequests->any(r:LoanRequest | r.RequestID = requestid)",
+    "candidate": "candidate:LoanRequest = CurrentLoanRequests->any(lr | lr.RequestID = requestid)",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "chooseOneForReview",
+    "cosineSimilarity": 0.8956450294790474
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "candidate.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "chooseOneForReview",
+    "cosineSimilarity": 0.8421692629360698
+  },
+  {
+    "ocl": "self.CurrentLoanRequest = rs and result = rs",
+    "candidate": "CurrentLoanRequest = candidate and result = candidate",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "chooseOneForReview",
+    "cosineSimilarity": 0.6523192132645836
+  },
+  {
+    "ocl": "true",
+    "candidate": "loanTerms.isEmpty() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listAvaiableLoanTerm",
+    "cosineSimilarity": 0.3279985999149083
+  },
+  {
+    "ocl": "result = LoanTerm.allInstance()",
+    "candidate": "result = loanTerms",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listAvaiableLoanTerm",
+    "cosineSimilarity": 0.7712599514007399
+  },
+  {
+    "ocl": "rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::REFERENCESVALIDATED)",
+    "candidate": "referencesValidatedLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::REFERENCESVALIDATED)",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listTenLoanRequest",
+    "cosineSimilarity": 0.8606955089425109
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "referencesValidatedLoanRequests.isEmpty() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listTenLoanRequest",
+    "cosineSimilarity": 0.3367568400149859
+  },
+  {
+    "ocl": "self.CurrentLoanRequests = rs and result = rs",
+    "candidate": "CurrentLoanRequests = referencesValidatedLoanRequests and result = referencesValidatedLoanRequests",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listTenLoanRequest",
+    "cosineSimilarity": 0.6475957904238067
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false and requestedCAHistory.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "reviewCheckingAccount",
+    "cosineSimilarity": 0.9333005012891115
+  },
+  {
+    "ocl": "result = CurrentLoanRequest.RequestedCAHistory",
+    "candidate": "result = requestedCAHistory",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "reviewCheckingAccount",
+    "cosineSimilarity": 0.807710572235297
+  },
+  {
+    "ocl": "loanaccount:LoanAccount = LoanAccount.allInstance()->any(loa:LoanAccount | loa.LoanAccountID = loanaccountid)",
+    "candidate": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), loanAccountExists:Boolean = if loanAccount.oclIsUndefined() then false else true endif",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "createLoanAccount",
+    "cosineSimilarity": 0.9067208913317445
+  },
+  {
+    "ocl": "loanaccount.oclIsUndefined() = true",
+    "candidate": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "createLoanAccount",
+    "cosineSimilarity": 0.7207687850602367
+  },
+  {
+    "ocl": "let loa:LoanAccount in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.LoanAccountID = loanaccountid and\n\t\t\tloa.Balance = balance and\n\t\t\tloa.Status = status and\n\t\t\tLoanAccount.allInstance()->includes(loa) and\n\t\t\tresult = true",
+    "candidate": "loanAccountExists = false and LoanAccount.allInstance()->includes(resultLoanAccount) and resultLoanAccount.LoanAccountID = loanaccountid and resultLoanAccount.Balance = balance and resultLoanAccount.Status = status and result = true or loanAccountExists = true and result = false",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "createLoanAccount",
+    "cosineSimilarity": 0.8675640995648032
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false",
+    "candidate": "LoanRequest.allInstance()->includes(currentLoanRequest)",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "generateLoanAgreement",
+    "cosineSimilarity": 0.6177801988371263
+  },
+  {
+    "ocl": "let la:LoanAgreement in\n\t\t\tla.oclIsNew() and\n\t\t\tla.Content = \"Loan Agreement\" and\n\t\t\tself.CurrentLoanRequest.AttachedLoanAgreement = la and\n\t\t\tLoanAgreement.allInstance()->includes(la) and\n\t\t\tresult = true",
+    "candidate": "let newLoanAgreement:LoanAgreement in newLoanAgreement.oclIsNew() and LoanAgreement.allInstance()->includes(newLoanAgreement) and newLoanAgreement.Content = \"Loan Agreement\" and currentLoanRequest.AttachedLoanAgreement = newLoanAgreement and result = true",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "generateLoanAgreement",
+    "cosineSimilarity": 0.8935295747682729
+  },
+  {
+    "ocl": "r:LoanRequest = LoanRequest.allInstance()->any(lr:LoanRequest | lr.RequestID = id)",
+    "candidate": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = id), success:Boolean = loanRequest.oclIsUndefined() = false",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "genereateApprovalLetter",
+    "cosineSimilarity": 0.8976729915228473
+  },
+  {
+    "ocl": "r.oclIsUndefined() = false",
+    "candidate": "LoanRequest.allInstance()->includes(loanRequest)",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "genereateApprovalLetter",
+    "cosineSimilarity": 0.31806938958509406
+  },
+  {
+    "ocl": "let l:ApprovalLetter in\n\t\t\tl.oclIsNew() and\n\t\t\tl.Content = \"ApprovalLetterContent\" and\n\t\t\tr.AttachedApprovalLetter = l and\n\t\t\tself.CurrentLoanRequest = r and\n\t\t\tApprovalLetter.allInstance()->includes(l) and\n\t\t\tresult = true",
+    "candidate": "let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and ApprovalLetter.allInstance()->includes(approvalLetter) and approvalLetter.Content = 'ApprovalLetterContent' and loanRequest.AttachedApprovalLetter = approvalLetter and loanRequest.AttachedApprovalLetter = approvalLetter and loanRequest = loanRequest and result = success",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "genereateApprovalLetter",
+    "cosineSimilarity": 0.8966492658103266
+  },
+  {
+    "ocl": "rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::APPROVED)",
+    "candidate": "approvedLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::APPROVED)",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "listApprovalRequest",
+    "cosineSimilarity": 0.8956755902935128
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "approvedLoanRequests.isEmpty() = false",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "listApprovalRequest",
+    "cosineSimilarity": 0.350064633479468
+  },
+  {
+    "ocl": "self.CurrentLoanRequests = rs and result = rs",
+    "candidate": "result = approvedLoanRequests",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "listApprovalRequest",
+    "cosineSimilarity": 0.6408519138120061
+  },
+  {
+    "ocl": "loan:Loan = Loan.allInstance()->any(loa:Loan | loa.LoanID = loanid)",
+    "candidate": "loan:Loan = Loan.allInstance()->any(l | l.LoanID = loanid)",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "loanPayment",
+    "operation": "loanPayment",
+    "cosineSimilarity": 0.9633103120242043
+  },
+  {
+    "ocl": "loan.oclIsUndefined() = false and\n\t\t\tloan.Status = LoanStatus::LSOPEN",
+    "candidate": "loan.oclIsUndefined() = false and loan.Status = LoanStatus::LSOPEN",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "loanPayment",
+    "operation": "loanPayment",
+    "cosineSimilarity": 0.98593490003555
+  },
+  {
+    "ocl": "loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount and\n\t\t\tresult = true",
+    "candidate": "loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount and result = true",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "loanPayment",
+    "operation": "loanPayment",
+    "cosineSimilarity": 0.9879588658343994
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(l | l.ItemID = itemid and l.Content = content)",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "createLoanTerm",
+    "cosineSimilarity": 0.8763786486047435
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = true",
+    "candidate": "loanTerm.oclIsUndefined() = true",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "createLoanTerm",
+    "cosineSimilarity": 0.9654778683587595
+  },
+  {
+    "ocl": "let loa:LoanTerm in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.ItemID = itemid and\n\t\t\tloa.Content = content and\n\t\t\tLoanTerm.allInstance()->includes(loa) and\n\t\t\tresult = true",
+    "candidate": "let newLoanTerm:LoanTerm in newLoanTerm.oclIsNew() and LoanTerm.allInstance()->includes(newLoanTerm) and newLoanTerm.ItemID = itemid and newLoanTerm.Content = content and result = true",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "createLoanTerm",
+    "cosineSimilarity": 0.9098549057811928
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(lt | lt.ItemID = itemid)",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "deleteLoanTerm",
+    "cosineSimilarity": 0.9232965957830067
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = false",
+    "candidate": "loanTerm.oclIsUndefined() = false",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "deleteLoanTerm",
+    "cosineSimilarity": 0.9639296072738714
+  },
+  {
+    "ocl": "LoanTerm.allInstance()->excludes(loanterm) and\n\t\t\tresult = true",
+    "candidate": "LoanTerm.allInstance()->excludes(loanTerm) and result = true",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "deleteLoanTerm",
+    "cosineSimilarity": 0.9860915811112736
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(l | l.ItemID = itemid)",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "modifyLoanTerm",
+    "cosineSimilarity": 0.9362004513715099
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = false",
+    "candidate": "loanTerm.oclIsUndefined() = false",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "modifyLoanTerm",
+    "cosineSimilarity": 0.9639296072738714
+  },
+  {
+    "ocl": "loanterm.ItemID = itemid and\n\t\t\tloanterm.Content = content and\n\t\t\tresult = true",
+    "candidate": "loanTerm.ItemID = itemid and loanTerm.Content = content and result = true",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "modifyLoanTerm",
+    "cosineSimilarity": 0.9723957700700245
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(lt | lt.ItemID = itemid)",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "queryLoanTerm",
+    "cosineSimilarity": 0.9232965957830067
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = false",
+    "candidate": "loanTerm.oclIsUndefined() = false",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "queryLoanTerm",
+    "cosineSimilarity": 0.9639296072738714
+  },
+  {
+    "ocl": "result = loanterm",
+    "candidate": "result = loanTerm",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "queryLoanTerm",
+    "cosineSimilarity": 0.9613527111931596
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false and ca.oclIsUndefined() = false and ch.oclIsUndefined() = false and cs = true and statusSubmitted = true",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "calculateScore",
+    "cosineSimilarity": 0.8613456599571232
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.CreditScore = 100 and\n\t\t\tself.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\t\tresult = self.CurrentLoanRequest.CreditScore",
+    "candidate": "result = CurrentLoanRequest.CreditScore",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "calculateScore",
+    "cosineSimilarity": 0.7782855667290928
+  },
+  {
+    "ocl": "loanrequest:LoanRequest = LoanRequest.allInstance()->any(loa:LoanRequest | loa.RequestID = requestid)",
+    "candidate": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = requestid), notExist:Boolean = loanRequest.oclIsUndefined()",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "enterLoanInformation",
+    "cosineSimilarity": 0.8884731269065731
+  },
+  {
+    "ocl": "loanrequest.oclIsUndefined() = true",
+    "candidate": "requestid.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and loanamount.oclIsTypeOf(Real) and loanpurpose.oclIsTypeOf(String) and income.oclIsTypeOf(Real) and phonenumber.oclIsTypeOf(Integer) and postaladdress.oclIsTypeOf(String) and zipcode.oclIsTypeOf(Integer) and email.oclIsTypeOf(String) and workreferences.oclIsTypeOf(String) and creditreferences.oclIsTypeOf(String) and checkingaccountnumber.oclIsTypeOf(Integer) and securitynumber.oclIsTypeOf(Integer) and LoanRequest.allInstance()->excludes(loanRequest)",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "enterLoanInformation",
+    "cosineSimilarity": 0.6677870271672588
+  },
+  {
+    "ocl": "let loa:LoanRequest in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.RequestID = requestid and\n\t\t\tloa.Name = name and\n\t\t\tloa.LoanAmount = loanamount and\n\t\t\tloa.LoanPurpose = loanpurpose and\n\t\t\tloa.Income = income and\n\t\t\tloa.PhoneNumber = phonenumber and\n\t\t\tloa.PostalAddress = postaladdress and\n\t\t\tloa.ZipCode = zipcode and\n\t\t\tloa.Email = email and\n\t\t\tloa.WorkReferences = workreferences and\n\t\t\tloa.CreditReferences = creditreferences and\n\t\t\tloa.CheckingAccountNumber = checkingaccountnumber and\n\t\t\tloa.SecurityNumber = securitynumber and\n\t\t\tLoanRequest.allInstance()->includes(loa) and\n\t\t\tself.CurrentLoanRequest = loa and\n\t\t\tresult = true",
+    "candidate": "let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(newLoanRequest) and newLoanRequest.RequestID = requestid and newLoanRequest.Name = name and newLoanRequest.LoanAmount = loanamount and newLoanRequest.LoanPurpose = loanpurpose and newLoanRequest.Income = income and newLoanRequest.PhoneNumber = phonenumber and newLoanRequest.PostalAddress = postaladdress and newLoanRequest.ZipCode = zipcode and newLoanRequest.Email = email and newLoanRequest.WorkReferences = workreferences and newLoanRequest.CreditReferences = creditreferences and newLoanRequest.CheckingAccountNumber = checkingaccountnumber and newLoanRequest.SecurityNumber = securitynumber and newLoanRequest.Status = LoanRequestStatus::SUBMITTED and self.CurrentLoanRequest = newLoanRequest and result = true",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "enterLoanInformation",
+    "cosineSimilarity": 0.9078616686820469
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashier:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)",
+        "precondition": "cashier->size() > 0",
+        "postcondition": "result = cashier->size() > 0"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 19,
+          "msg": "no viable alternative at input 'cashier->size()'"
+        },
+        {
+          "line": 9,
+          "column": 28,
+          "msg": "no viable alternative at input 'cashier->size()'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::deleteCashier(id:Integer): Boolean {\n          definition:\n          cashier:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id)\n            \n            precondition:\n          cashier->size() > 0\n            \n            postcondition:\n          result = cashier->size() > 0\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid), isUnique:Boolean = User.allInstance()->isUnique(o:User | o.UserID)",
+        "precondition": "userid.oclIsUndefined() = bool and isUnique = true",
+        "postcondition": "let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Sex = sex and newUser.Password = password and newUser.Email = email and newUser.Faculty = faculty and newUser.LoanedNumber = loanednumber and newUser.BorrowStatus = borrowstatus and newUser.SuspensionDays = suspensiondays and newUser.OverDueFee = overduefee and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 70,
+          "msg": "mismatched input 'isUnique' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 45,
+          "msg": "mismatched input 'isUnique' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:String,name:String,sex:Sex [M|F],password:String,email:String,faculty:String,loanednumber:Integer,borrowstatus:BorrowStatus [NORMAL|SUSPEND],suspensiondays:Integer,overduefee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = userid), isUnique:Boolean = User.allInstance()->isUnique(o:User | o.UserID)\n            \n            precondition:\n          userid.oclIsUndefined() = bool and isUnique = true\n            \n            postcondition:\n          let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Sex = sex and newUser.Password = password and newUser.Email = email and newUser.Faculty = faculty and newUser.LoanedNumber = loanednumber and newUser.BorrowStatus = borrowstatus and newUser.SuspensionDays = suspensiondays and newUser.OverDueFee = overduefee and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

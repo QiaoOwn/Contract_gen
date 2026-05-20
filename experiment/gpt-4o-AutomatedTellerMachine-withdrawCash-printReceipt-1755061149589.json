@@ -1,0 +1,292 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.CardIDValidated = true and self.PasswordValidated = true and BankCard.allInstance()->includes(self.InputCard)",
+        "postcondition": "let output:Real in if self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard) then if self.IsWithdraw then output = self.WithdrawedNumber else if self.IsDeposit then output = self.DepositedNumber else output = 0 endif endif endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 109,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 7,
+          "column": 117,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 7,
+          "column": 285,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          \n            precondition:\n          self.CardIDValidated = true and self.PasswordValidated = true and BankCard.allInstance()->includes(self.InputCard)\n            \n            postcondition:\n          let output:Real in if self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard) then if self.IsWithdraw then output = self.WithdrawedNumber else if self.IsDeposit then output = self.DepositedNumber else output = 0 endif endif endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let output:Real in if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then if IsWithdraw then output = WithdrawedNumber else if IsDeposit then output = DepositedNumber else output = 0 endif endif endif and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 250,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)\n            \n            postcondition:\n          let output:Real in if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then if IsWithdraw then output = WithdrawedNumber else if IsDeposit then output = DepositedNumber else output = 0 endif endif endif and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then if IsWithdraw then WithdrawedNumber else if IsDeposit then DepositedNumber else 0 endif endif endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\toutput: Real = if CardIDValidated and\n\t\tPasswordValidated and\n\t\tBankCard.allInstance()->includes(InputCard) \n\t\tthen if IsWithdraw \n\t\tthen WithdrawedNumber \n\t\telse if IsDeposit \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif  \n\t\tendif  \n\t\tendif \n\tprecondition:\n\t\tCardIDValidated = true and\n\t\tPasswordValidated = true and\n\t\tBankCard.allInstance()->includes(InputCard)\n\tpostcondition:\n\t\tresult = output\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport { CardStatus, CardCatalog, BankCard, User, getRepository };\n",
+        "originalService": "class AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist, then if the money is withdraw,\n   *if print the withdrawed number or if it is deposit print the deposited number or print 0*/\n  printReceipt(): number {\n    /*Definition Start*/\n    let output: number = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => this.CardIDValidated,\n            description: \"CardIDValidated\",\n          })\n            .and({\n              logic: () => this.PasswordValidated,\n              description: \"PasswordValidated\",\n            })\n            .and({\n              logic: () => getRepository(BankCard).includes(this.InputCard),\n              description: \"BankCard.allInstance()->includes(InputCard)\",\n            }),\n        description:\n          \"CardIDValidatedandPasswordValidatedandBankCard.allInstance()->includes(InputCard)\",\n        then: l().if({\n          logic: () =>\n            l({\n              logic: () => this.IsWithdraw,\n              description: \"IsWithdraw\",\n            }),\n          description: \"IsWithdraw\",\n          then: l({\n            logic: () => this.WithdrawedNumber,\n            description: \"WithdrawedNumber\",\n          }),\n          else: l().if({\n            logic: () =>\n              l({\n                logic: () => this.IsDeposit,\n                description: \"IsDeposit\",\n              }),\n            description: \"IsDeposit\",\n            then: l({\n              logic: () => this.DepositedNumber,\n              description: \"DepositedNumber\",\n            }),\n            else: l({\n              logic: () => 0,\n              description: \"0\",\n            }),\n          }),\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => this.CardIDValidated === true,\n        description: \"CardIDValidated=true\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(BankCard).includes(this.InputCard),\n          description: \"BankCard.allInstance()->includes(InputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => output,\n      description: \"result=output\",\n    }).build().value;\n    /*Postcondition End*/\n  }\n}\nexport { AutomatedTellerMachineSystem_AutoGenerated };\n",
+        "entity": "/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist, then if the money is withdraw,\n   *if print the withdrawed number or if it is deposit print the deposited number or print 0*/\n  printReceipt(): number {\n    /*Definition Start*/\n    let output: number = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => this.CardIDValidated,\n            description: \"CardIDValidated\",\n          })\n            .and({\n              logic: () => this.PasswordValidated,\n              description: \"PasswordValidated\",\n            })\n            .and({\n              logic: () => getRepository(BankCard).includes(this.InputCard),\n              description: \"BankCard.allInstance()->includes(InputCard)\",\n            }),\n        description:\n          \"CardIDValidatedandPasswordValidatedandBankCard.allInstance()->includes(InputCard)\",\n        then: l().if({\n          logic: () =>\n            l({\n              logic: () => this.IsWithdraw,\n              description: \"IsWithdraw\",\n            }),\n          description: \"IsWithdraw\",\n          then: l({\n            logic: () => this.WithdrawedNumber,\n            description: \"WithdrawedNumber\",\n          }),\n          else: l().if({\n            logic: () =>\n              l({\n                logic: () => this.IsDeposit,\n                description: \"IsDeposit\",\n              }),\n            description: \"IsDeposit\",\n            then: l({\n              logic: () => this.DepositedNumber,\n              description: \"DepositedNumber\",\n            }),\n            else: l({\n              logic: () => 0,\n              description: \"0\",\n            }),\n          }),\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => this.CardIDValidated === true,\n        description: \"CardIDValidated=true\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(BankCard).includes(this.InputCard),\n          description: \"BankCard.allInstance()->includes(InputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => output,\n      description: \"result=output\",\n    }).build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist, then if the money is withdraw,\n   *if print the withdrawed number or if it is deposit print the deposited number or print 0*/\n  printReceipt(): number {\n    /*Definition Start*/\n    let output: number = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => this.CardIDValidated,\n            description: \"CardIDValidated\",\n          })\n            .and({\n              logic: () => this.PasswordValidated,\n              description: \"PasswordValidated\",\n            })\n            .and({\n              logic: () => getRepository(BankCard).includes(this.InputCard),\n              description: \"BankCard.allInstance()->includes(InputCard)\",\n            }),\n        description:\n          \"CardIDValidatedandPasswordValidatedandBankCard.allInstance()->includes(InputCard)\",\n        then: l().if({\n          logic: () =>\n            l({\n              logic: () => this.IsWithdraw,\n              description: \"IsWithdraw\",\n            }),\n          description: \"IsWithdraw\",\n          then: l({\n            logic: () => this.WithdrawedNumber,\n            description: \"WithdrawedNumber\",\n          }),\n          else: l().if({\n            logic: () =>\n              l({\n                logic: () => this.IsDeposit,\n                description: \"IsDeposit\",\n              }),\n            description: \"IsDeposit\",\n            then: l({\n              logic: () => this.DepositedNumber,\n              description: \"DepositedNumber\",\n            }),\n            else: l({\n              logic: () => 0,\n              description: \"0\",\n            }),\n          }),\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => this.CardIDValidated === true,\n        description: \"CardIDValidated=true\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(BankCard).includes(this.InputCard),\n          description: \"BankCard.allInstance()->includes(InputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => output,\n      description: \"result=output\",\n    }).build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 61,
+          "column": 9,
+          "msg": "Type 'number | boolean' is not assignable to type 'number'.\n  Type 'boolean' is not assignable to type 'number'.",
+          "code": 2322
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) \n then if IsWithdraw then WithdrawedNumber \n else if IsDeposit then DepositedNumber \n else 0 endif endif endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\toutput: Real = if CardIDValidated and\n\t\tPasswordValidated and\n\t\tBankCard.allInstance()->includes(InputCard) \n\t\tthen if IsWithdraw \n\t\tthen WithdrawedNumber \n\t\telse if IsDeposit \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif  \n\t\tendif  \n\t\tendif \n\tprecondition:\n\t\tCardIDValidated = true and\n\t\tPasswordValidated = true and\n\t\tBankCard.allInstance()->includes(InputCard)\n\tpostcondition:\n\t\tresult = output\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport { CardStatus, CardCatalog, BankCard, User, getRepository };\n",
+        "originalService": "class AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist, then if the money is withdraw,\n   *if print the withdrawed number or if it is deposit print the deposited number or print 0*/\n  printReceipt(): number {\n    /*Definition Start*/\n    let output: number = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => this.CardIDValidated,\n            description: \"CardIDValidated\",\n          })\n            .and({\n              logic: () => this.PasswordValidated,\n              description: \"PasswordValidated\",\n            })\n            .and({\n              logic: () => getRepository(BankCard).includes(this.InputCard),\n              description: \"BankCard.allInstance()->includes(InputCard)\",\n            }),\n        description:\n          \"CardIDValidatedandPasswordValidatedandBankCard.allInstance()->includes(InputCard)\",\n        then: l().if({\n          logic: () =>\n            l({\n              logic: () => this.IsWithdraw,\n              description: \"IsWithdraw\",\n            }),\n          description: \"IsWithdraw\",\n          then: l({\n            logic: () => this.WithdrawedNumber,\n            description: \"WithdrawedNumber\",\n          }),\n          else: l().if({\n            logic: () =>\n              l({\n                logic: () => this.IsDeposit,\n                description: \"IsDeposit\",\n              }),\n            description: \"IsDeposit\",\n            then: l({\n              logic: () => this.DepositedNumber,\n              description: \"DepositedNumber\",\n            }),\n            else: l({\n              logic: () => 0,\n              description: \"0\",\n            }),\n          }),\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => this.CardIDValidated === true,\n        description: \"CardIDValidated=true\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(BankCard).includes(this.InputCard),\n          description: \"BankCard.allInstance()->includes(InputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => output,\n      description: \"result=output\",\n    }).build().value;\n    /*Postcondition End*/\n  }\n}\nexport { AutomatedTellerMachineSystem_AutoGenerated };\n",
+        "entity": "/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist, then if the money is withdraw,\n   *if print the withdrawed number or if it is deposit print the deposited number or print 0*/\n  printReceipt(): number {\n    /*Definition Start*/\n    let output: number = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => this.CardIDValidated,\n            description: \"CardIDValidated\",\n          })\n            .and({\n              logic: () => this.PasswordValidated,\n              description: \"PasswordValidated\",\n            })\n            .and({\n              logic: () => getRepository(BankCard).includes(this.InputCard),\n              description: \"BankCard.allInstance()->includes(InputCard)\",\n            }),\n        description:\n          \"CardIDValidatedandPasswordValidatedandBankCard.allInstance()->includes(InputCard)\",\n        then: l().if({\n          logic: () =>\n            l({\n              logic: () => this.IsWithdraw,\n              description: \"IsWithdraw\",\n            }),\n          description: \"IsWithdraw\",\n          then: l({\n            logic: () => this.WithdrawedNumber,\n            description: \"WithdrawedNumber\",\n          }),\n          else: l().if({\n            logic: () =>\n              l({\n                logic: () => this.IsDeposit,\n                description: \"IsDeposit\",\n              }),\n            description: \"IsDeposit\",\n            then: l({\n              logic: () => this.DepositedNumber,\n              description: \"DepositedNumber\",\n            }),\n            else: l({\n              logic: () => 0,\n              description: \"0\",\n            }),\n          }),\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => this.CardIDValidated === true,\n        description: \"CardIDValidated=true\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(BankCard).includes(this.InputCard),\n          description: \"BankCard.allInstance()->includes(InputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => output,\n      description: \"result=output\",\n    }).build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The BankCrad is a card that can deposit or withdraw money.*/\nclass BankCard {\n  /*The unique identifier of the bank card*/\n  CardID: number;\n  /*The status of the bank card*/\n  CardStatus: CardStatus;\n  /*The catalog of the bank card*/\n  Catalog: CardCatalog;\n  /*The password of the bank card*/\n  Password: number;\n  /*The balance of the bank card*/\n  Balance: number;\n  /*The user who owns the bank card*/\n  BelongedUser: User;\n}\n/*Bank user information.*/\nclass User {\n  /*The id of the user*/\n  UserID: number;\n  /*The name of the user*/\n  Name: string;\n  /*The address of the user*/\n  Address: string;\n  /*The bank card owned by the user*/\n  OwnedCard: BankCard;\n}\nenum CardStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n  CANNEL = \"CANNEL\",\n}\nenum CardCatalog {\n  CREDIT = \"CREDIT\",\n  DESPOSIT = \"DESPOSIT\",\n}\nconst map = new Map();\nmap.set(BankCard, []);\nmap.set(User, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass AutomatedTellerMachineSystem_AutoGenerated {\n  /*SystemVariable Start*/\n  PasswordValidated: boolean;\n  WithdrawedNumber: number;\n  InputCard: BankCard;\n  CardIDValidated: boolean;\n  IsDeposit: boolean;\n  IsWithdraw: boolean;\n  DepositedNumber: number;\n  /*SystemVariable End*/\n\n  /*the card id and password is validated and the input card exist, then if the money is withdraw,\n   *if print the withdrawed number or if it is deposit print the deposited number or print 0*/\n  printReceipt(): number {\n    /*Definition Start*/\n    let output: number = l()\n      .if({\n        logic: () =>\n          l({\n            logic: () => this.CardIDValidated,\n            description: \"CardIDValidated\",\n          })\n            .and({\n              logic: () => this.PasswordValidated,\n              description: \"PasswordValidated\",\n            })\n            .and({\n              logic: () => getRepository(BankCard).includes(this.InputCard),\n              description: \"BankCard.allInstance()->includes(InputCard)\",\n            }),\n        description:\n          \"CardIDValidatedandPasswordValidatedandBankCard.allInstance()->includes(InputCard)\",\n        then: l().if({\n          logic: () =>\n            l({\n              logic: () => this.IsWithdraw,\n              description: \"IsWithdraw\",\n            }),\n          description: \"IsWithdraw\",\n          then: l({\n            logic: () => this.WithdrawedNumber,\n            description: \"WithdrawedNumber\",\n          }),\n          else: l().if({\n            logic: () =>\n              l({\n                logic: () => this.IsDeposit,\n                description: \"IsDeposit\",\n              }),\n            description: \"IsDeposit\",\n            then: l({\n              logic: () => this.DepositedNumber,\n              description: \"DepositedNumber\",\n            }),\n            else: l({\n              logic: () => 0,\n              description: \"0\",\n            }),\n          }),\n        }),\n      })\n      .build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => this.CardIDValidated === true,\n        description: \"CardIDValidated=true\",\n      })\n        .and({\n          logic: () => this.PasswordValidated === true,\n          description: \"PasswordValidated=true\",\n        })\n        .and({\n          logic: () => getRepository(BankCard).includes(this.InputCard),\n          description: \"BankCard.allInstance()->includes(InputCard)\",\n        })\n        .build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => output,\n      description: \"result=output\",\n    }).build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 61,
+          "column": 9,
+          "msg": "Type 'number | boolean' is not assignable to type 'number'.\n  Type 'boolean' is not assignable to type 'number'.",
+          "code": 2322
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) \n then if IsWithdraw then WithdrawedNumber \n else if IsDeposit then DepositedNumber \n else 0 endif endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) \n if validOutput then result = output else result = 0 endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 8,
+          "column": 12,
+          "msg": "mismatched input 'precondition' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 13,
+          "column": 1,
+          "msg": "mismatched input 'if' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) \n then if IsWithdraw then WithdrawedNumber \n else if IsDeposit then DepositedNumber \n else 0 endif endif\n            \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)\n            \n            postcondition:\n          let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) \n if validOutput then result = output else result = 0 endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then (if IsWithdraw then WithdrawedNumber else if IsDeposit then DepositedNumber else 0 endif) else 0",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard), result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 206,
+          "msg": "missing 'endif' at ')'"
+        },
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing 'endif' at 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 123,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 11,
+          "column": 8,
+          "msg": "extraneous input '}' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then (if IsWithdraw then WithdrawedNumber else if IsDeposit then DepositedNumber else 0 endif) else 0\n            \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)\n            \n            postcondition:\n          let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard), result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then (if IsWithdraw then WithdrawedNumber else if IsDeposit then DepositedNumber else 0 endif) else 0 endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) in output = validOutput, result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 206,
+          "msg": "missing 'endif' at ')'"
+        },
+        {
+          "line": 9,
+          "column": 145,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then (if IsWithdraw then WithdrawedNumber else if IsDeposit then DepositedNumber else 0 endif) else 0 endif\n            \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)\n            \n            postcondition:\n          let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) in output = validOutput, result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then (if IsWithdraw then WithdrawedNumber else (if IsDeposit then DepositedNumber else 0 endif) endif) else 0 endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) in output = (if validOutput then output else 0 endif) and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 134,
+          "msg": "mismatched input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          output:Real = if CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) then (if IsWithdraw then WithdrawedNumber else (if IsDeposit then DepositedNumber else 0 endif) endif) else 0 endif\n            \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)\n            \n            postcondition:\n          let validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard) in output = (if validOutput then output else 0 endif) and result = output\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard), output:Real = if validOutput then (if IsWithdraw then WithdrawedNumber else (if IsDeposit then DepositedNumber else 0 endif) endif) else 0 endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "output = output and result = output"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tvalidOutput: Boolean = CardIDValidated and\n\t\tPasswordValidated and\n\t\tBankCard.allInstance()->includes(InputCard),\n\t\toutput: Real = if validOutput \n\t\tthen (if IsWithdraw \n\t\tthen WithdrawedNumber \n\t\telse (if IsDeposit \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif ) \n\t\tendif ) \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tCardIDValidated = true and\n\t\tPasswordValidated = true and\n\t\tBankCard.allInstance()->includes(InputCard)\n\tpostcondition:\n\t\toutput = output and\n\t\tresult = output\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "validOutput:Boolean = CardIDValidated and PasswordValidated and BankCard.allInstance()->includes(InputCard), output:Real = if validOutput then (if IsWithdraw then WithdrawedNumber else (if IsDeposit then DepositedNumber else 0 endif) endif) else 0 endif",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+        "postcondition": "let newOutput:Real in newOutput.oclIsNew() and newOutput = output and result = newOutput"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tvalidOutput: Boolean = CardIDValidated and\n\t\tPasswordValidated and\n\t\tBankCard.allInstance()->includes(InputCard),\n\t\toutput: Real = if validOutput \n\t\tthen (if IsWithdraw \n\t\tthen WithdrawedNumber \n\t\telse (if IsDeposit \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif ) \n\t\tendif ) \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tCardIDValidated = true and\n\t\tPasswordValidated = true and\n\t\tBankCard.allInstance()->includes(InputCard)\n\tpostcondition:\n\t\tlet newOutput: Real in\n\t\tnewOutput.oclIsNew() and\n\t\tnewOutput = output and\n\t\tresult = newOutput\n}"
+    }
+  }
+]

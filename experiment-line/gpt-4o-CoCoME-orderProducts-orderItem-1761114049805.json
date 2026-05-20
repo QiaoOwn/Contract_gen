@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:Set(OrderProduct) = OrderProduct.allInstance()->any(op | op.Supplier.Id = barcode)",
+        "precondition": "OrderProduct.allInstance()->excludes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.oclIsNew() and CurrentOrderProduct.Quantity = quantity and CurrentOrderProduct.SubAmount = 0 and OrderProduct.allInstance()->includes(CurrentOrderProduct) and CurrentOrderProduct.Supplier = supplier and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\torderProduct: Set(OrderProduct) = OrderProduct.allInstance()->any(op|op.Supplier.Id = barcode)\n\tprecondition:\n\t\tOrderProduct.allInstance()->excludes(CurrentOrderProduct)\n\tpostcondition:\n\t\tCurrentOrderProduct.oclIsNew() and\n\t\tCurrentOrderProduct.Quantity = quantity and\n\t\tCurrentOrderProduct.SubAmount = 0 and\n\t\tOrderProduct.allInstance()->includes(CurrentOrderProduct) and\n\t\tCurrentOrderProduct.Supplier = supplier and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

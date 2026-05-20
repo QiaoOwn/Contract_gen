@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), quantityIncrease:Boolean = entries->forAll(e | e.Quantity)",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "item.StockNumber = item.StockNumber + entries->sum(e | e.Quantity) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 57,
+          "msg": "no viable alternative at input 'entries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), quantityIncrease:Boolean = entries->forAll(e | e.Quantity)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + entries->sum(e | e.Quantity) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), totalQuantityIncrease:Integer = entries->sum(e | e.Quantity)",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 227,
+          "msg": "no viable alternative at input 'entries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), totalQuantityIncrease:Integer = entries->sum(e | e.Quantity)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), totalQuantityIncrease:Integer = entries->sum(e | e.Quantity)",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 227,
+          "msg": "no viable alternative at input 'entries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), totalQuantityIncrease:Integer = entries->sum(e | e.Quantity)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), totalQuantityIncrease:Integer = entries->sum(e | e.Quantity)",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 227,
+          "msg": "no viable alternative at input 'entries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), entries:Set(OrderEntry) = orderProduct.ContainedEntries, item:Item = entries->any(e | e.Item), totalQuantityIncrease:Integer = entries->sum(e | e.Quantity)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->sum(e | e.Quantity), item:Item = orderProduct.ContainedEntries->any(e | e.Item)",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED and totalQuantityIncrease > 0",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->sum(e | e.Quantity), item:Item = orderProduct.ContainedEntries->any(e | e.Item)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED and totalQuantityIncrease > 0\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->sum(e | e.Quantity), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = true",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED and totalQuantityIncrease > 0",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->sum(e | e.Quantity), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = true\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED and totalQuantityIncrease > 0\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->sum(e | e.Quantity), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = if orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif",
+        "precondition": "orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED and totalQuantityIncrease > 0",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->sum(e | e.Quantity), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = if orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED then true else false endif\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED and totalQuantityIncrease > 0\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "precondition": "isSuccessful = true and totalQuantityIncrease > 0",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->size()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false and orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            precondition:\n          isSuccessful = true and totalQuantityIncrease > 0\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "precondition": "isSuccessful = true and totalQuantityIncrease > 0 and isSuccessful = true and isReceived = true",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful and result = isSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->size()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            precondition:\n          isSuccessful = true and totalQuantityIncrease > 0 and isSuccessful = true and isReceived = true\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful and result = isSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED",
+        "precondition": "isSuccessful = true and totalQuantityIncrease > 0 and isReceived = true",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->size()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED\n            \n            precondition:\n          isSuccessful = true and totalQuantityIncrease > 0 and isReceived = true\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isReceivedSuccessful:Boolean = isSuccessful and isReceived",
+        "precondition": "isSuccessful = true and totalQuantityIncrease > 0 and isReceived = true",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isReceivedSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->size()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isReceivedSuccessful:Boolean = isSuccessful and isReceived\n            \n            precondition:\n          isSuccessful = true and totalQuantityIncrease > 0 and isReceived = true\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isReceivedSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isReceivedSuccessful:Boolean = isSuccessful and isReceived",
+        "precondition": "isSuccessful = true and totalQuantityIncrease > 0 and isReceived = true",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isReceivedSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 154,
+          "msg": "no viable alternative at input 'orderProduct.ContainedEntries->size()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isReceivedSuccessful:Boolean = isSuccessful and isReceived\n            \n            precondition:\n          isSuccessful = true and totalQuantityIncrease > 0 and isReceived = true\n            \n            postcondition:\n          item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isReceivedSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), totalQuantityIncrease:Integer = orderProduct.ContainedEntries->size(), item:Item = orderProduct.ContainedEntries->any(e | e.Item), isSuccessful:Boolean = orderProduct.oclIsUndefined() = false, isReceived:Boolean = orderProduct.OrderStatus = OrderStatus::RECEIVED, isReceivedSuccessful:Boolean = isSuccessful and isReceived",
+        "precondition": "isSuccessful and totalQuantityIncrease > 0 and isReceived",
+        "postcondition": "item.StockNumber = item.StockNumber + totalQuantityIncrease and result = isReceivedSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

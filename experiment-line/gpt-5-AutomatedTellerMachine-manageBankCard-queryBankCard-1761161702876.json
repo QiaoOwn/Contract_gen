@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bc:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+        "precondition": "cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID) and BankCard.allInstance()->includes(bc) and bc.CardID = cardid",
+        "postcondition": "result = bc"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBankCardCRUDService::queryBankCard(cardid: Integer): BankCard {\n\tdefinition:\n\t\tbc: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid)\n\tprecondition:\n\t\tcardid.oclIsTypeOf(Integer) and\n\t\tBankCard.allInstance()->isUnique(o: BankCard|o.CardID) and\n\t\tBankCard.allInstance()->includes(bc) and\n\t\tbc.CardID = cardid\n\tpostcondition:\n\t\tresult = bc\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

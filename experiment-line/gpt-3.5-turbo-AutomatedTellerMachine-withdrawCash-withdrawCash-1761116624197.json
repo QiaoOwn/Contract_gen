@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = InputCard.Password and o.CardID = InputCard.CardID), inputCard.Balance:Real = inputCard.Balance, observedQuantity:Set(Integer) = Integer.allInstance()->select(o | o = quantity",
+        "precondition": "InputCard.oclIsUndefined() = bool and CardIDValidated = true and PasswordValidated = true and inputCard.Balance >= quantity",
+        "postcondition": "inputCard.Balance = inputCard.Balance - quantity and WithdrawedNumber = quantity and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 138,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::withdrawCash(quantity:Integer): Boolean {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = InputCard.Password and o.CardID = InputCard.CardID), inputCard.Balance:Real = inputCard.Balance, observedQuantity:Set(Integer) = Integer.allInstance()->select(o | o = quantity\n            \n            precondition:\n          InputCard.oclIsUndefined() = bool and CardIDValidated = true and PasswordValidated = true and inputCard.Balance >= quantity\n            \n            postcondition:\n          inputCard.Balance = inputCard.Balance - quantity and WithdrawedNumber = quantity and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

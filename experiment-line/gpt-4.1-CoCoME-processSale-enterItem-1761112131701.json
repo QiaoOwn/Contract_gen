@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(i | i.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem, existsSale:Boolean = not sale.oclIsUndefined(), existsItem:Boolean = not item.oclIsUndefined(), canCreateLine:Boolean = existsSale and existsItem and not sale.IsComplete and item.StockNumber > 0, subAmount:Real = item.Price * quantity",
+        "precondition": "canCreateLine",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and Sale.allInstance()->includes(sale) and SalesLineItem.allInstance()->includes(saleLine) and sale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.BelongedItem = item and saleLine.Quantity = quantity and item.StockNumber = item.StockNumber - quantity and saleLine.Subamount = subAmount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 151,
+          "msg": "mismatched input 'sale' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(i | i.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem, existsSale:Boolean = not sale.oclIsUndefined(), existsItem:Boolean = not item.oclIsUndefined(), canCreateLine:Boolean = existsSale and existsItem and not sale.IsComplete and item.StockNumber > 0, subAmount:Real = item.Price * quantity\n            \n            precondition:\n          canCreateLine\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and Sale.allInstance()->includes(sale) and SalesLineItem.allInstance()->includes(saleLine) and sale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.BelongedItem = item and saleLine.Quantity = quantity and item.StockNumber = item.StockNumber - quantity and saleLine.Subamount = subAmount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

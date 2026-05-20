@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newCopy:BookCopy = BookCopy.allInstance()->select(o | o.Barcode = barcode), book:Book = Book.allInstance()->any(o | o.CallNo = callNo), result:Boolean = true",
+        "precondition": "newCopy.isEmpty() = bool, book.oclIsUndefined() = bool",
+        "postcondition": "let addedCopy:BookCopy in addedCopy.oclIsNew(), BookCopy.allInstance()->includes(addedCopy), addedCopy.Barcode = barcode, addedCopy.BookBelongs = book, addedCopy.Location = location, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 146,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 34,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          newCopy:BookCopy = BookCopy.allInstance()->select(o | o.Barcode = barcode), book:Book = Book.allInstance()->any(o | o.CallNo = callNo), result:Boolean = true\n            \n            precondition:\n          newCopy.isEmpty() = bool, book.oclIsUndefined() = bool\n            \n            postcondition:\n          let addedCopy:BookCopy in addedCopy.oclIsNew(), BookCopy.allInstance()->includes(addedCopy), addedCopy.Barcode = barcode, addedCopy.BookBelongs = book, addedCopy.Location = location, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

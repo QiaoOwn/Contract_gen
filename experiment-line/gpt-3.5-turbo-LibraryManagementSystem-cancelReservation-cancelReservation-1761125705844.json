@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), ob:Reserve = obs.any()",
+        "precondition": "ob.oclIsUndefined() = bool, ob.ReservedUser.oclIsUndefined() = bool, ob.IsReserveClosed = false, Reserve.allInstance()->includes(ob)",
+        "postcondition": "let ob:Reserve in ob.oclIsNew(), Reserve.allInstance()->excludes(ob), ob.IsReserveClosed = true, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 147,
+          "msg": "no viable alternative at input 'obs.any'"
+        },
+        {
+          "line": 6,
+          "column": 36,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          obs:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), ob:Reserve = obs.any()\n            \n            precondition:\n          ob.oclIsUndefined() = bool, ob.ReservedUser.oclIsUndefined() = bool, ob.IsReserveClosed = false, Reserve.allInstance()->includes(ob)\n            \n            postcondition:\n          let ob:Reserve in ob.oclIsNew(), Reserve.allInstance()->excludes(ob), ob.IsReserveClosed = true, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

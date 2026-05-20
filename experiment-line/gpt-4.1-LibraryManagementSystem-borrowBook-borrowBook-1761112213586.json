@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode)",
+        "precondition": "User.allInstance()->includes(user) and BookCopy.allInstance()->includes(bookCopy) and user.BorrowStatus = BorrowStatus::NORMAL and bookCopy.Status = BookCopy::AVAILABLE",
+        "postcondition": "result = false or (bookCopy.Status = BookCopy::AVAILABLE and bookCopy.Status = BookCopy::LOANED and user.LoanedBook->includes(loan) and let loan:Loan in loan.oclIsNew() and Loan.allInstance()->includes(loan) and loan.LoanedUser = user and loan.LoanedCopy = bookCopy and result = true)"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 146,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 154,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 293,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode)\n            \n            precondition:\n          User.allInstance()->includes(user) and BookCopy.allInstance()->includes(bookCopy) and user.BorrowStatus = BorrowStatus::NORMAL and bookCopy.Status = BookCopy::AVAILABLE\n            \n            postcondition:\n          result = false or (bookCopy.Status = BookCopy::AVAILABLE and bookCopy.Status = BookCopy::LOANED and user.LoanedBook->includes(loan) and let loan:Loan in loan.oclIsNew() and Loan.allInstance()->includes(loan) and loan.LoanedUser = user and loan.LoanedCopy = bookCopy and result = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: loan"
+        }
+      ]
+    }
+  }
+]

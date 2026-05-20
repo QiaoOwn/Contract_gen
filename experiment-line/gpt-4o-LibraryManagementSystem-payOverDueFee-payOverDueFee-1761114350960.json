@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = uid)",
+        "precondition": "!User.allInstance()->isEmpty() and u.oclIsUndefined() = false and u.OverDueFee >= fee",
+        "postcondition": "let systemResult:Boolean in systemResult.oclIsNew() and User.allInstance()->includes(u) and u.OverDueFee = u.OverDueFee - fee and systemResult = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "extraneous input '!' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 6,
+          "column": 31,
+          "msg": "no viable alternative at input 'User.allInstance()->isEmpty()'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          u:User = User.allInstance()->any(o | o.UserID = uid)\n            \n            precondition:\n          !User.allInstance()->isEmpty() and u.oclIsUndefined() = false and u.OverDueFee >= fee\n            \n            postcondition:\n          let systemResult:Boolean in systemResult.oclIsNew() and User.allInstance()->includes(u) and u.OverDueFee = u.OverDueFee - fee and systemResult = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

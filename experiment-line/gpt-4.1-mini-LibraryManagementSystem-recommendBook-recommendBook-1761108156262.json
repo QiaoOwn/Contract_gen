@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = LibraryManagementSystemSystem.Users->any(u | u.UserID=uid)",
+        "precondition": "LibraryManagementSystemSystem.Users->exists(u | u.UserID=uid)",
+        "postcondition": "let recommendBook:RecommendBook in recommendBook.oclIsNew() and LibraryManagementSystemSystem.Users->any(u | u.UserID=uid).RecommendedBook->includes(recommendBook) and recommendBook.RecommendUser = LibraryManagementSystemSystem.Users->any(u | u.UserID=uid) and recommendBook.CallNo = callNo and recommendBook.Title = title and recommendBook.Edition = edition and recommendBook.Author = author and recommendBook.Publisher = publisher and recommendBook.Description = description and recommendBook.ISBn = isbn and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 132,
+          "msg": "mismatched input '.' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = LibraryManagementSystemSystem.Users->any(u | u.UserID=uid)\n            \n            precondition:\n          LibraryManagementSystemSystem.Users->exists(u | u.UserID=uid)\n            \n            postcondition:\n          let recommendBook:RecommendBook in recommendBook.oclIsNew() and LibraryManagementSystemSystem.Users->any(u | u.UserID=uid).RecommendedBook->includes(recommendBook) and recommendBook.RecommendUser = LibraryManagementSystemSystem.Users->any(u | u.UserID=uid) and recommendBook.CallNo = callNo and recommendBook.Title = title and recommendBook.Edition = edition and recommendBook.Author = author and recommendBook.Publisher = publisher and recommendBook.Description = description and recommendBook.ISBn = isbn and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: LibraryManagementSystemSystem"
+        }
+      ]
+    }
+  }
+]

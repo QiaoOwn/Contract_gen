@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = salesLines->sum(Subamount) and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 43,
+          "msg": "no viable alternative at input 'salesLines->sum'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = salesLines->sum(Subamount) and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, subTotal:Real = salesLines.sum(Subamount)",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and result = CurrentSale.Amount and CurrentSale.IsReadytoPay = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 104,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, subTotal:Real = salesLines.sum(Subamount)\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and result = CurrentSale.Amount and CurrentSale.IsReadytoPay = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine:SalesLineItem| salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and result = CurrentSale.Amount and CurrentSale.IsReadytoPay = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 155,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine:SalesLineItem| salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and result = CurrentSale.Amount and CurrentSale.IsReadytoPay = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real=salesLines->collect(salesLine:SalesLineItem|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real=salesLines->collect(salesLine:SalesLineItem|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real=salesLines->collect(salesLine | salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 138,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real=salesLines->collect(salesLine | salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine,subTotal:Real=salesLines->collect(salesLine|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 135,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine,subTotal:Real=salesLines->collect(salesLine|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, amounts:Sequence(Real)=salesLines->collect(salesLine|salesLine.Subamount), subTotal:Real=amounts->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 170,
+          "msg": "no viable alternative at input 'amounts->sum()'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, amounts:Sequence(Real)=salesLines->collect(salesLine|salesLine.Subamount), subTotal:Real=amounts->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real=salesLines->collect(salesLine|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 136,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real=salesLines->collect(salesLine|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine:SalesLineItem|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 152,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine:SalesLineItem|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 138,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine,subTotal:Real=salesLines->collect(salesLine|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 135,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine,subTotal:Real=salesLines->collect(salesLine|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine|salesLine.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 138,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = salesLines->collect(salesLine|salesLine.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem)=CurrentSale.ContainedSalesLine, subTotal:Real = (salesLines->collect(salesLine|salesLine.Subamount))->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = subTotal and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  }
+]

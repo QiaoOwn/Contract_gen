@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), currentLoanRequest:LoanRequest = CurrentLoanRequest, bool:Boolean = currentLoanRequest.oclIsUndefined() = false and term.oclIsUndefined() = false",
+        "precondition": "currentLoanRequest.oclIsUndefined() = false and term.oclIsUndefined() = false",
+        "postcondition": "LoanTerm.allInstance()->includes(term) and currentLoanRequest.AttachedLoanTerms->includes(term) and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid: Integer): Boolean {\n\tdefinition:\n\t\tterm: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = termid),\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tbool: Boolean = currentLoanRequest.oclIsUndefined() = false and\n\t\tterm.oclIsUndefined() = false\n\tprecondition:\n\t\tcurrentLoanRequest.oclIsUndefined() = false and\n\t\tterm.oclIsUndefined() = false\n\tpostcondition:\n\t\tLoanTerm.allInstance()->includes(term) and\n\t\tcurrentLoanRequest.AttachedLoanTerms->includes(term) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

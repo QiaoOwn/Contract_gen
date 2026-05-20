@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(i | i.Barcode = barcode), orderEntry: OrderEntry = OrderEntry.allInstance()->any(o | o.BelongedOrderProduct = CurrentOrderProduct and o.Item = item)",
+        "precondition": "true",
+        "postcondition": "let someItem: Item = Item.allInstance()->any(i | i.Barcode = barcode) in let oe: OrderEntry = OrderEntry.allInstance()->any(o | o.BelongedOrderProduct = CurrentOrderProduct and o.Item = someItem) in (oe.oclIsNew() and oe.Quantity = quantity and oe.SubAmount = someItem.Price * quantity and oe.Item = someItem and CurrentOrderProduct.ContainedEntries->including(oe)) in let resultBoolean: Boolean = true in result = resultBoolean"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 361,
+          "msg": "no viable alternative at input 'CurrentOrderProduct.ContainedEntries->including'"
+        },
+        {
+          "line": 9,
+          "column": 374,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item: Item = Item.allInstance()->any(i | i.Barcode = barcode), orderEntry: OrderEntry = OrderEntry.allInstance()->any(o | o.BelongedOrderProduct = CurrentOrderProduct and o.Item = item)\n            \n            precondition:\n          true\n            \n            postcondition:\n          let someItem: Item = Item.allInstance()->any(i | i.Barcode = barcode) in let oe: OrderEntry = OrderEntry.allInstance()->any(o | o.BelongedOrderProduct = CurrentOrderProduct and o.Item = someItem) in (oe.oclIsNew() and oe.Quantity = quantity and oe.SubAmount = someItem.Price * quantity and oe.Item = someItem and CurrentOrderProduct.ContainedEntries->including(oe)) in let resultBoolean: Boolean = true in result = resultBoolean\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

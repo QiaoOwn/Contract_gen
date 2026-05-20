@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approval:ApprovalHistory = ApprovalHistory()",
+        "precondition": "Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff)",
+        "postcondition": "let repair:Repair in repair = Repair.allInstance()->any(o | o.Id = rid) and let staff:Staff in staff = Staff.allInstance()->any(o | o.Id = sid) and let approval:ApprovalHistory in approval = ApprovalHistory.allInstance()->Including(ApprovalHistory) and if reject then repair.Process = 5 else if repair.Process = 0 and staff.Role = 1 then repair.Process = 1 else if repair.Process = 1 and staff.Role = 2 then repair.Process = 2 else if repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif endif endif and Repair.allInstance()->includes(repair)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 86,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 95,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approval:ApprovalHistory = ApprovalHistory()\n            \n            precondition:\n          Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff)\n            \n            postcondition:\n          let repair:Repair in repair = Repair.allInstance()->any(o | o.Id = rid) and let staff:Staff in staff = Staff.allInstance()->any(o | o.Id = sid) and let approval:ApprovalHistory in approval = ApprovalHistory.allInstance()->Including(ApprovalHistory) and if reject then repair.Process = 5 else if repair.Process = 0 and staff.Role = 1 then repair.Process = 1 else if repair.Process = 1 and staff.Role = 2 then repair.Process = 2 else if repair.Process = 2 and staff.Role = 3 then repair.Process = 3 endif endif endif and Repair.allInstance()->includes(repair)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

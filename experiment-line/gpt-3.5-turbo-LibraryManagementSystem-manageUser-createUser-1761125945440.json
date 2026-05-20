@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newUser:User = User.allInstance()->any(o | o.UserID = userid), isUserExists:Boolean = User.allInstance()->includes(newUser)",
+        "precondition": "userid.oclIsUndefined() = bool, isUserExists = false",
+        "postcondition": "let createdUser:User in createdUser.oclIsNew(), User.allInstance()->includes(createdUser), createdUser.UserID = userid, createdUser.Name = name, createdUser.Sex = sex, createdUser.Password = password, createdUser.Email = email, createdUser.Faculty = faculty, createdUser.LoanedNumber = loanednumber, createdUser.BorrowStatus = borrowstatus, createdUser.SuspensionDays = suspensiondays, createdUser.OverDueFee = overduefee, result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 40,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:String,name:String,sex:Sex [M|F],password:String,email:String,faculty:String,loanednumber:Integer,borrowstatus:BorrowStatus [NORMAL|SUSPEND],suspensiondays:Integer,overduefee:Real): Boolean {\n          definition:\n          newUser:User = User.allInstance()->any(o | o.UserID = userid), isUserExists:Boolean = User.allInstance()->includes(newUser)\n            \n            precondition:\n          userid.oclIsUndefined() = bool, isUserExists = false\n            \n            postcondition:\n          let createdUser:User in createdUser.oclIsNew(), User.allInstance()->includes(createdUser), createdUser.UserID = userid, createdUser.Name = name, createdUser.Sex = sex, createdUser.Password = password, createdUser.Email = email, createdUser.Faculty = faculty, createdUser.LoanedNumber = loanednumber, createdUser.BorrowStatus = borrowstatus, createdUser.SuspensionDays = suspensiondays, createdUser.OverDueFee = overduefee, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

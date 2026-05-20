@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), newBook:Book = Book.allInstance()->any(o | o.CallNo = callNo)",
+        "precondition": "newCopy.oclIsUndefined() = bool, newBook.oclIsUndefined() = bool",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob), ob.Barcode = barcode, ob.Location = location, result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 41,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          newCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), newBook:Book = Book.allInstance()->any(o | o.CallNo = callNo)\n            \n            precondition:\n          newCopy.oclIsUndefined() = bool, newBook.oclIsUndefined() = bool\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob), ob.Barcode = barcode, ob.Location = location, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

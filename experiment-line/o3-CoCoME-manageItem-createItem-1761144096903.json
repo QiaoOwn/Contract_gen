@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exItem:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "Item.allInstance()->isUnique(o:Item | o.Barcode)",
+        "postcondition": "if exItem.oclIsUndefined() then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice else exItem.Name = name and exItem.Price = price and exItem.StockNumber = stocknumber and exItem.OrderPrice = orderprice endif and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 404,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {\n          definition:\n          exItem:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          Item.allInstance()->isUnique(o:Item | o.Barcode)\n            \n            postcondition:\n          if exItem.oclIsUndefined() then let newItem:Item in newItem.oclIsNew() and Item.allInstance()->includes(newItem) and newItem.Barcode = barcode and newItem.Name = name and newItem.Price = price and newItem.StockNumber = stocknumber and newItem.OrderPrice = orderprice else exItem.Name = name and exItem.Price = price and exItem.StockNumber = stocknumber and exItem.OrderPrice = orderprice endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

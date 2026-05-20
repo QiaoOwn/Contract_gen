@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o:User | o.UserID = uid), reserveCopies:Set(BookCopy) = BookCopy.allInstance()->select(c:BookCopy | Reserve.allInstance()->exists(r:Reserve | r.ReservedUser = u and r.ReservedCopy = c and r.IsReserveClosed = false))",
+        "precondition": "uid.oclIsTypeOf(String) and User.allInstance()->includes(u) and User.allInstance()->isUnique(o:User | o.UserID)",
+        "postcondition": "result = reserveCopies"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ListBookHistory::listReservationBook(uid: String): Set(BookCopy) {\n\tdefinition:\n\t\tu: User = User.allInstance()->any(o: User|o.UserID = uid),\n\t\treserveCopies: Set(BookCopy) = BookCopy.allInstance()->select(c: BookCopy|Reserve.allInstance()->exists(r: Reserve|r.ReservedUser = u and\n\t\tr.ReservedCopy = c and\n\t\tr.IsReserveClosed = false))\n\tprecondition:\n\t\tuid.oclIsTypeOf(String) and\n\t\tUser.allInstance()->includes(u) and\n\t\tUser.allInstance()->isUnique(o: User|o.UserID)\n\tpostcondition:\n\t\tresult = reserveCopies\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

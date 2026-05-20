@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundStaff:Staff = Staff.allInstance()->any(o | o.Id = id), boss:Staff = Staff.allInstance()->any(o | o.Id = bossid), opResult:Boolean = true",
+        "precondition": "Staff.allInstance()->includes(boss) and boss.oclIsUndefined() = false and Staff.allInstance()->isUnique(o:Staff | o.Id) and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and pswd.oclIsTypeOf(String) and phone.oclIsTypeOf(String) and role.oclIsTypeOf(Integer) and bossid.oclIsTypeOf(Integer)",
+        "postcondition": "if foundStaff.oclIsUndefined() = true then let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss else foundStaff.Boss = boss endif and result = opResult"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 325,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          foundStaff:Staff = Staff.allInstance()->any(o | o.Id = id), boss:Staff = Staff.allInstance()->any(o | o.Id = bossid), opResult:Boolean = true\n            \n            precondition:\n          Staff.allInstance()->includes(boss) and boss.oclIsUndefined() = false and Staff.allInstance()->isUnique(o:Staff | o.Id) and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and pswd.oclIsTypeOf(String) and phone.oclIsTypeOf(String) and role.oclIsTypeOf(Integer) and bossid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          if foundStaff.oclIsUndefined() = true then let newStaff:Staff in newStaff.oclIsNew() and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss else foundStaff.Boss = boss endif and result = opResult\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

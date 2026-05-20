@@ -1,0 +1,426 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo)",
+        "precondition": "obs.size() = 0 and obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob), ob.Barcode = barcode, ob.Location = location, ob.BookBelongs = obs->any() | o.CallNo = callNo, result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 137,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 164,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo)\n            \n            precondition:\n          obs.size() = 0 and obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob), ob.Barcode = barcode, ob.Location = location, ob.BookBelongs = obs->any() | o.CallNo = callNo, result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = if Book.allInstance()->includes(obs->any() | o.CallNo = callNo) then true else false endif",
+        "precondition": "obs.size() = 0 and obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 204,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 231,
+          "msg": "extraneous input ')' expecting 'then'"
+        },
+        {
+          "line": 6,
+          "column": 137,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 164,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = if Book.allInstance()->includes(obs->any() | o.CallNo = callNo) then true else false endif\n            \n            precondition:\n          obs.size() = 0 and obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "precondition": "obs.size() = 0 and obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 201,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 228,
+          "msg": "extraneous input ')' expecting 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 137,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 164,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            precondition:\n          obs.size() = 0 and obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew(), BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode)",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0 and obs->isEmpty() = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 145,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "no viable alternative at input 'obs->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode)\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0 and obs->isEmpty() = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode)",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob and obs.size() = 0 and obs->isEmpty() = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 145,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 250,
+          "msg": "no viable alternative at input 'obs->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode)\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob and obs.size() = 0 and obs->isEmpty() = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode)",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 145,
+          "msg": "extraneous input ')' expecting 'postcondition'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode)\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo)\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob and obs.size() = 0"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob and obs.size() = 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and obs.size() = 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and ob.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and ob.oclIsNew()\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and ob.oclIsNew() and result = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and ob.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing ')' at 'precondition'"
+        },
+        {
+          "line": 6,
+          "column": 118,
+          "msg": "mismatched input '->' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 166,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode\n            \n            precondition:\n          obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(obs->any() | o.CallNo = callNo\n            \n            postcondition:\n          let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and ob.oclIsNew()\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), obs:Set(Book) = Book.allInstance()->select(o | o.CallNo = callNo), bool1:Boolean = BookCopy.allInstance()->isUnique(o:BookCopy | o.Barcode = barcode",
+        "precondition": "obs.isEmpty() = bool and obs->forAll(o:BookCopy | o.Status <> 'LOANED') and Book.allInstance()->includes(ob) and obs->forAll(o:Book | o.CallNo = callNo)",
+        "postcondition": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Location = location and ob.BookBelongs = obs->any() | o.CallNo = callNo and result = ob and ob.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

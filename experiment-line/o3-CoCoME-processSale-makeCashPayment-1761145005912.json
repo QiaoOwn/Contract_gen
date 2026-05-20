@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "sale:Sale = self.CurrentSale, store:Store = sale.Belongedstore",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentPaymentMethod = PaymentMethod::CASH and sale.IsComplete = false and sale.IsReadytoPay = true and amount >= sale.Amount and amount.oclIsTypeOf(Real)",
+        "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and CashPayment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = sale and sale.AssoicatedPayment = cashPayment and store.Sales->includes(sale) and sale.IsComplete = true and sale.Time = ThirdPartyServices.getCurrentTime() and cashPayment.Balance = amount - sale.Amount and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 342,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          sale:Sale = self.CurrentSale, store:Store = sale.Belongedstore\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentPaymentMethod = PaymentMethod::CASH and sale.IsComplete = false and sale.IsReadytoPay = true and amount >= sale.Amount and amount.oclIsTypeOf(Real)\n            \n            postcondition:\n          let cashPayment:CashPayment in cashPayment.oclIsNew() and CashPayment.allInstance()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = sale and sale.AssoicatedPayment = cashPayment and store.Sales->includes(sale) and sale.IsComplete = true and sale.Time = ThirdPartyServices.getCurrentTime() and cashPayment.Balance = amount - sale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

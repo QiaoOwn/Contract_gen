@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = InputCard, isWithdraw:Boolean = IsWithdraw, bool:Boolean = card.Password = PasswordValidated, amount:Real = if isWithdraw then (if card.Balance >= WithdrawedNumber then WithdrawedNumber else 0) else if IsDeposit then DepositedNumber else 0 endif, result:Real = amount",
+        "precondition": "InputCard.oclIsUndefined() = false and card.Password = PasswordValidated and card.Balance >= WithdrawedNumber and IsWithdraw = true or IsDeposit = true",
+        "postcondition": "result = amount and AutomatedTellerMachineSystem.withdrawCash() = result"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 218,
+          "msg": "missing 'endif' at ')'"
+        },
+        {
+          "line": 3,
+          "column": 271,
+          "msg": "missing 'endif' at ','"
+        },
+        {
+          "line": 3,
+          "column": 273,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 71,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          card:BankCard = InputCard, isWithdraw:Boolean = IsWithdraw, bool:Boolean = card.Password = PasswordValidated, amount:Real = if isWithdraw then (if card.Balance >= WithdrawedNumber then WithdrawedNumber else 0) else if IsDeposit then DepositedNumber else 0 endif, result:Real = amount\n            \n            precondition:\n          InputCard.oclIsUndefined() = false and card.Password = PasswordValidated and card.Balance >= WithdrawedNumber and IsWithdraw = true or IsDeposit = true\n            \n            postcondition:\n          result = amount and AutomatedTellerMachineSystem.withdrawCash() = result\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

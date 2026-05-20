@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "Book.allInstance()->select(b | b.CallNo = callno).isEmpty() = true",
+        "postcondition": "let ob:Book in ob.oclIsNew() and In the post condition, Book.allInstance()->includes(ob) and ob.CallNo = callno and ob.Title = title and ob.Edition = edition and ob.Author = author and ob.Publisher = publisher and ob.Description = description and ob.ISBn = isbn and ob.CopyNum = copynum and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 59,
+          "msg": "mismatched input '.' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCRUDService::createBook(callno:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String,copynum:Integer): Boolean {\n          \n            precondition:\n          Book.allInstance()->select(b | b.CallNo = callno).isEmpty() = true\n            \n            postcondition:\n          let ob:Book in ob.oclIsNew() and In the post condition, Book.allInstance()->includes(ob) and ob.CallNo = callno and ob.Title = title and ob.Edition = edition and ob.Author = author and ob.Publisher = publisher and ob.Description = description and ob.ISBn = isbn and ob.CopyNum = copynum and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: In"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,2186 @@
+[
+  {
+    "ocl": "dev:Device = Device.allInstance()->any(u:Device | u.Id = id),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = contactsid)",
+    "candidate": "device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid)",
+    "service": "AirportSystem",
+    "useCase": "manageDevice",
+    "operation": "createDevice"
+  },
+  {
+    "ocl": "dev.oclIsUndefined() = true and sta.oclIsUndefined() = false",
+    "candidate": "device.oclIsUndefined() = true and staff.oclIsUndefined() = false",
+    "service": "AirportSystem",
+    "useCase": "manageDevice",
+    "operation": "createDevice"
+  },
+  {
+    "ocl": "let d:Device in\n                     d.oclIsNew() and\n                     d.Id = id and\n                     d.Name = name and\n                     d.Location = location and\n                     d.Contacts = sta and\n                     Device.allInstance()->includes(dev) and result = true",
+    "candidate": "let ob:Device in ob.oclIsNew() and Device.allInstance()->includes(ob) and ob.Id = id and ob.Name = name and ob.Location = location and ob.Contacts = staff and result = true",
+    "service": "AirportSystem",
+    "useCase": "manageDevice",
+    "operation": "createDevice"
+  },
+  {
+    "ocl": "sta:Staff = Staff.allInstance()->any(u:Staff | u.Id = id),\n                 bo:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = bossid)",
+    "candidate": "staff: Staff = Staff.allInstance()->any(o | o.Id = id), boss: Staff = Staff.allInstance()->any(o | o.Id = bossid)",
+    "service": "AirportSystem",
+    "useCase": "manageUser",
+    "operation": "createStaff"
+  },
+  {
+    "ocl": "sta.oclIsUndefined() = true",
+    "candidate": "boss.oclIsUndefined() = false",
+    "service": "AirportSystem",
+    "useCase": "manageUser",
+    "operation": "createStaff"
+  },
+  {
+    "ocl": "let s:Staff in\n                     s.oclIsNew() and\n                     s.Id = id and\n                     s.Name = name and\n                     s.Password = pswd and\n                     s.Phone = phone and\n                     s.Role = role and\n                     if bo.oclIsUndefined() = false then s.Boss = bo endif and\n                     Staff.allInstance()->includes(s) and result = true",
+    "candidate": "let cond: Boolean = Staff.allInstance()->exists(o | o.Id = id and o.Boss = boss) in cond and result = cond",
+    "service": "AirportSystem",
+    "useCase": "manageUser",
+    "operation": "createStaff"
+  },
+  {
+    "ocl": "rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = rid),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid)",
+    "candidate": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = rid), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "approve"
+  },
+  {
+    "ocl": "rep.oclIsUndefined() = false and sta.oclIsUndefined() = false",
+    "candidate": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false and (reject = true or (reject = false and (obsRepair.Process = 0 and obsStaff.Role = 1 or obsRepair.Process = 1 and obsStaff.Role = 2 or obsRepair.Process = 2 and obsStaff.Role = 3)))",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "approve"
+  },
+  {
+    "ocl": "let ah:ApprovalHistory in\n\t\t\tah.oclIsNew() and\n\t\t\tah.Reject = reject and\n\t\t\tah.Suggestion = suggestion and\n\t\t\tApprovalHistory.allInstance()->includes(ah) and\n\t\t\trep.History->includes(ah) and\n\t\t\tif\n\t\t\t\treject <> false\n\t\t\tthen\n\t\t\t\tif\n\t\t\t\t\trep.Process = 0 and // STAFFREQUEST\n\t\t\t\t\tsta.Role = 1 // MASTER\n\t\t\t\tthen\n\t\t\t\t\trep.Process = 1 // MASTERAPPROVE\n\t\t\t\telse\n\t\t\t\t\tif\n\t\t\t\t\t\trep.Process = 1 and // MASTERAPPROVE\n\t\t\t\t\t\tsta.Role = 2 // MANAGER\n\t\t\t\t\tthen\n\t\t\t\t\t\trep.Process = 2 // MANAGERAPPROVE\n\t\t\t\t\telse\n\t\t\t\t\t\tif\n\t\t\t\t\t\t\trep.Process = 2 and // MANAGERAPPROVE\n\t\t\t\t\t\t\tsta.Role = 3 // WORKER\n\t\t\t\t\t\tthen\n\t\t\t\t\t\t\trep.Process = 3 // WORKERAPPROVE\n\t\t\t\t\t\tendif\n\t\t\t\t\tendif\n\t\t\t\tendif\n\t\t\telse\n\t\t\t\trep.Process = 5 // REJECT\n\t\t\tendif and\n\t\t\tRepair.allInstance()->includes(rep) and\n\t\t\tresult = ah",
+    "candidate": "let addHist:ApprovalHistory in addHist.oclIsNew() and addHist.StaffId = sid and addHist.Reject = reject and addHist.Suggestion = suggestion and obsRepair.History->includes(addHist) and result = addHist",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "approve"
+  },
+  {
+    "ocl": "rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = id),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid)",
+    "candidate": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = id), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid), opQualified:Boolean = obsRepair.RaiseStaff = obsStaff and obsStaff.Role = 0 and obsRepair.Process = 7, scoreOk:Boolean = score >= 3",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "feedback"
+  },
+  {
+    "ocl": "rep.RaiseStaff = sta and sta.Role = 0 and rep.Process = 7",
+    "candidate": "opQualified",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "feedback"
+  },
+  {
+    "ocl": "rep.Score = score and\n                    if score >= 3 then rep.Close = true\n                    else rep.Close = false and rep.Description = des and rep.Process = 0 endif and\n                    Repair.allInstance()->includes(rep) and result = true",
+    "candidate": "obsRepair.Score = score and obsRepair.Close = scoreOk and obsRepair.Description = des and obsRepair.Process = 0 and result = opQualified",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "feedback"
+  },
+  {
+    "ocl": "rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = id),\n                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid),\n                 dev:Device = Device.allInstance()->any(uuu:Device | uuu.Id = did)",
+    "candidate": "obsRepair:Repair = Repair.allInstance()->any(o | o.Id = id), obsStaff:Staff = Staff.allInstance()->any(o | o.Id = sid), obsDevice:Device = Device.allInstance()->any(o | o.Id = did)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "finishRepair"
+  },
+  {
+    "ocl": "dev.Contacts = sta and sta.Role = 3",
+    "candidate": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false and obsDevice.oclIsUndefined() = false and (obsDevice.Contacts = obsStaff) and (obsStaff.Role = 3)",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "finishRepair"
+  },
+  {
+    "ocl": "rep.Process = 7 and result = true",
+    "candidate": "obsRepair.Process = 7 and result = true",
+    "service": "RepairService",
+    "useCase": "raiseRepair",
+    "operation": "finishRepair"
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "PasswordValidated = true and CardIDValidated = true and InputCard.oclIsUndefined() = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "checkBalance"
+  },
+  {
+    "ocl": "\n      result = self.InputCard.Balance\n    ",
+    "candidate": "result = InputCard.Balance",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "checkBalance"
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "PasswordValidated = true and CardIDValidated = true and BankCard.allInstance()->includes(InputCard) and InputCard.oclIsUndefined() = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "ejectCard"
+  },
+  {
+    "ocl": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    ",
+    "candidate": "InputCard.CardID = 0 and InputCard.Password = 0 and InputCard.Balance = 0.0 and result = success",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "ejectCard"
+  },
+  {
+    "ocl": "bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardExists:Boolean = card.oclIsUndefined() = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+    "candidate": "true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "\n          if bc.BelongedUser.oclIsUndefined()=false then\n            self.CardIDValidated = true and\n            self.InputCard = bc and\n            result = true\n          else\n            self.CardIDValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "InputCard = card and CardIDValidated = cardExists and result = cardExists",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "\n          self.CardIDValidated = true and\n          self.InputCard.oclIsUndefined() = false\n        ",
+    "candidate": "InputCard.oclIsUndefined() = false and CardIDValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputPassword"
+  },
+  {
+    "ocl": "\n          if self.InputCard.Password = password then\n            self.PasswordValidated = true and\n            result = true\n          else\n            self.PasswordValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "result = passwordMatch",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "checkBalance",
+    "operation": "inputPassword"
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false and\n      quantity >= 100\n    ",
+    "candidate": "PasswordValidated = true and CardIDValidated = true and InputCard.oclIsUndefined() = false and quantity >= 100",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "depositFunds"
+  },
+  {
+    "ocl": "\n      self.InputCard.Balance = self.InputCard.Balance@pre + quantity and\n      self.IsDeposit = true and\n      self.DepositedNumber = quantity and\n      result = true\n    ",
+    "candidate": "InputCard.Balance = InputCard.Balance + quantity and result = bool",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "depositFunds"
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "CardIDValidated = true and PasswordValidated = true and InputCard.oclIsUndefined() = false and BankCard.allInstance()->exists(b | b.CardID = InputCard.CardID and b.Password = InputCard.Password)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "ejectCard"
+  },
+  {
+    "ocl": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    ",
+    "candidate": "InputCard = null and IsDeposit = false and DepositedNumber = 0.0 and CardIDValidated = false and PasswordValidated = false and success = true and result = success",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "ejectCard"
+  },
+  {
+    "ocl": "bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)",
+    "candidate": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), cardExists:Boolean = if obs.isEmpty() then false else true endif",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+    "candidate": "true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "\n          if bc.BelongedUser.oclIsUndefined()=false then\n            self.CardIDValidated = true and\n            self.InputCard = bc and\n            result = true\n          else\n            self.CardIDValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "CardIDValidated = cardExists and result = cardExists",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "\n          self.CardIDValidated = true and\n          self.InputCard.oclIsUndefined() = false\n        ",
+    "candidate": "InputCard.oclIsUndefined() = false and CardIDValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputPassword"
+  },
+  {
+    "ocl": "\n          if self.InputCard.Password = password then\n            self.PasswordValidated = true and\n            result = true\n          else\n            self.PasswordValidated = false and\n            result = false\n          endif\n        ",
+    "candidate": "result = passwordMatches",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "inputPassword"
+  },
+  {
+    "ocl": "\n      self.CardIDValidated = true and\n      self.PasswordValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "BankCard.allInstance()->includes(InputCard) and CardIDValidated = true and PasswordValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "printReceipt"
+  },
+  {
+    "ocl": "\n      if\n\t\t\t\tself.IsWithdraw = true\n\t\t\tthen\n\t\t\t\tresult = self.WithdrawedNumber\n\t\t\telse\n\t\t\t\tif\n\t\t\t\t\tself.IsDeposit = true\n\t\t\t\tthen\n\t\t\t\t\tresult = self.DepositedNumber\n\t\t\t\telse\n\t\t\t\t\tresult = 0\n\t\t\t\tendif\n\t\t\tendif\n    ",
+    "candidate": "result = amount",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "depositFunds",
+    "operation": "printReceipt"
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "createBankCard"
+  },
+  {
+    "ocl": "\n      bankcard.oclIsUndefined() = true\n    ",
+    "candidate": "card.oclIsUndefined() = true or card.oclIsUndefined() = false",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "createBankCard"
+  },
+  {
+    "ocl": "\n      let ban:BankCard in\n      ban.oclIsNew() and\n      ban.CardID = cardid and\n      ban.CardStatus = cardstatus and\n      ban.Catalog = catalog and\n      ban.Password = password and\n      ban.Balance = balance and\n      BankCard.allInstance()->includes(ban) and\n      result = true\n    ",
+    "candidate": "result = BankCard.allInstance()->exists(o | o.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "createBankCard"
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), deleteResult:Boolean = if card.oclIsUndefined() = false then true else false endif",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "deleteBankCard"
+  },
+  {
+    "ocl": "\n     bankcard.oclIsUndefined() = false and\n\t\t\tBankCard.allInstance()->includes(bankcard)\n    ",
+    "candidate": "cardid >= 0",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "deleteBankCard"
+  },
+  {
+    "ocl": "\n     BankCard.allInstance()->excludes(bankcard) and\n\t\t\tresult = true\n    ",
+    "candidate": "BankCard.allInstance()->excludes(card) and result = deleteResult",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "deleteBankCard"
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "bankCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "modifyBankCard"
+  },
+  {
+    "ocl": "\n      bankcard.oclIsUndefined() = false\n    ",
+    "candidate": "BankCard.allInstance()->includes(bankCard)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "modifyBankCard"
+  },
+  {
+    "ocl": "\n      \tbankcard.CardID = cardid and\n        bankcard.CardStatus = cardstatus and\n        bankcard.Catalog = catalog and\n        bankcard.Password = password and\n        bankcard.Balance = balance and\n        result = true\n    ",
+    "candidate": "bankCard.CardStatus = cardstatus and bankCard.Catalog = catalog and bankCard.Password = password and bankCard.Balance = balance and bankCard.CardID = cardid and result = true",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "modifyBankCard"
+  },
+  {
+    "ocl": "\n      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+    "candidate": "obs:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "queryBankCard"
+  },
+  {
+    "ocl": "\n     bankcard.oclIsUndefined() = false\n    ",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "queryBankCard"
+  },
+  {
+    "ocl": "\n      result = bankcard\n    ",
+    "candidate": "result = obs",
+    "service": "ManageBankCardCRUDService",
+    "useCase": "manageBankCard",
+    "operation": "queryBankCard"
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "obs:User = User.allInstance()->any(o | o.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser"
+  },
+  {
+    "ocl": "\n      user.oclIsUndefined() = true\n    ",
+    "candidate": "true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser"
+  },
+  {
+    "ocl": "\n      let use:User in\n      use.oclIsNew() and\n      use.UserID = userid and\n      use.Name = name and\n      use.Address = address and\n      User.allInstance()->includes(use) and\n      result = true\n    ",
+    "candidate": "let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser"
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "obs:Set(User) = User.allInstance()->select(o | o.UserID = userid), ob:User = obs->any(o | o.UserID = userid), wasDeleted:Boolean = ob.oclIsUndefined() = false",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "deleteUser"
+  },
+  {
+    "ocl": "\n     user.oclIsUndefined() = false\n    ",
+    "candidate": "obs.size() > 0",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "deleteUser"
+  },
+  {
+    "ocl": "\n      User.allInstance()->excludes(user) and\n\t  result = true\n    ",
+    "candidate": "User.allInstance()->excludes(ob) and result = wasDeleted",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "deleteUser"
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "obs:BankCard = BankCard.allInstance()->any(o | o.CardID = userid), u:User = obs.BelongedUser, existsBankCard:Boolean = obs.oclIsUndefined() = false",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "modifyUser"
+  },
+  {
+    "ocl": "\n      user.oclIsUndefined() = false\n    ",
+    "candidate": "existsBankCard = true and u.oclIsUndefined() = false",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "modifyUser"
+  },
+  {
+    "ocl": "\n        user.UserID = userid and\n        user.Name = name and\n        user.Address = address and\n        result = true\n    ",
+    "candidate": "u.Name = name and u.Address = address and result = existsBankCard",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "modifyUser"
+  },
+  {
+    "ocl": "\n      user:User = User.allInstance()->any(use:User | use.UserID = userid)\n    ",
+    "candidate": "foundUser: User = User.allInstance()->any(o | o.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "queryUser"
+  },
+  {
+    "ocl": "\n      user.oclIsUndefined() = false\n    ",
+    "candidate": "foundUser.oclIsUndefined() = false and User.allInstance()->includes(foundUser)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "queryUser"
+  },
+  {
+    "ocl": "\n      result = user\n    ",
+    "candidate": "User.allInstance()->includes(foundUser) and result = foundUser",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "queryUser"
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "BankCard.allInstance()->includes(inputCard) and inputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "ejectCard"
+  },
+  {
+    "ocl": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    ",
+    "candidate": "result = validInputs and InputCard.CardID = 0 and InputCard.Password = 0 and WithdrawedNumber = 0.0 and IsWithdraw = false",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "ejectCard"
+  },
+  {
+    "ocl": "bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)",
+    "candidate": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), cardExists:Boolean = BankCard.allInstance()->exists(o | o.CardID = cardid)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+    "candidate": "true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "\n           if bc.BelongedUser.oclIsUndefined()=false then\n             self.CardIDValidated = true and\n             self.InputCard = bc and\n             result = true\n           else\n             self.CardIDValidated = false and\n             result = false\n           endif\n         ",
+    "candidate": "CardIDValidated = cardExists and InputCard = obs->any(o | o.CardID = cardid) and result = cardExists",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputCard"
+  },
+  {
+    "ocl": "\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "InputCard.oclIsUndefined() = false and CardIDValidated = true",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputPassword"
+  },
+  {
+    "ocl": "\n      if self.InputCard.Password = password then\n        self.PasswordValidated = true and\n        result = true\n      else\n        self.PasswordValidated = false and\n        result = false\n      endif\n    ",
+    "candidate": "PasswordValidated = passwordMatch and result = passwordMatch",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "inputPassword"
+  },
+  {
+    "ocl": "\n      self.CardIDValidated = true and\n      self.PasswordValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+    "candidate": "InputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true and BankCard.allInstance()->includes(InputCard)",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "printReceipt"
+  },
+  {
+    "ocl": "\n      if\n\t\t\t\tself.IsWithdraw = true\n\t\t\tthen\n\t\t\t\tresult = self.WithdrawedNumber\n\t\t\telse\n\t\t\t\tif\n\t\t\t\t\tself.IsDeposit = true\n\t\t\t\tthen\n\t\t\t\t\tresult = self.DepositedNumber\n\t\t\t\telse\n\t\t\t\t\tresult = 0\n\t\t\t\tendif\n\t\t\tendif\n    ",
+    "candidate": "result = withdrawOrDepositValue",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "printReceipt"
+  },
+  {
+    "ocl": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false and\n      self.InputCard.Balance >= quantity\n    ",
+    "candidate": "PasswordValidated = true and CardIDValidated = true and InputCard.Balance >= quantity",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "withdrawCash"
+  },
+  {
+    "ocl": "\n      self.InputCard.Balance = self.InputCard.Balance@pre - quantity and\n      self.WithdrawedNumber = quantity and\n      self.IsWithdraw = true and\n      result = true\n    ",
+    "candidate": "InputCard.Balance = InputCard.Balance - quantity and WithdrawedNumber = quantity and IsWithdraw = true and result = withdrawBoolean",
+    "service": "AutomatedTellerMachineSystem",
+    "useCase": "withdrawCash",
+    "operation": "withdrawCash"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)",
+    "candidate": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+    "service": "CoCoMESystem",
+    "useCase": "changePrice",
+    "operation": "changePrice"
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "item.oclIsUndefined() = false",
+    "service": "CoCoMESystem",
+    "useCase": "changePrice",
+    "operation": "changePrice"
+  },
+  {
+    "ocl": "\nitem.Price = newPrice and\nresult = true",
+    "candidate": "item.Price = newPrice and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "changePrice",
+    "operation": "changePrice"
+  },
+  {
+    "ocl": "cd:CashDesk = CashDesk.allInstance()->any(s:CashDesk | s.Id = cashDeskID)",
+    "candidate": "obsCashDesk: CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID and o.BelongedStore = CurrentStore and o.IsOpened = true), currentStoreExists: Boolean = CurrentStore.oclIsUndefined() = false, currentCashDeskMatches: Boolean = CurrentCashDesk = obsCashDesk",
+    "service": "CoCoMESystem",
+    "useCase": "closeCashDesk",
+    "operation": "closeCashDesk"
+  },
+  {
+    "ocl": "\ncd.oclIsUndefined() = false and\ncd.IsOpened = true and\nCurrentStore.oclIsUndefined() = false and\nCurrentStore.IsOpened = true",
+    "candidate": "obsCashDesk.oclIsUndefined() = false and CurrentStore.oclIsUndefined() = false and CurrentCashDesk = obsCashDesk and obsCashDesk.BelongedStore = CurrentStore and obsCashDesk.IsOpened = true",
+    "service": "CoCoMESystem",
+    "useCase": "closeCashDesk",
+    "operation": "closeCashDesk"
+  },
+  {
+    "ocl": "\nself.CurrentCashDesk = cd and\ncd.IsOpened = false and\nresult = true",
+    "candidate": "let closeOK: Boolean = obsCashDesk.IsOpened = false in CurrentCashDesk = obsCashDesk and obsCashDesk.IsOpened = false and result = closeOK",
+    "service": "CoCoMESystem",
+    "useCase": "closeCashDesk",
+    "operation": "closeCashDesk"
+  },
+  {
+    "ocl": "sto:Store = Store.allInstance()->any(s:Store | s.Id = storeID)",
+    "candidate": "store:Store = Store.allInstance()->any(o | o.Id = storeID), returnValue:Boolean = true",
+    "service": "CoCoMESystem",
+    "useCase": "closeStore",
+    "operation": "closeStore"
+  },
+  {
+    "ocl": "\nsto.oclIsUndefined() = false and\nsto.IsOpened = true",
+    "candidate": "store.oclIsUndefined() = false and store.IsOpened = true",
+    "service": "CoCoMESystem",
+    "useCase": "closeStore",
+    "operation": "closeStore"
+  },
+  {
+    "ocl": "\nsto.IsOpened = false and\nresult = true",
+    "candidate": "store.IsOpened = false and result = returnValue",
+    "service": "CoCoMESystem",
+    "useCase": "closeStore",
+    "operation": "closeStore"
+  },
+  {
+    "ocl": "true",
+    "candidate": "true",
+    "service": "CoCoMESystem",
+    "useCase": "listSuppliers",
+    "operation": "listSuppliers"
+  },
+  {
+    "ocl": "result = Supplier.allInstance()",
+    "candidate": "result = suppliers",
+    "service": "CoCoMESystem",
+    "useCase": "listSuppliers",
+    "operation": "listSuppliers"
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), created:Boolean = existingCashDesk.oclIsUndefined()",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "createCashDesk"
+  },
+  {
+    "ocl": "cashdesk.oclIsUndefined() = true",
+    "candidate": "id > 0 and name.size() > 0",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "createCashDesk"
+  },
+  {
+    "ocl": "\nlet cas:CashDesk in\ncas.oclIsNew() and\ncas.Id = id and\ncas.Name = name and\ncas.IsOpened = isopened and\nCashDesk.allInstance()->includes(cas) and\nresult = true",
+    "candidate": "let createdCashDesk:CashDesk in createdCashDesk.oclIsNew() and createdCashDesk.Id = id and createdCashDesk.Name = name and createdCashDesk.IsOpened = isopened and CashDesk.allInstance()->includes(createdCashDesk) and result = created",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "createCashDesk"
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "obs:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), cashDeskExists:Boolean = obs.oclIsUndefined() = false",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "deleteCashDesk"
+  },
+  {
+    "ocl": "\ncashdesk.oclIsUndefined() = false and\nCashDesk.allInstance()->includes(cashdesk)",
+    "candidate": "id >= 0",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "deleteCashDesk"
+  },
+  {
+    "ocl": "\nCashDesk.allInstance()->excludes(cashdesk) and\nresult = true",
+    "candidate": "result = cashDeskExists",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "deleteCashDesk"
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "obs:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "modifyCashDesk"
+  },
+  {
+    "ocl": "cashdesk.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "modifyCashDesk"
+  },
+  {
+    "ocl": "\ncashdesk.Id = id and\ncashdesk.Name = name and\ncashdesk.IsOpened = isopened and\nresult = true",
+    "candidate": "CashDesk.allInstance()->includes(obs) and obs.Name = name and obs.IsOpened = isopened and result = true",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "modifyCashDesk"
+  },
+  {
+    "ocl": "cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)",
+    "candidate": "ob:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "queryCashDesk"
+  },
+  {
+    "ocl": "cashdesk.oclIsUndefined() = false",
+    "candidate": "ob.oclIsUndefined() = false",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "queryCashDesk"
+  },
+  {
+    "ocl": "result = cashdesk",
+    "candidate": "result = ob",
+    "service": "ManageCashDeskCRUDService",
+    "useCase": "manageCashDesk",
+    "operation": "queryCashDesk"
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), existsCashier:Boolean = Cashier.allInstance()->exists(o | o.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "createCashier"
+  },
+  {
+    "ocl": "cashier.oclIsUndefined() = true",
+    "candidate": "true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "createCashier"
+  },
+  {
+    "ocl": "\nlet cas:Cashier in\ncas.oclIsNew() and\ncas.Id = id and\ncas.Name = name and\nCashier.allInstance()->includes(cas) and\nresult = true",
+    "candidate": "result = Cashier.allInstance()->exists(o | o.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "createCashier"
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "obs:Set(Cashier) = Cashier.allInstance()->select(o | o.Id = id), found:Boolean = obs.size() > 0",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "deleteCashier"
+  },
+  {
+    "ocl": "\ncashier.oclIsUndefined() = false and\nCashier.allInstance()->includes(cashier)",
+    "candidate": "true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "deleteCashier"
+  },
+  {
+    "ocl": "\nCashier.allInstance()->excludes(cashier) and\nresult = true",
+    "candidate": "result = found",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "deleteCashier"
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "obs:Cashier = Cashier.allInstance()->any(o | o.Id = id), executionResult:Boolean",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "modifyCashier"
+  },
+  {
+    "ocl": "cashier.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "modifyCashier"
+  },
+  {
+    "ocl": "\ncashier.Id = id and\ncashier.Name = name and\nresult = true",
+    "candidate": "obs.Name = name and executionResult = true",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "modifyCashier"
+  },
+  {
+    "ocl": "cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)",
+    "candidate": "obs:Cashier = Cashier.allInstance()->any(o | o.Id = id)",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "queryCashier"
+  },
+  {
+    "ocl": "cashier.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "queryCashier"
+  },
+  {
+    "ocl": "result = cashier",
+    "candidate": "result = obs",
+    "service": "ManageCashierCRUDService",
+    "useCase": "manageCashier",
+    "operation": "queryCashier"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "matchedItems:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "createItem"
+  },
+  {
+    "ocl": "item.oclIsUndefined() = true",
+    "candidate": "matchedItems.size() <= 1",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "createItem"
+  },
+  {
+    "ocl": "\nlet ite:Item in\nite.oclIsNew() and\nite.Barcode = barcode and\nite.Name = name and\nite.Price = price and\nite.StockNumber = stocknumber and\nite.OrderPrice = orderprice and\nItem.allInstance()->includes(ite) and\nresult = true",
+    "candidate": "let ob:Item in ob.oclIsNew() and Item.allInstance()->includes(ob) and ob.Barcode = barcode and ob.Name = name and ob.Price = price and ob.StockNumber = stocknumber and ob.OrderPrice = orderprice and result = true",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "createItem"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "deleteItem"
+  },
+  {
+    "ocl": "\nitem.oclIsUndefined() = false and\nItem.allInstance()->includes(item)",
+    "candidate": "true",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "deleteItem"
+  },
+  {
+    "ocl": "\nItem.allInstance()->excludes(item) and\nresult = true",
+    "candidate": "let found:Boolean = obs.size() > 0 in found and result = found",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "deleteItem"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "obs:Item = Item.allInstance()->any(o | o.Barcode = barcode), success:Boolean = if obs.oclIsUndefined() = false then true else false endif",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "modifyItem"
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "obs.Barcode = barcode and obs.oclIsUndefined() = false",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "modifyItem"
+  },
+  {
+    "ocl": "\nitem.Barcode = barcode and\nitem.Name = name and\nitem.Price = price and\nitem.StockNumber = stocknumber and\nitem.OrderPrice = orderprice and\nresult = true",
+    "candidate": "Item.allInstance()->includes(obs) and obs.Name = name and obs.Price = price and obs.StockNumber = stocknumber and obs.OrderPrice = orderprice and result = success",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "modifyItem"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)",
+    "candidate": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "queryItem"
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "Item.allInstance()->includes(item)",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "queryItem"
+  },
+  {
+    "ocl": "result = item",
+    "candidate": "result = item",
+    "service": "ManageItemCRUDService",
+    "useCase": "manageItem",
+    "operation": "queryItem"
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "obs:Set(ProductCatalog) = ProductCatalog.allInstance()->select(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "createProductCatalog"
+  },
+  {
+    "ocl": "productcatalog.oclIsUndefined() = true",
+    "candidate": "id > 0 and name.size() > 0",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "createProductCatalog"
+  },
+  {
+    "ocl": "\nlet pro:ProductCatalog in\npro.oclIsNew() and\npro.Id = id and\npro.Name = name and\nProductCatalog.allInstance()->includes(pro) and\nresult = true",
+    "candidate": "let ob:ProductCatalog in ob.oclIsNew() and ProductCatalog.allInstance()->includes(ob) and ob.Id = id and ob.Name = name and result = true",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "createProductCatalog"
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "ob:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "deleteProductCatalog"
+  },
+  {
+    "ocl": "\nproductcatalog.oclIsUndefined() = false and\nProductCatalog.allInstance()->includes(productcatalog)",
+    "candidate": "ProductCatalog.allInstance()->exists(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "deleteProductCatalog"
+  },
+  {
+    "ocl": "\nProductCatalog.allInstance()->excludes(productcatalog) and\nresult = true",
+    "candidate": "ProductCatalog.allInstance()->excludes(ob) and result = true",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "deleteProductCatalog"
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "obs:Set(ProductCatalog) = ProductCatalog.allInstance()->select(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "modifyProductCatalog"
+  },
+  {
+    "ocl": "productcatalog.oclIsUndefined() = false",
+    "candidate": "obs.size() = 1",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "modifyProductCatalog"
+  },
+  {
+    "ocl": "\nproductcatalog.Id = id and\nproductcatalog.Name = name and\nresult = true",
+    "candidate": "result = ProductCatalog.allInstance()->exists(o | o.Id = id and o.Name = name)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "modifyProductCatalog"
+  },
+  {
+    "ocl": "productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)",
+    "candidate": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "queryProductCatalog"
+  },
+  {
+    "ocl": "productcatalog.oclIsUndefined() = false",
+    "candidate": "id <> null and ProductCatalog.allInstance()->exists(o | o.Id = id)",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "queryProductCatalog"
+  },
+  {
+    "ocl": "result = productcatalog",
+    "candidate": "catalog = ProductCatalog.allInstance()->any(o | o.Id = id) and result = catalog",
+    "service": "ManageProductCatalogCRUDService",
+    "useCase": "manageProductCatalog",
+    "operation": "queryProductCatalog"
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "store:Store = Store.allInstance()->any(o | o.Id = id), newName:String = name, newAddress:String = address, newIsOpened:Boolean = isopened",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "createStore"
+  },
+  {
+    "ocl": "store.oclIsUndefined() = true",
+    "candidate": "store.oclIsUndefined() = false or store.oclIsUndefined() = true",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "createStore"
+  },
+  {
+    "ocl": "\nlet sto:Store in\nsto.oclIsNew() and\nsto.Id = id and\nsto.Name = name and\nsto.Address = address and\nsto.IsOpened = isopened and\nStore.allInstance()->includes(sto) and\nresult = true",
+    "candidate": "let storeExistsAfter: Boolean = Store.allInstance()->exists(o | o.Id = id) in result = storeExistsAfter",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "createStore"
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "store:Store = Store.allInstance()->any(o | o.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "deleteStore"
+  },
+  {
+    "ocl": "\nstore.oclIsUndefined() = false and\nStore.allInstance()->includes(store)",
+    "candidate": "Store.allInstance()->includes(store)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "deleteStore"
+  },
+  {
+    "ocl": "\nStore.allInstance()->excludes(store) and\nresult = true",
+    "candidate": "Store.allInstance()->excludes(store) and result = true",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "deleteStore"
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "ob:Store = Store.allInstance()->any(o | o.Id = id), updateOk: Boolean = ob.Name = name and ob.Address = address and ob.IsOpened = isopened",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "modifyStore"
+  },
+  {
+    "ocl": "store.oclIsUndefined() = false",
+    "candidate": "ob.oclIsUndefined() = false",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "modifyStore"
+  },
+  {
+    "ocl": "\nstore.Id = id and\nstore.Name = name and\nstore.Address = address and\nstore.IsOpened = isopened and\nresult = true",
+    "candidate": "result = updateOk",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "modifyStore"
+  },
+  {
+    "ocl": "store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)",
+    "candidate": "obs:Set(Store) = Store.allInstance()->select(o | o.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "queryStore"
+  },
+  {
+    "ocl": "store.oclIsUndefined() = false",
+    "candidate": "obs.size() >= 1",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "queryStore"
+  },
+  {
+    "ocl": "result = store",
+    "candidate": "result = obs->any(o | o.Id = id)",
+    "service": "ManageStoreCRUDService",
+    "useCase": "manageStore",
+    "operation": "queryStore"
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "createSupplier"
+  },
+  {
+    "ocl": "supplier.oclIsUndefined() = true",
+    "candidate": "true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "createSupplier"
+  },
+  {
+    "ocl": "\nlet sup:Supplier in\nsup.oclIsNew() and\nsup.Id = id and\nsup.Name = name and\nSupplier.allInstance()->includes(sup) and\nresult = true",
+    "candidate": "result = true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "createSupplier"
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "obs:Supplier = Supplier.allInstance()->any(o | o.Id = id), supplierExists:Boolean = obs.oclIsUndefined() = false",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "deleteSupplier"
+  },
+  {
+    "ocl": "\nsupplier.oclIsUndefined() = false and\nSupplier.allInstance()->includes(supplier)",
+    "candidate": "id >= 0",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "deleteSupplier"
+  },
+  {
+    "ocl": "\nSupplier.allInstance()->excludes(supplier) and\nresult = true",
+    "candidate": "Supplier.allInstance()->excludes(obs) and result = supplierExists",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "deleteSupplier"
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "obs:Supplier = Supplier.allInstance()->any(o | o.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "modifySupplier"
+  },
+  {
+    "ocl": "supplier.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false and obs.Id = id and Supplier.allInstance()->includes(obs)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "modifySupplier"
+  },
+  {
+    "ocl": "\nsupplier.Id = id and\nsupplier.Name = name and\nresult = true",
+    "candidate": "obs.Name = name and result = true",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "modifySupplier"
+  },
+  {
+    "ocl": "supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)",
+    "candidate": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id)",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "querySupplier"
+  },
+  {
+    "ocl": "supplier.oclIsUndefined() = false",
+    "candidate": "supplier.oclIsUndefined() = false",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "querySupplier"
+  },
+  {
+    "ocl": "result = supplier",
+    "candidate": "result = supplier",
+    "service": "ManageSupplierCRUDService",
+    "useCase": "manageSupplier",
+    "operation": "querySupplier"
+  },
+  {
+    "ocl": "cd:CashDesk = CashDesk.allInstance()->any(s:CashDesk | s.Id = cashDeskID)",
+    "candidate": "obs:CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID)",
+    "service": "CoCoMESystem",
+    "useCase": "openCashDesk",
+    "operation": "openCashDesk"
+  },
+  {
+    "ocl": "\ncd.oclIsUndefined() = false and\ncd.IsOpened = false and\nCurrentStore.oclIsUndefined() = false and\nCurrentStore.IsOpened = true",
+    "candidate": "CashDesk.allInstance()->includes(obs) and obs.IsOpened = false and CurrentStore.oclIsUndefined() = false and CurrentStore.IsOpened = true and CurrentCashDesk = obs",
+    "service": "CoCoMESystem",
+    "useCase": "openCashDesk",
+    "operation": "openCashDesk"
+  },
+  {
+    "ocl": "\nself.CurrentCashDesk = cd and\ncd.IsOpened = true and\nresult = true",
+    "candidate": "let openedStatus: Boolean = obs.IsOpened = true in result = openedStatus",
+    "service": "CoCoMESystem",
+    "useCase": "openCashDesk",
+    "operation": "openCashDesk"
+  },
+  {
+    "ocl": "sto:Store = Store.allInstance()->any(s:Store | s.Id = storeID)",
+    "candidate": "store:Store = Store.allInstance()->any(o | o.Id = storeID and o.IsOpened = false)",
+    "service": "CoCoMESystem",
+    "useCase": "openStore",
+    "operation": "openStore"
+  },
+  {
+    "ocl": "\nsto.oclIsUndefined() = false and\nsto.IsOpened = false",
+    "candidate": "store.oclIsTypeOf(Store) and store.oclIsUndefined() = false",
+    "service": "CoCoMESystem",
+    "useCase": "openStore",
+    "operation": "openStore"
+  },
+  {
+    "ocl": "\nself.CurrentStore = sto and\nsto.IsOpened = true and\nresult = true",
+    "candidate": "CurrentStore = store and store.IsOpened = true and result = true",
+    "service": "CoCoMESystem",
+    "useCase": "openStore",
+    "operation": "openStore"
+  },
+  {
+    "ocl": "sup:Supplier = Supplier.allInstance()->any(s:Supplier | s.Id = supplierID)",
+    "candidate": "supplier: Supplier = Supplier.allInstance()->any(o | o.Id = supplierID), CurrentOrderProduct: OrderProduct, supplierMatch:Boolean = CurrentOrderProduct.Supplier = supplier",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "chooseSupplier"
+  },
+  {
+    "ocl": "\nsup.oclIsUndefined() = false and\nCurrentOrderProduct.oclIsUndefined() = false",
+    "candidate": "supplier.oclIsUndefined() = false and CurrentOrderProduct.oclIsUndefined() = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "chooseSupplier"
+  },
+  {
+    "ocl": "\nCurrentOrderProduct.Supplier = sup and\nresult = true",
+    "candidate": "result = supplierMatch",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "chooseSupplier"
+  },
+  {
+    "ocl": "true",
+    "candidate": "obs.isEmpty() = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "listAllOutOfStoreProducts"
+  },
+  {
+    "ocl": "\nresult = Item.allInstance()->select(item:Item | item.StockNumber = 0)",
+    "candidate": "obs = Item.allInstance()->select(o | o.StockNumber = 0) and result = obs",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "listAllOutOfStoreProducts"
+  },
+  {
+    "ocl": "o:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct | o.Id = orderid)",
+    "candidate": "order:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "makeNewOrder"
+  },
+  {
+    "ocl": "o.oclIsUndefined() = true",
+    "candidate": "orderid >= 0",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "makeNewOrder"
+  },
+  {
+    "ocl": "\nlet op:OrderProduct in\nop.oclIsNew() and\nop.OrderStatus = OrderStatus::NEW and\nop.Id = orderid and\nop.Time.isEqual(Now) and\nOrderProduct.allInstance()->includes(op) and\nself.CurrentOrderProduct = op and\nresult = true",
+    "candidate": "let ob:OrderProduct in ob.oclIsNew() and ob.Id = orderid and ob.OrderStatus = OrderStatus::NEW and OrderProduct.allInstance()->includes(ob) and result = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "makeNewOrder"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)",
+    "candidate": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode), currentOrderProduct: OrderProduct",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "orderItem"
+  },
+  {
+    "ocl": "item.oclIsUndefined() = false",
+    "candidate": "item.oclIsUndefined() = false and quantity > 0",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "orderItem"
+  },
+  {
+    "ocl": "\nlet order:OrderEntry in\norder.oclIsNew() and\norder.Quantity = quantity and\norder.SubAmount = item.OrderPrice * quantity and\norder.Item = item and\nOrderEntry.allInstance()->includes(order) and\nCurrentOrderProduct.ContainedEntries->includes(order) and\nresult = true",
+    "candidate": "let newOrderEntry: OrderEntry in newOrderEntry.oclIsNew() and newOrderEntry.Item = item and newOrderEntry.Quantity = quantity and newOrderEntry.SubAmount = quantity * item.Price and currentOrderProduct.ContainedEntries->includes(newOrderEntry) and result = true",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "orderItem"
+  },
+  {
+    "ocl": "CurrentOrderProduct.oclIsUndefined() = false",
+    "candidate": "CurrentOrderProduct.oclIsUndefined() = false",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "placeOrder"
+  },
+  {
+    "ocl": "\nCurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and\nCurrentOrderProduct.ContainedEntries->forAll(o:OrderEntry |\n  CurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + o.SubAmount)\nand\nresult = true",
+    "candidate": "result = requested and amountMatches",
+    "service": "CoCoMEOrderProducts",
+    "useCase": "orderProducts",
+    "operation": "placeOrder"
+  },
+  {
+    "ocl": "\nsls:Set(SalesLineItem) = CurrentSale.ContainedSalesLine,\nsub:Set(Real) = sls->collect(s:SalesLineItem | s.Subamount)",
+    "candidate": "salesLineItems: Set(SalesLineItem) = currentSale.ContainedSalesLine, sumOfSubamount: Real = 0.0",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "endSale"
+  },
+  {
+    "ocl": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nCurrentSale.IsReadytoPay = false",
+    "candidate": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = false",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "endSale"
+  },
+  {
+    "ocl": "\nCurrentSale.Amount = sub.sum() and\nCurrentSale.IsReadytoPay = true and\nresult = CurrentSale.Amount",
+    "candidate": "sumOfSubamount = currentSale.Amount and result = sumOfSubamount",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "endSale"
+  },
+  {
+    "ocl": "item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)",
+    "candidate": "item: Item = Item.allInstance()->any(i | i.Barcode = barcode), currentSale: Sale, currentSaleLine: SalesLineItem",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "enterItem"
+  },
+  {
+    "ocl": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nitem.oclIsUndefined() = false and\nitem.StockNumber > 0",
+    "candidate": "item.oclIsUndefined() = false and currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and item.StockNumber >= quantity",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "enterItem"
+  },
+  {
+    "ocl": "\nlet sli:SalesLineItem in\nsli.oclIsNew() and\nself.CurrentSaleLine = sli and\nsli.BelongedSale = CurrentSale and\nCurrentSale.ContainedSalesLine->includes(sli) and\nsli.Quantity = quantity and\nsli.BelongedItem = item and\nitem.StockNumber = item.StockNumber@pre - quantity and\nsli.Subamount = item.Price * quantity and\nSalesLineItem.allInstance()->includes(sli) and\nresult = true",
+    "candidate": "let ob:SalesLineItem in ob.oclIsNew() and ob.BelongedSale = currentSale and ob.BelongedItem = item and ob.Quantity = quantity and ob.Subamount = item.Price * quantity and item.StockNumber = item.StockNumber - quantity and currentSale.ContainedSalesLine->includes(ob) and currentSaleLine = ob and result = true",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "enterItem"
+  },
+  {
+    "ocl": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nCurrentSale.IsReadytoPay = true and\namount >= CurrentSale.Amount",
+    "candidate": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentPaymentMethod = PaymentMethod::CASH and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeCashPayment"
+  },
+  {
+    "ocl": "\nlet cp:CashPayment in\ncp.oclIsNew() and\ncp.AmountTendered = amount and\ncp.BelongedSale = CurrentSale and\nCurrentSale.AssoicatedPayment = cp and\nCurrentSale.Belongedstore = CurrentStore and\nCurrentStore.Sales->includes(CurrentSale) and\nCurrentSale.IsComplete = true and\nCurrentSale.Time.isEqual(Now) and\ncp.Balance = amount - CurrentSale.Amount and\nCashPayment.allInstance()->includes(cp) and\nresult = true",
+    "candidate": "let cashPayment:CashPayment in cashPayment.oclIsNew() and cashPayment.AmountTendered = amount and cashPayment.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = cashPayment and CurrentSale.IsComplete = true and CurrentSale.Time = CurrentTime and cashPayment.Balance = amount - CurrentSale.Amount and result = true",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeCashPayment"
+  },
+  {
+    "ocl": "\n    CurrentCashDesk.oclIsUndefined() = false and\n    CurrentCashDesk.IsOpened = true and\n    (CurrentSale.oclIsUndefined() = true or\n    (CurrentSale.oclIsUndefined() = false and\n        CurrentSale.IsComplete = true\n    )\n    )",
+    "candidate": "currentCashDesk.oclIsUndefined() = false and currentCashDesk.IsOpened = true and (CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true)",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeNewSale"
+  },
+  {
+    "ocl": "\n    let s:Sale in\n    s.oclIsNew() and\n    s.BelongedCashDesk = CurrentCashDesk and\n    CurrentCashDesk.ContainedSales->includes(s) and\n    s.IsComplete = false and\n    s.IsReadytoPay = false and\n    Sale.allInstance()->includes(s) and\n    self.CurrentSale = s and\n    result = true",
+    "candidate": "let newSale: Sale in (newSale.oclIsNew() and newSale.BelongedCashDesk = currentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and Sale.allInstance()->includes(newSale) and CurrentSale = newSale and ok = true and result = ok)",
+    "service": "ProcessSaleService",
+    "useCase": "processSale",
+    "operation": "makeNewSale"
+  },
+  {
+    "ocl": "op:OrderProduct = OrderProduct.allInstance()->any(i:OrderProduct | i.Id = orderID)",
+    "candidate": "orderProduct: OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID), orderExists: Boolean = OrderProduct.allInstance()->includes(orderProduct)",
+    "service": "CoCoMESystem",
+    "useCase": "receiveOrderedProduct",
+    "operation": "receiveOrderedProduct"
+  },
+  {
+    "ocl": "op.oclIsUndefined() = false",
+    "candidate": "OrderProduct.allInstance()->includes(orderProduct)",
+    "service": "CoCoMESystem",
+    "useCase": "receiveOrderedProduct",
+    "operation": "receiveOrderedProduct"
+  },
+  {
+    "ocl": "\nop.OrderStatus = OrderStatus::RECEIVED and\nop.ContainedEntries->forAll(oe:OrderEntry |\n  oe.Item.StockNumber = oe.Item.StockNumber@pre + oe.Quantity)\nand\nresult = true",
+    "candidate": "orderProduct.OrderStatus = OrderStatus::RECEIVED and orderProduct.ContainedEntries->forAll(oe | oe.Item.StockNumber = oe.Item.StockNumber@pre + oe.Quantity) and result = orderExists",
+    "service": "CoCoMESystem",
+    "useCase": "receiveOrderedProduct",
+    "operation": "receiveOrderedProduct"
+  },
+  {
+    "ocl": "true",
+    "candidate": "true",
+    "service": "CoCoMESystem",
+    "useCase": "showStockReports",
+    "operation": "showStockReports"
+  },
+  {
+    "ocl": "result = Item.allInstance()",
+    "candidate": "result = obs",
+    "service": "CoCoMESystem",
+    "useCase": "showStockReports",
+    "operation": "showStockReports"
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    stu:Student = Student.allInstance()->any(s:Student | s.UserID = uid),\n    fac:Faculty = Faculty.allInstance()->any(f:Faculty | f.UserID = uid),\n    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode),\n    res:Reserve = Reserve.allInstance()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user and r.IsReserveClosed = false)",
+    "candidate": "borrowOk: Boolean = User.allInstance()->exists(u | u.UserID = uid and u.BorrowStatus = BorrowStatus::NORMAL) and BookCopy.allInstance()->exists(bc | bc.Barcode = barcode and bc.Status = CopyStatus::AVAILABLE)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "borrowBook",
+    "operation": "borrowBook"
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    user.BorrowStatus = BorrowStatus::NORMAL and\n    user.SuspensionDays = 0 and\n    if\n      user.oclIsTypeOf(Student)\n    then\n      if\n        stu.Programme = Programme::BACHELOR\n      then\n        stu.LoanedNumber < 20\n      else\n        if\n          stu.Programme = Programme::MASTER\n        then\n          stu.LoanedNumber < 40\n        else\n          stu.LoanedNumber < 60\n        endif\n      endif\n    else\n      fac.LoanedNumber < 60\n    endif and\n    (copy.Status = CopyStatus::AVAILABLE or\n      (copy.Status = CopyStatus::ONHOLDSHELF and\n        copy.IsReserved = true and\n        res.oclIsUndefined() = false and\n        res.IsReserveClosed = false\n      )\n    )",
+    "candidate": "User.allInstance()->exists(u | u.UserID = uid and u.BorrowStatus = BorrowStatus::NORMAL) and BookCopy.allInstance()->exists(bc | bc.Barcode = barcode and bc.Status = CopyStatus::AVAILABLE)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "borrowBook",
+    "operation": "borrowBook"
+  },
+  {
+    "ocl": "\n    let loan:Loan in\n    loan.oclIsNew() and\n    loan.LoanedUser = user and\n    loan.LoanedCopy = copy and\n    loan.IsReturned = false and\n    loan.LoanDate = Today and\n    user.LoanedNumber = user.LoanedNumber@pre + 1 and\n    user.LoanedBook->includes(loan) and\n    copy.LoanedRecord->includes(loan) and\n    if\n      user.oclIsTypeOf(Student)\n    then\n      loan.DueDate = Today.After(30)\n    else\n      loan.DueDate = Today.After(60)\n    endif and\n    if\n      copy.Status@pre = CopyStatus::ONHOLDSHELF\n    then\n      copy.IsReserved = false and\n      res.IsReserveClosed = true\n    endif and\n    copy.Status = CopyStatus::LOANED and\n    loan.OverDue3Days = false and\n    loan.OverDue10Days = false and\n    loan.OverDue17Days = false and\n    loan.OverDue31Days = false and\n    Loan.allInstance()->includes(loan) and\n    result = true",
+    "candidate": "result = borrowOk",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "borrowBook",
+    "operation": "borrowBook"
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode),\n    res:Reserve = Reserve.allInstance()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user)",
+    "candidate": "obsUser:User = User.allInstance()->any(o | o.UserID = uid), obsCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode), ob:Reserve = Reserve.allInstance()->any(r | r.ReservedUser = obsUser and r.ReservedCopy = obsCopy and r.IsReserveClosed = false)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "cancelReservation",
+    "operation": "cancelReservation"
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    copy.Status = CopyStatus::LOANED and\n    copy.IsReserved = true and\n    res.oclIsUndefined() = false and\n    res.IsReserveClosed = false",
+    "candidate": "obsUser.oclIsUndefined() = false and obsCopy.oclIsUndefined() = false and ob.oclIsUndefined() = false and ob.IsReserveClosed = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "cancelReservation",
+    "operation": "cancelReservation"
+  },
+  {
+    "ocl": "\n    copy.IsReserved = false and\n    res.IsReserveClosed = true and\n    result = true",
+    "candidate": "ob.IsReserveClosed = true and result = ob.IsReserveClosed",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "cancelReservation",
+    "operation": "cancelReservation"
+  },
+  {
+    "ocl": "users:Set(User) = User.allInstance()->select(u:User | u.SuspensionDays > 0)",
+    "candidate": "obs:Set(User) = User.allInstance()->select(o | o.LoanedBook->exists(l | l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days))",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "countDownSuspensionDay",
+    "operation": "countDownSuspensionDay"
+  },
+  {
+    "ocl": "true",
+    "candidate": "obs.isEmpty() = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "countDownSuspensionDay",
+    "operation": "countDownSuspensionDay"
+  },
+  {
+    "ocl": "users->forAll(u:User |\n\t\t\t\tu.SuspensionDays = u.SuspensionDays@pre - 1 and\n\t\t\t\tif\n\t\t\t\t\tu.BorrowStatus = BorrowStatus::SUSPEND and\n\t\t\t\t\tu.OverDueFee = 0 and\n\t\t\t\t\tu.SuspensionDays = 0\n\t\t\t\tthen\n\t\t\t\t\tu.BorrowStatus = BorrowStatus::NORMAL\n\t\t\t\tendif\n\t\t\t)",
+    "candidate": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays - 1 and o.BorrowStatus = BorrowStatus::SUSPEND)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "countDownSuspensionDay",
+    "operation": "countDownSuspensionDay"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid)",
+    "candidate": "user:User = User.allInstance()->any(o | o.UserID = uid), loans:Set(Loan) = user.LoanedBook",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listBorrowHistory"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false",
+    "candidate": "uid.oclIsTypeOf(String) and user.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listBorrowHistory"
+  },
+  {
+    "ocl": "result = user.LoanedBook",
+    "candidate": "result = loans",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listBorrowHistory"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid)",
+    "candidate": "obsUser:User = User.allInstance()->any(u | u.UserID = uid), loans:Set(Loan) = obsUser.LoanedBook->select(l | l.IsReturned = false)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listHodingBook"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false",
+    "candidate": "obsUser.oclIsUndefined() = false and User.allInstance()->includes(obsUser)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listHodingBook"
+  },
+  {
+    "ocl": "result = user.LoanedBook->select(l:Loan | l.IsReturned = false)",
+    "candidate": "result = loans",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listHodingBook"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    loans:Set(Loan) = user.LoanedBook->select(l:Loan | l.IsReturned = false and l.OverDueFee > 0)",
+    "candidate": "overdueBooks:Set(BookCopy) = BookCopy.allInstance()->select(o | o.LoanedRecord->exists(l | l.LoanedUser.UserID = uid and l.ReturnDate = null and (l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true)))",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listOverDueBook"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and loans.oclIsUndefined() = false",
+    "candidate": "User.allInstance()->exists(u | u.UserID = uid)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listOverDueBook"
+  },
+  {
+    "ocl": "result = loans->collect(l:Loan | l.LoanedCopy)",
+    "candidate": "result = overdueBooks",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listOverDueBook"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    rBooks:Set(RecommendBook) = user.RecommendedBook",
+    "candidate": "obs:User = User.allInstance()->any(o | o.UserID = uid), a: Set(RecommendBook) = obs.RecommendedBook, b: Set(RecommendBook) = obs.RecommendedBook",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listRecommendBook"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listRecommendBook"
+  },
+  {
+    "ocl": "result = rBooks",
+    "candidate": "a = b and result = a",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listRecommendBook"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    res:Set(Reserve) = user.ReservedBook",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), reservedCopies:Set(BookCopy) = user.ReservedBook->collect(r | r.ReservedCopy)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listReservationBook"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and res.oclIsUndefined() = false",
+    "candidate": "User.allInstance()->exists(u | u.UserID = uid)",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listReservationBook"
+  },
+  {
+    "ocl": "result = res->collect(r:Reserve | r.ReservedCopy)",
+    "candidate": "result = reservedCopies",
+    "service": "ListBookHistory",
+    "useCase": "listBookHistory",
+    "operation": "listReservationBook"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n     rBooks:Set(RecommendBook) = user.RecommendedBook",
+    "candidate": "ob:User = User.allInstance()->any(o | o.UserID = uid), obs:Set(RecommendBook) = ob.RecommendedBook",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "listRecommendBook",
+    "operation": "listRecommendBook"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false",
+    "candidate": "ob.oclIsUndefined() = false and ob.oclIsTypeOf(User) and User.allInstance()->includes(ob)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "listRecommendBook",
+    "operation": "listRecommendBook"
+  },
+  {
+    "ocl": "result = rBooks",
+    "candidate": "result = obs",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "listRecommendBook",
+    "operation": "listRecommendBook"
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode)",
+    "candidate": "userSet:Set(User) = User.allInstance()->select(u | u.UserID = uid) , bookSet:Set(Book) = Book.allInstance()->select(b | b.CallNo = barcode) , canReserve:Boolean = userSet.size() > 0 and bookSet.size() > 0",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "makeReservation",
+    "operation": "makeReservation"
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    copy.Status = CopyStatus::LOANED and\n    copy.IsReserved = false",
+    "candidate": "userSet.size() > 0 and bookSet.size() > 0",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "makeReservation",
+    "operation": "makeReservation"
+  },
+  {
+    "ocl": "\n    let res:Reserve in\n    res.oclIsNew() and\n    copy.IsReserved = true and\n    res.IsReserveClosed = false and\n    res.ReserveDate.isEqual(Today) and\n    res.ReservedUser = user and\n    res.ReservedCopy = copy and\n    user.ReservedBook->includes(res) and\n    copy.ReservationRecord->includes(res) and\n    Reserve.allInstance()->includes(res) and\n    result = true",
+    "candidate": "result = canReserve",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "makeReservation",
+    "operation": "makeReservation"
+  },
+  {
+    "ocl": "book:Book = Book.allInstance()->any(boo:Book | boo.CallNo = callno)",
+    "candidate": "callno:String, title:String, edition:String, author:String, publisher:String, description:String, isbn:String, copynum:Integer",
+    "service": "ManageBookCRUDService",
+    "useCase": "manageBook",
+    "operation": "createBook"
+  },
+  {
+    "ocl": "book.oclIsUndefined() = true",
+    "candidate": "Book.allInstance()->forAll(b | b.CallNo <> callno) and callno.size() > 0 and title.size() > 0 and edition.size() > 0 and author.size() > 0 and publisher.size() > 0 and description.size() > 0 and isbn.size() > 0 and copynum >= 0",
+    "service": "ManageBookCRUDService",
+    "useCase": "manageBook",
+    "operation": "createBook"
+  },
+  {
+    "ocl": "\n    let boo:Book in\n    boo.oclIsNew() and\n    boo.CallNo = callno and\n    boo.Title = title and\n    boo.Edition = edition and\n    boo.Author = author and\n    boo.Publisher = publisher and\n    boo.Description = description and\n    boo.ISBn = isbn and\n    boo.CopyNum = copynum and\n    Book.allInstance()->includes(boo) and\n    result = true",
+    "candidate": "let newBook:Book in ( newBook.oclIsNew() and newBook.CallNo = callno and newBook.Title = title and newBook.Edition = edition and newBook.Author = author and newBook.Publisher = publisher and newBook.Description = description and newBook.ISBn = isbn and newBook.CopyNum = copynum and Book.allInstance()->includes(newBook) and result = newBook.oclIsNew() )",
+    "service": "ManageBookCRUDService",
+    "useCase": "manageBook",
+    "operation": "createBook"
+  },
+  {
+    "ocl": "\n    book:Book = Book.allInstance()->any(b:Book | b.CallNo = callNo),\n    bc:BookCopy = book.Copys->any(c:BookCopy | c.Barcode = barcode)",
+    "candidate": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode)",
+    "service": "ManageBookCopyCRUDService",
+    "useCase": "manageBookCopy",
+    "operation": "addBookCopy"
+  },
+  {
+    "ocl": "\n    book.oclIsUndefined() = false and\n    bc.oclIsUndefined() = true",
+    "candidate": "obs.isEmpty() = true",
+    "service": "ManageBookCopyCRUDService",
+    "useCase": "manageBookCopy",
+    "operation": "addBookCopy"
+  },
+  {
+    "ocl": "\n    let copy:BookCopy in\n    copy.oclIsNew() and\n    copy.Barcode = barcode and\n    copy.Status = CopyStatus::AVAILABLE and\n    copy.Location = location and\n    copy.IsReserved = false and\n    book.Copys->includes(copy) and\n    copy.BookBelongs = book and\n    book.CopyNum = book.CopyNum@pre + 1 and\n    BookCopy.allInstance()->includes(copy) and\n    result = true",
+    "candidate": "let ob:BookCopy in ob.oclIsNew() and BookCopy.allInstance()->includes(ob) and ob.BookBelongs = Book.allInstance()->any(b | b.CallNo = callNo) and ob.Barcode = barcode and ob.Location = location and result = true",
+    "service": "ManageBookCopyCRUDService",
+    "useCase": "manageBookCopy",
+    "operation": "addBookCopy"
+  },
+  {
+    "ocl": "librarian:Librarian = Librarian.allInstance()->any(lib:Librarian | lib.LibrarianID = librarianid)",
+    "candidate": "librarianSet:Set(Librarian) = Librarian.allInstance()->select(o | o.LibrarianID = librarianid)",
+    "service": "ManageLibrarianCRUDService",
+    "useCase": "manageLibrarian",
+    "operation": "createLibrarian"
+  },
+  {
+    "ocl": "librarian.oclIsUndefined() = true",
+    "candidate": "librarianSet.isEmpty() = true",
+    "service": "ManageLibrarianCRUDService",
+    "useCase": "manageLibrarian",
+    "operation": "createLibrarian"
+  },
+  {
+    "ocl": "\n    let lib:Librarian in\n    lib.oclIsNew() and\n    lib.LibrarianID = librarianid and\n    lib.Name = name and\n    lib.Password = password and\n    Librarian.allInstance()->includes(lib) and\n    result = true",
+    "candidate": "let ob:Librarian in ob.oclIsNew() and Librarian.allInstance()->includes(ob) and ob.LibrarianID = librarianid and ob.Name = name and ob.Password = password and result = true",
+    "service": "ManageLibrarianCRUDService",
+    "useCase": "manageLibrarian",
+    "operation": "createLibrarian"
+  },
+  {
+    "ocl": "subject:Subject = Subject.allInstance()->any(sub:Subject | sub.Name = name)",
+    "candidate": "subjectName: String",
+    "service": "ManageSubjectCRUDService",
+    "useCase": "manageSubject",
+    "operation": "createSubject"
+  },
+  {
+    "ocl": "subject.oclIsUndefined() = true",
+    "candidate": "subjectName <> ''",
+    "service": "ManageSubjectCRUDService",
+    "useCase": "manageSubject",
+    "operation": "createSubject"
+  },
+  {
+    "ocl": "\n    let sub:Subject in\n    sub.oclIsNew() and\n    sub.Name = name and\n    Subject.allInstance()->includes(sub) and\n    result = true",
+    "candidate": "let newOb:Subject in newOb.oclIsNew() and Subject.allInstance()->includes(newOb) and newOb.Name = subjectName and result = true",
+    "service": "ManageSubjectCRUDService",
+    "useCase": "manageSubject",
+    "operation": "createSubject"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(use:User | use.UserID = userid)",
+    "candidate": "obs:Set(User) = User.allInstance()->select(o | o.UserID = userid)",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = true",
+    "candidate": "obs.isEmpty() = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser"
+  },
+  {
+    "ocl": "\n    let use:User in\n    use.oclIsNew() and\n    use.UserID = userid and\n    use.Name = name and\n    use.Sex = sex and\n    use.Password = password and\n    use.Email = email and\n    use.Faculty = faculty and\n    use.LoanedNumber = loanednumber and\n    use.BorrowStatus = borrowstatus and\n    use.SuspensionDays = suspensiondays and\n    use.OverDueFee = overduefee and\n    User.allInstance()->includes(use) and\n    result = true",
+    "candidate": "let ob:User in ob.oclIsNew() and User.allInstance()->includes(ob) and ob.UserID = userid and ob.Name = name and ob.Sex = sex and ob.Password = password and ob.Email = email and ob.Faculty = faculty and ob.LoanedNumber = loanednumber and ob.BorrowStatus = borrowstatus and ob.SuspensionDays = suspensiondays and ob.OverDueFee = overduefee and result = true",
+    "service": "ManageUserCRUDService",
+    "useCase": "manageUser",
+    "operation": "createUser"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n\t\t\tloans:Set(Loan) = Loan.allInstance()->select(l:Loan | l.LoanedUser = user and l.DueDate.isBefore(Today)and l.IsReturned = true and l.OverDueFee > 0)",
+    "candidate": "user:User = User.allInstance()->any(o | o.UserID = uid)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "payOverDueFee",
+    "operation": "payOverDueFee"
+  },
+  {
+    "ocl": "user.oclIsUndefined() = false and\n\t\t\tloans.notEmpty() and\n\t\t\tfee >= user.OverDueFee",
+    "candidate": "User.allInstance()->includes(user) and fee >= 0 and user.OverDueFee >= fee",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "payOverDueFee",
+    "operation": "payOverDueFee"
+  },
+  {
+    "ocl": "user.OverDueFee = 0 and\n\t\t\tloans->forAll(l:Loan |\n\t\t\t\tl.OverDueFee = 0)\n\t\t\tand\n\t\t\tresult = true",
+    "candidate": "user.OverDueFee = user.OverDueFee - fee and result = true",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "payOverDueFee",
+    "operation": "payOverDueFee"
+  },
+  {
+    "ocl": "\n    user:User = User.allInstance()->any(u:User | u.UserID = uid),\n    rb:RecommendBook = RecommendBook.allInstance()->any(r:RecommendBook | r.CallNo = callNo)",
+    "candidate": "user:User = User.allInstance()->any(u | u.UserID = uid), book:Book = Book.allInstance()->any(b | b.CallNo = callNo and b.Title = title and b.Edition = edition and b.Author = author and b.Publisher =publisher and b.Description = description and b.ISBn = isbn), success:Boolean = if user.oclIsUndefined() or book.oclIsUndefined() then false else true endif",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "recommendBook",
+    "operation": "recommendBook"
+  },
+  {
+    "ocl": "\n    user.oclIsUndefined() = false and\n    rb.oclIsUndefined() = true",
+    "candidate": "uid.oclIsUndefined() = false and callNo.oclIsUndefined() = false and title.oclIsUndefined() = false and edition.oclIsUndefined() = false and author.oclIsUndefined() = false and publisher.oclIsUndefined() = false and description.oclIsUndefined() = false and isbn.oclIsUndefined() = false",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "recommendBook",
+    "operation": "recommendBook"
+  },
+  {
+    "ocl": "\n    let r:RecommendBook in\n    r.oclIsNew() and\n    r.CallNo = callNo and\n    r.Title = title and\n    r.Edition = edition and\n    r.Author = author and\n    r.Publisher = publisher and\n    r.Description = description and\n    r.ISBn = isbn and\n    r.RecommendDate = Today and\n    r.RecommendUser = user and\n    user.RecommendedBook->includes(r) and\n    RecommendBook.allInstance()->includes(r) and\n    result = true",
+    "candidate": "result = success",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "recommendBook",
+    "operation": "recommendBook"
+  },
+  {
+    "ocl": "user:User = User.allInstance()->any(u:User | u.UserID = uid),\n\t\t\tstu:Student = Student.allInstance()->any(s:Student | s.UserID = uid),\n\t\t\tfac:Faculty = Faculty.allInstance()->any(f:Faculty | f.UserID = uid),\n\t\t\tcopy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),\n\t\t\tloan:Loan = Loan.allInstance()->any(l:Loan | l.LoanedUser = user and l.LoanedCopy = copy)",
+    "candidate": "obsUser:Set(User) = User.allInstance()->select(u | u.UserID = uid), obsBook:Set(Book) = Book.allInstance()->select(b | b.Barcode = barcode), renewalOK:Boolean = Loan.allInstance()->exists(l | l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "renewBook",
+    "operation": "renewBook"
+  },
+  {
+    "ocl": "user.BorrowStatus = BorrowStatus::NORMAL and\n\t\t\tuser.oclIsUndefined() = false and\n\t\t\tcopy.oclIsUndefined() = false and\n\t\t\tloan.oclIsUndefined() = false and\n\t\t\tcopy.IsReserved = false and\n\t\t\tloan.DueDate.isAfter(Today) and\n\t\t\tif\n\t\t\t\tuser.oclIsTypeOf(Student)\n\t\t\tthen\n\t\t\t\tloan.RenewedTimes < 3\n\t\t\telse\n\t\t\t\tloan.RenewedTimes < 6\n\t\t\tendif and\n\t\t\tloan.OverDueFee = 0",
+    "candidate": "obsUser->exists(u | u.UserID = uid) and obsBook->exists(b | b.Barcode = barcode) and Loan.allInstance()->exists(l | l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false)",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "renewBook",
+    "operation": "renewBook"
+  },
+  {
+    "ocl": "loan.RenewedTimes = loan.RenewedTimes@pre + 1 and\n\t\t\tloan.RenewDate = Today and\n\t\t\tif\n\t\t\t\tuser.oclIsTypeOf(Student)\n\t\t\tthen\n\t\t\t\tif\n\t\t\t\t\tstu.Programme = Programme::BACHELOR\n\t\t\t\tthen\n\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(20)\n\t\t\t\telse\n\t\t\t\t\tif\n\t\t\t\t\t\tstu.Programme = Programme::MASTER\n\t\t\t\t\tthen\n\t\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(40)\n\t\t\t\t\telse\n\t\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(60)\n\t\t\t\t\tendif\n\t\t\t\tendif\n\t\t\telse\n\t\t\t\tloan.DueDate = loan.DueDate@pre.After(60)\n\t\t\tendif and\n\t\t\tresult = true",
+    "candidate": "result = renewalOK",
+    "service": "LibraryManagementSystemSystem",
+    "useCase": "renewBook",
+    "operation": "renewBook"
+  },
+  {
+    "ocl": "authorname <> \"\"",
+    "candidate": "authorname.oclIsTypeOf(String) and authorname.oclIsUndefined() = false",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByAuthor"
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Author = authorname)",
+    "candidate": "result = obs",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByAuthor"
+  },
+  {
+    "ocl": "barcode.oclIsTypeOf(String)",
+    "candidate": "barcode.oclIsTypeOf(String) and barcode.size() > 0",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByBarCode"
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))",
+    "candidate": "result = obs",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByBarCode"
+  },
+  {
+    "ocl": "iSBNnumber.oclIsTypeOf(String)",
+    "candidate": "iSBNnumber <> ''",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByISBN"
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.ISBn = iSBNnumber)",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByISBN"
+  },
+  {
+    "ocl": "subject.oclIsTypeOf(String)",
+    "candidate": "books.isEmpty() = false",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookBySubject"
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))",
+    "candidate": "result = books",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookBySubject"
+  },
+  {
+    "ocl": "title <> \"\"",
+    "candidate": "title.size() > 0",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByTitle"
+  },
+  {
+    "ocl": "result = Book.allInstance()->select(book:Book | book.Title = title)",
+    "candidate": "result = obs",
+    "service": "SearchBook",
+    "useCase": "searchBook",
+    "operation": "searchBookByTitle"
+  },
+  {
+    "ocl": "email <> \"\"",
+    "candidate": "email.oclIsUndefined() = false",
+    "service": "ThirdPartyServices",
+    "useCase": "sendNotificationEmail",
+    "operation": "sendNotificationEmail"
+  },
+  {
+    "ocl": "result = true",
+    "candidate": "result = isEmailPresent",
+    "service": "ThirdPartyServices",
+    "useCase": "sendNotificationEmail",
+    "operation": "sendNotificationEmail"
+  },
+  {
+    "ocl": "loan:Loan = Loan.allInstance()->any(loa:Loan | loa.LoanID = loanid)",
+    "candidate": "loan: Loan = Loan.allInstance()->any(o | o.LoanID = loanid)",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "closeOutLoan",
+    "operation": "closeOutLoan"
+  },
+  {
+    "ocl": "loan.oclIsUndefined() = false and\n\t\t\tloan.Status = LoanStatus::LSOPEN",
+    "candidate": "Loan.allInstance()->exists(o | o.LoanID = loanid and o.Status = LoanStatus::LSOPEN)",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "closeOutLoan",
+    "operation": "closeOutLoan"
+  },
+  {
+    "ocl": "loan.Status = LoanStatus::CLOSED and\n\t\t\tresult = true",
+    "candidate": "loan.Status = LoanStatus::CLOSED and result = true",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "closeOutLoan",
+    "operation": "closeOutLoan"
+  },
+  {
+    "ocl": "rs:LoanRequest = self.CurrentLoanRequests->any(r:LoanRequest | r.RequestID = requestid)",
+    "candidate": "obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.RequestID = requestid)",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "chooseLoanRequest"
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "obs.isEmpty() = false",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "chooseLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest = rs and result = rs",
+    "candidate": "result = obs->any(o | o.RequestID = requestid)",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "chooseLoanRequest"
+  },
+  {
+    "ocl": "rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::SUBMITTED)",
+    "candidate": "obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::SUBMITTED)",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "listSubmitedLoanRequest"
+  },
+  {
+    "ocl": "rs.size() > 0",
+    "candidate": "obs.isEmpty() = false",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "listSubmitedLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequests = rs and\n\t\t\tresult = rs",
+    "candidate": "result = obs",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "listSubmitedLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequests->includes(CurrentLoanRequest)",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "markRequestValid"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and\n\t\t\tresult = true",
+    "candidate": "CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and result = updateResult",
+    "service": "EnterValidatedCreditReferencesModule",
+    "useCase": "enterValidatedCreditReferences",
+    "operation": "markRequestValid"
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = termid)",
+    "candidate": "CurrentLoanRequest: LoanRequest, obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = termid)",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "addLoanTerm"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tloanterm.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "addLoanTerm"
+  },
+  {
+    "ocl": "CurrentLoanRequest.AttachedLoanTerms->includes(loanterm) and\n\t\t\tresult = true",
+    "candidate": "let addOb: LoanTerm = obs->any(o | o.oclIsUndefined() = false) in CurrentLoanRequest.AttachedLoanTerms->includes(addOb) and result = true",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "addLoanTerm"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false",
+    "candidate": "currentLoanRequest.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "approveLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and\n\t\t\tresult = true",
+    "candidate": "let operationSucceeded: Boolean = true in currentLoanRequest.Status = LoanRequestStatus::APPROVED and result = operationSucceeded",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "approveLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+    "candidate": "currentLoanRequest.oclIsUndefined() = false and currentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "checkCreditHistory"
+  },
+  {
+    "ocl": "result = CurrentLoanRequest.RequestedCreditHistory",
+    "candidate": "let creditHistory: CreditHistory in creditHistory = currentLoanRequest.RequestedCreditHistory and result = creditHistory",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "checkCreditHistory"
+  },
+  {
+    "ocl": "rs:LoanRequest = self.CurrentLoanRequests->any(r:LoanRequest | r.RequestID = requestid)",
+    "candidate": "loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "chooseOneForReview"
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "loanRequest.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "chooseOneForReview"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest = rs and result = rs",
+    "candidate": "result = loanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "chooseOneForReview"
+  },
+  {
+    "ocl": "true",
+    "candidate": "obs.size() >= 0",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listAvaiableLoanTerm"
+  },
+  {
+    "ocl": "result = LoanTerm.allInstance()",
+    "candidate": "result = obs",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listAvaiableLoanTerm"
+  },
+  {
+    "ocl": "rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::REFERENCESVALIDATED)",
+    "candidate": "obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::REFERENCESVALIDATED)",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listTenLoanRequest"
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "obs.isEmpty() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listTenLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequests = rs and result = rs",
+    "candidate": "result = obs",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "listTenLoanRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+    "candidate": "currentLoanRequest.oclIsUndefined() = false and currentLoanRequests->includes(currentLoanRequest) and currentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "reviewCheckingAccount"
+  },
+  {
+    "ocl": "result = CurrentLoanRequest.RequestedCAHistory",
+    "candidate": "result = currentLoanRequest.RequestedCAHistory",
+    "service": "EvaluateLoanRequestModule",
+    "useCase": "evaluateLoanRequest",
+    "operation": "reviewCheckingAccount"
+  },
+  {
+    "ocl": "loanaccount:LoanAccount = LoanAccount.allInstance()->any(loa:LoanAccount | loa.LoanAccountID = loanaccountid)",
+    "candidate": "existObSet: Set(LoanAccount) = LoanAccount.allInstance()->select(o | o.LoanAccountID = loanaccountid), existsOb: Boolean = existObSet.size() > 0",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "createLoanAccount"
+  },
+  {
+    "ocl": "loanaccount.oclIsUndefined() = true",
+    "candidate": "loanaccountid >= 0",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "createLoanAccount"
+  },
+  {
+    "ocl": "let loa:LoanAccount in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.LoanAccountID = loanaccountid and\n\t\t\tloa.Balance = balance and\n\t\t\tloa.Status = status and\n\t\t\tLoanAccount.allInstance()->includes(loa) and\n\t\t\tresult = true",
+    "candidate": "result = existsOb",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "createLoanAccount"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false",
+    "candidate": "currentLoanRequests->includes(currentLoanRequest) and currentLoanRequest.oclIsUndefined() = false",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "generateLoanAgreement"
+  },
+  {
+    "ocl": "let la:LoanAgreement in\n\t\t\tla.oclIsNew() and\n\t\t\tla.Content = \"Loan Agreement\" and\n\t\t\tself.CurrentLoanRequest.AttachedLoanAgreement = la and\n\t\t\tLoanAgreement.allInstance()->includes(la) and\n\t\t\tresult = true",
+    "candidate": "let newLoanAgreement: LoanAgreement in newLoanAgreement.oclIsNew() and newLoanAgreement.Content = 'Loan Agreement' and LoanAgreement.allInstance()->includes(newLoanAgreement) and currentLoanRequest.AttachedLoanAgreement = newLoanAgreement and result = true",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "generateLoanAgreement"
+  },
+  {
+    "ocl": "r:LoanRequest = LoanRequest.allInstance()->any(lr:LoanRequest | lr.RequestID = id)",
+    "candidate": "obs:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "genereateApprovalLetter"
+  },
+  {
+    "ocl": "r.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "genereateApprovalLetter"
+  },
+  {
+    "ocl": "let l:ApprovalLetter in\n\t\t\tl.oclIsNew() and\n\t\t\tl.Content = \"ApprovalLetterContent\" and\n\t\t\tr.AttachedApprovalLetter = l and\n\t\t\tself.CurrentLoanRequest = r and\n\t\t\tApprovalLetter.allInstance()->includes(l) and\n\t\t\tresult = true",
+    "candidate": "let addOb:ApprovalLetter in addOb.oclIsNew() and ApprovalLetter.allInstance()->includes(addOb) and addOb.Content = 'ApprovalLetterContent' and obs.AttachedApprovalLetter = addOb and result = true",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "genereateApprovalLetter"
+  },
+  {
+    "ocl": "rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::APPROVED)",
+    "candidate": "obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::APPROVED)",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "listApprovalRequest"
+  },
+  {
+    "ocl": "rs.oclIsUndefined() = false",
+    "candidate": "obs.isEmpty() = false",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "listApprovalRequest"
+  },
+  {
+    "ocl": "self.CurrentLoanRequests = rs and result = rs",
+    "candidate": "result = obs",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "useCase": "generateLoanLetterAndAgreement",
+    "operation": "listApprovalRequest"
+  },
+  {
+    "ocl": "loan:Loan = Loan.allInstance()->any(loa:Loan | loa.LoanID = loanid)",
+    "candidate": "loanObj:Loan = Loan.allInstance()->any(o | o.LoanID = loanid)",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "loanPayment",
+    "operation": "loanPayment"
+  },
+  {
+    "ocl": "loan.oclIsUndefined() = false and\n\t\t\tloan.Status = LoanStatus::LSOPEN",
+    "candidate": "loanObj.oclIsUndefined() = false and loanObj.Status = LoanStatus::LSOPEN",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "loanPayment",
+    "operation": "loanPayment"
+  },
+  {
+    "ocl": "loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount and\n\t\t\tresult = true",
+    "candidate": "loanObj.RemainAmountToPay = loanObj.RemainAmountToPay - loanObj.RepaymentAmount and result = true",
+    "service": "LoanProcessingSystemSystem",
+    "useCase": "loanPayment",
+    "operation": "loanPayment"
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content), created:Boolean = obs.isEmpty()",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "createLoanTerm"
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = true",
+    "candidate": "obs.isEmpty() = true",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "createLoanTerm"
+  },
+  {
+    "ocl": "let loa:LoanTerm in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.ItemID = itemid and\n\t\t\tloa.Content = content and\n\t\t\tLoanTerm.allInstance()->includes(loa) and\n\t\t\tresult = true",
+    "candidate": "result = LoanTerm.allInstance()->exists(o | o.ItemID = itemid and o.Content = content)",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "createLoanTerm"
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "existingTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid), deletion:Boolean = if existingTerm.oclIsUndefined() then false else true endif",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "deleteLoanTerm"
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = false",
+    "candidate": "existingTerm.oclIsUndefined() = false",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "deleteLoanTerm"
+  },
+  {
+    "ocl": "LoanTerm.allInstance()->excludes(loanterm) and\n\t\t\tresult = true",
+    "candidate": "LoanTerm.allInstance()->excludes(existingTerm) and result = deletion",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "deleteLoanTerm"
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "obs:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid), updated:Boolean = if obs.oclIsUndefined() = false and obs.Content <> content then true else false endif",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "modifyLoanTerm"
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = false",
+    "candidate": "obs.oclIsUndefined() = false",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "modifyLoanTerm"
+  },
+  {
+    "ocl": "loanterm.ItemID = itemid and\n\t\t\tloanterm.Content = content and\n\t\t\tresult = true",
+    "candidate": "obs.Content = content and result = updated",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "modifyLoanTerm"
+  },
+  {
+    "ocl": "loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)",
+    "candidate": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid)",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "queryLoanTerm"
+  },
+  {
+    "ocl": "loanterm.oclIsUndefined() = false",
+    "candidate": "term.oclIsUndefined() = false",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "queryLoanTerm"
+  },
+  {
+    "ocl": "result = loanterm",
+    "candidate": "result = term",
+    "service": "ManageLoanTermCRUDService",
+    "useCase": "manageLoanTerm",
+    "operation": "queryLoanTerm"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+    "candidate": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "calculateScore"
+  },
+  {
+    "ocl": "self.CurrentLoanRequest.CreditScore = 100 and\n\t\t\tself.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\t\tresult = self.CurrentLoanRequest.CreditScore",
+    "candidate": "CurrentLoanRequest.CreditScore = returnValue and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = returnValue",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "calculateScore"
+  },
+  {
+    "ocl": "loanrequest:LoanRequest = LoanRequest.allInstance()->any(loa:LoanRequest | loa.RequestID = requestid)",
+    "candidate": "currentLoanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "enterLoanInformation"
+  },
+  {
+    "ocl": "loanrequest.oclIsUndefined() = true",
+    "candidate": "true",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "enterLoanInformation"
+  },
+  {
+    "ocl": "let loa:LoanRequest in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.RequestID = requestid and\n\t\t\tloa.Name = name and\n\t\t\tloa.LoanAmount = loanamount and\n\t\t\tloa.LoanPurpose = loanpurpose and\n\t\t\tloa.Income = income and\n\t\t\tloa.PhoneNumber = phonenumber and\n\t\t\tloa.PostalAddress = postaladdress and\n\t\t\tloa.ZipCode = zipcode and\n\t\t\tloa.Email = email and\n\t\t\tloa.WorkReferences = workreferences and\n\t\t\tloa.CreditReferences = creditreferences and\n\t\t\tloa.CheckingAccountNumber = checkingaccountnumber and\n\t\t\tloa.SecurityNumber = securitynumber and\n\t\t\tLoanRequest.allInstance()->includes(loa) and\n\t\t\tself.CurrentLoanRequest = loa and\n\t\t\tresult = true",
+    "candidate": "let newOb:LoanRequest in newOb.oclIsNew() and currentLoanRequest = newOb and newOb.RequestID = requestid and newOb.Name = name and newOb.LoanAmount = loanamount and newOb.LoanPurpose = loanpurpose and newOb.Income = income and newOb.PhoneNumber = phonenumber and newOb.PostalAddress = postaladdress and newOb.ZipCode = zipcode and newOb.Email = email and newOb.WorkReferences = workreferences and newOb.CreditReferences = creditreferences and newOb.CheckingAccountNumber = checkingaccountnumber and newOb.SecurityNumber = securitynumber and result = true",
+    "service": "SubmitLoanRequestModule",
+    "useCase": "submitLoanRequest",
+    "operation": "enterLoanInformation"
+  }
+]

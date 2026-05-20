@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "targetTerm:LoanTerm = LoanTerm.allInstance()->any(o:LoanTerm | o.ItemID = itemid), curLoanRequest:LoanRequest = self.currentLoanRequest",
+        "precondition": "itemid.oclIsTypeOf(Integer) and curLoanRequest.oclIsUndefined() = false and targetTerm.oclIsUndefined() = false and LoanTerm.allInstance()->isUnique(o:LoanTerm | o.ItemID)",
+        "postcondition": "curLoanRequest.AttachedLoanTerms->includes(targetTerm) and result = targetTerm"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid: Integer): LoanTerm {\n\tdefinition:\n\t\ttargetTerm: LoanTerm = LoanTerm.allInstance()->any(o: LoanTerm|o.ItemID = itemid),\n\t\tcurLoanRequest: LoanRequest = self.currentLoanRequest\n\tprecondition:\n\t\titemid.oclIsTypeOf(Integer) and\n\t\tcurLoanRequest.oclIsUndefined() = false and\n\t\ttargetTerm.oclIsUndefined() = false and\n\t\tLoanTerm.allInstance()->isUnique(o: LoanTerm|o.ItemID)\n\tpostcondition:\n\t\tcurLoanRequest.AttachedLoanTerms->includes(targetTerm) and\n\t\tresult = targetTerm\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

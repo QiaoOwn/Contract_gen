@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), isFeeUpdated:Boolean = user.OverDueFee = fee, result:Boolean = isFeeUpdated",
+        "precondition": "user.oclIsUndefined() = bool",
+        "postcondition": "User.allInstance()->includes(user) and user.OverDueFee = fee and result = isFeeUpdated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), isFeeUpdated:Boolean = user.OverDueFee = fee, result:Boolean = isFeeUpdated\n            \n            precondition:\n          user.oclIsUndefined() = bool\n            \n            postcondition:\n          User.allInstance()->includes(user) and user.OverDueFee = fee and result = isFeeUpdated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,381 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory in history.oclIsNew()",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 implies repair.Process = 1) and (reject = false and repair.Process = 1 and staff.Role = 2 implies repair.Process = 2) and (reject = false and repair.Process = 2 and staff.Role = 3 implies repair.Process = 3) and (reject = true implies repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 149,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 249,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 339,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 429,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 476,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory in history.oclIsNew()\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 implies repair.Process = 1) and (reject = false and repair.Process = 1 and staff.Role = 2 implies repair.Process = 2) and (reject = false and repair.Process = 2 and staff.Role = 3 implies repair.Process = 3) and (reject = true implies repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory in history.oclIsNew()",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3 or reject = true and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 149,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory in history.oclIsNew()\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3 or reject = true and repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew()",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3 or reject = true and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew()\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 and repair.Process = 1 or reject = false and repair.Process = 1 and staff.Role = 2 and repair.Process = 2 or reject = false and repair.Process = 2 and staff.Role = 3 and repair.Process = 3 or reject = true and repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew()",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 implies repair.Process = 1) and (reject = false and repair.Process = 1 and staff.Role = 2 implies repair.Process = 2) and (reject = false and repair.Process = 2 and staff.Role = 3 implies repair.Process = 3) and (reject = true implies repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 249,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 339,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 429,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 476,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew()\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (reject = false and repair.Process = 0 and staff.Role = 1 implies repair.Process = 1) and (reject = false and repair.Process = 1 and staff.Role = 2 implies repair.Process = 2) and (reject = false and repair.Process = 2 and staff.Role = 3 implies repair.Process = 3) and (reject = true implies repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), setTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), setTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), setTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), setTo5:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (setTo1 = true implies repair.Process = 1) and (setTo2 = true implies repair.Process = 2) and (setTo3 = true implies repair.Process = 3) and (setTo5 = true implies repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 206,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 253,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 300,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 347,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), setTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), setTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), setTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), setTo5:Boolean = (reject = true)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (setTo1 = true implies repair.Process = 1) and (setTo2 = true implies repair.Process = 2) and (setTo3 = true implies repair.Process = 3) and (setTo5 = true implies repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), setTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), setTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), setTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), setTo5:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (setTo1 = true and repair.Process = 1 or setTo2 = true and repair.Process = 2 or setTo3 = true and repair.Process = 3 or setTo5 = true and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), setTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), setTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), setTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), setTo5:Boolean = (reject = true)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (setTo1 = true and repair.Process = 1 or setTo2 = true and repair.Process = 2 or setTo3 = true and repair.Process = 3 or setTo5 = true and repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), setTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), setTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), setTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), setTo5:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (setTo1 = true implies repair.Process = 1) and (setTo2 = true implies repair.Process = 2) and (setTo3 = true implies repair.Process = 3) and (setTo5 = true implies repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 206,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 253,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 300,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 347,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), setTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), setTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), setTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), setTo5:Boolean = (reject = true)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (setTo1 = true implies repair.Process = 1) and (setTo2 = true implies repair.Process = 2) and (setTo3 = true implies repair.Process = 3) and (setTo5 = true implies repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), isSetTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), isSetTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), isSetTo5:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true and repair.Process = 1 or isSetTo2 = true and repair.Process = 2 or isSetTo3 = true and repair.Process = 3 or isSetTo5 = true and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), isSetTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), isSetTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), isSetTo5:Boolean = (reject = true)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true and repair.Process = 1 or isSetTo2 = true and repair.Process = 2 or isSetTo3 = true and repair.Process = 3 or isSetTo5 = true and repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), isSetTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), isSetTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), isSetTo5:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true and repair.Process = 1 or isSetTo2 = true and repair.Process = 2 or isSetTo3 = true and repair.Process = 3 or isSetTo5 = true and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), isSetTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), isSetTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), isSetTo5:Boolean = (reject = true)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true and repair.Process = 1 or isSetTo2 = true and repair.Process = 2 or isSetTo3 = true and repair.Process = 3 or isSetTo5 = true and repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), isSetTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), isSetTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), isSetTo5:Boolean = (reject = true)",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 and repair.Process = 1 or isSetTo2 and repair.Process = 2 or isSetTo3 and repair.Process = 3 or isSetTo5 and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = (reject = false and repair.Process = 0 and staff.Role = 1), isSetTo2:Boolean = (reject = false and repair.Process = 1 and staff.Role = 2), isSetTo3:Boolean = (reject = false and repair.Process = 2 and staff.Role = 3), isSetTo5:Boolean = (reject = true)\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 and repair.Process = 1 or isSetTo2 and repair.Process = 2 or isSetTo3 and repair.Process = 3 or isSetTo5 and repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = reject = false and repair.Process = 0 and staff.Role = 1, isSetTo2:Boolean = reject = false and repair.Process = 1 and staff.Role = 2, isSetTo3:Boolean = reject = false and repair.Process = 2 and staff.Role = 3, isSetTo5:Boolean = reject = true",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and isSetTo1 implies repair.Process = 1 and isSetTo2 implies repair.Process = 2 and isSetTo3 implies repair.Process = 3 and isSetTo5 implies repair.Process = 5 and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 200,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = reject = false and repair.Process = 0 and staff.Role = 1, isSetTo2:Boolean = reject = false and repair.Process = 1 and staff.Role = 2, isSetTo3:Boolean = reject = false and repair.Process = 2 and staff.Role = 3, isSetTo5:Boolean = reject = true\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and isSetTo1 implies repair.Process = 1 and isSetTo2 implies repair.Process = 2 and isSetTo3 implies repair.Process = 3 and isSetTo5 implies repair.Process = 5 and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = reject = false and repair.Process = 0 and staff.Role = 1, isSetTo2:Boolean = reject = false and repair.Process = 1 and staff.Role = 2, isSetTo3:Boolean = reject = false and repair.Process = 2 and staff.Role = 3, isSetTo5:Boolean = reject = true",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true implies repair.Process = 1) and (isSetTo2 = true implies repair.Process = 2) and (isSetTo3 = true implies repair.Process = 3) and (isSetTo5 = true implies repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 157,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 208,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 257,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 306,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 355,
+          "msg": "mismatched input 'implies' expecting ')'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = reject = false and repair.Process = 0 and staff.Role = 1, isSetTo2:Boolean = reject = false and repair.Process = 1 and staff.Role = 2, isSetTo3:Boolean = reject = false and repair.Process = 2 and staff.Role = 3, isSetTo5:Boolean = reject = true\n            \n            precondition:\n          repair.oclIsUndefined() = false and staff.oclIsUndefined() = false\n            \n            postcondition:\n          ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true implies repair.Process = 1) and (isSetTo2 = true implies repair.Process = 2) and (isSetTo3 = true implies repair.Process = 3) and (isSetTo5 = true implies repair.Process = 5) and result = history\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(r | r.Id = rid), staff:Staff = Staff.allInstance()->any(s | s.Id = sid), history:ApprovalHistory, history.oclIsNew(), isSetTo1:Boolean = reject = false and repair.Process = 0 and staff.Role = 1, isSetTo2:Boolean = reject = false and repair.Process = 1 and staff.Role = 2, isSetTo3:Boolean = reject = false and repair.Process = 2 and staff.Role = 3, isSetTo5:Boolean = reject = true",
+        "precondition": "repair.oclIsUndefined() = false and staff.oclIsUndefined() = false",
+        "postcondition": "ApprovalHistory.allInstance()->includes(history) and history.StaffId = sid and history.Reject = reject and history.Suggestion = suggestion and repair.History->includes(history) and (isSetTo1 = true and repair.Process = 1 or isSetTo2 = true and repair.Process = 2 or isSetTo3 = true and repair.Process = 3 or isSetTo5 = true and repair.Process = 5) and result = history"
+      },
+      "model": "gpt-4.1"
+    }
+  }
+]

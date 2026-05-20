@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = InputCard.CardID), passwordValidated:Boolean = InputCard.Password = InputCard.Password, cardIDValidated:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "cardIDValidated = true and passwordValidated = true and InputCard.oclIsUndefined() = false",
+        "postcondition": "Self.IsWithdraw = false and Self.WithdrawedNumber = 0 and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = InputCard.CardID),\n\t\tpasswordValidated: Boolean = InputCard.Password = InputCard.Password,\n\t\tcardIDValidated: Boolean = inputCard.oclIsUndefined() = false\n\tprecondition:\n\t\tcardIDValidated = true and\n\t\tpasswordValidated = true and\n\t\tInputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tSelf.IsWithdraw = false and\n\t\tSelf.WithdrawedNumber = 0 and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Self"
+        }
+      ]
+    }
+  }
+]

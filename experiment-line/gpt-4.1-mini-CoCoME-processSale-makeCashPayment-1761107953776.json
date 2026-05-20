@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = self.CurrentSale.Belongedstore, payment:CashPayment = let p:CashPayment in p.oclIsNew()",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+        "postcondition": "payment.AmountTendered = amount and payment.BelongedSale = currentSale and currentSale.AssoicatedPayment = payment and currentStore.Sales->includes(currentSale) and currentSale.IsComplete = true and currentSale.Time = OclAny.now() and payment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 228,
+          "msg": "mismatched input 'OclAny' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          definition:\n          currentSale:Sale = self.CurrentSale, currentStore:Store = self.CurrentSale.Belongedstore, payment:CashPayment = let p:CashPayment in p.oclIsNew()\n            \n            precondition:\n          currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount\n            \n            postcondition:\n          payment.AmountTendered = amount and payment.BelongedSale = currentSale and currentSale.AssoicatedPayment = payment and currentStore.Sales->includes(currentSale) and currentSale.IsComplete = true and currentSale.Time = OclAny.now() and payment.Balance = amount - currentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property object of MemberExpression expected node to be of a type [\"Expression\",\"Super\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

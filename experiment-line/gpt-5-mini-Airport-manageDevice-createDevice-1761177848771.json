@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid)",
+        "precondition": "staff.oclIsUndefined() = false",
+        "postcondition": "device.oclIsUndefined() = true and let ob:Device in ob.oclIsNew() and Device.allInstance()->includes(ob) and ob.Id = id and ob.Name = name and ob.Location = location and ob.Contacts = staff and result = true or device.oclIsUndefined() = false and device.Contacts = staff and device.Name = name and device.Location = location and result = true"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {\n          definition:\n          device:Device = Device.allInstance()->any(o | o.Id = id), staff:Staff = Staff.allInstance()->any(o | o.Id = contactsid)\n            \n            precondition:\n          staff.oclIsUndefined() = false\n            \n            postcondition:\n          device.oclIsUndefined() = true and let ob:Device in ob.oclIsNew() and Device.allInstance()->includes(ob) and ob.Id = id and ob.Name = name and ob.Location = location and ob.Contacts = staff and result = true or device.oclIsUndefined() = false and device.Contacts = staff and device.Name = name and device.Location = location and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

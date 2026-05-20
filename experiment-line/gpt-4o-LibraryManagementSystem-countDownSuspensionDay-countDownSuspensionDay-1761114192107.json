@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "users:Set(User) = User.allInstance()->select(o | o.SuspensionDays > 0)",
+        "precondition": "User.allInstance()->exists(o:User | o.SuspensionDays > 0 and o.BorrowStatus = BorrowStatus::NORMAL and o.LoanedBook->exists(loan:Loan | loan.IsReturned = false))",
+        "postcondition": "users->forAll(o:User | if o.SuspensionDays = 1 then o.BorrowStatus = BorrowStatus::SUSPEND endif and o.SuspensionDays = o.SuspensionDays - 1)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 107,
+          "msg": "missing ')' at 'and'"
+        },
+        {
+          "line": 9,
+          "column": 150,
+          "msg": "extraneous input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          users:Set(User) = User.allInstance()->select(o | o.SuspensionDays > 0)\n            \n            precondition:\n          User.allInstance()->exists(o:User | o.SuspensionDays > 0 and o.BorrowStatus = BorrowStatus::NORMAL and o.LoanedBook->exists(loan:Loan | loan.IsReturned = false))\n            \n            postcondition:\n          users->forAll(o:User | if o.SuspensionDays = 1 then o.BorrowStatus = BorrowStatus::SUSPEND endif and o.SuspensionDays = o.SuspensionDays - 1)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

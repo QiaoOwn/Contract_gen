@@ -1,0 +1,60 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:BankCard = BankCard.allInstance()->any(o | o = self.InputCard)",
+        "precondition": "self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard)",
+        "postcondition": "let result:Real in if self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard) then if self.IsWithdraw then ThirdPartyServices.print(self.WithdrawedNumber) else if self.IsDeposit then ThirdPartyServices.print(self.DepositedNumber) else ThirdPartyServices.print(0) endif endif endif"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 95,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 117,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 186,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 262,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 9,
+          "column": 324,
+          "msg": "mismatched input 'endif' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          bankCard:BankCard = BankCard.allInstance()->any(o | o = self.InputCard)\n            \n            precondition:\n          self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard)\n            \n            postcondition:\n          let result:Real in if self.CardIDValidated and self.PasswordValidated and BankCard.allInstance()->includes(self.InputCard) then if self.IsWithdraw then ThirdPartyServices.print(self.WithdrawedNumber) else if self.IsDeposit then ThirdPartyServices.print(self.DepositedNumber) else ThirdPartyServices.print(0) endif endif endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

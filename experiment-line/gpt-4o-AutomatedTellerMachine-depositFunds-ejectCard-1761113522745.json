@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existsCard:BankCard = BankCard.allInstance()->any(b | b.CardID = InputCard.CardID and b.Password = InputCard.Password)",
+        "precondition": "existsCard.oclIsUndefined() = false and PasswordValidated = true and CardIDValidated = true and CardStatus::NORMAL = InputCard.CardStatus",
+        "postcondition": "let clearedCard:BankCard in clearedCard.oclIsNew() and BankCard.allInstance()->excludes(clearedCard) and clearedCard.CardStatus = CardStatus::CANNEL and clearedCard.Balance = 0 and clearedCard.BelongedUser = null and DepositedNumber = 0 and IsDeposit = false and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 116,
+          "msg": "mismatched input '::' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          existsCard:BankCard = BankCard.allInstance()->any(b | b.CardID = InputCard.CardID and b.Password = InputCard.Password)\n            \n            precondition:\n          existsCard.oclIsUndefined() = false and PasswordValidated = true and CardIDValidated = true and CardStatus::NORMAL = InputCard.CardStatus\n            \n            postcondition:\n          let clearedCard:BankCard in clearedCard.oclIsNew() and BankCard.allInstance()->excludes(clearedCard) and clearedCard.CardStatus = CardStatus::CANNEL and clearedCard.Balance = 0 and clearedCard.BelongedUser = null and DepositedNumber = 0 and IsDeposit = false and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CardStatus"
+        }
+      ]
+    }
+  }
+]

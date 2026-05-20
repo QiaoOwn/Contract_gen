@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+        "precondition": "cardid.oclIsTypeOf(Integer)",
+        "postcondition": "card.oclIsUndefined() = false and InputCard = card and CardIDValidated = true and result = true or card.oclIsUndefined() = true and CardIDValidated = false and result = false"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid)\n\tprecondition:\n\t\tcardid.oclIsTypeOf(Integer)\n\tpostcondition:\n\t\tcard.oclIsUndefined() = false and\n\t\tInputCard = card and\n\t\tCardIDValidated = true and\n\t\tresult = true or\n\t\tcard.oclIsUndefined() = true and\n\t\tCardIDValidated = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

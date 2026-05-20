@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid), isNewOrder:Boolean = orderProduct.oclIsUndefined()",
+        "precondition": "OrderProduct.allInstance()->isUnique(o:OrderProduct | o.Id = orderid) = bool",
+        "postcondition": "let newOrder:OrderProduct in newOrder.oclIsNew(), OrderProduct.allInstance()->includes(newOrder) and result = isNewOrder"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 58,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid), isNewOrder:Boolean = orderProduct.oclIsUndefined()\n            \n            precondition:\n          OrderProduct.allInstance()->isUnique(o:OrderProduct | o.Id = orderid) = bool\n            \n            postcondition:\n          let newOrder:OrderProduct in newOrder.oclIsNew(), OrderProduct.allInstance()->includes(newOrder) and result = isNewOrder\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

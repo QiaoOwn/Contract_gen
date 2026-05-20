@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u|u.OverDueFee>0 and u.SuspensionDays>0)",
+        "precondition": "",
+        "postcondition": "overdueUsers->forAll(u:User|u.SuspensionDays = u.SuspensionDays@pre - 1 and u.BorrowStatus = if u.SuspensionDays=0 then BorrowStatus::SUSPEND else u.BorrowStatus@pre endif)"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 103,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 7,
+          "column": 122,
+          "msg": "missing ')' at '='"
+        },
+        {
+          "line": 7,
+          "column": 125,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          overdueUsers:Set(User) = User.allInstance()->select(u|u.OverDueFee>0 and u.SuspensionDays>0)\n            \n            \n            postcondition:\n          overdueUsers->forAll(u:User|u.SuspensionDays = u.SuspensionDays@pre - 1 and u.BorrowStatus = if u.SuspensionDays=0 then BorrowStatus::SUSPEND else u.BorrowStatus@pre endif)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

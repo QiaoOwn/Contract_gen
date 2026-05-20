@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user: User = User.allInstance()->any(o | o.UserID = uid)",
+        "precondition": "User.allInstance()->includes(user)",
+        "postcondition": "let overdueLoans:Set(Loan) = Loan.allInstance()->select(l | l.LoanedUser = user and l.ReturnDate.oclIsUndefined() and (l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true)).LoanedCopy in result = overdueLoans"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 230,
+          "msg": "mismatched input '.' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          user: User = User.allInstance()->any(o | o.UserID = uid)\n            \n            precondition:\n          User.allInstance()->includes(user)\n            \n            postcondition:\n          let overdueLoans:Set(Loan) = Loan.allInstance()->select(l | l.LoanedUser = user and l.ReturnDate.oclIsUndefined() and (l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true)).LoanedCopy in result = overdueLoans\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

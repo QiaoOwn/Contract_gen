@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), isCardValid:Boolean = card.oclIsUndefined() = false, cardIDValidated:Boolean = card.oclIsUndefined() = true",
+        "precondition": "card.oclIsUndefined() = false",
+        "postcondition": "let result:Boolean in card.oclIsUndefined() = true and result = not card.oclIsUndefined()"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 78,
+          "msg": "mismatched input 'card' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), isCardValid:Boolean = card.oclIsUndefined() = false, cardIDValidated:Boolean = card.oclIsUndefined() = true\n            \n            precondition:\n          card.oclIsUndefined() = false\n            \n            postcondition:\n          let result:Boolean in card.oclIsUndefined() = true and result = not card.oclIsUndefined()\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

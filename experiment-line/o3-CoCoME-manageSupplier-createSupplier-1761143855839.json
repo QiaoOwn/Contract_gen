@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "sup:Supplier = Supplier.allInstance()->any(s | s.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String)",
+        "postcondition": "(if sup.oclIsUndefined() then let newSup:Supplier in newSup.oclIsNew() and Supplier.allInstance()->includes(newSup) and newSup.Id = id and newSup.Name = name else sup.Name = name endif) and result = true"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 196,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          sup:Supplier = Supplier.allInstance()->any(s | s.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String)\n            \n            postcondition:\n          (if sup.oclIsUndefined() then let newSup:Supplier in newSup.oclIsNew() and Supplier.allInstance()->includes(newSup) and newSup.Id = id and newSup.Name = name else sup.Name = name endif) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

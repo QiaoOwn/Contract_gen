@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = self, payment:CashPayment",
+        "precondition": "currentSale.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+        "postcondition": "let payment:CashPayment in payment.oclIsNew() and payment.AmountTendered = amount and payment.BelongedSale = currentSale and currentSale.AssoicatedPayment = payment and currentStore.Sales->includes(currentSale) and currentSale.IsComplete = true and currentSale.Time = now() and payment.Balance = amount - currentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcurrentStore: Store = self,\n\t\tpayment: CashPayment\n\tprecondition:\n\t\tcurrentSale.oclIsUndefined() = false and\n\t\tcurrentSale.IsComplete = false and\n\t\tcurrentSale.IsReadytoPay = true and\n\t\tamount>=currentSale.Amount\n\tpostcondition:\n\t\tlet payment: CashPayment in\n\t\tpayment.oclIsNew() and\n\t\tpayment.AmountTendered = amount and\n\t\tpayment.BelongedSale = currentSale and\n\t\tcurrentSale.AssoicatedPayment = payment and\n\t\tcurrentStore.Sales->includes(currentSale) and\n\t\tcurrentSale.IsComplete = true and\n\t\tcurrentSale.Time = now() and\n\t\tpayment.Balance = amount-currentSale.Amount and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentSale"
+        }
+      ]
+    }
+  }
+]

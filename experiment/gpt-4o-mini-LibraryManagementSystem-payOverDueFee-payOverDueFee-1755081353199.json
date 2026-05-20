@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false)",
+        "precondition": "user.OverDueFee >= fee",
+        "postcondition": "let updatedFee:Real in updatedFee = user.OverDueFee - fee, user.OverDueFee = updatedFee, result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false)\n            \n            precondition:\n          user.OverDueFee >= fee\n            \n            postcondition:\n          let updatedFee:Real in updatedFee = user.OverDueFee - fee, user.OverDueFee = updatedFee, result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false)",
+        "precondition": "user.OverDueFee >= fee",
+        "postcondition": "let updatedFee:Real in updatedFee = user.OverDueFee - fee, user.OverDueFee = updatedFee, result = true and updatedFee >= 0"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 67,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false)\n            \n            precondition:\n          user.OverDueFee >= fee\n            \n            postcondition:\n          let updatedFee:Real in updatedFee = user.OverDueFee - fee, user.OverDueFee = updatedFee, result = true and updatedFee >= 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee",
+        "precondition": "user.OverDueFee >= fee",
+        "postcondition": "user.OverDueFee = updatedFee and result = true and updatedFee >= 0"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee\n            \n            precondition:\n          user.OverDueFee >= fee\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = true and updatedFee >= 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = if updatedFee >= 0 then true else false endif",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "postcondition": "user.OverDueFee = updatedFee and result = isFeeUpdated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = if updatedFee >= 0 then true else false endif\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isFeeUpdated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "postcondition": "user.OverDueFee = updatedFee and result = isFeeUpdated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isFeeUpdated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "postcondition": "user.OverDueFee = updatedFee and result = isFeeUpdated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isFeeUpdated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated and updatedFee >= 0",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated and updatedFee >= 0\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isPaymentSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated and updatedFee >= 0",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated and updatedFee >= 0\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isPaymentSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated and updatedFee >= 0",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated and updatedFee >= 0\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isPaymentSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false and isFeeUpdated",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false and isFeeUpdated\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isPaymentSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated, isPaymentSuccessfulCheck:Boolean = user.OverDueFee = updatedFee",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false and isFeeUpdated",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated, isPaymentSuccessfulCheck:Boolean = user.OverDueFee = updatedFee\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false and isFeeUpdated\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isPaymentSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated, feeUpdatedCheck:Boolean = user.OverDueFee = updatedFee",
+        "precondition": "user.OverDueFee >= fee and loanedBooks->isEmpty() = false and isFeeUpdated",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 176,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated, feeUpdatedCheck:Boolean = user.OverDueFee = updatedFee\n            \n            precondition:\n          user.OverDueFee >= fee and loanedBooks->isEmpty() = false and isFeeUpdated\n            \n            postcondition:\n          user.OverDueFee = updatedFee and result = isPaymentSuccessful\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loanedBooks:Set(Loan) = user.LoanedBook->select(o | o.IsReturned = false), updatedFee:Real = user.OverDueFee - fee, isFeeUpdated:Boolean = updatedFee >= 0, isPaymentSuccessful:Boolean = isFeeUpdated, feeUpdatedCheck:Boolean = user.OverDueFee = updatedFee, feeValid:Boolean = user.OverDueFee >= fee and loanedBooks->isEmpty() = false",
+        "precondition": "feeValid and isFeeUpdated",
+        "postcondition": "user.OverDueFee = updatedFee and result = isPaymentSuccessful"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

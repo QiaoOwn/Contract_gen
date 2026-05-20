@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesk:CashDesk = CashDesk.allInstance()->any(c | c.Id = id), boolResult:Boolean = true",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "if existingCashDesk.oclIsUndefined() then\n    let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened\nelse\n    existingCashDesk.Name = name and existingCashDesk.IsOpened = isopened\nendif and result = boolResult"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 13,
+          "column": 6,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          existingCashDesk:CashDesk = CashDesk.allInstance()->any(c | c.Id = id), boolResult:Boolean = true\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          if existingCashDesk.oclIsUndefined() then\n    let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened\nelse\n    existingCashDesk.Name = name and existingCashDesk.IsOpened = isopened\nendif and result = boolResult\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

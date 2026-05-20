@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesks:Set(CashDesk) = CashDesk.allInstance(), targetCashDesk:CashDesk = cashDesks->any(cd | cd.Id = id)",
+        "precondition": "CashDesk.allInstance()->includes(targetCashDesk)",
+        "postcondition": "let exists:Boolean in targetCashDesk.oclIsUndefined() = false and result = exists"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 85,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {\n          definition:\n          cashDesks:Set(CashDesk) = CashDesk.allInstance(), targetCashDesk:CashDesk = cashDesks->any(cd | cd.Id = id)\n            \n            precondition:\n          CashDesk.allInstance()->includes(targetCashDesk)\n            \n            postcondition:\n          let exists:Boolean in targetCashDesk.oclIsUndefined() = false and result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

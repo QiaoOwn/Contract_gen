@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "ProductCatalog.allInstance()->isUnique(o:ProductCatalog| o.Id) and id > 0",
+        "postcondition": "result = true and pc.oclIsUndefined() = true and let newpc:ProductCatalog in newpc.oclIsNew() and ProductCatalog.allInstance()->includes(newpc) and newpc.Id = id and newpc.Name = name or pc.oclIsUndefined() = false and ProductCatalog.allInstance()->includes(pc)"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 59,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 68,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          ProductCatalog.allInstance()->isUnique(o:ProductCatalog| o.Id) and id > 0\n            \n            postcondition:\n          result = true and pc.oclIsUndefined() = true and let newpc:ProductCatalog in newpc.oclIsNew() and ProductCatalog.allInstance()->includes(newpc) and newpc.Id = id and newpc.Name = name or pc.oclIsUndefined() = false and ProductCatalog.allInstance()->includes(pc)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchedCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), isValid:Boolean = if BankCard.allInstance()->exists(o | o.CardID = cardid) then true else false endif",
+        "precondition": "cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)",
+        "postcondition": "self.CardIDValidated = isValid and (isValid = true and self.InputCard = matchedCard or isValid = false and self.InputCard = null) and result = isValid"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tmatchedCard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid),\n\t\tisValid: Boolean = if BankCard.allInstance()->exists(o|o.CardID = cardid) \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tcardid.oclIsTypeOf(Integer) and\n\t\tBankCard.allInstance()->isUnique(o: BankCard|o.CardID)\n\tpostcondition:\n\t\tself.CardIDValidated = isValid and\n\t\t(isValid = true and\n\t\tself.InputCard = matchedCard or\n\t\tisValid = false and\n\t\tself.InputCard = null) and\n\t\tresult = isValid\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

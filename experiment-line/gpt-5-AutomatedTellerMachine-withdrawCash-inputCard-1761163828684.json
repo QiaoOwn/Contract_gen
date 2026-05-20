@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cards:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardFound:Boolean = if cards.isEmpty() = true then false else true endif",
+        "precondition": "BankCard.allInstance()->isUnique(o:BankCard | o.CardID) and cardid.oclIsTypeOf(Integer)",
+        "postcondition": "self.InputCard = if cardFound then card else null endif and self.CardIDValidated = cardFound and result = self.CardIDValidated"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 27,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 40,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          cards:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid), card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardFound:Boolean = if cards.isEmpty() = true then false else true endif\n            \n            precondition:\n          BankCard.allInstance()->isUnique(o:BankCard | o.CardID) and cardid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          self.InputCard = if cardFound then card else null endif and self.CardIDValidated = cardFound and result = self.CardIDValidated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

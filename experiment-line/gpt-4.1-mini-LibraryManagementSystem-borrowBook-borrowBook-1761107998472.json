@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode)",
+        "precondition": "not user.oclIsUndefined() = false and not bookCopy.oclIsUndefined() = false and user.BorrowStatus = REMODEL::BorrowStatus::NORMAL and bookCopy.Status = REMODEL::CopyStatus::AVAILABLE",
+        "postcondition": "not user.BorrowStatus = REMODEL::BorrowStatus::SUSPEND, bookCopy.Status = REMODEL::CopyStatus::LOANED, user.LoanedNumber = user.LoanedNumber + 1, result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'user' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode)\n            \n            precondition:\n          not user.oclIsUndefined() = false and not bookCopy.oclIsUndefined() = false and user.BorrowStatus = REMODEL::BorrowStatus::NORMAL and bookCopy.Status = REMODEL::CopyStatus::AVAILABLE\n            \n            postcondition:\n          not user.BorrowStatus = REMODEL::BorrowStatus::SUSPEND, bookCopy.Status = REMODEL::CopyStatus::LOANED, user.LoanedNumber = user.LoanedNumber + 1, result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

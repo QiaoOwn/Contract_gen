@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(User) = User.allInstance()->select(o | o.LoanedBook->exists(l | l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true))",
+        "precondition": "obs->notEmpty() and obs->forAll(o:User | o.SuspensionDays > 0)",
+        "postcondition": "obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays - 1 and o.BorrowStatus = (if o.SuspensionDays <= 1 then SUSPEND else o.BorrowStatus endif))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 15,
+          "msg": "no viable alternative at input 'obs->notEmpty()'"
+        },
+        {
+          "line": 9,
+          "column": 92,
+          "msg": "mismatched input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 118,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          obs:Set(User) = User.allInstance()->select(o | o.LoanedBook->exists(l | l.OverDue3Days = true or l.OverDue10Days = true or l.OverDue17Days = true or l.OverDue31Days = true))\n            \n            precondition:\n          obs->notEmpty() and obs->forAll(o:User | o.SuspensionDays > 0)\n            \n            postcondition:\n          obs->forAll(o:User | o.SuspensionDays = o.SuspensionDays - 1 and o.BorrowStatus = (if o.SuspensionDays <= 1 then SUSPEND else o.BorrowStatus endif))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid), isNewCard:Boolean = card.oclIsUndefined()",
+        "precondition": "cardid.oclIsTypeOf(Integer) and password.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and balance >= 0",
+        "postcondition": "(if isNewCard then let newCard:BankCard in newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance else card.CardStatus = cardstatus and card.Catalog = catalog and card.Password = password and card.Balance = balance endif) and result = isNewCard"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 398,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid), isNewCard:Boolean = card.oclIsUndefined()\n            \n            precondition:\n          cardid.oclIsTypeOf(Integer) and password.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and balance >= 0\n            \n            postcondition:\n          (if isNewCard then let newCard:BankCard in newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance else card.CardStatus = cardstatus and card.Catalog = catalog and card.Password = password and card.Balance = balance endif) and result = isNewCard\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

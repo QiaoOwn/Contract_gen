@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest: LoanRequest = CurrentLoanRequest",
+        "precondition": "currentLoanRequest.oclIsUndefined() = false and currentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and currentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+        "postcondition": "currentLoanRequest.Status = LoanRequestStatus::SUBMITTED and currentLoanRequest.CreditScore = 100 and result = currentLoanRequest.CreditScore"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest\n\tprecondition:\n\t\tcurrentLoanRequest.oclIsUndefined() = false and\n\t\tcurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and\n\t\tcurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false\n\tpostcondition:\n\t\tcurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\tcurrentLoanRequest.CreditScore = 100 and\n\t\tresult = currentLoanRequest.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

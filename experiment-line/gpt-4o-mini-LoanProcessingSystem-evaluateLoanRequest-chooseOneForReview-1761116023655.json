@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequests->any(o | o.RequestID = requestid)",
+        "precondition": "CurrentLoanRequests->excludes(currentLoanRequest) = bool",
+        "postcondition": "CurrentLoanRequests->includes(currentLoanRequest) and result = currentLoanRequest"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::chooseOneForReview(requestid: Integer): LoanRequest {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequests->any(o|o.RequestID = requestid)\n\tprecondition:\n\t\tCurrentLoanRequests->excludes(currentLoanRequest) = bool\n\tpostcondition:\n\t\tCurrentLoanRequests->includes(currentLoanRequest) and\n\t\tresult = currentLoanRequest\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

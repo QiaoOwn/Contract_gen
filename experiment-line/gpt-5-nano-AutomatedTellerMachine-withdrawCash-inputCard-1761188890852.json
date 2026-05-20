@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid)",
+        "precondition": "cardid.oclIsTypeOf(Integer)",
+        "postcondition": "InputCard = obs->any(o | true) and CardIDValidated = obs.isEmpty() = false and result = obs.isEmpty() = false"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 35,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 77,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid)\n            \n            precondition:\n          cardid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          InputCard = obs->any(o | true) and CardIDValidated = obs.isEmpty() = false and result = obs.isEmpty() = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

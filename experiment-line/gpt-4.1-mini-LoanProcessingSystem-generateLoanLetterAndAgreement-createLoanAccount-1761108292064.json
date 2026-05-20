@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "true",
+        "postcondition": "(loanAccount.oclIsUndefined() = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true) or (loanAccount.oclIsUndefined() = false and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 69,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)\n            \n            precondition:\n          true\n            \n            postcondition:\n          (loanAccount.oclIsUndefined() = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true) or (loanAccount.oclIsUndefined() = false and result = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

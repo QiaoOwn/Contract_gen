@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), create:LoanAccount = LoanAccount.allInstance()->includes(loanAccount) = false, if create then loanAccount:LoanAccount = LoanAccount.allInstance()->select(o | o.LoanAccountID = loanaccountid) -> includes(create) and create.LoanAccountID = loanaccountid and create.Balance = balance and create.Status = status",
+        "precondition": "loanAccount.oclIsUndefined() = bool, LoanAccount.allInstance()->includes(loanAccount) = false",
+        "postcondition": "let loanAccount:LoanAccount in loanAccount.oclIsNew() and LoanAccount.allInstance()->includes(loanAccount)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 184,
+          "msg": "extraneous input 'if' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 194,
+          "msg": "mismatched input 'then' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), create:LoanAccount = LoanAccount.allInstance()->includes(loanAccount) = false, if create then loanAccount:LoanAccount = LoanAccount.allInstance()->select(o | o.LoanAccountID = loanaccountid) -> includes(create) and create.LoanAccountID = loanaccountid and create.Balance = balance and create.Status = status\n            \n            precondition:\n          loanAccount.oclIsUndefined() = bool, LoanAccount.allInstance()->includes(loanAccount) = false\n            \n            postcondition:\n          let loanAccount:LoanAccount in loanAccount.oclIsNew() and LoanAccount.allInstance()->includes(loanAccount)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

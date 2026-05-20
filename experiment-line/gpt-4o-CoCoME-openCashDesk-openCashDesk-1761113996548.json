@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCashDesks:Set(CashDesk) = CashDesk.allInstance()->select(o | o.Id = providedId), existingCashDesk:CashDesk = existingCashDesks->any(true), currentStoreExists:Boolean = not CurrentStore.oclIsUndefined(), currentStoreOpenStatus:Boolean = CurrentStore.IsOpen = true",
+        "precondition": "let existingCashDesks:Set(CashDesk) = CashDesk.allInstance()->select(cd | cd.Id = providedId),\n    currentStoreExists:Boolean = not CurrentCashDesk.oclIsUndefined(),\n    existingCashDesk:CashDesk = existingCashDesks->any(true) in   \nnot existingCashDesks->isEmpty() and existingCashDesk.IsOpen = false\nand self.CurrentCashDesk.oclIsUndefined() = false and self.CurrentCashDesk.IsOpen = true",
+        "postcondition": "CurrentCashDesk.oclIsNew() and CurrentCashDesk.Id = existingCashDesk.Id and CurrentCashDesk.IsOpen = true and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 3,
+          "column": 190,
+          "msg": "mismatched input 'CurrentStore' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          existingCashDesks:Set(CashDesk) = CashDesk.allInstance()->select(o | o.Id = providedId), existingCashDesk:CashDesk = existingCashDesks->any(true), currentStoreExists:Boolean = not CurrentStore.oclIsUndefined(), currentStoreOpenStatus:Boolean = CurrentStore.IsOpen = true\n            \n            precondition:\n          let existingCashDesks:Set(CashDesk) = CashDesk.allInstance()->select(cd | cd.Id = providedId),\n    currentStoreExists:Boolean = not CurrentCashDesk.oclIsUndefined(),\n    existingCashDesk:CashDesk = existingCashDesks->any(true) in   \nnot existingCashDesks->isEmpty() and existingCashDesk.IsOpen = false\nand self.CurrentCashDesk.oclIsUndefined() = false and self.CurrentCashDesk.IsOpen = true\n            \n            postcondition:\n          CurrentCashDesk.oclIsNew() and CurrentCashDesk.Id = existingCashDesk.Id and CurrentCashDesk.IsOpen = true and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: providedId"
+        }
+      ]
+    }
+  }
+]

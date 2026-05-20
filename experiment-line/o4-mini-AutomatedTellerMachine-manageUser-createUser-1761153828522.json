@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(o | o.UserID = userid)",
+        "precondition": "true",
+        "postcondition": "let newUser:User in u.oclIsUndefined() = true and newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true or u.oclIsUndefined() = false and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::createUser(userid: Integer,name: String,address: String): Boolean {\n\tdefinition:\n\t\tu: User = User.allInstance()->any(o|o.UserID = userid)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tlet newUser: User in\n\t\tu.oclIsUndefined() = true and\n\t\tnewUser.oclIsNew() and\n\t\tUser.allInstance()->includes(newUser) and\n\t\tnewUser.UserID = userid and\n\t\tnewUser.Name = name and\n\t\tnewUser.Address = address and\n\t\tresult = true or\n\t\tu.oclIsUndefined() = false and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

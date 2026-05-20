@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), let recommendBook:RecommendBook in recommendBook.oclIsNew()",
+        "precondition": "user.oclIsUndefined() = false",
+        "postcondition": "RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 67,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 99,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), let recommendBook:RecommendBook in recommendBook.oclIsNew()\n            \n            precondition:\n          user.oclIsUndefined() = false\n            \n            postcondition:\n          RecommendBook.allInstance()->includes(recommendBook) and recommendBook.RecommendUser = user and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: recommendBook"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "book:Book = Book.allInstance()->any(b | b.CallNo = callNo), bookCopy:BookCopy = null",
+        "precondition": "Book.allInstance()->includes(book) and BookCopy.allInstance()->excludes(bookCopy)",
+        "postcondition": "let bookCopy:BookCopy in bookCopy.oclIsNew() and bookCopy.Barcode = barcode and bookCopy.Location = location and bookCopy.Status = BookCopy::AVAILABLE and bookCopy.BookBelongs = book and BookCopy.allInstance()->includes(bookCopy) and book.Copys->includes(bookCopy) and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo: String,barcode: String,location: String): Boolean {\n\tdefinition:\n\t\tbook: Book = Book.allInstance()->any(b|b.CallNo = callNo),\n\t\tbookCopy: BookCopy = null\n\tprecondition:\n\t\tBook.allInstance()->includes(book) and\n\t\tBookCopy.allInstance()->excludes(bookCopy)\n\tpostcondition:\n\t\tlet bookCopy: BookCopy in\n\t\tbookCopy.oclIsNew() and\n\t\tbookCopy.Barcode = barcode and\n\t\tbookCopy.Location = location and\n\t\tbookCopy.Status = BookCopy::AVAILABLE and\n\t\tbookCopy.BookBelongs = book and\n\t\tBookCopy.allInstance()->includes(bookCopy) and\n\t\tbook.Copys->includes(bookCopy) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

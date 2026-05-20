@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "catalog.oclIsUndefined() = bool",
+        "postcondition": "let result:Boolean in result = catalog.oclIsNew() and ProductCatalog.allInstance()->includes(catalog)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::deleteProductCatalog(id:Integer): Boolean {\n          definition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          catalog.oclIsUndefined() = bool\n            \n            postcondition:\n          let result:Boolean in result = catalog.oclIsNew() and ProductCatalog.allInstance()->includes(catalog)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

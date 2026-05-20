@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct: OrderProduct",
+        "precondition": "OrderProduct.allInstance()->includes(currentOrderProduct)",
+        "postcondition": "let ok: Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(SubAmount)->sum()) in result = ok"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 175,
+          "msg": "mismatched input '->' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct: OrderProduct\n            \n            precondition:\n          OrderProduct.allInstance()->includes(currentOrderProduct)\n            \n            postcondition:\n          let ok: Boolean = (currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = currentOrderProduct.ContainedEntries->collect(SubAmount)->sum()) in result = ok\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "suspendedUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), overdueLoans:Set(Loan) = Loan.allInstance()->select(l | l DueDate < CurrentDate and l.IsReturned = false)",
+        "precondition": "User.allInstance()->includes(u) and u.SuspensionDays > 0",
+        "postcondition": "u.SuspensionDays = u.SuspensionDays - 1 and result = u.SuspensionDays = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 149,
+          "msg": "mismatched input 'DueDate' expecting ')'"
+        },
+        {
+          "line": 3,
+          "column": 195,
+          "msg": "extraneous input ')' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 80,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          definition:\n          suspendedUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), overdueLoans:Set(Loan) = Loan.allInstance()->select(l | l DueDate < CurrentDate and l.IsReturned = false)\n            \n            precondition:\n          User.allInstance()->includes(u) and u.SuspensionDays > 0\n            \n            postcondition:\n          u.SuspensionDays = u.SuspensionDays - 1 and result = u.SuspensionDays = 0\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentDate"
+        }
+      ]
+    }
+  }
+]

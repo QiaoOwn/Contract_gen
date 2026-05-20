@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bc:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid), isValid:Boolean = not bc.oclIsUndefined()",
+        "precondition": "true",
+        "postcondition": "self.CardIDValidated = isValid and self.InputCard = if isValid then bc else null endif and result = isValid"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 98,
+          "msg": "mismatched input 'bc' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 62,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 73,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          bc:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid), isValid:Boolean = not bc.oclIsUndefined()\n            \n            precondition:\n          true\n            \n            postcondition:\n          self.CardIDValidated = isValid and self.InputCard = if isValid then bc else null endif and result = isValid\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

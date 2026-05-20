@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currReq:LoanRequest = LoanRequest.allInstance()->any(o | o = CurrentLoanRequest), updated:Boolean = (currReq.Status = LoanRequestStatus::APPROVED), result:Boolean = updated",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false",
+        "postcondition": "currReq.Status = LoanRequestStatus::APPROVED and result = updated"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 158,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          currReq:LoanRequest = LoanRequest.allInstance()->any(o | o = CurrentLoanRequest), updated:Boolean = (currReq.Status = LoanRequestStatus::APPROVED), result:Boolean = updated\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          currReq.Status = LoanRequestStatus::APPROVED and result = updated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

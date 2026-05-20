@@ -1,0 +1,291 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), amounts:Real=if IsDeposit then DepositedNumber else if not IsWithdraw then 0 else WithdrawedNumber endif endif",
+        "precondition": "inputCard.oclIsUndefined() = bool",
+        "postcondition": "result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 187,
+          "msg": "extraneous input 'IsWithdraw' expecting 'then'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), amounts:Real=if IsDeposit then DepositedNumber else if not IsWithdraw then 0 else WithdrawedNumber endif endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = bool\n            \n            postcondition:\n          result = amounts\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), amounts:Real = if IsDeposit then DepositedNumber else if IsWithdraw then WithdrawedNumber else 0 endif endif",
+        "precondition": "inputCard.oclIsUndefined() = bool and IsWithdraw.oclIsUndefined() = bool",
+        "postcondition": "result = amounts and result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.Password = PasswordValidated and\n\t\to.CardID = InputCard.CardID),\n\t\tamounts: Real = if IsDeposit \n\t\tthen DepositedNumber \n\t\telse if IsWithdraw \n\t\tthen WithdrawedNumber \n\t\telse 0 \n\t\tendif  \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = bool and\n\t\tIsWithdraw.oclIsUndefined() = bool\n\tpostcondition:\n\t\tresult = amounts and\n\t\tresult = amounts\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), amounts:Real = if IsDeposit then DepositedNumber else if IsWithdraw then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = true and IsWithdraw.oclIsUndefined() = true",
+        "postcondition": "let amounts:Real in amounts = if IsDeposit then DepositedNumber else if IsWithdraw then WithdrawedNumber else 0 endif and result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing 'endif' at 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 40,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 53,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), amounts:Real = if IsDeposit then DepositedNumber else if IsWithdraw then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = true and IsWithdraw.oclIsUndefined() = true\n            \n            postcondition:\n          let amounts:Real in amounts = if IsDeposit then DepositedNumber else if IsWithdraw then WithdrawedNumber else 0 endif and result = amounts\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = true and isWithdraw = true",
+        "postcondition": "let amounts:Real in result = amounts and amounts = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 12,
+          "msg": "missing 'endif' at 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 61,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 74,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = true and isWithdraw = true\n            \n            postcondition:\n          let amounts:Real in result = amounts and amounts = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true",
+        "postcondition": "let ob:Real in ob = amounts and result = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true",
+        "postcondition": "let ob:Real in ob = amounts and result = ob and isInputCardValid = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = ob and isInputCardValid = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true and isInputCardValid = true",
+        "postcondition": "let ob:Real in ob = amounts and result = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true and isInputCardValid = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true and isInputCardValid = true",
+        "postcondition": "let ob:Real in ob = amounts and result = ob"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true and isInputCardValid = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = ob\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true and isInputCardValid = true",
+        "postcondition": "let ob:Real in ob = amounts and result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true and isInputCardValid = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = amounts\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true and isInputCardValid = true",
+        "postcondition": "let ob:Real in ob = amounts and result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true and isInputCardValid = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = amounts\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid = true and isWithdraw = true and isInputCardValid = true",
+        "postcondition": "let ob:Real in ob = amounts and result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid = true and isWithdraw = true and isInputCardValid = true\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = amounts\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false",
+        "precondition": "isInputCardValid and isWithdraw and isInputCardValid",
+        "postcondition": "let ob:Real in ob = amounts and result = amounts"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 294,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.Password = PasswordValidated and o.CardID = InputCard.CardID), isWithdraw:Boolean = IsWithdraw, isDeposit:Boolean = IsDeposit, amounts:Real = if isDeposit then DepositedNumber else if isWithdraw then WithdrawedNumber else 0 endif, isInputCardValid:Boolean = inputCard.oclIsUndefined() = false\n            \n            precondition:\n          isInputCardValid and isWithdraw and isInputCardValid\n            \n            postcondition:\n          let ob:Real in ob = amounts and result = amounts\n            \n        }"
+    }
+  }
+]

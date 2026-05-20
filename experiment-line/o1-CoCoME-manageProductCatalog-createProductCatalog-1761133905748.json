@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "p:ProductCatalog = ProductCatalog.allInstance()->any(pc | pc.Id = id)",
+        "precondition": "",
+        "postcondition": "if p.oclIsUndefined() then let newPC:ProductCatalog in newPC.oclIsNew() and ProductCatalog.allInstance()->includes(newPC) and newPC.Id = id and newPC.Name = name else p.Id = id and p.Name = name endif and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 211,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          p:ProductCatalog = ProductCatalog.allInstance()->any(pc | pc.Id = id)\n            \n            \n            postcondition:\n          if p.oclIsUndefined() then let newPC:ProductCatalog in newPC.oclIsNew() and ProductCatalog.allInstance()->includes(newPC) and newPC.Id = id and newPC.Name = name else p.Id = id and p.Name = name endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

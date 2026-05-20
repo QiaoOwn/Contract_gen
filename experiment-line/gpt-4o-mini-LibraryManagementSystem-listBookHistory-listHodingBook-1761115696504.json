@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loans:Set(Loan) = user.LoanHistory, loan:Loan = loans->any()",
+        "precondition": "user:Set(User) = User.allInstance()->select(u | u.UserID = uid), user.isEmpty() = false",
+        "postcondition": "Loan.allInstance()->includes(loan) and result = loans"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 69,
+          "msg": "mismatched input ')' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 18,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 6,
+          "column": 25,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listHodingBook(uid:String): Set(Loan) {\n          definition:\n          loans:Set(Loan) = user.LoanHistory, loan:Loan = loans->any()\n            \n            precondition:\n          user:Set(User) = User.allInstance()->select(u | u.UserID = uid), user.isEmpty() = false\n            \n            postcondition:\n          Loan.allInstance()->includes(loan) and result = loans\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: user"
+        }
+      ]
+    }
+  }
+]

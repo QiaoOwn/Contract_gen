@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingUsers:Set(User) = User.allInstance()->select(u | u.UserID = userid)",
+        "precondition": "userid.oclIsTypeOf(String) and name.oclIsTypeOf(String) and sex.oclIsTypeOf(Sex) and password.oclIsTypeOf(String) and email.oclIsTypeOf(String) and faculty.oclIsTypeOf(String) and loanednumber.oclIsTypeOf(Integer) and borrowstatus.oclIsTypeOf(BorrowStatus) and suspensiondays.oclIsTypeOf(Integer) and overduefee.oclIsTypeOf(Real) and existingUsers.isEmpty() = true and User.allInstance()->isUnique(o:User | o.UserID)",
+        "postcondition": "let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Sex = sex and newUser.Password = password and newUser.Email = email and newUser.Faculty = faculty and newUser.LoanedNumber = loanednumber and newUser.BorrowStatus = borrowstatus and newUser.SuspensionDays = suspensiondays and newUser.OverDueFee = overduefee and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::createUser(userid: String,name: String,sex: Sex[M|F],password: String,email: String,faculty: String,loanednumber: Integer,borrowstatus: BorrowStatus[NORMAL|SUSPEND],suspensiondays: Integer,overduefee: Real): Boolean {\n\tdefinition:\n\t\texistingUsers: Set(User) = User.allInstance()->select(u|u.UserID = userid)\n\tprecondition:\n\t\tuserid.oclIsTypeOf(String) and\n\t\tname.oclIsTypeOf(String) and\n\t\tsex.oclIsTypeOf(Sex) and\n\t\tpassword.oclIsTypeOf(String) and\n\t\temail.oclIsTypeOf(String) and\n\t\tfaculty.oclIsTypeOf(String) and\n\t\tloanednumber.oclIsTypeOf(Integer) and\n\t\tborrowstatus.oclIsTypeOf(BorrowStatus) and\n\t\tsuspensiondays.oclIsTypeOf(Integer) and\n\t\toverduefee.oclIsTypeOf(Real) and\n\t\texistingUsers.isEmpty() = true and\n\t\tUser.allInstance()->isUnique(o: User|o.UserID)\n\tpostcondition:\n\t\tlet newUser: User in\n\t\tnewUser.oclIsNew() and\n\t\tUser.allInstance()->includes(newUser) and\n\t\tnewUser.UserID = userid and\n\t\tnewUser.Name = name and\n\t\tnewUser.Sex = sex and\n\t\tnewUser.Password = password and\n\t\tnewUser.Email = email and\n\t\tnewUser.Faculty = faculty and\n\t\tnewUser.LoanedNumber = loanednumber and\n\t\tnewUser.BorrowStatus = borrowstatus and\n\t\tnewUser.SuspensionDays = suspensiondays and\n\t\tnewUser.OverDueFee = overduefee and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

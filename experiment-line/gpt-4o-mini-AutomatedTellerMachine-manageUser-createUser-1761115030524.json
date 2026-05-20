@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newUser:User = User.allInstance()->any(o | o.UserID = userid)\nif newUser.oclIsUndefined() then\n newUser = User.allInstance()->includes(userid)\nendif",
+        "precondition": "User.allInstance()->excludes(userid)",
+        "postcondition": "User.allInstance()->includes(newUser) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'if' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {\n          definition:\n          newUser:User = User.allInstance()->any(o | o.UserID = userid)\nif newUser.oclIsUndefined() then\n newUser = User.allInstance()->includes(userid)\nendif\n            \n            precondition:\n          User.allInstance()->excludes(userid)\n            \n            postcondition:\n          User.allInstance()->includes(newUser) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

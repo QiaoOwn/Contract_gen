@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newBook:Book = Book.create(); callNum:String = self.callno; title:String = self.title; edition:String = self.edition; author:String = self.author; publisher:String = self.publisher; description:String = self.description; isbn:String = self.isbn; copyNum:Integer = self.copynum",
+        "precondition": "self.callno.oclIsUndefined() = false and self.title.oclIsUndefined() = false and self.edition.oclIsUndefined() = false and self.author.oclIsUndefined() = false and self.publisher.oclIsUndefined() = false and self.description.oclIsUndefined() = false and self.isbn.oclIsUndefined() = false and self.copynum.oclIsTypeOf(Integer)",
+        "postcondition": "let ob:Book in ob.oclIsNew() and Book.allInstance()->includes(ob) and ob.CallNo = callNum and ob.Title = title and ob.Edition = edition and ob.Author = author and ob.Publisher = publisher and ob.Description = description and ob.ISBn = isbn and ob.CopyNum = copyNum and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 36,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCRUDService::createBook(callno:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String,copynum:Integer): Boolean {\n          definition:\n          newBook:Book = Book.create(); callNum:String = self.callno; title:String = self.title; edition:String = self.edition; author:String = self.author; publisher:String = self.publisher; description:String = self.description; isbn:String = self.isbn; copyNum:Integer = self.copynum\n            \n            precondition:\n          self.callno.oclIsUndefined() = false and self.title.oclIsUndefined() = false and self.edition.oclIsUndefined() = false and self.author.oclIsUndefined() = false and self.publisher.oclIsUndefined() = false and self.description.oclIsUndefined() = false and self.isbn.oclIsUndefined() = false and self.copynum.oclIsTypeOf(Integer)\n            \n            postcondition:\n          let ob:Book in ob.oclIsNew() and Book.allInstance()->includes(ob) and ob.CallNo = callNum and ob.Title = title and ob.Edition = edition and ob.Author = author and ob.Publisher = publisher and ob.Description = description and ob.ISBn = isbn and ob.CopyNum = copyNum and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Book"
+        }
+      ]
+    }
+  }
+]

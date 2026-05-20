@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), loan:Loan = user.LoanedBook->any(o | o.LoanedCopy.Barcode = barcode), isRenewed:Boolean = if loan.oclIsUndefined() then false else loan.IsReturned = false endif",
+        "precondition": "user.oclIsUndefined() = bool",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew(), Loan.allInstance()->includes(newLoan), loan.RenewedTimes = loan.RenewedTimes + 1, result = (isRenewed = true)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 48,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loan:Loan = user.LoanedBook->any(o | o.LoanedCopy.Barcode = barcode), isRenewed:Boolean = if loan.oclIsUndefined() then false else loan.IsReturned = false endif\n            \n            precondition:\n          user.oclIsUndefined() = bool\n            \n            postcondition:\n          let newLoan:Loan in newLoan.oclIsNew(), Loan.allInstance()->includes(newLoan), loan.RenewedTimes = loan.RenewedTimes + 1, result = (isRenewed = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

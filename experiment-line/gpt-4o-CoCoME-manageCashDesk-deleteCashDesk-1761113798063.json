@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesks:Set(CashDesk) = CashDesk.allInstance()",
+        "precondition": "cashDesk:CashDesk = cashDesks->any(c | c.Id = id), cashDesk.oclIsUndefined() = false",
+        "postcondition": "let result:Boolean = cashDesk.oclIsUndefined(), result = false"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 18,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 59,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {\n          definition:\n          cashDesks:Set(CashDesk) = CashDesk.allInstance()\n            \n            precondition:\n          cashDesk:CashDesk = cashDesks->any(c | c.Id = id), cashDesk.oclIsUndefined() = false\n            \n            postcondition:\n          let result:Boolean = cashDesk.oclIsUndefined(), result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cashDesk"
+        }
+      ]
+    }
+  }
+]

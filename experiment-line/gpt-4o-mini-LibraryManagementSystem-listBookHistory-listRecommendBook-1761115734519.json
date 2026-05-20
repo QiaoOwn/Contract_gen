@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "recommendedBooks:Set(RecommendBook) = RecommendBook.allInstance()->select(o | o.RecommendUser.UserID = uid)",
+        "precondition": "recommendedBooks.isEmpty() = bool",
+        "postcondition": "RecommendBook.allInstance()->includes(recommendedBooks) and result = recommendedBooks"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ListBookHistory::listRecommendBook(uid: String): Set(RecommendBook) {\n\tdefinition:\n\t\trecommendedBooks: Set(RecommendBook) = RecommendBook.allInstance()->select(o|o.RecommendUser.UserID = uid)\n\tprecondition:\n\t\trecommendedBooks.isEmpty() = bool\n\tpostcondition:\n\t\tRecommendBook.allInstance()->includes(recommendedBooks) and\n\t\tresult = recommendedBooks\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

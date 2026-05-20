@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "entries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries, totalAmount:Real = entries->collect(e | e.SubAmount)->sum(), statusRequested:Boolean = if self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED then true else false endif, amountCorrect:Boolean = if self.CurrentOrderProduct.Amount = totalAmount then true else false endif",
+        "precondition": "self.CurrentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "statusRequested = true and amountCorrect = true and result = statusRequested"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 131,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          entries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries, totalAmount:Real = entries->collect(e | e.SubAmount)->sum(), statusRequested:Boolean = if self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED then true else false endif, amountCorrect:Boolean = if self.CurrentOrderProduct.Amount = totalAmount then true else false endif\n            \n            precondition:\n          self.CurrentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          statusRequested = true and amountCorrect = true and result = statusRequested\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: statusRequested"
+        }
+      ]
+    }
+  }
+]

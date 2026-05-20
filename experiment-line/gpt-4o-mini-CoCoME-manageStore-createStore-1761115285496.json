@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Store = Store.allInstance()->any(o | o.Id = id), isExist:Boolean = store.oclIsUndefined()",
+        "precondition": "store.oclIsUndefined() = isExist",
+        "postcondition": "if isExist then let store:Store in store.oclIsNew() and Store.allInstance()->includes(store) and store.Id = id and store.Name = name and store.Address = address and store.IsOpened = isopened and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageStoreCRUDService::createStore(id: Integer,name: String,address: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tstore: Store = Store.allInstance()->any(o|o.Id = id),\n\t\tisExist: Boolean = store.oclIsUndefined()\n\tprecondition:\n\t\tstore.oclIsUndefined() = isExist\n\tpostcondition:\n\t\tif isExist \n\t\tthen let store: Store in\n\t\tstore.oclIsNew() and\n\t\tStore.allInstance()->includes(store) and\n\t\tstore.Id = id and\n\t\tstore.Name = name and\n\t\tstore.Address = address and\n\t\tstore.IsOpened = isopened and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

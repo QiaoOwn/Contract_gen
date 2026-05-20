@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)",
+        "precondition": "LoanRequest.allInstance()->includes(currentLoanRequest) or LoanRequest.allInstance()->excludes(currentLoanRequest)",
+        "postcondition": "CurrentLoanRequest = currentLoanRequest and CurrentLoanRequest.RequestID = requestid and CurrentLoanRequest.Name = name and CurrentLoanRequest.LoanAmount = loanamount and CurrentLoanRequest.LoanPurpose = loanpurpose and CurrentLoanRequest.Income = income and CurrentLoanRequest.PhoneNumber = phonenumber and CurrentLoanRequest.PostalAddress = postaladdress and CurrentLoanRequest.ZipCode = zipcode and CurrentLoanRequest.Email = email and CurrentLoanRequest.WorkReferences = workreferences and CurrentLoanRequest.CreditReferences = creditreferences and CurrentLoanRequest.CheckingAccountNumber = checkingaccountnumber and CurrentLoanRequest.SecurityNumber = securitynumber and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid: Integer,name: String,loanamount: Real,loanpurpose: String,income: Real,phonenumber: Integer,postaladdress: String,zipcode: Integer,email: String,workreferences: String,creditreferences: String,checkingaccountnumber: Integer,securitynumber: Integer): Boolean {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = LoanRequest.allInstance()->any(o|o.RequestID = requestid)\n\tprecondition:\n\t\tLoanRequest.allInstance()->includes(currentLoanRequest) or\n\t\tLoanRequest.allInstance()->excludes(currentLoanRequest)\n\tpostcondition:\n\t\tCurrentLoanRequest = currentLoanRequest and\n\t\tCurrentLoanRequest.RequestID = requestid and\n\t\tCurrentLoanRequest.Name = name and\n\t\tCurrentLoanRequest.LoanAmount = loanamount and\n\t\tCurrentLoanRequest.LoanPurpose = loanpurpose and\n\t\tCurrentLoanRequest.Income = income and\n\t\tCurrentLoanRequest.PhoneNumber = phonenumber and\n\t\tCurrentLoanRequest.PostalAddress = postaladdress and\n\t\tCurrentLoanRequest.ZipCode = zipcode and\n\t\tCurrentLoanRequest.Email = email and\n\t\tCurrentLoanRequest.WorkReferences = workreferences and\n\t\tCurrentLoanRequest.CreditReferences = creditreferences and\n\t\tCurrentLoanRequest.CheckingAccountNumber = checkingaccountnumber and\n\t\tCurrentLoanRequest.SecurityNumber = securitynumber and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

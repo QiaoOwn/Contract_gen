@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "recommendation:RecommendBook = RecommendBook.allInstance()->any(o | o.RecommendUser.Name = uid and o.CallNo = callNo and o.Title = title and o.Edition = edition and o.Author = author and o.Publisher = publisher and o.Description = description and o.ISBn = isbn)",
+        "precondition": "recommendation.oclIsUndefined() = bool",
+        "postcondition": "let newRecommendation:RecommendBook in newRecommendation.oclIsNew() and Library.allInstance()->includes(newRecommendation) and newRecommendation.RecommendUser = User.allInstances()->any(o|o.Name=uid) and newRecommendation.CallNo =callNo and newRecommendation.Title = title and newRecommendation.Edition = edition and newRecommendation.Author = author and newRecommendation.Publisher = publisher and newRecommendation.Description = description and newRecommendation.ISBn = isbn and result=true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 188,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          recommendation:RecommendBook = RecommendBook.allInstance()->any(o | o.RecommendUser.Name = uid and o.CallNo = callNo and o.Title = title and o.Edition = edition and o.Author = author and o.Publisher = publisher and o.Description = description and o.ISBn = isbn)\n            \n            precondition:\n          recommendation.oclIsUndefined() = bool\n            \n            postcondition:\n          let newRecommendation:RecommendBook in newRecommendation.oclIsNew() and Library.allInstance()->includes(newRecommendation) and newRecommendation.RecommendUser = User.allInstances()->any(o|o.Name=uid) and newRecommendation.CallNo =callNo and newRecommendation.Title = title and newRecommendation.Edition = edition and newRecommendation.Author = author and newRecommendation.Publisher = publisher and newRecommendation.Description = description and newRecommendation.ISBn = isbn and result=true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

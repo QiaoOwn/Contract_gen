@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newAccount:LoanAccount = LoanAccount(LoanAccountID = loanaccountid, Balance = balance, Status = status)",
+        "precondition": "let account:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid) in account.oclIsUndefined() = true",
+        "postcondition": "let newAccount:LoanAccount in newAccount.oclIsNew() and LoanAccount.allInstance()->includes(newAccount) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 61,
+          "msg": "mismatched input '=' expecting {')', ','}"
+        },
+        {
+          "line": 3,
+          "column": 112,
+          "msg": "extraneous input ')' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          newAccount:LoanAccount = LoanAccount(LoanAccountID = loanaccountid, Balance = balance, Status = status)\n            \n            precondition:\n          let account:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid) in account.oclIsUndefined() = true\n            \n            postcondition:\n          let newAccount:LoanAccount in newAccount.oclIsNew() and LoanAccount.allInstance()->includes(newAccount) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property object of MemberExpression expected node to be of a type [\"Expression\",\"Super\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

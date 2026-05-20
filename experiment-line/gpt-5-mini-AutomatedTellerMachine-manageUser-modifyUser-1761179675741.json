@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = userid)",
+        "precondition": "true",
+        "postcondition": "user.oclIsUndefined() = false and user.Name = name and user.Address = address and result = true or user.oclIsUndefined() = true and result = false"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageUserCRUDService::modifyUser(userid: Integer,name: String,address: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstance()->any(o|o.UserID = userid)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tuser.Name = name and\n\t\tuser.Address = address and\n\t\tresult = true or\n\t\tuser.oclIsUndefined() = true and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "device:Device = Device.allInstance()->any(d | d.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = contactsid), ok:Boolean = (device.oclIsUndefined() or device.Contacts->includes(staff))",
+        "precondition": "Staff.allInstance()->select(s | s.Id = contactsid)->size() > 0",
+        "postcondition": "let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts->includes(staff) and (device.oclIsUndefined() or device.Contacts->includes(staff)) and result = ok"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 60,
+          "msg": "mismatched input '->' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {\n          definition:\n          device:Device = Device.allInstance()->any(d | d.Id = id), staff:Staff = Staff.allInstance()->any(s | s.Id = contactsid), ok:Boolean = (device.oclIsUndefined() or device.Contacts->includes(staff))\n            \n            precondition:\n          Staff.allInstance()->select(s | s.Id = contactsid)->size() > 0\n            \n            postcondition:\n          let newDevice:Device in newDevice.oclIsNew() and Device.allInstance()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts->includes(staff) and (device.oclIsUndefined() or device.Contacts->includes(staff)) and result = ok\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

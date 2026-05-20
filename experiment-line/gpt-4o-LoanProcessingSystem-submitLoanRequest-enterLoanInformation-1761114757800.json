@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = requestid)",
+        "precondition": "loanRequest.oclIsUndefined() or LoanRequest.allInstance()->excludes(loanRequest)",
+        "postcondition": "let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and LoanRequest.allInstance()->excludes(loanRequest) and LoanRequest.allInstance()->includes(newLoanRequest) and newLoanRequest.RequestID = requestid and newLoanRequest.Name = name and newLoanRequest.LoanAmount = loanamount and newLoanRequest.LoanPurpose = loanpurpose and newLoanRequest.Income = income and newLoanRequest.PhoneNumber = phonenumber and newLoanRequest.PostalAddress = postaladdress and newLoanRequest.ZipCode = zipcode and newLoanRequest.Email = email and newLoanRequest.WorkReferences = workreferences and newLoanRequest.CreditReferences = creditreferences and newLoanRequest.CheckingAccountNumber = checkingaccountnumber and newLoanRequest.SecurityNumber = securitynumber and CurrentLoanRequest = newLoanRequest and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid: Integer,name: String,loanamount: Real,loanpurpose: String,income: Real,phonenumber: Integer,postaladdress: String,zipcode: Integer,email: String,workreferences: String,creditreferences: String,checkingaccountnumber: Integer,securitynumber: Integer): Boolean {\n\tdefinition:\n\t\tloanRequest: LoanRequest = LoanRequest.allInstance()->any(lr|lr.RequestID = requestid)\n\tprecondition:\n\t\tloanRequest.oclIsUndefined() or\n\t\tLoanRequest.allInstance()->excludes(loanRequest)\n\tpostcondition:\n\t\tlet newLoanRequest: LoanRequest in\n\t\tnewLoanRequest.oclIsNew() and\n\t\tLoanRequest.allInstance()->excludes(loanRequest) and\n\t\tLoanRequest.allInstance()->includes(newLoanRequest) and\n\t\tnewLoanRequest.RequestID = requestid and\n\t\tnewLoanRequest.Name = name and\n\t\tnewLoanRequest.LoanAmount = loanamount and\n\t\tnewLoanRequest.LoanPurpose = loanpurpose and\n\t\tnewLoanRequest.Income = income and\n\t\tnewLoanRequest.PhoneNumber = phonenumber and\n\t\tnewLoanRequest.PostalAddress = postaladdress and\n\t\tnewLoanRequest.ZipCode = zipcode and\n\t\tnewLoanRequest.Email = email and\n\t\tnewLoanRequest.WorkReferences = workreferences and\n\t\tnewLoanRequest.CreditReferences = creditreferences and\n\t\tnewLoanRequest.CheckingAccountNumber = checkingaccountnumber and\n\t\tnewLoanRequest.SecurityNumber = securitynumber and\n\t\tCurrentLoanRequest = newLoanRequest and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

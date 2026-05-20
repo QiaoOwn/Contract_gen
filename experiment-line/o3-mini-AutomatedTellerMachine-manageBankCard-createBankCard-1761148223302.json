@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+        "precondition": "card.oclIsUndefined() = true",
+        "postcondition": "let newCard:BankCard in newCard.oclIsNew() and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance and In the post condition, BankCard.allInstance()->includes(newCard) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 188,
+          "msg": "mismatched input 'the' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)\n            \n            precondition:\n          card.oclIsUndefined() = true\n            \n            postcondition:\n          let newCard:BankCard in newCard.oclIsNew() and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance and In the post condition, BankCard.allInstance()->includes(newCard) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: In"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid), isOrderExist:Boolean = if orderProduct.oclIsUndefined() then false else true endif, newOrderProduct:OrderProduct = if isOrderExist = false then let n:OrderProduct in n.oclIsNew() endif",
+        "precondition": "orderid.oclIsTypeOf(Integer)",
+        "postcondition": "(isOrderExist = false and let newOrderProduct:OrderProduct in newOrderProduct.oclIsNew() and OrderProduct.allInstance()->includes(newOrderProduct) and newOrderProduct.Id = orderid and newOrderProduct.OrderStatus = OrderStatus::NEW and newOrderProduct.Time = ThirdPartyServices.getCurrentTime() and result = true) or (isOrderExist = true and result = false)"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 36,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 55,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid), isOrderExist:Boolean = if orderProduct.oclIsUndefined() then false else true endif, newOrderProduct:OrderProduct = if isOrderExist = false then let n:OrderProduct in n.oclIsNew() endif\n            \n            precondition:\n          orderid.oclIsTypeOf(Integer)\n            \n            postcondition:\n          (isOrderExist = false and let newOrderProduct:OrderProduct in newOrderProduct.oclIsNew() and OrderProduct.allInstance()->includes(newOrderProduct) and newOrderProduct.Id = orderid and newOrderProduct.OrderStatus = OrderStatus::NEW and newOrderProduct.Time = ThirdPartyServices.getCurrentTime() and result = true) or (isOrderExist = true and result = false)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

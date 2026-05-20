@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Supplier = Supplier.allInstance()->any(o | o.Id = id), exists:Boolean = if obs.oclIsUndefined() then false else true endif",
+        "precondition": "obs.oclIsUndefined() = false",
+        "postcondition": "obs.Name = name and result = exists"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 69,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 39,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::modifySupplier(id:Integer,name:String): Boolean {\n          definition:\n          obs:Supplier = Supplier.allInstance()->any(o | o.Id = id), exists:Boolean = if obs.oclIsUndefined() then false else true endif\n            \n            precondition:\n          obs.oclIsUndefined() = false\n            \n            postcondition:\n          obs.Name = name and result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

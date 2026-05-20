@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "succ:Boolean = true",
+        "precondition": "self.CardIDValidated = true and self.PasswordValidated = true and self.InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(self.InputCard)",
+        "postcondition": "self.InputCard = null and self.IsWithdraw = false and self.WithdrawedNumber = 0.0 and self.CardIDValidated = false and self.PasswordValidated = false and result = succ"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 153,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {\n          definition:\n          succ:Boolean = true\n            \n            precondition:\n          self.CardIDValidated = true and self.PasswordValidated = true and self.InputCard.oclIsUndefined() = false and BankCard.allInstance()->includes(self.InputCard)\n            \n            postcondition:\n          self.InputCard = null and self.IsWithdraw = false and self.WithdrawedNumber = 0.0 and self.CardIDValidated = false and self.PasswordValidated = false and result = succ\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.InputCard"
+        }
+      ]
+    }
+  }
+]

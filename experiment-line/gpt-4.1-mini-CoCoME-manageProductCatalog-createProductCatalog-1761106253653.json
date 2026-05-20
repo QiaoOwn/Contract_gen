@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "productCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "productCatalog.oclIsUndefined() = false",
+        "postcondition": "(productCatalog.oclIsNew() and productCatalog.Id = id and productCatalog.Name = name and ProductCatalog.allInstance()->includes(productCatalog) and result = true) or (not productCatalog.oclIsNew() and productCatalog.Id = id and productCatalog.Name = name and result = true)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 173,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          productCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          productCatalog.oclIsUndefined() = false\n            \n            postcondition:\n          (productCatalog.oclIsNew() and productCatalog.Id = id and productCatalog.Name = name and ProductCatalog.allInstance()->includes(productCatalog) and result = true) or (not productCatalog.oclIsNew() and productCatalog.Id = id and productCatalog.Name = name and result = true)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

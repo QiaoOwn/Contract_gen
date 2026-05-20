@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), currentLoanRequestExists:Boolean = if self.CurrentLoanRequest.oclIsUndefined() = false then true else false endif, loanTermExists:Boolean = if LoanTerm.allInstance()->includes(term) then true else false endif",
+        "precondition": "LoanTerm.allInstance()->includes(self.CurrentLoanRequest) and self.CurrentLoanRequest.oclIsUndefined() = false",
+        "postcondition": "let term:LoanTerm in term.oclIsNew() and LoanTerm.allInstance()->includes(term) and self.CurrentLoanRequest.AttachedLoanTerms->includes(term) and term.ItemID = termid and LoanTerm.allInstance()->includes(term) and self.CurrentLoanRequests->includes(self.CurrentLoanRequest) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 43,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 259,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), currentLoanRequestExists:Boolean = if self.CurrentLoanRequest.oclIsUndefined() = false then true else false endif, loanTermExists:Boolean = if LoanTerm.allInstance()->includes(term) then true else false endif\n            \n            precondition:\n          LoanTerm.allInstance()->includes(self.CurrentLoanRequest) and self.CurrentLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          let term:LoanTerm in term.oclIsNew() and LoanTerm.allInstance()->includes(term) and self.CurrentLoanRequest.AttachedLoanTerms->includes(term) and term.ItemID = termid and LoanTerm.allInstance()->includes(term) and self.CurrentLoanRequests->includes(self.CurrentLoanRequest) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

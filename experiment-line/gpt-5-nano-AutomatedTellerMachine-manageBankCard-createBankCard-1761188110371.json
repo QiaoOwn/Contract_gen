@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), result:Boolean",
+        "precondition": "cardid > 0 and password >= 0 and balance >= 0",
+        "postcondition": "if card.oclIsUndefined() then let ob:BankCard in ob.oclIsNew() and ob.CardID = cardid and ob.CardStatus = cardstatus and ob.Catalog = catalog and ob.Password = password and ob.Balance = balance and BankCard.allInstance()->includes(ob) and result = true else BankCard.allInstance()->exists(o | o.CardID = cardid) and result = true endif"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 78,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), result:Boolean\n            \n            precondition:\n          cardid > 0 and password >= 0 and balance >= 0\n            \n            postcondition:\n          if card.oclIsUndefined() then let ob:BankCard in ob.oclIsNew() and ob.CardID = cardid and ob.CardStatus = cardstatus and ob.Catalog = catalog and ob.Password = password and ob.Balance = balance and BankCard.allInstance()->includes(ob) and result = true else BankCard.allInstance()->exists(o | o.CardID = cardid) and result = true endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "ProductCatalog.allInstance()->exists(c | c.Id = id)",
+        "postcondition": "ProductCatalog.allInstance()->includes(catalog) and catalog.Name = name and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::modifyProductCatalog(id: Integer,name: String): Boolean {\n\tprecondition:\n\t\tProductCatalog.allInstance()->exists(c|c.Id = id)\n\tpostcondition:\n\t\tProductCatalog.allInstance()->includes(catalog) and\n\t\tcatalog.Name = name and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: catalog"
+        }
+      ]
+    }
+  }
+]

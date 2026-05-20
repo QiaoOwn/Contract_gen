@@ -1,0 +1,321 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = (score >= 3) in result = (targetRepair.Score = score and targetRepair.Process = 7 and targetRepair.Close = closeFlag) or (targetRepair.Score = score and targetRepair.Process = 0 and targetRepair.Close = false and targetRepair.Description = des)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 59,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 79,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = (score >= 3) in result = (targetRepair.Score = score and targetRepair.Process = 7 and targetRepair.Close = closeFlag) or (targetRepair.Score = score and targetRepair.Process = 0 and targetRepair.Close = false and targetRepair.Description = des)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = (score >= 3) in result = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)))"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 59,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 79,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = (score >= 3) in result = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)))\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = (score >= 3) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 219,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 263,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = (score >= 3) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = (score >= 3) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 219,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 263,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = (score >= 3) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id),\nstaffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid),\ntargetRepair:Repair = Repair.allInstance()->any(r | r.Id = id),\ntargetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = (score >= 3) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 12,
+          "column": 219,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 12,
+          "column": 263,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id),\nstaffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid),\ntargetRepair:Repair = Repair.allInstance()->any(r | r.Id = id),\ntargetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = (score >= 3) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let cond1:Boolean = (score >= 3 and targetRepair.Process = 7) in let cond2:Boolean = (score < 3 and targetRepair.Process = 0) in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and (cond1 or cond2)) in result = validPost"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract RepairService::feedback(id: Integer,sid: Integer,score: Integer,des: String): Boolean {\n\tdefinition:\n\t\trepairSet: Set(Repair) = Repair.allInstance()->select(r|r.Id = id),\n\t\tstaffSet: Set(Staff) = Staff.allInstance()->select(s|s.Id = sid),\n\t\ttargetRepair: Repair = Repair.allInstance()->any(r|r.Id = id),\n\t\ttargetStaff: Staff = Staff.allInstance()->any(s|s.Id = sid)\n\tprecondition:\n\t\ttargetRepair.RaiseStaff = targetStaff and\n\t\ttargetStaff.Role = 0 and\n\t\ttargetRepair.Process = 7\n\tpostcondition:\n\t\tlet closeFlag: Boolean = score>=3 in\n\t\tlet cond1: Boolean = (score>=3 and\n\t\ttargetRepair.Process = 7) in\n\t\tlet cond2: Boolean = (score<3 and\n\t\ttargetRepair.Process = 0) in\n\t\tlet validPost: Boolean = (targetRepair.Score = score and\n\t\ttargetRepair.Description = des and\n\t\ttargetRepair.Close = closeFlag and\n\t\t(cond1 or\n\t\tcond2)) in\n\t\tresult = validPost\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 217,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 261,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = validPost\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) in let final:Boolean = (validPost and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = final"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 252,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 296,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) in let final:Boolean = (validPost and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = final\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) in let final:Boolean = validPost and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)) in result = final"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 251,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) in let final:Boolean = validPost and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)) in result = final\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) in let final:Boolean = validPost and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)) in result = final"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 251,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = score >= 3 in let validPost:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) in let final:Boolean = validPost and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)) in result = final\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let final:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)) in result = final"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 167,
+          "msg": "mismatched input 'and' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = score >= 3 in let final:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag) and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0)) in result = final\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)",
+        "precondition": "targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7",
+        "postcondition": "let closeFlag:Boolean = score >= 3 in let scoreMatchBoolean:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = scoreMatchBoolean"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 225,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 269,
+          "msg": "extraneous input ')' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {\n          definition:\n          repairSet:Set(Repair) = Repair.allInstance()->select(r | r.Id = id), staffSet:Set(Staff) = Staff.allInstance()->select(s | s.Id = sid), targetRepair:Repair = Repair.allInstance()->any(r | r.Id = id), targetStaff:Staff = Staff.allInstance()->any(s | s.Id = sid)\n            \n            precondition:\n          targetRepair.RaiseStaff = targetStaff and targetStaff.Role = 0 and targetRepair.Process = 7\n            \n            postcondition:\n          let closeFlag:Boolean = score >= 3 in let scoreMatchBoolean:Boolean = (targetRepair.Score = score and targetRepair.Description = des and targetRepair.Close = closeFlag and ((score >= 3 and targetRepair.Process = 7) or (score < 3 and targetRepair.Process = 0))) in result = scoreMatchBoolean\n            \n        }"
+    }
+  }
+]

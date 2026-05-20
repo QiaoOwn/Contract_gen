@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "user:User = User.allInstance()->any(o | o.UserID = uid), loans:Set(Loan) = user.LoanedBook",
+        "postcondition": "loans->forAll(o:Loan|o.IsReturned = false) and result = loans"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 14,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 4,
+          "column": 65,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listHodingBook(uid:String): Set(Loan) {\n          \n            precondition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), loans:Set(Loan) = user.LoanedBook\n            \n            postcondition:\n          loans->forAll(o:Loan|o.IsReturned = false) and result = loans\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: user"
+        }
+      ]
+    }
+  }
+]

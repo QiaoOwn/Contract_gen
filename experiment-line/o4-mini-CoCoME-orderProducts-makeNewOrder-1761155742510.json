@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "op:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+        "precondition": "op.oclIsUndefined() = true",
+        "postcondition": "let newOp:OrderProduct in newOp.oclIsNew() and OrderProduct.allInstance()->includes(newOp) and newOp.Id = orderid and newOp.OrderStatus = OrderProduct::NEW and newOp.Time = now and self.CurrentOrderProduct = newOp and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid: Integer): Boolean {\n\tdefinition:\n\t\top: OrderProduct = OrderProduct.allInstance()->any(o|o.Id = orderid)\n\tprecondition:\n\t\top.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet newOp: OrderProduct in\n\t\tnewOp.oclIsNew() and\n\t\tOrderProduct.allInstance()->includes(newOp) and\n\t\tnewOp.Id = orderid and\n\t\tnewOp.OrderStatus = OrderProduct::NEW and\n\t\tnewOp.Time = now and\n\t\tself.CurrentOrderProduct = newOp and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: now"
+        }
+      ]
+    }
+  }
+]

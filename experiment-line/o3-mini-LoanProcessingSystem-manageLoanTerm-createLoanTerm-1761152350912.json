@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "lt:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)",
+        "precondition": "itemid > 0 and content <> ''",
+        "postcondition": "(LoanTerm.allInstance()->includes(lt) or let ltNew:LoanTerm in ltNew.oclIsNew() and LoanTerm.allInstance()->includes(ltNew)) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 51,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 60,
+          "msg": "mismatched input ':' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          lt:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)\n            \n            precondition:\n          itemid > 0 and content <> ''\n            \n            postcondition:\n          (LoanTerm.allInstance()->includes(lt) or let ltNew:LoanTerm in ltNew.oclIsNew() and LoanTerm.allInstance()->includes(ltNew)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

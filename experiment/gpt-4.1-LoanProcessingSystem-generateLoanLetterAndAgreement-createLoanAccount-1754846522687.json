@@ -1,0 +1,289 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid)",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "let newLoanAccount:LoanAccount in (loanAccount.oclIsUndefined() and newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true) or (LoanAccount.allInstance()->includes(loanAccount) and result = false)"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 300,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid)\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          let newLoanAccount:LoanAccount in (loanAccount.oclIsUndefined() and newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true) or (LoanAccount.allInstance()->includes(loanAccount) and result = false)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or not shouldCreate and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 27,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or not shouldCreate and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate and LoanAccount.allInstance()->includes(resultLoanAccount) and resultLoanAccount.LoanAccountID = loanaccountid and resultLoanAccount.Balance = balance and resultLoanAccount.Status = status and result = true or not shouldCreate and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 237,
+          "msg": "mismatched input 'shouldCreate' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate and LoanAccount.allInstance()->includes(resultLoanAccount) and resultLoanAccount.LoanAccountID = loanaccountid and resultLoanAccount.Balance = balance and resultLoanAccount.Status = status and result = true or not shouldCreate and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 34,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and LoanAccount.allInstance()->excludes(loanAccount) and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 87,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 105,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate = true and LoanAccount.allInstance()->excludes(loanAccount) and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and LoanAccount.allInstance()->excludes(loanAccount) and LoanAccount.allInstance()->includes(resultLoanAccount) and resultLoanAccount.LoanAccountID = loanaccountid and resultLoanAccount.Balance = balance and resultLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(l|l.LoanAccountID = loanaccountid),\n\t\tshouldCreate: Boolean = loanAccount.oclIsUndefined()\n\tprecondition:\n\t\tloanaccountid.oclIsTypeOf(Integer) and\n\t\tbalance.oclIsTypeOf(Real) and\n\t\tstatus.oclIsTypeOf(LoanAccountStatus)\n\tpostcondition:\n\t\tshouldCreate = true and\n\t\tLoanAccount.allInstance()->excludes(loanAccount) and\n\t\tLoanAccount.allInstance()->includes(resultLoanAccount) and\n\t\tresultLoanAccount.LoanAccountID = loanaccountid and\n\t\tresultLoanAccount.Balance = balance and\n\t\tresultLoanAccount.Status = status and\n\t\tresult = true or\n\t\tshouldCreate = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: resultLoanAccount"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 34,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and LoanAccount.allInstance()->includes(loanAccount) = false and loanAccount.oclIsNew() and loanAccount.LoanAccountID = loanaccountid and loanAccount.Balance = balance and loanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(l|l.LoanAccountID = loanaccountid),\n\t\tshouldCreate: Boolean = loanAccount.oclIsUndefined()\n\tprecondition:\n\t\tloanaccountid.oclIsTypeOf(Integer) and\n\t\tbalance.oclIsTypeOf(Real) and\n\t\tstatus.oclIsTypeOf(LoanAccountStatus)\n\tpostcondition:\n\t\tshouldCreate = true and\n\t\tLoanAccount.allInstance()->includes(loanAccount) = false and\n\t\tloanAccount.oclIsNew() and\n\t\tloanAccount.LoanAccountID = loanaccountid and\n\t\tloanAccount.Balance = balance and\n\t\tloanAccount.Status = status and\n\t\tresult = true or\n\t\tshouldCreate = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 34,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and LoanAccount.allInstance()->includes(resultLoanAccount) and resultLoanAccount.LoanAccountID = loanaccountid and resultLoanAccount.Balance = balance and resultLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(l|l.LoanAccountID = loanaccountid),\n\t\tshouldCreate: Boolean = loanAccount.oclIsUndefined()\n\tprecondition:\n\t\tloanaccountid.oclIsTypeOf(Integer) and\n\t\tbalance.oclIsTypeOf(Real) and\n\t\tstatus.oclIsTypeOf(LoanAccountStatus)\n\tpostcondition:\n\t\tshouldCreate = true and\n\t\tLoanAccount.allInstance()->includes(resultLoanAccount) and\n\t\tresultLoanAccount.LoanAccountID = loanaccountid and\n\t\tresultLoanAccount.Balance = balance and\n\t\tresultLoanAccount.Status = status and\n\t\tresult = true or\n\t\tshouldCreate = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: resultLoanAccount"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)",
+        "postcondition": "shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 34,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 52,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loanaccountid), shouldCreate:Boolean = loanAccount.oclIsUndefined()\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and status.oclIsTypeOf(LoanAccountStatus)\n            \n            postcondition:\n          shouldCreate = true and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true or shouldCreate = false and result = false\n            \n        }"
+    }
+  }
+]

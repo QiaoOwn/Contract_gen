@@ -1,0 +1,331 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = i.StockNumber - quantity and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 310,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = i.StockNumber - quantity and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber + (-quantity)",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "{ let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true }"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '+' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 296,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber + (-quantity)\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          { let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true }\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber + (-quantity), success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = success"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '+' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber + (-quantity), success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and result = success\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity, success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity, success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = (i.StockNumber - quantity), success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 164,
+          "msg": "mismatched input '-' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = (i.StockNumber - quantity), success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber - quantity, success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 163,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber - quantity, success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber + (-1 * quantity), success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 163,
+          "msg": "mismatched input '+' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber + (-1 * quantity), success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber - quantity, success:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 163,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber - quantity, success:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and success = true and result = success\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber - quantity, flag:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and flag = true and result = flag"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 163,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 264,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, saleLine:SalesLineItem = null, newStock:Integer = i.StockNumber - quantity, flag:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and flag = true and result = flag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity, flag:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and flag = true and result = flag"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 132,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 294,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber - quantity, flag:Boolean = true\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity\n            \n            postcondition:\n          let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and flag = true and result = flag\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "i:Item = Item.allInstance()->any(o | o.Barcode = barcode), sale:Sale = self.CurrentSale, newStock:Integer = i.StockNumber + (-1 * quantity), flag:Boolean = true",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and i.oclIsUndefined() = false and i.StockNumber >= quantity",
+        "postcondition": "let saleLine:SalesLineItem in saleLine.oclIsNew() and self.CurrentSale.ContainedSalesLine->includes(saleLine) and saleLine.BelongedSale = sale and saleLine.Quantity = quantity and i.StockNumber = newStock and saleLine.Subamount = i.Price * quantity and ThirdPartyServices.saveSaleLine(saleLine) and flag = true and result = flag"
+      },
+      "model": "o3-mini"
+    }
+  }
+]

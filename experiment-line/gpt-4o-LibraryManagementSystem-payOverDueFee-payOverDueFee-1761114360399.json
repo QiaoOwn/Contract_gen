@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "let existingUser:User = User.allInstance()->any(u | u.UserID = uid)",
+        "precondition": "let userSet:Set(User) = User.allInstance()->select(u | u.UserID = uid) in \nuserSet->size() = 1 and \nuserSet->any(true)",
+        "postcondition": "let updatedUser:User in updatedUser.oclIsNew() and \nUser.allInstance()->includes(updatedUser) and \nupdatedUser.UserID = uid and \nupdatedUser.OverDueFee = fee and \nresult = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 7,
+          "column": 9,
+          "msg": "no viable alternative at input 'userSet->size()'"
+        },
+        {
+          "line": 8,
+          "column": 13,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          let existingUser:User = User.allInstance()->any(u | u.UserID = uid)\n            \n            precondition:\n          let userSet:Set(User) = User.allInstance()->select(u | u.UserID = uid) in \nuserSet->size() = 1 and \nuserSet->any(true)\n            \n            postcondition:\n          let updatedUser:User in updatedUser.oclIsNew() and \nUser.allInstance()->includes(updatedUser) and \nupdatedUser.UserID = uid and \nupdatedUser.OverDueFee = fee and \nresult = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

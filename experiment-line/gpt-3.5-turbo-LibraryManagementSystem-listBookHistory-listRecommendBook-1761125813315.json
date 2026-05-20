@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "recommendedBooks:Set(RecommendBook) = User.allInstance()->select(u | u.UserID = uid).RecommendedBook",
+        "precondition": "recommendedBooks.isEmpty() = bool",
+        "postcondition": "User.allInstance()->includes(recommendedBooks) and result = recommendedBooks"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 94,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listRecommendBook(uid:String): Set(RecommendBook) {\n          definition:\n          recommendedBooks:Set(RecommendBook) = User.allInstance()->select(u | u.UserID = uid).RecommendedBook\n            \n            precondition:\n          recommendedBooks.isEmpty() = bool\n            \n            postcondition:\n          User.allInstance()->includes(recommendedBooks) and result = recommendedBooks\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

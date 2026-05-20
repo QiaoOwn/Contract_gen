@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "librarian:Librarian = Librarian.allInstance()->any(l | l.LibrarianID = librarianid)",
+        "precondition": "Librarian.allInstance()->excludes(librarian)",
+        "postcondition": "let _new:Librarian in _new.oclIsNew() and _new.LibrarianID = librarianid and _new.Name = name and _new.Password = password and Librarian.allInstance()->includes(_new) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLibrarianCRUDService::createLibrarian(librarianid: String,name: String,password: String): Boolean {\n\tdefinition:\n\t\tlibrarian: Librarian = Librarian.allInstance()->any(l|l.LibrarianID = librarianid)\n\tprecondition:\n\t\tLibrarian.allInstance()->excludes(librarian)\n\tpostcondition:\n\t\tlet _new: Librarian in\n\t\t_new.oclIsNew() and\n\t\t_new.LibrarianID = librarianid and\n\t\t_new.Name = name and\n\t\t_new.Password = password and\n\t\tLibrarian.allInstance()->includes(_new) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

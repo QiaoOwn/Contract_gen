@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newReservation:Reserve = Reserve.allInstance()->any(o | o.ReservedUser = self.uid and o.ReservedCopy.Barcode = self.barcode)",
+        "precondition": "self.uid.oclIsUndefined() = false and self.barcode.oclIsUndefined() = false and LibraryManagementSystem.User.allInstance()->includes(self.uid)",
+        "postcondition": "let newReservation:Reserve in LibraryManagementSystem.Reserve.allInstance()->includes(newReservation) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 119,
+          "msg": "no viable alternative at input 'LibraryManagementSystem.User.allInstance()'"
+        },
+        {
+          "line": 9,
+          "column": 72,
+          "msg": "no viable alternative at input 'LibraryManagementSystem.Reserve.allInstance()'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          newReservation:Reserve = Reserve.allInstance()->any(o | o.ReservedUser = self.uid and o.ReservedCopy.Barcode = self.barcode)\n            \n            precondition:\n          self.uid.oclIsUndefined() = false and self.barcode.oclIsUndefined() = false and LibraryManagementSystem.User.allInstance()->includes(self.uid)\n            \n            postcondition:\n          let newReservation:Reserve in LibraryManagementSystem.Reserve.allInstance()->includes(newReservation) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

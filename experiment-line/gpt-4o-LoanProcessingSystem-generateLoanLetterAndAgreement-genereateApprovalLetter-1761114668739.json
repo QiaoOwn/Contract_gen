@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "let newApprovalLetter: ApprovalLetter in let loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+        "precondition": "let loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id) in not loanRequest.oclIsUndefined()",
+        "postcondition": "newApprovalLetter.oclIsNew() and newApprovalLetter.Content = \"ApprovalLetterContent\" and ApprovalLetter.allInstance()->includes(newApprovalLetter) and loanRequest.AttachedApprovalLetter = newApprovalLetter and CurrentLoanRequest = loanRequest and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {\n          definition:\n          let newApprovalLetter: ApprovalLetter in let loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)\n            \n            precondition:\n          let loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id) in not loanRequest.oclIsUndefined()\n            \n            postcondition:\n          newApprovalLetter.oclIsNew() and newApprovalLetter.Content = \"ApprovalLetterContent\" and ApprovalLetter.allInstance()->includes(newApprovalLetter) and loanRequest.AttachedApprovalLetter = newApprovalLetter and CurrentLoanRequest = loanRequest and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

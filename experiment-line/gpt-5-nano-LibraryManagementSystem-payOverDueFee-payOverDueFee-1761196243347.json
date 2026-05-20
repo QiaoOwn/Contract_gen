@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "uid: String, fee: Real, user: User = User.allInstance()->any(o | o.UserID = uid), result: Boolean",
+        "precondition": "user.oclIsUndefined() = false and User.allInstance()->includes(user) and user.OverDueFee >= fee",
+        "postcondition": "let a:Real = user.OverDueFee - fee in user.OverDueFee = a and result = (a = 0.0)"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 92,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 39,
+          "msg": "mismatched input '-' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {\n          definition:\n          uid: String, fee: Real, user: User = User.allInstance()->any(o | o.UserID = uid), result: Boolean\n            \n            precondition:\n          user.oclIsUndefined() = false and User.allInstance()->includes(user) and user.OverDueFee >= fee\n            \n            postcondition:\n          let a:Real = user.OverDueFee - fee in user.OverDueFee = a and result = (a = 0.0)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

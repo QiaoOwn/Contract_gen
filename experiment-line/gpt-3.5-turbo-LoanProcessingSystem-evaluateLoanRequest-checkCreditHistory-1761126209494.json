@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentCreditHistory:CreditHistory = CurrentLoanRequest.RequestedCreditHistory, currentLoanRequest:LoanRequest = CurrentLoanRequest \n",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+        "postcondition": "let newCreditHistory:CreditHistory in newCreditHistory.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest.RequestedCreditHistory) and result = newCreditHistory"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 10,
+          "column": 134,
+          "msg": "mismatched input '.' expecting ')'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::checkCreditHistory(): CreditHistory {\n          definition:\n          currentCreditHistory:CreditHistory = CurrentLoanRequest.RequestedCreditHistory, currentLoanRequest:LoanRequest = CurrentLoanRequest \n\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false and CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false\n            \n            postcondition:\n          let newCreditHistory:CreditHistory in newCreditHistory.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest.RequestedCreditHistory) and result = newCreditHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundItems:Set(Item) = Item.allInstance()->select(i | i.Barcode = barcode), foundItem:Item = foundItems->any(i | true)",
+        "precondition": "foundItems.isEmpty() = false",
+        "postcondition": "Item.allInstance()->includes(foundItem) and result = foundItem"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 123,
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {\n          definition:\n          foundItems:Set(Item) = Item.allInstance()->select(i | i.Barcode = barcode), foundItem:Item = foundItems->any(i | true)\n            \n            precondition:\n          foundItems.isEmpty() = false\n            \n            postcondition:\n          Item.allInstance()->includes(foundItem) and result = foundItem\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

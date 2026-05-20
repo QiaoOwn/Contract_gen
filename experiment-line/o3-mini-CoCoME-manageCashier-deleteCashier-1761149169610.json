@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), exists:Boolean = if Cashier.allInstance()->includes(cashier) then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer)",
+        "postcondition": "result = exists"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 71,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "mismatched input 'exists' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::deleteCashier(id:Integer): Boolean {\n          definition:\n          cashier:Cashier = Cashier.allInstance()->any(o | o.Id = id), exists:Boolean = if Cashier.allInstance()->includes(cashier) then true else false endif\n            \n            precondition:\n          id.oclIsTypeOf(Integer)\n            \n            postcondition:\n          result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

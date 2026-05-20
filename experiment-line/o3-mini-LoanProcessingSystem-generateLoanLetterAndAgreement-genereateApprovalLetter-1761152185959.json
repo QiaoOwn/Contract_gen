@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)",
+        "precondition": "loanRequest.oclIsUndefined() = false",
+        "postcondition": "let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and approvalLetter.Content = \"ApprovalLetterContent\" and In the post condition, ApprovalLetter.allInstance()->includes(approvalLetter) and loanRequest.AttachedApprovalLetter = approvalLetter and self.CurrentLoanRequest = loanRequest and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 133,
+          "msg": "mismatched input 'the' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id)\n            \n            precondition:\n          loanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and approvalLetter.Content = \"ApprovalLetterContent\" and In the post condition, ApprovalLetter.allInstance()->includes(approvalLetter) and loanRequest.AttachedApprovalLetter = approvalLetter and self.CurrentLoanRequest = loanRequest and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: In"
+        }
+      ]
+    }
+  }
+]

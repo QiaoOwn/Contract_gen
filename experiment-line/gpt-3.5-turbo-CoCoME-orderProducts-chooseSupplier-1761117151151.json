@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = supplierID), \ncurrentOrderProduct:OrderProduct = CurrentOrderProduct",
+        "precondition": "supplier.oclIsUndefined() = bool and currentOrderProduct.oclIsUndefined() = bool",
+        "postcondition": "let foundSupplier:Supplier in foundSupplier.oclIsNew() and CurrentOrderProduct.Supplier = supplier"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::chooseSupplier(supplierID: Integer): Boolean {\n\tdefinition:\n\t\tsupplier: Supplier = Supplier.allInstance()->any(o|o.Id = supplierID),\n\t\tcurrentOrderProduct: OrderProduct = CurrentOrderProduct\n\tprecondition:\n\t\tsupplier.oclIsUndefined() = bool and\n\t\tcurrentOrderProduct.oclIsUndefined() = bool\n\tpostcondition:\n\t\tlet foundSupplier: Supplier in\n\t\tfoundSupplier.oclIsNew() and\n\t\tCurrentOrderProduct.Supplier = supplier\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

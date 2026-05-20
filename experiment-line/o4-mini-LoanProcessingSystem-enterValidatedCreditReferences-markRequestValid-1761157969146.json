@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(self.CurrentLoanRequest)",
+        "postcondition": "self.CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 99,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {\n          \n            precondition:\n          self.CurrentLoanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(self.CurrentLoanRequest)\n            \n            postcondition:\n          self.CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

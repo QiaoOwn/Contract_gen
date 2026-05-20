@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "Item.allInstance()->isUnique(i:Item | i.Barcode)",
+        "postcondition": "let result:Boolean in Item.allInstance()->exists(i:Item | i.Barcode = barcode) and result = Item.allInstance()->exists(i:Item | i.Barcode = barcode)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {\n          \n            precondition:\n          Item.allInstance()->isUnique(i:Item | i.Barcode)\n            \n            postcondition:\n          let result:Boolean in Item.allInstance()->exists(i:Item | i.Barcode = barcode) and result = Item.allInstance()->exists(i:Item | i.Barcode = barcode)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

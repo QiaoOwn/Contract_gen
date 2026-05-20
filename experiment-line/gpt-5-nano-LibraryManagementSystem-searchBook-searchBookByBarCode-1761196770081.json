@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "barcode:String",
+        "precondition": "barcode <> null",
+        "postcondition": "let obs:Set(Book) = BookCopy.allInstance()->select(c | c.Barcode = barcode)->collect(c | c.BookBelongs) in result = obs"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 85,
+          "msg": "mismatched input '->' expecting {',', 'in'}"
+        }
+      ],
+      "contract": "Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {\n          definition:\n          barcode:String\n            \n            precondition:\n          barcode <> null\n            \n            postcondition:\n          let obs:Set(Book) = BookCopy.allInstance()->select(c | c.Barcode = barcode)->collect(c | c.BookBelongs) in result = obs\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

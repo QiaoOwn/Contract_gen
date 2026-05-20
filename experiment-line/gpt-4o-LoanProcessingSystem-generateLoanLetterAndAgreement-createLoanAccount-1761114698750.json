@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loadaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanAccount)\nloan.isEmpty()",
+        "postcondition": "LoanAccount.allInstance()->includes(loanAccount) and loanAccount.LoanAccountID = loadaccountid and loanAccount.Balance = balance and loanAccount.Status = status and result = loanAccount"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 0,
+          "msg": "mismatched input 'loan' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccount:LoanAccount = LoanAccount.allInstance()->any(l | l.LoanAccountID = loadaccountid)\n            \n            precondition:\n          LoanAccount.allInstance()->excludes(loanAccount)\nloan.isEmpty()\n            \n            postcondition:\n          LoanAccount.allInstance()->includes(loanAccount) and loanAccount.LoanAccountID = loadaccountid and loanAccount.Balance = balance and loanAccount.Status = status and result = loanAccount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: loadaccountid"
+        }
+      ]
+    }
+  }
+]

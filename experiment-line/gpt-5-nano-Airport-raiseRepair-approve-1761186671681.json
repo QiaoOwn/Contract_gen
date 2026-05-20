@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Set(Repair) = Repair.allInstance()->select(o | o.Id = rid), obsStaff:Set(Staff) = Staff.allInstance()->select(o | o.Id = sid)",
+        "precondition": "obsRepair->size() = 1 and obsStaff->size() = 1",
+        "postcondition": "let ah:ApprovalHistory in (ah.oclIsNew() and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and obsRepair->forAll(r | r.History->including(ah)) and obsRepair->forAll(r | r.Process = (if reject then 5 else (let st:Staff = obsStaff->any(s | true) in (if r.Process = 0 and st.Role = 1 then 1 else if r.Process = 1 and st.Role = 2 then 2 else if r.Process = 2 and st.Role = 3 then 3 else r.Process endif) endif))) and result = ah )"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 21,
+          "msg": "no viable alternative at input 'obsRepair->size()'"
+        },
+        {
+          "line": 6,
+          "column": 46,
+          "msg": "no viable alternative at input 'obsStaff->size()'"
+        },
+        {
+          "line": 9,
+          "column": 163,
+          "msg": "no viable alternative at input 'r.History->including'"
+        },
+        {
+          "line": 9,
+          "column": 178,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Set(Repair) = Repair.allInstance()->select(o | o.Id = rid), obsStaff:Set(Staff) = Staff.allInstance()->select(o | o.Id = sid)\n            \n            precondition:\n          obsRepair->size() = 1 and obsStaff->size() = 1\n            \n            postcondition:\n          let ah:ApprovalHistory in (ah.oclIsNew() and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and obsRepair->forAll(r | r.History->including(ah)) and obsRepair->forAll(r | r.Process = (if reject then 5 else (let st:Staff = obsStaff->any(s | true) in (if r.Process = 0 and st.Role = 1 then 1 else if r.Process = 1 and st.Role = 2 then 2 else if r.Process = 2 and st.Role = 3 then 3 else r.Process endif) endif))) and result = ah )\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

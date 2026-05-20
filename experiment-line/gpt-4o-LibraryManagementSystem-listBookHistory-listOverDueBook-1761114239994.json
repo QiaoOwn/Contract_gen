@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), overdueLoans:Set(Loan) = user.LoanedBook->select(l | l.OverDueFee > 0)",
+        "precondition": "User.allInstance()->includes(user) and user.oclIsUndefined() = false",
+        "postcondition": "overdueBooks:Set(BookCopy) = overdueLoans->collect(l | l.LoanedCopy), result = overdueBooks"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 22,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), overdueLoans:Set(Loan) = user.LoanedBook->select(l | l.OverDueFee > 0)\n            \n            precondition:\n          User.allInstance()->includes(user) and user.oclIsUndefined() = false\n            \n            postcondition:\n          overdueBooks:Set(BookCopy) = overdueLoans->collect(l | l.LoanedCopy), result = overdueBooks\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: overdueBooks"
+        }
+      ]
+    }
+  }
+]

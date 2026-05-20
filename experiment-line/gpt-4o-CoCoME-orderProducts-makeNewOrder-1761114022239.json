@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "order: OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID)",
+        "precondition": "OrderProduct.allInstance()->excludes(order)",
+        "postcondition": "order.oclIsNew() and OrderProduct.allInstance()->includes(order) and order.OrderStatus = OrderStatus::NEW and order.Id = orderID and order.Time = now() and result = order"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid: Integer): Boolean {\n\tdefinition:\n\t\torder: OrderProduct = OrderProduct.allInstance()->any(o|o.Id = orderID)\n\tprecondition:\n\t\tOrderProduct.allInstance()->excludes(order)\n\tpostcondition:\n\t\torder.oclIsNew() and\n\t\tOrderProduct.allInstance()->includes(order) and\n\t\torder.OrderStatus = OrderStatus::NEW and\n\t\torder.Id = orderID and\n\t\torder.Time = now() and\n\t\tresult = order\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: orderID"
+        }
+      ]
+    }
+  }
+]

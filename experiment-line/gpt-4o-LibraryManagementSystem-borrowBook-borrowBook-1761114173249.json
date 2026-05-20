@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "usr:Set(User) = User.allInstance()->select(u | u.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(bc | bc.Barcode = barcode)",
+        "precondition": "usr.size() = 1 and bookCopy.oclIsUndefined() = false and bookCopy.Status = CopyStatus::AVAILABLE and bookCopy.IsReserved = false and User.allInstance()->includes(usr)",
+        "postcondition": "let newLoan:Loan in newLoan.oclIsNew() and BookCopy.allInstance()->includes(book) and newLoan.LoanedUser = usr and newLoan.LoanedCopy = bookCopy and bookCopy.Status = CopyStatus::LOANED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tusr: Set(User) = User.allInstance()->select(u|u.UserID = uid),\n\t\tbookCopy: BookCopy = BookCopy.allInstance()->any(bc|bc.Barcode = barcode)\n\tprecondition:\n\t\tusr.size() = 1 and\n\t\tbookCopy.oclIsUndefined() = false and\n\t\tbookCopy.Status = CopyStatus::AVAILABLE and\n\t\tbookCopy.IsReserved = false and\n\t\tUser.allInstance()->includes(usr)\n\tpostcondition:\n\t\tlet newLoan: Loan in\n\t\tnewLoan.oclIsNew() and\n\t\tBookCopy.allInstance()->includes(book) and\n\t\tnewLoan.LoanedUser = usr and\n\t\tnewLoan.LoanedCopy = bookCopy and\n\t\tbookCopy.Status = CopyStatus::LOANED and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: book"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,381 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = false",
+        "precondition": "CurrentLoanRequests->size() > 0",
+        "postcondition": "let ob:LoanRequest in ob.oclIsNew(), CurrentLoanRequests->includes(CurrentLoanRequest) implies (CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = true)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 31,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 9,
+          "column": 45,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = false\n            \n            precondition:\n          CurrentLoanRequests->size() > 0\n            \n            postcondition:\n          let ob:LoanRequest in ob.oclIsNew(), CurrentLoanRequests->includes(CurrentLoanRequest) implies (CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = true)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = if CurrentLoanRequests->size() > 0 then true else false endif",
+        "precondition": "CurrentLoanRequests->size() > 0",
+        "postcondition": "CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 101,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 31,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = if CurrentLoanRequests->size() > 0 then true else false endif\n            \n            precondition:\n          CurrentLoanRequests->size() > 0\n            \n            postcondition:\n          CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = CurrentLoanRequests->size() > 0",
+        "precondition": "CurrentLoanRequests->size() > 0",
+        "postcondition": "CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 98,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 31,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = CurrentLoanRequests->size() > 0\n            \n            precondition:\n          CurrentLoanRequests->size() > 0\n            \n            postcondition:\n          CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true",
+        "precondition": "exists",
+        "postcondition": "CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true\n            \n            precondition:\n          exists\n            \n            postcondition:\n          CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "result = isApproved and approved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          result = isApproved and approved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "approved and result = isApproved"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 48,
+          "msg": "no viable alternative at input 'CurrentLoanRequests->size()'"
+        },
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {\n          definition:\n          exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)\n            \n            precondition:\n          exists\n            \n            postcondition:\n          approved and result = isApproved\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "exists:Boolean = CurrentLoanRequests->size() > 0, loanRequest:LoanRequest = CurrentLoanRequest, isApproved:Boolean = true, approved:Boolean = (loanRequest.Status = LoanRequestStatus::APPROVED)",
+        "precondition": "exists",
+        "postcondition": "let approvalStatus:Boolean = loanRequest.Status = LoanRequestStatus::APPROVED in approved and result = approvalStatus"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

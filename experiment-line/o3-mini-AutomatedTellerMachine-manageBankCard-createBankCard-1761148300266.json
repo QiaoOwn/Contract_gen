@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid)",
+        "precondition": "cardid > 0 and cardstatus.oclIsTypeOf(CardStatus) and catalog.oclIsTypeOf(CardCatalog) and password > 0 and balance >= 0",
+        "postcondition": "bankCard.oclIsUndefined() = true and let newCard:BankCard in newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance and result = true or bankCard.oclIsUndefined() = false and bankCard.CardID = cardid and result = false"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 47,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 58,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          bankCard:BankCard = BankCard.allInstance()->any(b | b.CardID = cardid)\n            \n            precondition:\n          cardid > 0 and cardstatus.oclIsTypeOf(CardStatus) and catalog.oclIsTypeOf(CardCatalog) and password > 0 and balance >= 0\n            \n            postcondition:\n          bankCard.oclIsUndefined() = true and let newCard:BankCard in newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance and result = true or bankCard.oclIsUndefined() = false and bankCard.CardID = cardid and result = false\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "cashDesk.oclIsUndefined() = false and cashDesk.IsOpened = true and (self.CurrentSale.oclIsUndefined() = true or self.CurrentSale.IsComplete = true)",
+        "postcondition": "let newSale:Sale in newSale.oclIsNew() and cashDesk.ContainedSales->includes(newSale) and newSale.BelongedCashDesk = cashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and self.CurrentSale = newSale and result = true"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n\tprecondition:\n\t\tcashDesk.oclIsUndefined() = false and\n\t\tcashDesk.IsOpened = true and\n\t\t(self.CurrentSale.oclIsUndefined() = true or\n\t\tself.CurrentSale.IsComplete = true)\n\tpostcondition:\n\t\tlet newSale: Sale in\n\t\tnewSale.oclIsNew() and\n\t\tcashDesk.ContainedSales->includes(newSale) and\n\t\tnewSale.BelongedCashDesk = cashDesk and\n\t\tnewSale.IsComplete = false and\n\t\tnewSale.IsReadytoPay = false and\n\t\tself.CurrentSale = newSale and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: cashDesk"
+        }
+      ]
+    }
+  }
+]

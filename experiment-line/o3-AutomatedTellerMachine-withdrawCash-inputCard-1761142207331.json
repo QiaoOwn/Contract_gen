@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(c | c.CardID = cardid)",
+        "precondition": "BankCard.allInstance()->isUnique(b:BankCard | b.CardID)",
+        "postcondition": "if card.oclIsUndefined() then CardIDValidated = false and InputCard = null and result = false else CardIDValidated = true and InputCard = card and result = true endif"
+      },
+      "model": "o3"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstance()->any(c|c.CardID = cardid)\n\tprecondition:\n\t\tBankCard.allInstance()->isUnique(b: BankCard|b.CardID)\n\tpostcondition:\n\t\tif card.oclIsUndefined() \n\t\tthen CardIDValidated = false and\n\t\tInputCard = null and\n\t\tresult = false \n\t\telse CardIDValidated = true and\n\t\tInputCard = card and\n\t\tresult = true \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

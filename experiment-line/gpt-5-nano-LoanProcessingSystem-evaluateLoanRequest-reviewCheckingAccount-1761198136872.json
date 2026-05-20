@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "ca:CheckingAccount = CurrentLoanRequest.RequestedCAHistory",
+        "precondition": "LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+        "postcondition": "result = ca"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {\n\tdefinition:\n\t\tca: CheckingAccount = CurrentLoanRequest.RequestedCAHistory\n\tprecondition:\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false\n\tpostcondition:\n\t\tresult = ca\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

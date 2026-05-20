@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardExists:Boolean = if BankCard.allInstance()->includes(foundCard) then true else false endif",
+        "precondition": "cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)",
+        "postcondition": "self.CardIDValidated = cardExists and self.InputCard = if cardExists then foundCard else null endif and result = self.CardIDValidated"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 65,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 79,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {\n          definition:\n          foundCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), cardExists:Boolean = if BankCard.allInstance()->includes(foundCard) then true else false endif\n            \n            precondition:\n          cardid.oclIsTypeOf(Integer) and BankCard.allInstance()->isUnique(o:BankCard | o.CardID)\n            \n            postcondition:\n          self.CardIDValidated = cardExists and self.InputCard = if cardExists then foundCard else null endif and result = self.CardIDValidated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

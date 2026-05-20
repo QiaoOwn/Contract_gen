@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newSubject:Subject = Subject.allInstance()->any(s | s.Name = name)",
+        "precondition": "Subject.allInstance()->excludes(newSubject)",
+        "postcondition": "let createdSubject:Subject in createdSubject.oclIsNew() and createdSubject.Name = name and Subject.allInstance()->includes(createdSubject) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageSubjectCRUDService::createSubject(name: String): Boolean {\n\tdefinition:\n\t\tnewSubject: Subject = Subject.allInstance()->any(s|s.Name = name)\n\tprecondition:\n\t\tSubject.allInstance()->excludes(newSubject)\n\tpostcondition:\n\t\tlet createdSubject: Subject in\n\t\tcreatedSubject.oclIsNew() and\n\t\tcreatedSubject.Name = name and\n\t\tSubject.allInstance()->includes(createdSubject) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

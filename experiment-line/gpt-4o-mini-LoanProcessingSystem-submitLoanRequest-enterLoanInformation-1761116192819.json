@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "requestLoanRequest:Integer = requestid, name:String = name, loanAmount:Real = loanamount, loanPurpose:String = loanpurpose, income:Real = income, phoneNumber:Integer = phonenumber, postalAddress:String = postaladdress, zipCode:Integer = zipcode, email:String = email, workReferences:String = workreferences, creditReferences:String = creditreferences, checkingAccountNumber:Integer = checkingaccountnumber, securityNumber:Integer = securitynumber, currentLoanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestLoanRequest)",
+        "precondition": "currentLoanRequest.oclIsUndefined() = bool",
+        "postcondition": "if currentLoanRequest.oclIsUndefined() then let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and newLoanRequest.RequestID = requestLoanRequest and newLoanRequest.Name = name and newLoanRequest.LoanAmount = loanAmount and newLoanRequest.LoanPurpose = loanPurpose and newLoanRequest.Income = income and newLoanRequest.PhoneNumber = phoneNumber and newLoanRequest.PostalAddress = postalAddress and newLoanRequest.ZipCode = zipCode and newLoanRequest.Email = email and newLoanRequest.WorkReferences = workReferences and newLoanRequest.CreditReferences = creditReferences and newLoanRequest.CheckingAccountNumber = checkingAccountNumber and newLoanRequest.SecurityNumber = securityNumber and LoanRequest.allInstance()->includes(newLoanRequest) and currentLoanRequest = newLoanRequest endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid: Integer,name: String,loanamount: Real,loanpurpose: String,income: Real,phonenumber: Integer,postaladdress: String,zipcode: Integer,email: String,workreferences: String,creditreferences: String,checkingaccountnumber: Integer,securitynumber: Integer): Boolean {\n\tdefinition:\n\t\trequestLoanRequest: Integer = requestid,\n\t\tname: String = name,\n\t\tloanAmount: Real = loanamount,\n\t\tloanPurpose: String = loanpurpose,\n\t\tincome: Real = income,\n\t\tphoneNumber: Integer = phonenumber,\n\t\tpostalAddress: String = postaladdress,\n\t\tzipCode: Integer = zipcode,\n\t\temail: String = email,\n\t\tworkReferences: String = workreferences,\n\t\tcreditReferences: String = creditreferences,\n\t\tcheckingAccountNumber: Integer = checkingaccountnumber,\n\t\tsecurityNumber: Integer = securitynumber,\n\t\tcurrentLoanRequest: LoanRequest = LoanRequest.allInstance()->any(o|o.RequestID = requestLoanRequest)\n\tprecondition:\n\t\tcurrentLoanRequest.oclIsUndefined() = bool\n\tpostcondition:\n\t\tif currentLoanRequest.oclIsUndefined() \n\t\tthen let newLoanRequest: LoanRequest in\n\t\tnewLoanRequest.oclIsNew() and\n\t\tnewLoanRequest.RequestID = requestLoanRequest and\n\t\tnewLoanRequest.Name = name and\n\t\tnewLoanRequest.LoanAmount = loanAmount and\n\t\tnewLoanRequest.LoanPurpose = loanPurpose and\n\t\tnewLoanRequest.Income = income and\n\t\tnewLoanRequest.PhoneNumber = phoneNumber and\n\t\tnewLoanRequest.PostalAddress = postalAddress and\n\t\tnewLoanRequest.ZipCode = zipCode and\n\t\tnewLoanRequest.Email = email and\n\t\tnewLoanRequest.WorkReferences = workReferences and\n\t\tnewLoanRequest.CreditReferences = creditReferences and\n\t\tnewLoanRequest.CheckingAccountNumber = checkingAccountNumber and\n\t\tnewLoanRequest.SecurityNumber = securityNumber and\n\t\tLoanRequest.allInstance()->includes(newLoanRequest) and\n\t\tcurrentLoanRequest = newLoanRequest \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), \\nnewAccount:LoanAccount = LoanAccount{LoanAccountID = loanaccountid, Balance = balance, Status = status}",
+        "precondition": "LoanAccount.allInstance()->excludes(existingAccount)",
+        "postcondition": "if existingAccount.oclIsUndefined() then LoanAccount.allInstance()->includes(newAccount) and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 147,
+          "msg": "mismatched input '{' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          existingAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid), \\nnewAccount:LoanAccount = LoanAccount{LoanAccountID = loanaccountid, Balance = balance, Status = status}\n            \n            precondition:\n          LoanAccount.allInstance()->excludes(existingAccount)\n            \n            postcondition:\n          if existingAccount.oclIsUndefined() then LoanAccount.allInstance()->includes(newAccount) and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: LoanAccount"
+        }
+      ]
+    }
+  }
+]

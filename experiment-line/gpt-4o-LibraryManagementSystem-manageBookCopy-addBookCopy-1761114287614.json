@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "book:Book = Book.allInstance()->any(b | b.CallNo = callNo), newCopy:BookCopy = BookCopy.oclIsNew()",
+        "precondition": "Book.allInstance()->includes(book) and BookCopy.allInstance()->excludes(newCopy)",
+        "postcondition": "BookCopy.allInstance()->includes(newCopy) and book.Copys->includes(newCopy) and newCopy.BookBelongs = book and newCopy.Barcode = barcode and newCopy.Location = location and newCopy.Status = CopyStatus::AVAILABLE and newCopy.IsReserved = false and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo: String,barcode: String,location: String): Boolean {\n\tdefinition:\n\t\tbook: Book = Book.allInstance()->any(b|b.CallNo = callNo),\n\t\tnewCopy: BookCopy = BookCopy.oclIsNew()\n\tprecondition:\n\t\tBook.allInstance()->includes(book) and\n\t\tBookCopy.allInstance()->excludes(newCopy)\n\tpostcondition:\n\t\tBookCopy.allInstance()->includes(newCopy) and\n\t\tbook.Copys->includes(newCopy) and\n\t\tnewCopy.BookBelongs = book and\n\t\tnewCopy.Barcode = barcode and\n\t\tnewCopy.Location = location and\n\t\tnewCopy.Status = CopyStatus::AVAILABLE and\n\t\tnewCopy.IsReserved = false and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BookCopy"
+        }
+      ]
+    }
+  }
+]

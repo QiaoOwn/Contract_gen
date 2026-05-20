@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "definition: existingSubject:Set(Subject) = Subject.allInstance()",
+        "precondition": "existingSubject->excludes(existingSubject->any(s | s.Name = name))",
+        "postcondition": "let newSubject:Subject in newSubject.oclIsNew() and newSubject.Name = name and Subject.allInstance()->includes(newSubject) and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'definition' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 37,
+          "msg": "missing 'precondition' at ':'"
+        },
+        {
+          "line": 3,
+          "column": 41,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 3,
+          "column": 51,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract ManageSubjectCRUDService::createSubject(name:String): Boolean {\n          definition:\n          definition: existingSubject:Set(Subject) = Subject.allInstance()\n            \n            precondition:\n          existingSubject->excludes(existingSubject->any(s | s.Name = name))\n            \n            postcondition:\n          let newSubject:Subject in newSubject.oclIsNew() and newSubject.Name = name and Subject.allInstance()->includes(newSubject) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

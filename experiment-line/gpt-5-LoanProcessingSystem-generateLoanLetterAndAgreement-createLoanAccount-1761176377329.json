@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "matchedAccounts:Set(LoanAccount) = LoanAccount.allInstance()->select(o:LoanAccount | o.LoanAccountID = loanaccountid), exists:Boolean = if matchedAccounts.isEmpty() = false then true else false endif",
+        "precondition": "loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and LoanAccount.allInstance()->isUnique(o:LoanAccount | o.LoanAccountID)",
+        "postcondition": "exists = true and result = false or exists = false and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 129,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          matchedAccounts:Set(LoanAccount) = LoanAccount.allInstance()->select(o:LoanAccount | o.LoanAccountID = loanaccountid), exists:Boolean = if matchedAccounts.isEmpty() = false then true else false endif\n            \n            precondition:\n          loanaccountid.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real) and LoanAccount.allInstance()->isUnique(o:LoanAccount | o.LoanAccountID)\n            \n            postcondition:\n          exists = true and result = false or exists = false and let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and LoanAccount.allInstance()->includes(newLoanAccount) and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

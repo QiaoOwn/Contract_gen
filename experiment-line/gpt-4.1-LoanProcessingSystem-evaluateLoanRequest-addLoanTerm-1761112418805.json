@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid)",
+        "precondition": "not self.CurrentLoanRequest.oclIsUndefined() and not loanTerm.oclIsUndefined()",
+        "postcondition": "self.CurrentLoanRequest.AttachedLoanTerms->includes(loanTerm) and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 14,
+          "msg": "mismatched input 'self' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid)\n            \n            precondition:\n          not self.CurrentLoanRequest.oclIsUndefined() and not loanTerm.oclIsUndefined()\n            \n            postcondition:\n          self.CurrentLoanRequest.AttachedLoanTerms->includes(loanTerm) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

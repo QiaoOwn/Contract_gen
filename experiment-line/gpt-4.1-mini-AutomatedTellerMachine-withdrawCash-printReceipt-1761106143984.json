@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = self.InputCard",
+        "precondition": "self.CardIDValidated = true and self.PasswordValidated = true and not(inputCard.oclIsUndefined())",
+        "postcondition": "(self.IsWithdraw = true and self.WithdrawedNumber = result) or (self.IsDeposit = true and self.DepositedNumber = result) or (result = 0)"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 90,
+          "msg": "mismatched input 'oclIsUndefined()' expecting {'self', 'result', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 70,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = self.InputCard\n            \n            precondition:\n          self.CardIDValidated = true and self.PasswordValidated = true and not(inputCard.oclIsUndefined())\n            \n            postcondition:\n          (self.IsWithdraw = true and self.WithdrawedNumber = result) or (self.IsDeposit = true and self.DepositedNumber = result) or (result = 0)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'getText')"
+        }
+      ]
+    }
+  }
+]

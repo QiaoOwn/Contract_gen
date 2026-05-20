@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode), itemExists:Boolean = if item.oclIsUndefined() = true then false else true endif",
+        "precondition": "barcode.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and price.oclIsTypeOf(Real) and stocknumber.oclIsTypeOf(Integer) and orderprice.oclIsTypeOf(Real) and Item.allInstance()->isUnique(o:Item | o.Barcode)",
+        "postcondition": "if itemExists then item.Name = name and item.Price = price and item.StockNumber = stocknumber and item.OrderPrice = orderprice and result = true else result = false endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageItemCRUDService::modifyItem(barcode: Integer,name: String,price: Real,stocknumber: Integer,orderprice: Real): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode),\n\t\titemExists: Boolean = if item.oclIsUndefined() = true \n\t\tthen false \n\t\telse true \n\t\tendif \n\tprecondition:\n\t\tbarcode.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tprice.oclIsTypeOf(Real) and\n\t\tstocknumber.oclIsTypeOf(Integer) and\n\t\torderprice.oclIsTypeOf(Real) and\n\t\tItem.allInstance()->isUnique(o: Item|o.Barcode)\n\tpostcondition:\n\t\tif itemExists \n\t\tthen item.Name = name and\n\t\titem.Price = price and\n\t\titem.StockNumber = stocknumber and\n\t\titem.OrderPrice = orderprice and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

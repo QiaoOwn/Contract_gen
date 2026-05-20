@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "pc:ProductCatalog = ProductCatalog.allInstance()->any(p | p.Id = id), isSuccess:Boolean = true",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String)",
+        "postcondition": "if pc.oclIsUndefined() = true then let newPc:ProductCatalog in newPc.oclIsNew() and ProductCatalog.allInstance()->includes(newPc) and newPc.Id = id and newPc.Name = name and result = isSuccess else result = isSuccess endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tpc: ProductCatalog = ProductCatalog.allInstance()->any(p|p.Id = id),\n\t\tisSuccess: Boolean = true\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String)\n\tpostcondition:\n\t\tif pc.oclIsUndefined() = true \n\t\tthen let newPc: ProductCatalog in\n\t\tnewPc.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(newPc) and\n\t\tnewPc.Id = id and\n\t\tnewPc.Name = name and\n\t\tresult = isSuccess \n\t\telse result = isSuccess \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

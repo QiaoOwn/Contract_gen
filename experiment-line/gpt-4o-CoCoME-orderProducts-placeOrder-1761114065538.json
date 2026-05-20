@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderEntries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries",
+        "precondition": "OrderProduct.allInstance()->includes(self.CurrentOrderProduct)",
+        "postcondition": "self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = orderEntries->sum(e:OrderEntry | e.SubAmount)"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 47,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 124,
+          "msg": "no viable alternative at input 'orderEntries->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          orderEntries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries\n            \n            precondition:\n          OrderProduct.allInstance()->includes(self.CurrentOrderProduct)\n            \n            postcondition:\n          self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and self.CurrentOrderProduct.Amount = orderEntries->sum(e:OrderEntry | e.SubAmount)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

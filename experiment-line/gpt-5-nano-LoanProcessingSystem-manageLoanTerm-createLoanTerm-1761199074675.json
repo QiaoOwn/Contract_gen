@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), itemId: Integer, content: String",
+        "precondition": "itemId.oclIsTypeOf(Integer) and content.oclIsTypeOf(String) and obs.size() <= 1",
+        "postcondition": "result:Boolean = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 16,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemId and o.Content = content), itemId: Integer, content: String\n            \n            precondition:\n          itemId.oclIsTypeOf(Integer) and content.oclIsTypeOf(String) and obs.size() <= 1\n            \n            postcondition:\n          result:Boolean = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: itemId"
+        }
+      ]
+    }
+  }
+]

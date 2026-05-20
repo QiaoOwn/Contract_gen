@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "sById:Set(Supplier) = Supplier.allInstance()->select(s:Supplier | s.Id = id), hasExisting:Boolean = sById.notEmpty()",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and Supplier.allInstance()->isUnique(s:Supplier | s.Id)",
+        "postcondition": "if hasExisting then result = true else let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name and result = true endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tsById: Set(Supplier) = Supplier.allInstance()->select(s: Supplier|s.Id = id),\n\t\thasExisting: Boolean = sById.notEmpty()\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tSupplier.allInstance()->isUnique(s: Supplier|s.Id)\n\tpostcondition:\n\t\tif hasExisting \n\t\tthen result = true \n\t\telse let newSupplier: Supplier in\n\t\tnewSupplier.oclIsNew() and\n\t\tSupplier.allInstance()->includes(newSupplier) and\n\t\tnewSupplier.Id = id and\n\t\tnewSupplier.Name = name and\n\t\tresult = true \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

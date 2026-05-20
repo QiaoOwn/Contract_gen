@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid)",
+        "precondition": "obs.oclIsUndefined() = false and currentLoanRequest.AttachedLoanTerms->includes(obs)",
+        "postcondition": "currentLoanRequest.AttachedLoanTerms->includes(obs) and result = obs"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid: Integer): LoanTerm {\n\tdefinition:\n\t\tobs: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = itemid)\n\tprecondition:\n\t\tobs.oclIsUndefined() = false and\n\t\tcurrentLoanRequest.AttachedLoanTerms->includes(obs)\n\tpostcondition:\n\t\tcurrentLoanRequest.AttachedLoanTerms->includes(obs) and\n\t\tresult = obs\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: currentLoanRequest"
+        }
+      ]
+    }
+  }
+]

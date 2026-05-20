@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "result = true and ((cashDesk.oclIsUndefined() = false and CashDesk.allInstance()->includes(cashDesk)) or (cashDesk.oclIsUndefined() = true and let newCashDesk:CashDesk in newCashDesk.oclIsNew() and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and CashDesk.allInstance()->includes(newCashDesk)))"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 112,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 153,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 168,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 341,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)\n            \n            postcondition:\n          result = true and ((cashDesk.oclIsUndefined() = false and CashDesk.allInstance()->includes(cashDesk)) or (cashDesk.oclIsUndefined() = true and let newCashDesk:CashDesk in newCashDesk.oclIsNew() and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and CashDesk.allInstance()->includes(newCashDesk)))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

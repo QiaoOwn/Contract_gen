@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "authorBooks:Set(Book) = Book.allInstance()->select(b | b.Author = authorname) \n authorBooks.isEmpty() = false",
+        "postcondition": "let result:Set(Book) in Book.allInstance()->includes(result) and result = authorBooks"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 21,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 4,
+          "column": 25,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 4,
+          "column": 32,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract SearchBook::searchBookByAuthor(authorname:String): Set(Book) {\n          \n            precondition:\n          authorBooks:Set(Book) = Book.allInstance()->select(b | b.Author = authorname) \n authorBooks.isEmpty() = false\n            \n            postcondition:\n          let result:Set(Book) in Book.allInstance()->includes(result) and result = authorBooks\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: authorBooks"
+        }
+      ]
+    }
+  }
+]

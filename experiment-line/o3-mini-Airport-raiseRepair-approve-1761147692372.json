@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "r:Repair = Repair.allInstance()->any(o | o.Id = rid), s:Staff = Staff.allInstance()->any(o | o.Id = sid)",
+        "precondition": "r.oclIsUndefined() = false and s.oclIsUndefined() = false and (reject = true or reject = false and (r.Process = 0 and s.Role = 1 or r.Process = 1 and s.Role = 2 or r.Process = 2 and s.Role = 3))",
+        "postcondition": "let h:ApprovalHistory in h.oclIsNew() and r.History->includes(h) and ((reject = true and r.Process = 5) or (reject = false and r.Process = 0 and s.Role = 1 and r.Process = 1) or (reject = false and r.Process = 1 and s.Role = 2 and r.Process = 2) or (reject = false and r.Process = 2 and s.Role = 3 and r.Process = 3)) and result = h"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 114,
+          "msg": "missing ')' at 'or'"
+        },
+        {
+          "line": 9,
+          "column": 326,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          r:Repair = Repair.allInstance()->any(o | o.Id = rid), s:Staff = Staff.allInstance()->any(o | o.Id = sid)\n            \n            precondition:\n          r.oclIsUndefined() = false and s.oclIsUndefined() = false and (reject = true or reject = false and (r.Process = 0 and s.Role = 1 or r.Process = 1 and s.Role = 2 or r.Process = 2 and s.Role = 3))\n            \n            postcondition:\n          let h:ApprovalHistory in h.oclIsNew() and r.History->includes(h) and ((reject = true and r.Process = 5) or (reject = false and r.Process = 0 and s.Role = 1 and r.Process = 1) or (reject = false and r.Process = 1 and s.Role = 2 and r.Process = 2) or (reject = false and r.Process = 2 and s.Role = 3 and r.Process = 3)) and result = h\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

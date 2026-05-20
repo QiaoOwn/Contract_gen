@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newBook:Book = Book.allInstance()->any(o | o.ISBn = isbn), isCreated:Boolean = if newBook.oclIsNew() then true else false endif",
+        "precondition": "Book.allInstance()->excludes(newBook)",
+        "postcondition": "let newBook:Book in newBook.oclIsNew(), Book.allInstance()->includes(newBook), newBook.CallNo = callno, newBook.Title = title, newBook.Edition = edition, newBook.Author = author, newBook.Publisher = publisher, newBook.Description = description, newBook.ISBn = isbn, newBook.CopyNum = copynum, result = isCreated"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 48,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBookCRUDService::createBook(callno:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String,copynum:Integer): Boolean {\n          definition:\n          newBook:Book = Book.allInstance()->any(o | o.ISBn = isbn), isCreated:Boolean = if newBook.oclIsNew() then true else false endif\n            \n            precondition:\n          Book.allInstance()->excludes(newBook)\n            \n            postcondition:\n          let newBook:Book in newBook.oclIsNew(), Book.allInstance()->includes(newBook), newBook.CallNo = callno, newBook.Title = title, newBook.Edition = edition, newBook.Author = author, newBook.Publisher = publisher, newBook.Description = description, newBook.ISBn = isbn, newBook.CopyNum = copynum, result = isCreated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

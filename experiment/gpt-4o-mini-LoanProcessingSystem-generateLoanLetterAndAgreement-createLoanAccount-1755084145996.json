@@ -1,0 +1,245 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanAccountId), loanAccount:LoanAccount = if loanAccountExists then LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId) else LoanAccount() endif",
+        "precondition": "LoanAccount.allInstance()->excludes(loanAccountId) = not loanAccountExists",
+        "postcondition": "loanAccount.LoanAccountID = loanAccountId and loanAccount.Balance = balance and loanAccount.Status = status and result = loanAccountExists or loanAccountExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 67,
+          "msg": "extraneous input 'loanAccountExists' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanAccountId), loanAccount:LoanAccount = if loanAccountExists then LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId) else LoanAccount() endif\n            \n            precondition:\n          LoanAccount.allInstance()->excludes(loanAccountId) = not loanAccountExists\n            \n            postcondition:\n          loanAccount.LoanAccountID = loanAccountId and loanAccount.Balance = balance and loanAccount.Status = status and result = loanAccountExists or loanAccountExists\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanAccountId), loanAccount:LoanAccount = if loanAccountExists then LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId) else LoanAccount() endif",
+        "precondition": "LoanAccount.allInstance()->excludes(loanAccountId) and loanAccountExists = LoanAccount.allInstance()->includes(loanAccountId)",
+        "postcondition": "result = loanAccountExists and (loanAccount.LoanAccountID = loanAccountId and loanAccount.Balance = balance and loanAccount.Status = status)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccountExists: Boolean = LoanAccount.allInstance()->includes(loanAccountId),\n\t\tloanAccount: LoanAccount = if loanAccountExists \n\t\tthen LoanAccount.allInstance()->any(o|o.LoanAccountID = loanAccountId) \n\t\telse LoanAccount() \n\t\tendif \n\tprecondition:\n\t\tLoanAccount.allInstance()->excludes(loanAccountId) and\n\t\tloanAccountExists = LoanAccount.allInstance()->includes(loanAccountId)\n\tpostcondition:\n\t\tresult = loanAccountExists and\n\t\t(loanAccount.LoanAccountID = loanAccountId and\n\t\tloanAccount.Balance = balance and\n\t\tloanAccount.Status = status)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: loanAccountId"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanAccountId), loanAccount:LoanAccount = if loanAccountExists then LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId) else LoanAccount() endif",
+        "precondition": "LoanAccount.allInstance()->excludes(loanAccountId)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and loanAccountExists = LoanAccount.allInstance()->includes(loanAccountId) and (if loanAccountExists then result = true else loanAccount.LoanAccountID = loanAccountId and loanAccount.Balance = balance and loanAccount.Status = status end if)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 303,
+          "msg": "mismatched input 'end' expecting 'endif'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanAccountId), loanAccount:LoanAccount = if loanAccountExists then LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId) else LoanAccount() endif\n            \n            precondition:\n          LoanAccount.allInstance()->excludes(loanAccountId)\n            \n            postcondition:\n          let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and loanAccountExists = LoanAccount.allInstance()->includes(loanAccountId) and (if loanAccountExists then result = true else loanAccount.LoanAccountID = loanAccountId and loanAccount.Balance = balance and loanAccount.Status = status end if)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = if loanAccountExists then LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid) else LoanAccount() endif",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and loanAccountExists = LoanAccount.allInstance()->includes(loanaccountid) and (loanAccountExists = false and loanAccount.LoanAccountID = loanaccountid and loanAccount.Balance = balance and loanAccount.Status = status) and result = loanAccountExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccountExists: Boolean = LoanAccount.allInstance()->includes(loanaccountid),\n\t\tloanAccount: LoanAccount = if loanAccountExists \n\t\tthen LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid) \n\t\telse LoanAccount() \n\t\tendif \n\tprecondition:\n\t\tLoanAccount.allInstance()->excludes(loanaccountid)\n\tpostcondition:\n\t\tlet newLoanAccount: LoanAccount in\n\t\tnewLoanAccount.oclIsNew() and\n\t\tloanAccountExists = LoanAccount.allInstance()->includes(loanaccountid) and\n\t\t(loanAccountExists = false and\n\t\tloanAccount.LoanAccountID = loanaccountid and\n\t\tloanAccount.Balance = balance and\n\t\tloanAccount.Status = status) and\n\t\tresult = loanAccountExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and loanAccountExists = LoanAccount.allInstance()->includes(loanaccountid) and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = loanAccountExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccountExists: Boolean = LoanAccount.allInstance()->includes(loanaccountid),\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid)\n\tprecondition:\n\t\tLoanAccount.allInstance()->excludes(loanaccountid)\n\tpostcondition:\n\t\tlet newLoanAccount: LoanAccount in\n\t\tnewLoanAccount.oclIsNew() and\n\t\tloanAccountExists = LoanAccount.allInstance()->includes(loanaccountid) and\n\t\t(loanAccountExists = false and\n\t\tnewLoanAccount.LoanAccountID = loanaccountid and\n\t\tnewLoanAccount.Balance = balance and\n\t\tnewLoanAccount.Status = status) and\n\t\tresult = loanAccountExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = loanAccountExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccountExists: Boolean = LoanAccount.allInstance()->includes(loanaccountid),\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid)\n\tprecondition:\n\t\tLoanAccount.allInstance()->excludes(loanaccountid)\n\tpostcondition:\n\t\tlet newLoanAccount: LoanAccount in\n\t\tnewLoanAccount.oclIsNew() and\n\t\t(loanAccountExists = false and\n\t\tnewLoanAccount.LoanAccountID = loanaccountid and\n\t\tnewLoanAccount.Balance = balance and\n\t\tnewLoanAccount.Status = status) and\n\t\tresult = loanAccountExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = loanAccountExists"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccountExists: Boolean = LoanAccount.allInstance()->includes(loanaccountid),\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid)\n\tprecondition:\n\t\tLoanAccount.allInstance()->excludes(loanaccountid)\n\tpostcondition:\n\t\tlet newLoanAccount: LoanAccount in\n\t\tnewLoanAccount.oclIsNew() and\n\t\t(loanAccountExists = false and\n\t\tnewLoanAccount.LoanAccountID = loanaccountid and\n\t\tnewLoanAccount.Balance = balance and\n\t\tnewLoanAccount.Status = status) and\n\t\tresult = loanAccountExists\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = (loanAccountExists or not newLoanAccount.oclIsNew())"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 236,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 262,
+          "msg": "mismatched input 'newLoanAccount' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)\n            \n            precondition:\n          LoanAccount.allInstance()->excludes(loanaccountid)\n            \n            postcondition:\n          let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = (loanAccountExists or not newLoanAccount.oclIsNew())\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = loanAccountExists or newLoanAccount.oclIsNew()"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid: Integer,balance: Real,status: LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n\tdefinition:\n\t\tloanAccountExists: Boolean = LoanAccount.allInstance()->includes(loanaccountid),\n\t\tloanAccount: LoanAccount = LoanAccount.allInstance()->any(o|o.LoanAccountID = loanaccountid)\n\tprecondition:\n\t\tLoanAccount.allInstance()->excludes(loanaccountid)\n\tpostcondition:\n\t\tlet newLoanAccount: LoanAccount in\n\t\tnewLoanAccount.oclIsNew() and\n\t\t(loanAccountExists = false and\n\t\tnewLoanAccount.LoanAccountID = loanaccountid and\n\t\tnewLoanAccount.Balance = balance and\n\t\tnewLoanAccount.Status = status) and\n\t\tresult = loanAccountExists or\n\t\tnewLoanAccount.oclIsNew()\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountExists:Boolean = LoanAccount.allInstance()->includes(loanaccountid), loanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanaccountid)",
+        "precondition": "LoanAccount.allInstance()->excludes(loanaccountid)",
+        "postcondition": "let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and (loanAccountExists = false and newLoanAccount.LoanAccountID = loanaccountid and newLoanAccount.Balance = balance and newLoanAccount.Status = status) and result = loanAccountExists or LoanAccount.allInstance()->includes(newLoanAccount)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content)",
+        "postcondition": "if obs.isEmpty() = true then let lt:LoanTerm in lt.oclIsNew() and lt.ItemID = itemid and lt.Content = content and LoanTerm.allInstance()->includes(lt) and result = true else result = false endif"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 13,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 4,
+          "column": 17,
+          "msg": "missing '{' at '('"
+        },
+        {
+          "line": 4,
+          "column": 28,
+          "msg": "mismatched input '=' expecting {'}', ','}"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          \n            precondition:\n          obs:Set(LoanTerm) = LoanTerm.allInstance()->select(o | o.ItemID = itemid and o.Content = content)\n            \n            postcondition:\n          if obs.isEmpty() = true then let lt:LoanTerm in lt.oclIsNew() and lt.ItemID = itemid and lt.Content = content and LoanTerm.allInstance()->includes(lt) and result = true else result = false endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: obs"
+        }
+      ]
+    }
+  }
+]

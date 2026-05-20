@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "passwordValidated:Boolean = if PasswordValidated then true else false, cardIdValidated:Boolean = if CardIDValidated then true else false, inputObs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardStatus = CardStatus.NORMAL and o.Password = PasswordValidated and o.Name = InputCard.Name)",
+        "precondition": "CardIDValidated = true and PasswordValidated = true and inputObs.isEmpty() = false",
+        "postcondition": "let card:BankCard in card = inputObs->any(o | o.Name = InputCard.Name) and card.Balance = result"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 79,
+          "msg": "missing 'endif' at ','"
+        },
+        {
+          "line": 3,
+          "column": 146,
+          "msg": "missing 'endif' at ','"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::checkBalance(): Real {\n          definition:\n          passwordValidated:Boolean = if PasswordValidated then true else false, cardIdValidated:Boolean = if CardIDValidated then true else false, inputObs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardStatus = CardStatus.NORMAL and o.Password = PasswordValidated and o.Name = InputCard.Name)\n            \n            precondition:\n          CardIDValidated = true and PasswordValidated = true and inputObs.isEmpty() = false\n            \n            postcondition:\n          let card:BankCard in card = inputObs->any(o | o.Name = InputCard.Name) and card.Balance = result\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CardStatus"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "let newLibrarian:Librarian in newLibrarian.oclIsNew()",
+        "precondition": "Librarian.allInstance()->forAll(l | l.LibrarianID <> librarianid)",
+        "postcondition": "Librarian.allInstance()->includes(newLibrarian) and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 37,
+          "msg": "mismatched input 'in' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ManageLibrarianCRUDService::createLibrarian(librarianid:String,name:String,password:String): Boolean {\n          definition:\n          let newLibrarian:Librarian in newLibrarian.oclIsNew()\n            \n            precondition:\n          Librarian.allInstance()->forAll(l | l.LibrarianID <> librarianid)\n            \n            postcondition:\n          Librarian.allInstance()->includes(newLibrarian) and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: newLibrarian"
+        }
+      ]
+    }
+  }
+]

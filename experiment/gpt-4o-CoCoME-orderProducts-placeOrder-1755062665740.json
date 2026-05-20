@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "let amount:Real in amount = obs->sum(o:OrderEntry|o.SubAmount) and CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 43,
+          "msg": "no viable alternative at input 'obs->sum'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          let amount:Real in amount = obs->sum(o:OrderEntry|o.SubAmount) and CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "let amount:Real in amount = obs->collect(o:OrderEntry|o.SubAmount)->sum() and CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 76,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          let amount:Real in amount = obs->collect(o:OrderEntry|o.SubAmount)->sum() and CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o:OrderEntry|o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 122,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o:OrderEntry|o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount)->sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount)->sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o : o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 102,
+          "msg": "mismatched input '.' expecting {',', '|'}"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o : o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 113,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()\n            \n            precondition:\n          OrderProduct.allInstance()->includes(CurrentOrderProduct)\n            \n            postcondition:\n          CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(OrderEntry) = CurrentOrderProduct.ContainedEntries, amount:Real = obs->collect(o | o.SubAmount).sum()",
+        "precondition": "OrderProduct.allInstance()->includes(CurrentOrderProduct)",
+        "postcondition": "CurrentOrderProduct.Amount = amount and CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true"
+      },
+      "model": "gpt-4o"
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "caHistory:CheckingAccount = self.CurrentLoanRequest.RequestedCAHistory, creditHistory:CreditHistory = self.CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(self.CurrentLoanRequest) and caHistory.oclIsUndefined() = false and creditHistory.oclIsUndefined() = false and self.CurrentLoanRequest.CreditScore = 100 and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "self.CurrentLoanRequest.RequestedCAHistory = caHistory and result = self.CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 99,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n          definition:\n          caHistory:CheckingAccount = self.CurrentLoanRequest.RequestedCAHistory, creditHistory:CreditHistory = self.CurrentLoanRequest.RequestedCreditHistory\n            \n            precondition:\n          self.CurrentLoanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(self.CurrentLoanRequest) and caHistory.oclIsUndefined() = false and creditHistory.oclIsUndefined() = false and self.CurrentLoanRequest.CreditScore = 100 and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n            \n            postcondition:\n          self.CurrentLoanRequest.RequestedCAHistory = caHistory and result = self.CurrentLoanRequest.CreditScore\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "card:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), isCardFound:Boolean = if card.oclIsUndefined() = false then true else false endif",
+        "precondition": "card.oclIsUndefined() = false and BankCard.allInstance()->includes(card) or card.oclIsUndefined() = true and BankCard.allInstance()->excludes(card)",
+        "postcondition": "InputCard = card and CardIDValidated = isCardFound and result = isCardFound"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid),\n\t\tisCardFound: Boolean = if card.oclIsUndefined() = false \n\t\tthen true \n\t\telse false \n\t\tendif \n\tprecondition:\n\t\tcard.oclIsUndefined() = false and\n\t\tBankCard.allInstance()->includes(card) or\n\t\tcard.oclIsUndefined() = true and\n\t\tBankCard.allInstance()->excludes(card)\n\tpostcondition:\n\t\tInputCard = card and\n\t\tCardIDValidated = isCardFound and\n\t\tresult = isCardFound\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

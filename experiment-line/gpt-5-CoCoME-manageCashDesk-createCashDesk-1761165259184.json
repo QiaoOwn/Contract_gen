@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cds:Set(CashDesk) = CashDesk.allInstance()->select(o | o.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean)",
+        "postcondition": "if cds.isEmpty() = true then let newCd:CashDesk in newCd.oclIsNew() and CashDesk.allInstance()->includes(newCd) and newCd.Id = id and newCd.Name = name and newCd.IsOpened = isopened and result = true else result = false endif"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id: Integer,name: String,isopened: Boolean): Boolean {\n\tdefinition:\n\t\tcds: Set(CashDesk) = CashDesk.allInstance()->select(o|o.Id = id)\n\tprecondition:\n\t\tid.oclIsTypeOf(Integer) and\n\t\tname.oclIsTypeOf(String) and\n\t\tisopened.oclIsTypeOf(Boolean)\n\tpostcondition:\n\t\tif cds.isEmpty() = true \n\t\tthen let newCd: CashDesk in\n\t\tnewCd.oclIsNew() and\n\t\tCashDesk.allInstance()->includes(newCd) and\n\t\tnewCd.Id = id and\n\t\tnewCd.Name = name and\n\t\tnewCd.IsOpened = isopened and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

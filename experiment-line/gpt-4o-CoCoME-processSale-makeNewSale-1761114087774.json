@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "CurrentCashDeskes:Set(CashDesk) = CashDesk.allInstance()->select(c | c = self.currentCashDesk)",
+        "precondition": "self.currentCashDesk.oclIsUndefined() = false and self.currentCashDesk.IsOpened = true and self.currentCashDesk.ContainedSales->isEmpty() or CurrentSale.IsComplete = true",
+        "postcondition": "let newSale:Sale = Sale.allInstance()->any(s | s.oclIsNew()) in newSale.oclIsNew()  and newSale.IsReadytoPay = false and newSale.IsReadytoPay = false and CurrentSaleLine = newSale"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 138,
+          "msg": "no viable alternative at input 'self.currentCashDesk.ContainedSales->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          definition:\n          CurrentCashDeskes:Set(CashDesk) = CashDesk.allInstance()->select(c | c = self.currentCashDesk)\n            \n            precondition:\n          self.currentCashDesk.oclIsUndefined() = false and self.currentCashDesk.IsOpened = true and self.currentCashDesk.ContainedSales->isEmpty() or CurrentSale.IsComplete = true\n            \n            postcondition:\n          let newSale:Sale = Sale.allInstance()->any(s | s.oclIsNew()) in newSale.oclIsNew()  and newSale.IsReadytoPay = false and newSale.IsReadytoPay = false and CurrentSaleLine = newSale\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

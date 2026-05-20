@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid)",
+        "precondition": "cardid.oclIsTypeOf(Integer) and cardstatus.oclIsTypeOf(CardStatus) and catalog.oclIsTypeOf(CardCatalog) and password.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real)",
+        "postcondition": "let newCard:BankCard in if obs->isEmpty() then newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance else obs->forAll(o | o.CardStatus = cardstatus and o.Catalog = catalog and o.Password = password and o.Balance = balance) endif"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 42,
+          "msg": "no viable alternative at input 'obs->isEmpty()'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {\n          definition:\n          obs:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = cardid)\n            \n            precondition:\n          cardid.oclIsTypeOf(Integer) and cardstatus.oclIsTypeOf(CardStatus) and catalog.oclIsTypeOf(CardCatalog) and password.oclIsTypeOf(Integer) and balance.oclIsTypeOf(Real)\n            \n            postcondition:\n          let newCard:BankCard in if obs->isEmpty() then newCard.oclIsNew() and BankCard.allInstance()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance else obs->forAll(o | o.CardStatus = cardstatus and o.Catalog = catalog and o.Password = password and o.Balance = balance) endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

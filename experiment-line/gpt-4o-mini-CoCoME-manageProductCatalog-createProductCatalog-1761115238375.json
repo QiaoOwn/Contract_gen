@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "prodCat:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = prodCat.oclIsUndefined()",
+        "precondition": "prodCat.oclIsUndefined() = isNew and ProductCatalog.allInstance()->includes(prodCat)",
+        "postcondition": "if isNew then let newProdCat:ProductCatalog in newProdCat.oclIsNew() and ProductCatalog.allInstance()->includes(newProdCat) and newProdCat.Id = id and newProdCat.Name = name else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tprodCat: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id),\n\t\tisNew: Boolean = prodCat.oclIsUndefined()\n\tprecondition:\n\t\tprodCat.oclIsUndefined() = isNew and\n\t\tProductCatalog.allInstance()->includes(prodCat)\n\tpostcondition:\n\t\tif isNew \n\t\tthen let newProdCat: ProductCatalog in\n\t\tnewProdCat.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(newProdCat) and\n\t\tnewProdCat.Id = id and\n\t\tnewProdCat.Name = name \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

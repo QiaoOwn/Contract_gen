@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and ProductCatalog.allInstance()->includes(pc) or pc.oclIsUndefined() = true",
+        "postcondition": "pc.oclIsUndefined() = false and result = true or pc.oclIsUndefined() = true and let newPC:ProductCatalog in newPC.oclIsNew() and In the post condition, ProductCatalog.allInstance()->includes(newPC) and newPC.Id = id and newPC.Name = name and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 90,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 99,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          pc:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and ProductCatalog.allInstance()->includes(pc) or pc.oclIsUndefined() = true\n            \n            postcondition:\n          pc.oclIsUndefined() = false and result = true or pc.oclIsUndefined() = true and let newPC:ProductCatalog in newPC.oclIsNew() and In the post condition, ProductCatalog.allInstance()->includes(newPC) and newPC.Id = id and newPC.Name = name and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "staff:Staff = Staff.allInstance()->any(o:Staff | o.Id = id), boss:Staff = Staff.allInstance()->any(o:Staff | o.Id = bossid), isNew:Boolean = if staff.oclIsUndefined() = true then true else false endif",
+        "precondition": "boss.oclIsUndefined() = false and Staff.allInstance()->includes(boss) and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and pswd.oclIsTypeOf(String) and phone.oclIsTypeOf(String) and role.oclIsTypeOf(Integer) and bossid.oclIsTypeOf(Integer) and Staff.allInstance()->isUnique(o:Staff | o.Id)",
+        "postcondition": "(let newStaff:Staff in newStaff.oclIsNew() and isNew = true and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss or isNew = false) and result = isNew"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 284,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {\n          definition:\n          staff:Staff = Staff.allInstance()->any(o:Staff | o.Id = id), boss:Staff = Staff.allInstance()->any(o:Staff | o.Id = bossid), isNew:Boolean = if staff.oclIsUndefined() = true then true else false endif\n            \n            precondition:\n          boss.oclIsUndefined() = false and Staff.allInstance()->includes(boss) and id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and pswd.oclIsTypeOf(String) and phone.oclIsTypeOf(String) and role.oclIsTypeOf(Integer) and bossid.oclIsTypeOf(Integer) and Staff.allInstance()->isUnique(o:Staff | o.Id)\n            \n            postcondition:\n          (let newStaff:Staff in newStaff.oclIsNew() and isNew = true and Staff.allInstance()->includes(newStaff) and newStaff.Id = id and newStaff.Name = name and newStaff.Password = pswd and newStaff.Phone = phone and newStaff.Role = role and newStaff.Boss = boss or isNew = false) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

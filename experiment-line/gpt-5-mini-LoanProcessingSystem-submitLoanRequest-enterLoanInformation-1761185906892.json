@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "lr:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), success:Boolean = true",
+        "precondition": "true",
+        "postcondition": "((lr.oclIsUndefined() = true and let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(newLoanRequest) and newLoanRequest.RequestID = requestid and newLoanRequest.Name = name and newLoanRequest.LoanAmount = loanamount and newLoanRequest.LoanPurpose = loanpurpose and newLoanRequest.Income = income and newLoanRequest.PhoneNumber = phonenumber and newLoanRequest.PostalAddress = postaladdress and newLoanRequest.ZipCode = zipcode and newLoanRequest.Email = email and newLoanRequest.WorkReferences = workreferences and newLoanRequest.CreditReferences = creditreferences and newLoanRequest.CheckingAccountNumber = checkingaccountnumber and newLoanRequest.SecurityNumber = securitynumber and self.CurrentLoanRequest = newLoanRequest) or (lr.oclIsUndefined() = false and self.CurrentLoanRequest = lr)) and result = success"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 43,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 61,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 159,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          lr:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), success:Boolean = true\n            \n            precondition:\n          true\n            \n            postcondition:\n          ((lr.oclIsUndefined() = true and let newLoanRequest:LoanRequest in newLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(newLoanRequest) and newLoanRequest.RequestID = requestid and newLoanRequest.Name = name and newLoanRequest.LoanAmount = loanamount and newLoanRequest.LoanPurpose = loanpurpose and newLoanRequest.Income = income and newLoanRequest.PhoneNumber = phonenumber and newLoanRequest.PostalAddress = postaladdress and newLoanRequest.ZipCode = zipcode and newLoanRequest.Email = email and newLoanRequest.WorkReferences = workreferences and newLoanRequest.CreditReferences = creditreferences and newLoanRequest.CheckingAccountNumber = checkingaccountnumber and newLoanRequest.SecurityNumber = securitynumber and self.CurrentLoanRequest = newLoanRequest) or (lr.oclIsUndefined() = false and self.CurrentLoanRequest = lr)) and result = success\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

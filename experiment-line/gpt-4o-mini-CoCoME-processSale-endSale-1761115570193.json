@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = SalesLineItem.allInstance()->select(o | o.BelongedSale = CurrentSale)->sum(o | o.Subamount) and CurrentSale.IsReadytoPay = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 100,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = SalesLineItem.allInstance()->select(o | o.BelongedSale = CurrentSale)->sum(o | o.Subamount) and CurrentSale.IsReadytoPay = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

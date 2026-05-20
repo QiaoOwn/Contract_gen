@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid)",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and LoanTerm.allInstance()->exists(t | t.ItemID = termid) and CurrentLoanRequest.AttachedLoanTerms->forAll(lt | lt.ItemID <> termid)",
+        "postcondition": "let term:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = termid), a: Boolean = CurrentLoanRequest.AttachedLoanTerms->includes(term), b: Boolean = CurrentLoanRequest.AttachedLoanTerms->includes(term) in a = b and result = a"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid: Integer): Boolean {\n\tdefinition:\n\t\tterm: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = termid)\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tLoanTerm.allInstance()->exists(t|t.ItemID = termid) and\n\t\tCurrentLoanRequest.AttachedLoanTerms->forAll(lt|lt.ItemID<>termid)\n\tpostcondition:\n\t\tlet term: LoanTerm = LoanTerm.allInstance()->any(o|o.ItemID = termid),a: Boolean = CurrentLoanRequest.AttachedLoanTerms->includes(term),b: Boolean = CurrentLoanRequest.AttachedLoanTerms->includes(term) in\n\t\ta = b and\n\t\tresult = a\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

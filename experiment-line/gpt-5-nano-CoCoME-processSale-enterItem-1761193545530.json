@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and item.oclIsUndefined() = false and item.StockNumber >= quantity and quantity > 0",
+        "postcondition": "let newLine:SalesLineItem in newLine.oclIsNew() and CurrentSaleLine = newLine and CurrentSale.ContainedSalesLine->includes(newLine) and newLine.BelongedSale = CurrentSale and newLine.BelongedItem = item and newLine.Quantity = quantity and newLine.Subamount = newLine.BelongedItem.Price * quantity and item.StockNumber = item.StockNumber - quantity"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::enterItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(o|o.Barcode = barcode)\n\tprecondition:\n\t\tCurrentSale.oclIsUndefined() = false and\n\t\tCurrentSale.IsComplete = false and\n\t\titem.oclIsUndefined() = false and\n\t\titem.StockNumber>=quantity and\n\t\tquantity>0\n\tpostcondition:\n\t\tlet newLine: SalesLineItem in\n\t\tnewLine.oclIsNew() and\n\t\tCurrentSaleLine = newLine and\n\t\tCurrentSale.ContainedSalesLine->includes(newLine) and\n\t\tnewLine.BelongedSale = CurrentSale and\n\t\tnewLine.BelongedItem = item and\n\t\tnewLine.Quantity = quantity and\n\t\tnewLine.Subamount = newLine.BelongedItem.Price*quantity and\n\t\titem.StockNumber = item.StockNumber-quantity\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

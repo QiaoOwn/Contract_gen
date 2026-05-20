@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "u:User = User.allInstance()->any(x| x.UserID=uid), bc:BookCopy = BookCopy.allInstance()->any(x| x.Barcode=barcode)",
+        "precondition": "u.oclIsUndefined()=false and bc.oclIsUndefined()=false and u.BorrowStatus=BorrowStatus::NORMAL and bc.IsReserved=false and bc.Status=CopyStatus::AVAILABLE",
+        "postcondition": "let newRes:Reserve in newRes.oclIsNew() and Reserve.allInstance()->includes(newRes) and newRes.IsReserveClosed=false and newRes.ReserveDate=ThirdPartyServices.getCurrentDate() and newRes.ReservedUser=u and newRes.ReservedCopy=bc and bc.IsReserved=true and result=true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 183,
+          "msg": "mismatched input '(' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {\n          definition:\n          u:User = User.allInstance()->any(x| x.UserID=uid), bc:BookCopy = BookCopy.allInstance()->any(x| x.Barcode=barcode)\n            \n            precondition:\n          u.oclIsUndefined()=false and bc.oclIsUndefined()=false and u.BorrowStatus=BorrowStatus::NORMAL and bc.IsReserved=false and bc.Status=CopyStatus::AVAILABLE\n            \n            postcondition:\n          let newRes:Reserve in newRes.oclIsNew() and Reserve.allInstance()->includes(newRes) and newRes.IsReserveClosed=false and newRes.ReserveDate=ThirdPartyServices.getCurrentDate() and newRes.ReservedUser=u and newRes.ReservedCopy=bc and bc.IsReserved=true and result=true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ThirdPartyServices"
+        }
+      ]
+    }
+  }
+]

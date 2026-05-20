@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentStore:Store = Store.allInstance()->select(s | s.Id = storeID)->any()",
+        "precondition": "currentStore.oclIsUndefined() = bool and Store.allInstance()->includes(currentStore)",
+        "postcondition": "Store.allInstance()->includes(currentStore) and currentStore.IsOpened = true and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 78,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openStore(storeID:Integer): Boolean {\n          definition:\n          currentStore:Store = Store.allInstance()->select(s | s.Id = storeID)->any()\n            \n            precondition:\n          currentStore.oclIsUndefined() = bool and Store.allInstance()->includes(currentStore)\n            \n            postcondition:\n          Store.allInstance()->includes(currentStore) and currentStore.IsOpened = true and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

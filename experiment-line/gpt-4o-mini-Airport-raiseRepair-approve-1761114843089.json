@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allNewInstance()",
+        "precondition": "repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, reject = true",
+        "postcondition": "repair.Process = 5 and result = approvalHistory, repair.Process = 1 and result = approvalHistory, repair.Process = 2 and result = approvalHistory, repair.Process = 3 and result = approvalHistory"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 189,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 57,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          repair:Repair = Repair.allInstance()->any(o | o.Id = rid), staff:Staff = Staff.allInstance()->any(o | o.Id = sid), approvalHistory:ApprovalHistory = ApprovalHistory.allNewInstance()\n            \n            precondition:\n          repair.oclIsUndefined() = bool, staff.oclIsUndefined() = bool, reject = true\n            \n            postcondition:\n          repair.Process = 5 and result = approvalHistory, repair.Process = 1 and result = approvalHistory, repair.Process = 2 and result = approvalHistory, repair.Process = 3 and result = approvalHistory\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: ApprovalHistory"
+        }
+      ]
+    }
+  }
+]

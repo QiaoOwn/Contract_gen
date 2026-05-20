@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "reservedCopy:BookCopy = Reserved.allInstance()->any(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), reservation:Reserve = reservedCopy.ReservationRecord->any(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode)",
+        "precondition": "reservation.oclIsUndefined() = bool",
+        "postcondition": "let newReservation:Reserve in newReservation.oclIsNew() and Reserved.allInstance()->includes(newReservation) and newReservation.ReservedCopy = reservedCopy and newReservation.ReservedUser = self and result = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\treservedCopy: BookCopy = Reserved.allInstance()->any(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode),\n\t\treservation: Reserve = reservedCopy.ReservationRecord->any(o|o.ReservedUser.UserID = uid and\n\t\to.ReservedCopy.Barcode = barcode)\n\tprecondition:\n\t\treservation.oclIsUndefined() = bool\n\tpostcondition:\n\t\tlet newReservation: Reserve in\n\t\tnewReservation.oclIsNew() and\n\t\tReserved.allInstance()->includes(newReservation) and\n\t\tnewReservation.ReservedCopy = reservedCopy and\n\t\tnewReservation.ReservedUser = self and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

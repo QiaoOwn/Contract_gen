@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obsRepair:Repair = Repair.allInstance()->any(r | r.Id = rid), obsStaff:Staff = Staff.allInstance()->any(s | s.Id = sid), addApproval:ApprovalHistory",
+        "precondition": "obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false",
+        "postcondition": "let addApproval:ApprovalHistory in addApproval.oclIsNew() and ApprovalHistory.allInstance()->includes(addApproval) and obsRepair.History->includes(addApproval) and addApproval.StaffId = sid and addApproval.Reject = reject and addApproval.Suggestion = suggestion and (if reject = false then ( (obsRepair.Process = 0 and obsStaff.Role = 1) implies (obsRepair.Process = 1) and (obsRepair.Process = 1 and obsStaff.Role = 2) implies (obsRepair.Process = 2) and (obsRepair.Process = 2 and obsStaff.Role = 3) implies (obsRepair.Process = 3) ) else true endif ) and (reject = true implies obsRepair.Process = 5) and result = addApproval"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 348,
+          "msg": "mismatched input 'implies' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 430,
+          "msg": "mismatched input 'implies' expecting '}'"
+        }
+      ],
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          obsRepair:Repair = Repair.allInstance()->any(r | r.Id = rid), obsStaff:Staff = Staff.allInstance()->any(s | s.Id = sid), addApproval:ApprovalHistory\n            \n            precondition:\n          obsRepair.oclIsUndefined() = false and obsStaff.oclIsUndefined() = false\n            \n            postcondition:\n          let addApproval:ApprovalHistory in addApproval.oclIsNew() and ApprovalHistory.allInstance()->includes(addApproval) and obsRepair.History->includes(addApproval) and addApproval.StaffId = sid and addApproval.Reject = reject and addApproval.Suggestion = suggestion and (if reject = false then ( (obsRepair.Process = 0 and obsStaff.Role = 1) implies (obsRepair.Process = 1) and (obsRepair.Process = 1 and obsStaff.Role = 2) implies (obsRepair.Process = 2) and (obsRepair.Process = 2 and obsStaff.Role = 3) implies (obsRepair.Process = 3) ) else true endif ) and (reject = true implies obsRepair.Process = 5) and result = addApproval\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

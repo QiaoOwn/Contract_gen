@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID)",
+        "precondition": "orderProduct.oclIsUndefined() = false",
+        "postcondition": "orderProduct.OrderStatus = OrderStatus::RECEIVED and orderProduct.ContainedEntries->forAll(entry | let item:Item in item = entry.Item in item.StockNumber = item.StockNumber@pre + entry.Quantity) and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 109,
+          "msg": "extraneous input 'let' expecting {'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 117,
+          "msg": "mismatched input ':' expecting ')'"
+        },
+        {
+          "line": 9,
+          "column": 144,
+          "msg": "mismatched input 'in' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {\n          definition:\n          orderProduct:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderID)\n            \n            precondition:\n          orderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          orderProduct.OrderStatus = OrderStatus::RECEIVED and orderProduct.ContainedEntries->forAll(entry | let item:Item in item = entry.Item in item.StockNumber = item.StockNumber@pre + entry.Quantity) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: item"
+        }
+      ]
+    }
+  }
+]

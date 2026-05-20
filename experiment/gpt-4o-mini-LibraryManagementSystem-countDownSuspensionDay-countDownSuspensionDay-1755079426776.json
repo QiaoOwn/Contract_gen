@@ -1,0 +1,228 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus = BorrowStatus.SUSPEND)",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays = 0 and result = true)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus = BorrowStatus.SUSPEND)\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays = 0 and\n\t\tresult = true)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus.oclIsTypeOf(BorrowStatus))",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays = 0 and result = true)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus.oclIsTypeOf(BorrowStatus))\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays = 0 and\n\t\tresult = true)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus.oclIsTypeOf(BorrowStatus))",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays = 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus.oclIsTypeOf(BorrowStatus))\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays = 0) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus.oclIsTypeOf(BorrowStatus))",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and suspendedUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays <= 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus.oclIsTypeOf(BorrowStatus))\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\tsuspendedUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays<=0) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus.oclIsTypeOf(BorrowStatus))",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays <= 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus.oclIsTypeOf(BorrowStatus))\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays<=0) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus = BorrowStatus.NORMAL)",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays <= 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus = BorrowStatus.NORMAL)\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays<=0) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus = BorrowStatus.NORMAL)",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays <= 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus = BorrowStatus.NORMAL)\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays<=0) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus = BorrowStatus.NORMAL)",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays <= 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tdefinition:\n\t\toverdueUsers: Set(User) = User.allInstance()->select(u|u.SuspensionDays>0),\n\t\tsuspendedUsers: Set(User) = overdueUsers->select(u|u.BorrowStatus = BorrowStatus.NORMAL)\n\tprecondition:\n\t\toverdueUsers.isEmpty() = false\n\tpostcondition:\n\t\tlet u: User in\n\t\tu.oclIsNew() and\n\t\toverdueUsers->forAll(u|u.SuspensionDays = u.SuspensionDays-1) and\n\t\toverdueUsers->forAll(u|u.BorrowStatus = BorrowStatus.SUSPEND and\n\t\tu.SuspensionDays<=0) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: BorrowStatus"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "overdueUsers:Set(User) = User.allInstance()->select(u | u.SuspensionDays > 0), suspendedUsers:Set(User) = overdueUsers->select(u | u.BorrowStatus = BorrowStatus.NORMAL)",
+        "precondition": "overdueUsers.isEmpty() = false",
+        "postcondition": "let u:User in u.oclIsNew() and overdueUsers->forAll(u | u.SuspensionDays = u.SuspensionDays - 1) and overdueUsers->forAll(u | u.BorrowStatus = BorrowStatus.SUSPEND and u.SuspensionDays <= 0) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

@@ -1,0 +1,240 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest\nobs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory\nobsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false\nobs.isEmpty() = false\nobsCredit.isEmpty() = false\nCurrentLoanRequest.CreditScore = 100\nCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "let loanRequest:LoanRequest in loanRequest.oclIsNew()\nLoanRequest.allInstance()->includes(CurrentLoanRequest)\nCurrentLoanRequest.CreditScore = 100\nobs->forAll(o:CheckingAccount|o=CurrentLoanRequest.RequestedCAHistory)\nresult = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'obs' expecting 'precondition'"
+        },
+        {
+          "line": 16,
+          "column": 0,
+          "msg": "mismatched input 'LoanRequest' expecting '}'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n          definition:\n          currentLoanRequest:LoanRequest = CurrentLoanRequest\nobs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory\nobsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false\nobs.isEmpty() = false\nobsCredit.isEmpty() = false\nCurrentLoanRequest.CreditScore = 100\nCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n            \n            postcondition:\n          let loanRequest:LoanRequest in loanRequest.oclIsNew()\nLoanRequest.allInstance()->includes(CurrentLoanRequest)\nCurrentLoanRequest.CreditScore = 100\nobs->forAll(o:CheckingAccount|o=CurrentLoanRequest.RequestedCAHistory)\nresult = CurrentLoanRequest.CreditScore\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest, obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory, obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and not obs.isEmpty() and not obsCredit.isEmpty() and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "let loanRequest:LoanRequest in loanRequest.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 62,
+          "msg": "mismatched input 'obs' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n          definition:\n          currentLoanRequest:LoanRequest = CurrentLoanRequest, obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory, obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false and not obs.isEmpty() and not obsCredit.isEmpty() and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n            \n            postcondition:\n          let loanRequest:LoanRequest in loanRequest.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest, obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory, obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "let loanRequest:LoanRequest in loanRequest.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tlet loanRequest: LoanRequest in\n\t\tloanRequest.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = CurrentLoanRequest.RequestedCAHistory) and\n\t\tresult = CurrentLoanRequest.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest, obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory, obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "CurrentLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tCurrentLoanRequest.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = CurrentLoanRequest.RequestedCAHistory) and\n\t\tresult = CurrentLoanRequest.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest,obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "let ob:LoanRequest in ob.oclIsNew() and LoanRequest.allInstance()->includes(ob) and ob.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = ob.RequestedCAHistory) and result = ob.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tlet ob: LoanRequest in\n\t\tob.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(ob) and\n\t\tob.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = ob.RequestedCAHistory) and\n\t\tresult = ob.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest,obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "let ob:LoanRequest in ob.oclIsNew() and LoanRequest.allInstance()->includes(ob) and ob.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = ob.RequestedCAHistory) and result = ob.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tlet ob: LoanRequest in\n\t\tob.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(ob) and\n\t\tob.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = ob.RequestedCAHistory) and\n\t\tresult = ob.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest,obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = CurrentLoanRequest.RequestedCAHistory) and\n\t\tresult = CurrentLoanRequest.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest,obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "let currentLoanRequest:LoanRequest in currentLoanRequest.oclIsNew() and LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tlet currentLoanRequest: LoanRequest in\n\t\tcurrentLoanRequest.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = CurrentLoanRequest.RequestedCAHistory) and\n\t\tresult = CurrentLoanRequest.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest,obs:Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,obsCredit:Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false and obsCredit.isEmpty() = false and CurrentLoanRequest.CreditScore = 100 and CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED",
+        "postcondition": "LoanRequest.allInstance()->includes(CurrentLoanRequest) and CurrentLoanRequest.CreditScore = 100 and obs->forAll(o:CheckingAccount | o = CurrentLoanRequest.RequestedCAHistory) and result = CurrentLoanRequest.CreditScore"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(CheckingAccount) = CurrentLoanRequest.RequestedCAHistory,\n\t\tobsCredit: Set(CreditHistory) = CurrentLoanRequest.RequestedCreditHistory\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false and\n\t\tobsCredit.isEmpty() = false and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tCurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED\n\tpostcondition:\n\t\tLoanRequest.allInstance()->includes(CurrentLoanRequest) and\n\t\tCurrentLoanRequest.CreditScore = 100 and\n\t\tobs->forAll(o: CheckingAccount|o = CurrentLoanRequest.RequestedCAHistory) and\n\t\tresult = CurrentLoanRequest.CreditScore\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

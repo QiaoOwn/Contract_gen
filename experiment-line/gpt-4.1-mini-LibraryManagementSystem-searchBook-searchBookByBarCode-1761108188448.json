@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), result:Set(Book) = Set{}",
+        "precondition": "obs->notEmpty()",
+        "postcondition": "result = obs->collect(o | o.BookBelongs) and result->forAll(b | b.Copys->includes(obs->any(o | o.BookBelongs = b)))"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 87,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 15,
+          "msg": "no viable alternative at input 'obs->notEmpty()'"
+        },
+        {
+          "line": 9,
+          "column": 61,
+          "msg": "mismatched input '->' expecting '}'"
+        }
+      ],
+      "contract": "Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {\n          definition:\n          obs:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), result:Set(Book) = Set{}\n            \n            precondition:\n          obs->notEmpty()\n            \n            postcondition:\n          result = obs->collect(o | o.BookBelongs) and result->forAll(b | b.Copys->includes(obs->any(o | o.BookBelongs = b)))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property body of ArrowFunctionExpression expected node to be of a type [\"BlockStatement\",\"Expression\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

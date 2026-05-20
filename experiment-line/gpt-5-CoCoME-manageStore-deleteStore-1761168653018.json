@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "candidates:Set(Store) = Store.allInstance()->select(o | o.Id = id), success:Boolean = if candidates.isEmpty() = false then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer) and Store.allInstance()->isUnique(o:Store | o.Id)",
+        "postcondition": "(candidates.isEmpty() = false and candidates->forAll(o:Store | Store.allInstance()->excludes(o)) or candidates.isEmpty() = true) and result = success"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 139,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageStoreCRUDService::deleteStore(id:Integer): Boolean {\n          definition:\n          candidates:Set(Store) = Store.allInstance()->select(o | o.Id = id), success:Boolean = if candidates.isEmpty() = false then true else false endif\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and Store.allInstance()->isUnique(o:Store | o.Id)\n            \n            postcondition:\n          (candidates.isEmpty() = false and candidates->forAll(o:Store | Store.allInstance()->excludes(o)) or candidates.isEmpty() = true) and result = success\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

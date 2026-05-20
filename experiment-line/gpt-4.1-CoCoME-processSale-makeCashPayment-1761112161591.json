@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": null,
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+        "postcondition": "let payment:CashPayment in payment.oclIsNew() and payment.amountTendered = amount and payment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = payment and self.CurrentSale.Belongedstore = self.CurrentStore and Store.allInstance()->includes(self.CurrentStore) and self.CurrentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now() and payment.Balance = amount - self.CurrentSale.Amount and result = true"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 7,
+          "column": 274,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        },
+        {
+          "line": 7,
+          "column": 331,
+          "msg": "mismatched input 'self' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount\n            \n            postcondition:\n          let payment:CashPayment in payment.oclIsNew() and payment.amountTendered = amount and payment.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = payment and self.CurrentSale.Belongedstore = self.CurrentStore and Store.allInstance()->includes(self.CurrentStore) and self.CurrentStore.Sales->includes(self.CurrentSale) and self.CurrentSale.IsComplete = true and self.CurrentSale.Time = now() and payment.Balance = amount - self.CurrentSale.Amount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: self.CurrentStore"
+        }
+      ]
+    }
+  }
+]

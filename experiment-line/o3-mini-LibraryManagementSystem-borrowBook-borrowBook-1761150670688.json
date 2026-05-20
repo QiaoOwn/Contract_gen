@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and bookCopy.Status = BookCopy::AVAILABLE",
+        "postcondition": "let loan:Loan in loan.oclIsNew() and user.LoanedBook->includes(loan) and bookCopy.LoanedRecord->includes(loan) and bookCopy.Status = BookCopy::LOANED and flag:Boolean = true and result = flag"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 168,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          user.oclIsUndefined() = false and bookCopy.oclIsUndefined() = false and bookCopy.Status = BookCopy::AVAILABLE\n            \n            postcondition:\n          let loan:Loan in loan.oclIsNew() and user.LoanedBook->includes(loan) and bookCopy.LoanedRecord->includes(loan) and bookCopy.Status = BookCopy::LOANED and flag:Boolean = true and result = flag\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: flag"
+        }
+      ]
+    }
+  }
+]

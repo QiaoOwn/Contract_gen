@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentSale:Sale = CurrentSale, item:Item = Item.allInstance()->select(i | i.Barcode = barcode)->any(), saleLine:SalesLineItem = SalesLineItem.allInstance()->any(o | o.BelongedSale = currentSale), price:Real = item.Price, subAmount:Real = price * quantity, itemStockNumber:Integer = item.StockNumber",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and item.oclIsUndefined() = false and item.StockNumber > 0",
+        "postcondition": "result = true and currentSale.ContainedSalesLine->includes(saleLine) and item.StockNumber = itemStockNumber - quantity and saleLine.Quantity = quantity and saleLine.Subamount = subAmount"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          currentSale:Sale = CurrentSale, item:Item = Item.allInstance()->select(i | i.Barcode = barcode)->any(), saleLine:SalesLineItem = SalesLineItem.allInstance()->any(o | o.BelongedSale = currentSale), price:Real = item.Price, subAmount:Real = price * quantity, itemStockNumber:Integer = item.StockNumber\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and item.oclIsUndefined() = false and item.StockNumber > 0\n            \n            postcondition:\n          result = true and currentSale.ContainedSalesLine->includes(saleLine) and item.StockNumber = itemStockNumber - quantity and saleLine.Quantity = quantity and saleLine.Subamount = subAmount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

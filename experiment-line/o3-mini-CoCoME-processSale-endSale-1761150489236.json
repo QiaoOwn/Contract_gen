@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLineItems:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, sumSubamount:Real = salesLineItems->collect(o:SalesLineItem|o.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = sumSubamount and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 150,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLineItems:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, sumSubamount:Real = salesLineItems->collect(o:SalesLineItem|o.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = false and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = sumSubamount and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

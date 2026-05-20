@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), orderEntry:OrderEntry = if obs.isEmpty() then OrderEntry{} else null endif, orderEntry.Quantity = quantity, orderEntry.SubAmount = (obs->any(o | o.Price) * quantity), orderEntry.Item = obs->any(o | o), CurrentOrderProduct.ContainedEntries->includes(orderEntry)",
+        "precondition": "obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), obs.isEmpty() = false",
+        "postcondition": "let orderEntry:OrderEntry in orderEntry.oclIsNew() and Item.allInstance()->includes(orderEntry)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 135,
+          "msg": "mismatched input '{' expecting {'else', 'endif'}"
+        },
+        {
+          "line": 3,
+          "column": 165,
+          "msg": "mismatched input '.' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), orderEntry:OrderEntry = if obs.isEmpty() then OrderEntry{} else null endif, orderEntry.Quantity = quantity, orderEntry.SubAmount = (obs->any(o | o.Price) * quantity), orderEntry.Item = obs->any(o | o), CurrentOrderProduct.ContainedEntries->includes(orderEntry)\n            \n            precondition:\n          obs:Set(Item) = Item.allInstance()->select(o | o.Barcode = barcode), obs.isEmpty() = false\n            \n            postcondition:\n          let orderEntry:OrderEntry in orderEntry.oclIsNew() and Item.allInstance()->includes(orderEntry)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: OrderEntry"
+        }
+      ]
+    }
+  }
+]

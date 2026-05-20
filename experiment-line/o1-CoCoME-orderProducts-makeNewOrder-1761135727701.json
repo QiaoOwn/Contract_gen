@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "ord:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)",
+        "precondition": "",
+        "postcondition": "if ord.oclIsUndefined() then let newOrd:OrderProduct in newOrd.oclIsNew() and OrderProduct.allInstance()->includes(newOrd) and newOrd.Id = orderid and newOrd.OrderStatus = OrderStatus::NEW and newOrd.Time = ThirdPartyServices.getCurrentTime() and self.CurrentOrderProduct = newOrd else self.CurrentOrderProduct = ord endif and result = true"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 250,
+          "msg": "mismatched input '(' expecting {'else', 'endif'}"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {\n          definition:\n          ord:OrderProduct = OrderProduct.allInstance()->any(o | o.Id = orderid)\n            \n            \n            postcondition:\n          if ord.oclIsUndefined() then let newOrd:OrderProduct in newOrd.oclIsNew() and OrderProduct.allInstance()->includes(newOrd) and newOrd.Id = orderid and newOrd.OrderStatus = OrderStatus::NEW and newOrd.Time = ThirdPartyServices.getCurrentTime() and self.CurrentOrderProduct = newOrd else self.CurrentOrderProduct = ord endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

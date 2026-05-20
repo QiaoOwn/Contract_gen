@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existedSubject:Set(Subject) = Subject.allInstance()->select(o | o.Name = name)",
+        "precondition": "existedSubject.isEmpty() = true",
+        "postcondition": "let subject:Subject in subject.oclIsNew() and In the post condition, Subject.allInstance()->includes(subject) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 59,
+          "msg": "mismatched input 'the' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageSubjectCRUDService::createSubject(name:String): Boolean {\n          definition:\n          existedSubject:Set(Subject) = Subject.allInstance()->select(o | o.Name = name)\n            \n            precondition:\n          existedSubject.isEmpty() = true\n            \n            postcondition:\n          let subject:Subject in subject.oclIsNew() and In the post condition, Subject.allInstance()->includes(subject) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: In"
+        }
+      ]
+    }
+  }
+]

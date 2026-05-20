@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), reserved:Reserve = obs.any()",
+        "precondition": "reserved.oclIsUndefined() = bool",
+        "postcondition": "ClassName.allInstance()->excludes(reserved), result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 153,
+          "msg": "no viable alternative at input 'obs.any'"
+        },
+        {
+          "line": 9,
+          "column": 53,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          obs:Set(Reserve) = Reserve.allInstance()->select(o | o.ReservedUser.UserID = uid and o.ReservedCopy.Barcode = barcode), reserved:Reserve = obs.any()\n            \n            precondition:\n          reserved.oclIsUndefined() = bool\n            \n            postcondition:\n          ClassName.allInstance()->excludes(reserved), result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

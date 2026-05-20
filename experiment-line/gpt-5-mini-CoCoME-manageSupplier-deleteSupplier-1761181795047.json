@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id), exists:Boolean = if supplier.oclIsUndefined() = false then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer)",
+        "postcondition": "exists = true and result = exists"
+      },
+      "model": "gpt-5-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 74,
+          "msg": "mismatched input 'exists' expecting RULE_ID"
+        },
+        {
+          "line": 9,
+          "column": 10,
+          "msg": "mismatched input 'exists' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::deleteSupplier(id:Integer): Boolean {\n          definition:\n          supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id), exists:Boolean = if supplier.oclIsUndefined() = false then true else false endif\n            \n            precondition:\n          id.oclIsTypeOf(Integer)\n            \n            postcondition:\n          exists = true and result = exists\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

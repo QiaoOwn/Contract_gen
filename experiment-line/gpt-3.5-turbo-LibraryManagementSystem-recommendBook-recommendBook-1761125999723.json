@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(u | u.UserID = uid), newRecommend:RecommendBook = RecommendBook.allInstance()->any(o | false), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isNew:Boolean = if newRecommend.oclIsNew() then true else false endif",
+        "precondition": "user.oclIsUndefined() = bool and book.oclIsUndefined() = bool and user.RecommendedBook->excludes(newRecommend) and newRecommend.RecommendUser = user and newRecommend.CallNo = book.CallNo",
+        "postcondition": "let ob:RecommendBook in ob.oclIsNew() and Book.allInstance()->includes(book) and user.RecommendedBook->includes(ob) and ob.RecommendUser = user and ob.CallNo = book.CallNo and result = isNew"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 133,
+          "msg": "mismatched input 'false' expecting {'self', 'result', 'if', RULE_ID}"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(u | u.UserID = uid), newRecommend:RecommendBook = RecommendBook.allInstance()->any(o | false), book:Book = Book.allInstance()->any(b | b.CallNo = callNo), isNew:Boolean = if newRecommend.oclIsNew() then true else false endif\n            \n            precondition:\n          user.oclIsUndefined() = bool and book.oclIsUndefined() = bool and user.RecommendedBook->excludes(newRecommend) and newRecommend.RecommendUser = user and newRecommend.CallNo = book.CallNo\n            \n            postcondition:\n          let ob:RecommendBook in ob.oclIsNew() and Book.allInstance()->includes(book) and user.RecommendedBook->includes(ob) and ob.RecommendUser = user and ob.CallNo = book.CallNo and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

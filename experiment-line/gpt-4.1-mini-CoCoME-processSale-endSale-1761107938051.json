@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem) = self.CurrentSale.ContainedSalesLine",
+        "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false",
+        "postcondition": "self.CurrentSale.Amount = salesLines->collect(s | s.BelongedItem.Price * s.Quantity)->sum() and self.CurrentSale.IsReadytoPay = true and result = self.CurrentSale.Amount"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 81,
+          "msg": "missing ')' at '*'"
+        },
+        {
+          "line": 9,
+          "column": 93,
+          "msg": "mismatched input ')' expecting '}'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem) = self.CurrentSale.ContainedSalesLine\n            \n            precondition:\n          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          self.CurrentSale.Amount = salesLines->collect(s | s.BelongedItem.Price * s.Quantity)->sum() and self.CurrentSale.IsReadytoPay = true and result = self.CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: s"
+        }
+      ]
+    }
+  }
+]

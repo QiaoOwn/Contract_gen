@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "obs:Set(BookCopy) = user.LoanedBook->collect(l | l.LoanedCopy), someOverDueDate:Date = today() - 30",
+        "precondition": "user:User = User.allInstance()->any(u | u.UserID = uid) and user.oclIsUndefined() = false",
+        "postcondition": "result = obs, obs->forAll(o:BookCopy | o.Status = CopyStatus::LOANED and o.LoanedRecord->exists(l | l.ReturnDate.oclIsUndefined() = true and l.LoanDate < someOverDueDate))"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 105,
+          "msg": "mismatched input '-' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 22,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          definition:\n          obs:Set(BookCopy) = user.LoanedBook->collect(l | l.LoanedCopy), someOverDueDate:Date = today() - 30\n            \n            precondition:\n          user:User = User.allInstance()->any(u | u.UserID = uid) and user.oclIsUndefined() = false\n            \n            postcondition:\n          result = obs, obs->forAll(o:BookCopy | o.Status = CopyStatus::LOANED and o.LoanedRecord->exists(l | l.ReturnDate.oclIsUndefined() = true and l.LoanDate < someOverDueDate))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: user"
+        }
+      ]
+    }
+  }
+]

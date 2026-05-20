@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(i | i.Barcode = barcode)",
+        "precondition": "true",
+        "postcondition": "item.oclIsUndefined() = false and item.Price = newPrice and result = true or item.oclIsUndefined() = true and result = false"
+      },
+      "model": "o4-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract CoCoMESystem::changePrice(barcode: Integer,newPrice: Real): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstance()->any(i|i.Barcode = barcode)\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\titem.oclIsUndefined() = false and\n\t\titem.Price = newPrice and\n\t\tresult = true or\n\t\titem.oclIsUndefined() = true and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property left of AssignmentExpression expected node to be of a type [\"LVal\",\"OptionalMemberExpression\"] but instead got \"CallExpression\""
+        }
+      ]
+    }
+  }
+]

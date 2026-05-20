@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isExist:Boolean = cashDesk.oclIsUndefined()",
+        "precondition": "!cashDesk.oclIsUndefined()",
+        "postcondition": "if isExist then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and CashDesk.allInstance()->includes(newCashDesk) and result = true endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 10,
+          "msg": "extraneous input '!' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        }
+      ],
+      "contract": "Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {\n          definition:\n          cashDesk:CashDesk = CashDesk.allInstance()->any(o | o.Id = id), isExist:Boolean = cashDesk.oclIsUndefined()\n            \n            precondition:\n          !cashDesk.oclIsUndefined()\n            \n            postcondition:\n          if isExist then let newCashDesk:CashDesk in newCashDesk.oclIsNew() and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and CashDesk.allInstance()->includes(newCashDesk) and result = true endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property value of ObjectProperty expected node to be of a type [\"Expression\",\"PatternLike\"] but instead got undefined"
+        }
+      ]
+    }
+  }
+]

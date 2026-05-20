@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newLoanAgreement:LoanAgreement = LoanAgreement.allInstance()->any(o | o.Content = 'Loan Agreement'), ob:LoanRequest = CurrentLoanRequest",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false",
+        "postcondition": "LoanAgreement.allInstance()->includes(newLoanAgreement) and CurrentLoanRequest.AttachedLoanAgreement = newLoanAgreement and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {\n\tdefinition:\n\t\tnewLoanAgreement: LoanAgreement = LoanAgreement.allInstance()->any(o|o.Content = 'Loan Agreement'),\n\t\tob: LoanRequest = CurrentLoanRequest\n\tprecondition:\n\t\tCurrentLoanRequest.oclIsUndefined() = false\n\tpostcondition:\n\t\tLoanAgreement.allInstance()->includes(newLoanAgreement) and\n\t\tCurrentLoanRequest.AttachedLoanAgreement = newLoanAgreement and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

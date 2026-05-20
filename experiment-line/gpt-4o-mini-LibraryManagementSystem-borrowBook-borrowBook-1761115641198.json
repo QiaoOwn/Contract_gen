@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "uid.oclIsUndefined() or barcode.oclIsUndefined() or User.allInstance()->includes(User.allInstance()->any(o | o.UserID = uid)).oclIsUndefined() or BookCopy.allInstance()->excludes(BookCopy.allInstance()->any(o | o.Barcode = barcode)).",
+        "postcondition": "let loan:Loan in loan.oclIsNew() and Book.allInstance()->includes(Book.allInstance()->any(o | o.CallNo = barcode).LoanedCopy) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 95,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 133,
+          "msg": "mismatched input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          uid.oclIsUndefined() or barcode.oclIsUndefined() or User.allInstance()->includes(User.allInstance()->any(o | o.UserID = uid)).oclIsUndefined() or BookCopy.allInstance()->excludes(BookCopy.allInstance()->any(o | o.Barcode = barcode)).\n            \n            postcondition:\n          let loan:Loan in loan.oclIsNew() and Book.allInstance()->includes(Book.allInstance()->any(o | o.CallNo = barcode).LoanedCopy) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: User"
+        }
+      ]
+    }
+  }
+]

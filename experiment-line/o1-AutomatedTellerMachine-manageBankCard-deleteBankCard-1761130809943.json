@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "bankCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), found:Boolean = if bankCard.oclIsUndefined() then false else true endif",
+        "precondition": "",
+        "postcondition": "(found = false and result = found) or (BankCard.allInstance()->excludes(bankCard) and result = found)"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 45,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageBankCardCRUDService::deleteBankCard(cardid:Integer): Boolean {\n          definition:\n          bankCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid), found:Boolean = if bankCard.oclIsUndefined() then false else true endif\n            \n            \n            postcondition:\n          (found = false and result = found) or (BankCard.allInstance()->excludes(bankCard) and result = found)\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

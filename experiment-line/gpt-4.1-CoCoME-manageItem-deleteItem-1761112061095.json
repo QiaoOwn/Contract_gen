@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(i | i.Barcode = barcode)",
+        "precondition": "barcode.oclIsTypeOf(Integer)",
+        "postcondition": "result = (not item.oclIsUndefined())"
+      },
+      "model": "gpt-4.1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 19,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 24,
+          "msg": "mismatched input 'item' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(i | i.Barcode = barcode)\n            \n            precondition:\n          barcode.oclIsTypeOf(Integer)\n            \n            postcondition:\n          result = (not item.oclIsUndefined())\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: not"
+        }
+      ]
+    }
+  }
+]

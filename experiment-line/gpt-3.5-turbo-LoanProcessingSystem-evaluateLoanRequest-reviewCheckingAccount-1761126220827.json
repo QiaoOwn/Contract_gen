@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentLoanRequest:LoanRequest = CurrentLoanRequest, obs:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.RequestID = currentLoanRequest.RequestID)",
+        "precondition": "currentLoanRequest.oclIsUndefined() = false and obs.isEmpty() = false",
+        "postcondition": "let ob:CheckingAccount in ob.oclIsNew() and LoanRequest.allInstance()->includes(currentLoanRequest)"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {\n\tdefinition:\n\t\tcurrentLoanRequest: LoanRequest = CurrentLoanRequest,\n\t\tobs: Set(LoanRequest) = LoanRequest.allInstance()->select(o|o.RequestID = currentLoanRequest.RequestID)\n\tprecondition:\n\t\tcurrentLoanRequest.oclIsUndefined() = false and\n\t\tobs.isEmpty() = false\n\tpostcondition:\n\t\tlet ob: CheckingAccount in\n\t\tob.oclIsNew() and\n\t\tLoanRequest.allInstance()->includes(currentLoanRequest)\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

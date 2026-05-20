@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "store:Set(Store) = Store.allInstance()->any(s | s.Id = storeID)",
+        "precondition": "store->notEmpty() and store.oclIsUndefined() = false and store.isOpen = false",
+        "postcondition": "CurrentStore = store and store.oclIsNew() = false and store->includes(CurrentStore) and store.isOpen = true"
+      },
+      "model": "gpt-4o"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "no viable alternative at input 'store->notEmpty()'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::openStore(storeID:Integer): Boolean {\n          definition:\n          store:Set(Store) = Store.allInstance()->any(s | s.Id = storeID)\n            \n            precondition:\n          store->notEmpty() and store.oclIsUndefined() = false and store.isOpen = false\n            \n            postcondition:\n          CurrentStore = store and store.oclIsNew() = false and store->includes(CurrentStore) and store.isOpen = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

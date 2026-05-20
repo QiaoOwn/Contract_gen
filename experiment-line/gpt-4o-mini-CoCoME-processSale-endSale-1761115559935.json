@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, totalAmount:Real = salesLines->collect(s | s.Subamount)->sum()",
+        "precondition": "CurrentSale.oclIsUndefined() = bool and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false",
+        "postcondition": "CurrentSale.Amount = totalAmount and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 129,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract ProcessSaleService::endSale(): Real {\n          definition:\n          salesLines:Set(SalesLineItem) = CurrentSale.ContainedSalesLine, totalAmount:Real = salesLines->collect(s | s.Subamount)->sum()\n            \n            precondition:\n          CurrentSale.oclIsUndefined() = bool and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = false\n            \n            postcondition:\n          CurrentSale.Amount = totalAmount and CurrentSale.IsReadytoPay = true and result = CurrentSale.Amount\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

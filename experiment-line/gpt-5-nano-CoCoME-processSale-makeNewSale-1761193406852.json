@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "newSale: Sale, created:Boolean",
+        "precondition": "CurrentSale.oclIsUndefined() = true or CurrentSale.IsComplete = true",
+        "postcondition": "newSale.oclIsNew() and Sale.allInstance()->includes(newSale) and newSale.BelongedCashDesk = currentCashDesk and newSale.IsComplete = false and newSale.IsReadytoPay = false and created = true and result = created"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n\tdefinition:\n\t\tnewSale: Sale,\n\t\tcreated: Boolean\n\tprecondition:\n\t\tCurrentSale.oclIsUndefined() = true or\n\t\tCurrentSale.IsComplete = true\n\tpostcondition:\n\t\tnewSale.oclIsNew() and\n\t\tSale.allInstance()->includes(newSale) and\n\t\tnewSale.BelongedCashDesk = currentCashDesk and\n\t\tnewSale.IsComplete = false and\n\t\tnewSale.IsReadytoPay = false and\n\t\tcreated = true and\n\t\tresult = created\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentSale"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item: Item = Item.allInstance()->any(o | o.Barcode = barcode), newEntry: OrderEntry",
+        "precondition": "CurrentOrderProduct.oclIsUndefined() = false and item.oclIsUndefined() = false",
+        "postcondition": "newEntry.oclIsNew() and CurrentOrderProduct.ContainedEntries->including(newEntry) and newEntry.Item = item and newEntry.Quantity = quantity and newEntry.Subamount = item.Price * quantity and result = true"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 72,
+          "msg": "no viable alternative at input 'CurrentOrderProduct.ContainedEntries->including'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {\n          definition:\n          item: Item = Item.allInstance()->any(o | o.Barcode = barcode), newEntry: OrderEntry\n            \n            precondition:\n          CurrentOrderProduct.oclIsUndefined() = false and item.oclIsUndefined() = false\n            \n            postcondition:\n          newEntry.oclIsNew() and CurrentOrderProduct.ContainedEntries->including(newEntry) and newEntry.Item = item and newEntry.Quantity = quantity and newEntry.Subamount = item.Price * quantity and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

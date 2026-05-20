@@ -1,0 +1,298 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog.oclIsUndefined() = bool and bool = true",
+        "postcondition": "if isNew then ProductCatalog.allInstance()->includes(catalog) and result = true else result = false endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tcatalog: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id),\n\t\tisNew: Boolean = catalog.oclIsNew()\n\tprecondition:\n\t\tcatalog.oclIsUndefined() = bool and\n\t\tbool = true\n\tpostcondition:\n\t\tif isNew \n\t\tthen ProductCatalog.allInstance()->includes(catalog) and\n\t\tresult = true \n\t\telse result = false \n\t\tendif \n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog.oclIsUndefined() = bool and bool = true",
+        "postcondition": "let catalog:ProductCatalog in catalog.oclIsNew() and ProductCatalog.allInstance()->includes(catalog) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tcatalog: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id),\n\t\tisNew: Boolean = catalog.oclIsNew()\n\tprecondition:\n\t\tcatalog.oclIsUndefined() = bool and\n\t\tbool = true\n\tpostcondition:\n\t\tlet catalog: ProductCatalog in\n\t\tcatalog.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(catalog) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog.oclIsUndefined() = true",
+        "postcondition": "catalog.oclIsNew() and ProductCatalog.allInstance()->includes(catalog) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tcatalog: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id),\n\t\tisNew: Boolean = catalog.oclIsNew()\n\tprecondition:\n\t\tcatalog.oclIsUndefined() = true\n\tpostcondition:\n\t\tcatalog.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(catalog) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  OrderStatus,\n  Store,\n  ProductCatalog,\n  CashDesk,\n  Sale,\n  Cashier,\n  SalesLineItem,\n  Item,\n  Payment,\n  CashPayment,\n  CardPayment,\n  OrderEntry,\n  Supplier,\n  OrderProduct,\n  getRepository,\n};\n",
+        "originalService": "class ManageProductCatalogCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the product catalog with provided id,\n   *if the product catalog not exist,\n   *create the product catalog with the provided and other info*/\n  createProductCatalog(id: number, name: string): boolean {\n    /*Definition Start*/\n    let catalog: ProductCatalog = l({\n      logic: () =>\n        getRepository(ProductCatalog).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"ProductCatalog.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let isNew: boolean = l({\n      logic: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(catalog) === true,\n        description: \"catalog.oclIsUndefined()=true\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(ProductCatalog).push(catalog),\n        description: \"ProductCatalog.allInstance()->includes(catalog)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { ManageProductCatalogCRUDService_AutoGenerated };\n",
+        "entity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class ManageProductCatalogCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the product catalog with provided id,\n   *if the product catalog not exist,\n   *create the product catalog with the provided and other info*/\n  createProductCatalog(id: number, name: string): boolean {\n    /*Definition Start*/\n    let catalog: ProductCatalog = l({\n      logic: () =>\n        getRepository(ProductCatalog).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"ProductCatalog.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let isNew: boolean = l({\n      logic: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(catalog) === true,\n        description: \"catalog.oclIsUndefined()=true\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(ProductCatalog).push(catalog),\n        description: \"ProductCatalog.allInstance()->includes(catalog)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass ManageProductCatalogCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the product catalog with provided id,\n   *if the product catalog not exist,\n   *create the product catalog with the provided and other info*/\n  createProductCatalog(id: number, name: string): boolean {\n    /*Definition Start*/\n    let catalog: ProductCatalog = l({\n      logic: () =>\n        getRepository(ProductCatalog).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"ProductCatalog.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let isNew: boolean = l({\n      logic: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(catalog) === true,\n        description: \"catalog.oclIsUndefined()=true\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    return l({\n      execute: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(ProductCatalog).push(catalog),\n        description: \"ProductCatalog.allInstance()->includes(catalog)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 196,
+          "column": 9,
+          "msg": "Type 'ProductCatalog' is not assignable to type 'boolean'.",
+          "code": 2322
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog.oclIsUndefined() = true",
+        "postcondition": "let catalog:ProductCatalog in catalog.oclIsNew() and ProductCatalog.allInstance()->includes(catalog) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id: Integer,name: String): Boolean {\n\tdefinition:\n\t\tcatalog: ProductCatalog = ProductCatalog.allInstance()->any(o|o.Id = id),\n\t\tisNew: Boolean = catalog.oclIsNew()\n\tprecondition:\n\t\tcatalog.oclIsUndefined() = true\n\tpostcondition:\n\t\tlet catalog: ProductCatalog in\n\t\tcatalog.oclIsNew() and\n\t\tProductCatalog.allInstance()->includes(catalog) and\n\t\tresult = true\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescript": {
+        "originalEntity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  OrderStatus,\n  Store,\n  ProductCatalog,\n  CashDesk,\n  Sale,\n  Cashier,\n  SalesLineItem,\n  Item,\n  Payment,\n  CashPayment,\n  CardPayment,\n  OrderEntry,\n  Supplier,\n  OrderProduct,\n  getRepository,\n};\n",
+        "originalService": "class ManageProductCatalogCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the product catalog with provided id,\n   *if the product catalog not exist,\n   *create the product catalog with the provided and other info*/\n  createProductCatalog(id: number, name: string): boolean {\n    /*Definition Start*/\n    let catalog: ProductCatalog = l({\n      logic: () =>\n        getRepository(ProductCatalog).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"ProductCatalog.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let isNew: boolean = l({\n      logic: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(catalog) === true,\n        description: \"catalog.oclIsUndefined()=true\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let catalog: ProductCatalog;\n    return l({\n      execute: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(ProductCatalog).push(catalog),\n        description: \"ProductCatalog.allInstance()->includes(catalog)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\nexport { ManageProductCatalogCRUDService_AutoGenerated };\n",
+        "entity": "/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class ManageProductCatalogCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the product catalog with provided id,\n   *if the product catalog not exist,\n   *create the product catalog with the provided and other info*/\n  createProductCatalog(id: number, name: string): boolean {\n    /*Definition Start*/\n    let catalog: ProductCatalog = l({\n      logic: () =>\n        getRepository(ProductCatalog).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"ProductCatalog.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let isNew: boolean = l({\n      logic: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(catalog) === true,\n        description: \"catalog.oclIsUndefined()=true\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let catalog: ProductCatalog;\n    return l({\n      execute: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(ProductCatalog).push(catalog),\n        description: \"ProductCatalog.allInstance()->includes(catalog)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {l, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The place where items are sold*/\nclass Store {\n  /*Store ID*/\n  Id: number;\n  /*Store Name*/\n  Name: string;\n  /*Store Address*/\n  Address: string;\n  /*Store Open Status*/\n  IsOpened: boolean;\n  /*Store has multiple CashDesks*/\n  AssociationCashdeskes: CashDesk[];\n  /*Store has multiple ProductCatalogs*/\n  Productcatalogs: ProductCatalog[];\n  /*Store has multiple Items*/\n  Items: Item[];\n  /*Store has multiple Cashiers*/\n  Cashiers: Cashier[];\n  /*Store has multiple Sales*/\n  Sales: Sale[];\n}\n/*The catalogue of items*/\nclass ProductCatalog {\n  /*ProductCatalog ID*/\n  Id: number;\n  /*ProductCatalog Name*/\n  Name: string;\n  /*ProductCatalog contains multiple Items*/\n  ContainedItems: Item;\n}\n/*The cash desk in store*/\nclass CashDesk {\n  /*CashDesk ID*/\n  Id: number;\n  /*CashDesk Name*/\n  Name: string;\n  /*CashDesk Open Status*/\n  IsOpened: boolean;\n  /*CashDesk handles multiple Sales*/\n  ContainedSales: Sale[];\n  /*CashDesk belongs to one Store*/\n  BelongedStore: Store;\n}\n/*The sales order for items*/\nclass Sale {\n  /*Sale Time*/\n  Time: dayjs.Dayjs;\n  /*Sale Completion Status*/\n  IsComplete: boolean;\n  /*Total Amount*/\n  Amount: number;\n  /*Ready to Pay Status*/\n  IsReadytoPay: boolean;\n  /*Sale belongs to a Store*/\n  Belongedstore: Store;\n  /*Sale belongs to a CashDesk*/\n  BelongedCashDesk: CashDesk;\n  /*Sale contains multiple SalesLineItems*/\n  ContainedSalesLine: SalesLineItem[];\n  /*Sale is associated with a Payment*/\n  AssoicatedPayment: Payment;\n}\n/*The cashier in store*/\nclass Cashier {\n  /*Cashier ID*/\n  Id: number;\n  /*Cashier Name*/\n  Name: string;\n  /*Cashier works at one Store*/\n  WorkedStore: Store;\n}\n/*The sales order for a single item*/\nclass SalesLineItem {\n  /*Item Quantity*/\n  Quantity: number;\n  /*Sub Amount*/\n  Subamount: number;\n  /*SalesLineItem belongs to a Sale*/\n  BelongedSale: Sale;\n  /*SalesLineItem refers to an Item*/\n  BelongedItem: Item;\n}\n/*The item to be sold*/\nclass Item {\n  /*Item Barcode*/\n  Barcode: number;\n  /*Item Name*/\n  Name: string;\n  /*Item Price*/\n  Price: number;\n  /*Stock Number*/\n  StockNumber: number;\n  /*Order Price*/\n  OrderPrice: number;\n  /*Item belongs to a ProductCatalog*/\n  BelongedCatalog: ProductCatalog;\n}\n/*The bill for the goods sold*/\nclass Payment {\n  /*Amount Tendered*/\n  AmountTendered: number;\n  /*Payment belongs to a Sale*/\n  BelongedSale: Sale;\n}\n/*Pay in cash*/\nclass CashPayment extends Payment {\n  /*Change to be returned*/\n  Balance: number;\n}\n/*Pay by card*/\nclass CardPayment extends Payment {\n  /*Card Account Number*/\n  CardAccountNumber: string;\n  /*Card Expiry Date*/\n  ExpiryDate: dayjs.Dayjs;\n}\n/*The purchase order for an item*/\nclass OrderEntry {\n  /*Quantity Ordered*/\n  Quantity: number;\n  /*Sub Amount*/\n  SubAmount: number;\n  /*OrderEntry refers to an Item*/\n  Item: Item;\n}\n/*The supplier of items*/\nclass Supplier {\n  /*Supplier ID*/\n  Id: number;\n  /*Supplier Name*/\n  Name: string;\n}\n/*The purchase order for items*/\nclass OrderProduct {\n  /*OrderProduct ID*/\n  Id: number;\n  /*Order Time*/\n  Time: dayjs.Dayjs;\n  /*Order Status*/\n  OrderStatus: OrderStatus;\n  /*Total Amount*/\n  Amount: number;\n  /*OrderProduct is associated with a Supplier*/\n  Supplier: Supplier;\n  /*OrderProduct contains multiple OrderEntries*/\n  ContainedEntries: OrderEntry[];\n}\nenum OrderStatus {\n  NEW = \"NEW\",\n  RECEIVED = \"RECEIVED\",\n  REQUESTED = \"REQUESTED\",\n}\nconst map = new Map();\nmap.set(Store, []);\nmap.set(ProductCatalog, []);\nmap.set(CashDesk, []);\nmap.set(Sale, []);\nmap.set(Cashier, []);\nmap.set(SalesLineItem, []);\nmap.set(Item, []);\nmap.set(Payment, []);\nmap.set(CashPayment, []);\nmap.set(CardPayment, []);\nmap.set(OrderEntry, []);\nmap.set(Supplier, []);\nmap.set(OrderProduct, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n\n\nclass ManageProductCatalogCRUDService_AutoGenerated {\n  /*SystemVariable Start*/\n  CurrentCashDesk: CashDesk;\n  CurrentStore: Store;\n  /*SystemVariable End*/\n\n  /*find the product catalog with provided id,\n   *if the product catalog not exist,\n   *create the product catalog with the provided and other info*/\n  createProductCatalog(id: number, name: string): boolean {\n    /*Definition Start*/\n    let catalog: ProductCatalog = l({\n      logic: () =>\n        getRepository(ProductCatalog).find(\n          (o: any) =>\n            l({\n              logic: () => o.Id === id,\n              description: \"o.Id=id\",\n            }).build().pass,\n        ),\n      description: \"ProductCatalog.allInstance()->any(o|o.Id=id)\",\n    }).build().pass;\n    let isNew: boolean = l({\n      logic: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    }).build().pass;\n    /*Definition End*/\n\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () => StandardOPs.oclIsUndefined(catalog) === true,\n        description: \"catalog.oclIsUndefined()=true\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*Postcondition Start*/\n    let catalog: ProductCatalog;\n    return l({\n      execute: () => (catalog = new ProductCatalog()),\n      description: \"catalog.oclIsNew()\",\n    })\n      .and({\n        execute: () => getRepository(ProductCatalog).push(catalog),\n        description: \"ProductCatalog.allInstance()->includes(catalog)\",\n      })\n      .and({\n        execute: () => true,\n        description: \"result=true\",\n      })\n      .build().value;\n    /*Postcondition End*/\n  }\n}\n"
+      },
+      "typescriptErrors": []
+    }
+  },
+  {
+    "TypeScript Parser": {
+      "typescriptErrors": [
+        {
+          "line": 185,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'catalog'.",
+          "code": 2451
+        },
+        {
+          "line": 196,
+          "column": 9,
+          "msg": "Type 'ProductCatalog' is not assignable to type 'boolean'.",
+          "code": 2322
+        },
+        {
+          "line": 214,
+          "column": 9,
+          "msg": "Cannot redeclare block-scoped variable 'catalog'.",
+          "code": 2451
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true",
+        "postcondition": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 83,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()\n            \n            precondition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true\n            \n            postcondition:\n          let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true",
+        "postcondition": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 83,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()\n            \n            precondition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true\n            \n            postcondition:\n          let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true",
+        "postcondition": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 83,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()\n            \n            precondition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true\n            \n            postcondition:\n          let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()",
+        "precondition": "catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true",
+        "postcondition": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 17,
+          "msg": "missing 'postcondition' at ':'"
+        },
+        {
+          "line": 6,
+          "column": 83,
+          "msg": "mismatched input ',' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = catalog.oclIsNew()\n            \n            precondition:\n          catalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), catalog.oclIsUndefined() = true\n            \n            postcondition:\n          let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = existingCatalog.oclIsNew(), newCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id) if existingCatalog.oclIsUndefined() then newCatalog.oclIsNew() endif",
+        "precondition": "existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), existingCatalog.oclIsUndefined() = true",
+        "postcondition": "existingCatalog.oclIsUndefined() = true and newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew and result = (existingCatalog = newCatalog)"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 214,
+          "msg": "mismatched input 'if' expecting 'precondition'"
+        },
+        {
+          "line": 9,
+          "column": 163,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 180,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {\n          definition:\n          existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), isNew:Boolean = existingCatalog.oclIsNew(), newCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id) if existingCatalog.oclIsUndefined() then newCatalog.oclIsNew() endif\n            \n            precondition:\n          existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), existingCatalog.oclIsUndefined() = true\n            \n            postcondition:\n          existingCatalog.oclIsUndefined() = true and newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew and result = (existingCatalog = newCatalog)\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), newCatalog:ProductCatalog, isNew:Boolean = if existingCatalog.oclIsUndefined() then newCatalog = ProductCatalog.allInstance()->any(o | o.Id = id) endif",
+        "precondition": "existingCatalog:ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id), existingCatalog.oclIsUndefined() = true",
+        "postcondition": "let newCatalog:ProductCatalog in newCatalog.oclIsNew() and ProductCatalog.allInstance()->includes(newCatalog) and result = isNew and existingCatalog.Id = id"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

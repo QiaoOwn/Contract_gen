@@ -1,0 +1,245 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password) \nwithdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "(IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber) or (IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - WithdrawedNumber) and result = if IsDeposit = true then DepositedNumber else if IsDeposit = false then WithdrawedNumber else 0 endif"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 4,
+          "column": 0,
+          "msg": "mismatched input 'withdrawedNumber' expecting 'precondition'"
+        },
+        {
+          "line": 10,
+          "column": 137,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password) \nwithdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false\n            \n            postcondition:\n          (IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber) or (IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - WithdrawedNumber) and result = if IsDeposit = true then DepositedNumber else if IsDeposit = false then WithdrawedNumber else 0 endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "(IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber) or (IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber) and result = if IsDeposit = true then DepositedNumber else if IsDeposit = false then withdrawedNumber else 0 endif"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 137,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false\n            \n            postcondition:\n          (IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber) or (IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber) and result = if IsDeposit = true then DepositedNumber else if IsDeposit = false then withdrawedNumber else 0 endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber or IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = CardIDValidated and\n\t\to.Password = Password),\n\t\twithdrawedNumber: Real = if IsDeposit = false \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tIsDeposit = true and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance+DepositedNumber and\n\t\tresult = DepositedNumber or\n\t\tIsDeposit = false and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance-withdrawedNumber and\n\t\tresult = withdrawedNumber or\n\t\tresult = 0\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "let newInputCard:BankCard in newInputCard.oclIsNew() and IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber or IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = CardIDValidated and\n\t\to.Password = Password),\n\t\twithdrawedNumber: Real = if IsDeposit = false \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet newInputCard: BankCard in\n\t\tnewInputCard.oclIsNew() and\n\t\tIsDeposit = true and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance+DepositedNumber and\n\t\tresult = DepositedNumber or\n\t\tIsDeposit = false and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance-withdrawedNumber and\n\t\tresult = withdrawedNumber or\n\t\tresult = 0\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "let newInputCard:BankCard in newInputCard.oclIsNew() and IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber or IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = CardIDValidated and\n\t\to.Password = Password),\n\t\twithdrawedNumber: Real = if IsDeposit = false \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet newInputCard: BankCard in\n\t\tnewInputCard.oclIsNew() and\n\t\tIsDeposit = true and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance+DepositedNumber and\n\t\tresult = DepositedNumber or\n\t\tIsDeposit = false and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance-withdrawedNumber and\n\t\tresult = withdrawedNumber or\n\t\tresult = 0\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "let newInputCard:BankCard in newInputCard.oclIsNew() and IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber or IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = CardIDValidated and\n\t\to.Password = Password),\n\t\twithdrawedNumber: Real = if IsDeposit = false \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet newInputCard: BankCard in\n\t\tnewInputCard.oclIsNew() and\n\t\tIsDeposit = true and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance+DepositedNumber and\n\t\tresult = DepositedNumber or\n\t\tIsDeposit = false and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance-withdrawedNumber and\n\t\tresult = withdrawedNumber or\n\t\tresult = 0\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "let newInputCard:BankCard in newInputCard.oclIsNew() and IsDeposit = true and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber or IsDeposit = false and BankCard.allInstance()->includes(inputCard) and inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = CardIDValidated and\n\t\to.Password = Password),\n\t\twithdrawedNumber: Real = if IsDeposit = false \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet newInputCard: BankCard in\n\t\tnewInputCard.oclIsNew() and\n\t\tIsDeposit = true and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance+DepositedNumber and\n\t\tresult = DepositedNumber or\n\t\tIsDeposit = false and\n\t\tBankCard.allInstance()->includes(inputCard) and\n\t\tinputCard.Balance = inputCard.Balance-withdrawedNumber and\n\t\tresult = withdrawedNumber or\n\t\tresult = 0\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber or inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = CardIDValidated and\n\t\to.Password = Password),\n\t\twithdrawedNumber: Real = if IsDeposit = false \n\t\tthen DepositedNumber \n\t\telse 0 \n\t\tendif \n\tprecondition:\n\t\tinputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tinputCard.Balance = inputCard.Balance+DepositedNumber and\n\t\tresult = DepositedNumber or\n\t\tinputCard.Balance = inputCard.Balance-withdrawedNumber and\n\t\tresult = withdrawedNumber or\n\t\tresult = 0\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: Password"
+        }
+      ]
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "let withdrawedNumber:Real in if IsDeposit = false then inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber else inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber endif or result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 248,
+          "msg": "mismatched input 'or' expecting '}'"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif\n            \n            precondition:\n          inputCard.oclIsUndefined() = false\n            \n            postcondition:\n          let withdrawedNumber:Real in if IsDeposit = false then inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber else inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber endif or result = 0\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = CardIDValidated and o.Password = Password), withdrawedNumber:Real = if IsDeposit = false then DepositedNumber else 0 endif",
+        "precondition": "inputCard.oclIsUndefined() = false",
+        "postcondition": "let withdrawedNumber:Real = withdrawedNumber in if IsDeposit = false then inputCard.Balance = inputCard.Balance - withdrawedNumber and result = withdrawedNumber else inputCard.Balance = inputCard.Balance + DepositedNumber and result = DepositedNumber endif and result = 0"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  }
+]

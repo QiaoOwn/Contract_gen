@@ -1,0 +1,29 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)",
+        "precondition": "BankCard.allInstance()->includes(inputCard) or BankCard.allInstance()->excludes(inputCard)",
+        "postcondition": "inputCard.oclIsUndefined() = false and self.InputCard = inputCard and self.CardIDValidated = true and result = true or inputCard.oclIsUndefined() = true and self.CardIDValidated = false and result = false"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [],
+      "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tinputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid)\n\tprecondition:\n\t\tBankCard.allInstance()->includes(inputCard) or\n\t\tBankCard.allInstance()->excludes(inputCard)\n\tpostcondition:\n\t\tinputCard.oclIsUndefined() = false and\n\t\tself.InputCard = inputCard and\n\t\tself.CardIDValidated = true and\n\t\tresult = true or\n\t\tinputCard.oclIsUndefined() = true and\n\t\tself.CardIDValidated = false and\n\t\tresult = false\n}"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Property name expected type of string but got undefined"
+        }
+      ]
+    }
+  }
+]

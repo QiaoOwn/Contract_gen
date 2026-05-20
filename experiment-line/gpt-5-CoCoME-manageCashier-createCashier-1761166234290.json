@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "cashiers:Set(Cashier) = Cashier.allInstance()->select(c | c.Id = id), cashier:Cashier = Cashier.allInstance()->any(c | c.Id = id), cashierExists:Boolean = if cashiers.size() > 0 then true else false endif",
+        "precondition": "id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String)",
+        "postcondition": "cashierExists = true and Cashier.allInstance()->includes(cashier) and result = true or cashierExists = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true"
+      },
+      "model": "gpt-5"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 123,
+          "msg": "extraneous input 'let' expecting {'(', 'self', 'result', 'if', RULE_ID}"
+        },
+        {
+          "line": 9,
+          "column": 137,
+          "msg": "mismatched input ':' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {\n          definition:\n          cashiers:Set(Cashier) = Cashier.allInstance()->select(c | c.Id = id), cashier:Cashier = Cashier.allInstance()->any(c | c.Id = id), cashierExists:Boolean = if cashiers.size() > 0 then true else false endif\n            \n            precondition:\n          id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String)\n            \n            postcondition:\n          cashierExists = true and Cashier.allInstance()->includes(cashier) and result = true or cashierExists = false and let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "undefined is not iterable (cannot read property Symbol(Symbol.iterator))"
+        }
+      ]
+    }
+  }
+]

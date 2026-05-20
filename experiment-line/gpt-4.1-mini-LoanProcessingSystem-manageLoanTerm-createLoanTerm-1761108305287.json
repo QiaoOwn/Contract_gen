@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)",
+        "precondition": "loanTerm.oclIsUndefined() = false implies (loanTerm.ItemID = itemid and loanTerm.Content = content)",
+        "postcondition": "(loanTerm.oclIsUndefined() or (loanTerm.ItemID = itemid and loanTerm.Content = content)) and result = (loanTerm.oclIsUndefined() or (loanTerm.ItemID = itemid and loanTerm.Content = content))"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 44,
+          "msg": "mismatched input 'implies' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {\n          definition:\n          loanTerm:LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid and o.Content = content)\n            \n            precondition:\n          loanTerm.oclIsUndefined() = false implies (loanTerm.ItemID = itemid and loanTerm.Content = content)\n            \n            postcondition:\n          (loanTerm.oclIsUndefined() or (loanTerm.ItemID = itemid and loanTerm.Content = content)) and result = (loanTerm.oclIsUndefined() or (loanTerm.ItemID = itemid and loanTerm.Content = content))\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

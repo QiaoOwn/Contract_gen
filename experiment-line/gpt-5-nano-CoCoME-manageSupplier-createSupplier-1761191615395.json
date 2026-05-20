@@ -1,0 +1,50 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "definition: id: Integer, name: String",
+        "precondition": "true",
+        "postcondition": "If Supplier.allInstance()->exists(s | s.Id = id) then true else let ob:Supplier in ob.oclIsNew() and ob.Id = id and ob.Name = name and Supplier.allInstance()->includes(ob) endif"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "mismatched input 'definition' expecting RULE_ID"
+        },
+        {
+          "line": 3,
+          "column": 24,
+          "msg": "missing 'precondition' at ':'"
+        },
+        {
+          "line": 3,
+          "column": 26,
+          "msg": "mismatched input 'Integer' expecting {'{', '(', '*', 'self', 'result', 'if', 'let', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 13,
+          "msg": "mismatched input 'Supplier' expecting '}'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          definition: id: Integer, name: String\n            \n            precondition:\n          true\n            \n            postcondition:\n          If Supplier.allInstance()->exists(s | s.Id = id) then true else let ob:Supplier in ob.oclIsNew() and ob.Id = id and ob.Name = name and Supplier.allInstance()->includes(ob) endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: If"
+        }
+      ]
+    }
+  }
+]

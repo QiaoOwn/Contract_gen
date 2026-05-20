@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create()",
+        "precondition": "LoanRequest.allInstance()->includes(loanRequest) = false",
+        "postcondition": "let loanRequest:LoanRequest in loanRequest.oclIsNew() and LoanRequest.allInstance()->includes(loanRequest) and CurrentLoanRequest = loanRequest"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 144,
+          "msg": "mismatched input '(' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {\n          definition:\n          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid), newLoanRequest:LoanRequest = LoanRequest.create()\n            \n            precondition:\n          LoanRequest.allInstance()->includes(loanRequest) = false\n            \n            postcondition:\n          let loanRequest:LoanRequest in loanRequest.oclIsNew() and LoanRequest.allInstance()->includes(loanRequest) and CurrentLoanRequest = loanRequest\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: LoanRequest"
+        }
+      ]
+    }
+  }
+]

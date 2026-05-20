@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id)",
+        "precondition": "true",
+        "postcondition": "((supplier.oclIsUndefined() = false and Supplier.allInstance()->includes(supplier) and supplier.Id = id) or (supplier.oclIsUndefined() = true and let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name)) and result = true"
+      },
+      "model": "o3-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 115,
+          "msg": "mismatched input 'or' expecting ')'"
+        }
+      ],
+      "contract": "Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {\n          definition:\n          supplier:Supplier = Supplier.allInstance()->any(o | o.Id = id)\n            \n            precondition:\n          true\n            \n            postcondition:\n          ((supplier.oclIsUndefined() = false and Supplier.allInstance()->includes(supplier) and supplier.Id = id) or (supplier.oclIsUndefined() = true and let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name)) and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

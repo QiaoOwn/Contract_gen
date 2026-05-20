@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "item:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "item.oclIsUndefined() = bool = false",
+        "postcondition": "Item.allInstance()->includes(item) and item.Price = newPrice and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 39,
+          "msg": "mismatched input '=' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {\n          definition:\n          item:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          item.oclIsUndefined() = bool = false\n            \n            postcondition:\n          Item.allInstance()->includes(item) and item.Price = newPrice and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

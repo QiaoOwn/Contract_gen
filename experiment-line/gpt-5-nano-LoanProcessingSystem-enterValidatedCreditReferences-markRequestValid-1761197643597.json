@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "statusUpdated: Boolean",
+        "precondition": "CurrentLoanRequest.oclIsUndefined() = false",
+        "postcondition": "CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and statusUpdated = (CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED) and result = statusUpdated"
+      },
+      "model": "gpt-5-nano"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 97,
+          "msg": "extraneous input '(' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 9,
+          "column": 124,
+          "msg": "mismatched input '=' expecting '}'"
+        }
+      ],
+      "contract": "Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {\n          definition:\n          statusUpdated: Boolean\n            \n            precondition:\n          CurrentLoanRequest.oclIsUndefined() = false\n            \n            postcondition:\n          CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and statusUpdated = (CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED) and result = statusUpdated\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentLoanRequest"
+        }
+      ]
+    }
+  }
+]

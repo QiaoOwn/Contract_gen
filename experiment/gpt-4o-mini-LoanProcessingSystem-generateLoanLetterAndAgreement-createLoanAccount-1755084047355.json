@@ -1,0 +1,276 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId)",
+        "precondition": "existingLoanAccount.oclIsUndefined() = bool or LoanAccount.allInstance()->includes(existingLoanAccount)",
+        "postcondition": "if existingLoanAccount.oclIsUndefined() then let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif else result = true endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 316,
+          "msg": "mismatched input 'else' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId)\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined() = bool or LoanAccount.allInstance()->includes(existingLoanAccount)\n            \n            postcondition:\n          if existingLoanAccount.oclIsUndefined() then let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif else result = true endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount:Boolean = existingLoanAccount.oclIsUndefined()",
+        "precondition": "existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif else result = true endif"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 296,
+          "msg": "mismatched input 'else' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount:Boolean = existingLoanAccount.oclIsUndefined()\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif else result = true endif\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount:Boolean = existingLoanAccount.oclIsUndefined()",
+        "precondition": "existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 296,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount:Boolean = existingLoanAccount.oclIsUndefined()\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then let newLoanAccount:LoanAccount in newLoanAccount.oclIsNew() and newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = true\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount:Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount:LoanAccount = if isNewLoanAccount then LoanAccount() else null endif",
+        "precondition": "existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = isNewLoanAccount"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId:Integer, balance:Real, status:LoanAccountStatus = status, existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount:Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount:LoanAccount = if isNewLoanAccount then LoanAccount() else null endif\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = isNewLoanAccount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif",
+        "precondition": "existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = isNewLoanAccount"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = isNewLoanAccount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif",
+        "precondition": "existingLoanAccount.oclIsUndefined() and isNewLoanAccount = true",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = isNewLoanAccount"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined() and isNewLoanAccount = true\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = isNewLoanAccount\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif",
+        "precondition": "isNewLoanAccount = true and existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = loanAccountCreated endif and result = loanAccountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 246,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif\n            \n            precondition:\n          isNewLoanAccount = true and existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = loanAccountCreated endif and result = loanAccountCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif, newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif",
+        "precondition": "isNewLoanAccount = true and existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = loanAccountCreated endif and result = loanAccountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 246,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer, balance: Real, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif, newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif\n            \n            precondition:\n          isNewLoanAccount = true and existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = loanAccountCreated endif and result = loanAccountCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), loanAccountCreated: Boolean = isNewLoanAccount, newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif",
+        "precondition": "isNewLoanAccount = true and existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = loanAccountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), loanAccountCreated: Boolean = isNewLoanAccount, newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif\n            \n            precondition:\n          isNewLoanAccount = true and existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = loanAccountCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif",
+        "precondition": "existingLoanAccount.oclIsUndefined() and isNewLoanAccount = true",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = loanAccountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined() and isNewLoanAccount = true\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = loanAccountCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif",
+        "precondition": "existingLoanAccount.oclIsUndefined() and isNewLoanAccount = true",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = loanAccountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 232,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, loanAccountCreated: Boolean = if isNewLoanAccount then true else false endif\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined() and isNewLoanAccount = true\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) and result = true endif and result = loanAccountCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, accountCreated: Boolean = if isNewLoanAccount then true else false endif",
+        "precondition": "existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) endif and result = accountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 9,
+          "column": 214,
+          "msg": "mismatched input 'and' expecting '}'"
+        }
+      ],
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {\n          definition:\n          loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, accountCreated: Boolean = if isNewLoanAccount then true else false endif\n            \n            precondition:\n          existingLoanAccount.oclIsUndefined()\n            \n            postcondition:\n          if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) endif and result = accountCreated\n            \n        }"
+    }
+  },
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "loanAccountId: Integer = loanaccountid, balance: Real = balance, status: LoanAccountStatus = status, existingLoanAccount: LoanAccount = LoanAccount.allInstance()->any(o | o.LoanAccountID = loanAccountId), isNewLoanAccount: Boolean = existingLoanAccount.oclIsUndefined(), newLoanAccount: LoanAccount = if isNewLoanAccount then LoanAccount() else null endif, accountCreated: Boolean = isNewLoanAccount = true",
+        "precondition": "existingLoanAccount.oclIsUndefined()",
+        "postcondition": "if isNewLoanAccount then newLoanAccount.LoanAccountID = loanAccountId and newLoanAccount.Balance = balance and newLoanAccount.Status = status and LoanAccount.allInstance()->includes(newLoanAccount) endif and result = accountCreated"
+      },
+      "model": "gpt-4o-mini"
+    }
+  }
+]

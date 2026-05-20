@@ -1,0 +1,40 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "inputCard:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = self.InputCard.CardID and o.Password = self.InputCard.Password)\n\nisWithdraw:Boolean = if self.IsDeposit then false else true endif\n\nnumber:Real = if self.IsDeposit then self.DepositedNumber else if isWithdraw then 0.0 else 0.0 endif",
+        "precondition": "self.InputCard.oclIsUndefined() = false and inputCard.isEmpty() = false",
+        "postcondition": "let result:Real in result = number"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 5,
+          "column": 0,
+          "msg": "mismatched input 'isWithdraw' expecting 'precondition'"
+        },
+        {
+          "line": 13,
+          "column": 14,
+          "msg": "mismatched input 'result' expecting RULE_ID"
+        }
+      ],
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          definition:\n          inputCard:Set(BankCard) = BankCard.allInstance()->select(o | o.CardID = self.InputCard.CardID and o.Password = self.InputCard.Password)\n\nisWithdraw:Boolean = if self.IsDeposit then false else true endif\n\nnumber:Real = if self.IsDeposit then self.DepositedNumber else if isWithdraw then 0.0 else 0.0 endif\n            \n            precondition:\n          self.InputCard.oclIsUndefined() = false and inputCard.isEmpty() = false\n            \n            postcondition:\n          let result:Real in result = number\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: number"
+        }
+      ]
+    }
+  }
+]

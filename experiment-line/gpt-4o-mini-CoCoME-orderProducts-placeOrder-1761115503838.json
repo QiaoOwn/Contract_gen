@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "currentOrderProduct:OrderProduct = CurrentOrderProduct, totalAmount:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()",
+        "precondition": "CurrentOrderProduct.oclIsUndefined() = false",
+        "postcondition": "currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = totalAmount and result = true"
+      },
+      "model": "gpt-4o-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 147,
+          "msg": "mismatched input '->' expecting 'precondition'"
+        }
+      ],
+      "contract": "Contract CoCoMEOrderProducts::placeOrder(): Boolean {\n          definition:\n          currentOrderProduct:OrderProduct = CurrentOrderProduct, totalAmount:Real = currentOrderProduct.ContainedEntries->collect(o | o.SubAmount)->sum()\n            \n            precondition:\n          CurrentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and currentOrderProduct.Amount = totalAmount and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: CurrentOrderProduct"
+        }
+      ]
+    }
+  }
+]

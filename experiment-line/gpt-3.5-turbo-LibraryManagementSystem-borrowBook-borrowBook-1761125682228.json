@@ -1,0 +1,35 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "user.oclIsUndefined() = bool,\nbookCopy.oclIsUndefined() = bool,\nuser.BorrowStatus.oclIsTypeOf(BorrowStatus[NORMAL])",
+        "postcondition": "let loan:Loan in loan.oclIsNew(),\nBookCopy.allInstance()->includes(bookCopy),\nuser.LoanedBook->includes(loan),\nloan.LoanedUser = user,\nloan.LoanedCopy = bookCopy,\nresult = true"
+      },
+      "model": "gpt-3.5-turbo"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 38,
+          "msg": "mismatched input ',' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {\n          definition:\n          user:User = User.allInstance()->any(o | o.UserID = uid), bookCopy:BookCopy = BookCopy.allInstance()->any(o | o.Barcode = barcode)\n            \n            precondition:\n          user.oclIsUndefined() = bool,\nbookCopy.oclIsUndefined() = bool,\nuser.BorrowStatus.oclIsTypeOf(BorrowStatus[NORMAL])\n            \n            postcondition:\n          let loan:Loan in loan.oclIsNew(),\nBookCopy.allInstance()->includes(bookCopy),\nuser.LoanedBook->includes(loan),\nloan.LoanedUser = user,\nloan.LoanedCopy = bookCopy,\nresult = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: bool"
+        }
+      ]
+    }
+  }
+]

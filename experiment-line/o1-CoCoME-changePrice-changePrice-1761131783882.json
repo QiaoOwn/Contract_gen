@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "foundItem:Item = Item.allInstance()->any(o | o.Barcode = barcode)",
+        "precondition": "",
+        "postcondition": "foundItem.oclIsUndefined() or foundItem.Price = newPrice and result = if foundItem.oclIsUndefined() then false else true endif"
+      },
+      "model": "o1"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 6,
+          "column": 12,
+          "msg": "mismatched input 'postcondition' expecting 'precondition'"
+        },
+        {
+          "line": 7,
+          "column": 80,
+          "msg": "extraneous input 'if' expecting {'*', 'self', 'result', 'Tuple', 'true', 'false', 'null', 'invalid', 'Set', 'Bag', 'Sequence', 'Collection', 'OrderedSet', RULE_DOUBLE_QUOTED_STRING, RULE_SINGLE_QUOTED_STRING, RULE_ID, RULE_INT}"
+        },
+        {
+          "line": 7,
+          "column": 110,
+          "msg": "mismatched input 'then' expecting '}'"
+        }
+      ],
+      "contract": "Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {\n          definition:\n          foundItem:Item = Item.allInstance()->any(o | o.Barcode = barcode)\n            \n            \n            postcondition:\n          foundItem.oclIsUndefined() or foundItem.Price = newPrice and result = if foundItem.oclIsUndefined() then false else true endif\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "Cannot read properties of null (reading 'accept')"
+        }
+      ]
+    }
+  }
+]

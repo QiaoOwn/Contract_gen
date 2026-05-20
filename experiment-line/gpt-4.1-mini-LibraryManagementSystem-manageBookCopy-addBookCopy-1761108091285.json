@@ -1,0 +1,45 @@
+[
+  {
+    "OCL Generator": {
+      "ocl": {
+        "definition": "let book:Book = Book.allInstance()->any(b | b.CallNo = callNo), newCopy:BookCopy",
+        "precondition": "book.oclIsUndefined() = false and BookCopy.allInstance()->excludes(BookCopy.allInstance()->any(bc | bc.Barcode = barcode))",
+        "postcondition": "newCopy.oclIsNew() and BookCopy.allInstance()->includes(newCopy) and newCopy.Barcode = barcode and newCopy.Location = location and newCopy.Status = ClassName::AVAILABLE and newCopy.BookBelongs = book and result = true"
+      },
+      "model": "gpt-4.1-mini"
+    }
+  },
+  {
+    "Contract Generator": {
+      "contractErrors": [
+        {
+          "line": 3,
+          "column": 10,
+          "msg": "extraneous input 'let' expecting RULE_ID"
+        },
+        {
+          "line": 6,
+          "column": 85,
+          "msg": "mismatched input '.' expecting ')'"
+        },
+        {
+          "line": 6,
+          "column": 130,
+          "msg": "mismatched input ')' expecting 'postcondition'"
+        }
+      ],
+      "contract": "Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {\n          definition:\n          let book:Book = Book.allInstance()->any(b | b.CallNo = callNo), newCopy:BookCopy\n            \n            precondition:\n          book.oclIsUndefined() = false and BookCopy.allInstance()->excludes(BookCopy.allInstance()->any(bc | bc.Barcode = barcode))\n            \n            postcondition:\n          newCopy.oclIsNew() and BookCopy.allInstance()->includes(newCopy) and newCopy.Barcode = barcode and newCopy.Location = location and newCopy.Status = ClassName::AVAILABLE and newCopy.BookBelongs = book and result = true\n            \n        }"
+    }
+  },
+  {
+    "TypeScript Generator": {
+      "typescriptErrors": [
+        {
+          "line": 0,
+          "column": 0,
+          "msg": "visitRuleVariableExpCS transform error - Cannot find variable: book"
+        }
+      ]
+    }
+  }
+]
