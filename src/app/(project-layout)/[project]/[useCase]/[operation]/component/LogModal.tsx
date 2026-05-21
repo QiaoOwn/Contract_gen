@@ -135,8 +135,12 @@ const StepPanel: FC<{stepKey: PipelineStepKey; data: unknown}> = ({stepKey, data
       return (
         <Space direction="vertical" style={{width: '100%'}} size="middle">
           {d.ocl?.definition != null && <CodeBlock title="Definition" code={d.ocl.definition} />}
-          {d.ocl?.precondition != null && <CodeBlock title="Precondition" code={d.ocl.precondition} />}
-          {d.ocl?.postcondition != null && <CodeBlock title="Postcondition" code={d.ocl.postcondition} />}
+          {d.ocl?.precondition != null && (
+            <CodeBlock title="Precondition" code={d.ocl.precondition} />
+          )}
+          {d.ocl?.postcondition != null && (
+            <CodeBlock title="Postcondition" code={d.ocl.postcondition} />
+          )}
           {d.userInput != null && d.userInput !== '' && (
             <CodeBlock title="User input" code={d.userInput} />
           )}
@@ -199,10 +203,7 @@ const StepPanel: FC<{stepKey: PipelineStepKey; data: unknown}> = ({stepKey, data
                 key: 'jest',
                 label: 'Jest result (JSON)',
                 children: (
-                  <CodeBlock
-                    title="result"
-                    code={JSON.stringify(d.result ?? {}, null, 2)}
-                  />
+                  <CodeBlock title="result" code={JSON.stringify(d.result ?? {}, null, 2)} />
                 ),
               },
               {
@@ -236,7 +237,9 @@ const LogModal: FC<LogModalProps> = ({steps, initialTab, ...modalProps}) => {
       return;
     }
     const preferred =
-      initialTab && (PIPELINE_ORDER as readonly string[]).includes(initialTab) && merged[initialTab as PipelineStepKey]
+      initialTab &&
+      (PIPELINE_ORDER as readonly string[]).includes(initialTab) &&
+      merged[initialTab as PipelineStepKey]
         ? (initialTab as PipelineStepKey)
         : undefined;
     const firstWithData = PIPELINE_ORDER.find((k) => merged[k] != null);
@@ -278,7 +281,11 @@ const LogModal: FC<LogModalProps> = ({steps, initialTab, ...modalProps}) => {
       {!steps.length ? (
         <Empty description="No steps in this run" />
       ) : (
-        <Tabs activeKey={active} onChange={(k) => setActive(k as PipelineStepKey)} items={tabItems} />
+        <Tabs
+          activeKey={active}
+          onChange={(k) => setActive(k as PipelineStepKey)}
+          items={tabItems}
+        />
       )}
     </Modal>
   );

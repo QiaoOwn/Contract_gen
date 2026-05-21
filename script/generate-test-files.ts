@@ -115,16 +115,19 @@ type CounterPercentSummary = Record<string, Record<string, string>>;
     )
   );
   const total = files.length;
-  const newCounter = Object.entries(counter).reduce<CounterPercentSummary>((prev, [oclExpressionType, expressionMap]) => {
-    const key = `${oclExpressionType}Percent`;
-    if (!prev[key]) {
-      prev[key] = {};
-    }
-    Object.entries(expressionMap).forEach(([k, expressionCount]) => {
-      prev[key][k] = ((expressionCount / total) * 100).toFixed(2);
-    });
-    return prev;
-  }, {});
+  const newCounter = Object.entries(counter).reduce<CounterPercentSummary>(
+    (prev, [oclExpressionType, expressionMap]) => {
+      const key = `${oclExpressionType}Percent`;
+      if (!prev[key]) {
+        prev[key] = {};
+      }
+      Object.entries(expressionMap).forEach(([k, expressionCount]) => {
+        prev[key][k] = ((expressionCount / total) * 100).toFixed(2);
+      });
+      return prev;
+    },
+    {}
+  );
   const C2TExpression = expressions;
   const expressionCount = C2TExpression.length;
   fs.writeJsonSync(path.resolve(publicDir, `C2TExpressionCounter.json`), {

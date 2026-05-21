@@ -21,11 +21,7 @@ type GenerateOclWithJsonModeParam = {
 };
 
 const getOclOutputMode = () => {
-  const mode = (
-    process.env.OCL_OUTPUT_MODE ??
-    process.env.OCL_STRUCTURED_OUTPUT_MODE ??
-    'json'
-  )
+  const mode = (process.env.OCL_OUTPUT_MODE ?? process.env.OCL_STRUCTURED_OUTPUT_MODE ?? 'json')
     .trim()
     .toLowerCase();
   if (mode === 'structured' || mode === 'json' || mode === 'auto') {
@@ -79,7 +75,9 @@ const extractJsonObject = (content: string) => {
   return candidate.slice(start, end + 1);
 };
 
-const createChatModel = (param: Pick<GenerateOclWithJsonModeParam, 'model' | 'apiKey' | 'baseURL'>) =>
+const createChatModel = (
+  param: Pick<GenerateOclWithJsonModeParam, 'model' | 'apiKey' | 'baseURL'>
+) =>
   new ChatOpenAI({
     model: param.model,
     apiKey: param.apiKey,
@@ -87,7 +85,9 @@ const createChatModel = (param: Pick<GenerateOclWithJsonModeParam, 'model' | 'ap
   });
 
 const generateWithStructuredOutput = async (param: GenerateOclWithJsonModeParam) => {
-  const ocl = (await createChatModel(param).withStructuredOutput(param.schema).invoke(param.messages)) as {
+  const ocl = (await createChatModel(param)
+    .withStructuredOutput(param.schema)
+    .invoke(param.messages)) as {
     definition: string | null;
     precondition: string;
     postcondition: string;

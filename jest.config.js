@@ -5,7 +5,7 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 /** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/test/**/*.test.ts','<rootDir>/test/**/index.test.ts'],
+  testMatch: ['<rootDir>/test/**/*.test.ts', '<rootDir>/test/**/index.test.ts'],
   // Do not set testPathIgnorePatterns here: `jest.runCLI` in graph.ts runs files under
   // test/tmp/ and would otherwise get "No tests found". CI/local `npm test` passes
   // `--testPathIgnorePatterns=test/tmp` in package.json instead.

@@ -914,7 +914,10 @@ export class ContractToTypescript extends REMODELVisitor<VisitorReturnType | Vis
             t.returnStatement(
               t.binaryExpression(
                 '===',
-                t.memberExpression(t.newExpression(t.identifier('Set'), [keysParam]), t.identifier('size')),
+                t.memberExpression(
+                  t.newExpression(t.identifier('Set'), [keysParam]),
+                  t.identifier('size')
+                ),
                 t.memberExpression(keysParam, t.identifier('length'))
               )
             ),

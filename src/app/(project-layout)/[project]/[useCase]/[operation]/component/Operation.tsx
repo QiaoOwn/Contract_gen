@@ -92,161 +92,165 @@ const Operation: FC<OperationProps> = ({
             <Splitter layout={'horizontal'}>
               <Splitter.Panel defaultSize="46%" min="28%" max="72%">
                 <div className="operation-panel">
-              <Tabs
-                className="operation-tabs"
-                style={{height: '100%'}}
-                type="card"
-                tabBarExtraContent={
-                  <Button
-                    className="operation-action-button"
-                    type="primary"
-                    size="small"
-                    icon={<RetweetOutlined />}
-                    onClick={runAsync}
-                    loading={loading}
-                  >
-                    Transform
-                  </Button>
-                }
-                items={[
-                  {
-                    label: 'Contract',
-                    key: 'contract',
-                    children: <LoadableContractEditor ref={contractEditorRef} code={contract} />,
-                  },
-                  {
-                    label: 'Context',
-                    key: 'context',
-                    children: <pre style={{height: '100%', overflow: 'auto'}}>{context}</pre>,
-                  },
-                ]}
-              />
+                  <Tabs
+                    className="operation-tabs"
+                    style={{height: '100%'}}
+                    type="card"
+                    tabBarExtraContent={
+                      <Button
+                        className="operation-action-button"
+                        type="primary"
+                        size="small"
+                        icon={<RetweetOutlined />}
+                        onClick={runAsync}
+                        loading={loading}
+                      >
+                        Transform
+                      </Button>
+                    }
+                    items={[
+                      {
+                        label: 'Contract',
+                        key: 'contract',
+                        children: (
+                          <LoadableContractEditor ref={contractEditorRef} code={contract} />
+                        ),
+                      },
+                      {
+                        label: 'Context',
+                        key: 'context',
+                        children: <pre style={{height: '100%', overflow: 'auto'}}>{context}</pre>,
+                      },
+                    ]}
+                  />
                 </div>
               </Splitter.Panel>
               <Splitter.Panel>
                 <div className="operation-panel">
-                <Tabs
-                className="operation-tabs"
-                style={{height: '100%'}}
-                type="card"
-                items={[
-                  {
-                    destroyOnHidden: true,
-                    label: 'Service',
-                    key: 'service',
-                    children: (
-                      <Skeleton loading={loading} active paragraph={{rows: 5}}>
-                        <LoadableTypescriptEditor
-                          code={data?.data?.code || typescript.service}
-                          path={servicePath}
-                          libs={commonLibs}
-                        />
-                      </Skeleton>
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'Entity',
-                    key: 'entity',
-                    children: (
-                      <LoadableTypescriptEditor
-                        path={entityPath}
-                        code={typescript.entity}
-                        libs={[
-                          {
-                            content: typescript.dayjs,
-                            filePath: dayjsPath,
-                          },
-                        ]}
-                      />
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'StandardOPs',
-                    key: 'standardOPs',
-                    children: (
-                      <LoadableTypescriptEditor
-                        path={standardOPsPath}
-                        code={typescript.standardOPs}
-                      />
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'ArrayExtension',
-                    key: 'arrayExtension',
-                    children: (
-                      <LoadableTypescriptEditor
-                        path={arrayExtensionPath}
-                        code={typescript.arrayExtension}
-                      />
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'LogicFormulaBuilder',
-                    key: 'logicFormulaBuilder',
-                    children: (
-                      <LoadableTypescriptEditor
-                        path={logicFormulaBuilderPath}
-                        code={typescript.logicFormulaBuilder}
-                      />
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'PreconditionError',
-                    key: 'preconditionError',
-                    children: (
-                      <LoadableTypescriptEditor
-                        path={preconditionErrorPath}
-                        code={typescript.preconditionError}
-                      />
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'dayjs',
-                    key: 'dayjs',
-                    children: <LoadableTypescriptEditor path={dayjsPath} code={typescript.dayjs} />,
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'Test',
-                    key: 'test',
-                    children: (
-                      <LoadableTypescriptEditor
-                        path={testPath}
-                        code={typescript.test}
-                        libs={[
-                          ...commonLibs,
-                          {
-                            content: typescript.service,
-                            filePath: preconditionErrorPath,
-                          },
-                          {
-                            content: typescript.jest,
-                            filePath: 'jest.d.ts',
-                          },
-                        ]}
-                      />
-                    ),
-                  },
-                  {
-                    destroyOnHidden: true,
-                    label: 'Test Coverage',
-                    key: 'test-coverage',
-                    children: (
-                      <iframe
-                        className="w-full"
-                        style={{height: `calc(100vh - 40px)`}}
-                        src={`/coverage/lcov-report/test/${fileKey}/index.html`}
-                      />
-                    ),
-                  },
-                ]}
-              />
+                  <Tabs
+                    className="operation-tabs"
+                    style={{height: '100%'}}
+                    type="card"
+                    items={[
+                      {
+                        destroyOnHidden: true,
+                        label: 'Service',
+                        key: 'service',
+                        children: (
+                          <Skeleton loading={loading} active paragraph={{rows: 5}}>
+                            <LoadableTypescriptEditor
+                              code={data?.data?.code || typescript.service}
+                              path={servicePath}
+                              libs={commonLibs}
+                            />
+                          </Skeleton>
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'Entity',
+                        key: 'entity',
+                        children: (
+                          <LoadableTypescriptEditor
+                            path={entityPath}
+                            code={typescript.entity}
+                            libs={[
+                              {
+                                content: typescript.dayjs,
+                                filePath: dayjsPath,
+                              },
+                            ]}
+                          />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'StandardOPs',
+                        key: 'standardOPs',
+                        children: (
+                          <LoadableTypescriptEditor
+                            path={standardOPsPath}
+                            code={typescript.standardOPs}
+                          />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'ArrayExtension',
+                        key: 'arrayExtension',
+                        children: (
+                          <LoadableTypescriptEditor
+                            path={arrayExtensionPath}
+                            code={typescript.arrayExtension}
+                          />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'LogicFormulaBuilder',
+                        key: 'logicFormulaBuilder',
+                        children: (
+                          <LoadableTypescriptEditor
+                            path={logicFormulaBuilderPath}
+                            code={typescript.logicFormulaBuilder}
+                          />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'PreconditionError',
+                        key: 'preconditionError',
+                        children: (
+                          <LoadableTypescriptEditor
+                            path={preconditionErrorPath}
+                            code={typescript.preconditionError}
+                          />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'dayjs',
+                        key: 'dayjs',
+                        children: (
+                          <LoadableTypescriptEditor path={dayjsPath} code={typescript.dayjs} />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'Test',
+                        key: 'test',
+                        children: (
+                          <LoadableTypescriptEditor
+                            path={testPath}
+                            code={typescript.test}
+                            libs={[
+                              ...commonLibs,
+                              {
+                                content: typescript.service,
+                                filePath: preconditionErrorPath,
+                              },
+                              {
+                                content: typescript.jest,
+                                filePath: 'jest.d.ts',
+                              },
+                            ]}
+                          />
+                        ),
+                      },
+                      {
+                        destroyOnHidden: true,
+                        label: 'Test Coverage',
+                        key: 'test-coverage',
+                        children: (
+                          <iframe
+                            className="w-full"
+                            style={{height: `calc(100vh - 40px)`}}
+                            src={`/coverage/lcov-report/test/${fileKey}/index.html`}
+                          />
+                        ),
+                      },
+                    ]}
+                  />
                 </div>
               </Splitter.Panel>
             </Splitter>

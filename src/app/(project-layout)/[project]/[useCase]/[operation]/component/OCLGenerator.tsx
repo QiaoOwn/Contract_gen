@@ -111,7 +111,8 @@ const OCLGenerator: FC<{src: string; initialUserInput?: string}> = ({initialUser
   const lastStep = isFinished ? processes.at(-1)!['Test Result'] : undefined;
   const buildStepStatus = (item: Record<string, unknown>, isLast: boolean): StepProps['status'] => {
     if (item.typescriptErrors || item.contractErrors) {
-      const hasTypescriptError = Array.isArray(item.typescriptErrors) && item.typescriptErrors.length > 0;
+      const hasTypescriptError =
+        Array.isArray(item.typescriptErrors) && item.typescriptErrors.length > 0;
       const hasContractError = Array.isArray(item.contractErrors) && item.contractErrors.length > 0;
       if (hasTypescriptError || hasContractError) {
         return 'error';
@@ -149,43 +150,43 @@ const OCLGenerator: FC<{src: string; initialUserInput?: string}> = ({initialUser
         {processes.length === 0 ? (
           <>
             <div className="generator-toolbar">
-          <Select
-            style={{width: 150}}
-            value={model}
-            onChange={(value) => setModel(value as OpenAIChatModelId)}
-            options={modelOptions}
-            virtual={false}
-            listHeight={320}
-            popupMatchSelectWidth={false}
-            getPopupContainer={(triggerNode) => triggerNode.parentElement ?? document.body}
-          />
+              <Select
+                style={{width: 150}}
+                value={model}
+                onChange={(value) => setModel(value as OpenAIChatModelId)}
+                options={modelOptions}
+                virtual={false}
+                listHeight={320}
+                popupMatchSelectWidth={false}
+                getPopupContainer={(triggerNode) => triggerNode.parentElement ?? document.body}
+              />
             </div>
-          <div
-            className="absolute"
-            style={{top: `50%`, left: `50%`, transform: `translate(-50%,-50%)`}}
-          >
-            <Space direction="vertical" size="middle" className="items-center generator-landing">
-              <div style={{width: 700, maxWidth: '80vw'}}>
-                <Text>Natural language input</Text>
-                <TextArea
-                  value={userInput}
-                  onChange={(event) => setUserInput(event.target.value)}
-                  rows={5}
-                  placeholder="Describe operation behavior in natural language"
-                />
-              </div>
-              <Image alt="" height={300} src={landingImageSrc} preview={false} />
-              <Button
-                loading={generateOCLLoading}
-                type="primary"
-                onClick={generateOCL}
-                size="large"
-                disabled={!userInput.trim()}
-              >
-                Generate OCL For {project} {useCase} {operation}
-              </Button>
-            </Space>
-          </div>
+            <div
+              className="absolute"
+              style={{top: `50%`, left: `50%`, transform: `translate(-50%,-50%)`}}
+            >
+              <Space direction="vertical" size="middle" className="items-center generator-landing">
+                <div style={{width: 700, maxWidth: '80vw'}}>
+                  <Text>Natural language input</Text>
+                  <TextArea
+                    value={userInput}
+                    onChange={(event) => setUserInput(event.target.value)}
+                    rows={5}
+                    placeholder="Describe operation behavior in natural language"
+                  />
+                </div>
+                <Image alt="" height={300} src={landingImageSrc} preview={false} />
+                <Button
+                  loading={generateOCLLoading}
+                  type="primary"
+                  onClick={generateOCL}
+                  size="large"
+                  disabled={!userInput.trim()}
+                >
+                  Generate OCL For {project} {useCase} {operation}
+                </Button>
+              </Space>
+            </div>
           </>
         ) : status === Status.Process ? (
           <div
@@ -235,7 +236,10 @@ const OCLGenerator: FC<{src: string; initialUserInput?: string}> = ({initialUser
                           items={processes.map((process, index) => {
                             const stepName = Object.keys(process)[0] as keyof GenerateOCLResult;
                             const stepData = process[stepName] as Record<string, unknown>;
-                            const stepStatus = buildStepStatus(stepData, index === processes.length - 1);
+                            const stepStatus = buildStepStatus(
+                              stepData,
+                              index === processes.length - 1
+                            );
                             return {
                               key: `${index}`,
                               label: (
@@ -284,7 +288,9 @@ const OCLGenerator: FC<{src: string; initialUserInput?: string}> = ({initialUser
                   {
                     key: 'test_result',
                     label: 'Test Result',
-                    children: <TestResult summary={lastStep!.summary!} result={lastStep!.result!} />,
+                    children: (
+                      <TestResult summary={lastStep!.summary!} result={lastStep!.result!} />
+                    ),
                   },
                 ]}
               />
