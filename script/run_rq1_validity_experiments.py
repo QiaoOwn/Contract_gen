@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import http.client
 import json
 import logging
 import os
@@ -129,7 +130,11 @@ def call_next_generate_ndjson(
     step_index = 0
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            raw_bytes = resp.read()
+            try:
+                raw_bytes = resp.read()
+            except http.client.IncompleteRead as e:
+                raw_bytes = e.partial or b""
+                meta["stream_incomplete"] = "incomplete_read_partial_response"
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")
         meta["http_error"] = f"HTTP {e.code}: {body[:4000]}"
@@ -232,7 +237,7 @@ def synthetic_parser_from_contract_meta(meta: Dict[str, Any]) -> Dict[str, Any]:
             "subprocess_timeout": False,
             "subprocess_exception": True,
         }
-    if meta.get("stream_incomplete"):
+    if meta.get("stream_incomplete") and meta.get("last_contract_errors") is None:
         msg = str(meta["stream_incomplete"])
         return {
             "is_valid": False,
