@@ -1,0 +1,9 @@
+Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {
+          definition:
+          rep:Repair = Repair.allInstance()->any(o:Repair|o.Id=id), sta:Staff = Staff.allInstance()->any(o:Staff|o.Id=sid)
+            precondition:
+          rep.oclIsUndefined() = false and sta.oclIsUndefined() = false and rep.RaiseStaff = sta and sta.Role = Staff::GroundStaff and rep.Close = true
+            postcondition:
+          rep.Score = score and (score >= 4 implies rep.Close = true and rep.Process = 0 and rep.Description = des) and (score < 4 implies rep.Close = false and rep.Process = 0 and rep.Description = des) and result = true
+            
+        }

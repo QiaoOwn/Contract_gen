@@ -5,6 +5,7 @@ Pure-LLM baseline (standalone).
 
 - Does NOT call Next.js, LangGraph, or run_rq1_validity_experiments.py.
 - One HTTP LLM request per attempt; no in-pipeline error feedback.
+- Prompt targets REMODEL dialect (allInstance(), transform rules), not standard OCL.
 - Optional REMODEL syntax check via external --validate-cmd (e.g. tsx validator).
 
 Example (114 ops, one model, 5 independent attempts, with syntax check):
@@ -112,6 +113,72 @@ def append_jsonl(path: Path, obj: Dict[str, Any]) -> None:
         f.write(json.dumps(obj, ensure_ascii=False) + "\n")
 
 
+REMODEL_TRANSFORM_RULES = """
+Here are REMODEL transform rules (must follow):
+
+Rule: ClassName::EnumValue — retrieve enum value.
+Rule: self.GlobalVariableName — global variable from Service/Module.
+
+definition (optional; variables are comma-separated, names in smallCamelCase):
+  obs:Set(ClassName) = ClassName.allInstance()
+  obs:Set(ClassName) = ClassName.allInstance()->select(o:ClassName|conditions)
+  obs:ClassName = ClassName.allInstance()->any(o:ClassName|conditions)
+  o:ClassName = ob.assoName
+
+precondition:
+  ob.oclIsUndefined() = bool
+  obs.isEmpty() = bool
+  ClassName.allInstance()->includes(ob) / ->excludes(ob)
+  ob.AttriName = value  (use = or <>; combine with and / or)
+
+postcondition:
+  let ob:ClassName in ob.oclIsNew() and ...  (first when creating objects)
+  ClassName.allInstance()->includes(ob) / ->excludes(ob)
+  ob.assoName = addOb  or  ob.assoName->includes(addOb)
+  ob.attriName = value
+  result = var  (last statement when return type is Boolean or entity)
+
+Iterator syntax: ClassName.allInstance()->any(o:ClassName|o.Id=id)  (typed iterator before |)
+""".strip()
+
+REMODEL_COMMON_MISTAKES = """
+Avoid these REMODEL grammar mistakes:
+- NEVER use allInstances(); ONLY ClassName.allInstance()
+- NEVER use keyword not; use = false or oclIsUndefined() = true instead
+- Do NOT write result = (a = b); bind booleans in definition if needed
+- Do NOT abuse extra parentheses like (exprA) and (exprB); write exprA and exprB
+- In definition, separate declarations with commas, not newlines
+- includes()/excludes() take a single variable name only; bind complex lookups in definition first
+- Validation logic belongs in precondition, not postcondition if/else tricks
+- definition JSON value must be omitted or a real expression; never the literal string "null"
+""".strip()
+
+REMODEL_SECTION_GUIDE = """
+definition: optional helper variables for precondition/postcondition (smallCamelCase names).
+precondition: state assumed before the operation; use definition variables when helpful.
+postcondition: state after the operation; use let ... in ... oclIsNew() for new objects.
+""".strip()
+
+
+def normalize_remodel_expression(text: Optional[str]) -> str:
+    if not text:
+        return ""
+    out = str(text).strip()
+    if not out:
+        return ""
+    out = re.sub(r"\.allInstances\s*\(\s*\)", ".allInstance()", out, flags=re.IGNORECASE)
+    return out
+
+
+def normalize_definition_value(defn: Any) -> Optional[str]:
+    if defn is None:
+        return None
+    s = normalize_remodel_expression(str(defn))
+    if not s or s.lower() in ("null", "none", "n/a", "undefined", '""', "''"):
+        return None
+    return s
+
+
 def safe_operation(row: Dict[str, Any], line_no: int) -> Optional[Dict[str, Any]]:
     oid = row.get("id") or row.get("operation_id")
     if not oid:
@@ -134,16 +201,29 @@ def safe_operation(row: Dict[str, Any], line_no: int) -> Optional[Dict[str, Any]
 
 def build_prompt(op: Dict[str, Any]) -> str:
     params_str = json.dumps(op.get("parameters") or [], ensure_ascii=False)
-    return f"""你是一名 OCL 合约生成专家。请根据给定的自然语言需求、操作签名、参数、返回值类型和系统模型上下文，生成 OCL 合约片段。
+    return f"""You are a REMODEL contract code generator. Generate definition / precondition / postcondition expressions for the operation below.
 
-要求：
-1. 只输出一个 JSON 对象，不要输出解释或 Markdown；
-2. JSON 键必须为 definition、precondition、postcondition（definition 可为 null）；
-3. 各字段值为 OCL 表达式字符串（不含 Contract 外壳）；
-4. 不要编造 model_context 中不存在的类、属性、关联或操作；
-5. 使用标准 OCL 风格；保持 result、self、@pre 等关键字使用正确。
+IMPORTANT: Output REMODEL dialect only (project-specific grammar). This is NOT standard OCL.
+- Always use ClassName.allInstance() — never allInstances(), never OCL library names unknown to REMODEL.
+- Use result, self, @pre where appropriate; combine conditions with and / or.
 
-输入信息：
+{REMODEL_SECTION_GUIDE}
+
+{REMODEL_TRANSFORM_RULES}
+
+{REMODEL_COMMON_MISTAKES}
+
+Output format:
+1. Return exactly one JSON object, no Markdown or explanation.
+2. Keys: definition, precondition, postcondition.
+3. definition may be JSON null if unused; never the string "null".
+4. Values are REMODEL expression strings only (no Contract wrapper).
+5. Use only classes, attributes, associations, and operations from model_context.
+
+Example (createDevice-style):
+{{"definition": "dev:Device = Device.allInstance()->any(u:Device|u.Id=id), sta:Staff = Staff.allInstance()->any(uu:Staff|uu.Id=contactsid)", "precondition": "dev.oclIsUndefined() = true and sta.oclIsUndefined() = false", "postcondition": "let d:Device in d.oclIsNew() and d.Id=id and d.Name=name and d.Location=location and d.Contacts=sta and Device.allInstance()->includes(d) and result=true"}}
+
+Operation input:
 Case Study: {op["case_study"]}
 Service: {op["service"]}
 Operation Signature: {op["operation_signature"]}
@@ -154,8 +234,7 @@ Return Type: {op["return_type"]}
 Model Context:
 {op["model_context"]}
 
-请输出 JSON，例如：
-{{"definition": "...", "precondition": "...", "postcondition": "..."}}
+Return JSON only.
 """
 
 
@@ -216,10 +295,9 @@ def parse_json_from_llm(text: str) -> Optional[Dict[str, Any]]:
 def extract_contract_text(raw: str, op: Dict[str, Any]) -> Dict[str, Any]:
     obj = parse_json_from_llm(raw)
     if obj and ("precondition" in obj or "postcondition" in obj):
-        pre = str(obj.get("precondition") or "")
-        post = str(obj.get("postcondition") or "")
-        defn = obj.get("definition")
-        defn_s = None if defn is None else str(defn)
+        pre = normalize_remodel_expression(str(obj.get("precondition") or ""))
+        post = normalize_remodel_expression(str(obj.get("postcondition") or ""))
+        defn_s = normalize_definition_value(obj.get("definition"))
         contract = wrap_contract(
             op, definition=defn_s, precondition=pre, postcondition=post
         )
@@ -405,6 +483,74 @@ def validate_contract_file(
         "validate_stdout": proc.stdout or "",
         "validate_stderr": proc.stderr or "",
     }
+
+
+def pair_is_complete(
+    operation_id: str,
+    model: str,
+    attempts: List[Dict[str, Any]],
+    max_attempts: int,
+) -> bool:
+    rows = [
+        r
+        for r in attempts
+        if r.get("operation_id") == operation_id and r.get("model") == model
+    ]
+    if not rows:
+        return False
+    if any(r.get("syntax_valid") for r in rows):
+        return True
+    return max(int(r["attempt"]) for r in rows) >= max_attempts
+
+
+def count_completed_pairs(
+    operations: List[Dict[str, Any]],
+    models: List[str],
+    attempts: List[Dict[str, Any]],
+    max_attempts: int,
+) -> int:
+    return sum(
+        1
+        for op in operations
+        for model in models
+        if pair_is_complete(op["id"], model, attempts, max_attempts)
+    )
+
+
+def format_progress_bar(done: int, total: int, width: int = 24) -> str:
+    if total <= 0:
+        return f"[{'-' * width}]"
+    ratio = min(1.0, done / total)
+    filled = int(width * ratio)
+    if filled >= width:
+        bar = "=" * width
+    elif filled == 0:
+        bar = ">" + "-" * (width - 1)
+    else:
+        bar = "=" * filled + ">" + "-" * (width - filled - 1)
+    return f"[{bar}]"
+
+
+def print_progress(done: int, total: int, rec: Dict[str, Any], *, max_attempts: int) -> None:
+    pct = (done / total * 100.0) if total else 0.0
+    status = "valid" if rec.get("syntax_valid") else str(rec.get("error_type") or "invalid")
+    att = int(rec.get("attempt") or 0)
+    print(
+        "{bar} {done}/{total} ({pct:5.1f}%) "
+        "model={model} op={op} att={att}/{max_att} status={status} latency={latency:.2f}s".format(
+            bar=format_progress_bar(done, total),
+            done=done,
+            total=total,
+            pct=pct,
+            model=rec.get("model", ""),
+            op=rec.get("operation_id", ""),
+            att=att,
+            max_att=max_attempts,
+            status=status,
+            latency=float(rec.get("latency_sec") or 0.0),
+        ),
+        flush=True,
+    )
 
 
 def reindex(
@@ -602,12 +748,21 @@ def main() -> None:
             done_valid.add((row["operation_id"], row["model"]))
 
     planned = len(operations) * len(args.models)
+    pairs_completed = count_completed_pairs(
+        operations, args.models, existing, args.max_attempts
+    )
     print(f"Baseline LLM: {len(operations)} ops x {len(args.models)} models = {planned} pairs")
+    if pairs_completed:
+        print(
+            f"Resuming: {pairs_completed}/{planned} pairs already complete "
+            f"({format_progress_bar(pairs_completed, planned)})",
+            flush=True,
+        )
 
     for op in operations:
         oid = op["id"]
         for model in args.models:
-            if (oid, model) in done_valid:
+            if pair_is_complete(oid, model, existing, args.max_attempts):
                 continue
             start_att = (
                 max(
@@ -682,11 +837,15 @@ def main() -> None:
                 }
                 append_jsonl(attempts_path, rec)
                 existing.append(rec)
+                pair_done = rec["syntax_valid"] or att >= args.max_attempts
+                if pair_done and not pair_is_complete(oid, model, existing[:-1], args.max_attempts):
+                    pairs_completed += 1
+                print_progress(
+                    pairs_completed, planned, rec, max_attempts=args.max_attempts
+                )
                 if rec["syntax_valid"]:
                     done_valid.add((oid, model))
-                    print(f"[ok] {model} {oid} att={att}", flush=True)
                     break
-                print(f"[--] {model} {oid} att={att} {rec['error_type']}", flush=True)
                 time.sleep(max(0.0, args.sleep_between_calls))
 
     write_summary(output_dir, operations, args.models, args.max_attempts)
