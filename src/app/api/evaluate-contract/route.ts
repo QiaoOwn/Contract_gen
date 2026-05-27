@@ -12,8 +12,7 @@ export const POST = async (request: Request) => {
     if (!project || !useCase || !operation || !ocl?.precondition || !ocl?.postcondition) {
       return NextResponse.json(
         {
-          error:
-            'project, useCase, operation, and ocl.precondition/ocl.postcondition are required',
+          error: 'project, useCase, operation, and ocl.precondition/ocl.postcondition are required',
         },
         {status: 400}
       );

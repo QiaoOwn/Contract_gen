@@ -84,7 +84,8 @@ const parseTypescriptEntry = (entry: string) => {
       getCompilationSettings: () => compilerOptions,
       getDefaultLibFileName: (options) => typescript.getDefaultLibFilePath(options),
       fileExists: (name) => fileMap[name] !== undefined || fs.existsSync(name),
-      readFile: (name) => fileMap[name] ?? (fs.existsSync(name) ? fs.readFileSync(name, 'utf-8') : undefined),
+      readFile: (name) =>
+        fileMap[name] ?? (fs.existsSync(name) ? fs.readFileSync(name, 'utf-8') : undefined),
       readDirectory: (dir, extensions) => extensions?.map((ext) => `${dir}/file${ext}`) || [],
       directoryExists: () => true,
       getDirectories: () => [],
@@ -177,7 +178,13 @@ const runOperationTests = async (
   };
 };
 
-export const evaluateContract = async ({project: key, useCase: uc, operation: op, contract, ocl}: EvalParams) => {
+export const evaluateContract = async ({
+  project: key,
+  useCase: uc,
+  operation: op,
+  contract,
+  ocl,
+}: EvalParams) => {
   const contractParse = contract ? parse(contract) : null;
   const contractErrors = contractParse ? toPlainErrors(contractParse.errors) : [];
   if (contractParse && contractErrors.length > 0) {
@@ -207,7 +214,9 @@ export const evaluateContract = async ({project: key, useCase: uc, operation: op
   } catch (error) {
     return {
       contract_parse_ok: true,
-      contract: contractParse ? formatContract(contractParse.tree!, contractParse.tokens) : contract,
+      contract: contractParse
+        ? formatContract(contractParse.tree!, contractParse.tokens)
+        : contract,
       contract_errors: [],
       typescript_generation_ok: false,
       typescript_generation_error: (error as Error).message,
@@ -222,7 +231,9 @@ export const evaluateContract = async ({project: key, useCase: uc, operation: op
   if (typescriptErrors.length > 0) {
     return {
       contract_parse_ok: true,
-      contract: contractParse ? formatContract(contractParse.tree!, contractParse.tokens) : contract,
+      contract: contractParse
+        ? formatContract(contractParse.tree!, contractParse.tokens)
+        : contract,
       contract_errors: [],
       typescript_generation_ok: true,
       typescript_parse_ok: false,
@@ -236,7 +247,9 @@ export const evaluateContract = async ({project: key, useCase: uc, operation: op
     const testResult = await runOperationTests(key, uc, op, typescriptCode);
     return {
       contract_parse_ok: true,
-      contract: contractParse ? formatContract(contractParse.tree!, contractParse.tokens) : contract,
+      contract: contractParse
+        ? formatContract(contractParse.tree!, contractParse.tokens)
+        : contract,
       contract_errors: [],
       typescript_generation_ok: true,
       typescript_parse_ok: true,
@@ -249,7 +262,9 @@ export const evaluateContract = async ({project: key, useCase: uc, operation: op
   } catch (error) {
     return {
       contract_parse_ok: true,
-      contract: contractParse ? formatContract(contractParse.tree!, contractParse.tokens) : contract,
+      contract: contractParse
+        ? formatContract(contractParse.tree!, contractParse.tokens)
+        : contract,
       contract_errors: [],
       typescript_generation_ok: true,
       typescript_parse_ok: true,
