@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {
+          definition:
+          u:User = User.allInstance()->any(o:User|o.UserID=uid)
+            precondition:
+          u.oclIsUndefined() = false and fee >= 0 and u.OverDueFee >= fee
+            postcondition:
+          u.OverDueFee = u.OverDueFee@pre - fee and result = true
+            
+        }

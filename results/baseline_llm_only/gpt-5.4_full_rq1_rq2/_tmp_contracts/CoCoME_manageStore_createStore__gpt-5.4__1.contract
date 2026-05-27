@@ -1,0 +1,9 @@
+Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {
+          definition:
+          store:Store = Store.allInstance()->any(s:Store|s.Id=id)
+            precondition:
+          store.oclIsUndefined() = true
+            postcondition:
+          let s:Store in s.oclIsNew() and s.Id=id and s.Name=name and s.Address=address and s.IsOpened=isopened and Store.allInstance()->includes(s) and result=true
+            
+        }

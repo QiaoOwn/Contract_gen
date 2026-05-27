@@ -1,0 +1,9 @@
+Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {
+          definition:
+          req:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.RequestID=itemid)
+            precondition:
+          itemid.oclIsUndefined() = false and content.oclIsUndefined() = false and req.oclIsUndefined() = false
+            postcondition:
+          let lt:LoanTerm in lt.oclIsNew() and lt.ItemID = itemid and lt.Content = content and LoanTerm.allInstance()->includes(lt) and req.AttachedLoanTerms->includes(lt) and result = true
+            
+        }

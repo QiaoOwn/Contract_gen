@@ -1,0 +1,9 @@
+Contract AutomatedTellerMachineSystem::printReceipt(): Real {
+          definition:
+          card:BankCard = self.InputCard
+            precondition:
+          card.oclIsUndefined() = false and BankCard.allInstance()->includes(card) and self.CardIDValidated = true and self.PasswordValidated = true and self.IsWithdraw = true and self.WithdrawedNumber > 0 and card.CardStatus = CardStatus::NORMAL and card.Balance >= self.WithdrawedNumber
+            postcondition:
+          card.Balance = card.Balance@pre and result = self.WithdrawedNumber
+            
+        }

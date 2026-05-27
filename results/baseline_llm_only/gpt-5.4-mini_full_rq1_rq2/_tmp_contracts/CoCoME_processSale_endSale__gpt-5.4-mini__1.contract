@@ -1,0 +1,9 @@
+Contract ProcessSaleService::endSale(): Real {
+          definition:
+          curSale:Sale = self.CurrentSale, pay:Payment = curSale.AssoicatedPayment
+            precondition:
+          curSale.oclIsUndefined() = false and pay.oclIsUndefined() = false and curSale.IsComplete = false
+            postcondition:
+          curSale.IsComplete = true and curSale.IsReadytoPay = false and result = curSale.Amount
+            
+        }

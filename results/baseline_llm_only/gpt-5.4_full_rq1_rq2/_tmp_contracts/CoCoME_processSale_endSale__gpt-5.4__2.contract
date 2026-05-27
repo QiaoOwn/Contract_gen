@@ -1,0 +1,9 @@
+Contract ProcessSaleService::endSale(): Real {
+          definition:
+          currentSale:Sale = self.CurrentSale, currentSaleLine:SalesLineItem = self.CurrentSaleLine
+            precondition:
+          currentSale.oclIsUndefined() = false and currentSaleLine.oclIsUndefined() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and Sale.allInstance()->includes(currentSale) and SalesLineItem.allInstance()->includes(currentSaleLine) and currentSale.ContainedSalesLine->includes(currentSaleLine)
+            postcondition:
+          currentSale.IsComplete = true and result = currentSale.Amount
+            
+        }

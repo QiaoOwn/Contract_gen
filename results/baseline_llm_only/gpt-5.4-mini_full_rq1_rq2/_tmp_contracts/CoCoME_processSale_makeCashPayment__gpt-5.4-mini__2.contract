@@ -1,0 +1,9 @@
+Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {
+          definition:
+          sale:Sale = CurrentSale, pay:Payment = sale.AssoicatedPayment
+            precondition:
+          sale.oclIsUndefined() = false and sale.IsReadytoPay = true and sale.IsComplete = false and sale.Amount <= amount and pay.oclIsUndefined() = false and pay.AmountTendered = amount
+            postcondition:
+          let cashPay:CashPayment in cashPay.oclIsNew() and cashPay.Balance = amount - sale.Amount and sale.IsComplete = true and sale.IsReadytoPay = false and pay.AmountTendered = amount and sale.AssoicatedPayment = cashPay and result = true
+            
+        }

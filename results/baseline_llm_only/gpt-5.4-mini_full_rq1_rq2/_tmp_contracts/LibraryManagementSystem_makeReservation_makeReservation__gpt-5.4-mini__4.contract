@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {
+          definition:
+          u:User = User.allInstance()->any(o:User|o.UserID=uid), c:BookCopy = BookCopy.allInstance()->any(o:BookCopy|o.Barcode=barcode)
+            precondition:
+          u.oclIsUndefined() = false and c.oclIsUndefined() = false and c.Status = CopyStatus::AVAILABLE and c.IsReserved = false and u.BorrowStatus = BorrowStatus::NORMAL
+            postcondition:
+          let r:Reserve in r.oclIsNew() and r.ReservedUser = u and r.ReservedCopy = c and r.IsReserveClosed = false and u.ReservedBook->includes(r) and c.ReservationRecord->includes(r) and c.IsReserved = true and result = true
+            
+        }

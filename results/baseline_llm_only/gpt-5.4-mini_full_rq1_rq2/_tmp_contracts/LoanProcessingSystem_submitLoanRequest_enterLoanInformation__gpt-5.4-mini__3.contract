@@ -1,0 +1,9 @@
+Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {
+          definition:
+          curReq:LoanRequest = LoanRequest.allInstance()->any(r:LoanRequest|r.RequestID=requestid)
+            precondition:
+          curReq.oclIsUndefined() = false and name <> '' and loanpurpose <> '' and postaladdress <> '' and email <> '' and workreferences <> '' and creditreferences <> '' and loanamount > 0 and income > 0 and phonenumber > 0 and zipcode > 0 and checkingaccountnumber > 0 and securitynumber > 0
+            postcondition:
+          curReq.Name = name and curReq.LoanAmount = loanamount and curReq.LoanPurpose = loanpurpose and curReq.Income = income and curReq.PhoneNumber = phonenumber and curReq.PostalAddress = postaladdress and curReq.ZipCode = zipcode and curReq.Email = email and curReq.WorkReferences = workreferences and curReq.CreditReferences = creditreferences and curReq.CheckingAccountNumber = checkingaccountnumber and curReq.SecurityNumber = securitynumber and curReq.Status = LoanRequestStatus::SUBMITTED and result = true
+            
+        }

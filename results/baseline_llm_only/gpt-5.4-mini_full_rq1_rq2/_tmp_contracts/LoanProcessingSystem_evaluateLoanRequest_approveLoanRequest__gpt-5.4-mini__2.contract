@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          definition:
+          currentLoanRequest:LoanRequest = self.CurrentLoanRequest, currentLoanRequests:Set(LoanRequest) = self.CurrentLoanRequests
+            precondition:
+          currentLoanRequest.oclIsUndefined() = false and currentLoanRequests->includes(currentLoanRequest) and currentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and currentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and currentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false and currentLoanRequest.ApprovalLoan.oclIsUndefined() = false and currentLoanRequest.AttachedApprovalLetter.oclIsUndefined() = false and currentLoanRequest.AttachedLoanAgreement.oclIsUndefined() = false
+            postcondition:
+          currentLoanRequest.Status = LoanRequestStatus::APPROVED and currentLoanRequest.ApprovalLoan.Status = LoanStatus::LSOPEN and currentLoanRequest.ApprovalLoan.ReferedLoanRequest = currentLoanRequest and currentLoanRequest.ApprovalLoan.IsPaidinFull = false and currentLoanRequest.ApprovalLoan.RemainAmountToPay >= 0 and result = true
+            
+        }

@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          definition:
+          loanRequest:LoanRequest = self.CurrentLoanRequest, approvalLoan:Loan = loanRequest.ApprovalLoan
+            precondition:
+          loanRequest.oclIsUndefined() = false and loanRequest.Name = LoanRequestStatus::READYFORREVIEW and approvalLoan.oclIsUndefined() = false and LoanRequest.allInstance()->includes(loanRequest) and Loan.allInstance()->includes(approvalLoan)
+            postcondition:
+          loanRequest.Name = LoanRequestStatus::APPROVED and approvalLoan.ReferedLoanRequest = loanRequest and loanRequest.ApprovalLoan = approvalLoan and result=true
+            
+        }

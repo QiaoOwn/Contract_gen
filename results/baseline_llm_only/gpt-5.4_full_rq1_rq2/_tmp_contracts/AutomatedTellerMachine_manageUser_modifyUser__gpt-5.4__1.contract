@@ -1,0 +1,9 @@
+Contract ManageUserCRUDService::modifyUser(userid:Integer,name:String,address:String): Boolean {
+          definition:
+          user:User = User.allInstance()->any(u:User|u.UserID=userid)
+            precondition:
+          user.oclIsUndefined() = false
+            postcondition:
+          User.allInstance()->includes(user) and user.Name=name and user.Address=address and result=true
+            
+        }

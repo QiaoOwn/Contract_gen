@@ -1,9 +1,0 @@
-Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {
-          definition:
-          boss:Staff = Staff.allInstance()->any(o:Staff|o.Id=bossid), existingStaff:Staff = Staff.allInstance()->any(o:Staff|o.Id=id)
-            precondition:
-          existingStaff.oclIsUndefined() = true and (boss.oclIsUndefined() = true or boss.Id = bossid)
-            postcondition:
-          let s:Staff in s.oclIsNew() and s.Id = id and s.Name = name and s.Password = pswd and s.Phone = phone and s.Role = role and (boss.oclIsUndefined() = false implies s.Boss = boss) and Staff.allInstance()->includes(s) and result = true
-            
-        }

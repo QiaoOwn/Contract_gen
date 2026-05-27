@@ -1,0 +1,9 @@
+Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {
+          definition:
+          catalog:ProductCatalog = ProductCatalog.allInstance()->any(c:ProductCatalog|c.Id=id)
+            precondition:
+          catalog.oclIsUndefined() = true
+            postcondition:
+          let catalog:ProductCatalog in catalog.oclIsNew() and catalog.Id=id and catalog.Name=name and ProductCatalog.allInstance()->includes(catalog) and result=true
+            
+        }

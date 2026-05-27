@@ -1,0 +1,9 @@
+Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
+          definition:
+          currentLoanRequest:LoanRequest = CurrentLoanRequest, currentApprovalLetter:ApprovalLetter = CurrentApprovalLetter, currentLoanAgreement:LoanAgreement = CurrentLoanAgreement
+            precondition:
+          currentLoanRequest.oclIsUndefined() = false and currentLoanRequest.Status = LoanRequestStatus::APPROVED and currentLoanRequest.AttachedApprovalLetter.oclIsUndefined() = true and currentLoanRequest.AttachedLoanAgreement.oclIsUndefined() = true and currentApprovalLetter.oclIsUndefined() = false and currentLoanAgreement.oclIsUndefined() = false
+            postcondition:
+          currentLoanRequest.AttachedApprovalLetter = currentApprovalLetter and currentLoanRequest.AttachedLoanAgreement = currentLoanAgreement and result = true
+            
+        }

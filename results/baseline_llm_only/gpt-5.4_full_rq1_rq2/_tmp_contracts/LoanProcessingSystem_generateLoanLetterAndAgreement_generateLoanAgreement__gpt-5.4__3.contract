@@ -1,0 +1,9 @@
+Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
+          definition:
+          req:LoanRequest = self.CurrentLoanRequest, letter:ApprovalLetter = self.CurrentApprovalLetter, agreement:LoanAgreement = self.CurrentLoanAgreement
+            precondition:
+          req.oclIsUndefined() = false and letter.oclIsUndefined() = false and agreement.oclIsUndefined() = false and LoanRequest.allInstance()->includes(req) and ApprovalLetter.allInstance()->includes(letter) and LoanAgreement.allInstance()->includes(agreement) and req.Status = LoanRequestStatus::APPROVED
+            postcondition:
+          req.AttachedApprovalLetter = letter and req.AttachedLoanAgreement = agreement and result=true
+            
+        }

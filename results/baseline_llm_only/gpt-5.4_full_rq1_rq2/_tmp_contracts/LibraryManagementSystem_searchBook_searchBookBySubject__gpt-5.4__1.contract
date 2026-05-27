@@ -1,0 +1,9 @@
+Contract SearchBook::searchBookBySubject(subject:String): Set(Book) {
+          definition:
+          sub:Set(Subject) = Subject.allInstance()->select(s:Subject|s.Name=subject), books:Set(Book) = Book.allInstance()->select(b:Book|b.Subject->includes(sub))
+            precondition:
+          subject <> '' and sub.isEmpty() = false
+            postcondition:
+          result = books
+            
+        }

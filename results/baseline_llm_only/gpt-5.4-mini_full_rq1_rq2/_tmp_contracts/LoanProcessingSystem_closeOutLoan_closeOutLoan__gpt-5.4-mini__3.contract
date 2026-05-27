@@ -1,0 +1,9 @@
+Contract LoanProcessingSystemSystem::closeOutLoan(loanid:Integer): Boolean {
+          definition:
+          loan:Loan = Loan.allInstance()->any(o:Loan|o.LoanID=loanid)
+            precondition:
+          loan.oclIsUndefined() = false and loan.Status = LoanStatus::LSOPEN and loan.IsPaidinFull = true
+            postcondition:
+          loan.Status = LoanStatus::CLOSED and loan.EndDate.oclIsUndefined() = false and result = true
+            
+        }

@@ -1,0 +1,9 @@
+Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
+          definition:
+          loanRequest:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.RequestID=requestid)
+            precondition:
+          loanRequest.oclIsUndefined() = false and loanRequest.Status = LoanRequestStatus::SUBMITTED
+            postcondition:
+          self.CurrentLoanRequest = loanRequest and result = loanRequest
+            
+        }

@@ -1,0 +1,9 @@
+Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {
+          definition:
+          inputCard:BankCard = self.InputCard
+            precondition:
+          inputCard.oclIsUndefined() = false and quantity > 0 and self.CardIDValidated = true and self.PasswordValidated = true and self.IsDeposit = true and inputCard.CardStatus = BankCard::NORMAL and inputCard.Catalog = CardCatalog::DESPOSIT
+            postcondition:
+          inputCard.Balance = inputCard.Balance@pre + quantity and self.DepositedNumber = quantity and result = true
+            
+        }

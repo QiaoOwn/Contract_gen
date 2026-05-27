@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
+          definition:
+          u:User = User.allInstance()->any(o:User|o.UserID=uid), c:BookCopy = BookCopy.allInstance()->any(o:BookCopy|o.Barcode=barcode), activeLoanCount:Integer = u.LoanedBook->select(l:Loan|l.IsReturned = false)->size()
+            precondition:
+          u.oclIsUndefined() = false and c.oclIsUndefined() = false and u.BorrowStatus = User::NORMAL and activeLoanCount < 0 and c.Status = BookCopy::AVAILABLE
+            postcondition:
+          let l:Loan in l.oclIsNew() and l.LoanedUser = u and l.LoanedCopy = c and l.IsReturned = false and c.Status = BookCopy::LOANED and c.IsReserved = false and u.LoanedNumber = u.LoanedNumber@pre + 1 and u.LoanedBook->includes(l) and c.LoanedRecord->includes(l) and result = true
+            
+        }

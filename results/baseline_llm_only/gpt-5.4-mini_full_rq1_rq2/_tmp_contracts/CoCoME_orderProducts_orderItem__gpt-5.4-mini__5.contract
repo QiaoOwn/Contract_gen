@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {
+          definition:
+          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, item:Item = Item.allInstance()->any(o:Item|o.Barcode=barcode)
+            precondition:
+          currentOrderProduct.oclIsUndefined() = false and item.oclIsUndefined() = false and quantity > 0 and currentOrderProduct.OrderStatus = OrderStatus::NEW
+            postcondition:
+          currentOrderProduct.ContainedEntries->exists(e:OrderEntry|e.Item = item and e.Quantity = quantity) and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true
+            
+        }

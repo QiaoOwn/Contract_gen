@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::listAllOutOfStoreProducts(): Set(Item) {
+          definition:
+          outOfStoreItems:Set(Item) = Item.allInstance()->select(i:Item|Store.allInstance()->exists(s:Store|s.Items->includes(i)) = false)
+            precondition:
+          Store.allInstance()->isEmpty() = false
+            postcondition:
+          result = outOfStoreItems
+            
+        }

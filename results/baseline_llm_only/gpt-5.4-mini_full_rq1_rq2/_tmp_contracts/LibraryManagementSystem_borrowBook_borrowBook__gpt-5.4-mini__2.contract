@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
+          definition:
+          u:User = User.allInstance()->any(o:User|o.UserID=uid), c:BookCopy = BookCopy.allInstance()->any(o:BookCopy|o.Barcode=barcode), hasQuota:Boolean = u.LoanedNumber < 5, notSuspended:Boolean = u.BorrowStatus = User::NORMAL, copyAvailable:Boolean = c.Status = BookCopy::AVAILABLE, copyReservedForUser:Boolean = c.IsReserved = true and c.ReservationRecord->exists(r:Reserve|r.ReservedUser = u and r.IsReserveClosed = false), borrowableCopy:Boolean = copyAvailable or copyReservedForUser
+            precondition:
+          u.oclIsUndefined() = false and c.oclIsUndefined() = false and notSuspended = true and hasQuota = true and (copyAvailable = true or copyReservedForUser = true)
+            postcondition:
+          let l:Loan in l.oclIsNew() and l.LoanedUser = u and l.LoanedCopy = c and l.IsReturned = false and l.RenewedTimes = 0 and l.LoanDate = l.LoanDate and l.DueDate = l.DueDate and u.LoanedBook->includes(l) and c.LoanedRecord->includes(l) and c.Status = BookCopy::LOANED and c.IsReserved = false and result = true
+            
+        }

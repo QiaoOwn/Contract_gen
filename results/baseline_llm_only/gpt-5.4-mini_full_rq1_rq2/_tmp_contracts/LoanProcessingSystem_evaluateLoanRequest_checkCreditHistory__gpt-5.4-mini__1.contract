@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::checkCreditHistory(): CreditHistory {
+          definition:
+          currentRequest:LoanRequest = self.CurrentLoanRequest
+            precondition:
+          currentRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(currentRequest)
+            postcondition:
+          let ch:CreditHistory in ch.oclIsNew() and ch.OutstandingDebt = currentRequest.RequestedCreditHistory.OutstandingDebt and ch.BadDebits = currentRequest.RequestedCreditHistory.BadDebits and CreditHistory.allInstance()->includes(ch) and result = ch
+            
+        }

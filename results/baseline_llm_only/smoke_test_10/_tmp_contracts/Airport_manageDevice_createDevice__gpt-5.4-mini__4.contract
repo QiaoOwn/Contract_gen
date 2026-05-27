@@ -1,7 +1,0 @@
-Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {
-          precondition:
-          Device.allInstances()->forAll(d | d.Id <> id) and Staff.allInstances()->exists(s | s.Id = contactsid)
-            postcondition:
-          let newDevice : Device = Device.allInstances()->any(d | d.Id = id) in newDevice <> null and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and Staff.allInstances()->exists(s | s.Id = contactsid and newDevice.Contacts = s) and result = true
-            
-        }

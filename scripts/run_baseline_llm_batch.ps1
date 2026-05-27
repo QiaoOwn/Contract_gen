@@ -1,10 +1,12 @@
 # Pure-LLM baseline: one model per output folder (114 ops each).
-# Requires API keys in repo root .env (OPENAI_API_KEY, ANTHROPIC_API_KEY, QWEN_API_KEY, ...).
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL in repo root .env.
 # Optional syntax check: pass -Validate to enable REMODEL parser via npx tsx.
+# Optional execution check: pass -EvalNextBaseUrl http://127.0.0.1:3000 after starting Next.
 
 param(
     [switch]$Validate,
-    [int]$MaxAttempts = 5
+    [int]$MaxAttempts = 5,
+    [string]$EvalNextBaseUrl = ""
 )
 
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
@@ -29,12 +31,20 @@ if ($Validate) {
 foreach ($model in $models) {
     $out = "results/baseline_llm_only/$model"
     Write-Host "=== $model -> $out ===" -ForegroundColor Cyan
+    $evalArgs = @()
+    if ($EvalNextBaseUrl) {
+        $evalArgs = @(
+            "--eval-next-base-url", $EvalNextBaseUrl,
+            "--eval-timeout", "600"
+        )
+    }
     python script/run_baseline_llm_only.py `
         --models $model `
         --output-dir $out `
         --max-attempts $MaxAttempts `
         --force `
-        @validateArgs
+        @validateArgs `
+        @evalArgs
 }
 
 Write-Host "All models finished. CSV/summary under results/baseline_llm_only/<model>/" -ForegroundColor Green

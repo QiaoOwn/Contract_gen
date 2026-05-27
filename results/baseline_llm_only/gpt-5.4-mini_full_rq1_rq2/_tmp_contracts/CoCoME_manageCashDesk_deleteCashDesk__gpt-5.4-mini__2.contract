@@ -1,0 +1,9 @@
+Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {
+          definition:
+          cashDesk:CashDesk = CashDesk.allInstance()->any(cashDeskLookup:CashDesk|cashDeskLookup.Id=id), store:Store = cashDesk.BelongedStore
+            precondition:
+          cashDesk.oclIsUndefined() = false and cashDesk.ContainedSales->isEmpty() = true and store.oclIsUndefined() = false
+            postcondition:
+          CashDesk.allInstance()->excludes(cashDesk) and store.AssociationCashdeskes->excludes(cashDesk) and result = true
+            
+        }

@@ -4,9 +4,10 @@
 Pure-LLM baseline (standalone).
 
 - Does NOT call Next.js, LangGraph, or run_rq1_validity_experiments.py.
-- One HTTP LLM request per attempt; no in-pipeline error feedback.
+- One OpenAI-compatible HTTP LLM request per attempt; no in-pipeline error feedback.
 - Prompt targets REMODEL dialect (allInstance(), transform rules), not standard OCL.
 - Optional REMODEL syntax check via external --validate-cmd (e.g. tsx validator).
+- Optional execution-grounded validation via Next.js POST /api/evaluate-contract.
 
 Example (114 ops, one model, 5 independent attempts, with syntax check):
 
@@ -187,6 +188,9 @@ def safe_operation(row: Dict[str, Any], line_no: int) -> Optional[Dict[str, Any]
     return {
         "id": str(oid),
         "case_study": str(row.get("case_study") or row.get("case") or "unknown"),
+        "project": str(row.get("project") or row.get("case_study") or row.get("case") or ""),
+        "useCase": str(row.get("useCase") or row.get("use_case") or ""),
+        "operation": str(row.get("operation") or row.get("operation_name") or row.get("name") or ""),
         "service": str(row.get("service") or ""),
         "operation_name": str(row.get("operation_name") or row.get("name") or ""),
         "operation_signature": str(
@@ -303,6 +307,9 @@ def extract_contract_text(raw: str, op: Dict[str, Any]) -> Dict[str, Any]:
         )
         return {
             "contract": contract,
+            "definition": defn_s,
+            "precondition": pre,
+            "postcondition": post,
             "json_parsed": True,
             "extraction_ok": bool(pre.strip() or post.strip()),
         }
@@ -310,10 +317,20 @@ def extract_contract_text(raw: str, op: Dict[str, Any]) -> Dict[str, Any]:
     if stripped.lower().startswith("contract "):
         return {
             "contract": stripped,
+            "definition": None,
+            "precondition": "",
+            "postcondition": "",
             "json_parsed": False,
             "extraction_ok": True,
         }
-    return {"contract": "", "json_parsed": False, "extraction_ok": False}
+    return {
+        "contract": "",
+        "definition": None,
+        "precondition": "",
+        "postcondition": "",
+        "json_parsed": False,
+        "extraction_ok": False,
+    }
 
 
 def _http_json(
@@ -321,109 +338,43 @@ def _http_json(
 ) -> Dict[str, Any]:
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(url, data=data, headers=headers, method="POST")
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"HTTP {e.code}: {body[:2000]}") from e
 
 
 def call_llm(
     model: str, prompt: str, *, temperature: float, max_tokens: int, timeout: float
 ) -> str:
+    key = os.environ.get("OPENAI_API_KEY", "")
+    if not key:
+        raise RuntimeError("OPENAI_API_KEY is not set")
+    base = os.environ.get("OPENAI_BASE_URL", "").strip() or "https://api.openai.com/v1"
+    url = base.rstrip("/") + "/chat/completions"
+
     last_err: Optional[BaseException] = None
     for attempt in range(1, 4):
         try:
-            if model.startswith("gpt-"):
-                key = os.environ.get("OPENAI_API_KEY", "")
-                if not key:
-                    raise RuntimeError("OPENAI_API_KEY is not set")
-                base = os.environ.get("OPENAI_BASE_URL", "").strip() or "https://api.openai.com/v1"
-                url = base.rstrip("/") + "/chat/completions"
-                out = _http_json(
-                    url,
-                    {
-                        "model": model,
-                        "messages": [{"role": "user", "content": prompt}],
-                        "temperature": temperature,
-                        "max_tokens": max_tokens,
-                    },
-                    {
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {key}",
-                    },
-                    timeout,
-                )
-                return str((out.get("choices") or [{}])[0].get("message", {}).get("content") or "")
-            if model.startswith("deepseek-"):
-                key = os.environ.get("DEEPSEEK_API_KEY", "")
-                if not key:
-                    raise RuntimeError("DEEPSEEK_API_KEY is not set")
-                base = os.environ.get("DEEPSEEK_BASE_URL", "").strip() or "https://api.deepseek.com/v1"
-                url = base.rstrip("/") + "/chat/completions"
-                out = _http_json(
-                    url,
-                    {
-                        "model": model,
-                        "messages": [{"role": "user", "content": prompt}],
-                        "temperature": temperature,
-                        "max_tokens": max_tokens,
-                    },
-                    {
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {key}",
-                    },
-                    timeout,
-                )
-                return str((out.get("choices") or [{}])[0].get("message", {}).get("content") or "")
-            if model.startswith("claude-"):
-                key = os.environ.get("ANTHROPIC_API_KEY", "")
-                if not key:
-                    raise RuntimeError("ANTHROPIC_API_KEY is not set")
-                base = os.environ.get("ANTHROPIC_BASE_URL", "").strip() or "https://api.anthropic.com"
-                url = base.rstrip("/") + "/v1/messages"
-                out = _http_json(
-                    url,
-                    {
-                        "model": model,
-                        "max_tokens": max(256, max_tokens),
-                        "messages": [{"role": "user", "content": prompt}],
-                    },
-                    {
-                        "Content-Type": "application/json",
-                        "x-api-key": key,
-                        "anthropic-version": "2023-06-01",
-                    },
-                    timeout,
-                )
-                parts = [
-                    str(b.get("text") or "")
-                    for b in out.get("content") or []
-                    if isinstance(b, dict) and b.get("type") == "text"
-                ]
-                return "".join(parts)
-            if model.startswith("qwen"):
-                key = os.environ.get("QWEN_API_KEY", "")
-                if not key:
-                    raise RuntimeError("QWEN_API_KEY is not set")
-                base = (
-                    os.environ.get("QWEN_BASE_URL", "").strip()
-                    or "https://dashscope.aliyuncs.com/compatible-mode/v1"
-                )
-                url = base.rstrip("/") + "/chat/completions"
-                out = _http_json(
-                    url,
-                    {
-                        "model": model,
-                        "messages": [{"role": "user", "content": prompt}],
-                        "temperature": temperature,
-                        "max_tokens": max_tokens,
-                    },
-                    {
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {key}",
-                    },
-                    timeout,
-                )
-                return str((out.get("choices") or [{}])[0].get("message", {}).get("content") or "")
-            raise RuntimeError(f"Unsupported model: {model}")
+            payload: Dict[str, Any] = {
+                "model": model,
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": max_tokens,
+            }
+            if not model.startswith("claude-"):
+                payload["temperature"] = temperature
+            out = _http_json(
+                url,
+                payload,
+                {
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {key}",
+                },
+                timeout,
+            )
+            return str((out.get("choices") or [{}])[0].get("message", {}).get("content") or "")
         except Exception as e:
             last_err = e
             logging.warning("LLM attempt %s failed: %s", attempt, e)
@@ -485,11 +436,86 @@ def validate_contract_file(
     }
 
 
+def evaluate_contract_with_next(
+    base_url: str,
+    op: Dict[str, Any],
+    contract: str,
+    ext: Dict[str, Any],
+    timeout: float,
+) -> Dict[str, Any]:
+    url = base_url.rstrip("/") + "/api/evaluate-contract"
+    payload = {
+        "project": op.get("project") or op.get("case_study"),
+        "useCase": op.get("useCase"),
+        "operation": op.get("operation") or op.get("operation_name"),
+        "contract": contract,
+        "ocl": {
+            "definition": ext.get("definition"),
+            "precondition": ext.get("precondition") or "",
+            "postcondition": ext.get("postcondition") or "",
+        },
+    }
+    if not payload["project"] or not payload["useCase"] or not payload["operation"]:
+        return {
+            "execution_eval_skipped": True,
+            "execution_eval_error": "missing project/useCase/operation fields",
+            "execution_valid": False,
+        }
+    if not payload["ocl"]["precondition"] or not payload["ocl"]["postcondition"]:
+        return {
+            "execution_eval_skipped": True,
+            "execution_eval_error": "missing extracted precondition/postcondition",
+            "execution_valid": False,
+        }
+    try:
+        out = _http_json(
+            url,
+            payload,
+            {"Content-Type": "application/json"},
+            timeout,
+        )
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        return {
+            "execution_eval_skipped": False,
+            "execution_eval_error": f"HTTP {e.code}: {body[:1000]}",
+            "execution_valid": False,
+        }
+    except Exception as e:
+        return {
+            "execution_eval_skipped": False,
+            "execution_eval_error": str(e),
+            "execution_valid": False,
+        }
+    execution_valid = (
+        bool(out.get("contract_parse_ok"))
+        and bool(out.get("typescript_generation_ok"))
+        and bool(out.get("typescript_parse_ok"))
+        and bool(out.get("test_execution_ok"))
+    )
+    return {
+        "execution_eval_skipped": False,
+        "execution_eval_error": "",
+        "execution_valid": execution_valid,
+        "contract_parse_ok": bool(out.get("contract_parse_ok")),
+        "contract_errors": out.get("contract_errors") or [],
+        "typescript_generation_ok": bool(out.get("typescript_generation_ok")),
+        "typescript_generation_error": out.get("typescript_generation_error", ""),
+        "typescript_parse_ok": bool(out.get("typescript_parse_ok")),
+        "typescript_errors": out.get("typescript_errors") or [],
+        "test_execution_ok": bool(out.get("test_execution_ok")),
+        "test_execution_error": out.get("test_execution_error", ""),
+        "test_passing_count": int(out.get("test_passing_count") or 0),
+        "test_failing_count": int(out.get("test_failing_count") or 0),
+    }
+
+
 def pair_is_complete(
     operation_id: str,
     model: str,
     attempts: List[Dict[str, Any]],
     max_attempts: int,
+    require_execution: bool = False,
 ) -> bool:
     rows = [
         r
@@ -498,7 +524,8 @@ def pair_is_complete(
     ]
     if not rows:
         return False
-    if any(r.get("syntax_valid") for r in rows):
+    success_field = "execution_valid" if require_execution else "syntax_valid"
+    if any(r.get(success_field) for r in rows):
         return True
     return max(int(r["attempt"]) for r in rows) >= max_attempts
 
@@ -508,12 +535,13 @@ def count_completed_pairs(
     models: List[str],
     attempts: List[Dict[str, Any]],
     max_attempts: int,
+    require_execution: bool = False,
 ) -> int:
     return sum(
         1
         for op in operations
         for model in models
-        if pair_is_complete(op["id"], model, attempts, max_attempts)
+        if pair_is_complete(op["id"], model, attempts, max_attempts, require_execution)
     )
 
 
@@ -533,7 +561,10 @@ def format_progress_bar(done: int, total: int, width: int = 24) -> str:
 
 def print_progress(done: int, total: int, rec: Dict[str, Any], *, max_attempts: int) -> None:
     pct = (done / total * 100.0) if total else 0.0
-    status = "valid" if rec.get("syntax_valid") else str(rec.get("error_type") or "invalid")
+    if not rec.get("execution_eval_skipped", True):
+        status = "exec_valid" if rec.get("execution_valid") else str(rec.get("error_type") or "exec_invalid")
+    else:
+        status = "valid" if rec.get("syntax_valid") else str(rec.get("error_type") or "invalid")
     att = int(rec.get("attempt") or 0)
     print(
         "{bar} {done}/{total} ({pct:5.1f}%) "
@@ -581,20 +612,36 @@ def write_summary(
     def agg(model: str, op_set: Set[str]) -> Dict[str, Any]:
         total = len(op_set)
         valid = sum(1 for oid in op_set if (oid, model) in succeeded)
+        execution_valid = sum(
+            1
+            for oid in op_set
+            if any(
+                r.get("execution_valid")
+                for r in by_key.get((oid, model), [])
+            )
+        )
         valid_at = {k: 0 for k in range(1, max_attempts + 1)}
+        pass_at = {k: 0 for k in range(1, max_attempts + 1)}
         for oid in op_set:
             rows = sorted(by_key.get((oid, model), []), key=lambda r: int(r["attempt"]))
             for k in range(1, max_attempts + 1):
                 if any(int(r["attempt"]) <= k and r.get("syntax_valid") for r in rows):
                     valid_at[k] += 1
+                if any(int(r["attempt"]) <= k and r.get("execution_valid") for r in rows):
+                    pass_at[k] += 1
         rates = {k: (100.0 * valid_at[k] / total) if total else 0.0 for k in valid_at}
+        pass_rates = {k: (100.0 * pass_at[k] / total) if total else 0.0 for k in pass_at}
         return {
             "model": model,
             "total_operations": total,
             "syntax_valid_count": valid,
             "syntax_validity_rate": (100.0 * valid / total) if total else 0.0,
+            "execution_success_count": execution_valid,
+            "execution_success_rate": (100.0 * execution_valid / total) if total else 0.0,
             "valid_at_counts": valid_at,
             "valid_at_rates": rates,
+            "pass_at_counts": pass_at,
+            "pass_at_rates": pass_rates,
         }
 
     model_rows = [agg(m, op_ids) for m in models]
@@ -626,6 +673,26 @@ def write_summary(
                 ]
             )
 
+    with (output_dir / "baseline_execution_by_model.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(
+            [
+                "model",
+                "total_operations",
+                "execution_success_count",
+                "execution_success_rate",
+            ]
+        )
+        for r in model_rows:
+            w.writerow(
+                [
+                    r["model"],
+                    r["total_operations"],
+                    r["execution_success_count"],
+                    f"{r['execution_success_rate']:.4f}",
+                ]
+            )
+
     hdr = ["model", "total_operations"] + [f"valid_at_{k}_rate" for k in range(1, max_attempts + 1)]
     with (output_dir / "baseline_valid_at_k_by_model.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -636,10 +703,28 @@ def write_summary(
                 + [f"{r['valid_at_rates'][k]:.4f}" for k in range(1, max_attempts + 1)]
             )
 
+    hdr = ["model", "total_operations"] + [f"pass_at_{k}_rate" for k in range(1, max_attempts + 1)]
+    with (output_dir / "baseline_pass_at_k_by_model.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(hdr)
+        for r in model_rows:
+            w.writerow(
+                [r["model"], r["total_operations"]]
+                + [f"{r['pass_at_rates'][k]:.4f}" for k in range(1, max_attempts + 1)]
+            )
+
     with (output_dir / "baseline_validity_by_case.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(
-            ["model", "case_study", "total_operations", "syntax_valid_count", "syntax_validity_rate"]
+            [
+                "model",
+                "case_study",
+                "total_operations",
+                "syntax_valid_count",
+                "syntax_validity_rate",
+                "execution_success_count",
+                "execution_success_rate",
+            ]
         )
         for r in case_rows:
             w.writerow(
@@ -649,6 +734,8 @@ def write_summary(
                     r["total_operations"],
                     r["syntax_valid_count"],
                     f"{r['syntax_validity_rate']:.4f}",
+                    r["execution_success_count"],
+                    f"{r['execution_success_rate']:.4f}",
                 ]
             )
 
@@ -690,6 +777,12 @@ def main() -> None:
     )
     p.add_argument("--parser-use-shell", action="store_true")
     p.add_argument("--parser-timeout", type=int, default=60)
+    p.add_argument(
+        "--eval-next-base-url",
+        default="",
+        help="Optional Next.js app origin for execution-grounded validation via /api/evaluate-contract.",
+    )
+    p.add_argument("--eval-timeout", type=float, default=600.0)
     p.add_argument("--force", action="store_true")
     p.add_argument("--analyze-only", action="store_true")
     args = p.parse_args()
@@ -741,15 +834,21 @@ def main() -> None:
                 f.unlink()
 
     validate_cmd = args.validate_cmd.strip() or None
+    eval_next_base_url = args.eval_next_base_url.strip()
+    require_execution_success = bool(eval_next_base_url)
     existing = read_jsonl(attempts_path)
-    done_valid: Set[Tuple[str, str]] = set()
+    done_success: Set[Tuple[str, str]] = set()
     for row in existing:
-        if row.get("syntax_valid"):
-            done_valid.add((row["operation_id"], row["model"]))
+        if row.get("execution_valid") if require_execution_success else row.get("syntax_valid"):
+            done_success.add((row["operation_id"], row["model"]))
 
     planned = len(operations) * len(args.models)
     pairs_completed = count_completed_pairs(
-        operations, args.models, existing, args.max_attempts
+        operations,
+        args.models,
+        existing,
+        args.max_attempts,
+        require_execution_success,
     )
     print(f"Baseline LLM: {len(operations)} ops x {len(args.models)} models = {planned} pairs")
     if pairs_completed:
@@ -762,7 +861,9 @@ def main() -> None:
     for op in operations:
         oid = op["id"]
         for model in args.models:
-            if pair_is_complete(oid, model, existing, args.max_attempts):
+            if pair_is_complete(
+                oid, model, existing, args.max_attempts, require_execution_success
+            ):
                 continue
             start_att = (
                 max(
@@ -773,7 +874,7 @@ def main() -> None:
             )
             prompt = build_prompt(op)
             for att in range(start_att, args.max_attempts + 1):
-                if (oid, model) in done_valid:
+                if (oid, model) in done_success:
                     break
                 t0 = time.perf_counter()
                 err_type = ""
@@ -818,33 +919,75 @@ def main() -> None:
                     val["syntax_valid"] = False
                 if not ext["extraction_ok"] and not err_type:
                     err_type = "extraction_failed"
+                eval_res: Dict[str, Any] = {
+                    "execution_eval_skipped": not bool(eval_next_base_url),
+                    "execution_valid": False,
+                }
+                if eval_next_base_url and val.get("syntax_valid"):
+                    eval_res = evaluate_contract_with_next(
+                        eval_next_base_url,
+                        op,
+                        contract,
+                        ext,
+                        args.eval_timeout,
+                    )
                 rec = {
                     "operation_id": oid,
                     "case_study": op["case_study"],
+                    "project": op.get("project", ""),
+                    "useCase": op.get("useCase", ""),
+                    "operation": op.get("operation", ""),
                     "model": model,
                     "attempt": att,
                     "prompt": prompt,
                     "raw_output": raw,
                     "contract": contract,
+                    "definition": ext.get("definition"),
+                    "precondition": ext.get("precondition", ""),
+                    "postcondition": ext.get("postcondition", ""),
                     "json_parsed": ext["json_parsed"],
                     "extraction_ok": ext["extraction_ok"],
                     "syntax_valid": bool(val.get("syntax_valid")),
+                    "execution_valid": bool(eval_res.get("execution_valid")),
                     "validate_skipped": bool(val.get("validate_skipped")),
-                    "error_type": "none" if val.get("syntax_valid") else (err_type or "syntax_invalid"),
+                    "error_type": (
+                        "none"
+                        if (
+                            eval_res.get("execution_valid")
+                            if require_execution_success
+                            else val.get("syntax_valid")
+                        )
+                        else (
+                            err_type
+                            or (
+                                "execution_invalid"
+                                if val.get("syntax_valid") and eval_next_base_url
+                                else "syntax_invalid"
+                            )
+                        )
+                    ),
                     "latency_sec": round(time.perf_counter() - t0, 4),
                     "timestamp": utc_now_iso(),
                     **{k: v for k, v in val.items() if k != "syntax_valid"},
+                    **eval_res,
                 }
                 append_jsonl(attempts_path, rec)
                 existing.append(rec)
-                pair_done = rec["syntax_valid"] or att >= args.max_attempts
-                if pair_done and not pair_is_complete(oid, model, existing[:-1], args.max_attempts):
+                pair_success = rec["execution_valid"] if require_execution_success else rec["syntax_valid"]
+                pair_done = pair_success or att >= args.max_attempts
+                if pair_done and not pair_is_complete(
+                    oid,
+                    model,
+                    existing[:-1],
+                    args.max_attempts,
+                    require_execution_success,
+                ):
                     pairs_completed += 1
                 print_progress(
                     pairs_completed, planned, rec, max_attempts=args.max_attempts
                 )
-                if rec["syntax_valid"]:
-                    done_valid.add((oid, model))
+                if pair_success:
+                    done_success.add((oid, model))
                     break
                 time.sleep(max(0.0, args.sleep_between_calls))
 

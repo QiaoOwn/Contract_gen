@@ -1,0 +1,9 @@
+Contract EnterValidatedCreditReferencesModule::listSubmitedLoanRequest(): Set(LoanRequest) {
+          definition:
+          submittedLoanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(o:LoanRequest|o.Status=LoanRequestStatus::SUBMITTED)
+            precondition:
+          submittedLoanRequests.isEmpty() = false
+            postcondition:
+          self.CurrentLoanRequests=submittedLoanRequests and result=submittedLoanRequests
+            
+        }

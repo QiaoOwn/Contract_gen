@@ -1,0 +1,9 @@
+Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {
+          definition:
+          req:LoanRequest = self.CurrentLoanRequest, ca:CheckingAccount = req.RequestedCAHistory, ch:CreditHistory = req.RequestedCreditHistory
+            precondition:
+          req.oclIsUndefined() = false and LoanRequest.allInstance()->includes(req) and req.Name = LoanRequestStatus::SUBMITTED and ca.oclIsUndefined() = false and ch.oclIsUndefined() = false
+            postcondition:
+          LoanRequest.allInstance()->includes(req) and req.Name = LoanRequestStatus::REFERENCESVALIDATED and req.RequestedCAHistory = ca and req.RequestedCreditHistory = ch and result=true
+            
+        }

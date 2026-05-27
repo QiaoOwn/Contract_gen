@@ -1,0 +1,9 @@
+Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {
+          definition:
+          user:User = User.allInstance()->any(u:User|u.UserID=uid), reserves:Set(Reserve) = Reserve.allInstance()->select(r:Reserve|r.ReservedUser=user and r.IsReserveClosed=false), copies:Set(BookCopy) = BookCopy.allInstance()->select(bc:BookCopy|reserves->includes(bc.ReservationRecord))
+            precondition:
+          user.oclIsUndefined() = false
+            postcondition:
+          result = copies
+            
+        }

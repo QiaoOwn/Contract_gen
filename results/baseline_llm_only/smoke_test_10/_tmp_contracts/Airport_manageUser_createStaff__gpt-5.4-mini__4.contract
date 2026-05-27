@@ -1,9 +1,0 @@
-Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {
-          definition:
-          null
-            precondition:
-          Staff.allInstances()->forAll(s | s.Id <> id)
-            postcondition:
-          let createdStaff : Staff = Staff.allInstances()->any(s | s.Id = id) in createdStaff <> null and createdStaff.Id = id and createdStaff.Name = name and createdStaff.Password = pswd and createdStaff.Phone = phone and createdStaff.Role = role and (bossid = 0 or Staff.allInstances()->exists(b | b.Id = bossid and createdStaff.Boss = b))
-            
-        }

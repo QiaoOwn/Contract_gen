@@ -1,0 +1,9 @@
+Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {
+          definition:
+          curReq:LoanRequest = self.CurrentLoanRequest
+            precondition:
+          curReq.oclIsUndefined() = false and LoanRequest.allInstance()->includes(curReq) and curReq.Name = LoanRequestStatus::SUBMITTED
+            postcondition:
+          LoanRequest.allInstance()->includes(curReq) and curReq.Name = LoanRequestStatus::REFERENCESVALIDATED and result=true
+            
+        }

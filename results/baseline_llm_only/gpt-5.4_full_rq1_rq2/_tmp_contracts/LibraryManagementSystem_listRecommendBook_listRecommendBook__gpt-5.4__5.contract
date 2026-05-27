@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::listRecommendBook(uid:String): Set(RecommendBook) {
+          definition:
+          user:User = User.allInstance()->any(u:User|u.UserID=uid), recommendBooks:Set(RecommendBook) = RecommendBook.allInstance()->select(r:RecommendBook|r.RecommendUser=user)
+            precondition:
+          user.oclIsUndefined() = false
+            postcondition:
+          result = recommendBooks
+            
+        }

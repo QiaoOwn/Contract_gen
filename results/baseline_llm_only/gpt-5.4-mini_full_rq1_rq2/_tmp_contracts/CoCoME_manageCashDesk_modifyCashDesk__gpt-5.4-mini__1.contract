@@ -1,0 +1,9 @@
+Contract ManageCashDeskCRUDService::modifyCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {
+          definition:
+          cashDesk:CashDesk = CashDesk.allInstance()->any(c:CashDesk|c.Id=id)
+            precondition:
+          cashDesk.oclIsUndefined() = false and name <> ''
+            postcondition:
+          cashDesk.Id = id and cashDesk.Name = name and cashDesk.IsOpened = isopened and CashDesk.allInstance()->includes(cashDesk) and result = true
+            
+        }

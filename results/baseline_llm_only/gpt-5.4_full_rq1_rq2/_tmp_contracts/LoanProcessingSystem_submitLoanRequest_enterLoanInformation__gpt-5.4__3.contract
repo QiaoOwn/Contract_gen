@@ -1,0 +1,9 @@
+Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {
+          definition:
+          req:LoanRequest = LoanRequest.allInstance()->any(r:LoanRequest|r.RequestID=requestid)
+            precondition:
+          req.oclIsUndefined() = true and loanamount > 0 and income >= 0
+            postcondition:
+          let newReq:LoanRequest in newReq.oclIsNew() and newReq.RequestID=requestid and newReq.Name=name and newReq.LoanAmount=loanamount and newReq.LoanPurpose=loanpurpose and newReq.Income=income and newReq.PhoneNumber=phonenumber and newReq.PostalAddress=postaladdress and newReq.ZipCode=zipcode and newReq.Email=email and newReq.WorkReferences=workreferences and newReq.CreditReferences=creditreferences and newReq.CheckingAccountNumber=checkingaccountnumber and newReq.SecurityNumber=securitynumber and newReq.Status=LoanRequestStatus::SUBMITTED and LoanRequest.allInstance()->includes(newReq) and self.CurrentLoanRequest=newReq and result=true
+            
+        }

@@ -1,0 +1,9 @@
+Contract AutomatedTellerMachineSystem::withdrawCash(quantity:Integer): Boolean {
+          definition:
+          inputCard:BankCard = self.InputCard
+            precondition:
+          inputCard.oclIsUndefined() = false and self.CardIDValidated = true and self.PasswordValidated = true and self.IsWithdraw = true and inputCard.CardStatus = BankCard::NORMAL and inputCard.Catalog = BankCard::DESPOSIT and quantity > 0 and inputCard.Balance >= quantity
+            postcondition:
+          let card:BankCard in card = inputCard and card.Balance = inputCard.Balance - quantity and self.WithdrawedNumber = quantity and self.IsWithdraw = true and result = true
+            
+        }
