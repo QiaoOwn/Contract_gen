@@ -1,0 +1,57 @@
+Contract CoCoMESystem::openStore(storeID:Integer): Boolean {
+          precondition:
+          Store.allInstance()->exists(s | s.Id = storeID and s.IsOpened = false)
+            postcondition:
+          if Store.allInstance()->exists(s | s.Id = storeID@pre and s.IsOpened@pre = false) then
+    result = true and
+    Store.allInstance()->exists(s |
+        s.Id = storeID and
+        s.IsOpened = true and
+        s.Name = s.Name@pre and
+        s.Address = s.Address@pre and
+        s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+        s.Productcatalogs = s.Productcatalogs@pre and
+        s.Items = s.Items@pre and
+        s.Cashiers = s.Cashiers@pre and
+        s.Sales = s.Sales@pre
+    ) and
+    CashDesk.allInstance()->forAll(cd |
+        cd.Id = cd.Id@pre and
+        cd.Name = cd.Name@pre and
+        cd.IsOpened = cd.IsOpened@pre and
+        cd.ContainedSales = cd.ContainedSales@pre and
+        cd.BelongedStore = cd.BelongedStore@pre
+    ) and
+    Cashier.allInstance()->forAll(c |
+        c.Id = c.Id@pre and
+        c.Name = c.Name@pre and
+        c.WorkedStore = c.WorkedStore@pre
+    )
+else
+    result = false and
+    Store.allInstance()->forAll(s |
+        s.Id = s.Id@pre and
+        s.Name = s.Name@pre and
+        s.Address = s.Address@pre and
+        s.IsOpened = s.IsOpened@pre and
+        s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+        s.Productcatalogs = s.Productcatalogs@pre and
+        s.Items = s.Items@pre and
+        s.Cashiers = s.Cashiers@pre and
+        s.Sales = s.Sales@pre
+    ) and
+    CashDesk.allInstance()->forAll(cd |
+        cd.Id = cd.Id@pre and
+        cd.Name = cd.Name@pre and
+        cd.IsOpened = cd.IsOpened@pre and
+        cd.ContainedSales = cd.ContainedSales@pre and
+        cd.BelongedStore = cd.BelongedStore@pre
+    ) and
+    Cashier.allInstance()->forAll(c |
+        c.Id = c.Id@pre and
+        c.Name = c.Name@pre and
+        c.WorkedStore = c.WorkedStore@pre
+    )
+endif
+            
+        }

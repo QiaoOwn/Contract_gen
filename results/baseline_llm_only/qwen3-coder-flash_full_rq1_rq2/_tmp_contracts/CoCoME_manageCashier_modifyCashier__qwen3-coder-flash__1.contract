@@ -1,0 +1,9 @@
+Contract ManageCashierCRUDService::modifyCashier(id:Integer,name:String): Boolean {
+          definition:
+          cashier:Cashier = Cashier.allInstance()->any(c:Cashier|c.Id=id)
+            precondition:
+          cashier.oclIsUndefined() = false and id <> null and name <> null
+            postcondition:
+          let c:Cashier in c.oclIsNew() = false and c.Id = id and c.Name = name and result = true
+            
+        }

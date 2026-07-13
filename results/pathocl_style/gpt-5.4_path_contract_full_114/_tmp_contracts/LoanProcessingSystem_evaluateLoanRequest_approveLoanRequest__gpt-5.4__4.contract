@@ -1,0 +1,26 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          precondition:
+          LoanRequest.allInstance()->exists(lr |
+		lr.Status = LoanRequestStatus::REFERENCESVALIDATED and
+		not lr.ApprovalLoan.oclIsUndefined() and
+		not lr.RequestedCAHistory.oclIsUndefined() and
+		not lr.RequestedCreditHistory.oclIsUndefined()
+	)
+            postcondition:
+          (result = true implies
+		LoanRequest.allInstance()->exists(lr |
+			lr.Status = LoanRequestStatus::APPROVED and
+			not lr.ApprovalLoan.oclIsUndefined() and
+			lr.ApprovalLoan.ReferedLoanRequest = lr and
+			lr.ApprovalLoan.RemainAmountToPay = lr.LoanAmount and
+			lr.ApprovalLoan.Status = LoanStatus::LSOPEN and
+			lr.ApprovalLoan.IsPaidinFull = false
+		)
+	) and
+	(result = false implies
+		LoanRequest.allInstance()->exists(lr |
+			lr.Status <> LoanRequestStatus::APPROVED
+		)
+	)
+            
+        }

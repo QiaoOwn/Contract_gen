@@ -1,0 +1,18 @@
+Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {
+          precondition:
+          CurrentLoanRequest <> null and
+  CurrentLoanRequest.RequestedCAHistory <> null and
+  CurrentLoanRequests->includes(CurrentLoanRequest) and
+  CurrentLoanRequest.Status = LoanRequestStatus::READYFORREVIEW
+            postcondition:
+          result = CurrentLoanRequest.RequestedCAHistory and
+  CurrentLoanRequest = CurrentLoanRequest@pre and
+  CurrentLoanRequests = CurrentLoanRequests@pre and
+  CurrentLoanRequest.RequestedCAHistory = CurrentLoanRequest.RequestedCAHistory@pre and
+  CurrentLoanRequest.RequestedCreditHistory = CurrentLoanRequest.RequestedCreditHistory@pre and
+  CurrentLoanRequest.ApprovalLoan = CurrentLoanRequest.ApprovalLoan@pre and
+  CurrentLoanRequest.AttachedApprovalLetter = CurrentLoanRequest.AttachedApprovalLetter@pre and
+  CurrentLoanRequest.AttachedLoanAgreement = CurrentLoanRequest.AttachedLoanAgreement@pre and
+  CurrentLoanRequest.AttachedLoanTerms = CurrentLoanRequest.AttachedLoanTerms@pre
+            
+        }

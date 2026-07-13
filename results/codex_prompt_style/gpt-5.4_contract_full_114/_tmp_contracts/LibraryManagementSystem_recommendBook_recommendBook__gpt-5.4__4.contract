@@ -1,0 +1,35 @@
+Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {
+          precondition:
+          uid <> null and uid <> '' and
+  callNo <> null and callNo <> '' and
+  title <> null and title <> '' and
+  edition <> null and edition <> '' and
+  author <> null and author <> '' and
+  publisher <> null and publisher <> '' and
+  description <> null and description <> '' and
+  isbn <> null and isbn <> '' and
+  User.allInstance()->exists(u | u.UserID = uid) and
+  RecommendBook.allInstance()->forAll(rb |
+    not (rb.RecommendUser.UserID = uid and
+         callNo = callNo and
+         title = title and
+         edition = edition and
+         author = author and
+         publisher = publisher and
+         description = description and
+         isbn = isbn)
+  )
+            postcondition:
+          if result = true then
+    RecommendBook.allInstance()->size() = RecommendBook.allInstance()->size() + 1 and
+    let u : User = User.allInstance()->any(x | x.UserID = uid),
+        rb : RecommendBook = RecommendBook.allInstance()->any(x | not RecommendBook.allInstance()->includes(x))
+    in
+      u.RecommendedBook = u.RecommendedBook@pre->including(rb) and
+      rb.RecommendUser = u
+  else
+    RecommendBook.allInstance()->size() = RecommendBook.allInstance()->size() and
+    User.allInstance()->forAll(u | u.RecommendedBook = u.RecommendedBook@pre)
+  endif
+            
+        }

@@ -1,0 +1,34 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstance()->exists(u |
+    u.UserID = uid and
+    u.BorrowStatus <> BorrowStatus::SUSPEND and
+    u.LoanedNumber < 5
+  ) and
+  BookCopy.allInstance()->exists(c |
+    c.Barcode = barcode and
+    (c.Status = CopyStatus::AVAILABLE or
+     (c.Status = CopyStatus::ONHOLDSHELF and c.IsReserved = true and
+      Reserve.allInstance()->exists(r | r.ReservedUser.UserID = uid and r.ReservedCopy = c)))
+  )
+            postcondition:
+          if result = true then
+    let u : User = User.allInstance()->any(x | x.UserID = uid) in
+    let c : BookCopy = BookCopy.allInstance()->any(x | x.Barcode = barcode) in
+    Loan.allInstance()->exists(l |
+      l.oclIsNew() and
+      l.LoanedUser = u and
+      l.LoanedCopy = c and
+      l.IsReturned = false and
+      l.ReturnDate.oclIsUndefined() and
+      l.RenewedTimes = 0 and
+      l.LoanDate = Date::now() and
+      l.DueDate > l.LoanDate
+    ) and
+    u.LoanedNumber = u.LoanedNumber@pre + 1 and
+    c.Status = CopyStatus::LOANED
+  else
+    Loan.allInstance()->size() = Loan.allInstance()->size()
+  endif
+            
+        }

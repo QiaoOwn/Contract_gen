@@ -1,0 +1,80 @@
+Contract CoCoMEOrderProducts::listAllOutOfStoreProducts(): Set(Item) {
+          precondition:
+          true
+            postcondition:
+          result = Item.allInstance()->select(i | i.StockNumber = 0) and
+Item.allInstance()->forAll(i |
+  i.Barcode = i@pre.Barcode and
+  i.Name = i@pre.Name and
+  i.Price = i@pre.Price and
+  i.StockNumber = i@pre.StockNumber and
+  i.OrderPrice = i@pre.OrderPrice and
+  i.BelongedCatalog = i@pre.BelongedCatalog
+) and
+Store.allInstance()->forAll(s |
+  s.Name = s.Name@pre and
+  s.Address = s.Address@pre and
+  s.IsOpened = s.IsOpened@pre and
+  s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+  s.Productcatalogs = s.Productcatalogs@pre and
+  s.Items = s.Items@pre and
+  s.Cashiers = s.Cashiers@pre and
+  s.Sales = s.Sales@pre
+) and
+ProductCatalog.allInstance()->forAll(pc |
+  pc.Id = pc.Id@pre and
+  pc.Name = pc.Name@pre and
+  pc.ContainedItems = pc.ContainedItems@pre
+) and
+CashDesk.allInstance()->forAll(cd |
+  cd.Id = cd.Id@pre and
+  cd.Name = cd.Name@pre and
+  cd.IsOpened = cd.IsOpened@pre and
+  cd.ContainedSales = cd.ContainedSales@pre and
+  cd.BelongedStore = cd.BelongedStore@pre
+) and
+Sale.allInstance()->forAll(sa |
+  sa.Time = sa.Time@pre and
+  sa.IsComplete = sa.IsComplete@pre and
+  sa.Amount = sa.Amount@pre and
+  sa.IsReadytoPay = sa.IsReadytoPay@pre and
+  sa.Belongedstore = sa.Belongedstore@pre and
+  sa.BelongedCashDesk = sa.BelongedCashDesk@pre and
+  sa.ContainedSalesLine = sa.ContainedSalesLine@pre and
+  sa.AssoicatedPayment = sa.AssoicatedPayment@pre
+) and
+Cashier.allInstance()->forAll(c |
+  c.Id = c.Id@pre and
+  c.Name = c.Name@pre and
+  c.WorkedStore = c.WorkedStore@pre
+) and
+SalesLineItem.allInstance()->forAll(sli |
+  sli.Quantity = sli.Quantity@pre and
+  sli.Subamount = sli.Subamount@pre and
+  sli.BelongedSale = sli.BelongedSale@pre and
+  sli.BelongedItem = sli.BelongedItem@pre
+) and
+Payment.allInstance()->forAll(p |
+  p.AmountTendered = p.AmountTendered@pre and
+  p.BelongedSale = p.BelongedSale@pre
+) and
+OrderEntry.allInstance()->forAll(oe |
+  oe.Quantity = oe.Quantity@pre and
+  oe.SubAmount = oe.SubAmount@pre and
+  oe.Item = oe.Item@pre
+) and
+Supplier.allInstance()->forAll(sp |
+  sp.Id = sp.Id@pre and
+  sp.Name = sp.Name@pre
+) and
+OrderProduct.allInstance()->forAll(op |
+  op.Id = op.Id@pre and
+  op.Time = op.Time@pre and
+  op.OrderStatus = op.OrderStatus@pre and
+  op.Amount = op.Amount@pre and
+  op.Supplier = op.Supplier@pre and
+  op.ContainedEntries = op.ContainedEntries@pre
+) and
+CurrentOrderProduct = CurrentOrderProduct@pre
+            
+        }

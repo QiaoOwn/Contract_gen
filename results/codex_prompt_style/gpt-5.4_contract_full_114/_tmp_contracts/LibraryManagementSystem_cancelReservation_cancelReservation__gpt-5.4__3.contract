@@ -1,0 +1,28 @@
+Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {
+          precondition:
+          uid <> null and uid <> '' and
+  barcode <> null and barcode <> '' and
+  User.allInstance()->exists(u | u.UserID = uid) and
+  BookCopy.allInstance()->exists(bc | bc.Barcode = barcode) and
+  Reserve.allInstance()->exists(r |
+    r.ReservedUser.UserID = uid and
+    r.ReservedCopy.Barcode = barcode and
+    r.IsReserveClosed = false
+  )
+            postcondition:
+          let rs : Set(Reserve) = Reserve.allInstance()->select(r |
+    r.ReservedUser.UserID = uid and
+    r.ReservedCopy.Barcode = barcode and
+    r.IsReserveClosed = false
+  ) in
+  result = true and
+  rs->forAll(r | r.IsReserveClosed = true) and
+  BookCopy.allInstance()->any(bc | bc.Barcode = barcode).IsReserved = false and
+  User.allInstance()->any(u | u.UserID = uid).ReservedBook->forAll(r |
+    not (r.ReservedCopy.Barcode = barcode and r.IsReserveClosed = false)
+  ) and
+  BookCopy.allInstance()->any(bc | bc.Barcode = barcode).ReservationRecord->forAll(r |
+    not (r.ReservedUser.UserID = uid and r.IsReserveClosed = false)
+  )
+            
+        }

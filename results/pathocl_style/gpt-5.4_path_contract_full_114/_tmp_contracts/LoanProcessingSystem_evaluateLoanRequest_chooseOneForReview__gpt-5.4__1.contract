@@ -1,0 +1,13 @@
+Contract EvaluateLoanRequestModule::chooseOneForReview(requestid:Integer): LoanRequest {
+          precondition:
+          LoanRequest.allInstance()->exists(lr | lr.RequestID = requestid and lr.Status = LoanRequestStatus::READYFORREVIEW)
+            postcondition:
+          let selected : LoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = requestid) in
+    result = selected and
+    selected.Status = LoanRequestStatus::READYFORREVIEW and
+    LoanRequest.allInstance()->forAll(lr |
+      lr <> selected implies
+      lr.Status = lr.Status@pre
+    )
+            
+        }

@@ -1,0 +1,9 @@
+Contract ManageCashDeskCRUDService::modifyCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {
+          definition:
+          cd:CashDesk = CashDesk.allInstance()->any(c:CashDesk|c.Id=id)
+            precondition:
+          cd.oclIsUndefined() = false and id > 0 and name <> null and isopened <> null
+            postcondition:
+          let c:CashDesk in c.oclIsNew() = false and c.Id = id and c.Name = name and c.IsOpened = isopened and result = true
+            
+        }

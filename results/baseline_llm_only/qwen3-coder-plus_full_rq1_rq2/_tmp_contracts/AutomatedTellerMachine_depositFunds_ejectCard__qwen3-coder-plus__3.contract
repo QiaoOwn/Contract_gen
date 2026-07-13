@@ -1,0 +1,9 @@
+Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {
+          definition:
+          currentCard:BankCard = self.InputCard
+            precondition:
+          self.PasswordValidated = true and self.CardIDValidated = true and currentCard.oclIsUndefined() = false and currentCard.CardStatus = BankCard::NORMAL
+            postcondition:
+          self.InputCard = null and self.PasswordValidated = false and self.CardIDValidated = false and result = true
+            
+        }

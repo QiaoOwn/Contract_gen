@@ -1,0 +1,52 @@
+Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
+          precondition:
+          requestid.oclIsUndefined() = false and
+  LoanRequest.allInstance()->exists(lr |
+    lr.RequestID = requestid and
+    lr.Status = LoanRequestStatus::REFERENCESVALIDATED
+  )
+            postcondition:
+          result.oclIsUndefined() = false and
+  result.RequestID = requestid and
+  result.Status = LoanRequestStatus::REFERENCESVALIDATED and
+  LoanRequest.allInstance()->includes(result) and
+  LoanRequest.allInstance()->forAll(lr |
+    lr.oclIsNew() = false and
+    lr.RequestID = lr@pre.RequestID and
+    lr.Status = lr@pre.Status and
+    lr.Name = lr@pre.Name and
+    lr.LoanAmount = lr@pre.LoanAmount and
+    lr.LoanPurpose = lr@pre.LoanPurpose and
+    lr.Income = lr@pre.Income and
+    lr.PhoneNumber = lr@pre.PhoneNumber and
+    lr.PostalAddress = lr@pre.PostalAddress and
+    lr.ZipCode = lr@pre.ZipCode and
+    lr.Email = lr@pre.Email and
+    lr.WorkReferences = lr@pre.WorkReferences and
+    lr.CreditReferences = lr@pre.CreditReferences and
+    lr.CheckingAccountNumber = lr@pre.CheckingAccountNumber and
+    lr.SecurityNumber = lr@pre.SecurityNumber and
+    lr.CreditScore = lr@pre.CreditScore and
+    lr.ApprovalLoan = lr@pre.ApprovalLoan and
+    lr.RequestedCAHistory = lr@pre.RequestedCAHistory and
+    lr.RequestedCreditHistory = lr@pre.RequestedCreditHistory and
+    lr.AttachedApprovalLetter = lr@pre.AttachedApprovalLetter and
+    lr.AttachedLoanAgreement = lr@pre.AttachedLoanAgreement and
+    lr.AttachedLoanTerms = lr@pre.AttachedLoanTerms
+  ) and
+  Loan.allInstance()->forAll(l |
+    l.oclIsNew() = false and
+    l.LoanID = l@pre.LoanID and
+    l.RemainAmountToPay = l@pre.RemainAmountToPay and
+    l.Status = l@pre.Status and
+    l.IsPaidinFull = l@pre.IsPaidinFull and
+    l.StartDate = l@pre.StartDate and
+    l.EndDate = l@pre.EndDate and
+    l.CurrentOverDueDate = l@pre.CurrentOverDueDate and
+    l.RePaymentDays = l@pre.RePaymentDays and
+    l.RepaymentAmount = l@pre.RepaymentAmount and
+    l.ReferedLoanRequest = l@pre.ReferedLoanRequest and
+    l.BelongedLoanAccount = l@pre.BelongedLoanAccount
+  )
+            
+        }

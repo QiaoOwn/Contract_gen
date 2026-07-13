@@ -1,0 +1,8 @@
+Contract ManageCashierCRUDService::queryCashier(id: Integer): Cashier {
+  definition:
+    cashier: Cashier = Cashier.allInstance()->any(c | c.Id = id)
+  precondition:
+    id.oclIsTypeOf(Integer) and cashier.oclIsUndefined() = false and Cashier.allInstance()->includes(cashier)
+  postcondition:
+    result = cashier
+}

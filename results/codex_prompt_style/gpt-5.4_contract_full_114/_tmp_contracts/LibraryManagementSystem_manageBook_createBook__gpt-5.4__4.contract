@@ -1,0 +1,43 @@
+Contract ManageBookCRUDService::createBook(callno:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String,copynum:Integer): Boolean {
+          precondition:
+          callno <> '' and
+    title <> '' and
+    edition <> '' and
+    author <> '' and
+    publisher <> '' and
+    description <> '' and
+    isbn <> '' and
+    copynum > 0 and
+    Book.allInstance()->forAll(b | b.CallNo <> callno)
+            postcondition:
+          (result = true implies
+        Book.allInstance()->exists(b |
+            b.oclIsNew() and
+            b.CallNo = callno and
+            b.Title = title and
+            b.Edition = edition and
+            b.Author = author and
+            b.Publisher = publisher and
+            b.Description = description and
+            b.ISBn = isbn and
+            b.CopyNum = copynum
+        )
+    ) and
+    (result = true implies
+        Book.allInstance()->one(b | b.CallNo = callno)
+    ) and
+    (result = false implies
+        Book.allInstance()->forAll(b |
+            not (b.oclIsNew() and
+                 b.CallNo = callno and
+                 b.Title = title and
+                 b.Edition = edition and
+                 b.Author = author and
+                 b.Publisher = publisher and
+                 b.Description = description and
+                 b.ISBn = isbn and
+                 b.CopyNum = copynum)
+        )
+    )
+            
+        }

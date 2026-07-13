@@ -1,0 +1,14 @@
+Contract ManageProductCatalogCRUDService::modifyProductCatalog(id:Integer,name:String): Boolean {
+          precondition:
+          id <> null and
+	name <> null and
+	ProductCatalog.allInstance()->exists(pc | pc.Id = id)
+            postcondition:
+          ProductCatalog.allInstance()->exists(pc |
+		pc.Id = id and
+		pc.Name = name
+	) and
+	ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size() and
+	result = true
+            
+        }

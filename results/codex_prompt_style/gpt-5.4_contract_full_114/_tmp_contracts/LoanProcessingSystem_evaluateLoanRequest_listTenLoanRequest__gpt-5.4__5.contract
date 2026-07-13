@@ -1,0 +1,12 @@
+Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {
+          precondition:
+          true
+            postcondition:
+          result = LoanRequest.allInstance()
+    ->select(lr | lr.Status = LoanRequestStatus::READYFORREVIEW)
+    ->asSet()
+    ->subOrderedSet(1, if LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::READYFORREVIEW)->size() >= 10 then 10 else LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::READYFORREVIEW)->size() endif)
+    ->asSet()
+  and CurrentLoanRequests = result
+            
+        }

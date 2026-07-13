@@ -1,0 +1,9 @@
+Contract ManageSupplierCRUDService::deleteSupplier(id:Integer): Boolean {
+          definition:
+          supp:Supplier = Supplier.allInstance()->any(s:Supplier|s.Id=id)
+            precondition:
+          supp.oclIsUndefined() = false and OrderProduct.allInstance()->select(op:OrderProduct|op.Supplier=supp and op.OrderStatus<>OrderProduct::OrderStatus.RECEIVED).isEmpty() = true
+            postcondition:
+          Supplier.allInstance()->excludes(supp) and result = true
+            
+        }

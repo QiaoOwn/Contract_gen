@@ -1,0 +1,20 @@
+Contract ManageItemCRUDService::modifyItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
+          precondition:
+          barcode <> null and
+    name <> null and
+    price <> null and
+    stocknumber <> null and
+    orderprice <> null and
+    Item.allInstance()->exists(i | i.Barcode = barcode) and
+    price >= 0 and
+    stocknumber >= 0 and
+    orderprice >= 0
+            postcondition:
+          let item : Item = Item.allInstance()->any(i | i.Barcode = barcode) in
+    item.Name = name and
+    item.Price = price and
+    item.StockNumber = stocknumber and
+    item.OrderPrice = orderprice and
+    result = true
+            
+        }

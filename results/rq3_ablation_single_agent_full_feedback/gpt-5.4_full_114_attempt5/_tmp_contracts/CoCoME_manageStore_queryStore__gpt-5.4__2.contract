@@ -1,0 +1,8 @@
+Contract ManageStoreCRUDService::queryStore(id: Integer): Store {
+  definition:
+    store: Store = Store.allInstance()->any(o | o.Id = id)
+  precondition:
+    store.oclIsUndefined() = false and Store.allInstance()->includes(store)
+  postcondition:
+    result = store
+}

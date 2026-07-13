@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+          definition:
+          currentOrder:OrderProduct = self.CurrentOrderProduct
+            precondition:
+          currentOrder.oclIsUndefined() = false and currentOrder.OrderStatus = OrderStatus::NEW
+            postcondition:
+          let o:OrderProduct in o.oclIsNew() and o.Id=currentOrder.Id and o.OrderStatus = OrderStatus::REQUESTED and OrderProduct.allInstance()->includes(o) and result=true
+            
+        }

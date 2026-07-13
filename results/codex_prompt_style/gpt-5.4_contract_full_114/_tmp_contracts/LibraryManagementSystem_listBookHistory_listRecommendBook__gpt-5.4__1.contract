@@ -1,0 +1,29 @@
+Contract ListBookHistory::listRecommendBook(uid:String): Set(RecommendBook) {
+          precondition:
+          uid <> null and
+  uid <> '' and
+  User.allInstance()->exists(u | u.UserID = uid)
+            postcondition:
+          result = User.allInstance()->any(u | u.UserID = uid).RecommendedBook and
+  User.allInstance()->exists(u | u.UserID = uid and u.RecommendedBook = result) and
+  User.allInstance()->forAll(u | u.oclIsTypeOf(User) implies
+    u.UserID = u.UserID and
+    u.Name = u.Name and
+    u.Sex = u.Sex and
+    u.Password = u.Password and
+    u.Email = u.Email and
+    u.Faculty = u.Faculty and
+    u.LoanedNumber = u.LoanedNumber and
+    u.BorrowStatus = u.BorrowStatus and
+    u.SuspensionDays = u.SuspensionDays and
+    u.OverDueFee = u.OverDueFee and
+    u.LoanedBook = u.LoanedBook and
+    u.ReservedBook = u.ReservedBook and
+    u.RecommendedBook = u.RecommendedBook
+  ) and
+  RecommendBook.allInstance()->forAll(r |
+    r.RecommendDate = r.RecommendDate and
+    r.RecommendUser = r.RecommendUser
+  )
+            
+        }

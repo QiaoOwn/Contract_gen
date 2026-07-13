@@ -1,0 +1,27 @@
+Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {
+          precondition:
+          orderid.oclIsUndefined() = false and
+    orderid > 0 and
+    CashDesk.allInstance()->exists(cd |
+        cd.IsOpened = true and
+        cd.BelongedStore.oclIsUndefined() = false and
+        cd.BelongedStore.IsOpened = true
+    )
+            postcondition:
+          if result = true then
+        Sale.allInstance()->exists(s |
+            s.Id = orderid and
+            CashDesk.allInstance()->exists(cd |
+                cd.IsOpened = true and
+                cd.ContainedSales->includes(s) and
+                cd.BelongedStore.oclIsUndefined() = false and
+                cd.BelongedStore.IsOpened = true and
+                cd.BelongedStore.Sales->includes(s)
+            )
+        ) and
+        Sale.allInstance()->one(s | s.Id = orderid)
+    else
+        Sale.allInstance()->forAll(s | s.Id <> orderid)
+    endif
+            
+        }

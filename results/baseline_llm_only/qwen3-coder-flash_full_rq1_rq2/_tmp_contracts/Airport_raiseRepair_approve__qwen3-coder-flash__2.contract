@@ -1,0 +1,9 @@
+Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {
+          definition:
+          sta:Staff = Staff.allInstance()->any(u:Staff|u.Id=sid), rep:Repair = Repair.allInstance()->any(uu:Repair|uu.Id=rid)
+            precondition:
+          sta.oclIsUndefined() = false and rep.oclIsUndefined() = false
+            postcondition:
+          let ah:ApprovalHistory in ah.oclIsNew() and ah.StaffId=sid and ah.Reject=reject and ah.Suggestion=suggestion and rep.History->includes(ah) and (reject = false implies rep.Process = 2) and (reject = true implies rep.Process = 3) and result = ah
+            
+        }

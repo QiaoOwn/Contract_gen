@@ -145,7 +145,12 @@ const OCLGenerator: FC<{src: string; initialUserInput?: string}> = ({initialUser
           tooltip={'Logs'}
         />
       )}
-      <LogDrawer open={logDrawerOpen} onClose={() => setLogDrawerOpen(false)} logs={logs} />
+      <LogDrawer
+        open={logDrawerOpen}
+        onClose={() => setLogDrawerOpen(false)}
+        logs={logs}
+        downloadBasename={`${project}-${useCase}-${operation}`}
+      />
       <div className="generator-shell">
         {processes.length === 0 ? (
           <>

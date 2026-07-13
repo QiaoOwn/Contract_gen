@@ -1,0 +1,18 @@
+Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {
+          precondition:
+          uid <> null and uid <> '' and
+    barcode <> null and barcode <> '' and
+    BookCopy.allInstance()->exists(b | b.Barcode = barcode) and
+    BookCopy.allInstance()->any(b | b.Barcode = barcode).Status = CopyStatus::ONHOLDSHELF and
+    BookCopy.allInstance()->any(b | b.Barcode = barcode).IsReserved = false
+            postcondition:
+          let bc : BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode) in
+    result = true and
+    bc.IsReserved = true and
+    bc.Status = bc.Status@pre and
+    bc.Barcode = bc.Barcode@pre and
+    bc.Location = bc.Location@pre and
+    bc.BookBelongs = bc.BookBelongs@pre and
+    bc.LoanedRecord = bc.LoanedRecord@pre
+            
+        }

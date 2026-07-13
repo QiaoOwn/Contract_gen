@@ -1,0 +1,9 @@
+Contract ManageProductCatalogCRUDService::deleteProductCatalog(id:Integer): Boolean {
+          precondition:
+          ProductCatalog.allInstance()->exists(pc | pc.Id = id)
+            postcondition:
+          ProductCatalog.allInstance()->forAll(pc | pc.Id <> id) and
+	Store.allInstance()->forAll(s | s.Productcatalogs->forAll(pc | pc.Id <> id)) and
+	result = true
+            
+        }

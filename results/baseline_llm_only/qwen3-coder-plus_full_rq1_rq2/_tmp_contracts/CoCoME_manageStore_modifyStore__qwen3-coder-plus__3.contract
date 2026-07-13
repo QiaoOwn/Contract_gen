@@ -1,0 +1,9 @@
+Contract ManageStoreCRUDService::modifyStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {
+          definition:
+          existingStore:Store = Store.allInstance()->any(s:Store|s.Id=id)
+            precondition:
+          existingStore.oclIsUndefined() = false and name.oclIsUndefined() = false and address.oclIsUndefined() = false
+            postcondition:
+          existingStore@pre.Id = id and existingStore.Name = name and existingStore.Address = address and existingStore.IsOpened = isopened and result = true
+            
+        }

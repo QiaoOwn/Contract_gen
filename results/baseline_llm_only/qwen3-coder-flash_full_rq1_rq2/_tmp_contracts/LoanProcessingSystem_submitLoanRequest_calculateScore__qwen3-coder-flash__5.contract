@@ -1,0 +1,9 @@
+Contract SubmitLoanRequestModule::calculateScore(): Integer {
+          definition:
+          lr:LoanRequest = self.CurrentLoanRequest
+            precondition:
+          lr.oclIsUndefined() = false and lr.Status = LoanRequestStatus::SUBMITTED
+            postcondition:
+          result = (lr.Income * 0.3 + lr.LoanAmount * 0.7 + lr.CreditScore * 0.2) as Integer
+            
+        }

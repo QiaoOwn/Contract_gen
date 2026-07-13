@@ -1,0 +1,39 @@
+Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {
+          precondition:
+          CurrentLoanRequest <> null and
+    CurrentLoanRequest.oclIsTypeOf(LoanRequest) and
+    CurrentLoanRequest.Status = LoanRequestStatus::READYFORREVIEW and
+    termid > 0 and
+    LoanTerm.allInstance()->forAll(lt | lt.ItemID <> termid) and
+    CurrentLoanRequests->includes(CurrentLoanRequest)
+            postcondition:
+          result = true and
+    LoanTerm.allInstance()->exists(lt |
+        lt.oclIsNew() and
+        lt.ItemID = termid and
+        CurrentLoanRequest.AttachedLoanTerms->includes(lt)
+    ) and
+    CurrentLoanRequest.AttachedLoanTerms->size() = CurrentLoanRequest.AttachedLoanTerms@pre->size() + 1 and
+    CurrentLoanRequest.Status = CurrentLoanRequest.Status@pre and
+    CurrentLoanRequest.RequestID = CurrentLoanRequest.RequestID@pre and
+    CurrentLoanRequest.Name = CurrentLoanRequest.Name@pre and
+    CurrentLoanRequest.LoanAmount = CurrentLoanRequest.LoanAmount@pre and
+    CurrentLoanRequest.LoanPurpose = CurrentLoanRequest.LoanPurpose@pre and
+    CurrentLoanRequest.Income = CurrentLoanRequest.Income@pre and
+    CurrentLoanRequest.PhoneNumber = CurrentLoanRequest.PhoneNumber@pre and
+    CurrentLoanRequest.PostalAddress = CurrentLoanRequest.PostalAddress@pre and
+    CurrentLoanRequest.ZipCode = CurrentLoanRequest.ZipCode@pre and
+    CurrentLoanRequest.Email = CurrentLoanRequest.Email@pre and
+    CurrentLoanRequest.WorkReferences = CurrentLoanRequest.WorkReferences@pre and
+    CurrentLoanRequest.CreditReferences = CurrentLoanRequest.CreditReferences@pre and
+    CurrentLoanRequest.CheckingAccountNumber = CurrentLoanRequest.CheckingAccountNumber@pre and
+    CurrentLoanRequest.SecurityNumber = CurrentLoanRequest.SecurityNumber@pre and
+    CurrentLoanRequest.CreditScore = CurrentLoanRequest.CreditScore@pre and
+    CurrentLoanRequest.ApprovalLoan = CurrentLoanRequest.ApprovalLoan@pre and
+    CurrentLoanRequest.RequestedCAHistory = CurrentLoanRequest.RequestedCAHistory@pre and
+    CurrentLoanRequest.RequestedCreditHistory = CurrentLoanRequest.RequestedCreditHistory@pre and
+    CurrentLoanRequest.AttachedApprovalLetter = CurrentLoanRequest.AttachedApprovalLetter@pre and
+    CurrentLoanRequest.AttachedLoanAgreement = CurrentLoanRequest.AttachedLoanAgreement@pre and
+    CurrentLoanRequests = CurrentLoanRequests@pre
+            
+        }

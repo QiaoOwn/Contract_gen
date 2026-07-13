@@ -1,0 +1,51 @@
+Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {
+          precondition:
+          cardid <> null and
+  BankCard.allInstance()->exists(c | c.CardID = cardid and c.CardStatus = CardStatus::NORMAL)
+            postcondition:
+          let c : BankCard = BankCard.allInstance()->any(b | b.CardID = cardid and b.CardStatus = CardStatus::NORMAL) in
+  if c <> null then
+    result = true and
+    InputCard = c and
+    CardIDValidated = true and
+    PasswordValidated = PasswordValidated@pre and
+    DepositedNumber = DepositedNumber@pre and
+    IsDeposit = IsDeposit@pre and
+    BankCard.allInstance()->forAll(b |
+      b.CardID = b.CardID@pre and
+      b.CardStatus = b.CardStatus@pre and
+      b.Catalog = b.Catalog@pre and
+      b.Password = b.Password@pre and
+      b.Balance = b.Balance@pre and
+      b.BelongedUser = b.BelongedUser@pre
+    ) and
+    User.allInstance()->forAll(u |
+      u.UserID = u.UserID@pre and
+      u.Name = u.Name@pre and
+      u.Address = u.Address@pre and
+      u.OwnedCard = u.OwnedCard@pre
+    )
+  else
+    result = false and
+    InputCard = InputCard@pre and
+    CardIDValidated = false and
+    PasswordValidated = PasswordValidated@pre and
+    DepositedNumber = DepositedNumber@pre and
+    IsDeposit = IsDeposit@pre and
+    BankCard.allInstance()->forAll(b |
+      b.CardID = b.CardID@pre and
+      b.CardStatus = b.CardStatus@pre and
+      b.Catalog = b.Catalog@pre and
+      b.Password = b.Password@pre and
+      b.Balance = b.Balance@pre and
+      b.BelongedUser = b.BelongedUser@pre
+    ) and
+    User.allInstance()->forAll(u |
+      u.UserID = u.UserID@pre and
+      u.Name = u.Name@pre and
+      u.Address = u.Address@pre and
+      u.OwnedCard = u.OwnedCard@pre
+    )
+  endif
+            
+        }

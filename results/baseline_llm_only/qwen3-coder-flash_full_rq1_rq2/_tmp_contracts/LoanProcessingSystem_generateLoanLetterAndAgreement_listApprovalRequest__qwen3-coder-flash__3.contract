@@ -1,0 +1,9 @@
+Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {
+          definition:
+          reqs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest|r.Status=LoanRequestStatus::SUBMITTED or r.Status=LoanRequestStatus::REFERENCESVALIDATED)
+            precondition:
+          CurrentLoanRequests.oclIsUndefined() = false and CurrentLoanRequests->size() > 0
+            postcondition:
+          result = reqs
+            
+        }

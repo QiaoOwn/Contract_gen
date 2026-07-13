@@ -1,0 +1,32 @@
+Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {
+          precondition:
+          barcode > 0 and
+  quantity > 0 and
+  CurrentSale <> null and
+  CurrentSale.IsComplete = false and
+  CurrentSale.IsReadytoPay = false and
+  Item.allInstance()->exists(i | i.Barcode = barcode and i.StockNumber >= quantity)
+            postcondition:
+          let itm : Item = Item.allInstance()->any(i | i.Barcode = barcode) in
+  let sli : SalesLineItem = CurrentSale.ContainedSalesLine->any(s | s.BelongedItem = itm) in
+    (
+      if CurrentSale.ContainedSalesLine@pre->exists(s | s.BelongedItem = itm) then
+        sli.Quantity = sli.Quantity@pre + quantity and
+        sli.Subamount = itm.Price * sli.Quantity and
+        CurrentSale.ContainedSalesLine->size() = CurrentSale.ContainedSalesLine@pre->size()
+      else
+        CurrentSale.ContainedSalesLine->size() = CurrentSale.ContainedSalesLine@pre->size() + 1 and
+        CurrentSale.ContainedSalesLine->exists(s |
+          not CurrentSale.ContainedSalesLine@pre->includes(s) and
+          s.BelongedSale = CurrentSale and
+          s.BelongedItem = itm and
+          s.Quantity = quantity and
+          s.Subamount = itm.Price * quantity
+        )
+      endif
+    ) and
+    itm.StockNumber = itm.StockNumber@pre - quantity and
+    CurrentSale.Amount = CurrentSale.ContainedSalesLine->collect(s | s.Subamount)->sum() and
+    result = true
+            
+        }

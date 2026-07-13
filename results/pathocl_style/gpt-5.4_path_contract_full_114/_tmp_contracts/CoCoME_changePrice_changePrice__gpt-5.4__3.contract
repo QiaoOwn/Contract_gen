@@ -1,0 +1,28 @@
+Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {
+          precondition:
+          barcode.oclIsUndefined() = false and
+    newPrice.oclIsUndefined() = false and
+    newPrice >= 0 and
+    Store.allInstance()->exists(s | s.Items->exists(i | i.Barcode = barcode))
+            postcondition:
+          if Store.allInstance()->exists(s | s.Items->exists(i | i.Barcode = barcode)) and newPrice >= 0 then
+        Store.allInstance()->forAll(s |
+            s.Items->forAll(i |
+                if i.Barcode = barcode then
+                    i.Price = newPrice
+                else
+                    i.Price = i.Price@pre
+                endif
+            )
+        ) and
+        result = true
+    else
+        Store.allInstance()->forAll(s |
+            s.Items->forAll(i |
+                i.Price = i.Price@pre
+            )
+        ) and
+        result = false
+    endif
+            
+        }

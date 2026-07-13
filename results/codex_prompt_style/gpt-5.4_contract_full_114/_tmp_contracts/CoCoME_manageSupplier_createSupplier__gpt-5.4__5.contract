@@ -1,0 +1,15 @@
+Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {
+          precondition:
+          id.oclIsUndefined() = false and
+    name.oclIsUndefined() = false and
+    name <> '' and
+    Supplier.allInstance()->forAll(s | s.Id <> id)
+            postcondition:
+          result = true and
+    Supplier.allInstance()->exists(s |
+        s.Id = id and
+        s.Name = name
+    ) and
+    Supplier.allInstance()->size() = Supplier.allInstance()->size() + 1
+            
+        }

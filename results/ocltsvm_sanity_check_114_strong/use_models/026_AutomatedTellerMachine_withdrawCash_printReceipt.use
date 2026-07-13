@@ -1,0 +1,86 @@
+model StrongUSE_026_AutomatedTellerMachine_withdrawCash_printReceipt
+
+-- operation_id: AutomatedTellerMachine_withdrawCash_printReceipt
+-- operation_signature: printReceipt(): Real
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AutomatedTellerMachineSystem::printReceipt(): Real {
+--   definition:
+--     card: BankCard = self.InputCard
+--   precondition:
+--     self.InputCard.oclIsUndefined() = false and
+--     card.oclIsUndefined() = false and
+--     BankCard.allInstance()->includes(card) and
+--     self.CardIDValidated = true and
+--     self.PasswordValidated = true and
+--     self.IsWithdraw = true and
+--     card.CardStatus = CardStatus::NORMAL and
+--     card.Balance>=self.WithdrawedNumber
+--   postcondition:
+--     result = self.WithdrawedNumber
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class AutomatedTellerMachineSystem
+end
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class withdrawCash
+end
+
+class OperationContext
+attributes
+  CardIDValidated : Boolean
+  IsWithdraw : Boolean
+  PasswordValidated : Boolean
+  WithdrawedNumber : Real
+  sampleIndex : Integer
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+association OperationContext_InputCard_BankCard between
+  OperationContext[0..*] role ContextOwner
+  BankCard[0..1] role InputCard
+end
+
+constraints
+
+context OperationContext
+  inv printReceiptDefinitionPreconditionTypecheck:
+    let card : BankCard = self.InputCard in
+          self.InputCard.oclIsUndefined() = false and
+    		card.oclIsUndefined() = false and
+    		BankCard.allInstances()->includes(card) and
+    		self.CardIDValidated = true and
+    		self.PasswordValidated = true and
+    		self.IsWithdraw = true and
+    		card.CardStatus = #NORMAL and
+    		card.Balance>=self.WithdrawedNumber

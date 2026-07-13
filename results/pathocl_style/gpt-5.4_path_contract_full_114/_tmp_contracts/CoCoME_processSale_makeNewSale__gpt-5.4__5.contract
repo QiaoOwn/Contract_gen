@@ -1,0 +1,27 @@
+Contract ProcessSaleService::makeNewSale(): Boolean {
+          precondition:
+          Store.allInstance()->exists(s | s.IsOpened = true and
+        s.AssociationCashdeskes->exists(cd | cd.IsOpened = true and cd.BelongedStore = s))
+            postcondition:
+          if result = true then
+        let newSale : Set(Sale) = Sale.allInstance()@post->excludingAll(Sale.allInstance()) in
+            newSale->size() = 1 and
+            let s : Sale = newSale->any(true) in
+                s.Time.oclIsUndefined() = false and
+                s.IsComplete = false and
+                s.Amount = 0 and
+                s.IsReadytoPay = false and
+                s.ContainedSalesLine->isEmpty() and
+                s.AssoicatedPayment.oclIsUndefined() and
+                s.Belongedstore.oclIsUndefined() = false and
+                s.BelongedCashDesk.oclIsUndefined() = false and
+                s.Belongedstore.IsOpened = true and
+                s.BelongedCashDesk.IsOpened = true and
+                s.BelongedCashDesk.BelongedStore = s.Belongedstore and
+                s.Belongedstore.Sales->includes(s) and
+                s.BelongedCashDesk.ContainedSales->includes(s)
+    else
+        Sale.allInstance()@post = Sale.allInstance()
+    endif
+            
+        }

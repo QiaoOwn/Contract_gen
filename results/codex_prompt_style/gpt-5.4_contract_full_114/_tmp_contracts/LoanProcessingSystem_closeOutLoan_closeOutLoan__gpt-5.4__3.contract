@@ -1,0 +1,24 @@
+Contract LoanProcessingSystemSystem::closeOutLoan(loanid:Integer): Boolean {
+          precondition:
+          Loan.allInstance()->exists(l | l.LoanID = loanid and l.Status = LoanStatus::LSOPEN and l.IsPaidinFull = true and l.RemainAmountToPay = 0 and not l.BelongedLoanAccount.oclIsUndefined())
+            postcondition:
+          let loan : Loan = Loan.allInstance()->any(l | l.LoanID = loanid) in
+  loan.Status = LoanStatus::CLOSED and
+  loan.BelongedLoanAccount.Status = LoanAccountStatus::HASPAIDINFULL and
+  result = true and
+  Loan.allInstance()->excluding(loan)->forAll(l |
+    l.Status = l.Status@pre and
+    l.IsPaidinFull = l.IsPaidinFull@pre and
+    l.RemainAmountToPay = l.RemainAmountToPay@pre and
+    l.StartDate = l.StartDate@pre and
+    l.EndDate = l.EndDate@pre and
+    l.CurrentOverDueDate = l.CurrentOverDueDate@pre and
+    l.RePaymentDays = l.RePaymentDays@pre and
+    l.RepaymentAmount = l.RepaymentAmount@pre
+  ) and
+  LoanAccount.allInstance()->excluding(loan.BelongedLoanAccount)->forAll(a |
+    a.Balance = a.Balance@pre and
+    a.Status = a.Status@pre
+  )
+            
+        }

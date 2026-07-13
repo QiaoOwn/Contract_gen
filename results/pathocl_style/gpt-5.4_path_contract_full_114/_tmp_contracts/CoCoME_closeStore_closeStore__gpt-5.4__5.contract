@@ -1,0 +1,35 @@
+Contract CoCoMESystem::closeStore(storeID:Integer): Boolean {
+          precondition:
+          Store.allInstance()->exists(s | s.Id = storeID and s.IsOpened = true and s.AssociationCashdeskes->forAll(cd | cd.IsOpened = false))
+            postcondition:
+          (
+  Store.allInstance()->exists(s |
+    s.Id = storeID and
+    s.IsOpened = false and
+    s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+    s.Cashiers = s.Cashiers@pre and
+    s.Productcatalogs = s.Productcatalogs@pre and
+    s.Items = s.Items@pre and
+    s.Sales = s.Sales@pre
+  ) and
+  result = true
+) and
+Store.allInstance()->forAll(s |
+  s.Id <> storeID implies
+    s.IsOpened = s.IsOpened@pre and
+    s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+    s.Cashiers = s.Cashiers@pre and
+    s.Productcatalogs = s.Productcatalogs@pre and
+    s.Items = s.Items@pre and
+    s.Sales = s.Sales@pre
+) and
+CashDesk.allInstance()->forAll(cd |
+  cd.IsOpened = cd.IsOpened@pre and
+  cd.BelongedStore = cd.BelongedStore@pre and
+  cd.ContainedSales = cd.ContainedSales@pre
+) and
+Cashier.allInstance()->forAll(c |
+  c.WorkedStore = c.WorkedStore@pre
+)
+            
+        }

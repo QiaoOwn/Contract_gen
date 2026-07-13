@@ -1,0 +1,9 @@
+Contract LoanProcessingSystemSystem::loanPayment(loanid:Integer): Boolean {
+          definition:
+          ln:Loan = Loan.allInstance()->any(l:Loan|l.LoanID=loanid)
+            precondition:
+          ln.oclIsUndefined() = false and ln.Status <> LoanStatus.CLOSED
+            postcondition:
+          let l:Loan in l.oclIsNew() and l.RemainAmountToPay = (ln.RemainAmountToPay - ln.RepaymentAmount) and l.IsPaidinFull = (l.RemainAmountToPay <= 0.0) and result = true
+            
+        }

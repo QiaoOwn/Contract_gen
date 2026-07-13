@@ -1,0 +1,52 @@
+Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
+          precondition:
+          requestid <> null and
+  LoanRequest.allInstance()->exists(lr |
+    lr.RequestID = requestid and
+    lr.Status = LoanRequestStatus::REFERENCESVALIDATED
+  )
+            postcondition:
+          result <> null and
+  result.oclIsTypeOf(LoanRequest) and
+  result.RequestID = requestid and
+  result.Status = LoanRequestStatus::REFERENCESVALIDATED and
+  LoanRequest.allInstance()->includes(result) and
+  LoanRequest.allInstance()->forAll(lr |
+    lr.oclIsNew() = false and
+    lr.Status = lr.Status@pre and
+    lr.RequestID = lr.RequestID@pre and
+    lr.Name = lr.Name@pre and
+    lr.LoanAmount = lr.LoanAmount@pre and
+    lr.LoanPurpose = lr.LoanPurpose@pre and
+    lr.Income = lr.Income@pre and
+    lr.PhoneNumber = lr.PhoneNumber@pre and
+    lr.PostalAddress = lr.PostalAddress@pre and
+    lr.ZipCode = lr.ZipCode@pre and
+    lr.Email = lr.Email@pre and
+    lr.WorkReferences = lr.WorkReferences@pre and
+    lr.CreditReferences = lr.CreditReferences@pre and
+    lr.CheckingAccountNumber = lr.CheckingAccountNumber@pre and
+    lr.SecurityNumber = lr.SecurityNumber@pre and
+    lr.CreditScore = lr.CreditScore@pre
+  ) and
+  Loan.allInstance()->forAll(l |
+    l.LoanID = l.LoanID@pre and
+    l.RemainAmountToPay = l.RemainAmountToPay@pre and
+    l.Status = l.Status@pre and
+    l.IsPaidinFull = l.IsPaidinFull@pre and
+    l.StartDate = l.StartDate@pre and
+    l.EndDate = l.EndDate@pre and
+    l.CurrentOverDueDate = l.CurrentOverDueDate@pre and
+    l.RePaymentDays = l.RePaymentDays@pre and
+    l.RepaymentAmount = l.RepaymentAmount@pre
+  ) and
+  CheckingAccount.allInstance()->forAll(ca |
+    ca.Balance = ca.Balance@pre and
+    ca.Status = ca.Status@pre
+  ) and
+  CreditHistory.allInstance()->forAll(ch |
+    ch.OutstandingDebt = ch.OutstandingDebt@pre and
+    ch.BadDebits = ch.BadDebits@pre
+  )
+            
+        }

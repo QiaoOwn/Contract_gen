@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {
+          definition:
+          usr:User = User.allInstance()->any(u:User|u.UserID=uid), copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy|bc.Barcode=barcode), res:Reserve = Reserve.allInstance()->any(r:Reserve|r.ReservedUser=usr and r.ReservedCopy=copy and r.IsReserveClosed=false)
+            precondition:
+          usr.oclIsUndefined() = false and copy.oclIsUndefined() = false and res.oclIsUndefined() = false
+            postcondition:
+          res.IsReserveClosed = true and res.ReservedCopy.IsReserved = false and result = true
+            
+        }

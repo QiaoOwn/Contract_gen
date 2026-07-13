@@ -1,0 +1,46 @@
+Contract ThirdPartyServices::sendNotificationEmail(email:String): Boolean {
+          precondition:
+          email <> null and email <> '' and
+    User.allInstance()->exists(u | u.Email = email)
+            postcondition:
+          User.allInstance()->forAll(u |
+        u.UserID = u.UserID and
+        u.Name = u.Name and
+        u.Sex = u.Sex and
+        u.Password = u.Password and
+        u.Email = u.Email and
+        u.Faculty = u.Faculty and
+        u.LoanedNumber = u.LoanedNumber and
+        u.BorrowStatus = u.BorrowStatus and
+        u.SuspensionDays = u.SuspensionDays and
+        u.OverDueFee = u.OverDueFee and
+        u.LoanedBook = u.LoanedBook and
+        u.ReservedBook = u.ReservedBook and
+        u.RecommendedBook = u.RecommendedBook
+    ) and
+    Loan.allInstance()->forAll(l |
+        l.LoanDate = l.LoanDate and
+        l.RenewDate = l.RenewDate and
+        l.DueDate = l.DueDate and
+        l.ReturnDate = l.ReturnDate and
+        l.RenewedTimes = l.RenewedTimes and
+        l.IsReturned = l.IsReturned and
+        l.OverDueFee = l.OverDueFee and
+        l.OverDue3Days = l.OverDue3Days and
+        l.OverDue10Days = l.OverDue10Days and
+        l.OverDue17Days = l.OverDue17Days and
+        l.OverDue31Days = l.OverDue31Days and
+        l.LoanedUser = l.LoanedUser and
+        l.LoanedCopy = l.LoanedCopy and
+        l.LoanLibrarian = l.LoanLibrarian and
+        l.ReturnLibrarian = l.ReturnLibrarian
+    ) and
+    Reserve.allInstance()->forAll(r |
+        r.ReserveDate = r.ReserveDate and
+        r.IsReserveClosed = r.IsReserveClosed and
+        r.ReservedCopy = r.ReservedCopy and
+        r.ReservedUser = r.ReservedUser
+    ) and
+    result = true
+            
+        }

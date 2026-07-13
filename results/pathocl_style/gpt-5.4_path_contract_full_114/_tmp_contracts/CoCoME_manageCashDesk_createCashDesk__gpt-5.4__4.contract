@@ -1,0 +1,20 @@
+Contract ManageCashDeskCRUDService::createCashDesk(id:Integer,name:String,isopened:Boolean): Boolean {
+          precondition:
+          id <> null and
+    name <> null and
+    name <> '' and
+    isopened <> null and
+    CashDesk.allInstance()->forAll(cd | cd.Id <> id)
+            postcondition:
+          if result = true then
+        CashDesk.allInstance()->exists(cd |
+            cd.Id = id and
+            cd.Name = name and
+            cd.IsOpened = isopened
+        ) and
+        CashDesk.allInstance()->size() = CashDesk.allInstance()->size() + 1
+    else
+        CashDesk.allInstance() = CashDesk.allInstance()
+    endif
+            
+        }

@@ -1,0 +1,9 @@
+Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {
+          definition:
+          item:Item = Item.allInstance()->any(o:Item|o.Barcode=barcode), store:Store = Store.allInstance()->any(s:Store|s.Items->includes(item))
+            precondition:
+          item.oclIsUndefined() = false and store.oclIsUndefined() = false and item.Price <> newPrice
+            postcondition:
+          let i:Item in i.oclIsNew() = false and i.Price = newPrice and result = true
+            
+        }

@@ -1,0 +1,39 @@
+Contract ListBookHistory::listBorrowHistory(uid:String): Set(Loan) {
+          precondition:
+          uid <> null and
+  uid <> '' and
+  User.allInstance()->exists(u | u.UserID = uid)
+            postcondition:
+          result = User.allInstance()->any(u | u.UserID = uid).LoanedBook and
+  User.allInstance()->any(u | u.UserID = uid).LoanedBook = User.allInstance()->any(u | u.UserID = uid).LoanedBook@pre and
+  User.allInstance()->forAll(u |
+    u.UserID = u.UserID@pre and
+    u.Name = u.Name@pre and
+    u.Sex = u.Sex@pre and
+    u.Password = u.Password@pre and
+    u.Email = u.Email@pre and
+    u.Faculty = u.Faculty@pre and
+    u.LoanedNumber = u.LoanedNumber@pre and
+    u.BorrowStatus = u.BorrowStatus@pre and
+    u.SuspensionDays = u.SuspensionDays@pre and
+    u.OverDueFee = u.OverDueFee@pre
+  ) and
+  Loan.allInstance()->forAll(l |
+    l.LoanDate = l.LoanDate@pre and
+    l.RenewDate = l.RenewDate@pre and
+    l.DueDate = l.DueDate@pre and
+    l.ReturnDate = l.ReturnDate@pre and
+    l.RenewedTimes = l.RenewedTimes@pre and
+    l.IsReturned = l.IsReturned@pre and
+    l.OverDueFee = l.OverDueFee@pre and
+    l.OverDue3Days = l.OverDue3Days@pre and
+    l.OverDue10Days = l.OverDue10Days@pre and
+    l.OverDue17Days = l.OverDue17Days@pre and
+    l.OverDue31Days = l.OverDue31Days@pre and
+    l.LoanedUser = l.LoanedUser@pre and
+    l.LoanedCopy = l.LoanedCopy@pre and
+    l.LoanLibrarian = l.LoanLibrarian@pre and
+    l.ReturnLibrarian = l.ReturnLibrarian@pre
+  )
+            
+        }

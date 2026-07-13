@@ -1,0 +1,17 @@
+Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {
+          precondition:
+          CurrentLoanRequest <> null and
+	CurrentLoanRequest.Status = LoanRequestStatus::READYFORREVIEW and
+	termid > 0 and
+	LoanTerm.allInstance()->exists(lt | lt.ItemID = termid) and
+	not CurrentLoanRequest.AttachedLoanTerms->exists(lt | lt.ItemID = termid)
+            postcondition:
+          if result = true then
+		CurrentLoanRequest.AttachedLoanTerms = CurrentLoanRequest.AttachedLoanTerms@pre->including(LoanTerm.allInstance()->any(lt | lt.ItemID = termid)) and
+		CurrentLoanRequest.Status = CurrentLoanRequest.Status@pre
+	else
+		CurrentLoanRequest.AttachedLoanTerms = CurrentLoanRequest.AttachedLoanTerms@pre and
+		CurrentLoanRequest.Status = CurrentLoanRequest.Status@pre
+	endif
+            
+        }

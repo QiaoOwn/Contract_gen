@@ -1,0 +1,8 @@
+Contract ProcessSaleService::makeNewSale(): Boolean {
+  definition:
+    store:Set(Store) = Store.allInstance()->select(s | s.IsOpened = true), cashDesk:Set(CashDesk) = CashDesk.allInstance()->select(c | c.IsOpened = true)
+  precondition:
+    self.CurrentSale.oclIsUndefined() = true and store.isEmpty() = false and cashDesk.isEmpty() = false
+  postcondition:
+    let sale:Sale in sale.oclIsNew() and Sale.allInstance()->includes(sale) and sale.IsComplete = false and sale.Amount = 0 and sale.IsReadytoPay = false and self.CurrentSale = sale and self.CurrentSaleLine = null and result = true
+}

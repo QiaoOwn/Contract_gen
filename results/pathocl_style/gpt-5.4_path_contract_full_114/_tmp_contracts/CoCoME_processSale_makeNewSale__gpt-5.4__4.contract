@@ -1,0 +1,24 @@
+Contract ProcessSaleService::makeNewSale(): Boolean {
+          precondition:
+          Store.allInstance()->exists(s | s.IsOpened = true and
+        s.AssociationCashdeskes->exists(cd | cd.IsOpened = true and cd.BelongedStore = s))
+            postcondition:
+          if result = true then
+        Sale.allInstance()->exists(ns |
+            not Sale.allInstance()->includes(ns) and
+            ns.IsComplete = false and
+            ns.IsReadytoPay = false and
+            ns.Amount = 0 and
+            ns.ContainedSalesLine->isEmpty() and
+            ns.AssoicatedPayment.oclIsUndefined() and
+            ns.Belongedstore.IsOpened = true and
+            ns.BelongedCashDesk.IsOpened = true and
+            ns.BelongedCashDesk.BelongedStore = ns.Belongedstore and
+            ns.Belongedstore.Sales->includes(ns) and
+            ns.BelongedCashDesk.ContainedSales->includes(ns)
+        )
+    else
+        Sale.allInstance()->size() = Sale.allInstance()->size()
+    endif
+            
+        }

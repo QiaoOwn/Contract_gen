@@ -1,0 +1,21 @@
+Contract CoCoMESystem::showStockReports(): Set(Item) {
+          precondition:
+          Store.allInstance()->exists(s | s.IsOpened = true and s.Items->notEmpty())
+            postcondition:
+          result = Store.allInstance()->select(s | s.IsOpened = true)->collect(s | s.Items)->asSet()
+  and Item.allInstance()->forAll(i |
+    i.Barcode = i@pre.Barcode and
+    i.Name = i@pre.Name and
+    i.Price = i@pre.Price and
+    i.StockNumber = i@pre.StockNumber and
+    i.OrderPrice = i@pre.OrderPrice
+  )
+  and Store.allInstance()->forAll(s |
+    s.Id = s@pre.Id and
+    s.Name = s@pre.Name and
+    s.Address = s@pre.Address and
+    s.IsOpened = s@pre.IsOpened and
+    s.Items = s@pre.Items
+  )
+            
+        }

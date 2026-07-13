@@ -1,0 +1,24 @@
+Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {
+          precondition:
+          barcode <> null and
+quantity <> null and
+quantity > 0 and
+Item.allInstance()->exists(i | i.Barcode = barcode) and
+CashDesk.allInstance()->exists(cd |
+	cd.IsOpened = true and
+	cd.BelongedStore.IsOpened = true and
+	cd.BelongedStore.Items->exists(i | i.Barcode = barcode)
+)
+            postcondition:
+          if result = true then
+	OrderEntry.allInstance()->exists(oe |
+		oe.oclIsNew() and
+		oe.Quantity = quantity and
+		oe.Item.Barcode = barcode and
+		oe.SubAmount = oe.Item.Price * quantity
+	)
+else
+	OrderEntry.allInstance()->forAll(oe | not oe.oclIsNew())
+endif
+            
+        }

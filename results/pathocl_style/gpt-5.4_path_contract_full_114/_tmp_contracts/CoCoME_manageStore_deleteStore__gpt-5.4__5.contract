@@ -1,0 +1,20 @@
+Contract ManageStoreCRUDService::deleteStore(id:Integer): Boolean {
+          precondition:
+          id <> null and
+    Store.allInstance()->exists(s | s.Id = id)
+            postcondition:
+          (
+        Store.allInstance()->exists(s | s.Id = id@pre) implies
+        (
+            result = true and
+            Store.allInstance()->forAll(s | s.Id <> id@pre) and
+            CashDesk.allInstance()->forAll(cd | cd.BelongedStore.oclIsUndefined() or cd.BelongedStore.Id <> id@pre) and
+            Cashier.allInstance()->forAll(c | c.WorkedStore.oclIsUndefined() or c.WorkedStore.Id <> id@pre)
+        )
+    ) and
+    (
+        Store.allInstance()->forAll(s | s.Id <> id@pre) implies
+        result = false
+    )
+            
+        }

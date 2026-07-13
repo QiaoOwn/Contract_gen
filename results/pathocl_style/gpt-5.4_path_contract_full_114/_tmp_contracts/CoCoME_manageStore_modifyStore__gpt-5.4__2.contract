@@ -1,0 +1,19 @@
+Contract ManageStoreCRUDService::modifyStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {
+          precondition:
+          id > 0 and
+  name <> null and name <> '' and
+  address <> null and address <> '' and
+  Store.allInstance()->exists(s | s.Id = id)
+            postcondition:
+          let s : Store = Store.allInstance()->any(st | st.Id = id) in
+    s.Id = id and
+    s.Name = name and
+    s.Address = address and
+    s.IsOpened = isopened and
+    s.AssociationCashdeskes = s@pre.AssociationCashdeskes and
+    s.Productcatalogs = s@pre.Productcatalogs and
+    s.Cashiers = s@pre.Cashiers and
+    Store.allInstance()->size() = Store.allInstance()->size() and
+    result = true
+            
+        }

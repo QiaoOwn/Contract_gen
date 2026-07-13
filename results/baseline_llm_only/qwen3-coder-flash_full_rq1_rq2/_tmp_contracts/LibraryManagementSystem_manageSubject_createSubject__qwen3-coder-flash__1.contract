@@ -1,0 +1,9 @@
+Contract ManageSubjectCRUDService::createSubject(name:String): Boolean {
+          definition:
+          existingSubject:Set(Subject) = Subject.allInstance()->select(s:Subject|s.Name=name)
+            precondition:
+          name <> null and name <> '' and existingSubject.isEmpty() = true
+            postcondition:
+          let newSubject:Subject in newSubject.oclIsNew() and newSubject.Name=name and Subject.allInstance()->includes(newSubject) and result=true
+            
+        }

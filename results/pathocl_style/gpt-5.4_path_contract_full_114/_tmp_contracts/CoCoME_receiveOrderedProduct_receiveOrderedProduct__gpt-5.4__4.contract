@@ -1,0 +1,17 @@
+Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {
+          precondition:
+          orderID <> null and
+  orderID > 0 and
+  Store.allInstance()->exists(s |
+    s.IsOpened = true and
+    s.AssociationCashdeskes->exists(cd | cd.IsOpened = true)
+  )
+            postcondition:
+          result = true and
+  Store.allInstance()->forAll(s |
+    s.AssociationCashdeskes->forAll(cd |
+      cd.BelongedStore = s
+    )
+  )
+            
+        }

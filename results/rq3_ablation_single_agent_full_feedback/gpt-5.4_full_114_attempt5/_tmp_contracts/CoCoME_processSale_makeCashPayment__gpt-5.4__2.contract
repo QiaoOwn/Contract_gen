@@ -1,0 +1,8 @@
+Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {
+  definition:
+    currentSale: Sale = Sale.allInstance()->any(s | s.IsReadytoPay = true and s.IsComplete = false)
+  precondition:
+    amount > 0 and currentSale.oclIsUndefined() = false and Sale.allInstance()->includes(currentSale) and currentSale.IsReadytoPay = true and currentSale.IsComplete = false and amount >= currentSale.Amount
+  postcondition:
+    let payment:Payment in payment.oclIsNew() and Payment.allInstance()->includes(payment) and payment.AmountTendered = amount and payment.BelongedSale = currentSale and currentSale.AssoicatedPayment = payment and currentSale.IsComplete = true and result = true
+}

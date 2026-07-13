@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {
+          definition:
+          item:Item = Item.allInstance()->any(o:Item|o.Barcode=barcode), currentOrder:OrderProduct = self.CurrentOrderProduct
+            precondition:
+          item.oclIsUndefined() = false and quantity > 0 and item.StockNumber >= quantity
+            postcondition:
+          let entry:OrderEntry in entry.oclIsNew() and entry.Quantity=quantity and entry.SubAmount=item.Price * quantity and currentOrder.ContainedEntries->includes(entry) and result=true
+            
+        }

@@ -1,0 +1,10 @@
+Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {
+          precondition:
+          CheckingAccount.allInstance()->exists(ca | not ca.oclIsUndefined() and ca.Status = Status::GOODSTANDING)
+            postcondition:
+          let resultCA : CheckingAccount = result in
+    not resultCA.oclIsUndefined() and
+    resultCA.Status = Status::GOODSTANDING and
+    resultCA.Balance = resultCA.Balance@pre
+            
+        }

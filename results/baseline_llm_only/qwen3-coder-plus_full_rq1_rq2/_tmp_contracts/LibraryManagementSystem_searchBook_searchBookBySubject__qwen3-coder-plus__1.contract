@@ -1,0 +1,9 @@
+Contract SearchBook::searchBookBySubject(subject:String): Set(Book) {
+          definition:
+          subjectBooks:Set(Book) = Book.allInstance()->select(b:Book|b.Subject->exists(s:Subject|s.Name=subject))
+            precondition:
+          subject.oclIsUndefined() = false
+            postcondition:
+          result = subjectBooks
+            
+        }

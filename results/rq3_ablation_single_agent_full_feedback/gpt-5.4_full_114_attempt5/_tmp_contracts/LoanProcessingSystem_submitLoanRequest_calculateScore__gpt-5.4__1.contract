@@ -1,0 +1,11 @@
+Contract SubmitLoanRequestModule::calculateScore(): Integer {
+  definition:
+    currentLoanRequest: LoanRequest = self.CurrentLoanRequest,
+    requestedCreditHistory: CreditHistory = currentLoanRequest.RequestedCreditHistory,
+    requestedCheckingAccount: CheckingAccount = currentLoanRequest.RequestedCAHistory,
+    score: Integer = 100 - requestedCreditHistory.BadDebits * 10
+  precondition:
+    currentLoanRequest.oclIsUndefined() = false and requestedCreditHistory.oclIsUndefined() = false and requestedCheckingAccount.oclIsUndefined() = false and LoanRequest.allInstance()->includes(currentLoanRequest) and currentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED
+  postcondition:
+    currentLoanRequest.CreditScore = score and result = score
+}

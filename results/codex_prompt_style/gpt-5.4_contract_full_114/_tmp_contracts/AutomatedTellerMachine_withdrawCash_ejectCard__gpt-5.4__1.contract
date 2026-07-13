@@ -1,0 +1,30 @@
+Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {
+          precondition:
+          InputCard <> null and
+  CardIDValidated = true and
+  PasswordValidated = true and
+  InputCard.CardStatus = CardStatus::NORMAL
+            postcondition:
+          InputCard = null and
+  result = true and
+  CardIDValidated = false and
+  PasswordValidated = false and
+  IsDeposit = false and
+  IsWithdraw = false and
+  WithdrawedNumber = 0 and
+  DepositedNumber = 0 and
+  BankCard.allInstance()->forAll(c |
+    c.Balance = c.Balance@pre and
+    c.CardStatus = c.CardStatus@pre and
+    c.Password = c.Password@pre and
+    c.Catalog = c.Catalog@pre and
+    c.BelongedUser = c.BelongedUser@pre
+  ) and
+  User.allInstance()->forAll(u |
+    u.UserID = u.UserID@pre and
+    u.Name = u.Name@pre and
+    u.Address = u.Address@pre and
+    u.OwnedCard = u.OwnedCard@pre
+  )
+            
+        }

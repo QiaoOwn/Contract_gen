@@ -1,0 +1,14 @@
+Contract ManageSupplierCRUDService::deleteSupplier(id:Integer): Boolean {
+          precondition:
+          id <> null and Supplier.allInstance()->exists(s | s.Id = id)
+            postcondition:
+          (if Supplier.allInstance()->exists(s | s.Id = id) then
+    Supplier.allInstance()->size() = Supplier.allInstance()->size() - 1 and
+    Supplier.allInstance()->forAll(s | s.Id <> id) and
+    result = true
+else
+    Supplier.allInstance()->size() = Supplier.allInstance()->size() and
+    result = false
+endif)
+            
+        }

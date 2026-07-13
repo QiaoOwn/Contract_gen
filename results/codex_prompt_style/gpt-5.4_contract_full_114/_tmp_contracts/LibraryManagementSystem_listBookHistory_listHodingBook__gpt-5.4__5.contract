@@ -1,0 +1,50 @@
+Contract ListBookHistory::listHodingBook(uid:String): Set(Loan) {
+          precondition:
+          uid <> null and
+  uid <> '' and
+  User.allInstance()->exists(u | u.UserID = uid)
+            postcondition:
+          result = User.allInstance()->any(u | u.UserID = uid).LoanedBook and
+  User.allInstance()->forAll(u |
+    u.UserID = uid implies
+      u.LoanedBook = result
+  ) and
+  User.allInstance()->forAll(u |
+    u.UserID <> uid implies
+      u.LoanedBook = u.LoanedBook@pre
+  ) and
+  Loan.allInstance()->forAll(l |
+    l = l@pre
+  ) and
+  BookCopy.allInstance()->forAll(bc |
+    bc = bc@pre
+  ) and
+  Book.allInstance()->forAll(b |
+    b = b@pre
+  ) and
+  Reserve.allInstance()->forAll(r |
+    r = r@pre
+  ) and
+  RecommendBook.allInstance()->forAll(rb |
+    rb = rb@pre
+  ) and
+  Librarian.allInstance()->forAll(lb |
+    lb = lb@pre
+  ) and
+  Administrator.allInstance()->forAll(a |
+    a = a@pre
+  ) and
+  Subject.allInstance()->forAll(s |
+    s = s@pre
+  ) and
+  User.allInstance()->size() = User.allInstance()->size() and
+  Loan.allInstance()->size() = Loan.allInstance()->size() and
+  BookCopy.allInstance()->size() = BookCopy.allInstance()->size() and
+  Book.allInstance()->size() = Book.allInstance()->size() and
+  Reserve.allInstance()->size() = Reserve.allInstance()->size() and
+  RecommendBook.allInstance()->size() = RecommendBook.allInstance()->size() and
+  Librarian.allInstance()->size() = Librarian.allInstance()->size() and
+  Administrator.allInstance()->size() = Administrator.allInstance()->size() and
+  Subject.allInstance()->size() = Subject.allInstance()->size()
+            
+        }

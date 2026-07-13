@@ -1,0 +1,72 @@
+Contract ThirdPartyServices::sendNotificationEmail(email:String): Boolean {
+          precondition:
+          email <> null and email <> '' and User.allInstance()->exists(u | u.Email = email)
+            postcondition:
+          result = true and User.allInstance()->forAll(u |
+    u.oclIsNew() = false and
+    u.UserID = u@pre.UserID and
+    u.Name = u@pre.Name and
+    u.Sex = u@pre.Sex and
+    u.Password = u@pre.Password and
+    u.Email = u@pre.Email and
+    u.Faculty = u@pre.Faculty and
+    u.LoanedNumber = u@pre.LoanedNumber and
+    u.BorrowStatus = u@pre.BorrowStatus and
+    u.SuspensionDays = u@pre.SuspensionDays and
+    u.OverDueFee = u@pre.OverDueFee
+) and
+Book.allInstance()->forAll(b |
+    b.oclIsNew() = false and
+    b.CallNo = b@pre.CallNo and
+    b.Title = b@pre.Title and
+    b.Edition = b@pre.Edition and
+    b.Author = b@pre.Author and
+    b.Publisher = b@pre.Publisher and
+    b.Description = b@pre.Description and
+    b.ISBn = b@pre.ISBn and
+    b.CopyNum = b@pre.CopyNum
+) and
+BookCopy.allInstance()->forAll(bc |
+    bc.oclIsNew() = false and
+    bc.Barcode = bc@pre.Barcode and
+    bc.Status = bc@pre.Status and
+    bc.Location = bc@pre.Location and
+    bc.IsReserved = bc@pre.IsReserved
+) and
+Loan.allInstance()->forAll(l |
+    l.oclIsNew() = false and
+    l.LoanDate = l@pre.LoanDate and
+    l.RenewDate = l@pre.RenewDate and
+    l.DueDate = l@pre.DueDate and
+    l.ReturnDate = l@pre.ReturnDate and
+    l.RenewedTimes = l@pre.RenewedTimes and
+    l.IsReturned = l@pre.IsReturned and
+    l.OverDueFee = l@pre.OverDueFee and
+    l.OverDue3Days = l@pre.OverDue3Days and
+    l.OverDue10Days = l@pre.OverDue10Days and
+    l.OverDue17Days = l@pre.OverDue17Days and
+    l.OverDue31Days = l@pre.OverDue31Days
+) and
+Reserve.allInstance()->forAll(r |
+    r.oclIsNew() = false and
+    r.ReserveDate = r@pre.ReserveDate and
+    r.IsReserveClosed = r@pre.IsReserveClosed
+) and
+RecommendBook.allInstance()->forAll(rb |
+    rb.oclIsNew() = false and
+    rb.RecommendDate = rb@pre.RecommendDate
+) and
+Administrator.allInstance()->forAll(a |
+    a.oclIsNew() = false and
+    a.AdminID = a@pre.AdminID and
+    a.UserName = a@pre.UserName and
+    a.Password = a@pre.Password
+) and
+Librarian.allInstance()->forAll(lbr |
+    lbr.oclIsNew() = false and
+    lbr.LibrarianID = lbr@pre.LibrarianID and
+    lbr.Name = lbr@pre.Name and
+    lbr.Password = lbr@pre.Password
+)
+            
+        }

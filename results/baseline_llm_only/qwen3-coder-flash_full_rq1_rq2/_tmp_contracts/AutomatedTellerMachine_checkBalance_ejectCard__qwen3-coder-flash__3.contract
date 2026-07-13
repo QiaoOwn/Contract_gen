@@ -1,0 +1,9 @@
+Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {
+          definition:
+          card:BankCard = BankCard.allInstance()->any(c:BankCard|c.CardID=InputCard.CardID)
+            precondition:
+          InputCard.oclIsUndefined() = false and card.oclIsUndefined() = false and card.CardStatus=NORMAL and PasswordValidated=true and CardIDValidated=true
+            postcondition:
+          let c:BankCard in c.oclIsNew() and c.CardStatus=CANNEL and result=true
+            
+        }

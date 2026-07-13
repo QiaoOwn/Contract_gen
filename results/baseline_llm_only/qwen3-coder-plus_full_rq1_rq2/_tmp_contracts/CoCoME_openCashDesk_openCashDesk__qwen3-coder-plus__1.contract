@@ -1,0 +1,9 @@
+Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {
+          definition:
+          cashDesk:CashDesk = CashDesk.allInstance()->any(cd:CashDesk|cd.Id=cashDeskID), currentStore:Store = self.CurrentStore
+            precondition:
+          cashDesk.oclIsUndefined() = false and currentStore.oclIsUndefined() = false and cashDesk.BelongedStore = currentStore and cashDesk.IsOpened = false
+            postcondition:
+          cashDesk.IsOpened = true and self.CurrentCashDesk = cashDesk and result = true
+            
+        }

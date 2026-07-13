@@ -1,0 +1,9 @@
+Contract ThirdPartyServices::sendNotificationEmail(email:String): Boolean {
+          definition:
+          validEmailUsers:Set(User) = User.allInstance()->select(u:User|u.Email=email)
+            precondition:
+          email.oclIsUndefined() = false and email = "" = false and validEmailUsers.isEmpty() = false
+            postcondition:
+          result = true
+            
+        }

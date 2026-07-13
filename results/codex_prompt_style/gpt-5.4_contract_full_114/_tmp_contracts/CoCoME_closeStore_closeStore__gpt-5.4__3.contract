@@ -1,0 +1,13 @@
+Contract CoCoMESystem::closeStore(storeID:Integer): Boolean {
+          precondition:
+          Store.allInstance()->exists(s | s.Id = storeID and s.IsOpened = true) and
+     CurrentStore <> null and
+     CurrentStore.Id = storeID and
+     CurrentStore.AssociationCashdeskes->forAll(cd | cd.ContainedSales->forAll(sa | sa.IsComplete = true))
+            postcondition:
+          let s : Store = Store.allInstance()->any(st | st.Id = storeID) in
+      s.IsOpened = false and
+      s.AssociationCashdeskes->forAll(cd | cd.IsOpened = false) and
+      result = true
+            
+        }

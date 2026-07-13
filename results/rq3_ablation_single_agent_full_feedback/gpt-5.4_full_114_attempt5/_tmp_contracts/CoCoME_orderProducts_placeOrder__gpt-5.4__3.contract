@@ -1,0 +1,10 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+  definition:
+    orderProduct: OrderProduct = OrderProduct.allInstance()->any(o | o.OrderStatus = OrderStatus::NEW),
+    containedEntries: Set(OrderEntry) = orderProduct.ContainedEntries,
+    supplier: Supplier = orderProduct.Supplier
+  precondition:
+    orderProduct.oclIsUndefined() = false and containedEntries.isEmpty() = false and supplier.oclIsUndefined() = false
+  postcondition:
+    orderProduct.OrderStatus = OrderStatus::REQUESTED and result = true
+}

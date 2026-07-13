@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          definition:
+          lr:LoanRequest = CurrentLoanRequest
+            precondition:
+          lr.oclIsUndefined() = false and lr.Status = LoanRequestStatus::SUBMITTED
+            postcondition:
+          let l:Loan in l.oclIsNew() and lr.Status = LoanRequestStatus::APPROVED and lr.ApprovalLoan = l and result = true
+            
+        }

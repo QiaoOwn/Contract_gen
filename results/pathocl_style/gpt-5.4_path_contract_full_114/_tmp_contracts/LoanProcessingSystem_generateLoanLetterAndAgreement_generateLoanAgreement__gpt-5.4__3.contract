@@ -1,0 +1,39 @@
+Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
+          precondition:
+          Loan.allInstance()->exists(l |
+		not l.ReferedLoanRequest.oclIsUndefined() and
+		not l.BelongedLoanAccount.oclIsUndefined() and
+		l.ReferedLoanRequest.Status = LoanRequestStatus::APPROVED and
+		l.ReferedLoanRequest.AttachedLoanAgreement.oclIsUndefined()
+	)
+            postcondition:
+          let targetLoan : Loan = Loan.allInstance()->any(l |
+		not l.ReferedLoanRequest.oclIsUndefined() and
+		not l.BelongedLoanAccount.oclIsUndefined() and
+		l.ReferedLoanRequest.Status = LoanRequestStatus::APPROVED and
+		l.ReferedLoanRequest.AttachedLoanAgreement.oclIsUndefined()
+	) in
+	if result = true then
+		LoanAgreement.allInstance()->exists(la |
+			targetLoan.ReferedLoanRequest.AttachedLoanAgreement = la and
+			not la.Content.oclIsUndefined() and
+			la.Content <> ''
+		)
+	else
+		LoanAgreement.allInstance()->forAll(la |
+			targetLoan.ReferedLoanRequest.AttachedLoanAgreement <> la
+		)
+	endif and
+	targetLoan.ReferedLoanRequest.Status = targetLoan.ReferedLoanRequest.Status@pre and
+	targetLoan.Status = targetLoan.Status@pre and
+	targetLoan.BelongedLoanAccount.Status = targetLoan.BelongedLoanAccount.Status@pre and
+	targetLoan.BelongedLoanAccount.Balance = targetLoan.BelongedLoanAccount.Balance@pre and
+	targetLoan.RemainAmountToPay = targetLoan.RemainAmountToPay@pre and
+	targetLoan.IsPaidinFull = targetLoan.IsPaidinFull@pre and
+	targetLoan.StartDate = targetLoan.StartDate@pre and
+	targetLoan.EndDate = targetLoan.EndDate@pre and
+	targetLoan.CurrentOverDueDate = targetLoan.CurrentOverDueDate@pre and
+	targetLoan.RePaymentDays = targetLoan.RePaymentDays@pre and
+	targetLoan.RepaymentAmount = targetLoan.RepaymentAmount@pre
+            
+        }

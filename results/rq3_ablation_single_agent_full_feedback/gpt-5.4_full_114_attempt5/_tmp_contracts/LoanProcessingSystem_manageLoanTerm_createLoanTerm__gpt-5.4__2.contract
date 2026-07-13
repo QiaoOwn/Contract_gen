@@ -1,0 +1,8 @@
+Contract ManageLoanTermCRUDService::createLoanTerm(itemid: Integer, content: String): Boolean {
+  definition:
+    existingLoanTerm: LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid)
+  precondition:
+    existingLoanTerm.oclIsUndefined() = true and content <> ""
+  postcondition:
+    let newLoanTerm: LoanTerm in newLoanTerm.oclIsNew() and LoanTerm.allInstance()->includes(newLoanTerm) and newLoanTerm.ItemID = itemid and newLoanTerm.Content = content and result = true
+}

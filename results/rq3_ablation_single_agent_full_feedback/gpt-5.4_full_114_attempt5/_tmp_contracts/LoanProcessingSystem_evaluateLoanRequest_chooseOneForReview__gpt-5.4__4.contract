@@ -1,0 +1,8 @@
+Contract EvaluateLoanRequestModule::chooseOneForReview(requestid: Integer): LoanRequest {
+  definition:
+    loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = requestid)
+  precondition:
+    loanRequest.oclIsUndefined() = false and loanRequest.RequestID = requestid and loanRequest.Status = LoanRequestStatus::READYFORREVIEW
+  postcondition:
+    result = loanRequest
+}

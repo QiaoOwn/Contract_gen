@@ -1,0 +1,12 @@
+Contract ManageCashDeskCRUDService::queryCashDesk(id:Integer): CashDesk {
+          precondition:
+          id.oclIsUndefined() = false and
+    CashDesk.allInstance()->exists(cd | cd.Id = id)
+            postcondition:
+          result.oclIsUndefined() = false and
+    result.Id = id and
+    CashDesk.allInstance() = CashDesk.allInstance() and
+    Store.allInstance() = Store.allInstance() and
+    result = CashDesk.allInstance()->any(cd | cd.Id = id)
+            
+        }

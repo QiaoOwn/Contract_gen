@@ -1,0 +1,31 @@
+Contract LoanProcessingSystemSystem::loanPayment(loanid:Integer): Boolean {
+          precondition:
+          loanid <> null and
+  Loan.allInstance()->exists(l | l.LoanID = loanid and l.Status = LoanStatus::LSOPEN and l.IsPaidinFull = false and l.RemainAmountToPay > 0)
+            postcondition:
+          let l : Loan = Loan.allInstance()->any(x | x.LoanID = loanid) in
+  if l.RemainAmountToPay@pre - l.RepaymentAmount@pre <= 0 then
+    l.RemainAmountToPay = 0 and
+    l.IsPaidinFull = true and
+    l.Status = LoanStatus::CLOSED and
+    l.BelongedLoanAccount.Balance = l.BelongedLoanAccount.Balance@pre - l.RepaymentAmount@pre and
+    l.BelongedLoanAccount.Status = LoanAccountStatus::HASPAIDINFULL and
+    result = true
+  else
+    l.RemainAmountToPay = l.RemainAmountToPay@pre - l.RepaymentAmount@pre and
+    l.IsPaidinFull = false and
+    l.Status = LoanStatus::LSOPEN and
+    l.BelongedLoanAccount.Balance = l.BelongedLoanAccount.Balance@pre - l.RepaymentAmount@pre and
+    l.BelongedLoanAccount.Status = l.BelongedLoanAccount.Status@pre and
+    result = true
+  endif and
+  l.LoanID = l.LoanID@pre and
+  l.StartDate = l.StartDate@pre and
+  l.EndDate = l.EndDate@pre and
+  l.CurrentOverDueDate = l.CurrentOverDueDate@pre and
+  l.RePaymentDays = l.RePaymentDays@pre and
+  l.RepaymentAmount = l.RepaymentAmount@pre and
+  l.ReferedLoanRequest = l.ReferedLoanRequest@pre and
+  l.BelongedLoanAccount.LoanAccountID = l.BelongedLoanAccount.LoanAccountID@pre
+            
+        }

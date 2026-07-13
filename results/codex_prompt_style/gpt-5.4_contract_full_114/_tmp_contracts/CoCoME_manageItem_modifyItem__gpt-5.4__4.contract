@@ -1,0 +1,33 @@
+Contract ManageItemCRUDService::modifyItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
+          precondition:
+          barcode.oclIsUndefined() = false and
+    name.oclIsUndefined() = false and
+    price.oclIsUndefined() = false and
+    stocknumber.oclIsUndefined() = false and
+    orderprice.oclIsUndefined() = false and
+    name <> '' and
+    price >= 0 and
+    stocknumber >= 0 and
+    orderprice >= 0 and
+    Item.allInstance()->exists(i | i.Barcode = barcode)
+            postcondition:
+          let item : Item = Item.allInstance()->any(i | i.Barcode = barcode) in
+    item.Name = name and
+    item.Price = price and
+    item.StockNumber = stocknumber and
+    item.OrderPrice = orderprice and
+    item.Barcode = barcode and
+    Item.allInstance()->size() = Item.allInstance()->size() and
+    Store.allInstance()->forAll(s |
+        s.Items = s.Items@pre and
+        s.Productcatalogs = s.Productcatalogs@pre and
+        s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+        s.Cashiers = s.Cashiers@pre and
+        s.Sales = s.Sales@pre
+    ) and
+    ProductCatalog.allInstance()->forAll(pc |
+        pc.ContainedItems = pc.ContainedItems@pre
+    ) and
+    result = true
+            
+        }

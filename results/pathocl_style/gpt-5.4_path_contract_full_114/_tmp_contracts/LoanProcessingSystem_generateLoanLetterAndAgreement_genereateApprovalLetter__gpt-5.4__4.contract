@@ -1,0 +1,50 @@
+Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {
+          precondition:
+          id <> null and
+  LoanRequest.allInstance()->exists(lr |
+    lr.RequestID = id and
+    lr.Status = LoanRequestStatus::APPROVED and
+    lr.ApprovalLoan <> null
+  )
+            postcondition:
+          let lr : LoanRequest = LoanRequest.allInstance()->any(r | r.RequestID = id) in
+  result = true and
+  lr.AttachedApprovalLetter <> null and
+  lr.AttachedApprovalLetter.Content <> null and
+  lr.AttachedApprovalLetter.Content <> '' and
+  lr.Status = LoanRequestStatus::APPROVED and
+  lr.ApprovalLoan = lr.ApprovalLoan@pre and
+  lr.AttachedLoanAgreement = lr.AttachedLoanAgreement@pre and
+  lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre and
+  lr.RequestedCAHistory = lr.RequestedCAHistory@pre and
+  lr.RequestedCreditHistory = lr.RequestedCreditHistory@pre and
+  lr.Name = lr.Name@pre and
+  lr.LoanAmount = lr.LoanAmount@pre and
+  lr.LoanPurpose = lr.LoanPurpose@pre and
+  lr.Income = lr.Income@pre and
+  lr.PhoneNumber = lr.PhoneNumber@pre and
+  lr.PostalAddress = lr.PostalAddress@pre and
+  lr.ZipCode = lr.ZipCode@pre and
+  lr.Email = lr.Email@pre and
+  lr.WorkReferences = lr.WorkReferences@pre and
+  lr.CreditReferences = lr.CreditReferences@pre and
+  lr.CheckingAccountNumber = lr.CheckingAccountNumber@pre and
+  lr.SecurityNumber = lr.SecurityNumber@pre and
+  lr.CreditScore = lr.CreditScore@pre and
+  lr.ApprovalLoan.LoanID = lr.ApprovalLoan.LoanID@pre and
+  lr.ApprovalLoan.RemainAmountToPay = lr.ApprovalLoan.RemainAmountToPay@pre and
+  lr.ApprovalLoan.Status = lr.ApprovalLoan.Status@pre and
+  lr.ApprovalLoan.IsPaidinFull = lr.ApprovalLoan.IsPaidinFull@pre and
+  lr.ApprovalLoan.StartDate = lr.ApprovalLoan.StartDate@pre and
+  lr.ApprovalLoan.EndDate = lr.ApprovalLoan.EndDate@pre and
+  lr.ApprovalLoan.CurrentOverDueDate = lr.ApprovalLoan.CurrentOverDueDate@pre and
+  lr.ApprovalLoan.RePaymentDays = lr.ApprovalLoan.RePaymentDays@pre and
+  lr.ApprovalLoan.RepaymentAmount = lr.ApprovalLoan.RepaymentAmount@pre and
+  ApprovalLetter.allInstance()->exists(al | al = lr.AttachedApprovalLetter) and
+  LoanRequest.allInstance()->forAll(r |
+    r.RequestID <> id implies
+      r.Status = r.Status@pre and
+      r.AttachedApprovalLetter = r.AttachedApprovalLetter@pre
+  )
+            
+        }

@@ -1,0 +1,19 @@
+Contract AirportSystem::createStaff(id:Integer,name:String,pswd:String,phone:String,role:Integer,bossid:Integer): Boolean {
+          precondition:
+          Staff.allInstance()->forAll(s | s.Id <> id)
+            postcondition:
+          Staff.allInstance()->exists(s |
+        s.Id = id and
+        s.Name = name and
+        s.Password = pswd and
+        s.Phone = phone and
+        s.Role = role and
+        (
+            (Staff.allInstance()->exists(b | b.Id = bossid) and s.Boss = Staff.allInstance()->any(b | b.Id = bossid)) or
+            (Staff.allInstance()->forAll(b | b.Id <> bossid) and s.Boss.oclIsUndefined())
+        )
+    ) and
+    Staff.allInstance()->size() = Staff.allInstance()->size() + 1 and
+    result = true
+            
+        }

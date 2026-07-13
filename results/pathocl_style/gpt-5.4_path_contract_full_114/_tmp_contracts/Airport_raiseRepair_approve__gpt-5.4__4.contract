@@ -1,0 +1,16 @@
+Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {
+          precondition:
+          Staff.allInstance()->exists(s | s.Id = sid) and
+    Repair.allInstance()->exists(r | r.Id = rid)
+            postcondition:
+          let r : Repair = Repair.allInstance()->any(x | x.Id = rid) in
+    let s : Staff = Staff.allInstance()->any(x | x.Id = sid) in
+    ApprovalHistory.allInstance()->includes(result) and
+    result.oclIsNew() and
+    result.StaffId = sid and
+    result.Reject = reject and
+    result.Suggestion = suggestion and
+    r.History = r.History@pre->including(result) and
+    r.Process = if reject then 0 else r.Process@pre + 1 endif
+            
+        }

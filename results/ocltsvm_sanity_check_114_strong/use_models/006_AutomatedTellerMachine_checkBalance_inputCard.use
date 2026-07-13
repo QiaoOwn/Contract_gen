@@ -1,0 +1,70 @@
+model StrongUSE_006_AutomatedTellerMachine_checkBalance_inputCard
+
+-- operation_id: AutomatedTellerMachine_checkBalance_inputCard
+-- operation_signature: inputCard(cardid: Integer): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {
+--   definition:
+--     inputCard: BankCard = BankCard.allInstance()->any(o|o.CardID = cardid)
+--   precondition:
+--     inputCard.oclIsUndefined() = false and
+--     BankCard.allInstance()->includes(inputCard) and
+--     inputCard.CardStatus = CardStatus::NORMAL
+--   postcondition:
+--     self.InputCard = inputCard and
+--     self.CardIDValidated = true and
+--     result = self.CardIDValidated
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class AutomatedTellerMachineSystem
+end
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class checkBalance
+end
+
+class OperationContext
+attributes
+  cardid : Integer
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+constraints
+
+context OperationContext
+  inv inputCardDefinitionPreconditionTypecheck:
+    let cardid : Integer = self.cardid in
+          let inputCard : BankCard = BankCard.allInstances()->any(o|o.CardID = cardid) in
+          inputCard.oclIsUndefined() = false and
+    		BankCard.allInstances()->includes(inputCard) and
+    		inputCard.CardStatus = #NORMAL

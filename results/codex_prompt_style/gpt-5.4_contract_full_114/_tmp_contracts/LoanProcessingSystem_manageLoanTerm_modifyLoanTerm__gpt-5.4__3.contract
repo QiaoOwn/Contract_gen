@@ -1,0 +1,16 @@
+Contract ManageLoanTermCRUDService::modifyLoanTerm(itemid:Integer,content:String): Boolean {
+          precondition:
+          itemid <> null and
+  content <> null and
+  LoanTerm.allInstance()->exists(lt | lt.ItemID = itemid)
+            postcondition:
+          let lt : LoanTerm = LoanTerm.allInstance()->any(x | x.ItemID = itemid) in
+    lt.Content = content and
+    result = true and
+    LoanTerm.allInstance()->size() = LoanTerm.allInstance()->size() and
+    LoanTerm.allInstance()->forAll(x |
+      x.ItemID <> itemid implies
+      x.Content = x.Content@pre
+    )
+            
+        }

@@ -1,0 +1,35 @@
+Contract SubmitLoanRequestModule::calculateScore(): Integer {
+          precondition:
+          CurrentLoanRequest <> null and
+     CurrentLoanRequest.RequestedCAHistory <> null and
+     CurrentLoanRequest.RequestedCreditHistory <> null and
+     CurrentLoanRequest.Income >= 0 and
+     CurrentLoanRequest.LoanAmount >= 0
+            postcondition:
+          CurrentLoanRequest.CreditScore = CurrentLoanRequest.RequestedCAHistory.Balance.div(1000).oclAsType(Integer) +
+                                 CurrentLoanRequest.Income.div(1000).oclAsType(Integer) -
+                                 CurrentLoanRequest.RequestedCreditHistory.OutstandingDebt.div(1000).oclAsType(Integer) -
+                                 CurrentLoanRequest.RequestedCreditHistory.BadDebits * 10 and
+      result = CurrentLoanRequest.CreditScore and
+      CurrentLoanRequest.RequestedCAHistory = CurrentLoanRequest.RequestedCAHistory@pre and
+      CurrentLoanRequest.RequestedCreditHistory = CurrentLoanRequest.RequestedCreditHistory@pre and
+      CurrentLoanRequest.Status = CurrentLoanRequest.Status@pre and
+      CurrentLoanRequest.RequestID = CurrentLoanRequest.RequestID@pre and
+      CurrentLoanRequest.Name = CurrentLoanRequest.Name@pre and
+      CurrentLoanRequest.LoanAmount = CurrentLoanRequest.LoanAmount@pre and
+      CurrentLoanRequest.LoanPurpose = CurrentLoanRequest.LoanPurpose@pre and
+      CurrentLoanRequest.Income = CurrentLoanRequest.Income@pre and
+      CurrentLoanRequest.PhoneNumber = CurrentLoanRequest.PhoneNumber@pre and
+      CurrentLoanRequest.PostalAddress = CurrentLoanRequest.PostalAddress@pre and
+      CurrentLoanRequest.ZipCode = CurrentLoanRequest.ZipCode@pre and
+      CurrentLoanRequest.Email = CurrentLoanRequest.Email@pre and
+      CurrentLoanRequest.WorkReferences = CurrentLoanRequest.WorkReferences@pre and
+      CurrentLoanRequest.CreditReferences = CurrentLoanRequest.CreditReferences@pre and
+      CurrentLoanRequest.CheckingAccountNumber = CurrentLoanRequest.CheckingAccountNumber@pre and
+      CurrentLoanRequest.SecurityNumber = CurrentLoanRequest.SecurityNumber@pre and
+      CurrentLoanRequest.ApprovalLoan = CurrentLoanRequest.ApprovalLoan@pre and
+      CurrentLoanRequest.AttachedApprovalLetter = CurrentLoanRequest.AttachedApprovalLetter@pre and
+      CurrentLoanRequest.AttachedLoanAgreement = CurrentLoanRequest.AttachedLoanAgreement@pre and
+      CurrentLoanRequest.AttachedLoanTerms = CurrentLoanRequest.AttachedLoanTerms@pre
+            
+        }

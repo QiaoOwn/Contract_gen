@@ -1,0 +1,14 @@
+Contract ManageBankCardCRUDService::modifyBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {
+          precondition:
+          BankCard.allInstance()->exists(b | b.CardID = cardid) and
+  password >= 0 and
+  balance >= 0
+            postcondition:
+          let bc : BankCard = BankCard.allInstance()->any(b | b.CardID = cardid) in
+    bc.CardStatus = cardstatus and
+    bc.Catalog = catalog and
+    bc.Password = password and
+    bc.Balance = balance and
+    result = true
+            
+        }

@@ -1,0 +1,14 @@
+Contract ManageUserCRUDService::deleteUser(userid:Integer): Boolean {
+          precondition:
+          userid <> null and
+  User.allInstance()->exists(u | u.UserID = userid)
+            postcondition:
+          let deletedUsers : Set(User) = User.allInstance()->select(u | u.UserID = userid) in
+  deletedUsers->forAll(u | not User.allInstance()->includes(u)) and
+  BankCard.allInstance()->forAll(c |
+    deletedUsers->excludes(c.BelongedUser) and
+    deletedUsers->forAll(u | u.OwnedCard <> c)
+  ) and
+  result = true
+            
+        }

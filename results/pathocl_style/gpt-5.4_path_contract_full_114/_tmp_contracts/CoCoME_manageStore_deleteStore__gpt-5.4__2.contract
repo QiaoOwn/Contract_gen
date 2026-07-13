@@ -1,0 +1,15 @@
+Contract ManageStoreCRUDService::deleteStore(id:Integer): Boolean {
+          precondition:
+          id <> null and
+  Store.allInstance()->exists(s | s.Id = id)
+            postcondition:
+          if Store.allInstance()->exists(s | s.Id = id) then
+    result = true and
+    Store.allInstance()->forAll(s | s.Id <> id) and
+    CashDesk.allInstance()->forAll(cd | cd.BelongedStore.Id <> id) and
+    Cashier.allInstance()->forAll(c | c.WorkedStore.Id <> id)
+  else
+    result = false
+  endif
+            
+        }

@@ -1,0 +1,22 @@
+Contract ManageUserCRUDService::queryUser(userid:Integer): User {
+          precondition:
+          userid <> null and User.allInstance()->exists(u | u.UserID = userid)
+            postcondition:
+          result <> null and result.UserID = userid and
+  User.allInstance()->exists(u | u = result and u.UserID = userid) and
+  User.allInstance()->forAll(u |
+    u.UserID = u@pre.UserID and
+    u.Name = u@pre.Name and
+    u.Address = u@pre.Address and
+    u.OwnedCard = u@pre.OwnedCard
+  ) and
+  BankCard.allInstance()->forAll(b |
+    b.CardID = b@pre.CardID and
+    b.CardStatus = b@pre.CardStatus and
+    b.Catalog = b@pre.Catalog and
+    b.Password = b@pre.Password and
+    b.Balance = b@pre.Balance and
+    b.BelongedUser = b@pre.BelongedUser
+  )
+            
+        }

@@ -1,0 +1,10 @@
+Contract ManageCashierCRUDService::deleteCashier(id:Integer): Boolean {
+          precondition:
+          id <> null and Cashier.allInstance()->exists(c | c.Id = id)
+            postcondition:
+          let c : Cashier = Cashier.allInstance()->any(x | x.Id = id) in
+    Cashier.allInstance()->excluding(c) = Cashier.allInstance() and
+    Store.allInstance()->forAll(s | s.Cashiers = s.Cashiers@pre->excluding(c)) and
+    result = true
+            
+        }

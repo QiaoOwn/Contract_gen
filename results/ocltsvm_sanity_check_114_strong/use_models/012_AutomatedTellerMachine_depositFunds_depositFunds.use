@@ -1,0 +1,86 @@
+model StrongUSE_012_AutomatedTellerMachine_depositFunds_depositFunds
+
+-- operation_id: AutomatedTellerMachine_depositFunds_depositFunds
+-- operation_signature: depositFunds(quantity: Real): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AutomatedTellerMachineSystem::depositFunds(quantity: Real): Boolean {
+--   definition:
+--     inputCard: BankCard = self.InputCard
+--   precondition:
+--     self.PasswordValidated = true and
+--     self.CardIDValidated = true and
+--     self.IsDeposit = true and
+--     inputCard.oclIsUndefined() = false and
+--     BankCard.allInstance()->includes(inputCard) and
+--     inputCard.CardStatus = CardStatus::NORMAL and
+--     quantity>0
+--   postcondition:
+--     inputCard.Balance = inputCard.Balance@pre+quantity and
+--     self.DepositedNumber = quantity and
+--     result = true
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class AutomatedTellerMachineSystem
+end
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class depositFunds
+end
+
+class OperationContext
+attributes
+  quantity : Real
+  CardIDValidated : Boolean
+  IsDeposit : Boolean
+  PasswordValidated : Boolean
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+association OperationContext_InputCard_BankCard between
+  OperationContext[0..*] role ContextOwner
+  BankCard[0..1] role InputCard
+end
+
+constraints
+
+context OperationContext
+  inv depositFundsDefinitionPreconditionTypecheck:
+    let quantity : Real = self.quantity in
+          let inputCard : BankCard = self.InputCard in
+          self.PasswordValidated = true and
+    		self.CardIDValidated = true and
+    		self.IsDeposit = true and
+    		inputCard.oclIsUndefined() = false and
+    		BankCard.allInstances()->includes(inputCard) and
+    		inputCard.CardStatus = #NORMAL and
+    		quantity>0

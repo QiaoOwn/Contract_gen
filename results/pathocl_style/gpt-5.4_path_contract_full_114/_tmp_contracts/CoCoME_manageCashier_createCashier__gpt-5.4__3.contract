@@ -1,0 +1,21 @@
+Contract ManageCashierCRUDService::createCashier(id:Integer,name:String): Boolean {
+          precondition:
+          id <> null and
+  name <> null and
+  name <> '' and
+  Cashier.allInstance()->forAll(c | c.Id <> id)
+            postcondition:
+          (result = true implies
+    Cashier.allInstance()->exists(c |
+      c.oclIsNew() and
+      c.Id = id and
+      c.Name = name
+    )
+  ) and
+  (result = false implies
+    Cashier.allInstance()->forAll(c |
+      not (c.oclIsNew() and c.Id = id and c.Name = name)
+    )
+  )
+            
+        }

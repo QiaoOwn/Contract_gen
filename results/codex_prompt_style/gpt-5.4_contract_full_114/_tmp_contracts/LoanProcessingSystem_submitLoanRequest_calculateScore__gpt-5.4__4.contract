@@ -1,0 +1,31 @@
+Contract SubmitLoanRequestModule::calculateScore(): Integer {
+          precondition:
+          CurrentLoanRequest <> null and
+	CurrentLoanRequest.RequestedCAHistory <> null and
+	CurrentLoanRequest.RequestedCreditHistory <> null and
+	CurrentLoanRequest.Income >= 0 and
+	CurrentLoanRequest.LoanAmount >= 0 and
+	CurrentLoanRequest.RequestedCreditHistory.OutstandingDebt >= 0 and
+	CurrentLoanRequest.RequestedCreditHistory.BadDebits >= 0
+            postcondition:
+          CurrentLoanRequest = CurrentLoanRequest@pre and
+	CurrentLoanRequest.Name = CurrentLoanRequest@pre.Name and
+	CurrentLoanRequest.RequestID = CurrentLoanRequest@pre.RequestID and
+	CurrentLoanRequest.LoanAmount = CurrentLoanRequest@pre.LoanAmount and
+	CurrentLoanRequest.LoanPurpose = CurrentLoanRequest@pre.LoanPurpose and
+	CurrentLoanRequest.Income = CurrentLoanRequest@pre.Income and
+	CurrentLoanRequest.PhoneNumber = CurrentLoanRequest@pre.PhoneNumber and
+	CurrentLoanRequest.PostalAddress = CurrentLoanRequest@pre.PostalAddress and
+	CurrentLoanRequest.ZipCode = CurrentLoanRequest@pre.ZipCode and
+	CurrentLoanRequest.Email = CurrentLoanRequest@pre.Email and
+	CurrentLoanRequest.WorkReferences = CurrentLoanRequest@pre.WorkReferences and
+	CurrentLoanRequest.CreditReferences = CurrentLoanRequest@pre.CreditReferences and
+	CurrentLoanRequest.CheckingAccountNumber = CurrentLoanRequest@pre.CheckingAccountNumber and
+	CurrentLoanRequest.SecurityNumber = CurrentLoanRequest@pre.SecurityNumber and
+	CurrentLoanRequest.CreditScore = CurrentLoanRequest@pre.CreditScore and
+	CurrentLoanRequest.Status = CurrentLoanRequest@pre.Status and
+	result = CurrentLoanRequest.Income.floor() - CurrentLoanRequest.LoanAmount.floor() - CurrentLoanRequest.RequestedCreditHistory.OutstandingDebt.floor() - CurrentLoanRequest.RequestedCreditHistory.BadDebits * 100 and
+	result >= Integer.MIN_VALUE and
+	result <= Integer.MAX_VALUE
+            
+        }

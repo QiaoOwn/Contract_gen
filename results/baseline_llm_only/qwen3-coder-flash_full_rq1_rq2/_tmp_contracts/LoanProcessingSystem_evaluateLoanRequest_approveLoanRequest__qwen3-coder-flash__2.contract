@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          definition:
+          lr:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.RequestID=self.CurrentLoanRequest.RequestID), approvedLoans:Set(Loan) = Loan.allInstance()->select(l:Loan|l.Status=LoanStatus::APPROVED)
+            precondition:
+          self.CurrentLoanRequest.oclIsUndefined() = false and lr.Status = LoanRequestStatus::SUBMITTED and lr.Status <> LoanRequestStatus::APPROVED
+            postcondition:
+          let newLoan:Loan in newLoan.oclIsNew() and newLoan.ReferedLoanRequest = lr and newLoan.Status = LoanStatus::LSOPEN and Loan.allInstance()->includes(newLoan) and result = true
+            
+        }

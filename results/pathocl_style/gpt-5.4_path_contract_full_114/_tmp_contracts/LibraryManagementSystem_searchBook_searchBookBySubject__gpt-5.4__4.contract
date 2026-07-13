@@ -1,0 +1,9 @@
+Contract SearchBook::searchBookBySubject(subject:String): Set(Book) {
+          precondition:
+          subject <> null and subject <> '' and Subject.allInstance()->exists(s | s.Name = subject)
+            postcondition:
+          result = Book.allInstance()->select(b | b.Subject->exists(s | s.Name = subject))->asSet() and
+      Book.allInstance() = Book.allInstance() and
+      Subject.allInstance() = Subject.allInstance()
+            
+        }

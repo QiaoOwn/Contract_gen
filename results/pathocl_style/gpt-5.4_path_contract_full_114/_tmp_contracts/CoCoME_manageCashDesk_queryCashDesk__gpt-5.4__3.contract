@@ -1,0 +1,28 @@
+Contract ManageCashDeskCRUDService::queryCashDesk(id:Integer): CashDesk {
+          precondition:
+          id <> null and CashDesk.allInstance()->exists(cd | cd.Id = id)
+            postcondition:
+          result <> null and
+	result.Id = id and
+	CashDesk.allInstance()->exists(cd | cd = result and cd.Id = id) and
+	CashDesk.allInstance()->size() = CashDesk.allInstance()->size() and
+	Store.allInstance()->forAll(s |
+		s.Id = s.Id@pre and
+		s.Name = s.Name@pre and
+		s.Address = s.Address@pre and
+		s.IsOpened = s.IsOpened@pre and
+		s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+		s.Productcatalogs = s.Productcatalogs@pre and
+		s.Items = s.Items@pre and
+		s.Cashiers = s.Cashiers@pre and
+		s.Sales = s.Sales@pre
+	) and
+	CashDesk.allInstance()->forAll(cd |
+		cd.Id = cd.Id@pre and
+		cd.Name = cd.Name@pre and
+		cd.IsOpened = cd.IsOpened@pre and
+		cd.ContainedSales = cd.ContainedSales@pre and
+		cd.BelongedStore = cd.BelongedStore@pre
+	)
+            
+        }

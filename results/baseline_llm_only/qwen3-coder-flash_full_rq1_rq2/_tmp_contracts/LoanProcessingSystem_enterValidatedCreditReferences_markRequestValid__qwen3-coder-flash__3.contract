@@ -1,0 +1,9 @@
+Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {
+          definition:
+          lr:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.RequestID=self.CurrentLoanRequest.RequestID)
+            precondition:
+          self.CurrentLoanRequest.oclIsUndefined() = false and lr.Status = LoanRequestStatus::SUBMITTED
+            postcondition:
+          let updatedLr:LoanRequest in updatedLr.oclIsNew() = false and updatedLr.Status = LoanRequestStatus::REFERENCESVALIDATED and LoanRequest.allInstance()->includes(updatedLr) and result = true
+            
+        }

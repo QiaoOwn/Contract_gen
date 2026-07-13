@@ -1,0 +1,28 @@
+Contract LibraryManagementSystemSystem::countDownSuspensionDay(): void {
+          precondition:
+          true
+            postcondition:
+          User.allInstance()->forAll(u |
+    ((u@pre.SuspensionDays > 0 and u@pre.LoanedBook->exists(l |
+      not l.IsReturned and (l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days)
+    )) implies
+      u.SuspensionDays = u@pre.SuspensionDays - 1
+    ) and
+    ((not (u@pre.SuspensionDays > 0 and u@pre.LoanedBook->exists(l |
+      not l.IsReturned and (l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days)
+    ))) implies
+      u.SuspensionDays = u@pre.SuspensionDays
+    ) and
+    ((u@pre.SuspensionDays > 0 and u@pre.LoanedBook->exists(l |
+      not l.IsReturned and (l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days)
+    ) and u@pre.SuspensionDays - 1 = 0) implies
+      u.BorrowStatus = BorrowStatus::SUSPEND
+    ) and
+    ((not (u@pre.SuspensionDays > 0 and u@pre.LoanedBook->exists(l |
+      not l.IsReturned and (l.OverDue3Days or l.OverDue10Days or l.OverDue17Days or l.OverDue31Days)
+    ) and u@pre.SuspensionDays - 1 = 0)) implies
+      u.BorrowStatus = u@pre.BorrowStatus
+    )
+  )
+            
+        }

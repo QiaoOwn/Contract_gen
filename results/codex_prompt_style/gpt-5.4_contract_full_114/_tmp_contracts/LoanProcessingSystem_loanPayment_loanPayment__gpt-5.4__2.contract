@@ -1,0 +1,26 @@
+Contract LoanProcessingSystemSystem::loanPayment(loanid:Integer): Boolean {
+          precondition:
+          Loan.allInstance()->exists(l | l.LoanID = loanid and l.Status = LoanStatus::LSOPEN and l.BelongedLoanAccount <> null)
+            postcondition:
+          if Loan.allInstance()->exists(l | l.LoanID = loanid@pre and l.Status@pre = LoanStatus::LSOPEN and l.BelongedLoanAccount@pre <> null) then
+    let loan : Loan = Loan.allInstance()->any(l | l.LoanID = loanid@pre) in
+    let account : LoanAccount = loan.BelongedLoanAccount in
+    result = true and
+    loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount@pre and
+    account.Balance = account.Balance@pre + loan.RepaymentAmount@pre and
+    (
+        if loan.RemainAmountToPay <= 0 then
+            loan.IsPaidinFull = true and
+            loan.Status = LoanStatus::CLOSED and
+            account.Status = LoanAccountStatus::HASPAIDINFULL
+        else
+            loan.IsPaidinFull = loan.IsPaidinFull@pre and
+            loan.Status = loan.Status@pre and
+            account.Status = account.Status@pre
+        endif
+    )
+else
+    result = false
+endif
+            
+        }

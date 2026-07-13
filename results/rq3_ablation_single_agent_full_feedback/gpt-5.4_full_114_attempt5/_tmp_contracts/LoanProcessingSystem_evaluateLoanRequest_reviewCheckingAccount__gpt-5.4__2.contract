@@ -1,0 +1,8 @@
+Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {
+  definition:
+    currentLoanRequest: LoanRequest = CurrentLoanRequest, checkingAccount: CheckingAccount = currentLoanRequest.RequestedCAHistory
+  precondition:
+    currentLoanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(currentLoanRequest) and checkingAccount.oclIsUndefined() = false and CheckingAccount.allInstance()->includes(checkingAccount) and currentLoanRequest.Status = LoanRequestStatus::READYFORREVIEW
+  postcondition:
+    result = checkingAccount
+}

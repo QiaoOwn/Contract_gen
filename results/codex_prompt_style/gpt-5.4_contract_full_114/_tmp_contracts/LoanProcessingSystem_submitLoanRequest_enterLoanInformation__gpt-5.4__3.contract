@@ -1,0 +1,37 @@
+Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {
+          precondition:
+          requestid <> null and
+	name <> null and name <> '' and
+	loanamount <> null and
+	loanpurpose <> null and loanpurpose <> '' and
+	income <> null and
+	phonenumber <> null and
+	postaladdress <> null and postaladdress <> '' and
+	zipcode <> null and
+	email <> null and email <> '' and
+	workreferences <> null and workreferences <> '' and
+	creditreferences <> null and creditreferences <> '' and
+	checkingaccountnumber <> null and
+	securitynumber <> null and
+	LoanRequest.allInstance()->forAll(lr | lr.RequestID <> requestid)
+            postcondition:
+          result = true and
+	CurrentLoanRequest.oclIsNew() and
+	CurrentLoanRequest.RequestID = requestid and
+	CurrentLoanRequest.Name = name and
+	CurrentLoanRequest.LoanAmount = loanamount and
+	CurrentLoanRequest.LoanPurpose = loanpurpose and
+	CurrentLoanRequest.Income = income and
+	CurrentLoanRequest.PhoneNumber = phonenumber and
+	CurrentLoanRequest.PostalAddress = postaladdress and
+	CurrentLoanRequest.ZipCode = zipcode and
+	CurrentLoanRequest.Email = email and
+	CurrentLoanRequest.WorkReferences = workreferences and
+	CurrentLoanRequest.CreditReferences = creditreferences and
+	CurrentLoanRequest.CheckingAccountNumber = checkingaccountnumber and
+	CurrentLoanRequest.SecurityNumber = securitynumber and
+	CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and
+	LoanRequest.allInstance()->includes(CurrentLoanRequest) and
+	LoanRequest.allInstance()->size() = LoanRequest.allInstance()->size() + 1
+            
+        }

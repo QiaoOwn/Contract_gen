@@ -1,0 +1,15 @@
+Contract ManageCashierCRUDService::modifyCashier(id:Integer,name:String): Boolean {
+          precondition:
+          id <> null and
+  name <> null and
+  Cashier.allInstance()->exists(c | c.Id = id)
+            postcondition:
+          let c : Cashier = Cashier.allInstance()->any(x | x.Id = id) in
+    c.Name = name and
+    result = true and
+    Cashier.allInstance()->size() = Cashier.allInstance()->size() and
+    Store.allInstance()->forAll(s |
+      s.Cashiers->includes(c) implies s.Cashiers = s.Cashiers@pre
+    )
+            
+        }

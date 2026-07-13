@@ -1,0 +1,26 @@
+Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {
+          precondition:
+          barcode <> null and
+    quantity <> null and
+    quantity > 0 and
+    Item.allInstance()->exists(i | i.Barcode = barcode and i.StockNumber >= quantity) and
+    CashDesk.allInstance()->exists(cd | cd.IsOpened = true)
+            postcondition:
+          if result = true then
+        OrderEntry.allInstance()->exists(oe |
+            oe.Item.Barcode = barcode and
+            oe.Quantity = quantity and
+            oe.SubAmount = oe.Item.Price * quantity
+        ) and
+        Item.allInstance()->exists(i |
+            i.Barcode = barcode and
+            i.StockNumber = i.StockNumber@pre - quantity
+        )
+    else
+        OrderEntry.allInstance() = OrderEntry.allInstance() and
+        Item.allInstance()->forAll(i |
+            i.StockNumber = i.StockNumber@pre
+        )
+    endif
+            
+        }

@@ -1,0 +1,37 @@
+Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {
+          precondition:
+          termid > 0 and
+  LoanTerm.allInstance()->exists(lt | lt.ItemID = termid) and
+  LoanRequest.allInstance()->exists(lr |
+    lr.Status = LoanRequestStatus::APPROVED and
+    not lr.AttachedLoanTerms->exists(lt | lt.ItemID = termid)
+  )
+            postcondition:
+          if result = true then
+    LoanRequest.allInstance()->exists(lr |
+      lr.Status = LoanRequestStatus::APPROVED and
+      lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre->including(
+        LoanTerm.allInstance()->any(lt | lt.ItemID = termid)
+      )
+    ) and
+    LoanRequest.allInstance()->forAll(lr |
+      (lr.Status = LoanRequestStatus::APPROVED and
+       not lr.AttachedLoanTerms@pre->exists(lt | lt.ItemID = termid))
+      implies
+      lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre->including(
+        LoanTerm.allInstance()->any(lt | lt.ItemID = termid)
+      )
+    ) and
+    LoanTerm.allInstance() = LoanTerm.allInstance() and
+    Loan.allInstance() = Loan.allInstance() and
+    LoanAccount.allInstance() = LoanAccount.allInstance()
+  else
+    LoanRequest.allInstance()->forAll(lr |
+      lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre
+    ) and
+    LoanTerm.allInstance() = LoanTerm.allInstance() and
+    Loan.allInstance() = Loan.allInstance() and
+    LoanAccount.allInstance() = LoanAccount.allInstance()
+  endif
+            
+        }

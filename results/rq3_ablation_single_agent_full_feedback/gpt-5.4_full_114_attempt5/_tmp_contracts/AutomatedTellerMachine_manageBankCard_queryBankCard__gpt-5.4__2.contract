@@ -1,0 +1,8 @@
+Contract ManageBankCardCRUDService::queryBankCard(cardid: Integer): BankCard {
+  definition:
+    bankCard: BankCard = BankCard.allInstance()->any(o | o.CardID = cardid)
+  precondition:
+    bankCard.oclIsUndefined() = false and BankCard.allInstance()->includes(bankCard)
+  postcondition:
+    result = bankCard
+}

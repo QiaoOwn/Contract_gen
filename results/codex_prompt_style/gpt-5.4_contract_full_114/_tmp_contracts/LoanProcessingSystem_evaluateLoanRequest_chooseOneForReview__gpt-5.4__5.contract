@@ -1,0 +1,15 @@
+Contract EvaluateLoanRequestModule::chooseOneForReview(requestid:Integer): LoanRequest {
+          precondition:
+          requestid <> null and
+	LoanRequest.allInstance()->exists(lr | lr.RequestID = requestid) and
+	LoanRequest.allInstance()->any(lr | lr.RequestID = requestid).Status = LoanRequestStatus::REFERENCESVALIDATED
+            postcondition:
+          result = LoanRequest.allInstance()->any(lr | lr.RequestID = requestid) and
+	CurrentLoanRequest = result and
+	CurrentLoanRequests = CurrentLoanRequests@pre and
+	result.Status = LoanRequestStatus::READYFORREVIEW and
+	LoanRequest.allInstance()->forAll(lr |
+		lr.RequestID = requestid implies lr.Status = LoanRequestStatus::READYFORREVIEW
+	)
+            
+        }

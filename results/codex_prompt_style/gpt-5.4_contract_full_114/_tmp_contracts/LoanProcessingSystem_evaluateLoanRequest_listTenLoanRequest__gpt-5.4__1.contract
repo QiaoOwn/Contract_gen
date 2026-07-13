@@ -1,0 +1,16 @@
+Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {
+          precondition:
+          true
+            postcondition:
+          result = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::REFERENCESVALIDATED)->asSet()->subOrderedSet(1, if LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::REFERENCESVALIDATED)->size() > 10 then 10 else LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::REFERENCESVALIDATED)->size() endif)->asSet() and
+  CurrentLoanRequests = result and
+  LoanRequest.allInstance()->isEqualTo(LoanRequest.allInstance()) and
+  Loan.allInstance()->isEqualTo(Loan.allInstance()) and
+  LoanTerm.allInstance()->isEqualTo(LoanTerm.allInstance()) and
+  CheckingAccount.allInstance()->isEqualTo(CheckingAccount.allInstance()) and
+  CreditHistory.allInstance()->isEqualTo(CreditHistory.allInstance()) and
+  LoanAccount.allInstance()->isEqualTo(LoanAccount.allInstance()) and
+  ApprovalLetter.allInstance()->isEqualTo(ApprovalLetter.allInstance()) and
+  LoanAgreement.allInstance()->isEqualTo(LoanAgreement.allInstance())
+            
+        }

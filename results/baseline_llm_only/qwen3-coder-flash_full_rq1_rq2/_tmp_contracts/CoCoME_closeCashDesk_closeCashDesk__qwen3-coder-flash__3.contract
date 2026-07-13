@@ -1,0 +1,9 @@
+Contract CoCoMESystem::closeCashDesk(cashDeskID:Integer): Boolean {
+          definition:
+          cd:CashDesk = CashDesk.allInstance()->any(c:CashDesk|c.Id=cashDeskID), st:Store = cd.BelongedStore
+            precondition:
+          cd.oclIsUndefined() = false and cd.IsOpened = true and st.oclIsUndefined() = false and st.IsOpened = true
+            postcondition:
+          let c:CashDesk in c.oclIsNew() and c.IsOpened = false and CashDesk.allInstance()->includes(c) and result = true
+            
+        }

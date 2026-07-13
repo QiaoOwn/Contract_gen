@@ -1,0 +1,22 @@
+USE version 7.5.0, Copyright (C) 1999-2025 University of Bremen & University of Applied Sciences Hamburg
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !create ctx : OperationContext
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set ctx.quantity := 10.0
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set ctx.CardIDValidated := true
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set ctx.IsDeposit := true
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set ctx.PasswordValidated := true
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !create automatedtellermachinesystem1 : AutomatedTellerMachineSystem
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !create bankcard1 : BankCard
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set bankcard1.CardID := 1
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set bankcard1.CardStatus := #CANNEL
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set bankcard1.Catalog := #CREDIT
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set bankcard1.Password := 1
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set bankcard1.Balance := 10.0
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !create user1 : User
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set user1.UserID := 1
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set user1.Name := 'sample'
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !set user1.Address := 'sample'
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !create depositfunds1 : depositFunds
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> !insert (ctx, bankcard1) into OperationContext_InputCard_BankCard
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> -- semantic load/typecheck only; no invariant truth check for operation pre-state
+012_AutomatedTellerMachine_depositFunds_depositFunds.cmd> 
+use> 

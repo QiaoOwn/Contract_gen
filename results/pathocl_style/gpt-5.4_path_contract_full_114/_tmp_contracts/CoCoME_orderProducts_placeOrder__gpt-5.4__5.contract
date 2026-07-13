@@ -1,0 +1,29 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+          precondition:
+          CashDesk.allInstance()->exists(cd |
+    cd.IsOpened = true and
+    cd.BelongedStore <> null and
+    cd.BelongedStore.IsOpened = true and
+    cd.BelongedStore.Productcatalogs->notEmpty()
+  )
+            postcondition:
+          if result = true then
+    Sale.allInstance()->exists(s |
+      s.oclIsNew() and
+      s.BelongedCashDesk <> null and
+      s.Belongedstore <> null and
+      s.BelongedCashDesk.BelongedStore = s.Belongedstore and
+      s.BelongedCashDesk.IsOpened = true and
+      s.Belongedstore.IsOpened = true and
+      s.Belongedstore.Productcatalogs->notEmpty() and
+      s.IsComplete = false and
+      s.IsReadytoPay = false and
+      s.Amount >= 0 and
+      s.BelongedCashDesk.ContainedSales->includes(s) and
+      s.Belongedstore.Sales->includes(s)
+    )
+  else
+    Sale.allInstance()->forAll(s | not s.oclIsNew())
+  endif
+            
+        }

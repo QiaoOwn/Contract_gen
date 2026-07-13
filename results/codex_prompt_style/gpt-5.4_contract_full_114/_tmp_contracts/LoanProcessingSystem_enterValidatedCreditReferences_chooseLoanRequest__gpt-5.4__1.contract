@@ -1,0 +1,57 @@
+Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
+          precondition:
+          LoanRequest.allInstance()->exists(lr | lr.RequestID = requestid and lr.Status = LoanRequestStatus::SUBMITTED)
+            postcondition:
+          CurrentLoanRequest = LoanRequest.allInstance()->any(lr | lr.RequestID = requestid and lr.Status = LoanRequestStatus::SUBMITTED@pre) and
+	CurrentLoanRequests = CurrentLoanRequests@pre and
+	CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and
+	result = CurrentLoanRequest and
+	LoanRequest.allInstance()->forAll(lr |
+		(lr = CurrentLoanRequest implies
+			lr.Name = lr.Name@pre and
+			lr.RequestID = lr.RequestID@pre and
+			lr.LoanAmount = lr.LoanAmount@pre and
+			lr.LoanPurpose = lr.LoanPurpose@pre and
+			lr.Income = lr.Income@pre and
+			lr.PhoneNumber = lr.PhoneNumber@pre and
+			lr.PostalAddress = lr.PostalAddress@pre and
+			lr.ZipCode = lr.ZipCode@pre and
+			lr.Email = lr.Email@pre and
+			lr.WorkReferences = lr.WorkReferences@pre and
+			lr.CreditReferences = lr.CreditReferences@pre and
+			lr.CheckingAccountNumber = lr.CheckingAccountNumber@pre and
+			lr.SecurityNumber = lr.SecurityNumber@pre and
+			lr.CreditScore = lr.CreditScore@pre and
+			lr.ApprovalLoan = lr.ApprovalLoan@pre and
+			lr.RequestedCAHistory = lr.RequestedCAHistory@pre and
+			lr.RequestedCreditHistory = lr.RequestedCreditHistory@pre and
+			lr.AttachedApprovalLetter = lr.AttachedApprovalLetter@pre and
+			lr.AttachedLoanAgreement = lr.AttachedLoanAgreement@pre and
+			lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre
+		) and
+		(lr <> CurrentLoanRequest implies
+			lr.Status = lr.Status@pre and
+			lr.Name = lr.Name@pre and
+			lr.RequestID = lr.RequestID@pre and
+			lr.LoanAmount = lr.LoanAmount@pre and
+			lr.LoanPurpose = lr.LoanPurpose@pre and
+			lr.Income = lr.Income@pre and
+			lr.PhoneNumber = lr.PhoneNumber@pre and
+			lr.PostalAddress = lr.PostalAddress@pre and
+			lr.ZipCode = lr.ZipCode@pre and
+			lr.Email = lr.Email@pre and
+			lr.WorkReferences = lr.WorkReferences@pre and
+			lr.CreditReferences = lr.CreditReferences@pre and
+			lr.CheckingAccountNumber = lr.CheckingAccountNumber@pre and
+			lr.SecurityNumber = lr.SecurityNumber@pre and
+			lr.CreditScore = lr.CreditScore@pre and
+			lr.ApprovalLoan = lr.ApprovalLoan@pre and
+			lr.RequestedCAHistory = lr.RequestedCAHistory@pre and
+			lr.RequestedCreditHistory = lr.RequestedCreditHistory@pre and
+			lr.AttachedApprovalLetter = lr.AttachedApprovalLetter@pre and
+			lr.AttachedLoanAgreement = lr.AttachedLoanAgreement@pre and
+			lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre
+		)
+	)
+            
+        }

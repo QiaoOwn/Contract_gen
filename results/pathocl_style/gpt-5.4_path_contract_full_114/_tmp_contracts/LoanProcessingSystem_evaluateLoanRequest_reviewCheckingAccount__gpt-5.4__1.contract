@@ -1,0 +1,11 @@
+Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {
+          precondition:
+          CheckingAccount.allInstance()->exists(ca | ca.Status = Status::GOODSTANDING or ca.Status = Status::SUSPENDED)
+            postcondition:
+          result <> null and
+      (result.Status = Status::GOODSTANDING or result.Status = Status::SUSPENDED) and
+      CheckingAccount.allInstance()->includes(result) and
+      result.Balance = result.Balance@pre and
+      result.Status = result.Status@pre
+            
+        }

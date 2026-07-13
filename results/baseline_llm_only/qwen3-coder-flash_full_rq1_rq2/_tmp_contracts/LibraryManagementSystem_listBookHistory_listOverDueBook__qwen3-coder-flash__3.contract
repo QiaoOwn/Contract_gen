@@ -1,0 +1,9 @@
+Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {
+          definition:
+          usr:User = User.allInstance()->any(u:User|u.UserID=uid), overdueLoans:Set(Loan) = usr.LoanedBook->select(l:Loan|l.DueDate < currentDate and l.IsReturned = false), overdueCopies:Set(BookCopy) = overdueLoans.LoanedCopy
+            precondition:
+          usr.oclIsUndefined() = false and usr.BorrowStatus = BorrowStatus.NORMAL
+            postcondition:
+          result = overdueCopies
+            
+        }

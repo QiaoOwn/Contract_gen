@@ -1,0 +1,35 @@
+Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
+          precondition:
+          barcode.oclIsUndefined() = false and
+  name.oclIsUndefined() = false and
+  price.oclIsUndefined() = false and
+  stocknumber.oclIsUndefined() = false and
+  orderprice.oclIsUndefined() = false and
+  name <> '' and
+  price >= 0 and
+  stocknumber >= 0 and
+  orderprice >= 0 and
+  Item.allInstance()->forAll(i | i.Barcode <> barcode)
+            postcondition:
+          if result = true then
+    Item.allInstance()->exists(i |
+      i.oclIsNew() and
+      i.Barcode = barcode and
+      i.Name = name and
+      i.Price = price and
+      i.StockNumber = stocknumber and
+      i.OrderPrice = orderprice
+    ) and
+    Item.allInstance()->one(i | i.Barcode = barcode)
+  else
+    Item.allInstance()->forAll(i |
+      not (i.oclIsNew() and
+           i.Barcode = barcode and
+           i.Name = name and
+           i.Price = price and
+           i.StockNumber = stocknumber and
+           i.OrderPrice = orderprice)
+    )
+  endif
+            
+        }

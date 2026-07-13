@@ -1,0 +1,42 @@
+Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {
+          precondition:
+          CheckingAccount.allInstance()->notEmpty() and
+    CreditHistory.allInstance()->notEmpty() and
+    ApprovalLetter.allInstance()->notEmpty() and
+    CheckingAccount.allInstance()->forAll(ca |
+        ca.Balance.oclIsUndefined() = false and
+        ca.Status.oclIsUndefined() = false
+    ) and
+    CreditHistory.allInstance()->forAll(ch |
+        ch.OutstandingDebt.oclIsUndefined() = false and
+        ch.BadDebits.oclIsUndefined() = false
+    ) and
+    ApprovalLetter.allInstance()->forAll(al |
+        al.Content.oclIsUndefined() = false and
+        al.Content <> ''
+    ) and
+    CheckingAccount.allInstance()->forAll(ca |
+        ca.Status = Status::GOODSTANDING
+    ) and
+    CreditHistory.allInstance()->forAll(ch |
+        ch.OutstandingDebt >= 0.0 and
+        ch.BadDebits >= 0
+    )
+            postcondition:
+          result = true and
+    CheckingAccount.allInstance()->forAll(ca |
+        ca.Status = Status::GOODSTANDING and
+        ca.Balance = ca.Balance@pre
+    ) and
+    CreditHistory.allInstance()->forAll(ch |
+        ch.OutstandingDebt = ch.OutstandingDebt@pre and
+        ch.BadDebits = ch.BadDebits@pre
+    ) and
+    ApprovalLetter.allInstance()->forAll(al |
+        al.Content = al.Content@pre
+    ) and
+    CheckingAccount.allInstance()->size() = CheckingAccount.allInstance()->size() and
+    CreditHistory.allInstance()->size() = CreditHistory.allInstance()->size() and
+    ApprovalLetter.allInstance()->size() = ApprovalLetter.allInstance()->size()
+            
+        }

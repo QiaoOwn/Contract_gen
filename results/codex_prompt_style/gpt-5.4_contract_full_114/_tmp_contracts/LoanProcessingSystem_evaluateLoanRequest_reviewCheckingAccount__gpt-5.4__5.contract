@@ -1,0 +1,70 @@
+Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {
+          precondition:
+          CurrentLoanRequest <> null and
+  CurrentLoanRequest.RequestedCAHistory <> null and
+  CurrentLoanRequest.Status = LoanRequestStatus::READYFORREVIEW
+            postcondition:
+          result = CurrentLoanRequest.RequestedCAHistory and
+  CurrentLoanRequest = CurrentLoanRequest@pre and
+  CurrentLoanRequests = CurrentLoanRequests@pre and
+  LoanRequest.allInstance()->forAll(l |
+    l.Status = l.Status@pre and
+    l.RequestID = l.RequestID@pre and
+    l.Name = l.Name@pre and
+    l.LoanAmount = l.LoanAmount@pre and
+    l.LoanPurpose = l.LoanPurpose@pre and
+    l.Income = l.Income@pre and
+    l.PhoneNumber = l.PhoneNumber@pre and
+    l.PostalAddress = l.PostalAddress@pre and
+    l.ZipCode = l.ZipCode@pre and
+    l.Email = l.Email@pre and
+    l.WorkReferences = l.WorkReferences@pre and
+    l.CreditReferences = l.CreditReferences@pre and
+    l.CheckingAccountNumber = l.CheckingAccountNumber@pre and
+    l.SecurityNumber = l.SecurityNumber@pre and
+    l.CreditScore = l.CreditScore@pre and
+    l.ApprovalLoan = l.ApprovalLoan@pre and
+    l.RequestedCAHistory = l.RequestedCAHistory@pre and
+    l.RequestedCreditHistory = l.RequestedCreditHistory@pre and
+    l.AttachedApprovalLetter = l.AttachedApprovalLetter@pre and
+    l.AttachedLoanAgreement = l.AttachedLoanAgreement@pre and
+    l.AttachedLoanTerms = l.AttachedLoanTerms@pre
+  ) and
+  CheckingAccount.allInstance()->forAll(c |
+    c.Balance = c.Balance@pre and
+    c.Status = c.Status@pre
+  ) and
+  CreditHistory.allInstance()->forAll(ch |
+    ch.OutstandingDebt = ch.OutstandingDebt@pre and
+    ch.BadDebits = ch.BadDebits@pre
+  ) and
+  Loan.allInstance()->forAll(lo |
+    lo.LoanID = lo.LoanID@pre and
+    lo.RemainAmountToPay = lo.RemainAmountToPay@pre and
+    lo.Status = lo.Status@pre and
+    lo.IsPaidinFull = lo.IsPaidinFull@pre and
+    lo.StartDate = lo.StartDate@pre and
+    lo.EndDate = lo.EndDate@pre and
+    lo.CurrentOverDueDate = lo.CurrentOverDueDate@pre and
+    lo.RePaymentDays = lo.RePaymentDays@pre and
+    lo.RepaymentAmount = lo.RepaymentAmount@pre and
+    lo.ReferedLoanRequest = lo.ReferedLoanRequest@pre and
+    lo.BelongedLoanAccount = lo.BelongedLoanAccount@pre
+  ) and
+  LoanAccount.allInstance()->forAll(la |
+    la.LoanAccountID = la.LoanAccountID@pre and
+    la.Balance = la.Balance@pre and
+    la.Status = la.Status@pre
+  ) and
+  ApprovalLetter.allInstance()->forAll(al |
+    al.Content = al.Content@pre
+  ) and
+  LoanAgreement.allInstance()->forAll(ag |
+    ag.Content = ag.Content@pre
+  ) and
+  LoanTerm.allInstance()->forAll(lt |
+    lt.ItemID = lt.ItemID@pre and
+    lt.Content = lt.Content@pre
+  )
+            
+        }

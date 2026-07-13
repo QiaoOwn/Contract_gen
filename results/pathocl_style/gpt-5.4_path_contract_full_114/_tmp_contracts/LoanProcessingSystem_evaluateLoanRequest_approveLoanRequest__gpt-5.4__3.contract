@@ -1,0 +1,24 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          precondition:
+          LoanRequest.allInstance()->exists(lr |
+		lr.Status = LoanRequestStatus::REFERENCESVALIDATED and
+		not lr.ApprovalLoan.oclIsUndefined() and
+		not lr.RequestedCAHistory.oclIsUndefined() and
+		not lr.RequestedCreditHistory.oclIsUndefined()
+	)
+            postcondition:
+          let lr : LoanRequest = LoanRequest.allInstance()->any(l |
+		l.Status = LoanRequestStatus::REFERENCESVALIDATED and
+		not l.ApprovalLoan.oclIsUndefined() and
+		not l.RequestedCAHistory.oclIsUndefined() and
+		not l.RequestedCreditHistory.oclIsUndefined()
+	) in
+	let ln : Loan = lr.ApprovalLoan in
+	result = true and
+	lr.Status = LoanRequestStatus::APPROVED and
+	ln.ReferedLoanRequest = lr and
+	ln.RemainAmountToPay = lr.LoanAmount and
+	ln.Status = LoanStatus::LSOPEN and
+	ln.IsPaidinFull = false
+            
+        }

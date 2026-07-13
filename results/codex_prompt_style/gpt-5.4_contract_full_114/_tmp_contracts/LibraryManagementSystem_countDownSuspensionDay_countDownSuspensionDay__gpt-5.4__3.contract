@@ -1,0 +1,80 @@
+Contract LibraryManagementSystemSystem::countDownSuspensionDay(): void {
+          precondition:
+          true
+            postcondition:
+          User.allInstance()->forAll(u |
+    if u@pre.SuspensionDays > 0 then
+      u.SuspensionDays = u@pre.SuspensionDays - 1 and
+      (if u@pre.SuspensionDays - 1 = 0 then
+         u.BorrowStatus = BorrowStatus::SUSPEND
+       else
+         u.BorrowStatus = u@pre.BorrowStatus
+       endif)
+    else
+      u.SuspensionDays = u@pre.SuspensionDays and
+      u.BorrowStatus = u@pre.BorrowStatus
+    endif
+  ) and
+  User.allInstance()->forAll(u |
+    u.UserID = u@pre.UserID and
+    u.Name = u@pre.Name and
+    u.Sex = u@pre.Sex and
+    u.Password = u@pre.Password and
+    u.Email = u@pre.Email and
+    u.Faculty = u@pre.Faculty and
+    u.LoanedNumber = u@pre.LoanedNumber and
+    u.OverDueFee = u@pre.OverDueFee and
+    u.LoanedBook = u@pre.LoanedBook and
+    u.ReservedBook = u@pre.ReservedBook and
+    u.RecommendedBook = u@pre.RecommendedBook
+  ) and
+  Book.allInstance()->forAll(b |
+    b.CallNo = b@pre.CallNo and
+    b.Title = b@pre.Title and
+    b.Edition = b@pre.Edition and
+    b.Author = b@pre.Author and
+    b.Publisher = b@pre.Publisher and
+    b.Description = b@pre.Description and
+    b.ISBn = b@pre.ISBn and
+    b.CopyNum = b@pre.CopyNum and
+    b.Copys = b@pre.Copys and
+    b.Subject = b@pre.Subject
+  ) and
+  BookCopy.allInstance()->forAll(bc |
+    bc.Barcode = bc@pre.Barcode and
+    bc.Status = bc@pre.Status and
+    bc.Location = bc@pre.Location and
+    bc.IsReserved = bc@pre.IsReserved and
+    bc.BookBelongs = bc@pre.BookBelongs and
+    bc.LoanedRecord = bc@pre.LoanedRecord and
+    bc.ReservationRecord = bc@pre.ReservationRecord
+  ) and
+  Loan.allInstance()->forAll(l |
+    l.LoanDate = l@pre.LoanDate and
+    l.RenewDate = l@pre.RenewDate and
+    l.DueDate = l@pre.DueDate and
+    l.ReturnDate = l@pre.ReturnDate and
+    l.RenewedTimes = l@pre.RenewedTimes and
+    l.IsReturned = l@pre.IsReturned and
+    l.OverDueFee = l@pre.OverDueFee and
+    l.OverDue3Days = l@pre.OverDue3Days and
+    l.OverDue10Days = l@pre.OverDue10Days and
+    l.OverDue17Days = l@pre.OverDue17Days and
+    l.OverDue31Days = l@pre.OverDue31Days and
+    l.LoanedUser = l@pre.LoanedUser and
+    l.LoanedCopy = l@pre.LoanedCopy and
+    l.LoanLibrarian = l@pre.LoanLibrarian and
+    l.ReturnLibrarian = l@pre.ReturnLibrarian
+  ) and
+  Reserve.allInstance()->forAll(r |
+    r.ReserveDate = r@pre.ReserveDate and
+    r.IsReserveClosed = r@pre.IsReserveClosed and
+    r.ReservedCopy = r@pre.ReservedCopy and
+    r.ReservedUser = r@pre.ReservedUser
+  ) and
+  RecommendBook.allInstance()->forAll(rb |
+    rb.RecommendDate = rb@pre.RecommendDate and
+    rb.RecommendUser = rb@pre.RecommendUser
+  )
+            
+        }

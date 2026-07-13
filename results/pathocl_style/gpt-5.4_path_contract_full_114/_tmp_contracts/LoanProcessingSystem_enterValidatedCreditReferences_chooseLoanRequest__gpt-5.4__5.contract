@@ -1,0 +1,20 @@
+Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
+          precondition:
+          requestid <> null and
+  LoanRequest.allInstance()->exists(lr |
+    lr.RequestID = requestid and
+    lr.Status = LoanRequestStatus::REFERENCESVALIDATED
+  )
+            postcondition:
+          result <> null and
+  result.RequestID = requestid and
+  result.Status = LoanRequestStatus::REFERENCESVALIDATED and
+  LoanRequest.allInstance()->includes(result) and
+  LoanRequest.allInstance()->forAll(lr |
+    lr.oclIsUndefined() = false implies
+    lr = result or
+    lr.RequestID <> requestid or
+    (lr.RequestID = requestid and lr.Status = LoanRequestStatus::REFERENCESVALIDATED)
+  )
+            
+        }

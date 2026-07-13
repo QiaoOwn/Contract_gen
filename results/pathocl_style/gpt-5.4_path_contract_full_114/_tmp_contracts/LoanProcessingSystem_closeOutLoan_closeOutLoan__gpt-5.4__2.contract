@@ -1,0 +1,16 @@
+Contract LoanProcessingSystemSystem::closeOutLoan(loanid:Integer): Boolean {
+          precondition:
+          loanid <> null and
+  Loan.allInstance()->exists(l |
+    l.LoanID = loanid and
+    l.Status = LoanStatus::LSOPEN and
+    l.IsPaidinFull = true and
+    l.RemainAmountToPay = 0
+  )
+            postcondition:
+          let loan : Loan = Loan.allInstance()->any(l | l.LoanID = loanid) in
+  loan.Status = LoanStatus::CLOSED and
+  loan.BelongedLoanAccount.Status = LoanAccountStatus::HASPAIDINFULL and
+  result = true
+            
+        }

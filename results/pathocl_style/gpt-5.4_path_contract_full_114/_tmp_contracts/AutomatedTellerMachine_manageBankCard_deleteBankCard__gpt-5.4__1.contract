@@ -1,0 +1,16 @@
+Contract ManageBankCardCRUDService::deleteBankCard(cardid:Integer): Boolean {
+          precondition:
+          cardid <> null and
+  BankCard.allInstance()->exists(c | c.CardID = cardid)
+            postcondition:
+          if BankCard.allInstance()->exists(c | c.CardID = cardid) then
+    BankCard.allInstance()->forAll(c | c.CardID <> cardid) and
+    User.allInstance()->forAll(u |
+      u.OwnedCard = null or u.OwnedCard.CardID <> cardid
+    ) and
+    result = true
+  else
+    result = false
+  endif
+            
+        }

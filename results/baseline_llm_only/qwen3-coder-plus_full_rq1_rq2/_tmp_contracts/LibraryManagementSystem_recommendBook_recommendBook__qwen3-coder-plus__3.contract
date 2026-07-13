@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {
+          definition:
+          usr:User = User.allInstance()->any(u:User|u.UserID=uid), recBook:RecommendBook = RecommendBook.allInstance()->any(r:RecommendBook|r.RecommendUser=usr and r.@pre.Book.CallNo=callNo)
+            precondition:
+          usr.oclIsUndefined() = false and uid <> '' and callNo <> '' and title <> '' and edition <> '' and author <> '' and publisher <> '' and isbn <> ''
+            postcondition:
+          let rb:RecommendBook in rb.oclIsNew() and rb.RecommendUser=usr and rb.RecommendDate=self.CurrentDate and RecommendBook.allInstance()->includes(rb) and result=true
+            
+        }

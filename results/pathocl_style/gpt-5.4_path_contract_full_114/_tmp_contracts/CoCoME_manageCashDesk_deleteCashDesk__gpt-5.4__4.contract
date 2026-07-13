@@ -1,0 +1,12 @@
+Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {
+          precondition:
+          id <> null and
+    CashDesk.allInstance()->exists(cd | cd.Id = id) and
+    CashDesk.allInstance()->any(cd | cd.Id = id).ContainedSales->isEmpty()
+            postcondition:
+          let deletedCashDesk : CashDesk = CashDesk.allInstance()->any(cd | cd.Id = id) in
+    result = true and
+    CashDesk.allInstance()->forAll(cd | cd.Id <> id) and
+    Store.allInstance()->forAll(s | s.AssociationCashdeskes->excludes(deletedCashDesk))
+            
+        }

@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::reviewCheckingAccount(): CheckingAccount {
+          definition:
+          lr:LoanRequest = LoanRequest.allInstance()->any(l:LoanRequest|l.RequestID=self.CurrentLoanRequest.RequestID), ca:CheckingAccount = lr.RequestedCAHistory
+            precondition:
+          self.CurrentLoanRequest.oclIsUndefined() = false and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and lr.oclIsUndefined() = false and ca.oclIsUndefined() = true
+            postcondition:
+          let c:CheckingAccount in c.oclIsNew() and c.Balance = 0.0 and c.Status = Status::GOODSTANDING and lr.RequestedCAHistory = c and LoanRequest.allInstance()->any(l:LoanRequest|l.RequestID=self.CurrentLoanRequest.RequestID and l.RequestedCAHistory = c) and result = c
+            
+        }

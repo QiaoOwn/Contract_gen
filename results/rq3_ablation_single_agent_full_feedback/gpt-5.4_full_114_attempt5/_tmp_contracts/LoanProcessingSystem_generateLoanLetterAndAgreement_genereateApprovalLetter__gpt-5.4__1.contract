@@ -1,0 +1,9 @@
+Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id: Integer): Boolean {
+  definition:
+    loanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.RequestID = id),
+    approvalLetter: ApprovalLetter = self.CurrentApprovalLetter
+  precondition:
+    id.oclIsTypeOf(Integer) and loanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(loanRequest) and loanRequest.Status = LoanRequestStatus::APPROVED and approvalLetter.oclIsUndefined() = false
+  postcondition:
+    loanRequest.AttachedApprovalLetter = approvalLetter and approvalLetter.Content = "Approval Letter" and result = true
+}

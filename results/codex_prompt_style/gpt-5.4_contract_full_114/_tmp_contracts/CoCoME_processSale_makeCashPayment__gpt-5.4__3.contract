@@ -1,0 +1,24 @@
+Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {
+          precondition:
+          CurrentSale <> null and
+  CurrentPaymentMethod = PaymentMethod::CASH and
+  amount >= 0 and
+  CurrentSale.IsReadytoPay = true and
+  CurrentSale.IsComplete = false and
+  CurrentSale.AssoicatedPayment = null and
+  CurrentSale.Amount >= 0
+            postcondition:
+          result = true and
+  CurrentSale.AssoicatedPayment <> null and
+  CurrentSale.AssoicatedPayment.oclIsTypeOf(CashPayment) and
+  CurrentSale.AssoicatedPayment.AmountTendered = amount and
+  CurrentSale.AssoicatedPayment.BelongedSale = CurrentSale and
+  CurrentSale.IsComplete = true and
+  CurrentSale.AssoicatedPayment.oclAsType(CashPayment).Balance = amount - CurrentSale.Amount and
+  CurrentSale@pre.Belongedstore.Sales = CurrentSale.Belongedstore.Sales and
+  CurrentSale@pre.BelongedCashDesk.ContainedSales = CurrentSale.BelongedCashDesk.ContainedSales and
+  CurrentSale.ContainedSalesLine = CurrentSale@pre.ContainedSalesLine and
+  CurrentSale.Amount = CurrentSale@pre.Amount and
+  CurrentSale.IsReadytoPay = CurrentSale@pre.IsReadytoPay
+            
+        }

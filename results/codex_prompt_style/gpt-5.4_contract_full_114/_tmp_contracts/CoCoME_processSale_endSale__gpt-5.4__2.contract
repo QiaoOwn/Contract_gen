@@ -1,0 +1,23 @@
+Contract ProcessSaleService::endSale(): Real {
+          precondition:
+          not CurrentSale.oclIsUndefined() and
+  CurrentSale.IsComplete = false and
+  CurrentSale.IsReadytoPay = false and
+  not CurrentSale.ContainedSalesLine->isEmpty() and
+  CurrentSale.ContainedSalesLine->forAll(sli |
+    not sli.oclIsUndefined() and
+    sli.BelongedSale = CurrentSale and
+    sli.Quantity > 0 and
+    not sli.BelongedItem.oclIsUndefined() and
+    sli.BelongedItem.StockNumber >= sli.Quantity
+  )
+            postcondition:
+          CurrentSale.IsReadytoPay = true and
+  CurrentSale.IsComplete = false and
+  CurrentSale.Amount = CurrentSale.ContainedSalesLine->collect(sli | sli.Subamount)->sum() and
+  CurrentSale.ContainedSalesLine->forAll(sli |
+    sli.Subamount = sli.Quantity * sli.BelongedItem.Price
+  ) and
+  result = CurrentSale.Amount
+            
+        }

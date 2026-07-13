@@ -1,0 +1,23 @@
+Contract ManageUserCRUDService::modifyUser(userid:Integer,name:String,address:String): Boolean {
+          precondition:
+          userid.oclIsUndefined() = false and
+  name.oclIsUndefined() = false and
+  address.oclIsUndefined() = false and
+  User.allInstance()->exists(u | u.UserID = userid)
+            postcondition:
+          let u : User = User.allInstance()->any(x | x.UserID = userid) in
+    u.Name = name and
+    u.Address = address and
+    u.UserID = userid and
+    u.OwnedCard = u.OwnedCard@pre and
+    BankCard.allInstance()->forAll(b |
+      b.CardID = b.CardID@pre and
+      b.CardStatus = b.CardStatus@pre and
+      b.Catalog = b.Catalog@pre and
+      b.Password = b.Password@pre and
+      b.Balance = b.Balance@pre and
+      b.BelongedUser = b.BelongedUser@pre
+    ) and
+    result = true
+            
+        }

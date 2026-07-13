@@ -1,0 +1,8 @@
+Contract ManageLoanTermCRUDService::queryLoanTerm(itemid: Integer): LoanTerm {
+  definition:
+    loanTerm: LoanTerm = LoanTerm.allInstance()->any(o | o.ItemID = itemid)
+  precondition:
+    loanTerm.oclIsUndefined() = false and LoanTerm.allInstance()->includes(loanTerm)
+  postcondition:
+    result = loanTerm
+}

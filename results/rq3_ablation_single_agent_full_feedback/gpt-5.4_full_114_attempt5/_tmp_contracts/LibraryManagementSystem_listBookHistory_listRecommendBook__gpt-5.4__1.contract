@@ -1,0 +1,8 @@
+Contract ListBookHistory::listRecommendBook(uid: String): Set(RecommendBook) {
+  definition:
+    user: User = User.allInstance()->any(u | u.UserID = uid), recommendBooks:Set(RecommendBook) = user.RecommendedBook
+  precondition:
+    uid.oclIsTypeOf(String) and user.oclIsUndefined() = false
+  postcondition:
+    result = recommendBooks
+}

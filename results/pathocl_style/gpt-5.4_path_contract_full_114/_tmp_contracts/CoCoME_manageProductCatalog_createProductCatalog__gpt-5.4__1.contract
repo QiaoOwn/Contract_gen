@@ -1,0 +1,23 @@
+Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {
+          precondition:
+          id <> null and
+    name <> null and
+    name <> '' and
+    ProductCatalog.allInstance()->forAll(pc | pc.Id <> id)
+            postcondition:
+          if result = true then
+        ProductCatalog.allInstance()->exists(pc |
+            pc.oclIsNew() and
+            pc.Id = id and
+            pc.Name = name
+        )
+    else
+        ProductCatalog.allInstance()->forAll(pc |
+            not (pc.oclIsNew() and pc.Id = id and pc.Name = name)
+        )
+    endif and
+    ProductCatalog.allInstance()->forAll(pc1, pc2 |
+        pc1 <> pc2 implies pc1.Id <> pc2.Id
+    )
+            
+        }

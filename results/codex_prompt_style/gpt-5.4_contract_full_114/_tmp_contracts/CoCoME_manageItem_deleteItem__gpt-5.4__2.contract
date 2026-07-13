@@ -1,0 +1,13 @@
+Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {
+          precondition:
+          barcode <> null and
+  Item.allInstance()->exists(i | i.Barcode = barcode)
+            postcondition:
+          let deletedItems : Set(Item) = Item.allInstance()->select(i | i.Barcode = barcode) in
+  result = true and
+  Item.allInstance()->forAll(i | i.Barcode <> barcode) and
+  Store.allInstance()->forAll(s | s.Items = s.Items@pre->excludingAll(deletedItems)) and
+  ProductCatalog.allInstance()->forAll(pc | deletedItems->forAll(di | pc.ContainedItems <> di)) and
+  SalesLineItem.allInstance()->forAll(sli | deletedItems->forAll(di | sli.BelongedItem <> di))
+            
+        }

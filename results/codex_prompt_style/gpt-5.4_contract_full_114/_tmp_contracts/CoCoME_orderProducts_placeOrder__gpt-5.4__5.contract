@@ -1,0 +1,13 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+          precondition:
+          CurrentOrderProduct <> null and
+     CurrentOrderProduct.Supplier <> null and
+     CurrentOrderProduct.ContainedEntries->notEmpty() and
+     CurrentOrderProduct.ContainedEntries->forAll(e | e.Quantity > 0 and e.SubAmount >= 0 and e.Item <> null) and
+     CurrentOrderProduct.OrderStatus = OrderStatus::NEW
+            postcondition:
+          CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and
+      CurrentOrderProduct.Amount = CurrentOrderProduct.ContainedEntries->collect(e | e.SubAmount)->sum() and
+      result = true
+            
+        }

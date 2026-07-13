@@ -1,0 +1,38 @@
+Contract ManageItemCRUDService::queryItem(barcode:Integer): Item {
+          precondition:
+          barcode <> null and
+    Item.allInstance()->exists(i | i.Barcode = barcode)
+            postcondition:
+          result <> null and
+    result.Barcode = barcode and
+    Item.allInstance()->exists(i | i = result and i.Barcode = barcode) and
+    Item.allInstance()->size() = Item.allInstance()->size() and
+    Store.allInstance()->forAll(s |
+        s.Items = s.Items@pre and
+        s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+        s.Productcatalogs = s.Productcatalogs@pre and
+        s.Cashiers = s.Cashiers@pre and
+        s.Sales = s.Sales@pre
+    ) and
+    CashDesk.allInstance()->forAll(c |
+        c.Id = c.Id@pre and
+        c.Name = c.Name@pre and
+        c.IsOpened = c.IsOpened@pre and
+        c.ContainedSales = c.ContainedSales@pre and
+        c.BelongedStore = c.BelongedStore@pre
+    ) and
+    Cashier.allInstance()->forAll(ca |
+        ca.Id = ca.Id@pre and
+        ca.Name = ca.Name@pre and
+        ca.WorkedStore = ca.WorkedStore@pre
+    ) and
+    Item.allInstance()->forAll(i |
+        i.Barcode = i.Barcode@pre and
+        i.Name = i.Name@pre and
+        i.Price = i.Price@pre and
+        i.StockNumber = i.StockNumber@pre and
+        i.OrderPrice = i.OrderPrice@pre and
+        i.BelongedCatalog = i.BelongedCatalog@pre
+    )
+            
+        }

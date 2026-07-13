@@ -1,0 +1,78 @@
+Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {
+          precondition:
+          true
+            postcondition:
+          result = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::APPROVED) and
+  CurrentLoanRequests = result and
+  LoanRequest.allInstance()->forAll(lr |
+    lr.oclIsNew() = false and
+    lr.Status = lr.Status@pre and
+    lr.RequestID = lr.RequestID@pre and
+    lr.Name = lr.Name@pre and
+    lr.LoanAmount = lr.LoanAmount@pre and
+    lr.LoanPurpose = lr.LoanPurpose@pre and
+    lr.Income = lr.Income@pre and
+    lr.PhoneNumber = lr.PhoneNumber@pre and
+    lr.PostalAddress = lr.PostalAddress@pre and
+    lr.ZipCode = lr.ZipCode@pre and
+    lr.Email = lr.Email@pre and
+    lr.WorkReferences = lr.WorkReferences@pre and
+    lr.CreditReferences = lr.CreditReferences@pre and
+    lr.CheckingAccountNumber = lr.CheckingAccountNumber@pre and
+    lr.SecurityNumber = lr.SecurityNumber@pre and
+    lr.CreditScore = lr.CreditScore@pre and
+    lr.ApprovalLoan = lr.ApprovalLoan@pre and
+    lr.RequestedCAHistory = lr.RequestedCAHistory@pre and
+    lr.RequestedCreditHistory = lr.RequestedCreditHistory@pre and
+    lr.AttachedApprovalLetter = lr.AttachedApprovalLetter@pre and
+    lr.AttachedLoanAgreement = lr.AttachedLoanAgreement@pre and
+    lr.AttachedLoanTerms = lr.AttachedLoanTerms@pre
+  ) and
+  ApprovalLetter.allInstance()->forAll(al |
+    al.oclIsNew() = false and
+    al.Content = al.Content@pre
+  ) and
+  LoanAgreement.allInstance()->forAll(la |
+    la.oclIsNew() = false and
+    la.Content = la.Content@pre
+  ) and
+  Loan.allInstance()->forAll(l |
+    l.oclIsNew() = false and
+    l.LoanID = l.LoanID@pre and
+    l.RemainAmountToPay = l.RemainAmountToPay@pre and
+    l.Status = l.Status@pre and
+    l.IsPaidinFull = l.IsPaidinFull@pre and
+    l.StartDate = l.StartDate@pre and
+    l.EndDate = l.EndDate@pre and
+    l.CurrentOverDueDate = l.CurrentOverDueDate@pre and
+    l.RePaymentDays = l.RePaymentDays@pre and
+    l.RepaymentAmount = l.RepaymentAmount@pre and
+    l.ReferedLoanRequest = l.ReferedLoanRequest@pre and
+    l.BelongedLoanAccount = l.BelongedLoanAccount@pre
+  ) and
+  LoanTerm.allInstance()->forAll(lt |
+    lt.oclIsNew() = false and
+    lt.ItemID = lt.ItemID@pre and
+    lt.Content = lt.Content@pre
+  ) and
+  CheckingAccount.allInstance()->forAll(ca |
+    ca.oclIsNew() = false and
+    ca.Balance = ca.Balance@pre and
+    ca.Status = ca.Status@pre
+  ) and
+  CreditHistory.allInstance()->forAll(ch |
+    ch.oclIsNew() = false and
+    ch.OutstandingDebt = ch.OutstandingDebt@pre and
+    ch.BadDebits = ch.BadDebits@pre
+  ) and
+  LoanAccount.allInstance()->forAll(laa |
+    laa.oclIsNew() = false and
+    laa.LoanAccountID = laa.LoanAccountID@pre and
+    laa.Balance = laa.Balance@pre and
+    laa.Status = laa.Status@pre
+  ) and
+  CurrentApprovalLetter = CurrentApprovalLetter@pre and
+  CurrentLoanAgreement = CurrentLoanAgreement@pre and
+  CurrentLoanRequest = CurrentLoanRequest@pre
+            
+        }

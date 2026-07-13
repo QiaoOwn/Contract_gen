@@ -1,0 +1,24 @@
+Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {
+          precondition:
+          uid <> '' and
+  callNo <> '' and
+  title <> '' and
+  edition <> '' and
+  author <> '' and
+  publisher <> '' and
+  description <> '' and
+  isbn <> '' and
+  User.allInstance()->exists(u | u.UserID = uid) and
+  Book.allInstance()->forAll(b | b.CallNo <> callNo)
+            postcondition:
+          result = true and
+  RecommendBook.allInstance()->exists(r |
+    r.oclIsNew() and
+    r.RecommendUser.UserID = uid
+  ) and
+  let u : User = User.allInstance()->any(x | x.UserID = uid) in
+    u.RecommendedBook = u.RecommendedBook@pre->including(
+      RecommendBook.allInstance()->any(r | r.oclIsNew() and r.RecommendUser = u)
+    )
+            
+        }

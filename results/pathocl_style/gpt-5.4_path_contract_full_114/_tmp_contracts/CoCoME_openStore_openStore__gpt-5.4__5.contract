@@ -1,0 +1,11 @@
+Contract CoCoMESystem::openStore(storeID:Integer): Boolean {
+          precondition:
+          storeID <> null and
+	Store.allInstance()->exists(s | s.Id = storeID and s.IsOpened = false)
+            postcondition:
+          let st : Store = Store.allInstance()->any(s | s.Id = storeID) in
+	st.IsOpened = true and
+	st.AssociationCashdeskes->forAll(cd | cd.IsOpened = false) and
+	result = true
+            
+        }

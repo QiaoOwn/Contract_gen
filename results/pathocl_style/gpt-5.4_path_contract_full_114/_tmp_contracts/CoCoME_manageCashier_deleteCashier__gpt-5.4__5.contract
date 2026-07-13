@@ -1,0 +1,12 @@
+Contract ManageCashierCRUDService::deleteCashier(id:Integer): Boolean {
+          precondition:
+          id.oclIsUndefined() = false and
+  Cashier.allInstance()->exists(c | c.Id = id)
+            postcondition:
+          let deletedCashier : Set(Cashier) = Cashier.allInstance()->select(c | c.Id = id) in
+  deletedCashier->size() = 1 and
+  Cashier.allInstance()->forAll(c | c.Id <> id) and
+  Store.allInstance()->forAll(s | s.Cashiers->forAll(c | c.Id <> id)) and
+  result = true
+            
+        }

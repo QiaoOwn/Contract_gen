@@ -1,0 +1,44 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          uid <> null and uid <> '' and
+  barcode <> null and barcode <> '' and
+  User.allInstance()->exists(u | u.UserID = uid) and
+  BookCopy.allInstance()->exists(bc | bc.Barcode = barcode) and
+  Loan.allInstance()->exists(l |
+    l.LoanedUser.UserID = uid and
+    l.LoanedCopy.Barcode = barcode and
+    l.IsReturned = false
+  ) and
+  let u : User = User.allInstance()->any(x | x.UserID = uid) in
+  let bc : BookCopy = BookCopy.allInstance()->any(x | x.Barcode = barcode) in
+  let l : Loan = Loan.allInstance()->any(x |
+    x.LoanedUser = u and x.LoanedCopy = bc and x.IsReturned = false
+  ) in
+    u.BorrowStatus = BorrowStatus::NORMAL and
+    u.OverDueFee <= 0 and
+    l.OverDueFee <= 0 and
+    bc.Status = CopyStatus::LOANED and
+    bc.IsReserved = false
+            postcondition:
+          let u : User = User.allInstance()->any(x | x.UserID = uid) in
+  let bc : BookCopy = BookCopy.allInstance()->any(x | x.Barcode = barcode) in
+  let l : Loan = Loan.allInstance()->any(x |
+    x.LoanedUser = u and x.LoanedCopy = bc and x.IsReturned = false
+  ) in
+    result = true and
+    l.RenewedTimes = l.RenewedTimes@pre + 1 and
+    l.RenewDate <> null and
+    l.DueDate > l.DueDate@pre and
+    l.IsReturned = false and
+    l.LoanedUser = u and
+    l.LoanedCopy = bc and
+    u.LoanedNumber = u.LoanedNumber@pre and
+    u.BorrowStatus = u.BorrowStatus@pre and
+    u.OverDueFee = u.OverDueFee@pre and
+    bc.Status = bc.Status@pre and
+    bc.IsReserved = bc.IsReserved@pre and
+    Loan.allInstance()->size() = Loan.allInstance()->size() and
+    User.allInstance()->size() = User.allInstance()->size() and
+    BookCopy.allInstance()->size() = BookCopy.allInstance()->size()
+            
+        }

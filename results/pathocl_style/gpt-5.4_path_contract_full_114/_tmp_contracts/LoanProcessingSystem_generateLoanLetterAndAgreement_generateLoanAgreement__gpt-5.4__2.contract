@@ -1,0 +1,26 @@
+Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
+          precondition:
+          Loan.allInstance()->exists(l |
+		l.ReferedLoanRequest <> null and
+		l.BelongedLoanAccount <> null and
+		l.ReferedLoanRequest.Status = LoanRequestStatus::APPROVED and
+		l.ReferedLoanRequest.AttachedLoanAgreement = null and
+		l.Status = LoanStatus::LSOPEN
+	)
+            postcondition:
+          if result = true then
+		Loan.allInstance()->exists(l |
+			l.ReferedLoanRequest <> null and
+			l.BelongedLoanAccount <> null and
+			l.ReferedLoanRequest.Status = LoanRequestStatus::APPROVED and
+			l.Status = LoanStatus::LSOPEN and
+			l.ReferedLoanRequest.AttachedLoanAgreement <> null and
+			LoanAgreement.allInstance()->includes(l.ReferedLoanRequest.AttachedLoanAgreement)
+		)
+	else
+		LoanRequest.allInstance()->forAll(lr |
+			lr.AttachedLoanAgreement = lr.AttachedLoanAgreement@pre
+		)
+	endif
+            
+        }

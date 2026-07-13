@@ -1,0 +1,9 @@
+Contract ManageCashDeskCRUDService::createCashDesk(id: Integer, name: String, isopened: Boolean): Boolean {
+  definition:
+    store: Store = Store.allInstance()->any(s | s.Id >= 0),
+    cashDesk: CashDesk = CashDesk.allInstance()->any(c | c.Id = id)
+  precondition:
+    id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and isopened.oclIsTypeOf(Boolean) and store.oclIsUndefined() = false and cashDesk.oclIsUndefined() = true
+  postcondition:
+    let newCashDesk:CashDesk in newCashDesk.oclIsNew() and CashDesk.allInstance()->includes(newCashDesk) and newCashDesk.Id = id and newCashDesk.Name = name and newCashDesk.IsOpened = isopened and newCashDesk.BelongedStore = store and result = true
+}

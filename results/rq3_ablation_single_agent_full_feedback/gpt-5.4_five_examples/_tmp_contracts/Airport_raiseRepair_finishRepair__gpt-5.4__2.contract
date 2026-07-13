@@ -1,0 +1,8 @@
+Contract RepairService::finishRepair(id: Integer, sid: Integer, did: Integer, res: String): Boolean {
+  definition:
+    repair: Repair = Repair.allInstance()->any(r | r.Id = id), staff: Staff = Staff.allInstance()->any(s | s.Id = sid), device: Device = Device.allInstance()->any(d | d.Id = did), contact: Staff = device.Contacts
+  precondition:
+    Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff) and Device.allInstance()->includes(device) and contact = staff and staff.Role = 3
+  postcondition:
+    repair.Process = 4 and repair.Result = res and result = true
+}

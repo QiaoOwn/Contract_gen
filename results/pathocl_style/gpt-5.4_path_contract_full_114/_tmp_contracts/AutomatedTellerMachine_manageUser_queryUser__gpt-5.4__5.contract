@@ -1,0 +1,15 @@
+Contract ManageUserCRUDService::queryUser(userid:Integer): User {
+          precondition:
+          userid <> null and User.allInstance()->exists(u | u.UserID = userid)
+            postcondition:
+          result <> null and result.UserID = userid and
+    User.allInstance()->includes(result) and
+    User.allInstance()->forAll(u |
+        u.oclIsUndefined() = false implies
+        u.UserID = u.UserID and
+        u.Name = u.Name and
+        u.Address = u.Address and
+        u.OwnedCard = u.OwnedCard
+    )
+            
+        }

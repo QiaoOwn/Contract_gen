@@ -87,6 +87,8 @@ def call_next_generate_ndjson(
     model: str,
     user_input: Optional[str],
     timeout: float,
+    graph_mode: str = "feedback",
+    feedback_mode: str = "full",
 ) -> Tuple[str, Dict[str, Any]]:
     """
     Calls this repo's Next route /api/generate-ocl (NDJSON stream).
@@ -99,6 +101,8 @@ def call_next_generate_ndjson(
         "operation": operation,
         "model": model,
         "apiKey": api_key,
+        "graphMode": graph_mode,
+        "feedbackMode": feedback_mode,
     }
     if user_input:
         payload["userInput"] = user_input
@@ -124,6 +128,7 @@ def call_next_generate_ndjson(
         "http_error": None,
         "step_errors": [],
         "repair_round_count": 0,
+        "feedback_used": False,
     }
     lines: List[str] = []
     ocl_round = 0
@@ -158,6 +163,8 @@ def call_next_generate_ndjson(
             og = obj["OCL Generator"] or {}
             meta["last_ocl"] = og.get("ocl") or og
             meta["repair_round_count"] = ocl_round
+            if bool(og.get("feedbackUsed")):
+                meta["feedback_used"] = True
         if "Contract Generator" in obj:
             cg = obj["Contract Generator"] or {}
             meta["last_contract"] = cg.get("contract")
@@ -1384,7 +1391,29 @@ def main() -> None:
         default=float(os.environ.get("NEXT_RQ1_READ_TIMEOUT", "600")),
         help="HTTP read timeout for one full /api/generate-ocl response.",
     )
+    p.add_argument(
+        "--next-graph-mode",
+        choices=["feedback", "linear"],
+        default=os.environ.get("NEXT_RQ1_GRAPH_MODE", "feedback"),
+        help="Next LangGraph mode: feedback is the full repair loop; linear is the no-feedback RQ3 ablation.",
+    )
+    p.add_argument(
+        "--feedback-mode",
+        choices=["full", "generic", "none"],
+        default=os.environ.get("NEXT_RQ1_FEEDBACK_MODE"),
+        help=(
+            "Feedback ablation mode for --backend next. full uses concrete diagnostics; "
+            "generic uses one fixed failure message without diagnostic details; none uses the linear no-feedback graph. "
+            "If omitted, derived from --next-graph-mode for backward compatibility."
+        ),
+    )
     args = p.parse_args()
+    if args.feedback_mode is None:
+        args.feedback_mode = "none" if args.next_graph_mode == "linear" else "full"
+    if args.feedback_mode == "none":
+        args.next_graph_mode = "linear"
+    else:
+        args.next_graph_mode = "feedback"
 
     load_env_file(repo_root() / ".env")
     output_dir = Path(args.output_dir)
@@ -1490,8 +1519,10 @@ def main() -> None:
             )
             sys.exit(1)
         logging.info(
-            "Next backend: %s/api/generate-ocl (LangGraph; OPENAI_BASE_URL from server env)",
+            "Next backend: %s/api/generate-ocl (LangGraph mode=%s; feedback_mode=%s; OPENAI_BASE_URL from server env)",
             args.next_base_url.rstrip("/"),
+            args.next_graph_mode,
+            args.feedback_mode,
         )
 
     parser_cmd = args.parser_cmd.strip() or None
@@ -1569,6 +1600,8 @@ def main() -> None:
                             "operation": oper,
                             "model": model,
                             "userInput": ui,
+                            "graphMode": args.next_graph_mode,
+                            "feedbackMode": args.feedback_mode,
                         },
                         ensure_ascii=False,
                     )
@@ -1582,6 +1615,8 @@ def main() -> None:
                             model,
                             ui,
                             args.next_read_timeout,
+                            args.next_graph_mode,
+                            args.feedback_mode,
                         )
                     except Exception:
                         logging.exception(
@@ -1656,6 +1691,18 @@ def main() -> None:
                 )
                 step_error_count = len(meta.get("step_errors", []))
                 repair_round_count = int(meta.get("repair_round_count") or 0)
+                if err_type_llm:
+                    validation_stage = "llm_api"
+                elif not syntax_valid:
+                    validation_stage = "parser"
+                elif not bool(meta.get("typescript_generation_ok")):
+                    validation_stage = "typescript_generator"
+                elif not bool(meta.get("typescript_parse_ok")):
+                    validation_stage = "typescript_parser"
+                elif not bool(meta.get("test_execution_ok")):
+                    validation_stage = "jest"
+                else:
+                    validation_stage = "passed"
                 if p_res.get("parser_skipped"):
                     et = "dry_run_skipped_validation"
                 elif err_type_llm:
@@ -1680,7 +1727,11 @@ def main() -> None:
                     "operation_name": op["operation_name"],
                     "operation_signature": op["operation_signature"],
                     "model": model,
+                    "model_name": model,
+                    "feedback_mode": args.feedback_mode,
+                    "next_graph_mode": args.next_graph_mode if args.backend == "next" else "",
                     "attempt": att,
+                    "attempt_id": att,
                     "raw_output": raw_out,
                     "extracted_ocl": ocl_text,
                     "extraction_success": ext.get("extraction_success"),
@@ -1688,6 +1739,14 @@ def main() -> None:
                     "is_valid": is_valid,
                     "syntax_valid": syntax_valid,
                     "execution_valid": execution_valid,
+                    "validation_stage": validation_stage,
+                    "parser_valid": syntax_valid,
+                    "typescript_valid": bool(meta.get("typescript_generation_ok"))
+                    and bool(meta.get("typescript_parse_ok")),
+                    "jest_passed": bool(meta.get("test_execution_ok")),
+                    "final_pass": execution_valid,
+                    "number_of_attempts_used": att,
+                    "whether_feedback_was_used": bool(meta.get("feedback_used")),
                     "contract_error_count": len(meta.get("last_contract_errors") or []),
                     "contract_errors": meta.get("last_contract_errors") or [],
                     "typescript_generation_ok": bool(meta.get("typescript_generation_ok")),
@@ -1721,6 +1780,7 @@ def main() -> None:
                             "service": op["service"],
                             "operation_name": op["operation_name"],
                             "model": model,
+                            "feedback_mode": args.feedback_mode,
                             "attempt": att,
                             "attempt_is_valid": is_valid,
                             **step_error,
@@ -1732,6 +1792,7 @@ def main() -> None:
                     {
                         "operation_id": oid,
                         "model": model,
+                        "feedback_mode": args.feedback_mode,
                         "attempt": att,
                         "prompt": prompt,
                         "raw_output": raw_out,

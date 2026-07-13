@@ -1,0 +1,14 @@
+Contract ManageProductCatalogCRUDService::queryProductCatalog(id:Integer): ProductCatalog {
+          precondition:
+          id <> null and
+	ProductCatalog.allInstance()->exists(pc | pc.Id = id)
+            postcondition:
+          result <> null and
+	result.Id = id and
+	ProductCatalog.allInstance()->includes(result) and
+	ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size() and
+	Store.allInstance()->forAll(s |
+		s.Productcatalogs = s.Productcatalogs@pre
+	)
+            
+        }

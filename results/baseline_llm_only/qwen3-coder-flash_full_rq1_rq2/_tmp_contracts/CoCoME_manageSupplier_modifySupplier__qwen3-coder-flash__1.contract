@@ -1,0 +1,9 @@
+Contract ManageSupplierCRUDService::modifySupplier(id:Integer,name:String): Boolean {
+          definition:
+          sup:Supplier = Supplier.allInstance()->any(s:Supplier|s.Id=id)
+            precondition:
+          sup.oclIsUndefined() = false and id <> null and name <> null
+            postcondition:
+          let s:Supplier in s.oclIsNew() = false and s.Name=name and Supplier.allInstance()->includes(s) and result=true
+            
+        }

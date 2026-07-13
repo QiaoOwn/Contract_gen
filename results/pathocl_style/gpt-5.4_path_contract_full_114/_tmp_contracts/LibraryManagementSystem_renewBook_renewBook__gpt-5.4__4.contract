@@ -1,0 +1,19 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          uid <> null and uid <> '' and
+  barcode <> null and barcode <> '' and
+  BookCopy.allInstance()->exists(b | b.Barcode = barcode) and
+  let bc : BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode) in
+    bc.Status = CopyStatus::LOANED
+            postcondition:
+          let bc : BookCopy = BookCopy.allInstance()->any(b | b.Barcode = barcode) in
+    (result = true implies
+      bc.Status = CopyStatus::LOANED and
+      bc.Barcode = barcode
+    ) and
+    (result = false implies
+      bc.oclIsUndefined() or
+      bc.Status <> CopyStatus::LOANED
+    )
+            
+        }

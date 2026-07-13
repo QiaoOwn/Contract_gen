@@ -1,0 +1,25 @@
+Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
+          precondition:
+          barcode > 0 and
+    name <> null and name <> '' and
+    price >= 0 and
+    stocknumber >= 0 and
+    orderprice >= 0 and
+    Item.allInstance()->forAll(i | i.Barcode <> barcode)
+            postcondition:
+          (result = true implies
+        Item.allInstance()->exists(i |
+            i.oclIsNew() and
+            i.Barcode = barcode and
+            i.Name = name and
+            i.Price = price and
+            i.StockNumber = stocknumber and
+            i.OrderPrice = orderprice
+        ) and
+        Item.allInstance()->size() = Item.allInstance()->size() + 1
+    ) and
+    (result = false implies
+        Item.allInstance()->size() = Item.allInstance()->size()
+    )
+            
+        }

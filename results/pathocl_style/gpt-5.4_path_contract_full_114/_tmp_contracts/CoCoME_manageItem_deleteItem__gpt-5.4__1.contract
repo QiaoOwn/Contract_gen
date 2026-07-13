@@ -1,0 +1,15 @@
+Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {
+          precondition:
+          barcode <> null and
+  Item.allInstance()->exists(i | i.Barcode = barcode)
+            postcondition:
+          (result = true implies
+    Item.allInstance()->forAll(i | i.Barcode <> barcode) and
+    Store.allInstance()->forAll(s | s.Items = s.Items@pre->excluding(s.Items@pre->any(i | i.Barcode = barcode)))
+  ) and
+  (result = false implies
+    Item.allInstance() = Item.allInstance() and
+    Store.allInstance()->forAll(s | s.Items = s.Items@pre)
+  )
+            
+        }

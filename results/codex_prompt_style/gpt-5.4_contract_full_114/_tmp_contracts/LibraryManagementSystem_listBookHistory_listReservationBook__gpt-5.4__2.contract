@@ -1,0 +1,22 @@
+Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {
+          precondition:
+          uid <> null and
+  uid <> '' and
+  User.allInstance()->exists(u | u.UserID = uid)
+            postcondition:
+          result = User.allInstance()->any(u | u.UserID = uid).ReservedBook->collect(r | r.ReservedCopy)->asSet() and
+  User.allInstance()->any(u | u.UserID = uid).ReservedBook = User.allInstance()->any(u | u.UserID = uid).ReservedBook@pre and
+  User.allInstance()->any(u | u.UserID = uid).LoanedBook = User.allInstance()->any(u | u.UserID = uid).LoanedBook@pre and
+  BookCopy.allInstance()->forAll(bc |
+    bc.Status = bc.Status@pre and
+    bc.Location = bc.Location@pre and
+    bc.IsReserved = bc.IsReserved@pre
+  ) and
+  Reserve.allInstance()->forAll(r |
+    r.IsReserveClosed = r.IsReserveClosed@pre and
+    r.ReserveDate = r.ReserveDate@pre and
+    r.ReservedCopy = r.ReservedCopy@pre and
+    r.ReservedUser = r.ReservedUser@pre
+  )
+            
+        }

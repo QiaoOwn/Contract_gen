@@ -1,0 +1,8 @@
+Contract SearchBook::searchBookByTitle(title: String): Set(Book) {
+  definition:
+    books:Set(Book) = Book.allInstance()->select(b | b.Title = title)
+  precondition:
+    title.oclIsUndefined() = false and books.oclIsTypeOf(Set(Book))
+  postcondition:
+    result = books
+}

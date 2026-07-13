@@ -1,0 +1,15 @@
+Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {
+          precondition:
+          orderid <> null and
+OrderProduct.allInstance()->forAll(op | op.Id <> orderid)
+            postcondition:
+          let newOrder : Set(OrderProduct) = OrderProduct.allInstance()->excludingAll(OrderProduct.allInstance()) in
+newOrder->size() = 1 and
+newOrder->forAll(op |
+    op.Id = orderid and
+    op.OrderStatus = OrderStatus::NEW and
+    CurrentOrderProduct = op
+) and
+result = true
+            
+        }

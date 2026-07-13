@@ -1,0 +1,13 @@
+Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {
+          precondition:
+          barcode <> null and
+    newPrice <> null and
+    newPrice >= 0 and
+    Item.allInstance()->exists(i | i.Barcode = barcode)
+            postcondition:
+          let targetItem : Item = Item.allInstance()->any(i | i.Barcode = barcode) in
+    targetItem.Price = newPrice and
+    result = true and
+    Item.allInstance()->excluding(targetItem)->forAll(i | i.Price = i.Price@pre)
+            
+        }

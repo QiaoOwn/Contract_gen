@@ -1,0 +1,28 @@
+Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {
+          precondition:
+          barcode <> null and barcode <> '' and BookCopy.allInstance()->exists(bc | bc.Barcode = barcode)
+            postcondition:
+          result = Book.allInstance()->select(b | b.Copys->exists(c | c.Barcode = barcode)) and
+      Book.allInstance()->forAll(b |
+        b.CallNo = b@pre.CallNo and
+        b.Title = b@pre.Title and
+        b.Edition = b@pre.Edition and
+        b.Author = b@pre.Author and
+        b.Publisher = b@pre.Publisher and
+        b.Description = b@pre.Description and
+        b.ISBn = b@pre.ISBn and
+        b.CopyNum = b@pre.CopyNum and
+        b.Copys = b@pre.Copys and
+        b.Subject = b@pre.Subject
+      ) and
+      BookCopy.allInstance()->forAll(bc |
+        bc.Barcode = bc@pre.Barcode and
+        bc.Status = bc@pre.Status and
+        bc.Location = bc@pre.Location and
+        bc.IsReserved = bc@pre.IsReserved and
+        bc.BookBelongs = bc@pre.BookBelongs and
+        bc.LoanedRecord = bc@pre.LoanedRecord and
+        bc.ReservationRecord = bc@pre.ReservationRecord
+      )
+            
+        }

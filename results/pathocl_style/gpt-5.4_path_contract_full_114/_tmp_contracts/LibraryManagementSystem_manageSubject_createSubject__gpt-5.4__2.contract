@@ -1,0 +1,22 @@
+Contract ManageSubjectCRUDService::createSubject(name:String): Boolean {
+          precondition:
+          not name.oclIsUndefined() and
+  name <> '' and
+  Subject.allInstance()->forAll(s | s.Name <> name)
+            postcondition:
+          if result = true then
+    Subject.allInstance()->exists(s |
+      s.oclIsNew() and
+      s.Name = name and
+      s.SuperSubject.oclIsUndefined() and
+      s.SubSubject->isEmpty()
+    ) and
+    Subject.allInstance()->size() = Subject.allInstance()->size() + 1
+  else
+    Subject.allInstance()->size() = Subject.allInstance()->size() and
+    Subject.allInstance()->forAll(s |
+      Subject.allInstance()->includes(s)
+    )
+  endif
+            
+        }

@@ -1,0 +1,20 @@
+Contract ProcessSaleService::endSale(): Real {
+          precondition:
+          CurrentSale <> null and
+  CurrentSale.IsComplete = false and
+  CurrentSale.ContainedSalesLine->notEmpty() and
+  CurrentSale.ContainedSalesLine->forAll(sli |
+    sli <> null and
+    sli.BelongedSale = CurrentSale and
+    sli.BelongedItem <> null and
+    sli.Quantity > 0 and
+    sli.Subamount = sli.Quantity * sli.BelongedItem.Price
+  ) and
+  CurrentSale.Amount = CurrentSale.ContainedSalesLine->collect(Subamount)->sum()
+            postcondition:
+          CurrentSale.IsReadytoPay = true and
+  CurrentSale.IsComplete = false and
+  CurrentSale.Amount = CurrentSale.ContainedSalesLine->collect(Subamount)->sum() and
+  result = CurrentSale.Amount
+            
+        }

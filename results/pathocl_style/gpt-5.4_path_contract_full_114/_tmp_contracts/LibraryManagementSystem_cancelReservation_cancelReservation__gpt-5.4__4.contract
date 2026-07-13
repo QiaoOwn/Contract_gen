@@ -1,0 +1,21 @@
+Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {
+          precondition:
+          uid <> null and uid <> '' and
+  barcode <> null and barcode <> '' and
+  BookCopy.allInstance()->exists(c | c.Barcode = barcode and c.IsReserved = true and
+    c.ReservationRecord->exists(r | r.ReservedUser.UserID = uid))
+            postcondition:
+          if result = true then
+    let copy : BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode) in
+    copy.IsReserved = false and
+    copy.ReservationRecord->forAll(r | r.ReservedUser.UserID <> uid) and
+    (copy.Status = CopyStatus::AVAILABLE or copy.Status = CopyStatus::INPROCESSING or copy.Status = CopyStatus::LIBUSEONLY or copy.Status = CopyStatus::LOANED)
+  else
+    BookCopy.allInstance()->forAll(c |
+      c.oclIsUndefined() = false implies
+      c.IsReserved = c.IsReserved@pre and
+      c.Status = c.Status@pre and
+      c.Location = c.Location@pre))
+  endif
+            
+        }

@@ -1,0 +1,9 @@
+Contract ManageStoreCRUDService::modifyStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {
+          definition:
+          st:Store = Store.allInstance()->any(s:Store|s.Id=id)
+            precondition:
+          st.oclIsUndefined() = false and id <> null and name <> null and address <> null and isopened <> null
+            postcondition:
+          let s:Store in s.oclIsNew() = false and s.Id = id and s.Name = name and s.Address = address and s.IsOpened = isopened and Store.allInstance()->includes(s) and result = true
+            
+        }

@@ -1,0 +1,39 @@
+Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {
+          precondition:
+          requestid > 0 and
+    name <> '' and
+    loanamount > 0 and
+    loanpurpose <> '' and
+    income >= 0 and
+    phonenumber > 0 and
+    postaladdress <> '' and
+    zipcode > 0 and
+    email <> '' and
+    workreferences <> '' and
+    creditreferences <> '' and
+    checkingaccountnumber > 0 and
+    securitynumber > 0 and
+    LoanRequest.allInstance()->exists(lr |
+        lr.RequestID = requestid and
+        (lr.Status = LoanRequestStatus::INCOMPLETEINFORMATION or lr.Status = LoanRequestStatus::READYFORREVIEW)
+    )
+            postcondition:
+          let lr : LoanRequest = LoanRequest.allInstance()->any(r | r.RequestID = requestid) in
+    lr.Name = name and
+    lr.LoanAmount = loanamount and
+    lr.LoanPurpose = loanpurpose and
+    lr.Income = income and
+    lr.PhoneNumber = phonenumber and
+    lr.PostalAddress = postaladdress and
+    lr.ZipCode = zipcode and
+    lr.Email = email and
+    lr.WorkReferences = workreferences and
+    lr.CreditReferences = creditreferences and
+    lr.CheckingAccountNumber = checkingaccountnumber and
+    lr.SecurityNumber = securitynumber and
+    (if name <> '' and loanamount > 0 and loanpurpose <> '' and income >= 0 and phonenumber > 0 and postaladdress <> '' and zipcode > 0 and email <> '' and workreferences <> '' and creditreferences <> '' and checkingaccountnumber > 0 and securitynumber > 0
+     then lr.Status = LoanRequestStatus::SUBMITTED and result = true
+     else lr.Status = LoanRequestStatus::INCOMPLETEINFORMATION and result = false
+     endif)
+            
+        }

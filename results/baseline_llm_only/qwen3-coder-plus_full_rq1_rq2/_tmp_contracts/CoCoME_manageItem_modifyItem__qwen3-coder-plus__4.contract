@@ -1,0 +1,9 @@
+Contract ManageItemCRUDService::modifyItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
+          definition:
+          existingItem:Item = Item.allInstance()->any(i:Item|i.Barcode=barcode)
+            precondition:
+          existingItem.oclIsUndefined() = false and barcode <> 0 and name <> ''
+            postcondition:
+          existingItem@pre.Barcode = existingItem.Barcode and existingItem.Name = name and existingItem.Price = price and existingItem.StockNumber = stocknumber and existingItem.OrderPrice = orderprice and result = true
+            
+        }

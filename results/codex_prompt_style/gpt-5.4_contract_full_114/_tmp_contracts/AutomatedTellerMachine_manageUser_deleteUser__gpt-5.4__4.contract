@@ -1,0 +1,13 @@
+Contract ManageUserCRUDService::deleteUser(userid:Integer): Boolean {
+          precondition:
+          userid <> null and User.allInstance()->exists(u | u.UserID = userid)
+            postcondition:
+          if User.allInstance()->exists(u | u.UserID = userid) then
+  User.allInstance()->forAll(u | u.UserID <> userid) and
+  BankCard.allInstance()->forAll(c | c.BelongedUser.oclIsUndefined() or c.BelongedUser.UserID <> userid) and
+  result = true
+else
+  result = false
+endif
+            
+        }

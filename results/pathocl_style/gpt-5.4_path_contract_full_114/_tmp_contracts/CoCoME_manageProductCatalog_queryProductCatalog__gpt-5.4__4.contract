@@ -1,0 +1,33 @@
+Contract ManageProductCatalogCRUDService::queryProductCatalog(id:Integer): ProductCatalog {
+          precondition:
+          id <> null and
+	ProductCatalog.allInstance()->exists(pc | pc.Id = id)
+            postcondition:
+          result <> null and
+	result.Id = id and
+	ProductCatalog.allInstance()->includes(result) and
+	ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size() and
+	Store.allInstance()->forAll(s |
+		s.Productcatalogs = s.Productcatalogs@pre and
+		s.Items = s.Items@pre and
+		s.AssociationCashdeskes = s.AssociationCashdeskes@pre and
+		s.Cashiers = s.Cashiers@pre and
+		s.Sales = s.Sales@pre
+	) and
+	CashDesk.allInstance()->forAll(cd |
+		cd.BelongedStore = cd.BelongedStore@pre and
+		cd.ContainedSales = cd.ContainedSales@pre and
+		cd.Name = cd.Name@pre and
+		cd.IsOpened = cd.IsOpened@pre
+	) and
+	Cashier.allInstance()->forAll(c |
+		c.WorkedStore = c.WorkedStore@pre and
+		c.Name = c.Name@pre
+	) and
+	ProductCatalog.allInstance()->forAll(pc |
+		pc.Id = pc.Id@pre and
+		pc.Name = pc.Name@pre and
+		pc.ContainedItems = pc.ContainedItems@pre
+	)
+            
+        }

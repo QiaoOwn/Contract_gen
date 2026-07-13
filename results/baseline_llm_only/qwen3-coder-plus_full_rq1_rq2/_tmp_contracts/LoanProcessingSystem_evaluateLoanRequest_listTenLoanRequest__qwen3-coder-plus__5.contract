@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {
+          definition:
+          loanRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(lr:LoanRequest|lr.Status = LoanRequestStatus::SUBMITTED or lr.Status = LoanRequestStatus::READYFORREVIEW)
+            precondition:
+          true
+            postcondition:
+          result = loanRequests->subSet(0, 10)
+            
+        }

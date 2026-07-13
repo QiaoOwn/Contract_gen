@@ -1,0 +1,18 @@
+Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {
+          precondition:
+          id <> null and
+    name <> null and
+    name <> '' and
+    ProductCatalog.allInstance()->forAll(pc | pc.Id <> id)
+            postcondition:
+          if result = true then
+        ProductCatalog.allInstance()->exists(pc |
+            pc.Id = id and
+            pc.Name = name
+        ) and
+        ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size() + 1
+    else
+        ProductCatalog.allInstance() = ProductCatalog.allInstance()
+    endif
+            
+        }

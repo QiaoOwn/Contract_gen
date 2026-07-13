@@ -1,0 +1,8 @@
+Contract EvaluateLoanRequestModule::listAvaiableLoanTerm(): Set(LoanTerm) {
+  definition:
+    loanRequests: Set(LoanRequest) = LoanRequest.allInstance(), currentLoanRequest: LoanRequest = LoanRequest.allInstance()->any(o | o.Status = LoanRequestStatus::READYFORREVIEW), availableLoanTerms: Set(LoanTerm) = currentLoanRequest.AttachedLoanTerms
+  precondition:
+    loanRequests.isEmpty() = false and currentLoanRequest.oclIsUndefined() = false and LoanRequest.allInstance()->includes(currentLoanRequest) and availableLoanTerms.isEmpty() = false
+  postcondition:
+    result = availableLoanTerms
+}

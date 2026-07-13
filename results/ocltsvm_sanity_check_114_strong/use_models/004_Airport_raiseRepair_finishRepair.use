@@ -1,0 +1,119 @@
+model StrongUSE_004_Airport_raiseRepair_finishRepair
+
+-- operation_id: Airport_raiseRepair_finishRepair
+-- operation_signature: finishRepair(id: Integer, sid: Integer, did: Integer, res: String): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract RepairService::finishRepair(id: Integer,sid: Integer,did: Integer,res: String): Boolean {
+--   definition:
+--     repair: Repair = Repair.allInstance()->any(r|r.Id = id),
+--     staff: Staff = Staff.allInstance()->any(s|s.Id = sid),
+--     device: Device = Device.allInstance()->any(d|d.Id = did)
+--   precondition:
+--     repair.oclIsUndefined() = false and
+--     staff.oclIsUndefined() = false and
+--     device.oclIsUndefined() = false and
+--     device.Contacts = staff and
+--     staff.Role = 3 and
+--     repair.RelatedDevice = device
+--   postcondition:
+--     repair.Process = 4 and
+--     repair.Result = res and
+--     result = true
+-- }
+
+class ApprovalHistory
+attributes
+  Id : Integer
+  StaffId : Integer
+  Reject : Boolean
+  Suggestion : String
+end
+
+class Device
+attributes
+  Id : Integer
+  Name : String
+  Location : String
+end
+
+class Repair
+attributes
+  Id : Integer
+  Repairname : String
+  Price : Integer
+  Description : String
+  Score : Integer
+  FailTime : String
+  Close : Boolean
+  Process : Integer
+  Result : String
+end
+
+class RepairService
+end
+
+class Staff
+attributes
+  Id : Integer
+  Name : String
+  Password : String
+  Phone : String
+  Role : Integer
+end
+
+class raiseRepair
+end
+
+class OperationContext
+attributes
+  id : Integer
+  sid : Integer
+  did : Integer
+  res : String
+end
+
+association Device_Contacts_Staff between
+  Device[0..*] role Device_Contacts_Owner
+  Staff[0..1] role Contacts
+end
+
+association Repair_History_ApprovalHistory between
+  Repair[0..*] role Repair_History_Owner
+  ApprovalHistory[*] role History
+end
+
+association Repair_RelatedDevice_Device between
+  Repair[0..*] role Repair_RelatedDevice_Owner
+  Device[0..1] role RelatedDevice
+end
+
+association Repair_RaiseStaff_Staff between
+  Repair[0..*] role Repair_RaiseStaff_Owner
+  Staff[0..1] role RaiseStaff
+end
+
+association Staff_Boss_Staff between
+  Staff[0..*] role Staff_Boss_Owner
+  Staff[0..1] role Boss
+end
+
+constraints
+
+context OperationContext
+  inv finishRepairDefinitionPreconditionTypecheck:
+    let id : Integer = self.id in
+          let sid : Integer = self.sid in
+          let did : Integer = self.did in
+          let res : String = self.res in
+          let repair : Repair = Repair.allInstances()->any(r|r.Id = id) in
+          let staff : Staff = Staff.allInstances()->any(s|s.Id = sid) in
+          let device : Device = Device.allInstances()->any(d|d.Id = did) in
+          repair.oclIsUndefined() = false and
+    		staff.oclIsUndefined() = false and
+    		device.oclIsUndefined() = false and
+    		device.Contacts = staff and
+    		staff.Role = 3 and
+    		repair.RelatedDevice = device

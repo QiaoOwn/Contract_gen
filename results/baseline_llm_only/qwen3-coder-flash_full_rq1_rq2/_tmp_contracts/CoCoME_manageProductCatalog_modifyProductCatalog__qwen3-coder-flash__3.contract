@@ -1,0 +1,9 @@
+Contract ManageProductCatalogCRUDService::modifyProductCatalog(id:Integer,name:String): Boolean {
+          definition:
+          pc:ProductCatalog = ProductCatalog.allInstance()->any(o:ProductCatalog|o.Id=id)
+            precondition:
+          pc.oclIsUndefined() = false and id > 0 and name <> ''
+            postcondition:
+          let pc:ProductCatalog in pc.oclIsNew() = false and pc.Name=name and ProductCatalog.allInstance()->includes(pc) and result=true
+            
+        }

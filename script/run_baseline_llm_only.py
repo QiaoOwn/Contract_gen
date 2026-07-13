@@ -62,12 +62,12 @@ def repo_root() -> Path:
 def load_env_file(path: Path) -> None:
     if not path.is_file():
         return
-    for raw in path.read_text(encoding="utf-8").splitlines():
+    for raw in path.read_text(encoding="utf-8-sig").splitlines():
         line = raw.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, _, val = line.partition("=")
-        key = key.strip()
+        key = key.strip().lstrip("\ufeff")
         val = val.strip().strip('"').strip("'")
         if key and key not in os.environ:
             os.environ[key] = val

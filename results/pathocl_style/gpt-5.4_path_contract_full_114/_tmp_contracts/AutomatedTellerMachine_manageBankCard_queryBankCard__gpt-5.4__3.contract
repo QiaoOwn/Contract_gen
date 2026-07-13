@@ -1,0 +1,13 @@
+Contract ManageBankCardCRUDService::queryBankCard(cardid:Integer): BankCard {
+          precondition:
+          cardid <> null and
+    BankCard.allInstance()->exists(b | b.CardID = cardid)
+            postcondition:
+          result <> null and
+    result.oclIsTypeOf(BankCard) and
+    result.CardID = cardid and
+    BankCard.allInstance()->includes(result) and
+    BankCard.allInstance()->size() = BankCard.allInstance()->size() and
+    User.allInstance()->size() = User.allInstance()->size()
+            
+        }

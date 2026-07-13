@@ -1,0 +1,17 @@
+Contract CoCoMESystem::showStockReports(): Set(Item) {
+          precondition:
+          Item.allInstance()->notEmpty()
+            postcondition:
+          result = Item.allInstance() and
+      Item.allInstance()->forAll(i |
+        i.oclIsTypeOf(Item) and
+        i.Barcode.oclIsUndefined() = false and
+        i.Name.oclIsUndefined() = false and
+        i.Price.oclIsUndefined() = false and
+        i.StockNumber.oclIsUndefined() = false and
+        i.OrderPrice.oclIsUndefined() = false and
+        i.BelongedCatalog.oclIsUndefined() = false
+      ) and
+      Item.allInstance() = Item.allInstance()
+            
+        }

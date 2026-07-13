@@ -1,0 +1,12 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid: String, barcode: String): Boolean {
+  definition:
+    user: User = User.allInstance()->any(u | u.UserID = uid),
+    copy: BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode),
+    activeReserves: Set(Reserve) = copy.ReservationRecord->select(r | r.IsReserveClosed = false),
+    sameUserReserve: Reserve = activeReserves->any(r | r.ReservedUser = user),
+    quotaOk:Boolean = if user.oclIsTypeOf(Student) then user.LoanedNumber < 5 else user.LoanedNumber < 10 endif
+  precondition:
+    user.oclIsUndefined() = false and copy.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL and quotaOk = true and (copy.Status = CopyStatus::AVAILABLE or copy.Status = CopyStatus::ONHOLDSHELF) and (activeReserves.isEmpty() = true or sameUserReserve.oclIsUndefined() = false)
+  postcondition:
+    let loan:Loan in loan.oclIsNew() and Loan.allInstance()->includes(loan) and loan.LoanedUser = user and loan.LoanedCopy = copy and loan.IsReturned = false and loan.RenewedTimes = 0 and loan.OverDueFee = 0 and loan.OverDue3Days = false and loan.OverDue10Days = false and loan.OverDue17Days = false and loan.OverDue31Days = false and user.LoanedBook->includes(loan) and copy.LoanedRecord->includes(loan) and user.LoanedNumber = user.LoanedNumber@pre + 1 and copy.Status = CopyStatus::LOANED and copy.IsReserved = false and loan.DueDate = if user.oclIsTypeOf(Student) then 30 else 60 endif and sameUserReserve.IsReserveClosed = true and result = true
+}

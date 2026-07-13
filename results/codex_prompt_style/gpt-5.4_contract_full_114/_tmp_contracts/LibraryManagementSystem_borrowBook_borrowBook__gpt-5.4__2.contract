@@ -1,0 +1,61 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstance()->exists(u |
+    u.UserID = uid and
+    u.BorrowStatus <> BorrowStatus::SUSPEND and
+    u.LoanedNumber < 5
+  ) and
+  BookCopy.allInstance()->exists(c |
+    c.Barcode = barcode and
+    (
+      c.Status = CopyStatus::AVAILABLE or
+      (c.IsReserved = true and
+       Reserve.allInstance()->exists(r |
+         r.ReservedCopy = c and
+         r.ReservedUser.UserID = uid and
+         r.IsReserveClosed = false
+       )
+      )
+    )
+  )
+            postcondition:
+          if result = true then
+    let u : User = User.allInstance()->any(x | x.UserID = uid),
+        c : BookCopy = BookCopy.allInstance()->any(x | x.Barcode = barcode),
+        newLoan : Loan = Loan.allInstance()->any(l |
+          l.oclIsNew() and
+          l.LoanedUser = u and
+          l.LoanedCopy = c and
+          l.IsReturned = false
+        )
+    in
+      c.Status = CopyStatus::LOANED and
+      u.LoanedNumber = u.LoanedNumber@pre + 1 and
+      u.LoanedBook->includes(newLoan) and
+      c.LoanedRecord->includes(newLoan) and
+      newLoan.LoanedUser = u and
+      newLoan.LoanedCopy = c and
+      newLoan.IsReturned = false and
+      newLoan.RenewedTimes = 0 and
+      newLoan.OverDueFee = 0 and
+      newLoan.OverDue3Days = false and
+      newLoan.OverDue10Days = false and
+      newLoan.OverDue17Days = false and
+      newLoan.OverDue31Days = false and
+      (
+        (u.oclIsTypeOf(Student) implies newLoan.DueDate > newLoan.LoanDate) and
+        (u.oclIsTypeOf(Faculty) implies newLoan.DueDate > newLoan.LoanDate)
+      )
+  else
+    User.allInstance()->forAll(u |
+      u.UserID = uid implies
+      u.LoanedNumber = u.LoanedNumber@pre
+    ) and
+    BookCopy.allInstance()->forAll(c |
+      c.Barcode = barcode implies
+      c.Status = c.Status@pre
+    ) and
+    Loan.allInstance()->size() = Loan.allInstance()->size()
+  endif
+            
+        }

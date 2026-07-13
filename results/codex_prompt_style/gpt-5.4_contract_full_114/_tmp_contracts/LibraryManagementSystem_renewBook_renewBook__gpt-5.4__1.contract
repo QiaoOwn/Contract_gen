@@ -1,0 +1,34 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          not uid.oclIsUndefined() and uid <> '' and
+  not barcode.oclIsUndefined() and barcode <> '' and
+  User.allInstance()->exists(u |
+    u.UserID = uid and
+    u.BorrowStatus = BorrowStatus::NORMAL and
+    u.LoanedBook->exists(l |
+      l.LoanedCopy.Barcode = barcode and
+      l.IsReturned = false and
+      l.LoanedCopy.Status = CopyStatus::LOANED and
+      l.LoanedCopy.IsReserved = false
+    )
+  )
+            postcondition:
+          let u : User = User.allInstance()->any(x | x.UserID = uid) in
+  let l : Loan = u.LoanedBook->any(x | x.LoanedCopy.Barcode = barcode and x.IsReturned = false) in
+    result = true and
+    l.RenewedTimes = l.RenewedTimes@pre + 1 and
+    l.RenewDate <> l.RenewDate@pre and
+    l.DueDate > l.DueDate@pre and
+    l.IsReturned = false and
+    l.LoanedUser = u and
+    l.LoanedCopy.Barcode = barcode and
+    u.LoanedNumber = u.LoanedNumber@pre and
+    u.OverDueFee = u.OverDueFee@pre and
+    u.BorrowStatus = u.BorrowStatus@pre and
+    l.LoanedCopy.Status = l.LoanedCopy.Status@pre and
+    l.LoanedCopy.IsReserved = l.LoanedCopy.IsReserved@pre and
+    User.allInstance()->excluding(u)->forAll(x | x = x@pre) and
+    BookCopy.allInstance()->excluding(l.LoanedCopy)->forAll(c | c = c@pre) and
+    Loan.allInstance()->excluding(l)->forAll(x | x = x@pre)
+            
+        }

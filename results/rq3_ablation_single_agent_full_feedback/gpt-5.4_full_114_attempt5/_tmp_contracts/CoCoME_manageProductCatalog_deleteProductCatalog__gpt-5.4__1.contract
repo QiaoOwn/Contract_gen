@@ -1,0 +1,9 @@
+Contract ManageProductCatalogCRUDService::deleteProductCatalog(id: Integer): Boolean {
+  definition:
+    productCatalog: ProductCatalog = ProductCatalog.allInstance()->any(o | o.Id = id),
+    containedItems: Set(Item) = Item.allInstance()->select(o | o.BelongedCatalog = productCatalog)
+  precondition:
+    id.oclIsTypeOf(Integer) and productCatalog.oclIsUndefined() = false and ProductCatalog.allInstance()->includes(productCatalog) and containedItems.isEmpty() = true
+  postcondition:
+    ProductCatalog.allInstance()->excludes(productCatalog) and result = true
+}

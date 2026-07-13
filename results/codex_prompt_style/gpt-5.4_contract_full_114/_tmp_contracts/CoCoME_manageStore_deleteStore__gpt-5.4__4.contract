@@ -1,0 +1,13 @@
+Contract ManageStoreCRUDService::deleteStore(id:Integer): Boolean {
+          precondition:
+          id <> null and Store.allInstance()->exists(s | s.Id = id)
+            postcondition:
+          if Store.allInstance()->exists(s | s.Id = id) then
+    Store.allInstance()->forAll(s | s.Id <> id) and
+    result = true
+else
+    Store.allInstance() = Store.allInstance() and
+    result = false
+endif
+            
+        }

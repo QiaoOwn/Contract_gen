@@ -1,0 +1,11 @@
+Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {
+          precondition:
+          true
+            postcondition:
+          result = LoanRequest.allInstance()->select(lr | lr.Status = LoanRequestStatus::APPROVED) and
+  CurrentLoanRequests = result and
+  LoanRequest.allInstance()->forAll(lr |
+    result->includes(lr) implies lr.Status = LoanRequestStatus::APPROVED
+  )
+            
+        }

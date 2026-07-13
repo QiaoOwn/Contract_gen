@@ -1,0 +1,9 @@
+Contract CoCoMESystem::showStockReports(): Set(Item) {
+  definition:
+    store: Store = Store.allInstance()->any(s | s.IsOpened = true),
+    items: Set(Item) = store.Items
+  precondition:
+    store.oclIsUndefined() = false and Item.allInstance()->includesAll(items)
+  postcondition:
+    result = items
+}

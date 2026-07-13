@@ -1,0 +1,10 @@
+Contract ListBookHistory::listRecommendBook(uid:String): Set(RecommendBook) {
+          precondition:
+          uid <> null and uid <> '' and User.allInstance()->exists(u | u.UserID = uid)
+            postcondition:
+          result = User.allInstance()->any(u | u.UserID = uid).RecommendedBook and
+      User.allInstance()->any(u | u.UserID = uid).RecommendedBook = User.allInstance()->any(u | u.UserID = uid).RecommendedBook@pre and
+      RecommendBook.allInstance() = RecommendBook.allInstance() and
+      User.allInstance() = User.allInstance()
+            
+        }

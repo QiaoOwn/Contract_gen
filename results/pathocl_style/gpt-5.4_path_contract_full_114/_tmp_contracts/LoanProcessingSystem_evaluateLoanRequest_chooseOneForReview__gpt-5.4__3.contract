@@ -1,0 +1,16 @@
+Contract EvaluateLoanRequestModule::chooseOneForReview(requestid:Integer): LoanRequest {
+          precondition:
+          requestid <> null and
+	LoanRequest.allInstance()->exists(lr |
+		lr.RequestID = requestid and
+		lr.Status = LoanRequestStatus::READYFORREVIEW
+	)
+            postcondition:
+          let lr : LoanRequest = LoanRequest.allInstance()->any(l | l.RequestID = requestid) in
+	result = lr and
+	lr.Status = LoanRequestStatus::READYFORREVIEW and
+	LoanRequest.allInstance()->forAll(l |
+		l.RequestID <> requestid implies l.oclIsInState(l.oclType())
+	)
+            
+        }

@@ -27,6 +27,8 @@ import generate from '@babel/generator';
 import {GenerateOCLParam} from './generateOCL';
 import {generateOclWithJsonMode} from './generateOclWithJsonMode';
 const openAIBaseURL = process.env.OPENAI_BASE_URL || 'https://api.apiyi.com/v1';
+const genericFeedbackMessage =
+  'The previous candidate failed validation. Please generate a revised OCL operation contract using only the supplied operation requirement, model context, and transformation rules. Return only the three contract fields: definition, precondition, and postcondition.';
 const contractSchema = z.object({
   definition: z.string().nullable().describe(whatIsDefination),
   precondition: z.string().describe(whatIsPrecondition),
@@ -46,6 +48,7 @@ const StateAnnotation = Annotation.Root({
   apiKey: Annotation<GenerateOCLParam['apiKey']>,
   operation: Annotation<GenerateOCLParam['operation']>,
   userInput: Annotation<GenerateOCLParam['userInput']>,
+  feedbackMode: Annotation<GenerateOCLParam['feedbackMode']>,
   ocl: Annotation<{
     definition: string;
     precondition: string;
@@ -60,6 +63,7 @@ const StateAnnotation = Annotation.Root({
 });
 const oclGeneratorNode = async (state: typeof StateAnnotation.State) => {
   const {project: key, useCase: uc, apiKey, messages, userInput} = state;
+  const feedbackMode = state.feedbackMode || 'full';
   const systemMessage = [
     createG4Prompt(),
     createDefinitionPrompt(),
@@ -73,11 +77,13 @@ const oclGeneratorNode = async (state: typeof StateAnnotation.State) => {
     .join('\n');
   const newMessages = [new SystemMessage(systemMessage), ...messages];
   const hasError = state.contractErrors?.length > 0 || state.typescriptErrors?.length > 0;
-  if (hasError) {
+  if (hasError && feedbackMode === 'full') {
     newMessages.push(new AIMessage(JSON.stringify(state.ocl, null, 2)));
   }
   const errorMessages: string[] = [];
-  if (state.contractErrors?.length > 0) {
+  if (hasError && feedbackMode === 'generic') {
+    errorMessages.push(genericFeedbackMessage);
+  } else if (state.contractErrors?.length > 0 && feedbackMode === 'full') {
     errorMessages.push(
       `After I generate the whole contract from my complier with your response, I found these errors, please fix them for me.`
     );
@@ -90,7 +96,7 @@ const oclGeneratorNode = async (state: typeof StateAnnotation.State) => {
       )
     );
   }
-  if (state.typescriptErrors?.length > 0) {
+  if (state.typescriptErrors?.length > 0 && feedbackMode === 'full') {
     errorMessages.push(
       `After I generate the whole contract from my complier and then I generate the typescript from the contract, I found these errors, please fix them for me.`
     );
@@ -113,7 +119,13 @@ const oclGeneratorNode = async (state: typeof StateAnnotation.State) => {
     schema: contractSchema,
   });
   console.log(...newMessages.map((m) => m.getType().bgBlue + ': ' + m.content + '\n'));
-  return {ocl, model: state.model, userInput};
+  return {
+    ocl,
+    model: state.model,
+    userInput,
+    feedbackMode,
+    feedbackUsed: hasError && feedbackMode !== 'none',
+  };
 };
 
 const contractGeneratorNode = async (state: typeof StateAnnotation.State) => {

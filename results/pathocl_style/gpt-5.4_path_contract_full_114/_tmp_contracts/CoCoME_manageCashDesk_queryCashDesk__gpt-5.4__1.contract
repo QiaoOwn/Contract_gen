@@ -1,0 +1,14 @@
+Contract ManageCashDeskCRUDService::queryCashDesk(id:Integer): CashDesk {
+          precondition:
+          id <> null and
+	CashDesk.allInstance()->exists(cd | cd.Id = id)
+            postcondition:
+          result <> null and
+	result.Id = id and
+	CashDesk.allInstance()->includes(result) and
+	CashDesk.allInstance()->size() = CashDesk.allInstance()->size() and
+	Store.allInstance()->size() = Store.allInstance()->size() and
+	Cashier.allInstance()->size() = Cashier.allInstance()->size() and
+	ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size()
+            
+        }

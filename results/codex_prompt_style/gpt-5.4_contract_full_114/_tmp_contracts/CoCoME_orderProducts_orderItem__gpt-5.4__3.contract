@@ -1,0 +1,31 @@
+Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {
+          precondition:
+          barcode <> null and
+  quantity <> null and
+  quantity > 0 and
+  CurrentOrderProduct <> null and
+  Item.allInstance()->exists(i | i.Barcode = barcode) and
+  CurrentOrderProduct.OrderStatus = OrderStatus::NEW
+            postcondition:
+          let orderedItem : Item = Item.allInstance()->any(i | i.Barcode = barcode) in
+  let existingEntry : Set(OrderEntry) = CurrentOrderProduct.ContainedEntries@pre->select(e | e.Item = orderedItem) in
+    if existingEntry->isEmpty() then
+      OrderEntry.allInstance()->exists(ne |
+        not OrderEntry.allInstance()->includes(ne) and
+        ne.Item = orderedItem and
+        ne.Quantity = quantity and
+        ne.SubAmount = orderedItem.OrderPrice * quantity and
+        CurrentOrderProduct.ContainedEntries = CurrentOrderProduct.ContainedEntries@pre->including(ne) and
+        CurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + ne.SubAmount and
+        result = true
+      )
+    else
+      let oe : OrderEntry = existingEntry->any(true) in
+        CurrentOrderProduct.ContainedEntries = CurrentOrderProduct.ContainedEntries@pre and
+        oe.Quantity = oe.Quantity@pre + quantity and
+        oe.SubAmount = orderedItem.OrderPrice * oe.Quantity and
+        CurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + orderedItem.OrderPrice * quantity and
+        result = true
+    endif
+            
+        }

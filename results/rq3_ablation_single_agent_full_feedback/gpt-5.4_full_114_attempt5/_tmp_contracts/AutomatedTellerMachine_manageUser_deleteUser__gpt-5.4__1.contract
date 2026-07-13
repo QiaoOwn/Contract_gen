@@ -1,0 +1,8 @@
+Contract ManageUserCRUDService::deleteUser(userid: Integer): Boolean {
+  definition:
+    user: User = User.allInstance()->any(u | u.UserID = userid), ownedCards:Set(BankCard) = user.OwnedCard
+  precondition:
+    user.oclIsUndefined() = false and User.allInstance()->includes(user) and ownedCards.isEmpty() = true
+  postcondition:
+    User.allInstance()->excludes(user) and result = true
+}

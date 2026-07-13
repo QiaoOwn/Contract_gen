@@ -1,0 +1,16 @@
+Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {
+          precondition:
+          barcode <> null and barcode <> '' and
+  BookCopy.allInstance()->exists(bc | bc.Barcode = barcode)
+            postcondition:
+          result = BookCopy.allInstance()
+    ->select(bc | bc.Barcode = barcode)
+    ->collect(bc | bc.BookBelongs)
+    ->asSet() and
+  Book.allInstance()->isEqual(Book.allInstance()) and
+  BookCopy.allInstance()->isEqual(BookCopy.allInstance()) and
+  Loan.allInstance()->isEqual(Loan.allInstance()) and
+  Reserve.allInstance()->isEqual(Reserve.allInstance()) and
+  User.allInstance()->isEqual(User.allInstance())
+            
+        }

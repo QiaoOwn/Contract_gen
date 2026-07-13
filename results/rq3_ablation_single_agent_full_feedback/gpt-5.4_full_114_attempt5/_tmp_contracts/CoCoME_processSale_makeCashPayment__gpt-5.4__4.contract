@@ -1,0 +1,8 @@
+Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {
+  definition:
+    currentSaleLine: SalesLineItem = self.CurrentSaleLine, currentSale: Sale = currentSaleLine.BelongedSale
+  precondition:
+    amount > 0 and currentSaleLine.oclIsUndefined() = false and SalesLineItem.allInstance()->includes(currentSaleLine) and currentSale.oclIsUndefined() = false and Sale.allInstance()->includes(currentSale) and currentSale.IsReadytoPay = true and currentSale.IsComplete = false and amount >= currentSale.Amount
+  postcondition:
+    currentSale.IsComplete = true and result = true
+}

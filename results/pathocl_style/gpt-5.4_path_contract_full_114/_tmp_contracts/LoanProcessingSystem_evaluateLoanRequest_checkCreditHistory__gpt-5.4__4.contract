@@ -1,0 +1,22 @@
+Contract EvaluateLoanRequestModule::checkCreditHistory(): CreditHistory {
+          precondition:
+          CreditHistory.allInstance()->notEmpty() and
+  CreditHistory.allInstance()->forAll(ch |
+    ch.OutstandingDebt.oclIsUndefined() = false and
+    ch.BadDebits.oclIsUndefined() = false and
+    ch.OutstandingDebt >= 0.0 and
+    ch.BadDebits >= 0
+  )
+            postcondition:
+          result.oclIsUndefined() = false and
+  CreditHistory.allInstance()->includes(result) and
+  result.OutstandingDebt.oclIsUndefined() = false and
+  result.BadDebits.oclIsUndefined() = false and
+  result.OutstandingDebt >= 0.0 and
+  result.BadDebits >= 0 and
+  CreditHistory.allInstance()->forAll(ch |
+    ch.OutstandingDebt = ch.OutstandingDebt@pre and
+    ch.BadDebits = ch.BadDebits@pre
+  )
+            
+        }

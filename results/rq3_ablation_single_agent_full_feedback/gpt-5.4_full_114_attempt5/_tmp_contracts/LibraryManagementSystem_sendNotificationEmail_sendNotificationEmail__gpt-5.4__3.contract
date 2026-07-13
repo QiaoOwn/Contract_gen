@@ -1,0 +1,9 @@
+Contract ThirdPartyServices::sendNotificationEmail(email: String): Boolean {
+  definition:
+    user: User = User.allInstance()->any(u | u.Email = email),
+    sent:Boolean = if user.oclIsUndefined() = false then true else false endif
+  precondition:
+    email.oclIsTypeOf(String) and user.oclIsUndefined() = false
+  postcondition:
+    result = sent
+}

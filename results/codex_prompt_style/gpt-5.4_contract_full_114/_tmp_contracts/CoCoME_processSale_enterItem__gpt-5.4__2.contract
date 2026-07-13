@@ -1,0 +1,30 @@
+Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {
+          precondition:
+          CurrentSale <> null and
+  barcode <> null and
+  quantity <> null and
+  quantity > 0 and
+  CurrentSale.IsComplete = false and
+  CurrentSale.IsReadytoPay = false and
+  Item.allInstance()->exists(i | i.Barcode = barcode and i.StockNumber >= quantity)
+            postcondition:
+          if result = true then
+    SalesLineItem.allInstance()->exists(sli |
+      sli.oclIsNew() and
+      sli.Quantity = quantity and
+      sli.BelongedItem.Barcode = barcode and
+      sli.Subamount = sli.BelongedItem.Price * quantity and
+      sli.BelongedSale = CurrentSale and
+      CurrentSale.ContainedSalesLine->includes(sli)
+    ) and
+    CurrentSale.Amount = CurrentSale.Amount@pre + Item.allInstance()->any(i | i.Barcode = barcode).Price * quantity and
+    CurrentSaleLine.oclIsNew() and
+    CurrentSaleLine.BelongedSale = CurrentSale and
+    CurrentSaleLine.BelongedItem.Barcode = barcode and
+    CurrentSaleLine.Quantity = quantity
+  else
+    CurrentSale.ContainedSalesLine = CurrentSale.ContainedSalesLine@pre and
+    CurrentSale.Amount = CurrentSale.Amount@pre
+  endif
+            
+        }

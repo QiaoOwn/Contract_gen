@@ -1,0 +1,26 @@
+Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {
+          precondition:
+          amount > 0 and
+    CashDesk.allInstance()->exists(cd |
+        cd.IsOpened = true and
+        cd.ContainedSales->exists(s |
+            Payment.allInstance()->exists(p |
+                p.BelongedSale = s and
+                p.oclIsTypeOf(CashPayment)
+            )
+        )
+    )
+            postcondition:
+          if result = true then
+        CashPayment.allInstance()->exists(cp |
+            cp.AmountTendered = amount and
+            cp.BelongedSale = cp.BelongedSale and
+            cp.Balance = amount - cp.BelongedSale.oclAsType(Sale).total
+        )
+    else
+        CashPayment.allInstance()->forAll(cp |
+            cp.AmountTendered <> amount
+        )
+    endif
+            
+        }

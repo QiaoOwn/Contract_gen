@@ -1,0 +1,19 @@
+Contract CoCoMESystem::showStockReports(): Set(Item) {
+          precondition:
+          true
+            postcondition:
+          result = Item.allInstance()->asSet() and
+	Item.allInstance()->forAll(i |
+		i.Barcode <> null and
+		i.Name <> null and
+		i.Price <> null and
+		i.StockNumber <> null and
+		i.OrderPrice <> null
+	) and
+	Item.allInstance()->forAll(i |
+		i.StockNumber >= 0 and
+		i.Price >= 0 and
+		i.OrderPrice >= 0
+	)
+            
+        }

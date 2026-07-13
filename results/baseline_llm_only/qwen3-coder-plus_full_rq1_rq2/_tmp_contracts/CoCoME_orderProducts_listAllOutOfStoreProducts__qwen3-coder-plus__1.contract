@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::listAllOutOfStoreProducts(): Set(Item) {
+          definition:
+          items:Set(Item) = Item.allInstance()->select(i:Item|i.StockNumber <= 0)
+            precondition:
+          self.CurrentOrderProduct.oclIsUndefined() = false
+            postcondition:
+          result = items
+            
+        }

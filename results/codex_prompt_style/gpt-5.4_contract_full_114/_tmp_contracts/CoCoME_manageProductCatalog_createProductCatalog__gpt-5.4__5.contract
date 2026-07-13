@@ -1,0 +1,22 @@
+Contract ManageProductCatalogCRUDService::createProductCatalog(id:Integer,name:String): Boolean {
+          precondition:
+          id.oclIsUndefined() = false and
+    name.oclIsUndefined() = false and
+    name <> '' and
+    ProductCatalog.allInstance()->forAll(pc | pc.Id <> id)
+            postcondition:
+          (result = true implies
+        ProductCatalog.allInstance()->exists(pc |
+            pc.oclIsNew() and
+            pc.Id = id and
+            pc.Name = name
+        )
+    ) and
+    (result = true implies
+        ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size() + 1
+    ) and
+    (result = false implies
+        ProductCatalog.allInstance()->size() = ProductCatalog.allInstance()->size()
+    )
+            
+        }

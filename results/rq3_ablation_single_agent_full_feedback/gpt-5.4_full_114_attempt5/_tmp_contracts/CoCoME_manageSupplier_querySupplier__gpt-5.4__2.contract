@@ -1,0 +1,8 @@
+Contract ManageSupplierCRUDService::querySupplier(id: Integer): Supplier {
+  definition:
+    supplier: Supplier = Supplier.allInstance()->any(o | o.Id = id)
+  precondition:
+    supplier.oclIsUndefined() = false and Supplier.allInstance()->includes(supplier)
+  postcondition:
+    result = supplier
+}

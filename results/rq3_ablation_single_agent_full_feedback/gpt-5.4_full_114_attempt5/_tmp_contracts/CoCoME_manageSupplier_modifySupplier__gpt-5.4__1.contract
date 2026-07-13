@@ -1,0 +1,8 @@
+Contract ManageSupplierCRUDService::modifySupplier(id: Integer, name: String): Boolean {
+  definition:
+    supplier: Supplier = Supplier.allInstance()->any(o | o.Id = id)
+  precondition:
+    supplier.oclIsUndefined() = false and name.oclIsTypeOf(String) and name <> ""
+  postcondition:
+    supplier.Name = name and result = true
+}
