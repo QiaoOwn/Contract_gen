@@ -1,80 +1,24 @@
-http://codinggorilla.domemtech.com/antlr/xtext/2021/09/10/converting-xtext.html
+# Contract Gen Artifact
 
-Install Dotnet 8.0.x
+This repository contains the artifact for the manuscript **"Contract Gen: Verification-Driven OCL Contract Generation"**.
 
-dotnet tool install -g trcaret
-dotnet tool install -g trclonereplace
-dotnet tool install -g trcombine
-dotnet tool install -g trconvert
-dotnet tool install -g trcover
-dotnet tool install -g trfoldlit
-dotnet tool install -g trgen
-dotnet tool install -g trgenvsc
-dotnet tool install -g trglob
-dotnet tool install -g triconv
-dotnet tool install -g tritext
-dotnet tool install -g trjson
-dotnet tool install -g trparse
-dotnet tool install -g trperf
-dotnet tool install -g trquery
-dotnet tool install -g trrename
-dotnet tool install -g trsort
-dotnet tool install -g trsplit
-dotnet tool install -g trsponge
-dotnet tool install -g trtext
-dotnet tool install -g trtokens
-dotnet tool install -g trtree
-dotnet tool install -g trunfold
-dotnet tool install -g trwdog
-dotnet tool install -g trxml
-dotnet tool install -g trxml2
+Start here:
 
-trparse REMODEL.g -t ANTLRv3 | trconvert | trsponge
+- `ARTIFACT_README.md` explains how to inspect, validate, and optionally rerun the artifact.
+- `ARTIFACT_MANIFEST.md` maps files and result directories to the paper's RQs and tables.
+- `data/operations.jsonl` contains the 114 benchmark operations.
+- `results/` contains the raw and summarized experiment outputs from which the manuscript tables are regenerated.
+- `src/app/service/generateOCL.ts` and `src/app/service/graph.ts` contain the main Contract Gen implementation.
+- `src/rm2pt/project/` and `test/` contain the encoded benchmark systems and execution-grounded tests.
 
-删掉
-RULE_WS: (' ' | '\t' | '\r' | '\n')+;
-增加
-WS: [ \t\r\n]+ -> skip;
-WS: [ \t\r\n]+ -> skip;
+Quick check:
 
-LINE*COMMENT: '//' ~[\r\n]* -> channel(1);
-BLOCK*COMMENT: '/*' ._? '_/' -> channel(1);
+```powershell
+python scripts/verify_artifact_tables.py
+```
 
-antlr4 -Dlanguage=TypeScript ./antlr4/REMODEL.g4 -visitor
+The full LLM rerun path requires model API credentials. The included precomputed results are sufficient to inspect and recompute the paper-level tables without reissuing LLM calls.
 
-R1: getRepository(Class)
-R2: R2.filter
-R3: R1.find
-R4:
-R5:
-R6:
-R7:
-// ref: StandardOPs.ts
-R8: StandardOPs.oclIsUndefined
-// ref: StandardOPs.ts
-R9: StandardOPs.oclIsTypeOf
-// ref: StandardOPs.ts
-R10: StandardOPs.oclIsTypeOf
-R11:
-R12:
-R13: R2.includes
-R14:
-R15:
-R16:
-R17:
-R18:
-R19:
-R20:
-R21:
-R22:
-R23:
-R24:
-R25:
-R26:
+If this repository is packaged together with the LaTeX paper source, the manuscript files are kept separately as `main.tex`, `sections/`, `figures/`, and `refs.bib`.
 
-type RuleContext 生成代码需要context
-
-exists: some
-
-todo: service中嵌套service
-CoCoME/processSale/makeCardPayment
+Do not archive `.env`, `node_modules/`, `.next/`, `.next-build/`, coverage folders, or generated `test/tmp/` files.
