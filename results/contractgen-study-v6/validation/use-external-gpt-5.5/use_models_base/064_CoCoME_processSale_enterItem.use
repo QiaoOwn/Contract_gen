@@ -1,0 +1,228 @@
+model StrongUSE_064_CoCoME_processSale_enterItem
+
+-- operation_id: CoCoME_processSale_enterItem
+-- operation_signature: enterItem(barcode: Integer, quantity: Integer): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract ProcessSaleService::enterItem(barcode: Integer,quantity: Integer): Boolean {
+--   definition:
+--     item: Item = Item.allInstances()->any(candidate: Item|candidate.Barcode = barcode)
+--   precondition:
+--     self.CurrentSale.oclIsUndefined() = false and
+--     self.CurrentSale.IsComplete = false and
+--     item.oclIsUndefined() = false and
+--     item.StockNumber>0
+--   postcondition:
+--     let salesLineItem: SalesLineItem in
+--     salesLineItem.oclIsNew() and
+--     SalesLineItem.allInstances()->includes(salesLineItem) and
+--     salesLineItem.BelongedSale = self.CurrentSale and
+--     salesLineItem.BelongedItem = item and
+--     self.CurrentSale.ContainedSalesLine->includes(salesLineItem) and
+--     salesLineItem.Quantity = quantity and
+--     salesLineItem.Subamount = item.Price*quantity and
+--     item.StockNumber = item.StockNumber@pre-quantity and
+--     result = true
+-- }
+
+enum OrderStatus { NEW, RECEIVED, REQUESTED }
+
+class CardPayment < Payment
+attributes
+  CardAccountNumber : String
+  ExpiryDate : Integer
+end
+
+class CashDesk
+attributes
+  Id : Integer
+  Name : String
+  IsOpened : Boolean
+end
+
+class CashPayment < Payment
+attributes
+  Balance : Real
+end
+
+class Cashier
+attributes
+  Id : Integer
+  Name : String
+end
+
+class Item
+attributes
+  Barcode : Integer
+  Name : String
+  Price : Real
+  StockNumber : Integer
+  OrderPrice : Real
+end
+
+class OrderEntry
+attributes
+  Quantity : Integer
+  SubAmount : Real
+end
+
+class OrderProduct
+attributes
+  Id : Integer
+  Time : Integer
+  OrderStatus : OrderStatus
+  Amount : Real
+end
+
+class Payment
+attributes
+  AmountTendered : Real
+end
+
+class ProductCatalog
+attributes
+  Id : Integer
+  Name : String
+end
+
+class Sale
+attributes
+  Time : Integer
+  IsComplete : Boolean
+  Amount : Real
+  IsReadytoPay : Boolean
+end
+
+class SalesLineItem
+attributes
+  Quantity : Integer
+  Subamount : Real
+end
+
+class Store
+attributes
+  Id : Integer
+  Name : String
+  Address : String
+  IsOpened : Boolean
+end
+
+class Supplier
+attributes
+  Id : Integer
+  Name : String
+end
+
+class OperationContext
+attributes
+  barcode : Integer
+  quantity : Integer
+  CurrentSale : Boolean
+  CurrentSaleLine : SalesLineItem
+  Now : Integer
+  Today : Integer
+operations
+  Contract_enterItem(barcode : Integer, quantity : Integer) : Boolean
+end
+
+association CashDesk_ContainedSales_Sale between
+  CashDesk[0..*] role CashDesk_ContainedSales_Owner
+  Sale[*] role ContainedSales
+end
+
+association CashDesk_BelongedStore_Store between
+  CashDesk[0..*] role CashDesk_BelongedStore_Owner
+  Store[0..1] role BelongedStore
+end
+
+association Cashier_WorkedStore_Store between
+  Cashier[0..*] role Cashier_WorkedStore_Owner
+  Store[0..1] role WorkedStore
+end
+
+association Item_BelongedCatalog_ProductCatalog between
+  Item[0..*] role Item_BelongedCatalog_Owner
+  ProductCatalog[0..1] role BelongedCatalog
+end
+
+association OrderEntry_Item_Item between
+  OrderEntry[0..*] role OrderEntry_Item_Owner
+  Item[0..1] role Item
+end
+
+association OrderProduct_Supplier_Supplier between
+  OrderProduct[0..*] role OrderProduct_Supplier_Owner
+  Supplier[0..1] role Supplier
+end
+
+association OrderProduct_ContainedEntries_OrderEntry between
+  OrderProduct[0..*] role OrderProduct_ContainedEntries_Owner
+  OrderEntry[*] role ContainedEntries
+end
+
+association Payment_BelongedSale_Sale between
+  Payment[0..*] role Payment_BelongedSale_Owner
+  Sale[0..1] role BelongedSale
+end
+
+association ProductCatalog_ContainedItems_Item between
+  ProductCatalog[0..*] role ProductCatalog_ContainedItems_Owner
+  Item[0..1] role ContainedItems
+end
+
+association Sale_Belongedstore_Store between
+  Sale[0..*] role Sale_Belongedstore_Owner
+  Store[0..1] role Belongedstore
+end
+
+association Sale_BelongedCashDesk_CashDesk between
+  Sale[0..*] role Sale_BelongedCashDesk_Owner
+  CashDesk[0..1] role BelongedCashDesk
+end
+
+association Sale_ContainedSalesLine_SalesLineItem between
+  Sale[0..*] role Sale_ContainedSalesLine_Owner
+  SalesLineItem[*] role ContainedSalesLine
+end
+
+association Sale_AssoicatedPayment_Payment between
+  Sale[0..*] role Sale_AssoicatedPayment_Owner
+  Payment[0..1] role AssoicatedPayment
+end
+
+association SalesLineItem_BelongedSale_Sale between
+  SalesLineItem[0..*] role SalesLineItem_BelongedSale_Owner
+  Sale[0..1] role BelongedSale
+end
+
+association SalesLineItem_BelongedItem_Item between
+  SalesLineItem[0..*] role SalesLineItem_BelongedItem_Owner
+  Item[0..1] role BelongedItem
+end
+
+association Store_AssociationCashdeskes_CashDesk between
+  Store[0..*] role Store_AssociationCashdeskes_Owner
+  CashDesk[*] role AssociationCashdeskes
+end
+
+association Store_Productcatalogs_ProductCatalog between
+  Store[0..*] role Store_Productcatalogs_Owner
+  ProductCatalog[*] role Productcatalogs
+end
+
+association Store_Items_Item between
+  Store[0..*] role Store_Items_Owner
+  Item[*] role Items
+end
+
+association Store_Cashiers_Cashier between
+  Store[0..*] role Store_Cashiers_Owner
+  Cashier[*] role Cashiers
+end
+
+association Store_Sales_Sale between
+  Store[0..*] role Store_Sales_Owner
+  Sale[*] role Sales
+end

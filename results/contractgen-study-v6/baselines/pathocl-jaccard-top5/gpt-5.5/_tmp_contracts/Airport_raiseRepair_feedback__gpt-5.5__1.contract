@@ -1,0 +1,24 @@
+Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {
+          precondition:
+          Repair.allInstances()->exists(r: Repair | r.Id = id) and
+Staff.allInstances()->exists(s: Staff | s.Id = sid) and
+Repair.allInstances()->any(r: Repair | r.Id = id).RaiseStaff.Id = sid and
+Staff.allInstances()->any(s: Staff | s.Id = sid).Role = 0 and
+Repair.allInstances()->any(r: Repair | r.Id = id).Process = 7
+            postcondition:
+          Repair.allInstances()->any(r: Repair | r.Id = id).Score = score and
+if score >= 3 then
+        Repair.allInstances()->any(r: Repair | r.Id = id).Close = true
+    else
+        true
+    endif and
+if score < 3 then
+        Repair.allInstances()->any(r: Repair | r.Id = id).Close = false and
+        Repair.allInstances()->any(r: Repair | r.Id = id).Description = des and
+        Repair.allInstances()->any(r: Repair | r.Id = id).Process = 0
+    else
+        true
+    endif and
+result = true
+            
+        }

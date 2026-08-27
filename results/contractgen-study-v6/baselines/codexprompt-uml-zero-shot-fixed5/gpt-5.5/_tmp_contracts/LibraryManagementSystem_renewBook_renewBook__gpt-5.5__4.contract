@@ -1,0 +1,77 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u: User |
+        u.UserID = uid and
+        u.BorrowStatus = BorrowStatus::NORMAL and
+        BookCopy.allInstances()->exists(c: BookCopy |
+            c.Barcode = barcode and
+            Loan.allInstances()->exists(l: Loan |
+                l.LoanedUser = u and
+                l.LoanedCopy = c and
+                l.IsReturned = false
+            )
+        )
+    ) and
+Loan.allInstances()->exists(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        l.LoanedCopy.IsReserved = false and
+        l.DueDate > Today and
+        l.OverDueFee = 0
+    ) and
+Loan.allInstances()->forAll(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false implies
+            (
+                (l.LoanedUser.oclIsKindOf(Student) and l.RenewedTimes < 3) or
+                (l.LoanedUser.oclIsKindOf(Faculty) and l.RenewedTimes < 6)
+            )
+    )
+            postcondition:
+          Loan.allInstances()->forAll(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false implies
+            l.RenewedTimes = l.RenewedTimes@pre + 1
+    ) and
+Loan.allInstances()->forAll(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false implies
+            l.RenewDate = Today
+    ) and
+Loan.allInstances()->forAll(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false implies
+            (
+                if l.LoanedUser.oclIsTypeOf(Student) and
+                   l.LoanedUser.oclAsType(Student).Programme = Programme::BACHELOR
+                then
+                    l.DueDate = l.DueDate@pre + 20
+                else
+                    if l.LoanedUser.oclIsTypeOf(Student) and
+                       l.LoanedUser.oclAsType(Student).Programme = Programme::MASTER
+                    then
+                        l.DueDate = l.DueDate@pre + 40
+                    else
+                        if l.LoanedUser.oclIsKindOf(Student)
+                        then
+                            l.DueDate = l.DueDate@pre + 60
+                        else
+                            if l.LoanedUser.oclIsKindOf(Faculty)
+                            then
+                                l.DueDate = l.DueDate@pre + 60
+                            else
+                                l.DueDate = l.DueDate@pre
+                            endif
+                        endif
+                    endif
+                endif
+            )
+    ) and
+result = true
+            
+        }

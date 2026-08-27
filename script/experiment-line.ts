@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import * as allProjects from '@/rm2pt/project';
 import {generateOCL, GenerateOCLParam} from '@/app/service/generateOCL';
 import {UseCaseKeys} from '@/app/type';
-import {graph} from '../src/app/service/graph-line';
 type Checkpoint = Record<
   string,
   Record<string, Record<string, Record<string, {pass?: boolean} & {time: number}>>>
@@ -18,20 +17,17 @@ fs.ensureDirSync(folderPath);
 const checkpoint: Checkpoint = fs.readJSONSync(path.resolve(folderPath, 'checkpoint.json'));
 const writeCheckpoint = (checkpoint: Checkpoint) =>
   fs.writeJSONSync(path.resolve(folderPath, 'checkpoint.json'), checkpoint, {spaces: 2});
-const experiment = async (
-  {project, useCase, operation, model, apiKey}: GenerateOCLParam,
-  time = 1
-) => {
-  console.log(
-    `Start generating OCL for ${project} ${useCase} ${operation} with model ${model}, time: ${time}`
-  );
+const experiment = async ({project, useCase, operation, model, apiKey}: GenerateOCLParam) => {
+  console.log(`Start generating OCL for ${project} ${useCase} ${operation} with model ${model}`);
   const stream = await generateOCL({
     project,
     useCase,
     operation,
     model,
     apiKey,
-    graph,
+    graphMode: 'linear',
+    feedbackMode: 'none',
+    maxGenerationAttempts: 1,
   });
   try {
     const dateTime = new Date().getTime();
@@ -62,16 +58,8 @@ const experiment = async (
     }
   } catch (error) {
     console.error(error);
-    checkpoint[model][project][useCase][operation].time = time;
+    checkpoint[model][project][useCase][operation].time = 5;
     writeCheckpoint(checkpoint);
-    time++;
-    if (time <= 5) {
-      try {
-        await experiment({project, useCase, operation, model, apiKey}, time);
-      } catch (error) {
-        console.error(error);
-      }
-    }
   }
 };
 (async () => {
@@ -112,16 +100,13 @@ const experiment = async (
               continue;
             }
           }
-          await experiment(
-            {
-              project,
-              useCase,
-              operation,
-              model,
-              apiKey: OPENAI_API_KEY,
-            },
-            checkpoint[model][project][useCase][operation].time
-          );
+          await experiment({
+            project,
+            useCase,
+            operation,
+            model,
+            apiKey: OPENAI_API_KEY,
+          });
         }
       }
     }

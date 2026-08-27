@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -158,16 +166,14 @@ class GenerateLoanLetterAndAgreementModule {
   CurrentLoanRequests: LoanRequest[];
   /*TempVariable End*/
 
-  /*if current loan request exist,
-   *then create a new loan agreement and set it's content to "Loan Agreement"
-   *and
-   *save it
-   *and
-   *attach it to the current loan request*/
+  /*Definition: The generateLoanAgreement operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   generateLoanAgreement(): boolean {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentLoanRequest) === false,
+      logic: () =>
+        StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentLoanRequest), false),
       description: 'self.CurrentLoanRequest.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -175,30 +181,68 @@ class GenerateLoanLetterAndAgreementModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let la: LoanAgreement;
-    return l({
-      execute: () => (la = new LoanAgreement()),
-      description: 'la.oclIsNew()',
-    })
-      .and({
-        execute: () => (la.Content = 'Loan Agreement'),
-        description: 'la.Content="Loan Agreement"',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let la: LoanAgreement;
+      return l({
+        execute: () => (la = new LoanAgreement()),
+        description: 'la.oclIsNew()',
       })
-      .and({
-        execute: () => (this.CurrentLoanRequest.AttachedLoanAgreement = la),
-        description: 'self.CurrentLoanRequest.AttachedLoanAgreement=la',
+        .and({
+          execute: () => (la.Content = 'Loan Agreement'),
+          description: 'la.Content="Loan Agreement"',
+        })
+        .and({
+          execute: () => (this.CurrentLoanRequest.AttachedLoanAgreement = la),
+          description: 'self.CurrentLoanRequest.AttachedLoanAgreement=la',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(LoanAgreement), la),
+          description: 'LoanAgreement.allInstances()->includes(la)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let la: LoanAgreement = oclState.findNew(LoanAgreement);
+      return l({
+        logic: () => oclState.isNew(la, LoanAgreement),
+        description: 'la.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(LoanAgreement).push(la),
-        description: 'LoanAgreement.allInstance()->includes(la)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(la.Content, 'Loan Agreement'),
+          description: 'la.Content="Loan Agreement"',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentLoanRequest.AttachedLoanAgreement, la),
+          description: 'self.CurrentLoanRequest.AttachedLoanAgreement=la',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(LoanAgreement), la),
+          description: 'LoanAgreement.allInstances()->includes(la)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {GenerateLoanLetterAndAgreementModule};

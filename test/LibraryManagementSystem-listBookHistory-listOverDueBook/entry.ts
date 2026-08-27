@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,45 +238,53 @@ export {
 };
 
 class ListBookHistory {
-  /*Lists the overdue books for a user.*/
+  /*Definition: The listOverDueBook operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   listOverDueBook(uid: string): BookCopy[] {
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (u: User) =>
-            l({
-              logic: () => u.UserID === uid,
-              description: 'u.UserID=uid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(u:User|u.UserID=uid)',
-    }).build().pass;
-    let loans: Loan[] = l({
-      logic: () =>
-        user.LoanedBook.filter(
-          (_l: Loan) =>
-            l({
-              logic: () => _l.IsReturned === false,
-              description: 'l.IsReturned=false',
-            })
-              .and({
-                logic: () => _l.OverDueFee > 0,
-                description: 'l.OverDueFee>0',
-              })
-              .build().pass
-        ),
-      description: 'user.LoanedBook->select(l:Loan|l.IsReturned=falseandl.OverDueFee>0)',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (u: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.UserID, uid),
+                  description: 'u.UserID=uid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(u:User|u.UserID=uid)',
+        }).build().pass
+    );
+    let loans: Loan[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            user.LoanedBook.filter(
+              (_l: Loan) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(_l.IsReturned, false),
+                  description: 'l.IsReturned=false',
+                })
+                  .and({
+                    logic: () => _l.OverDueFee > 0,
+                    description: 'l.OverDueFee>0',
+                  })
+                  .build().pass
+            ),
+          description: 'user.LoanedBook->select(l:Loan|l.IsReturned=falseandl.OverDueFee>0)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(user) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), false),
       description: 'user.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(loans) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(loans), false),
         description: 'loans.oclIsUndefined()=false',
       })
       .build();
@@ -277,19 +293,49 @@ class ListBookHistory {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () =>
-        loans.map(
-          (_l: Loan) =>
-            l({
-              execute: () => _l.LoanedCopy,
-              description: 'l.LoanedCopy',
-            }).build().value
-        ),
-      description: 'result=loans->collect(l:Loan|l.LoanedCopy)',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () =>
+          loans.map(
+            (_l: Loan) =>
+              l({
+                logic: () => _l.LoanedCopy,
+                description: 'l.LoanedCopy',
+              }).build().pass
+          ),
+        description: 'result=loans->collect(l:Loan|l.LoanedCopy)',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(
+            result,
+            loans.map(
+              (_l: Loan) =>
+                l({
+                  logic: () => _l.LoanedCopy,
+                  description: 'l.LoanedCopy',
+                }).build().pass
+            )
+          ),
+        description: 'result=loans->collect(l:Loan|l.LoanedCopy)',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ListBookHistory};

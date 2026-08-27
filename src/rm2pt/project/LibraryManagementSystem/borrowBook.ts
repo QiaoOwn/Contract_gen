@@ -21,11 +21,11 @@ const operations = [
     returnType: new ReturnedType('Boolean'),
     // Include the full definition, precondition, and postcondition from the remodel file
     definition: `
-    user:User = User.allInstance()->any(u:User | u.UserID = uid),
-    stu:Student = Student.allInstance()->any(s:Student | s.UserID = uid),
-    fac:Faculty = Faculty.allInstance()->any(f:Faculty | f.UserID = uid),
-    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode),
-    res:Reserve = Reserve.allInstance()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user and r.IsReserveClosed = false)`,
+    user:User = User.allInstances()->any(u:User | u.UserID = uid),
+    stu:Student = Student.allInstances()->any(s:Student | s.UserID = uid),
+    fac:Faculty = Faculty.allInstances()->any(f:Faculty | f.UserID = uid),
+    copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode),
+    res:Reserve = Reserve.allInstances()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user and r.IsReserveClosed = false)`,
     precondition: `
     user.oclIsUndefined() = false and
     copy.oclIsUndefined() = false and
@@ -85,7 +85,7 @@ const operations = [
     loan.OverDue10Days = false and
     loan.OverDue17Days = false and
     loan.OverDue31Days = false and
-    Loan.allInstance()->includes(loan) and
+    Loan.allInstances()->includes(loan) and
     result = true`,
   }),
 ];

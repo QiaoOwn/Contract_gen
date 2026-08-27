@@ -1,0 +1,155 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 27,
+  "operation_id": "CoCoME_processSale_enterItem",
+  "case_study": "CoCoME",
+  "project": "CoCoME",
+  "use_case": "processSale",
+  "operation": "enterItem",
+  "operation_signature": "enterItem(barcode: Integer, quantity: Integer): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "59eef33634f0a655353f7a2b181ee4066b194d20395ea8affe9e6d49832d4262",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "temporal_at_pre",
+    "new_object",
+    "undefined",
+    "repository_update",
+    "navigation_update"
+  ],
+  "complexity_score": 74,
+  "contract": "Contract ProcessSaleService::enterItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\titem: Item = Item.allInstances()->any(candidate: Item|candidate.Barcode = barcode)\n\tprecondition:\n\t\tself.CurrentSale.oclIsUndefined() = false and\n\t\tself.CurrentSale.IsComplete = false and\n\t\titem.oclIsUndefined() = false and\n\t\titem.StockNumber>0\n\tpostcondition:\n\t\tlet salesLineItem: SalesLineItem in\n\t\tsalesLineItem.oclIsNew() and\n\t\tSalesLineItem.allInstances()->includes(salesLineItem) and\n\t\tsalesLineItem.BelongedSale = self.CurrentSale and\n\t\tsalesLineItem.BelongedItem = item and\n\t\tself.CurrentSale.ContainedSalesLine->includes(salesLineItem) and\n\t\tsalesLineItem.Quantity = quantity and\n\t\tsalesLineItem.Subamount = item.Price*quantity and\n\t\titem.StockNumber = item.StockNumber@pre-quantity and\n\t\tresult = true\n}",
+  "complexity_tier": "complex",
+  "scenarios": [
+    {
+      "scenario_id": "CoCoME_processSale_enterItem::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\CoCoME_processSale_enterItem\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\CoCoME_processSale_enterItem\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json",
+          "test_name": "CoCoME/ProcessSaleService/enterItem Happy Path"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json",
+          "test_name": "CoCoME/ProcessSaleService/enterItem Happy Path",
+          "test_status": "failed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json"
+    },
+    {
+      "scenario_id": "CoCoME_processSale_enterItem::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\CoCoME_processSale_enterItem\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\CoCoME_processSale_enterItem\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json",
+          "test_name": "CoCoME/ProcessSaleService/enterItem rejects when precondition is violated"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json",
+          "test_name": "CoCoME/ProcessSaleService/enterItem rejects when precondition is violated",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json"
+    },
+    {
+      "scenario_id": "CoCoME_processSale_enterItem::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\CoCoME_processSale_enterItem.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

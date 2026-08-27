@@ -1,0 +1,9 @@
+Contract ListBookHistory::listBorrowHistory(uid:String): Set(Loan) {
+          definition:
+          user:User = User.allInstances()->any(u:User | u.UserID = uid)
+            precondition:
+          User.allInstances()->exists(u:User | u.UserID = uid)
+            postcondition:
+          result = user.LoanedBook
+            
+        }

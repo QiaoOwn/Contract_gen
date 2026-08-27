@@ -1,0 +1,150 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 6,
+  "operation_id": "LibraryManagementSystem_searchBook_searchBookBySubject",
+  "case_study": "Library Management",
+  "project": "LibraryManagementSystem",
+  "use_case": "searchBook",
+  "operation": "searchBookBySubject",
+  "operation_signature": "searchBookBySubject(subject: String): Set(Book)",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "a8549b954404c07477c672869f220f4039ba7e0c9a48ae558e2ddf65395287ed",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "type_test"
+  ],
+  "complexity_score": 37,
+  "contract": "Contract SearchBook::searchBookBySubject(subject: String): Set(Book) {\n\tprecondition:\n\t\tsubject.oclIsTypeOf(String)\n\tpostcondition:\n\t\tresult = Book.allInstances()->select(book: Book|book.Subject->exists(sub: Subject|sub.Name = subject))\n}",
+  "complexity_tier": "simple",
+  "scenarios": [
+    {
+      "scenario_id": "LibraryManagementSystem_searchBook_searchBookBySubject::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_searchBook_searchBookBySubject\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_searchBook_searchBookBySubject\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json",
+          "test_name": "LibraryManagementSystem/SearchBook/searchBookBySubject Happy Path: returns books matching subject name"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json",
+          "test_name": "LibraryManagementSystem/SearchBook/searchBookBySubject Happy Path: returns books matching subject name",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json"
+    },
+    {
+      "scenario_id": "LibraryManagementSystem_searchBook_searchBookBySubject::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_searchBook_searchBookBySubject\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_searchBook_searchBookBySubject\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json",
+          "test_name": "LibraryManagementSystem/SearchBook/searchBookBySubject rejects when subject is not a string"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json",
+          "test_name": "LibraryManagementSystem/SearchBook/searchBookBySubject rejects when subject is not a string",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json"
+    },
+    {
+      "scenario_id": "LibraryManagementSystem_searchBook_searchBookBySubject::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_searchBook_searchBookBySubject.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

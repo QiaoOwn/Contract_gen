@@ -1,9 +1,0 @@
-Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {
-          definition:
-          item:Item = Item.allInstance()->any(i:Item|i.Barcode=barcode), lineItems:Set(SalesLineItem) = SalesLineItem.allInstance()->select(s:SalesLineItem|s.BelongedItem=item), orderEntries:Set(OrderEntry) = OrderEntry.allInstance()->select(o:OrderEntry|o.Item=item)
-            precondition:
-          item.oclIsUndefined() = false and lineItems.isEmpty() = true and orderEntries.isEmpty() = true
-            postcondition:
-          Item.allInstance()->excludes(item) and result=true
-            
-        }

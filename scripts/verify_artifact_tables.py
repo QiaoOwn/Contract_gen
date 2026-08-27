@@ -1,244 +1,243 @@
 #!/usr/bin/env python3
-"""Print a compact verification summary directly from raw result folders.
+"""Recompute the paper-facing metrics from frozen Contract Gen v5 attempts.
 
-This script intentionally uses only the Python standard library. It does not
-read `results/paper_tables_current_data`; the paper tables can be regenerated
-from the result folders shipped with the artifact.
+Legacy result directories are deliberately invisible to this script. Every
+consumed attempt must match the canonical 114-operation manifest and carry the
+``contractgen-study-v6`` marker.
 """
 
 from __future__ import annotations
 
-import csv
 import json
+from collections import defaultdict
 from pathlib import Path
-from statistics import mean
+from typing import Any, Dict, Iterable, List, Tuple
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS = ROOT / "results"
+STUDY_VERSION = "contractgen-study-v6"
+INPUT_SCHEMA_VERSION = "contractgen-operation-input-v2"
+RESULTS = ROOT / "results" / STUDY_VERSION
+PAPER_MODELS = (
+    "gpt-5.5",
+    "gpt-5.4",
+    "gemini-3.5-flash",
+    "claude-opus-4-7",
+)
 
-FULL_RUNS = {
-    "gpt-5.4": "rq_gpt_5_4_full_oracle_fixed",
-    "gpt-5.4-mini": "rq_gpt_5_4_mini_full_oracle_fixed",
-    "claude-opus-4-7": "rq_claude_opus_4_7_full_oracle_fixed",
-    "qwen3-coder-plus": "rq_qwen3_coder_plus_full_oracle_fixed",
-    "qwen3-coder-flash": "rq_qwen3_coder_flash_full_oracle_fixed",
-}
-
-NO_FEEDBACK_RUNS = {
-    "gpt-5.4": "gpt-5.4_full_114_attempt5",
-    "gpt-5.4-mini": "gpt-5.4-mini_full_114_attempt5",
-    "claude-opus-4-7": "claude-opus-4-7_full_114_attempt5",
-    "qwen3-coder-plus": "qwen3-coder-plus_full_114_attempt5",
-    "qwen3-coder-flash": "qwen3-coder-flash_full_114_attempt5",
-}
-
-GENERIC_RUNS = NO_FEEDBACK_RUNS
-
-PURE_LLM_RUNS_FOR_AVERAGE = {
-    "gpt-5.4": "gpt-5.4_full_rq1_rq2",
-    "gpt-5.4-mini": "gpt-5.4-mini_full_rq1_rq2",
-    "qwen3-coder-plus": "qwen3-coder-plus_full_rq1_rq2",
-    "qwen3-coder-flash": "qwen3-coder-flash_full_rq1_rq2",
+RUNS = {
+    "full_feedback": RESULTS / "contract_gen" / "full_feedback" / "attempts.jsonl",
+    "generic_feedback": RESULTS / "contract_gen" / "generic_feedback" / "attempts.jsonl",
+    "no_feedback": RESULTS / "contract_gen" / "no_feedback" / "attempts.jsonl",
+    "pure_llm": RESULTS / "baselines" / "purellm" / "attempts.jsonl",
+    "codex_prompt_style": RESULTS / "baselines" / "codexprompt" / "attempts.jsonl",
+    "pathocl_style": RESULTS / "baselines" / "pathocl" / "attempts.jsonl",
+    "end_to_end_full_feedback": (
+        RESULTS / "ablations" / "end_to_end_full_feedback" / "attempts.jsonl"
+    ),
 }
 
 
-def count_jsonl(path: Path) -> int:
-    with path.open("r", encoding="utf-8") as f:
-        return sum(1 for line in f if line.strip())
+def read_jsonl(path: Path) -> List[Dict[str, Any]]:
+    if not path.is_file():
+        raise FileNotFoundError(f"Required v5 result is missing: {path}")
+    rows: List[Dict[str, Any]] = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line_no, raw in enumerate(handle, 1):
+            if not raw.strip():
+                continue
+            try:
+                row = json.loads(raw)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"{path}:{line_no}: invalid JSON: {exc}") from exc
+            if not isinstance(row, dict):
+                raise ValueError(f"{path}:{line_no}: expected a JSON object")
+            rows.append(row)
+    return rows
 
 
-def read_json(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+def load_manifest() -> Dict[str, Dict[str, Any]]:
+    rows = read_jsonl(ROOT / "data" / "operations.jsonl")
+    manifest = {str(row.get("id") or ""): row for row in rows}
+    if len(rows) != 114 or len(manifest) != 114 or "" in manifest:
+        raise ValueError(
+            f"Expected 114 unique canonical operations, got {len(rows)} rows and "
+            f"{len(manifest)} ids"
+        )
+    return manifest
 
 
-def read_one_csv(path: Path) -> dict[str, str]:
-    with path.open("r", encoding="utf-8-sig", newline="") as f:
-        rows = list(csv.DictReader(f))
-    if len(rows) != 1:
-        raise ValueError(f"Expected exactly one row in {path}, got {len(rows)}")
-    return rows[0]
+MANIFEST = load_manifest()
 
 
-def first_by_model(summary_path: Path) -> dict:
-    summary = read_json(summary_path)
-    if "by_model" in summary:
-        return summary["by_model"][0]
-    if "exp1_by_model" in summary:
-        return summary["exp1_by_model"][0]
-    raise KeyError(f"No model summary found in {summary_path}")
+def validated_attempts(setting: str) -> List[Dict[str, Any]]:
+    path = RUNS[setting]
+    rows = read_jsonl(path)
+    seen: set[Tuple[str, str, int]] = set()
+    for line_no, row in enumerate(rows, 1):
+        operation_id = str(row.get("operation_id") or "")
+        model = str(row.get("model") or row.get("model_name") or "")
+        attempt = int(row.get("attempt") or row.get("attempt_id") or 0)
+        manifest = MANIFEST.get(operation_id)
+        shared_prompt_hash = row.get("shared_prompt_hash") or row.get("prompt_hash")
+        checks = {
+            "study_version": row.get("study_version") == STUDY_VERSION,
+            "input_schema_version": row.get("input_schema_version") == INPUT_SCHEMA_VERSION,
+            "known_operation": manifest is not None,
+            "input_hash": bool(manifest) and row.get("input_hash") == manifest.get("input_hash"),
+            "prompt_hash": bool(manifest)
+            and shared_prompt_hash == manifest.get("prompt_hash"),
+            "generation_prompt_version": bool(row.get("generation_prompt_version")),
+            "model": bool(model),
+            "attempt": attempt > 0,
+        }
+        failed = [name for name, ok in checks.items() if not ok]
+        if failed:
+            raise ValueError(
+                f"{path}:{line_no}: incompatible record ({', '.join(failed)})"
+            )
+        key = (operation_id, model, attempt)
+        if key in seen:
+            raise ValueError(f"{path}:{line_no}: duplicate attempt key {key}")
+        seen.add(key)
+        if row.get("execution_eval_skipped") is True:
+            raise ValueError(f"{path}:{line_no}: execution validation was skipped")
+    return rows
+
+
+def summarize(setting: str, model: str) -> Dict[str, float]:
+    rows = [
+        row
+        for row in validated_attempts(setting)
+        if str(row.get("model") or row.get("model_name")) == model
+    ]
+    by_operation: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        by_operation[str(row["operation_id"])].append(row)
+    if set(by_operation) != set(MANIFEST):
+        missing = sorted(set(MANIFEST) - set(by_operation))
+        extra = sorted(set(by_operation) - set(MANIFEST))
+        raise ValueError(
+            f"{setting}/{model} is incomplete: {len(by_operation)}/114 operations; "
+            f"missing={missing[:5]}, extra={extra[:5]}"
+        )
+
+    valid = sum(
+        any(bool(row.get("syntax_valid", row.get("is_valid"))) for row in group)
+        for group in by_operation.values()
+    )
+    passed = sum(
+        any(bool(row.get("execution_valid", row.get("test_execution_ok"))) for row in group)
+        for group in by_operation.values()
+    )
+    pass_at_1 = sum(
+        any(
+            bool(row.get("execution_valid", row.get("test_execution_ok")))
+            and int(row.get("cumulative_llm_generation_count") or row.get("attempt") or 0) <= 1
+            for row in group
+        )
+        for group in by_operation.values()
+    )
+    generations = sum(
+        int(row.get("llm_generation_count") or 1) for row in rows
+    )
+    return {
+        "valid": valid,
+        "valid_rate": 100.0 * valid / 114,
+        "passed": passed,
+        "pass_rate": 100.0 * passed / 114,
+        "pass_at_1": pass_at_1,
+        "pass_at_1_rate": 100.0 * pass_at_1 / 114,
+        "generations": generations,
+    }
 
 
 def fmt(value: float) -> str:
     return f"{value:.2f}"
 
 
-def full_run_row(model: str) -> tuple[int, float, int, float, int]:
-    folder = RESULTS / FULL_RUNS[model]
-    rq1 = read_one_csv(folder / "rq1_syntax_validity_by_model.csv")
-    rq2 = read_one_csv(folder / "rq2_execution_success_by_model.csv")
-    summary = first_by_model(folder / "summary.json")
-    return (
-        int(rq1["syntax_valid_count"]),
-        float(rq1["syntax_validity_rate"]),
-        int(rq2["execution_success_count"]),
-        float(rq2["execution_success_rate"]),
-        int(summary.get("total_attempts", count_jsonl(folder / "attempts.jsonl"))),
-    )
-
-
-def baseline_row(label: str, summary_path: Path) -> tuple[str, int, float, int, float]:
-    row = first_by_model(summary_path)
-    return (
-        label,
-        int(row["syntax_valid_count"]),
-        float(row["syntax_validity_rate"]),
-        int(row["execution_success_count"]),
-        float(row["execution_success_rate"]),
-    )
-
-
-def pure_llm_average() -> tuple[str, int, float, int, float]:
-    rows = [
-        first_by_model(RESULTS / "baseline_llm_only" / folder / "summary.json")
-        for folder in PURE_LLM_RUNS_FOR_AVERAGE.values()
-    ]
-    valid = int(mean(int(r["syntax_valid_count"]) for r in rows))
-    passed = int(mean(int(r["execution_success_count"]) for r in rows))
-    total = int(rows[0]["total_operations"])
-    return ("PureLLM average", valid, valid / total * 100, passed, passed / total * 100)
-
-
-def feedback_row(root: Path, folder: str) -> tuple[int, float, int, float]:
-    row = first_by_model(root / folder / "summary.json")
-    valid = int(row.get("syntax_valid_count", row.get("valid_count")))
-    valid_rate = float(row.get("syntax_validity_rate", row.get("validity_rate")))
-    passed = int(row.get("execution_success_count", 0))
-    pass_rate = float(row.get("execution_success_rate", 0.0))
-    if not passed:
-        # No-feedback/generic summaries are syntax-first summaries; derive pass
-        # counts from attempts when execution fields are absent.
-        attempts = root / folder / "attempts.jsonl"
-        if attempts.exists():
-            by_op: dict[str, list[dict]] = {}
-            with attempts.open("r", encoding="utf-8") as f:
-                for line in f:
-                    if not line.strip():
-                        continue
-                    rec = json.loads(line)
-                    op = str(rec.get("operation_id"))
-                    by_op.setdefault(op, []).append(rec)
-            passed = sum(
-                any(bool(r.get("final_pass", r.get("execution_valid", r.get("test_execution_ok")))) for r in rs)
-                for rs in by_op.values()
-            )
-            total = int(row["total_operations"])
-            pass_rate = passed / total * 100
-    return valid, valid_rate, passed, pass_rate
-
-
-def print_table(title: str, header: list[str], rows: list[list[str]]) -> None:
-    print(f"\n{title}")
-    print("-" * len(title))
+def print_table(title: str, header: Iterable[str], rows: Iterable[Iterable[str]]) -> None:
+    print(f"\n{title}\n{'-' * len(title)}")
     print(" | ".join(header))
     for row in rows:
         print(" | ".join(row))
 
 
 def main() -> None:
-    operations = count_jsonl(ROOT / "data" / "operations.jsonl")
-    print(f"Benchmark operations: {operations}")
-
-    rq_rows: list[list[str]] = []
-    for label, path in [
-        ("CodexPrompt-style + gpt-5.4", RESULTS / "codex_prompt_style" / "gpt-5.4_contract_full_114" / "summary.json"),
-        ("PathOCL-style + gpt-5.4", RESULTS / "pathocl_style" / "gpt-5.4_path_contract_full_114" / "summary.json"),
-    ]:
-        name, valid, valid_rate, passed, pass_rate = baseline_row(label, path)
-        rq_rows.append([name, str(valid), fmt(valid_rate), str(passed), fmt(pass_rate)])
-
-    name, valid, valid_rate, passed, pass_rate = pure_llm_average()
-    rq_rows.append([name, str(valid), fmt(valid_rate), str(passed), fmt(pass_rate)])
-
-    staged_attempts = 0
-    for model in FULL_RUNS:
-        valid, valid_rate, passed, pass_rate, attempts = full_run_row(model)
-        staged_attempts += attempts if model == "gpt-5.4" else 0
-        rq_rows.append([f"Contract Gen + {model}", str(valid), fmt(valid_rate), str(passed), fmt(pass_rate)])
-
-    print_table("RQ1/RQ2 summary derived from results/", ["Method", "#Valid", "Valid (%)", "#Pass", "Pass (%)"], rq_rows)
-
-    feedback_rows: list[list[str]] = []
-    totals = {"none": [0, 0, 0], "generic": [0, 0, 0], "full": [0, 0, 0]}
-    for model in FULL_RUNS:
-        no_valid, _, no_pass, _ = feedback_row(RESULTS / "rq3_ablation_no_feedback", NO_FEEDBACK_RUNS[model])
-        gen_valid, _, gen_pass, _ = feedback_row(RESULTS / "rq3_ablation_generic_feedback", GENERIC_RUNS[model])
-        full_valid, _, full_pass, _pass_rate = full_run_row(model)[:4]
-        total = 114
-        totals["none"][0] += no_valid
-        totals["none"][1] += no_pass
-        totals["none"][2] += total
-        totals["generic"][0] += gen_valid
-        totals["generic"][1] += gen_pass
-        totals["generic"][2] += total
-        totals["full"][0] += int(full_valid)
-        totals["full"][1] += int(full_pass)
-        totals["full"][2] += total
-        feedback_rows.append(
-            [
-                model,
-                fmt(no_pass / total * 100),
-                fmt(gen_pass / total * 100),
-                fmt(full_pass / total * 100),
-                fmt((full_pass - no_pass) / total * 100),
-            ]
+    comparison = []
+    for label, setting in (
+        ("CodexPrompt-style + gpt-5.4", "codex_prompt_style"),
+        ("PathOCL-style + gpt-5.4", "pathocl_style"),
+        ("PureLLM + gpt-5.4", "pure_llm"),
+    ):
+        row = summarize(setting, "gpt-5.4")
+        comparison.append(
+            [label, str(int(row["valid"])), fmt(row["valid_rate"]),
+             str(int(row["passed"])), fmt(row["pass_rate"])]
         )
+    for model in PAPER_MODELS:
+        row = summarize("full_feedback", model)
+        comparison.append(
+            [f"Contract Gen + {model}", str(int(row["valid"])), fmt(row["valid_rate"]),
+             str(int(row["passed"])), fmt(row["pass_rate"])]
+        )
+    print_table(
+        "RQ1/RQ2 summary from frozen v5 attempts",
+        ["Method", "#Valid", "Valid (%)", "#Pass", "Pass (%)"],
+        comparison,
+    )
+
+    feedback_rows = []
+    totals = {name: 0.0 for name in ("no_feedback", "generic_feedback", "full_feedback")}
+    for model in PAPER_MODELS:
+        no_feedback = summarize("no_feedback", model)
+        generic = summarize("generic_feedback", model)
+        full = summarize("full_feedback", model)
+        for name, row in (
+            ("no_feedback", no_feedback),
+            ("generic_feedback", generic),
+            ("full_feedback", full),
+        ):
+            totals[name] += row["passed"]
+        feedback_rows.append(
+            [model, fmt(no_feedback["pass_rate"]), fmt(generic["pass_rate"]),
+             fmt(full["pass_rate"]), fmt(full["pass_rate"] - no_feedback["pass_rate"])]
+        )
+    denominator = 114 * len(PAPER_MODELS)
     feedback_rows.append(
-        [
-            "Micro average",
-            fmt(totals["none"][1] / totals["none"][2] * 100),
-            fmt(totals["generic"][1] / totals["generic"][2] * 100),
-            fmt(totals["full"][1] / totals["full"][2] * 100),
-            fmt((totals["full"][1] - totals["none"][1]) / totals["none"][2] * 100),
-        ]
+        ["Micro average", fmt(100 * totals["no_feedback"] / denominator),
+         fmt(100 * totals["generic_feedback"] / denominator),
+         fmt(100 * totals["full_feedback"] / denominator),
+         fmt(100 * (totals["full_feedback"] - totals["no_feedback"]) / denominator)]
     )
     print_table(
-        "RQ3 feedback summary derived from results/",
+        "RQ3 feedback summary from frozen v5 attempts",
         ["Model", "NoFB Pass (%)", "Generic Pass (%)", "Full Pass (%)", "Full-NoFB (pp)"],
         feedback_rows,
     )
 
-    single_summary = first_by_model(
-        RESULTS / "rq3_ablation_single_agent_full_feedback" / "gpt-5.4_full_114_attempt5" / "summary.json"
-    )
-    single_attempts = count_jsonl(
-        RESULTS / "rq3_ablation_single_agent_full_feedback" / "gpt-5.4_full_114_attempt5" / "attempts.jsonl"
-    )
-    arch_rows = [
-        ["Staged Contract Gen", "52.63", "52.63", str(staged_attempts), "1.00"],
+    staged = summarize("full_feedback", "gpt-5.4")
+    end_to_end = summarize("end_to_end_full_feedback", "gpt-5.4")
+    print_table(
+        "RQ3 pipeline-structure summary from frozen v5 attempts",
+        ["Architecture", "Pass@1 (%)", "Pass@5 (%)", "LLM generations"],
         [
-            "Single agent",
-            fmt(single_summary["pass_at_rates"]["1"]),
-            fmt(single_summary["pass_at_rates"]["5"]),
-            str(single_attempts),
-            fmt(single_attempts / staged_attempts),
+            ["Staged Contract Gen", fmt(staged["pass_at_1_rate"]),
+             fmt(staged["pass_rate"]), str(int(staged["generations"]))],
+            ["End-to-end full feedback", fmt(end_to_end["pass_at_1_rate"]),
+             fmt(end_to_end["pass_rate"]), str(int(end_to_end["generations"]))],
         ],
-    ]
-    print_table("RQ3 architecture summary derived from results/", ["Architecture", "Pass@1 (%)", "Pass@5 (%)", "Attempts", "Relative effort"], arch_rows)
+    )
 
-    use_summary_path = RESULTS / "ocltsvm_sanity_check_114_strong" / "summary.json"
-    if not use_summary_path.exists():
-        use_summary_path = RESULTS / "oclvm_sanity_check_114_strong" / "summary.json"
-    print("\nExternal USE/OCLTSVM summary")
-    print("---------------------------")
-    if use_summary_path.exists():
-        use_summary = read_json(use_summary_path)
-        print(json.dumps(use_summary, ensure_ascii=False, indent=2))
-    else:
-        print("No USE summary found. Expected one of:")
-        print(f"- {RESULTS / 'ocltsvm_sanity_check_114_strong' / 'summary.json'}")
-        print(f"- {RESULTS / 'oclvm_sanity_check_114_strong' / 'summary.json'}")
+    use_summary = RESULTS / "validation" / "use_strong_114" / "summary.json"
+    if not use_summary.is_file():
+        raise FileNotFoundError(f"Required USE validation summary is missing: {use_summary}")
+    print("\nExternal USE/OCLTSVM summary\n---------------------------")
+    print(json.dumps(json.loads(use_summary.read_text(encoding="utf-8")), ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (FileNotFoundError, ValueError) as error:
+        raise SystemExit(f"Artifact verification failed: {error}") from None

@@ -1,0 +1,7 @@
+Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {
+          precondition:
+          Supplier.allInstances()->forAll(supplier:Supplier | supplier.Id <> id)
+            postcondition:
+          let supplier:Supplier in supplier.oclIsNew() and Supplier.allInstances()->includes(supplier) and supplier.Id = id and supplier.Name = name and result = true
+            
+        }

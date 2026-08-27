@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-OUT = Path("results/oclvm_sanity_check")
+OUT = Path("results/contractgen-study-v6/validation/ocltsvm_sanity_samples")
 MODEL_DIR = OUT / "use_models"
 CMD_DIR = OUT / "use_cmds"
 

@@ -26,7 +26,13 @@ type CounterPercentSummary = Record<string, Record<string, string>>;
         promises.push(
           ...operations.map(({name}) => {
             const useCase = uc as UseCaseKeys;
-            return getOperationCode({project, useCase, operation: name, removeExports: false});
+            return getOperationCode({
+              project,
+              useCase,
+              operation: name,
+              removeExports: false,
+              includeGraphImage: false,
+            });
           })
         );
       }

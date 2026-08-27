@@ -19,15 +19,15 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'orderid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `o:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct | o.Id = orderid)`,
+    definition: `o:OrderProduct = OrderProduct.allInstances()->any(o:OrderProduct | o.Id = orderid)`,
     precondition: `o.oclIsUndefined() = true`,
     postcondition: `
 let op:OrderProduct in
 op.oclIsNew() and
 op.OrderStatus = OrderStatus::NEW and
 op.Id = orderid and
-op.Time.isEqual(Now) and
-OrderProduct.allInstance()->includes(op) and
+op.Time = Now and
+OrderProduct.allInstances()->includes(op) and
 self.CurrentOrderProduct = op and
 result = true`,
   }),
@@ -39,7 +39,7 @@ result = true`,
     returnType: new ReturnedType('Set(Item)'),
     precondition: `true`,
     postcondition: `
-result = Item.allInstance()->select(item:Item | item.StockNumber = 0)`,
+result = Item.allInstances()->select(item:Item | item.StockNumber = 0)`,
   }),
   new Operation({
     name: 'orderItem',
@@ -51,7 +51,7 @@ result = Item.allInstance()->select(item:Item | item.StockNumber = 0)`,
       new Parameter({name: 'quantity', type: 'Integer'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(i:Item | i.Barcode = barcode)`,
     precondition: `item.oclIsUndefined() = false`,
     postcondition: `
 let order:OrderEntry in
@@ -59,7 +59,7 @@ order.oclIsNew() and
 order.Quantity = quantity and
 order.SubAmount = item.OrderPrice * quantity and
 order.Item = item and
-OrderEntry.allInstance()->includes(order) and
+OrderEntry.allInstances()->includes(order) and
 CurrentOrderProduct.ContainedEntries->includes(order) and
 result = true`,
   }),
@@ -70,7 +70,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'supplierID', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `sup:Supplier = Supplier.allInstance()->any(s:Supplier | s.Id = supplierID)`,
+    definition: `sup:Supplier = Supplier.allInstances()->any(s:Supplier | s.Id = supplierID)`,
     precondition: `
 sup.oclIsUndefined() = false and
 CurrentOrderProduct.oclIsUndefined() = false`,
@@ -84,12 +84,11 @@ result = true`,
     Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     returnType: new ReturnedType('Boolean'),
+    definition: `sub:Set(Real) = CurrentOrderProduct.ContainedEntries->collect(o:OrderEntry | o.SubAmount)`,
     precondition: `CurrentOrderProduct.oclIsUndefined() = false`,
     postcondition: `
 CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and
-CurrentOrderProduct.ContainedEntries->forAll(o:OrderEntry |
-  CurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + o.SubAmount)
-and
+CurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + sub.sum() and
 result = true`,
   }),
 ];

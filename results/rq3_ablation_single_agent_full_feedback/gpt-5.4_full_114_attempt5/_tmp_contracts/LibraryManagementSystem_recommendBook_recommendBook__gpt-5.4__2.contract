@@ -1,8 +1,0 @@
-Contract LibraryManagementSystemSystem::recommendBook(uid: String, callNo: String, title: String, edition: String, author: String, publisher: String, description: String, isbn: String): Boolean {
-  definition:
-    user: User = User.allInstance()->any(u | u.UserID = uid), existingRecs: Set(RecommendBook) = user.RecommendedBook
-  precondition:
-    uid <> "" and callNo <> "" and title <> "" and edition <> "" and author <> "" and publisher <> "" and description <> "" and isbn <> "" and user.oclIsUndefined() = false and User.allInstance()->includes(user)
-  postcondition:
-    RecommendBook.allInstance()->size() = RecommendBook.allInstance()@pre.size() + 1 and user.RecommendedBook->size() = user.RecommendedBook@pre.size() + 1 and existingRecs->forAll(r:RecommendBook | user.RecommendedBook->includes(r)) and result = true
-}

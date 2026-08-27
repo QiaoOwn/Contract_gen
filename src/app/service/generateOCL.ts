@@ -1,11 +1,11 @@
-import {UseCase} from '@/rm2pt/model/UseCase';
-import * as project from '@/rm2pt/project';
 import {ExtractStreamType, ProjectParam} from '../type';
 import {graph as feedbackGraph} from './graph';
 import {graph as linearGraph} from './graph-line';
 import {OpenAIChatModelId} from '@langchain/openai';
+import {normalizeGenerationBudget, validateGenerationMode} from './generationBudget';
+import {buildOperationInput} from './createOperationInput';
 export type GenerateOCLResult = ExtractStreamType<Awaited<ReturnType<typeof generateOCL>>>;
-export type GenerateOCLGraphMode = 'feedback' | 'linear';
+export type GenerateOCLGraphMode = 'feedback' | 'linear' | 'paired';
 export type GenerateOCLFeedbackMode = 'full' | 'generic' | 'none';
 export type GenerateOCLParam = {
   apiKey: string;
@@ -14,6 +14,13 @@ export type GenerateOCLParam = {
   userInput?: string;
   graphMode?: GenerateOCLGraphMode;
   feedbackMode?: GenerateOCLFeedbackMode;
+  maxGenerationAttempts?: number;
+  initialOcl?: {
+    definition: string;
+    precondition: string;
+    postcondition: string;
+  };
+  initialGenerationCount?: number;
   graph?: typeof feedbackGraph | typeof linearGraph;
 } & ProjectParam;
 export const generateOCL = async (param: GenerateOCLParam) => {
@@ -25,30 +32,37 @@ export const generateOCL = async (param: GenerateOCLParam) => {
     userInput,
     graphMode = 'feedback',
     feedbackMode = graphMode === 'linear' ? 'none' : 'full',
+    maxGenerationAttempts,
+    initialOcl,
+    initialGenerationCount,
     graph,
   } = param;
+  validateGenerationMode(graphMode, feedbackMode, Boolean(initialOcl));
+  const generationBudget = normalizeGenerationBudget(maxGenerationAttempts);
   const g = graph ?? (graphMode === 'linear' ? linearGraph : feedbackGraph);
-  const p = project[key];
-  const useCase = p.useCase[uc as keyof typeof p.useCase] as UseCase;
-  const service = useCase.relatedService;
-  const operation = service.operations.find((o) => o.name === op)!;
+  const seededGenerationCount = graphMode === 'paired' ? (initialGenerationCount ?? 1) : 0;
+  if (seededGenerationCount < 0 || seededGenerationCount >= generationBudget) {
+    throw new Error(
+      `Invalid initialGenerationCount=${seededGenerationCount}; paired repair requires remaining generation budget.`
+    );
+  }
+  const operationInput = buildOperationInput({
+    project: key,
+    useCase: uc,
+    operation: op,
+    userInput,
+  });
   const graphInput = {
     ...param,
     model,
+    maxGenerationAttempts: generationBudget,
+    generationCount: seededGenerationCount,
+    ...(initialOcl ? {ocl: initialOcl} : {}),
+    inputMetadata: operationInput.metadata,
     messages: [
       {
         role: 'user',
-        content: [
-          `The operation description is: `,
-          userInput?.trim() || operation.description,
-          operation.parameters?.length ? `The contract input parameters are:` : undefined,
-          operation.parameters?.map((e) => `Name: ${e.name} Type: ${e.type}`).join('\n'),
-          operation.returnType
-            ? `The return type of the contract is: ${operation.returnType.type}`
-            : undefined,
-        ]
-          .filter(Boolean)
-          .join('\n'),
+        content: operationInput.content,
       },
     ],
   };
@@ -56,14 +70,11 @@ export const generateOCL = async (param: GenerateOCLParam) => {
     ...graphInput,
     feedbackMode,
   };
-  const stream = await g.stream(
-    graphMode === 'linear' ? graphInput : feedbackGraphInput,
-    {
-      configurable: {
-        thread_id: new Date().getTime(),
-      },
-      recursionLimit: 50,
-    }
-  );
+  const stream = await g.stream(graphMode === 'linear' ? graphInput : feedbackGraphInput, {
+    configurable: {
+      thread_id: new Date().getTime(),
+    },
+    recursionLimit: generationBudget * 5 + 8,
+  });
   return stream;
 };

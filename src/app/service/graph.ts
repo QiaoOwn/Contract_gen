@@ -8,29 +8,25 @@ import presetTypescript from '@babel/preset-typescript';
 import type {CoverageSummary} from 'istanbul-lib-coverage';
 import type {TestResult} from '@jest/test-result';
 import {OpenAIChatModelId} from '@langchain/openai';
-import {AIMessage, HumanMessage, SystemMessage} from '@langchain/core/messages';
-import {whatIsDefination, whatIsPrecondition, whatIsPostcondition} from '../constant';
-import {createProjectContextPrompt} from './createProjectContextPrompt';
+import {whatIsDefinition, whatIsPrecondition, whatIsPostcondition} from '../constant';
 import {Annotation, MessagesAnnotation, StateGraph} from '@langchain/langgraph';
 import {z} from 'zod';
-import {createG4Prompt} from './createG4Prompt';
-import {createDefinitionPrompt} from './createDefinitionPrompt';
-import {createTransformRulesPrompt} from './createTransformRulesPrompt';
 import {formatContract, generateContractCode, parse} from '../util';
-import {createGlobalEntryCode} from './createGlobalEntryCode';
+import {createGlobalEntryCode, syncTestGlobalEntryCode} from './createGlobalEntryCode';
 import {buildEntryCode, createEntryCode} from './createEntryCode';
 import path from 'path';
 import fs from 'fs-extra';
-import {createCommonContractErrorPrompt} from './createCommonContractErrorPrompt';
-import {createCommonTypescriptErrorPrompt} from './createCommonTypescriptErrorPrompt';
+import {randomUUID} from 'crypto';
 import generate from '@babel/generator';
 import {GenerateOCLParam} from './generateOCL';
 import {generateOclWithJsonMode} from './generateOclWithJsonMode';
+import {routeAfterValidation, routeGenerationEntry} from './generationBudget';
+import {OperationInputMetadata} from './createOperationInput';
+import {createOCLGenerationMessages} from './createOCLGenerationMessages';
+import {validateGeneratedContractSemantics} from './validateGeneratedContractSemantics';
 const openAIBaseURL = process.env.OPENAI_BASE_URL || 'https://api.apiyi.com/v1';
-const genericFeedbackMessage =
-  'The previous candidate failed validation. Please generate a revised OCL operation contract using only the supplied operation requirement, model context, and transformation rules. Return only the three contract fields: definition, precondition, and postcondition.';
 const contractSchema = z.object({
-  definition: z.string().nullable().describe(whatIsDefination),
+  definition: z.string().nullable().describe(whatIsDefinition),
   precondition: z.string().describe(whatIsPrecondition),
   postcondition: z.string().describe(whatIsPostcondition),
 });
@@ -49,6 +45,23 @@ const StateAnnotation = Annotation.Root({
   operation: Annotation<GenerateOCLParam['operation']>,
   userInput: Annotation<GenerateOCLParam['userInput']>,
   feedbackMode: Annotation<GenerateOCLParam['feedbackMode']>,
+  feedbackUsed: Annotation<boolean>,
+  maxGenerationAttempts: Annotation<GenerateOCLParam['maxGenerationAttempts']>,
+  generationCount: Annotation<number>,
+  inputMetadata: Annotation<OperationInputMetadata>,
+  promptMetadata: Annotation<{
+    version: string;
+    hash: string;
+    generationConfigVersion: string;
+    generationConfigHash: string;
+    generationGrammarVersion: string;
+    generationGrammarHash: string;
+    generationRulesVersion: string;
+    generationRulesHash: string;
+    outputMode: string;
+    temperature: number;
+    maxTokens: number;
+  }>,
   ocl: Annotation<{
     definition: string;
     precondition: string;
@@ -62,54 +75,20 @@ const StateAnnotation = Annotation.Root({
   typescriptErrors: Annotation<E[]>,
 });
 const oclGeneratorNode = async (state: typeof StateAnnotation.State) => {
-  const {project: key, useCase: uc, apiKey, messages, userInput} = state;
+  const {apiKey, messages, userInput} = state;
   const feedbackMode = state.feedbackMode || 'full';
-  const systemMessage = [
-    createG4Prompt(),
-    createDefinitionPrompt(),
-    createTransformRulesPrompt(),
-    createProjectContextPrompt({project: key, useCase: uc}),
-    `Now the user will tell you the operation context and you should help the user generate the code with json format like below:`,
-    JSON.stringify({definition: 'code', precondition: 'code', postcondition: 'code'}, null, 2),
-    createCommonContractErrorPrompt(),
-  ]
-    .filter(Boolean)
-    .join('\n');
-  const newMessages = [new SystemMessage(systemMessage), ...messages];
-  const hasError = state.contractErrors?.length > 0 || state.typescriptErrors?.length > 0;
-  if (hasError && feedbackMode === 'full') {
-    newMessages.push(new AIMessage(JSON.stringify(state.ocl, null, 2)));
-  }
-  const errorMessages: string[] = [];
-  if (hasError && feedbackMode === 'generic') {
-    errorMessages.push(genericFeedbackMessage);
-  } else if (state.contractErrors?.length > 0 && feedbackMode === 'full') {
-    errorMessages.push(
-      `After I generate the whole contract from my complier with your response, I found these errors, please fix them for me.`
-    );
-    errorMessages.push(`The contract is below:`);
-    errorMessages.push(state.contract);
-    state.contractErrors.forEach((e) =>
-      errorMessages.push(
-        `Contract Error at line ${e.line}, column ${e.column}: ${e.msg}`,
-        createCommonContractErrorPrompt()
-      )
-    );
-  }
-  if (state.typescriptErrors?.length > 0 && feedbackMode === 'full') {
-    errorMessages.push(
-      `After I generate the whole contract from my complier and then I generate the typescript from the contract, I found these errors, please fix them for me.`
-    );
-    state.typescriptErrors.forEach((e) =>
-      errorMessages.push(
-        `TypeScript Error at line ${e.line}, column ${e.column}: ${e.msg}`,
-        createCommonTypescriptErrorPrompt()
-      )
-    );
-  }
-  if (errorMessages.length) {
-    newMessages.push(new HumanMessage(errorMessages.join('\n')));
-  }
+  const {
+    messages: newMessages,
+    systemPrompt,
+    hasError,
+  } = createOCLGenerationMessages({
+    messages,
+    feedbackMode,
+    previousOcl: state.ocl,
+    contract: state.contract,
+    contractErrors: state.contractErrors,
+    typescriptErrors: state.typescriptErrors,
+  });
 
   const ocl = await generateOclWithJsonMode({
     model: state.model,
@@ -118,13 +97,27 @@ const oclGeneratorNode = async (state: typeof StateAnnotation.State) => {
     messages: newMessages,
     schema: contractSchema,
   });
-  console.log(...newMessages.map((m) => m.getType().bgBlue + ': ' + m.content + '\n'));
   return {
     ocl,
     model: state.model,
     userInput,
     feedbackMode,
     feedbackUsed: hasError && feedbackMode !== 'none',
+    generationCount: (state.generationCount || 0) + 1,
+    inputMetadata: state.inputMetadata,
+    promptMetadata: {
+      version: systemPrompt.version,
+      hash: systemPrompt.hash,
+      generationConfigVersion: systemPrompt.generationConfig.version,
+      generationConfigHash: systemPrompt.generationConfig.hash,
+      generationGrammarVersion: systemPrompt.components.grammar.version,
+      generationGrammarHash: systemPrompt.components.grammar.hash,
+      generationRulesVersion: systemPrompt.components.generationRules.version,
+      generationRulesHash: systemPrompt.components.generationRules.hash,
+      outputMode: systemPrompt.generationConfig.outputMode,
+      temperature: systemPrompt.generationConfig.temperature,
+      maxTokens: systemPrompt.generationConfig.maxTokens,
+    },
   };
 };
 
@@ -141,10 +134,18 @@ const contractGeneratorNode = async (state: typeof StateAnnotation.State) => {
     returnedType: operation.returnType?.type,
     ...ocl,
   });
-  const {errors, tree, tokens} = parse(contract);
+  const {errors: parserErrors, tree, tokens} = parse(contract);
+  const semanticErrors =
+    parserErrors.length === 0 && tree
+      ? validateGeneratedContractSemantics({
+          tree,
+          hasReturnValue: Boolean(operation.returnType?.type),
+        })
+      : [];
+  const contractErrors = [...parserErrors, ...semanticErrors];
   return {
-    contractErrors: errors,
-    contract: errors.length === 0 ? formatContract(tree!, tokens) : contract,
+    contractErrors,
+    contract: contractErrors.length === 0 && tree ? formatContract(tree, tokens) : contract,
   };
 };
 
@@ -282,11 +283,11 @@ const testResultNode = async (state: typeof StateAnnotation.State) => {
   const operation = service.operations.find((o) => o.name === op)!;
   const serviceName = service.name;
   const operationName = operation.name;
-  const time = new Date().getTime();
   const testDir = path.resolve(process.cwd(), 'test');
   const folder = path.resolve(testDir, 'tmp');
   fs.ensureDirSync(folder);
-  const fileName = `${key}${serviceName}${operationName}${time}`;
+  syncTestGlobalEntryCode();
+  const fileName = `${key}${serviceName}${operationName}${randomUUID().replaceAll('-', '')}`;
   const testFileName = `${fileName}.test.ts`;
   const testFilePath = path.resolve(folder, testFileName);
   const filePath = path.resolve(folder, `${fileName}.ts`);
@@ -314,74 +315,92 @@ const testResultNode = async (state: typeof StateAnnotation.State) => {
     },
   });
   fs.writeFileSync(testFilePath, generate(originTestFileAst).code, 'utf-8');
-  const res = await jest.runCLI(
-    {
-      _: [`test/tmp/${testFileName}`],
-      $0: '',
-      //   listTests: true,
-      json: true,
-      coverage: true,
-    },
-    [process.cwd()]
-  );
-  const summary = res.results.coverageMap!.getCoverageSummary();
-  const result = res.results.testResults[0];
-  return {
-    typescript: state.typescript,
-    contract: state.contract,
-    summary,
-    result,
-  };
+  try {
+    const res = await jest.runCLI(
+      {
+        _: [`test/tmp/${testFileName}`],
+        $0: '',
+        json: true,
+        coverage: true,
+      },
+      [process.cwd()]
+    );
+    const summary = res.results.coverageMap!.getCoverageSummary();
+    const result = res.results.testResults[0];
+    return {
+      typescript: state.typescript,
+      contract: state.contract,
+      summary,
+      result,
+    };
+  } finally {
+    fs.removeSync(testFilePath);
+    fs.removeSync(filePath);
+  }
 };
 
+const generationEntryNode = async () => ({});
+
 const builder = new StateGraph(StateAnnotation)
+  .addNode('Generation Entry', generationEntryNode)
   .addNode('OCL Generator', oclGeneratorNode)
   .addNode('Contract Generator', contractGeneratorNode)
   .addNode('TypeScript Generator', typescriptGeneratorNode)
   .addNode('TypeScript Parser', typescriptParserNode)
   .addNode('Test Result', testResultNode)
-  .addEdge('__start__', 'OCL Generator')
+  .addEdge('__start__', 'Generation Entry')
+  .addConditionalEdges(
+    'Generation Entry',
+    (state: typeof StateAnnotation.State) => routeGenerationEntry(Boolean(state.ocl)),
+    {
+      seeded: 'Contract Generator',
+      generate: 'OCL Generator',
+    }
+  )
   .addEdge('OCL Generator', 'Contract Generator')
   .addConditionalEdges(
     'Contract Generator',
     (state: typeof StateAnnotation.State) => {
-      if (state.contractErrors?.length > 0) {
-        return 'error';
-      } else {
-        return 'next';
-      }
+      return routeAfterValidation(
+        state.contractErrors?.length > 0,
+        state.generationCount,
+        state.maxGenerationAttempts
+      );
     },
     {
       next: 'TypeScript Generator',
-      error: 'OCL Generator',
+      retry: 'OCL Generator',
+      exhausted: '__end__',
     }
   )
   .addConditionalEdges(
     'TypeScript Generator',
     (state: typeof StateAnnotation.State) => {
-      if (state.typescriptErrors?.length > 0) {
-        return 'error';
-      } else {
-        return 'next';
-      }
+      return routeAfterValidation(
+        state.typescriptErrors?.length > 0,
+        state.generationCount,
+        state.maxGenerationAttempts
+      );
     },
     {
       next: 'TypeScript Parser',
-      error: 'OCL Generator',
+      retry: 'OCL Generator',
+      exhausted: '__end__',
     }
   )
   .addConditionalEdges(
     'TypeScript Parser',
     (state: typeof StateAnnotation.State) => {
-      if (state.typescriptErrors?.length > 0) {
-        return 'error';
-      } else {
-        return 'next';
-      }
+      return routeAfterValidation(
+        state.typescriptErrors?.length > 0,
+        state.generationCount,
+        state.maxGenerationAttempts
+      );
     },
     {
       next: 'Test Result',
-      error: 'OCL Generator',
+      retry: 'OCL Generator',
+      exhausted: '__end__',
     }
   )
   .addEdge('Test Result', '__end__');

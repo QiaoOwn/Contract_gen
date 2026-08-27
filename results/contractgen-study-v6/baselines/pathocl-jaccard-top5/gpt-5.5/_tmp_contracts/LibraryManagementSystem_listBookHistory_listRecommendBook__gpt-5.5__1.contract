@@ -1,0 +1,8 @@
+Contract ListBookHistory::listRecommendBook(uid:String): Set(RecommendBook) {
+          precondition:
+          User.allInstances()->exists(u | u.uid = uid) and
+RecommendBook.allInstances()->notEmpty() or RecommendBook.allInstances()->isEmpty()
+            postcondition:
+          result = RecommendBook.allInstances()->select(rb | rb.user.uid = uid)->asSet()
+            
+        }

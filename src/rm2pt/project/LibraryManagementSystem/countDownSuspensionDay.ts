@@ -12,7 +12,7 @@ const operations = [
     description: `Definition: The countDownSuspensionDay operation handles its intended business action in this system.
     Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
-    definition: `users:Set(User) = User.allInstance()->select(u:User | u.SuspensionDays > 0)`,
+    definition: `users:Set(User) = User.allInstances()->select(u:User | u.SuspensionDays > 0)`,
     precondition: `true`,
     postcondition: `users->forAll(u:User |
 				u.SuspensionDays = u.SuspensionDays@pre - 1 and

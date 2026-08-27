@@ -1,0 +1,7 @@
+Contract ManageBankCardCRUDService::createBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {
+          precondition:
+          BankCard.allInstances()->forAll(card:BankCard | card.CardID <> cardid)
+            postcondition:
+          let newCard:BankCard in newCard.oclIsNew() and BankCard.allInstances()->includes(newCard) and newCard.CardID = cardid and newCard.CardStatus = cardstatus and newCard.Catalog = catalog and newCard.Password = password and newCard.Balance = balance and result = true
+            
+        }

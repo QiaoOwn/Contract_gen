@@ -1,0 +1,9 @@
+Contract ProcessSaleService::enterItem(barcode:Integer,quantity:Integer): Boolean {
+          definition:
+          scannedItem:Item = Item.allInstances()->any(item:Item | item.Barcode = barcode)
+            precondition:
+          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and scannedItem.oclIsUndefined() = false and scannedItem.StockNumber > 0
+            postcondition:
+          let line:SalesLineItem in line.oclIsNew() and SalesLineItem.allInstances()->includes(line) and line.BelongedSale = self.CurrentSale and line.BelongedItem = scannedItem and line.Quantity = quantity and line.Subamount = scannedItem.Price * quantity and self.CurrentSale.ContainedSalesLine->includes(line) and scannedItem.StockNumber = scannedItem.StockNumber@pre - quantity and result = true
+            
+        }

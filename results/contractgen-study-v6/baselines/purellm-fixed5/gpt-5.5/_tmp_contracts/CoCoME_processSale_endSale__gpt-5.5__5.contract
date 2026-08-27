@@ -1,0 +1,7 @@
+Contract ProcessSaleService::endSale(): Real {
+          precondition:
+          self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false
+            postcondition:
+          self.CurrentSale.Amount = self.CurrentSale.ContainedSalesLine->collect(line:SalesLineItem | line.Subamount)->sum() and self.CurrentSale.IsReadytoPay = true and result = self.CurrentSale.Amount
+            
+        }

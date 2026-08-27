@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,11 +238,13 @@ export {
 };
 
 class ThirdPartyServices {
-  /*The third-party system sends a notification email.*/
+  /*Definition: The sendNotificationEmail operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   sendNotificationEmail(email: string): boolean {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => email !== '',
+      logic: () => !StandardOPs.oclEquals(email, ''),
       description: 'email<>""',
     }).build();
     if (!isPreconditionPass) {
@@ -242,12 +252,32 @@ class ThirdPartyServices {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => true,
-      description: 'result=true',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => true,
+        description: 'result=true',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(result, true),
+        description: 'result=true',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ThirdPartyServices};

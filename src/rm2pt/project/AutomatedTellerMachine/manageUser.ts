@@ -22,7 +22,7 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-      user:User = User.allInstance()->any(use:User | use.UserID = userid)
+      user:User = User.allInstances()->any(use:User | use.UserID = userid)
     `,
     precondition: `
       user.oclIsUndefined() = true
@@ -33,7 +33,7 @@ const operations = [
       use.UserID = userid and
       use.Name = name and
       use.Address = address and
-      User.allInstance()->includes(use) and
+      User.allInstances()->includes(use) and
       result = true
     `,
   }),
@@ -45,7 +45,7 @@ const operations = [
     parameters: [new Parameter({name: 'userid', type: 'Integer'})],
     returnType: new ReturnedType('User'),
     definition: `
-      user:User = User.allInstance()->any(use:User | use.UserID = userid)
+      user:User = User.allInstances()->any(use:User | use.UserID = userid)
     `,
     precondition: `
       user.oclIsUndefined() = false
@@ -66,7 +66,7 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-      user:User = User.allInstance()->any(use:User | use.UserID = userid)
+      user:User = User.allInstances()->any(use:User | use.UserID = userid)
     `,
     precondition: `
       user.oclIsUndefined() = false
@@ -86,13 +86,13 @@ const operations = [
     parameters: [new Parameter({name: 'userid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
     definition: `
-      user:User = User.allInstance()->any(use:User | use.UserID = userid)
+      user:User = User.allInstances()->any(use:User | use.UserID = userid)
     `,
     precondition: `
      user.oclIsUndefined() = false
     `,
     postcondition: `
-      User.allInstance()->excludes(user) and
+      User.allInstances()->excludes(user) and
 	  result = true
     `,
   }),

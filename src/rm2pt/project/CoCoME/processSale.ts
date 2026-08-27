@@ -40,7 +40,7 @@ const operations = [
     CurrentCashDesk.ContainedSales->includes(s) and
     s.IsComplete = false and
     s.IsReadytoPay = false and
-    Sale.allInstance()->includes(s) and
+    Sale.allInstances()->includes(s) and
     self.CurrentSale = s and
     result = true`,
   }),
@@ -54,7 +54,7 @@ const operations = [
       new Parameter({name: 'quantity', type: 'Integer'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(i:Item | i.Barcode = barcode)`,
     precondition: `
 CurrentSale.oclIsUndefined() = false and
 CurrentSale.IsComplete = false and
@@ -70,7 +70,7 @@ sli.Quantity = quantity and
 sli.BelongedItem = item and
 item.StockNumber = item.StockNumber@pre - quantity and
 sli.Subamount = item.Price * quantity and
-SalesLineItem.allInstance()->includes(sli) and
+SalesLineItem.allInstances()->includes(sli) and
 result = true`,
   }),
   new Operation({
@@ -112,9 +112,9 @@ CurrentSale.AssoicatedPayment = cp and
 CurrentSale.Belongedstore = CurrentStore and
 CurrentStore.Sales->includes(CurrentSale) and
 CurrentSale.IsComplete = true and
-CurrentSale.Time.isEqual(Now) and
+CurrentSale.Time = Now and
 cp.Balance = amount - CurrentSale.Amount and
-CashPayment.allInstance()->includes(cp) and
+CashPayment.allInstances()->includes(cp) and
 result = true`,
   }),
   //   new Operation({
@@ -148,7 +148,7 @@ result = true`,
   // CurrentSale.AssoicatedPayment = cdp and
   // cdp.CardAccountNumber = cardAccountNumber and
   // cdp.ExpiryDate = expiryDate and
-  // CardPayment.allInstance()->includes(cdp) and
+  // CardPayment.allInstances()->includes(cdp) and
   // CurrentSale.Belongedstore = CurrentStore and
   // CurrentStore.Sales->includes(CurrentSale) and
   // CurrentSale.IsComplete = true and

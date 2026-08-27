@@ -1,0 +1,70 @@
+model StrongUSE_015_AutomatedTellerMachine_manageBankCard_createBankCard
+
+-- operation_id: AutomatedTellerMachine_manageBankCard_createBankCard
+-- operation_signature: createBankCard(cardid: Integer, cardstatus: CardStatus[NORMAL|SUSPEND|CANCEL], catalog: CardCatalog[CREDIT|DEPOSIT], password: Integer, balance: Real): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract ManageBankCardCRUDService::createBankCard(cardid: Integer,cardstatus: CardStatus[NORMAL|SUSPEND|CANCEL],catalog: CardCatalog[CREDIT|DEPOSIT],password: Integer,balance: Real): Boolean {
+--   precondition:
+--     BankCard.allInstances()->forAll(bankCard: BankCard|bankCard.CardID<>cardid)
+--   postcondition:
+--     let bankCard: BankCard in
+--     bankCard.oclIsNew() and
+--     BankCard.allInstances()->includes(bankCard) and
+--     bankCard.CardID = cardid and
+--     bankCard.CardStatus = cardstatus and
+--     bankCard.Catalog = catalog and
+--     bankCard.Password = password and
+--     bankCard.Balance = balance and
+--     result = true
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class OperationContext
+attributes
+  cardid : Integer
+  cardstatus : String
+  catalog : String
+  password : Integer
+  balance : Real
+  Now : Integer
+  Today : Integer
+operations
+  Contract_createBankCard(cardid : Integer, cardstatus : String, catalog : String, password : Integer, balance : Real) : Boolean
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+constraints
+
+context OperationContext::Contract_createBankCard(cardid : Integer, cardstatus : String, catalog : String, password : Integer, balance : Real) : Boolean
+  pre createBankCardGeneratedPre:
+    BankCard.allInstances()->forAll(bankCard: BankCard|bankCard.CardID<>cardid)

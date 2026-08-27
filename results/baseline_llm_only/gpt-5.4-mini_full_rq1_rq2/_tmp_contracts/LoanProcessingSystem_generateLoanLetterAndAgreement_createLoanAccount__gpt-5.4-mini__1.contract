@@ -1,9 +1,0 @@
-Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {
-          definition:
-          existingLoanAccount:LoanAccount = LoanAccount.allInstance()->any(o:LoanAccount|o.LoanAccountID=loanaccountid)
-            precondition:
-          existingLoanAccount.oclIsUndefined() = true and balance >= 0 and (status = LoanAccount::NORMAL or status = LoanAccount::HASPAIDINFULL)
-            postcondition:
-          let la:LoanAccount in la.oclIsNew() and la.LoanAccountID=loanaccountid and la.Balance=balance and la.Status=status and LoanAccount.allInstance()->includes(la) and result=true
-            
-        }

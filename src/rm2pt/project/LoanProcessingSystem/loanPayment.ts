@@ -19,7 +19,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'loanid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `loan:Loan = Loan.allInstance()->any(loa:Loan | loa.LoanID = loanid)`,
+    definition: `loan:Loan = Loan.allInstances()->any(loa:Loan | loa.LoanID = loanid)`,
     precondition: `loan.oclIsUndefined() = false and
 			loan.Status = LoanStatus::LSOPEN`,
     postcondition: `loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount and

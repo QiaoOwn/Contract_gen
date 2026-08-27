@@ -1,6 +1,5 @@
 import {UseCase} from '@/rm2pt/model/UseCase';
 import * as project from '@/rm2pt/project';
-import * as typescript from 'typescript';
 import * as jest from 'jest';
 import * as babel from '@babel/core';
 // @ts-expect-error no types for this package
@@ -8,9 +7,11 @@ import presetTypescript from '@babel/preset-typescript';
 import generate from '@babel/generator';
 import path from 'path';
 import fs from 'fs-extra';
+import {randomUUID} from 'crypto';
 import {formatContract, parse} from '../util';
 import {buildEntryCode, createEntryCode} from './createEntryCode';
-import {createGlobalEntryCode} from './createGlobalEntryCode';
+import {syncTestGlobalEntryCode} from './createGlobalEntryCode';
+import {parseTypescriptEntry} from './parseTypescriptEntry';
 
 type OclSections = {
   definition?: string | null;
@@ -34,85 +35,6 @@ const toPlainErrors = (errors: unknown[]) =>
     return {msg: String(e)};
   });
 
-const parseTypescriptEntry = (entry: string) => {
-  const prefix = `baseline_eval/${new Date().getTime()}`;
-  const entryFileName = `/${prefix}/entry/index.ts`;
-  const globalEntryFileName = `/${prefix}/globalEntry.ts`;
-  const dayjsFileName = `/${prefix}/dayjs.ts`;
-  const compilerOptions: typescript.CompilerOptions = {
-    target: typescript.ScriptTarget.ESNext,
-    module: typescript.ModuleKind.ESNext,
-    strict: true,
-    noEmitOnError: false,
-    lib: ['esnext'],
-    allowJs: true,
-    skipLibCheck: true,
-    strictNullChecks: false,
-    noEmit: true,
-    esModuleInterop: true,
-    moduleResolution: typescript.ModuleResolutionKind.Bundler,
-    resolveJsonModule: true,
-    isolatedModules: true,
-    noImplicitAny: false,
-    incremental: true,
-    typeRoots: [path.join(process.cwd(), 'node_modules', '@types')],
-    types: ['node'],
-    paths: {
-      dayjs: [dayjsFileName],
-    },
-  };
-  const fileMap: Record<string, string> = {
-    [entryFileName]: entry,
-    [globalEntryFileName]: createGlobalEntryCode(),
-    [dayjsFileName]: fs.readFileSync(`${process.cwd()}/node_modules/dayjs/index.d.ts`, 'utf-8'),
-  };
-  const fileNames = Object.keys(fileMap);
-  const languageService = typescript.createLanguageService(
-    {
-      getScriptFileNames: () => fileNames,
-      getScriptVersion: () => '1',
-      getScriptSnapshot: (name) => {
-        if (name in fileMap) {
-          return typescript.ScriptSnapshot.fromString(fileMap[name]);
-        }
-        if (fs.existsSync(name)) {
-          return typescript.ScriptSnapshot.fromString(fs.readFileSync(name, 'utf-8'));
-        }
-        return undefined;
-      },
-      getCurrentDirectory: () => process.cwd(),
-      getCompilationSettings: () => compilerOptions,
-      getDefaultLibFileName: (options) => typescript.getDefaultLibFilePath(options),
-      fileExists: (name) => fileMap[name] !== undefined || fs.existsSync(name),
-      readFile: (name) =>
-        fileMap[name] ?? (fs.existsSync(name) ? fs.readFileSync(name, 'utf-8') : undefined),
-      readDirectory: (dir, extensions) => extensions?.map((ext) => `${dir}/file${ext}`) || [],
-      directoryExists: () => true,
-      getDirectories: () => [],
-    },
-    typescript.createDocumentRegistry()
-  );
-  const diagnostics = [
-    ...languageService.getSyntacticDiagnostics(entryFileName),
-    ...languageService.getSemanticDiagnostics(entryFileName),
-  ];
-  return diagnostics.map((diagnostic) => {
-    if (diagnostic.file) {
-      const {line, character} = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-      return {
-        line: line + 1,
-        column: character + 1,
-        msg: typescript.flattenDiagnosticMessageText(diagnostic.messageText, '\n'),
-        code: diagnostic.code,
-      };
-    }
-    return {
-      msg: typescript.flattenDiagnosticMessageText(diagnostic.messageText, '\n'),
-      code: diagnostic.code,
-    };
-  });
-};
-
 const runOperationTests = async (
   key: keyof typeof project,
   uc: string,
@@ -125,11 +47,11 @@ const runOperationTests = async (
   const operation = service.operations.find((o) => o.name === op)!;
   const serviceName = service.name;
   const operationName = operation.name;
-  const time = new Date().getTime();
   const testDir = path.resolve(process.cwd(), 'test');
   const folder = path.resolve(testDir, 'tmp');
   fs.ensureDirSync(folder);
-  const fileName = `${key}${serviceName}${operationName}${time}`;
+  syncTestGlobalEntryCode();
+  const fileName = `${key}${serviceName}${operationName}${randomUUID().replaceAll('-', '')}`;
   const testFileName = `${fileName}.test.ts`;
   const testFilePath = path.resolve(folder, testFileName);
   const filePath = path.resolve(folder, `${fileName}.ts`);
@@ -159,23 +81,27 @@ const runOperationTests = async (
     },
   });
   fs.writeFileSync(testFilePath, generate(originTestFileAst).code, 'utf-8');
-  const res = await jest.runCLI(
-    {
-      _: [`test/tmp/${testFileName}`],
-      $0: '',
-      json: true,
-      coverage: true,
-    },
-    [process.cwd()]
-  );
-  const result = res.results.testResults[0];
-  return {
-    passing: result?.numPassingTests || 0,
-    failing: result?.numFailingTests || 0,
-    pending: result?.numPendingTests || 0,
-    testFilePath,
-    success: (result?.numPassingTests || 0) > 0 && (result?.numFailingTests || 0) === 0,
-  };
+  try {
+    const res = await jest.runCLI(
+      {
+        _: [`test/tmp/${testFileName}`],
+        $0: '',
+        json: true,
+        coverage: true,
+      },
+      [process.cwd()]
+    );
+    const result = res.results.testResults[0];
+    return {
+      passing: result?.numPassingTests || 0,
+      failing: result?.numFailingTests || 0,
+      pending: result?.numPendingTests || 0,
+      success: (result?.numPassingTests || 0) > 0 && (result?.numFailingTests || 0) === 0,
+    };
+  } finally {
+    fs.removeSync(testFilePath);
+    fs.removeSync(filePath);
+  }
 };
 
 export const evaluateContract = async ({

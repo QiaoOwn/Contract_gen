@@ -25,7 +25,7 @@ const operations = [
       new Parameter({name: 'copynum', type: 'Integer'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `book:Book = Book.allInstance()->any(boo:Book | boo.CallNo = callno)`,
+    definition: `book:Book = Book.allInstances()->any(boo:Book | boo.CallNo = callno)`,
     precondition: `book.oclIsUndefined() = true`,
     postcondition: `
     let boo:Book in
@@ -38,7 +38,7 @@ const operations = [
     boo.Description = description and
     boo.ISBn = isbn and
     boo.CopyNum = copynum and
-    Book.allInstance()->includes(boo) and
+    Book.allInstances()->includes(boo) and
     result = true`,
   }),
   // Similar operations for queryBook, modifyBook, deleteBook

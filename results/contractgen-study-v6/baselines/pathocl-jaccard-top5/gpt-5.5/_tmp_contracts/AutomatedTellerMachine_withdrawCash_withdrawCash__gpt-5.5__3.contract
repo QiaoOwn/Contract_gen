@@ -1,0 +1,13 @@
+Contract AutomatedTellerMachineSystem::withdrawCash(quantity:Integer): Boolean {
+          precondition:
+          self.currentCard.CardID = self.inputCardID and
+    self.currentCard.Password = self.inputPassword and
+not self.currentCard.oclIsUndefined() and
+self.currentCard.Balance >= quantity
+            postcondition:
+          self.currentCard.Balance = self.currentCard.Balance@pre - quantity and
+self.withdrawalRecorded = true and
+    self.withdrawalAmount = quantity and
+result = true
+            
+        }

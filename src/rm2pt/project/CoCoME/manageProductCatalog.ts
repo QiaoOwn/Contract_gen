@@ -22,14 +22,14 @@ const operations = [
       new Parameter({name: 'name', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)`,
+    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)`,
     precondition: `productcatalog.oclIsUndefined() = true`,
     postcondition: `
 let pro:ProductCatalog in
 pro.oclIsNew() and
 pro.Id = id and
 pro.Name = name and
-ProductCatalog.allInstance()->includes(pro) and
+ProductCatalog.allInstances()->includes(pro) and
 result = true`,
   }),
   new Operation({
@@ -39,7 +39,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('ProductCatalog'),
-    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)`,
+    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)`,
     precondition: `productcatalog.oclIsUndefined() = false`,
     postcondition: `result = productcatalog`,
   }),
@@ -53,7 +53,7 @@ result = true`,
       new Parameter({name: 'name', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)`,
+    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)`,
     precondition: `productcatalog.oclIsUndefined() = false`,
     postcondition: `
 productcatalog.Id = id and
@@ -67,12 +67,12 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstance()->any(pro:ProductCatalog | pro.Id = id)`,
+    definition: `productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)`,
     precondition: `
 productcatalog.oclIsUndefined() = false and
-ProductCatalog.allInstance()->includes(productcatalog)`,
+ProductCatalog.allInstances()->includes(productcatalog)`,
     postcondition: `
-ProductCatalog.allInstance()->excludes(productcatalog) and
+ProductCatalog.allInstances()->excludes(productcatalog) and
 result = true`,
   }),
 ];

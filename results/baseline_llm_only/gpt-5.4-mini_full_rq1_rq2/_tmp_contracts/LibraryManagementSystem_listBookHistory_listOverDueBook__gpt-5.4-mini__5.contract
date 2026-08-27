@@ -1,9 +1,0 @@
-Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {
-          definition:
-          u:User = User.allInstance()->any(x:User|x.UserID=uid)
-            precondition:
-          u.oclIsUndefined() = false
-            postcondition:
-          result = u.LoanedBook->select(l:Loan|l.IsReturned = false)->collect(l:Loan|l.LoanedCopy)
-            
-        }

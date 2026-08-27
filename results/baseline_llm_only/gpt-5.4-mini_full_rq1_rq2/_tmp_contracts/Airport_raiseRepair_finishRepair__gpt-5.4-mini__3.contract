@@ -1,9 +1,0 @@
-Contract RepairService::finishRepair(id:Integer,sid:Integer,did:Integer,res:String): Boolean {
-          definition:
-          rep:Repair = Repair.allInstance()->any(o:Repair|o.Id=id), dev:Device = Device.allInstance()->any(o:Device|o.Id=did), sta:Staff = Staff.allInstance()->any(o:Staff|o.Id=sid)
-            precondition:
-          rep.oclIsUndefined() = false and dev.oclIsUndefined() = false and sta.oclIsUndefined() = false and dev.Contacts = sta and sta.Role = Staff::Worker
-            postcondition:
-          rep.Process = 1 and rep.Result = res and result = true
-            
-        }

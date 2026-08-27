@@ -1,0 +1,24 @@
+Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u | u.UserID = uid) and
+BookCopy.allInstances()->exists(c | c.Barcode = barcode) and
+Reserve.allInstances()->exists(r |
+        r.ReservedUser.UserID = uid and
+        r.ReservedCopy.Barcode = barcode and
+        r.IsReserveClosed = false
+    ) and
+BookCopy.allInstances()->exists(c |
+        c.Barcode = barcode and
+        c.Status = CopyStatus::LOANED and
+        c.IsReserved = true
+    )
+            postcondition:
+          BookCopy.allInstances()->any(c | c.Barcode = barcode).IsReserved = false and
+Reserve.allInstances()->any(r |
+        r.ReservedUser.UserID = uid and
+        r.ReservedCopy.Barcode = barcode and
+        r.IsReserveClosed@pre = false
+    ).IsReserveClosed = true and
+result = true
+            
+        }

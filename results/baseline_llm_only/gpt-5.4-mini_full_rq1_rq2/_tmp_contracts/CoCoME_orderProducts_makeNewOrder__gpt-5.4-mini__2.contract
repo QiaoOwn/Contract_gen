@@ -1,9 +1,0 @@
-Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {
-          definition:
-          currentOrderProduct:OrderProduct = self.CurrentOrderProduct, existingOrder:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct|o.Id=orderid)
-            precondition:
-          currentOrderProduct.oclIsUndefined() = false and existingOrder.oclIsUndefined() = false and OrderProduct.allInstance()->excludes(currentOrderProduct) and currentOrderProduct.Id=orderid and currentOrderProduct.OrderStatus=OrderProduct::NEW
-            postcondition:
-          let newOrder:OrderProduct in newOrder.oclIsNew() and newOrder.Id=orderid and newOrder.OrderStatus=OrderProduct::NEW and newOrder.Time=currentOrderProduct.Time and newOrder.Amount=currentOrderProduct.Amount and newOrder.Supplier=currentOrderProduct.Supplier and newOrder.ContainedEntries=currentOrderProduct.ContainedEntries and OrderProduct.allInstance()->includes(newOrder) and self.CurrentOrderProduct=newOrder and result=true
-            
-        }

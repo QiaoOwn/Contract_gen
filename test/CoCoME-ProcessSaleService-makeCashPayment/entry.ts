@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -204,25 +212,23 @@ class ProcessSaleService {
   CurrentPaymentMethod: PaymentMethod;
   /*TempVariable End*/
 
-  /*if the current sale exist and not complete
-   *and is ready to pay
-   *and the input amount is greater or equal to the current sale amount
-   *then create a new cash payment with the amount tendered with amount and the payment belonged sale is current sale
-   *and current sale's assoicated payment is the payment and the current sale's belonged store is current store
-   *and the current store will add this sale then the current sale is complete and the time is now
-   *and the payment balance is equal to the input amount minus the current sale amount, then save the cash payment*/
+  /*Definition: The makeCashPayment operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   makeCashPayment(amount: number): boolean {
+    /*OCL Invocation Environment*/
+    const oclInvocationTime = dayjs();
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentSale), false),
       description: 'CurrentSale.oclIsUndefined()=false',
     })
       .and({
-        logic: () => this.CurrentSale.IsComplete === false,
+        logic: () => StandardOPs.oclEquals(this.CurrentSale.IsComplete, false),
         description: 'CurrentSale.IsComplete=false',
       })
       .and({
-        logic: () => this.CurrentSale.IsReadytoPay === true,
+        logic: () => StandardOPs.oclEquals(this.CurrentSale.IsReadytoPay, true),
         description: 'CurrentSale.IsReadytoPay=true',
       })
       .and({
@@ -235,54 +241,116 @@ class ProcessSaleService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let cp: CashPayment;
-    return l({
-      execute: () => (cp = new CashPayment()),
-      description: 'cp.oclIsNew()',
-    })
-      .and({
-        execute: () => (cp.AmountTendered = amount),
-        description: 'cp.AmountTendered=amount',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let cp: CashPayment;
+      return l({
+        execute: () => (cp = new CashPayment()),
+        description: 'cp.oclIsNew()',
       })
-      .and({
-        execute: () => (cp.BelongedSale = this.CurrentSale),
-        description: 'cp.BelongedSale=CurrentSale',
+        .and({
+          execute: () => (cp.AmountTendered = amount),
+          description: 'cp.AmountTendered=amount',
+        })
+        .and({
+          execute: () => (cp.BelongedSale = this.CurrentSale),
+          description: 'cp.BelongedSale=CurrentSale',
+        })
+        .and({
+          execute: () => (this.CurrentSale.AssoicatedPayment = cp),
+          description: 'CurrentSale.AssoicatedPayment=cp',
+        })
+        .and({
+          execute: () => (this.CurrentSale.Belongedstore = this.CurrentStore),
+          description: 'CurrentSale.Belongedstore=CurrentStore',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(this.CurrentStore.Sales, this.CurrentSale),
+          description: 'CurrentStore.Sales->includes(CurrentSale)',
+        })
+        .and({
+          execute: () => (this.CurrentSale.IsComplete = true),
+          description: 'CurrentSale.IsComplete=true',
+        })
+        .and({
+          execute: () => (this.CurrentSale.Time = oclInvocationTime),
+          description: 'CurrentSale.Time=Now',
+        })
+        .and({
+          execute: () => (cp.Balance = amount - this.CurrentSale.Amount),
+          description: 'cp.Balance=amount-CurrentSale.Amount',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(CashPayment), cp),
+          description: 'CashPayment.allInstances()->includes(cp)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let cp: CashPayment = oclState.findNew(CashPayment);
+      return l({
+        logic: () => oclState.isNew(cp, CashPayment),
+        description: 'cp.oclIsNew()',
       })
-      .and({
-        execute: () => (this.CurrentSale.AssoicatedPayment = cp),
-        description: 'CurrentSale.AssoicatedPayment=cp',
-      })
-      .and({
-        execute: () => (this.CurrentSale.Belongedstore = this.CurrentStore),
-        description: 'CurrentSale.Belongedstore=CurrentStore',
-      })
-      .and({
-        execute: () => this.CurrentStore.Sales.push(this.CurrentSale),
-        description: 'CurrentStore.Sales->includes(CurrentSale)',
-      })
-      .and({
-        execute: () => (this.CurrentSale.IsComplete = true),
-        description: 'CurrentSale.IsComplete=true',
-      })
-      .and({
-        execute: () => dayjs(this.CurrentSale.Time).isSame(dayjs(), 'ms'),
-        description: 'CurrentSale.Time.isEqual(Now)',
-      })
-      .and({
-        execute: () => (cp.Balance = amount - this.CurrentSale.Amount),
-        description: 'cp.Balance=amount-CurrentSale.Amount',
-      })
-      .and({
-        execute: () => getRepository(CashPayment).push(cp),
-        description: 'CashPayment.allInstance()->includes(cp)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(cp.AmountTendered, amount),
+          description: 'cp.AmountTendered=amount',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(cp.BelongedSale, this.CurrentSale),
+          description: 'cp.BelongedSale=CurrentSale',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSale.AssoicatedPayment, cp),
+          description: 'CurrentSale.AssoicatedPayment=cp',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSale.Belongedstore, this.CurrentStore),
+          description: 'CurrentSale.Belongedstore=CurrentStore',
+        })
+        .and({
+          logic: () => StandardOPs.includes(this.CurrentStore.Sales, this.CurrentSale),
+          description: 'CurrentStore.Sales->includes(CurrentSale)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSale.IsComplete, true),
+          description: 'CurrentSale.IsComplete=true',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSale.Time, oclInvocationTime),
+          description: 'CurrentSale.Time=Now',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(cp.Balance, amount - this.CurrentSale.Amount),
+          description: 'cp.Balance=amount-CurrentSale.Amount',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(CashPayment), cp),
+          description: 'CashPayment.allInstances()->includes(cp)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ProcessSaleService};

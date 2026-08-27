@@ -30,7 +30,7 @@ const operations = [
       new Parameter({name: 'overduefee', type: 'Real'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `user:User = User.allInstance()->any(use:User | use.UserID = userid)`,
+    definition: `user:User = User.allInstances()->any(use:User | use.UserID = userid)`,
     precondition: `user.oclIsUndefined() = true`,
     postcondition: `
     let use:User in
@@ -45,7 +45,7 @@ const operations = [
     use.BorrowStatus = borrowstatus and
     use.SuspensionDays = suspensiondays and
     use.OverDueFee = overduefee and
-    User.allInstance()->includes(use) and
+    User.allInstances()->includes(use) and
     result = true`,
   }),
   // Similar operations for queryUser, modifyUser, deleteUser, createStudent, createFaculty, modifyStudent, modifyFaculty

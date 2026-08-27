@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,41 +201,42 @@ class CoCoMESystem {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find a cash desk with provided id,
-   *if it exists,
-   *and is opened and current store exist
-   *and current store exist the current cash desk is the cash desk
-   *and close it*/
+  /*Definition: The closeCashDesk operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   closeCashDesk(cashDeskID: number): boolean {
     /*Definition Start*/
-    let cd: CashDesk = l({
-      logic: () =>
-        getRepository(CashDesk).find(
-          (s: CashDesk) =>
-            l({
-              logic: () => s.Id === cashDeskID,
-              description: 's.Id=cashDeskID',
-            }).build().pass
-        ),
-      description: 'CashDesk.allInstance()->any(s:CashDesk|s.Id=cashDeskID)',
-    }).build().pass;
+    let cd: CashDesk = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(CashDesk).find(
+              (s: CashDesk) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(s.Id, cashDeskID),
+                  description: 's.Id=cashDeskID',
+                }).build().pass
+            ),
+          description: 'CashDesk.allInstances()->any(s:CashDesk|s.Id=cashDeskID)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cd) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cd), false),
       description: 'cd.oclIsUndefined()=false',
     })
       .and({
-        logic: () => cd.IsOpened === true,
+        logic: () => StandardOPs.oclEquals(cd.IsOpened, true),
         description: 'cd.IsOpened=true',
       })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(this.CurrentStore) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentStore), false),
         description: 'CurrentStore.oclIsUndefined()=false',
       })
       .and({
-        logic: () => this.CurrentStore.IsOpened === true,
+        logic: () => StandardOPs.oclEquals(this.CurrentStore.IsOpened, true),
         description: 'CurrentStore.IsOpened=true',
       })
       .build();
@@ -236,21 +245,50 @@ class CoCoMESystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentCashDesk = cd),
-      description: 'self.CurrentCashDesk=cd',
-    })
-      .and({
-        execute: () => (cd.IsOpened = false),
-        description: 'cd.IsOpened=false',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentCashDesk = cd),
+        description: 'self.CurrentCashDesk=cd',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+        .and({
+          execute: () => (cd.IsOpened = false),
+          description: 'cd.IsOpened=false',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(this.CurrentCashDesk, cd),
+        description: 'self.CurrentCashDesk=cd',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(cd.IsOpened, false),
+          description: 'cd.IsOpened=false',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMESystem};

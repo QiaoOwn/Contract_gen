@@ -1,9 +1,0 @@
-Contract ProcessSaleService::makeNewSale(): Boolean {
-          definition:
-          currentSale:Sale = Sale.allInstance()->any(s:Sale|s.IsComplete=false), currentSaleLine:SalesLineItem = SalesLineItem.allInstance()->any(sli:SalesLineItem|sli.BelongedSale=currentSale)
-            precondition:
-          currentSale.oclIsUndefined() = true and CurrentSaleLine.oclIsUndefined() = true
-            postcondition:
-          let newSale:Sale in newSale.oclIsNew() and newSale.IsComplete=false and newSale.IsReadytoPay=false and newSale.Amount=0.0 and Sale.allInstance()->includes(newSale) and result=true
-            
-        }

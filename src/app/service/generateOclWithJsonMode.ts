@@ -1,6 +1,10 @@
-import {BaseMessage, HumanMessage} from '@langchain/core/messages';
+import {BaseMessage} from '@langchain/core/messages';
 import {ChatOpenAI, OpenAIChatModelId} from '@langchain/openai';
 import {z} from 'zod';
+import {
+  createModelReasoningKwargs,
+  createOCLGenerationConfiguration,
+} from './generationConfiguration';
 
 export type OclParts = {
   definition: string;
@@ -18,19 +22,6 @@ type GenerateOclWithJsonModeParam = {
     precondition: string;
     postcondition: string;
   }>;
-};
-
-const getOclOutputMode = () => {
-  const mode = (process.env.OCL_OUTPUT_MODE ?? process.env.OCL_STRUCTURED_OUTPUT_MODE ?? 'json')
-    .trim()
-    .toLowerCase();
-  if (mode === 'structured' || mode === 'json' || mode === 'auto') {
-    return mode;
-  }
-  if (mode === 'fallback') {
-    return 'json';
-  }
-  return 'json';
 };
 
 const normalizeOcl = (ocl: {
@@ -64,50 +55,53 @@ const messageContentToString = (content: unknown): string => {
   return String(content ?? '');
 };
 
-const extractJsonObject = (content: string) => {
+const extractJsonObject = (content: string, diagnostic = '') => {
   const fenced = content.match(/```(?:json)?\s*([\s\S]*?)```/i);
   const candidate = fenced?.[1] ?? content;
   const start = candidate.indexOf('{');
   const end = candidate.lastIndexOf('}');
   if (start < 0 || end < start) {
-    throw new Error('JSON output response did not contain a JSON object.');
+    throw new Error(
+      `JSON-mode response did not contain a JSON object${diagnostic ? ` (${diagnostic})` : ''}.`
+    );
   }
   return candidate.slice(start, end + 1);
 };
 
+const createResponseDiagnostic = (response: {
+  response_metadata?: Record<string, unknown>;
+  usage_metadata?: {
+    output_tokens?: number;
+    output_token_details?: {reasoning?: number};
+  };
+}) => {
+  const finishReason = response.response_metadata?.finish_reason ?? 'unknown';
+  const outputTokens = response.usage_metadata?.output_tokens ?? 'unknown';
+  const reasoningTokens = response.usage_metadata?.output_token_details?.reasoning ?? 'unknown';
+  return `finish_reason=${finishReason}, output_tokens=${outputTokens}, reasoning_tokens=${reasoningTokens}`;
+};
+
 const createChatModel = (
   param: Pick<GenerateOclWithJsonModeParam, 'model' | 'apiKey' | 'baseURL'>
-) =>
-  new ChatOpenAI({
+) => {
+  const config = createOCLGenerationConfiguration();
+  const modelKwargs = createModelReasoningKwargs(String(param.model));
+  return new ChatOpenAI({
     model: param.model,
     apiKey: param.apiKey,
+    temperature: config.temperature,
+    maxTokens: config.maxTokens,
+    ...(Object.keys(modelKwargs).length > 0 ? {modelKwargs} : {}),
     configuration: {baseURL: param.baseURL},
   });
-
-const generateWithStructuredOutput = async (param: GenerateOclWithJsonModeParam) => {
-  const ocl = (await createChatModel(param)
-    .withStructuredOutput(param.schema)
-    .invoke(param.messages)) as {
-    definition: string | null;
-    precondition: string;
-    postcondition: string;
-  };
-  return normalizeOcl(ocl);
 };
 
 const generateWithJsonOutput = async (param: GenerateOclWithJsonModeParam) => {
-  const response = await createChatModel(param).invoke([
-    ...param.messages,
-    new HumanMessage(
-      [
-        'Return only one valid JSON object. Do not use markdown.',
-        'The object must have exactly these keys: definition, precondition, postcondition.',
-        'Use an empty string for definition when no definition is needed.',
-      ].join('\n')
-    ),
-  ]);
+  const response = await createChatModel(param).invoke(param.messages, {
+    response_format: {type: 'json_object'},
+  });
   const content = messageContentToString(response.content);
-  const parsed = JSON.parse(extractJsonObject(content));
+  const parsed = JSON.parse(extractJsonObject(content, createResponseDiagnostic(response)));
   const ocl = param.schema.parse(parsed) as {
     definition: string | null;
     precondition: string;
@@ -117,20 +111,5 @@ const generateWithJsonOutput = async (param: GenerateOclWithJsonModeParam) => {
 };
 
 export const generateOclWithJsonMode = async (param: GenerateOclWithJsonModeParam) => {
-  const mode = getOclOutputMode();
-  if (mode === 'json') {
-    return generateWithJsonOutput(param);
-  }
-  if (mode === 'structured') {
-    return generateWithStructuredOutput(param);
-  }
-  try {
-    return await generateWithStructuredOutput(param);
-  } catch (error) {
-    console.warn(
-      `[OCL Generator] structured output failed for ${param.model}; retrying with JSON output.`,
-      error
-    );
-    return generateWithJsonOutput(param);
-  }
+  return generateWithJsonOutput(param);
 };

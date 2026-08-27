@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -197,29 +205,32 @@ class CoCoMEOrderProducts {
   CurrentOrderProduct: OrderProduct;
   /*TempVariable End*/
 
-  /*find the order with provided order id
-   *if it is not exist,
-   *create the order product with the status new and the id is order id,
-   *and the time is now,
-   *then save it*/
+  /*Definition: The makeNewOrder operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   makeNewOrder(orderid: number): boolean {
+    /*OCL Invocation Environment*/
+    const oclInvocationTime = dayjs();
     /*Definition Start*/
-    let o: OrderProduct = l({
-      logic: () =>
-        getRepository(OrderProduct).find(
-          (o: OrderProduct) =>
-            l({
-              logic: () => o.Id === orderid,
-              description: 'o.Id=orderid',
-            }).build().pass
-        ),
-      description: 'OrderProduct.allInstance()->any(o:OrderProduct|o.Id=orderid)',
-    }).build().pass;
+    let o: OrderProduct = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(OrderProduct).find(
+              (o: OrderProduct) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(o.Id, orderid),
+                  description: 'o.Id=orderid',
+                }).build().pass
+            ),
+          description: 'OrderProduct.allInstances()->any(o:OrderProduct|o.Id=orderid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(o) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(o), true),
       description: 'o.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -227,38 +238,84 @@ class CoCoMEOrderProducts {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let op: OrderProduct;
-    return l({
-      execute: () => (op = new OrderProduct()),
-      description: 'op.oclIsNew()',
-    })
-      .and({
-        execute: () => (op.OrderStatus = OrderStatus.NEW),
-        description: 'op.OrderStatus=OrderStatus::NEW',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let op: OrderProduct;
+      return l({
+        execute: () => (op = new OrderProduct()),
+        description: 'op.oclIsNew()',
       })
-      .and({
-        execute: () => (op.Id = orderid),
-        description: 'op.Id=orderid',
+        .and({
+          execute: () => (op.OrderStatus = OrderStatus.NEW),
+          description: 'op.OrderStatus=OrderStatus::NEW',
+        })
+        .and({
+          execute: () => (op.Id = orderid),
+          description: 'op.Id=orderid',
+        })
+        .and({
+          execute: () => (op.Time = oclInvocationTime),
+          description: 'op.Time=Now',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(OrderProduct), op),
+          description: 'OrderProduct.allInstances()->includes(op)',
+        })
+        .and({
+          execute: () => (this.CurrentOrderProduct = op),
+          description: 'self.CurrentOrderProduct=op',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let op: OrderProduct = oclState.findNew(OrderProduct);
+      return l({
+        logic: () => oclState.isNew(op, OrderProduct),
+        description: 'op.oclIsNew()',
       })
-      .and({
-        execute: () => dayjs(op.Time).isSame(dayjs(), 'ms'),
-        description: 'op.Time.isEqual(Now)',
-      })
-      .and({
-        execute: () => getRepository(OrderProduct).push(op),
-        description: 'OrderProduct.allInstance()->includes(op)',
-      })
-      .and({
-        execute: () => (this.CurrentOrderProduct = op),
-        description: 'self.CurrentOrderProduct=op',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(op.OrderStatus, OrderStatus.NEW),
+          description: 'op.OrderStatus=OrderStatus::NEW',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(op.Id, orderid),
+          description: 'op.Id=orderid',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(op.Time, oclInvocationTime),
+          description: 'op.Time=Now',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(OrderProduct), op),
+          description: 'OrderProduct.allInstances()->includes(op)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentOrderProduct, op),
+          description: 'self.CurrentOrderProduct=op',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMEOrderProducts};

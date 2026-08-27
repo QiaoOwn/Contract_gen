@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 """PathOCL-style transfer baseline for operation-level OCL contracts.
 
-This script implements a path-based prompt-augmentation baseline:
-- no Contract Gen agents
+This script implements a PathOCL-inspired Jaccard top-k transfer baseline:
+- no Contract Gen staged generation or validation loop
 - no validation feedback
 - no REMODEL transformation-rule block
-- selected entity/attribute/relationship paths instead of full model_context
+- one independently generated contract for each ranked UML simple-path prompt
 
 It is a transfer baseline inspired by PathOCL's path-based context selection,
 adapted to this project's operation-level contract benchmark and evaluated
@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -27,6 +28,11 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 import run_baseline_llm_only as base
 import run_codex_prompt_style_baseline as codex_style
+
+PATHOCL_PROMPT_VERSION = "pathocl-jaccard-topk-contract-transfer-v4"
+PATHOCL_PROTOCOL_VERSION = "pathocl-ranked-path-fixed-budget-v1"
+PATHOCL_SOURCE_DOI = "10.1145/3650105.3652290"
+PATHOCL_DATASET_DOI = "10.5281/zenodo.10841785"
 
 
 @dataclass
@@ -109,6 +115,7 @@ def parse_model_context(text: str) -> Dict[str, Entity]:
     entities: Dict[str, Entity] = {}
     current: Optional[Entity] = None
     section: Optional[str] = None
+    in_entities = False
     pending_name: Optional[str] = None
     pending_type: Optional[str] = None
     pending_description: str = ""
@@ -132,6 +139,14 @@ def parse_model_context(text: str) -> Dict[str, Entity]:
     for raw_line in (text or "").splitlines():
         stripped = raw_line.strip()
         if not stripped:
+            continue
+        if stripped == "Entities":
+            flush_pending()
+            current = None
+            section = None
+            in_entities = True
+            continue
+        if not in_entities:
             continue
         entity_match = re.fullmatch(r"Name:\s*(.+)", stripped)
         if entity_match and raw_line.startswith("    Name:"):
@@ -165,127 +180,171 @@ def parse_model_context(text: str) -> Dict[str, Entity]:
     return entities
 
 
-def entity_score(entity: Entity, op: Dict[str, Any]) -> int:
-    haystack = " ".join(
+def target_class(type_name: str) -> str:
+    return re.sub(r"^Set\((.*)\)$", r"\1", type_name or "")
+
+
+def generate_simple_paths(entities: Dict[str, Entity]) -> List[Tuple[str, ...]]:
+    """Generate every directed simple path, including each class as a path."""
+    graph: Dict[str, List[str]] = {name: [] for name in entities}
+    for source, entity in entities.items():
+        for relationship in entity.relationships:
+            target = target_class(relationship.type_name)
+            if target in entities and target not in graph[source]:
+                graph[source].append(target)
+        graph[source].sort()
+
+    paths: Set[Tuple[str, ...]] = set()
+
+    def visit(path: Tuple[str, ...]) -> None:
+        paths.add(path)
+        for successor in graph[path[-1]]:
+            if successor not in path:
+                visit(path + (successor,))
+
+    for start in sorted(graph):
+        visit((start,))
+    return sorted(paths)
+
+
+def query_terms(op: Dict[str, Any]) -> Set[str]:
+    """Deterministic lexical adaptation of PathOCL's preprocessed UML elements."""
+    text = " ".join(
         [
-            op.get("description") or "",
-            op.get("operation_signature") or "",
-            op.get("operation_name") or "",
-            op.get("operation") or "",
-            json.dumps(op.get("parameters") or [], ensure_ascii=False),
+            str(op.get("description") or ""),
+            str(op.get("operation_name") or op.get("operation") or ""),
+            " ".join(str(param.get("name") or "") for param in op.get("parameters") or []),
         ]
     )
-    query_words = words(haystack)
-    name_words = split_camel(entity.name) | {entity.name.lower()}
-    score = 0
-    if entity.name.lower() in haystack.lower():
-        score += 8
-    score += 3 * len(query_words & name_words)
-    for attr in entity.attributes:
-        attr_words = split_camel(attr.name) | {attr.name.lower()}
-        score += len(query_words & attr_words)
-        if attr.name.lower() in haystack.lower():
-            score += 2
-    for rel in entity.relationships:
-        target_words = split_camel(re.sub(r"^Set\((.*)\)$", r"\1", rel.type_name))
-        rel_words = (split_camel(rel.name) - target_words) | {rel.name.lower()}
-        score += len(query_words & rel_words)
-        if rel.name.lower() in haystack.lower():
-            score += 2
-    return score
+    return words(text) | split_camel(str(op.get("operation_name") or op.get("operation") or ""))
 
 
-def select_entities(entities: Dict[str, Entity], op: Dict[str, Any], max_entities: int) -> List[Entity]:
-    scored = [(entity_score(entity, op), entity.name, entity) for entity in entities.values()]
-    selected = [entity for score, _, entity in sorted(scored, key=lambda x: (-x[0], x[1])) if score >= 3]
-
-    # Add direct operation return type and parameter entity names if present.
-    explicit_names = {op.get("return_type", "")}
-    for param in op.get("parameters") or []:
-        if isinstance(param, dict):
-            explicit_names.add(str(param.get("type") or ""))
-    for name in list(explicit_names):
-        base_name = re.sub(r"^Set\((.*)\)$", r"\1", name)
-        if base_name in entities and entities[base_name] not in selected:
-            selected.insert(0, entities[base_name])
-
-    # Pull in one-hop relationship targets from selected anchors.
-    seen = {e.name for e in selected}
-    for entity in list(selected):
-        for rel in entity.relationships:
-            target = re.sub(r"^Set\((.*)\)$", r"\1", rel.type_name)
-            if target in entities and target not in seen:
-                selected.append(entities[target])
-                seen.add(target)
-
-    if not selected:
-        selected = [entity for _, _, entity in sorted(scored, key=lambda x: x[1])]
-    return selected[:max_entities]
+def path_terms(path: Tuple[str, ...], entities: Dict[str, Entity]) -> Set[str]:
+    terms: Set[str] = set()
+    for index, class_name in enumerate(path):
+        entity = entities[class_name]
+        terms |= split_camel(class_name) | {class_name.lower()}
+        for attribute in entity.attributes:
+            terms |= split_camel(attribute.name) | {attribute.name.lower()}
+        if index + 1 < len(path):
+            next_class = path[index + 1]
+            for relationship in entity.relationships:
+                if target_class(relationship.type_name) == next_class:
+                    terms |= split_camel(relationship.name) | {relationship.name.lower()}
+    return terms
 
 
-def build_path_context(op: Dict[str, Any], max_entities: int, max_paths: int) -> str:
+def jaccard_score(left: Set[str], right: Set[str]) -> float:
+    union = left | right
+    return len(left & right) / len(union) if union else 0.0
+
+
+def rank_simple_paths(op: Dict[str, Any]) -> List[Tuple[Tuple[str, ...], float]]:
     entities = parse_model_context(op.get("model_context") or "")
-    selected = select_entities(entities, op, max_entities)
-    selected_names = {entity.name for entity in selected}
-    lines: List[str] = []
-    path_count = 0
-    for entity in selected:
-        lines.append(f"Entity {entity.name}")
-        for attr in entity.attributes:
-            if path_count >= max_paths:
-                break
-            desc = f" -- {attr.description}" if attr.description else ""
-            lines.append(f"  {entity.name}.{attr.name} : {attr.type_name}{desc}")
-            path_count += 1
-        for rel in entity.relationships:
-            if path_count >= max_paths:
-                break
-            target = re.sub(r"^Set\((.*)\)$", r"\1", rel.type_name)
-            marker = "selected" if target in selected_names else "external"
-            desc = f" -- {rel.description}" if rel.description else ""
-            lines.append(f"  {entity.name}.{rel.name} -> {rel.type_name} ({marker}){desc}")
-            path_count += 1
-        if path_count >= max_paths:
-            break
-    return "\n".join(lines)
+    terms = query_terms(op)
+    ranked = [
+        (path, jaccard_score(terms, path_terms(path, entities)))
+        for path in generate_simple_paths(entities)
+    ]
+    return sorted(ranked, key=lambda item: (-item[1], len(item[0]), item[0]))
 
 
-def build_pathocl_prompt(op: Dict[str, Any], max_entities: int, max_paths: int) -> Tuple[str, str]:
-    path_context = build_path_context(op, max_entities, max_paths)
+def render_path_context(path: Tuple[str, ...], entities: Dict[str, Entity]) -> str:
+    selected = set(path)
+    classes: List[Dict[str, Any]] = []
+    for class_name in path:
+        entity = entities[class_name]
+        associations = []
+        for relationship in entity.relationships:
+            target = target_class(relationship.type_name)
+            if target not in selected:
+                continue
+            associations.append(
+                {
+                    "target": target,
+                    "role": relationship.name,
+                    "multiplicity": "*" if relationship.type_name.startswith("Set(") else "1",
+                }
+            )
+        classes.append(
+            {
+                "class": class_name,
+                "attributes": [
+                    {attribute.name: attribute.type_name} for attribute in entity.attributes
+                ],
+                "operations": [],
+                "associations": associations,
+            }
+        )
+    return json.dumps(classes, ensure_ascii=False, indent=2)
+
+
+def build_pathocl_messages(
+    op: Dict[str, Any], path: Tuple[str, ...]
+) -> Tuple[List[Dict[str, str]], str]:
+    entities = parse_model_context(op.get("model_context") or "")
+    path_context = render_path_context(path, entities)
     service = op.get("service") or "Service"
-    operation_signature = op.get("operation_signature") or op.get("operation_name") or op.get("operation")
-    description = op.get("description") or ""
-    prompt = f"""You are an expert in Object Constraint Language (OCL).
-Given the natural-language requirement and the relevant UML model paths, generate the corresponding OCL operation contract.
+    signature = op.get("operation_signature") or op.get("operation_name") or op.get("operation")
+    system_prompt = (
+        "As a system designer with expertise in UML modeling and OCL constraints, "
+        "assist the user in writing an OCL operation contract. The user provides a "
+        "natural-language specification, the target operation, and UML classes along "
+        "one ranked simple path. Generate a complete operation contract containing the "
+        "required preconditions and postconditions. Do not provide an explanation. "
+        "Put only the solution in an <OCL> tag."
+    )
+    user_prompt = f"""-- OCL specification
+{op.get('description') or ''}
 
-Return only the OCL contract. Do not explain the answer.
+-- Target operation
+{service}::{signature}
 
-Operation:
-{service}::{operation_signature}
-
-Relevant UML paths:
+-- UML classes and properties in the selected simple path
 {path_context}
 
-Requirement:
-{description}
+-- OCL operation contract
 """
-    return prompt, path_context
+    return [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+    ], path_context
+
+
+def extract_pathocl_output(raw: str, op: Dict[str, Any]) -> Dict[str, Any]:
+    tagged = re.search(r"<OCL>\s*([\s\S]*?)\s*</OCL>", raw or "", re.IGNORECASE)
+    text = tagged.group(1).strip() if tagged else (raw or "").strip()
+    text = re.sub(r"^\s*<OCL>\s*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\s*</OCL>\s*$", "", text, flags=re.IGNORECASE)
+    return codex_style.extract_codex_prompt_output(
+        text, op, "uml-zero-shot-contract"
+    )
 
 
 def parse_models(value: str) -> List[str]:
     return base.parse_models(value)
 
 
-def rewrite_summary(output_dir: Path, max_entities: int, max_paths: int) -> None:
+def rewrite_summary(output_dir: Path) -> None:
     summary_path = output_dir / "summary.json"
     if not summary_path.exists():
         return
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     summary["experiment"] = "pathocl_style_baseline"
+    summary["treatment"] = "pathocl_jaccard_topk_contract_transfer"
+    summary["sampling_protocol_version"] = PATHOCL_PROTOCOL_VERSION
     summary["context_selection"] = {
-        "max_entities": max_entities,
-        "max_paths": max_paths,
-        "mode": "lexical_anchor_plus_one_hop_paths",
+        "mode": "all_directed_simple_paths_ranked_by_lexical_jaccard",
+        "one_ranked_path_per_generation": True,
+        "small_graph_fallback": "cycle_ranked_paths_to_fill_fixed_budget",
+    }
+    summary["source_method"] = {
+        "paper_doi": PATHOCL_SOURCE_DOI,
+        "dataset_doi": PATHOCL_DATASET_DOI,
+        "source_ranking": "Jaccard",
+        "adaptation": "isolated OCL constraint to complete operation contract",
+        "exact_rerun": False,
+        "oracle_available_to_generator": False,
     }
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -293,41 +352,42 @@ def rewrite_summary(output_dir: Path, max_entities: int, max_paths: int) -> None
 def main() -> None:
     parser = argparse.ArgumentParser(description="PathOCL-style path-context OCL baseline.")
     parser.add_argument("--input", default="data/operations.jsonl")
-    parser.add_argument("--output-dir", default="results/pathocl_style")
-    parser.add_argument("--models", default="gpt-5.4", type=parse_models)
-    parser.add_argument("--max-attempts", type=int, default=5)
+    parser.add_argument(
+        "--output-dir",
+        default=f"{base.STUDY_RESULTS_ROOT}/baselines/pathocl-jaccard-top5",
+    )
+    parser.add_argument("--models", default="gpt-5.5", type=parse_models)
+    parser.add_argument(
+        "--max-attempts",
+        type=int,
+        default=5,
+        help="Fixed top-k path-generation budget per operation-model pair (1-5).",
+    )
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--temperature", type=float, default=0.2)
-    parser.add_argument("--max-tokens", type=int, default=2048)
+    parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--http-timeout", type=float, default=120.0)
     parser.add_argument("--sleep-between-calls", type=float, default=1.0)
-    parser.add_argument("--max-path-entities", type=int, default=4)
-    parser.add_argument("--max-paths", type=int, default=40)
     parser.add_argument(
         "--validate-cmd",
-        default="",
+        default="npx tsx script/validate-remodel-contract.ts {input_file}",
         help='External validator with {input_file}, e.g. npx tsx script/validate-remodel-contract.ts {input_file}',
     )
     parser.add_argument("--parser-use-shell", action="store_true")
     parser.add_argument("--parser-timeout", type=int, default=60)
     parser.add_argument(
         "--eval-next-base-url",
-        default="",
-        help="Optional Next.js app origin for execution-grounded validation via /api/evaluate-contract.",
+        default=os.environ.get("NEXT_EVAL_BASE_URL", "http://127.0.0.1:3000"),
+        help="Required Next.js app origin for common OCLTSVM/Jest post-hoc evaluation.",
     )
     parser.add_argument("--eval-timeout", type=float, default=600.0)
     parser.add_argument("--force", action="store_true")
-    parser.add_argument(
-        "--resume",
-        action="store_true",
-        help="Continue from an existing attempts.jsonl without deleting previous attempts.",
-    )
     parser.add_argument("--analyze-only", action="store_true")
     args = parser.parse_args()
-
-    if args.force and args.resume:
-        logging.error("--force and --resume cannot be used together")
-        sys.exit(1)
+    if args.max_attempts < 1 or args.max_attempts > 5:
+        parser.error("--max-attempts must be between 1 and 5 ranked path prompts")
+    if not args.eval_next_base_url.strip():
+        parser.error("--eval-next-base-url is required for the frozen PathOCL study")
 
     base.load_env_file(base.repo_root() / ".env")
     output_dir = Path(args.output_dir)
@@ -347,20 +407,56 @@ def main() -> None:
                     continue
                 try:
                     row = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"{input_path}:{line_no}: invalid JSON: {exc}") from exc
                 op = base.safe_operation(row, line_no)
                 if op:
                     operations.append(op)
+    if len(operations) != base.EXPECTED_OPERATION_COUNT:
+        raise RuntimeError(
+            f"Expected {base.EXPECTED_OPERATION_COUNT} canonical operations in {input_path}, "
+            f"found {len(operations)}"
+        )
+    if len({op["id"] for op in operations}) != len(operations):
+        raise RuntimeError(f"Duplicate operation ids in {input_path}")
+    base.assert_generation_configuration(args.temperature, args.max_tokens)
     if args.limit > 0:
         operations = operations[: args.limit]
 
+    generation_prompt_version = PATHOCL_PROMPT_VERSION
+    ranked_by_operation = {op["id"]: rank_simple_paths(op) for op in operations}
+    if any(not ranked for ranked in ranked_by_operation.values()):
+        raise RuntimeError("Every operation must have at least one PathOCL simple path")
+    expected_prompt_hashes: Dict[Any, str] = {}
+    for operation in operations:
+        ranked = ranked_by_operation[operation["id"]]
+        for attempt in range(1, args.max_attempts + 1):
+            path, _ = ranked[(attempt - 1) % len(ranked)]
+            messages, _ = build_pathocl_messages(operation, path)
+            expected_prompt_hashes[(operation["id"], attempt)] = base.sha256_text(
+                json.dumps(messages, ensure_ascii=False, separators=(",", ":"))
+            )
+    existing = base.read_jsonl(attempts_path)
+    base.assert_existing_records_match_manifest(
+        existing,
+        operations,
+        generation_prompt_version,
+        "text",
+        args.temperature,
+        args.max_tokens,
+        sampling_protocol_version=PATHOCL_PROTOCOL_VERSION,
+        expected_generation_prompt_hashes=expected_prompt_hashes,
+        uses_shared_generation_assets=False,
+    )
+
     if args.analyze_only:
+        if not attempts_path.is_file():
+            raise FileNotFoundError(f"analyze-only requires {attempts_path}")
         if not operations:
             logging.error("analyze-only needs --input with operations")
             sys.exit(1)
         base.write_summary(output_dir, operations, args.models, args.max_attempts)
-        rewrite_summary(output_dir, args.max_path_entities, args.max_paths)
+        rewrite_summary(output_dir)
         logging.info("Wrote summary under %s", output_dir)
         return
 
@@ -369,21 +465,17 @@ def main() -> None:
         sys.exit(1)
 
     if args.force:
+        base.assert_force_target_is_current_study(existing)
         for fp in [attempts_path, output_dir / "summary.json"]:
             if fp.exists():
                 fp.unlink()
         for csv_path in output_dir.glob("baseline_*.csv"):
             csv_path.unlink()
+        existing = []
 
     validate_cmd = args.validate_cmd.strip() or None
     eval_base_url = args.eval_next_base_url.strip()
     require_execution_success = bool(eval_base_url)
-    existing = base.read_jsonl(attempts_path)
-    done_success: Set[Tuple[str, str]] = set()
-    for row in existing:
-        ok = row.get("execution_valid") if require_execution_success else row.get("syntax_valid")
-        if ok:
-            done_success.add((row["operation_id"], row["model"]))
 
     planned = len(operations) * len(args.models)
     pairs_completed = base.count_completed_pairs(
@@ -402,8 +494,6 @@ def main() -> None:
             f"({base.format_progress_bar(pairs_completed, planned)})",
             flush=True,
         )
-    elif args.resume:
-        print("Resume requested, but no completed pairs were found in attempts.jsonl.", flush=True)
 
     for op in operations:
         oid = op["id"]
@@ -423,26 +513,32 @@ def main() -> None:
                 )
                 + 1
             )
-            prompt, path_context = build_pathocl_prompt(op, args.max_path_entities, args.max_paths)
+            ranked_paths = ranked_by_operation[oid]
             for attempt in range(start_att, args.max_attempts + 1):
-                if (oid, model) in done_success:
-                    break
+                path_rank_index = (attempt - 1) % len(ranked_paths)
+                selected_path, path_score = ranked_paths[path_rank_index]
+                messages, path_context = build_pathocl_messages(op, selected_path)
+                prompt = json.dumps(messages, ensure_ascii=False, separators=(",", ":"))
                 started = time.perf_counter()
                 error_type = ""
                 raw = ""
                 try:
                     raw = base.call_llm(
                         model,
-                        prompt,
+                        messages,
                         temperature=args.temperature,
                         max_tokens=args.max_tokens,
                         timeout=args.http_timeout,
+                        json_mode=False,
                     )
-                except Exception:
+                except Exception as exc:
                     logging.exception("LLM failed op=%s model=%s att=%s", oid, model, attempt)
-                    error_type = "llm_api_error"
+                    raise RuntimeError(
+                        "LLM infrastructure failed; no experimental attempt was consumed "
+                        f"(op={oid}, model={model}, attempt={attempt})"
+                    ) from exc
 
-                ext = codex_style.extract_codex_prompt_output(raw, op, "contract")
+                ext = extract_pathocl_output(raw, op)
                 contract = ext["contract"]
 
                 if validate_cmd and contract:
@@ -478,7 +574,7 @@ def main() -> None:
                     "execution_eval_skipped": not bool(eval_base_url),
                     "execution_valid": False,
                 }
-                if eval_base_url and validation.get("syntax_valid"):
+                if eval_base_url and ext["extraction_ok"]:
                     eval_result = base.evaluate_contract_with_next(
                         eval_base_url,
                         op,
@@ -486,18 +582,85 @@ def main() -> None:
                         ext,
                         args.eval_timeout,
                     )
+                base.raise_if_evaluation_infrastructure_error(
+                    eval_result, oid, model, attempt
+                )
+                syntax_valid = (
+                    bool(eval_result.get("contract_parse_ok"))
+                    if not eval_result.get("execution_eval_skipped")
+                    else bool(validation.get("syntax_valid"))
+                )
+                pre_execution_valid = (
+                    syntax_valid
+                    and bool(eval_result.get("typescript_generation_ok"))
+                    and bool(eval_result.get("typescript_parse_ok"))
+                )
+                if not ext["extraction_ok"]:
+                    validation_stage = "output_extraction"
+                    final_error_type = "extraction_failed"
+                elif not syntax_valid:
+                    validation_stage = "parser"
+                    final_error_type = "syntax_invalid"
+                elif not bool(eval_result.get("typescript_generation_ok")):
+                    validation_stage = "typescript_generator"
+                    final_error_type = "typescript_generation_invalid"
+                elif not bool(eval_result.get("typescript_parse_ok")):
+                    validation_stage = "typescript_parser"
+                    final_error_type = "typescript_parse_invalid"
+                elif not bool(eval_result.get("test_execution_ok")):
+                    validation_stage = "jest"
+                    final_error_type = "execution_invalid"
+                else:
+                    validation_stage = "passed"
+                    final_error_type = "none"
 
                 record = {
+                    "study_version": base.STUDY_VERSION,
+                    "treatment": "pathocl_style",
                     "experiment": "pathocl_style_baseline",
-                    "context_selection": "lexical_anchor_plus_one_hop_paths",
-                    "max_path_entities": args.max_path_entities,
-                    "max_paths": args.max_paths,
+                    "context_selection": "all_simple_paths_lexical_jaccard",
+                    "path_ranking_metric": "jaccard",
+                    "path_rank": path_rank_index + 1,
+                    "path_reused_to_fill_budget": attempt > len(ranked_paths),
+                    "path_score": path_score,
+                    "selected_path": list(selected_path),
+                    "available_simple_paths": len(ranked_paths),
                     "path_context": path_context,
                     "operation_id": oid,
+                    "oracle_id": op.get("oracle_id", ""),
+                    "requirement_group_id": op.get("requirement_group_id", ""),
                     "case_study": op["case_study"],
                     "project": op.get("project", ""),
                     "useCase": op.get("useCase", ""),
                     "operation": op.get("operation", ""),
+                    "has_return_value": op.get("has_return_value", False),
+                    "input_schema_version": op.get("input_schema_version", ""),
+                    "input_hash": op.get("input_hash", ""),
+                    "requirement_hash": op.get("requirement_hash", ""),
+                    "context_hash": op.get("context_hash", ""),
+                    "shared_prompt_version": op.get("prompt_version", ""),
+                    "shared_prompt_hash": op.get("prompt_hash", ""),
+                    "generation_prompt_version": generation_prompt_version,
+                    "generation_prompt_hash": base.sha256_text(prompt),
+                    "generation_request_hash": base.sha256_text(prompt),
+                    "sampling_protocol": "ranked_path_fixed_budget",
+                    "sampling_protocol_version": PATHOCL_PROTOCOL_VERSION,
+                    "source_paper_doi": PATHOCL_SOURCE_DOI,
+                    "source_dataset_doi": PATHOCL_DATASET_DOI,
+                    "source_ranking_setting": "jaccard",
+                    "exact_source_rerun": False,
+                    "oracle_available_to_generator": False,
+                    "generation_config_version": base.EXPECTED_GENERATION_CONFIG_VERSION,
+                    "generation_config_hash": base.generation_configuration_hash(
+                        "text", args.temperature, args.max_tokens
+                    ),
+                    "generation_output_mode": "text",
+                    "generation_grammar_version": "",
+                    "generation_grammar_hash": "",
+                    "generation_rules_version": "",
+                    "generation_rules_hash": "",
+                    "generation_temperature": args.temperature,
+                    "generation_max_tokens": args.max_tokens,
                     "model": model,
                     "attempt": attempt,
                     "prompt": prompt,
@@ -512,25 +675,23 @@ def main() -> None:
                     "statement_wrapped_as_precondition": ext.get(
                         "statement_wrapped_as_precondition", False
                     ),
+                    "context_match": ext.get("context_match", False),
                     **validation,
                     **eval_result,
-                    "error_type": error_type,
+                    "syntax_valid": syntax_valid,
+                    "pre_execution_valid": pre_execution_valid,
+                    "external_syntax_valid": bool(validation.get("syntax_valid")),
+                    "typescript_valid": bool(eval_result.get("typescript_generation_ok"))
+                    and bool(eval_result.get("typescript_parse_ok")),
+                    "jest_passed": bool(eval_result.get("test_execution_ok")),
+                    "final_pass": bool(eval_result.get("execution_valid")),
+                    "validation_stage": validation_stage,
+                    "error_type": error_type or final_error_type,
                     "latency_sec": round(time.perf_counter() - started, 4),
                     "timestamp": base.utc_now_iso(),
                 }
-                if not record["error_type"] and not record.get("syntax_valid"):
-                    record["error_type"] = "syntax_invalid"
-                if (
-                    not record["error_type"]
-                    and not record.get("execution_eval_skipped", True)
-                    and not record.get("execution_valid")
-                ):
-                    record["error_type"] = "execution_invalid"
-
                 base.append_jsonl(attempts_path, record)
                 existing.append(record)
-                if record.get("execution_valid") if require_execution_success else record.get("syntax_valid"):
-                    done_success.add((oid, model))
                 completed = base.count_completed_pairs(
                     operations,
                     args.models,
@@ -542,7 +703,7 @@ def main() -> None:
                 time.sleep(args.sleep_between_calls)
 
     base.write_summary(output_dir, operations, args.models, args.max_attempts)
-    rewrite_summary(output_dir, args.max_path_entities, args.max_paths)
+    rewrite_summary(output_dir)
     logging.info("Done. Outputs under %s", output_dir)
 
 

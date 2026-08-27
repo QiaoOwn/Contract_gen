@@ -30,9 +30,9 @@ const operations: Operation[] = [
   //   After all these things done, transfer funds to the account id the loan request amount, and the loan remain amount to pay is the loan request amount,
   //   then the loan should be save in the system and the loan request's approve loan should be it, the loan's refered loan request is the loan request you find
   //   `,
-  //   definition: `loan:Loan = Loan.allInstance()->any(loa:Loan | loa.LoanID = loanid),
-  //      r:LoanRequest = LoanRequest.allInstance()->any(lr:LoanRequest | lr.RequestID = requestid),
-  //      la:LoanAccount = LoanAccount.allInstance()->any(lacc:LoanAccount | lacc.LoanAccountID = accountid)`,
+  //   definition: `loan:Loan = Loan.allInstances()->any(loa:Loan | loa.LoanID = loanid),
+  //      r:LoanRequest = LoanRequest.allInstances()->any(lr:LoanRequest | lr.RequestID = requestid),
+  //      la:LoanAccount = LoanAccount.allInstances()->any(lacc:LoanAccount | lacc.LoanAccountID = accountid)`,
   //   precondition: `loan.oclIsUndefined() = true and
   // 		r.oclIsUndefined() = false`,
   //   postcondition: `let loa:Loan, lacc:LoanAccount in
@@ -48,7 +48,7 @@ const operations: Operation[] = [
   // 			la.oclIsUndefined() = true
   // 		then
   // 			lacc = createLoanAccount(accountid) and
-  // 			LoanAccount.allInstance()->includes(lacc) and
+  // 			LoanAccount.allInstances()->includes(lacc) and
   // 			lacc.Balance = r.LoanAmount and
   // 			loa.BelongedLoanAccount = lacc
   // 		else
@@ -56,7 +56,7 @@ const operations: Operation[] = [
   // 		endif and
   // 		transferFunds(accountid, r.LoanAmount) and
   // 		loa.RemainAmountToPay = r.LoanAmount and
-  // 		Loan.allInstance()->includes(loa) and
+  // 		Loan.allInstances()->includes(loa) and
   // 		r.ApprovalLoan = loa and
   // 		loa.ReferedLoanRequest = r and
   // 		result = true`,

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,20 +238,25 @@ export {
 };
 
 class LibraryManagementSystemSystem {
-  /*The scheduler counts down the suspension days for users who have overdue books, suspending their borrowing privileges once the suspension period is over.*/
+  /*Definition: The countDownSuspensionDay operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   countDownSuspensionDay(): void {
     /*Definition Start*/
-    let users: User[] = l({
-      logic: () =>
-        getRepository(User).filter(
-          (u: User) =>
-            l({
-              logic: () => u.SuspensionDays > 0,
-              description: 'u.SuspensionDays>0',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->select(u:User|u.SuspensionDays>0)',
-    }).build().pass;
+    let users: User[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).filter(
+              (u: User) =>
+                l({
+                  logic: () => u.SuspensionDays > 0,
+                  description: 'u.SuspensionDays>0',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->select(u:User|u.SuspensionDays>0)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
@@ -256,42 +269,96 @@ class LibraryManagementSystemSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () =>
-        users.forEach(
-          (u: User) =>
-            l({
-              execute: () => (u.SuspensionDays = u.SuspensionDays - 1),
-              description: 'u.SuspensionDays=u.SuspensionDays@pre-1',
-            })
-              .if({
-                logic: () =>
-                  l({
-                    logic: () => u.BorrowStatus === BorrowStatus.SUSPEND,
-                    description: 'u.BorrowStatus=BorrowStatus::SUSPEND',
-                  })
-                    .and({
-                      logic: () => u.OverDueFee === 0,
-                      description: 'u.OverDueFee=0',
-                    })
-                    .and({
-                      logic: () => u.SuspensionDays === 0,
-                      description: 'u.SuspensionDays=0',
-                    }),
-                description:
-                  'u.BorrowStatus=BorrowStatus::SUSPENDandu.OverDueFee=0andu.SuspensionDays=0',
-                then: l({
-                  execute: () => (u.BorrowStatus = BorrowStatus.NORMAL),
-                  description: 'u.BorrowStatus=BorrowStatus::NORMAL',
-                }),
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () =>
+          users.forEach(
+            (u: User) =>
+              l({
+                execute: () => (u.SuspensionDays = oclState.preValue(u, 'SuspensionDays') - 1),
+                description: 'u.SuspensionDays=u.SuspensionDays@pre-1',
               })
-              .build().value
-        ),
-      description:
-        'users->forAll(u:User|u.SuspensionDays=u.SuspensionDays@pre-1andifu.BorrowStatus=BorrowStatus::SUSPENDandu.OverDueFee=0andu.SuspensionDays=0thenu.BorrowStatus=BorrowStatus::NORMALendif)',
-    }).build().value;
-    /*Postcondition End*/
+                .if({
+                  logic: () =>
+                    l({
+                      logic: () => StandardOPs.oclEquals(u.BorrowStatus, BorrowStatus.SUSPEND),
+                      description: 'u.BorrowStatus=BorrowStatus::SUSPEND',
+                    })
+                      .and({
+                        logic: () => StandardOPs.oclEquals(u.OverDueFee, 0),
+                        description: 'u.OverDueFee=0',
+                      })
+                      .and({
+                        logic: () => StandardOPs.oclEquals(u.SuspensionDays, 0),
+                        description: 'u.SuspensionDays=0',
+                      }),
+                  description:
+                    'u.BorrowStatus=BorrowStatus::SUSPENDandu.OverDueFee=0andu.SuspensionDays=0',
+                  then: l({
+                    execute: () => (u.BorrowStatus = BorrowStatus.NORMAL),
+                    description: 'u.BorrowStatus=BorrowStatus::NORMAL',
+                  }),
+                })
+                .build().value
+          ),
+        description:
+          'users->forAll(u:User|u.SuspensionDays=u.SuspensionDays@pre-1andifu.BorrowStatus=BorrowStatus::SUSPENDandu.OverDueFee=0andu.SuspensionDays=0thenu.BorrowStatus=BorrowStatus::NORMALendif)',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          users.every(
+            (u: User) =>
+              l({
+                logic: () =>
+                  StandardOPs.oclEquals(
+                    u.SuspensionDays,
+                    oclState.preValue(u, 'SuspensionDays') - 1
+                  ),
+                description: 'u.SuspensionDays=u.SuspensionDays@pre-1',
+              })
+                .if({
+                  logic: () =>
+                    l({
+                      logic: () => StandardOPs.oclEquals(u.BorrowStatus, BorrowStatus.SUSPEND),
+                      description: 'u.BorrowStatus=BorrowStatus::SUSPEND',
+                    })
+                      .and({
+                        logic: () => StandardOPs.oclEquals(u.OverDueFee, 0),
+                        description: 'u.OverDueFee=0',
+                      })
+                      .and({
+                        logic: () => StandardOPs.oclEquals(u.SuspensionDays, 0),
+                        description: 'u.SuspensionDays=0',
+                      }),
+                  description:
+                    'u.BorrowStatus=BorrowStatus::SUSPENDandu.OverDueFee=0andu.SuspensionDays=0',
+                  then: l({
+                    logic: () => StandardOPs.oclEquals(u.BorrowStatus, BorrowStatus.NORMAL),
+                    description: 'u.BorrowStatus=BorrowStatus::NORMAL',
+                  }),
+                })
+                .build().pass
+          ),
+        description:
+          'users->forAll(u:User|u.SuspensionDays=u.SuspensionDays@pre-1andifu.BorrowStatus=BorrowStatus::SUSPENDandu.OverDueFee=0andu.SuspensionDays=0thenu.BorrowStatus=BorrowStatus::NORMALendif)',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return;
   }
 }
 export {LibraryManagementSystemSystem};

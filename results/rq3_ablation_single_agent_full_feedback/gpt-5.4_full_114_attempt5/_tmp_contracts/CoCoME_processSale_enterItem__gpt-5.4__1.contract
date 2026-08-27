@@ -1,9 +1,0 @@
-Contract ProcessSaleService::enterItem(barcode: Integer, quantity: Integer): Boolean {
-  definition:
-    item: Item = Item.allInstance()->any(o | o.Barcode = barcode),
-    sale: Sale = self.CurrentSale
-  precondition:
-    sale.oclIsUndefined() = false and item.oclIsUndefined() = false and quantity > 0 and sale.IsComplete = false and sale.IsReadytoPay = false
-  postcondition:
-    let salesLineItem:SalesLineItem in salesLineItem.oclIsNew() and SalesLineItem.allInstance()->includes(salesLineItem) and salesLineItem.BelongedSale = sale and salesLineItem.BelongedItem = item and salesLineItem.Quantity = quantity and salesLineItem.Subamount = item.Price * quantity and sale.ContainedSalesLine->includes(salesLineItem) and sale.Amount = sale.Amount@pre + item.Price * quantity and self.CurrentSaleLine = salesLineItem and result = true
-}

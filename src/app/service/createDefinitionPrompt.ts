@@ -1,10 +1,9 @@
-import {whatIsDefination, whatIsPrecondition, whatIsPostcondition} from '../constant';
+import {whatIsDefinition, whatIsPrecondition, whatIsPostcondition} from '../constant';
 
-export const createDefinitionPrompt = () => {
-  return [
-    'Now I will tell you the tell you some context about the rules:',
-    `\`definition\`: ${whatIsDefination}`,
-    `\`precondition\`: ${whatIsPrecondition}`,
-    `\`postcondition\`: ${whatIsPostcondition}`,
+export const createDefinitionPrompt = () =>
+  [
+    'Contract-field semantics:',
+    'definition: ' + whatIsDefinition.trim(),
+    'precondition: ' + whatIsPrecondition.trim(),
+    'postcondition: ' + whatIsPostcondition.trim(),
   ].join('\n');
-};

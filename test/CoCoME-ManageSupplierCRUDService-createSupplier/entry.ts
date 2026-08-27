@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageSupplierCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the supplier with provided id,
-   *if the supplier not exist,
-   *create the supplier with the provided and other info*/
+  /*Definition: The createSupplier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createSupplier(id: number, name: string): boolean {
     /*Definition Start*/
-    let supplier: Supplier = l({
-      logic: () =>
-        getRepository(Supplier).find(
-          (sup: Supplier) =>
-            l({
-              logic: () => sup.Id === id,
-              description: 'sup.Id=id',
-            }).build().pass
-        ),
-      description: 'Supplier.allInstance()->any(sup:Supplier|sup.Id=id)',
-    }).build().pass;
+    let supplier: Supplier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Supplier).find(
+              (sup: Supplier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(sup.Id, id),
+                  description: 'sup.Id=id',
+                }).build().pass
+            ),
+          description: 'Supplier.allInstances()->any(sup:Supplier|sup.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(supplier) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(supplier), true),
       description: 'supplier.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -221,30 +232,68 @@ class ManageSupplierCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let sup: Supplier;
-    return l({
-      execute: () => (sup = new Supplier()),
-      description: 'sup.oclIsNew()',
-    })
-      .and({
-        execute: () => (sup.Id = id),
-        description: 'sup.Id=id',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let sup: Supplier;
+      return l({
+        execute: () => (sup = new Supplier()),
+        description: 'sup.oclIsNew()',
       })
-      .and({
-        execute: () => (sup.Name = name),
-        description: 'sup.Name=name',
+        .and({
+          execute: () => (sup.Id = id),
+          description: 'sup.Id=id',
+        })
+        .and({
+          execute: () => (sup.Name = name),
+          description: 'sup.Name=name',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Supplier), sup),
+          description: 'Supplier.allInstances()->includes(sup)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let sup: Supplier = oclState.findNew(Supplier);
+      return l({
+        logic: () => oclState.isNew(sup, Supplier),
+        description: 'sup.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(Supplier).push(sup),
-        description: 'Supplier.allInstance()->includes(sup)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(sup.Id, id),
+          description: 'sup.Id=id',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sup.Name, name),
+          description: 'sup.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Supplier), sup),
+          description: 'Supplier.allInstances()->includes(sup)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageSupplierCRUDService};

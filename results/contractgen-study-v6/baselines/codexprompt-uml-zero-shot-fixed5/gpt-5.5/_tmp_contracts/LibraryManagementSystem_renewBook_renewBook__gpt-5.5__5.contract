@@ -1,0 +1,90 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u: User |
+        u.UserID = uid and
+        u.BorrowStatus = BorrowStatus::NORMAL and
+        BookCopy.allInstances()->exists(c: BookCopy |
+            c.Barcode = barcode and
+            Loan.allInstances()->exists(l: Loan |
+                l.LoanedUser = u and
+                l.LoanedCopy = c and
+                l.IsReturned = false
+            )
+        )
+    ) and
+Loan.allInstances()->exists(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        l.LoanedCopy.IsReserved = false and
+        l.DueDate > Today and
+        l.OverDueFee = 0
+    ) and
+Loan.allInstances()->exists(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        (
+            (
+                l.LoanedUser.oclIsTypeOf(Student) and
+                l.RenewedTimes < 3
+            )
+            or
+            (
+                l.LoanedUser.oclIsTypeOf(Faculty) and
+                l.RenewedTimes < 6
+            )
+        )
+    )
+            postcondition:
+          Loan.allInstances()->any(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false
+    ).RenewedTimes =
+    Loan.allInstances()@pre->any(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false
+    ).RenewedTimes + 1 and
+Loan.allInstances()->any(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false
+    ).RenewDate = Today and
+let loan: Loan = Loan.allInstances()->any(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false
+    ) in
+    let oldLoan: Loan = Loan.allInstances()@pre->any(l: Loan |
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false
+    ) in
+    if loan.LoanedUser.oclIsTypeOf(Student) and
+       loan.LoanedUser.oclAsType(Student).Programme = Programme::BACHELOR
+    then
+        loan.DueDate = oldLoan.DueDate + 20
+    else
+        if loan.LoanedUser.oclIsTypeOf(Student) and
+           loan.LoanedUser.oclAsType(Student).Programme = Programme::MASTER
+        then
+            loan.DueDate = oldLoan.DueDate + 40
+        else
+            if loan.LoanedUser.oclIsTypeOf(Student)
+            then
+                loan.DueDate = oldLoan.DueDate + 60
+            else
+                if loan.LoanedUser.oclIsTypeOf(Faculty)
+                then
+                    loan.DueDate = oldLoan.DueDate + 60
+                else
+                    false
+                endif
+            endif
+        endif
+    endif and
+result = true
+            
+        }

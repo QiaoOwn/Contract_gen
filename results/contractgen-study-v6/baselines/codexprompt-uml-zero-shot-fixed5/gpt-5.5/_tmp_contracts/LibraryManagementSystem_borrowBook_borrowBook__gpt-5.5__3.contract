@@ -1,0 +1,85 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u | u.UserID = uid) and
+    BookCopy.allInstances()->exists(c | c.Barcode = barcode) and
+User.allInstances()->any(u | u.UserID = uid).BorrowStatus = BorrowStatus::NORMAL and
+    User.allInstances()->any(u | u.UserID = uid).SuspensionDays = 0 and
+let u: User = User.allInstances()->any(x | x.UserID = uid) in
+        if u.oclIsKindOf(Student) then
+            if u.oclAsType(Student).Programme = Programme::BACHELOR then
+                u.LoanedNumber < 20
+            else
+                if u.oclAsType(Student).Programme = Programme::MASTER then
+                    u.LoanedNumber < 40
+                else
+                    u.LoanedNumber < 60
+                endif
+            endif
+        else
+            if u.oclIsKindOf(Faculty) then
+                u.LoanedNumber < 60
+            else
+                false
+            endif
+        endif and
+let u: User = User.allInstances()->any(x | x.UserID = uid) in
+    let c: BookCopy = BookCopy.allInstances()->any(x | x.Barcode = barcode) in
+        c.Status = CopyStatus::AVAILABLE or
+        (
+            c.Status = CopyStatus::ONHOLDSHELF and
+            c.IsReserved = true and
+            Reserve.allInstances()->exists(r |
+                r.ReservedUser = u and
+                r.ReservedCopy = c and
+                r.IsReserveClosed = false
+            )
+        )
+            postcondition:
+          Loan.allInstances()->exists(l |
+        l.oclIsNew() and
+        l.LoanedUser = User.allInstances()->any(u | u.UserID = uid) and
+        l.LoanedCopy = BookCopy.allInstances()->any(c | c.Barcode = barcode) and
+        l.LoanDate = Today and
+        l.IsReturned = false and
+        l.RenewedTimes = 0 and
+        l.OverDueFee = 0 and
+        l.OverDue3Days = false and
+        l.OverDue10Days = false and
+        l.OverDue17Days = false and
+        l.OverDue31Days = false and
+        (
+            if l.LoanedUser.oclIsKindOf(Student) then
+                l.DueDate = Today + 30
+            else
+                if l.LoanedUser.oclIsKindOf(Faculty) then
+                    l.DueDate = Today + 60
+                else
+                    false
+                endif
+            endif
+        )
+    ) and
+let u: User = User.allInstances()->any(x | x.UserID = uid) in
+        u.LoanedNumber = u.LoanedNumber@pre + 1 and
+let c: BookCopy = BookCopy.allInstances()->any(x | x.Barcode = barcode) in
+        c.Status = CopyStatus::LOANED and
+let u: User = User.allInstances()->any(x | x.UserID = uid) in
+    let c: BookCopy = BookCopy.allInstances()->any(x | x.Barcode = barcode) in
+        if c.Status@pre = CopyStatus::ONHOLDSHELF then
+            c.IsReserved = false and
+            Reserve.allInstances()->forAll(r |
+                if r.ReservedUser = u and
+                   r.ReservedCopy = c and
+                   r.IsReserveClosed@pre = false
+                then
+                    r.IsReserveClosed = true
+                else
+                    true
+                endif
+            )
+        else
+            c.IsReserved = c.IsReserved@pre
+        endif and
+result = true
+            
+        }

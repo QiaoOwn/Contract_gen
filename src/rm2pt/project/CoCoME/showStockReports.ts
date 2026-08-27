@@ -18,7 +18,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     returnType: new ReturnedType('Set(Item)'),
     precondition: `true`,
-    postcondition: `result = Item.allInstance()`,
+    postcondition: `result = Item.allInstances()`,
   }),
 ];
 

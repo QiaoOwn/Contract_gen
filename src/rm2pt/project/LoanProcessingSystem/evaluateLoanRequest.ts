@@ -25,7 +25,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     returnType: new ReturnedType('Set(LoanRequest)'),
     definition:
-      'rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::REFERENCESVALIDATED)',
+      'rs:Set(LoanRequest) = LoanRequest.allInstances()->select(r:LoanRequest | r.Status =  LoanRequestStatus::REFERENCESVALIDATED)',
     precondition: 'rs.oclIsUndefined() = false',
     postcondition: 'self.CurrentLoanRequests = rs and result = rs',
   }),
@@ -68,7 +68,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     returnType: new ReturnedType('Set(LoanTerm)'),
     precondition: `true`,
-    postcondition: `result = LoanTerm.allInstance()`,
+    postcondition: `result = LoanTerm.allInstances()`,
   }),
   new Operation({
     name: 'addLoanTerm',
@@ -77,7 +77,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'termid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = termid)`,
+    definition: `loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = termid)`,
     precondition: `self.CurrentLoanRequest.oclIsUndefined() = false and
 			loanterm.oclIsUndefined() = false`,
     postcondition: `CurrentLoanRequest.AttachedLoanTerms->includes(loanterm) and

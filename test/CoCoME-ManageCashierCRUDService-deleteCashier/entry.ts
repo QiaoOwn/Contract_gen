@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,31 +201,35 @@ class ManageCashierCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the cashier with provided id,
-   *if the cashier exists*/
+  /*Definition: The deleteCashier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   deleteCashier(id: number): boolean {
     /*Definition Start*/
-    let cashier: Cashier = l({
-      logic: () =>
-        getRepository(Cashier).find(
-          (cas: Cashier) =>
-            l({
-              logic: () => cas.Id === id,
-              description: 'cas.Id=id',
-            }).build().pass
-        ),
-      description: 'Cashier.allInstance()->any(cas:Cashier|cas.Id=id)',
-    }).build().pass;
+    let cashier: Cashier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Cashier).find(
+              (cas: Cashier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(cas.Id, id),
+                  description: 'cas.Id=id',
+                }).build().pass
+            ),
+          description: 'Cashier.allInstances()->any(cas:Cashier|cas.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cashier) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cashier), false),
       description: 'cashier.oclIsUndefined()=false',
     })
       .and({
-        logic: () => getRepository(Cashier).includes(cashier),
-        description: 'Cashier.allInstance()->includes(cashier)',
+        logic: () => StandardOPs.includes(getRepository(Cashier), cashier),
+        description: 'Cashier.allInstances()->includes(cashier)',
       })
       .build();
     if (!isPreconditionPass) {
@@ -225,17 +237,42 @@ class ManageCashierCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => getRepository(Cashier).remove(cashier),
-      description: 'Cashier.allInstance()->excludes(cashier)',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => StandardOPs.removeIfPresent(getRepository(Cashier), cashier),
+        description: 'Cashier.allInstances()->excludes(cashier)',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => !StandardOPs.includes(getRepository(Cashier), cashier),
+        description: 'Cashier.allInstances()->excludes(cashier)',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageCashierCRUDService};

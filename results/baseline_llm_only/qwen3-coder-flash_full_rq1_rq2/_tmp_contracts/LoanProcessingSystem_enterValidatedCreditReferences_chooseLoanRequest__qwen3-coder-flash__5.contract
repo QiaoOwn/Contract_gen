@@ -1,9 +1,0 @@
-Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
-          definition:
-          req:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.RequestID=requestid), currentRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(o:LoanRequest|o.Status=LoanRequestStatus::SUBMITTED or o.Status=LoanRequestStatus::REFERENCESVALIDATED)
-            precondition:
-          req.oclIsUndefined() = false and (req.Status = LoanRequestStatus::SUBMITTED or req.Status = LoanRequestStatus::REFERENCESVALIDATED)
-            postcondition:
-          let r:LoanRequest in r.oclIsNew() and r.Status = LoanRequestStatus::REFERENCESVALIDATED and LoanRequest.allInstance()->includes(r) and result = r
-            
-        }

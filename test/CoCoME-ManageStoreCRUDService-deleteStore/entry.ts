@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,32 +201,35 @@ class ManageStoreCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the store with provided id,
-   *if the store exists,
-   *delete it*/
+  /*Definition: The deleteStore operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   deleteStore(id: number): boolean {
     /*Definition Start*/
-    let store: Store = l({
-      logic: () =>
-        getRepository(Store).find(
-          (sto: Store) =>
-            l({
-              logic: () => sto.Id === id,
-              description: 'sto.Id=id',
-            }).build().pass
-        ),
-      description: 'Store.allInstance()->any(sto:Store|sto.Id=id)',
-    }).build().pass;
+    let store: Store = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Store).find(
+              (sto: Store) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(sto.Id, id),
+                  description: 'sto.Id=id',
+                }).build().pass
+            ),
+          description: 'Store.allInstances()->any(sto:Store|sto.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(store) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(store), false),
       description: 'store.oclIsUndefined()=false',
     })
       .and({
-        logic: () => getRepository(Store).includes(store),
-        description: 'Store.allInstance()->includes(store)',
+        logic: () => StandardOPs.includes(getRepository(Store), store),
+        description: 'Store.allInstances()->includes(store)',
       })
       .build();
     if (!isPreconditionPass) {
@@ -226,17 +237,42 @@ class ManageStoreCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => getRepository(Store).remove(store),
-      description: 'Store.allInstance()->excludes(store)',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => StandardOPs.removeIfPresent(getRepository(Store), store),
+        description: 'Store.allInstances()->excludes(store)',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => !StandardOPs.includes(getRepository(Store), store),
+        description: 'Store.allInstances()->excludes(store)',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageStoreCRUDService};

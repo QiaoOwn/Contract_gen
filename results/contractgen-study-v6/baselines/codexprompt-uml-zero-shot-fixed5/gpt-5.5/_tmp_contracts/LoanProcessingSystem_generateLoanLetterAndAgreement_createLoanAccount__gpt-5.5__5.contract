@@ -1,0 +1,15 @@
+Contract GenerateLoanLetterAndAgreementModule::createLoanAccount(loanaccountid:Integer,balance:Real,status:LoanAccountStatus[NORMAL|HASPAIDINFULL]): Boolean {
+          precondition:
+          LoanAccount.allInstances()->forAll(la | la.LoanAccountID <> loanaccountid)
+            postcondition:
+          LoanAccount.allInstances()->exists(la |
+        la.oclIsNew() and
+        la.LoanAccountID = loanaccountid and
+        la.Balance = balance and
+        la.Status = status
+    ) and
+LoanAccount.allInstances()->size() =
+        LoanAccount.allInstances@pre()->size() + 1 and
+result = true
+            
+        }

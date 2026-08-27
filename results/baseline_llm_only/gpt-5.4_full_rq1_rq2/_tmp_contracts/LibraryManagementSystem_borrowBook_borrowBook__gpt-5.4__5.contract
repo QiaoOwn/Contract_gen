@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
-          definition:
-          user:User = User.allInstance()->any(u:User|u.UserID=uid), copy:BookCopy = BookCopy.allInstance()->any(c:BookCopy|c.Barcode=barcode), reserve:Reserve = Reserve.allInstance()->any(r:Reserve|r.ReservedCopy=copy and r.ReservedUser=user and r.IsReserveClosed=false), student:Student = Student.allInstance()->any(s:Student|s.UserID=uid), faculty:Faculty = Faculty.allInstance()->any(f:Faculty|f.UserID=uid), librarian:Librarian = Librarian.allInstance()->any(l:Librarian|true)
-            precondition:
-          user.oclIsUndefined() = false and copy.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL and ((student.oclIsUndefined() = false and user.LoanedNumber < 5) or (faculty.oclIsUndefined() = false and user.LoanedNumber < 10)) and (copy.Status = CopyStatus::AVAILABLE or (copy.IsReserved = true and reserve.oclIsUndefined() = false))
-            postcondition:
-          let loan:Loan in loan.oclIsNew() and loan.LoanedUser=user and loan.LoanedCopy=copy and loan.LoanLibrarian=librarian and loan.IsReturned=false and loan.RenewedTimes=0 and copy.Status=CopyStatus::LOANED and user.LoanedNumber=user.LoanedNumber@pre + 1 and user.LoanedBook->includes(loan) and copy.LoanedRecord->includes(loan) and ((student.oclIsUndefined() = false and loan.DueDate=loan.LoanDate) or (faculty.oclIsUndefined() = false and loan.DueDate=loan.LoanDate)) and Loan.allInstance()->includes(loan) and result=true
-            
-        }

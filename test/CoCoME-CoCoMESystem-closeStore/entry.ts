@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,31 +201,34 @@ class CoCoMESystem {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find a store with provided store id,
-   *if the store exists and opened,
-   *and the store is not opened*/
+  /*Definition: The closeStore operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   closeStore(storeID: number): boolean {
     /*Definition Start*/
-    let sto: Store = l({
-      logic: () =>
-        getRepository(Store).find(
-          (s: Store) =>
-            l({
-              logic: () => s.Id === storeID,
-              description: 's.Id=storeID',
-            }).build().pass
-        ),
-      description: 'Store.allInstance()->any(s:Store|s.Id=storeID)',
-    }).build().pass;
+    let sto: Store = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Store).find(
+              (s: Store) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(s.Id, storeID),
+                  description: 's.Id=storeID',
+                }).build().pass
+            ),
+          description: 'Store.allInstances()->any(s:Store|s.Id=storeID)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(sto) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(sto), false),
       description: 'sto.oclIsUndefined()=false',
     })
       .and({
-        logic: () => sto.IsOpened === true,
+        logic: () => StandardOPs.oclEquals(sto.IsOpened, true),
         description: 'sto.IsOpened=true',
       })
       .build();
@@ -226,17 +237,42 @@ class CoCoMESystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (sto.IsOpened = false),
-      description: 'sto.IsOpened=false',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (sto.IsOpened = false),
+        description: 'sto.IsOpened=false',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(sto.IsOpened, false),
+        description: 'sto.IsOpened=false',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMESystem};

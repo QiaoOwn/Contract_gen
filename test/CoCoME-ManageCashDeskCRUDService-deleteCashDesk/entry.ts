@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,31 +201,35 @@ class ManageCashDeskCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the cash desk with provided id,
-   *if the cash desk exists*/
+  /*Definition: The deleteCashDesk operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   deleteCashDesk(id: number): boolean {
     /*Definition Start*/
-    let cashdesk: CashDesk = l({
-      logic: () =>
-        getRepository(CashDesk).find(
-          (cas: CashDesk) =>
-            l({
-              logic: () => cas.Id === id,
-              description: 'cas.Id=id',
-            }).build().pass
-        ),
-      description: 'CashDesk.allInstance()->any(cas:CashDesk|cas.Id=id)',
-    }).build().pass;
+    let cashdesk: CashDesk = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(CashDesk).find(
+              (cas: CashDesk) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(cas.Id, id),
+                  description: 'cas.Id=id',
+                }).build().pass
+            ),
+          description: 'CashDesk.allInstances()->any(cas:CashDesk|cas.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cashdesk) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cashdesk), false),
       description: 'cashdesk.oclIsUndefined()=false',
     })
       .and({
-        logic: () => getRepository(CashDesk).includes(cashdesk),
-        description: 'CashDesk.allInstance()->includes(cashdesk)',
+        logic: () => StandardOPs.includes(getRepository(CashDesk), cashdesk),
+        description: 'CashDesk.allInstances()->includes(cashdesk)',
       })
       .build();
     if (!isPreconditionPass) {
@@ -225,17 +237,42 @@ class ManageCashDeskCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => getRepository(CashDesk).remove(cashdesk),
-      description: 'CashDesk.allInstance()->excludes(cashdesk)',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => StandardOPs.removeIfPresent(getRepository(CashDesk), cashdesk),
+        description: 'CashDesk.allInstances()->excludes(cashdesk)',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => !StandardOPs.includes(getRepository(CashDesk), cashdesk),
+        description: 'CashDesk.allInstances()->excludes(cashdesk)',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageCashDeskCRUDService};

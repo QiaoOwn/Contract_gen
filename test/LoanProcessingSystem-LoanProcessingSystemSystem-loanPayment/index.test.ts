@@ -1,5 +1,33 @@
-import {getRepository, Loan, LoanProcessingSystemSystem, LoanStatus} from './entry';
+import {
+  ApprovalLetter,
+  CheckingAccount,
+  CreditHistory,
+  Loan,
+  LoanAccount,
+  LoanAgreement,
+  LoanProcessingSystemSystem,
+  LoanRequest,
+  LoanStatus,
+  LoanTerm,
+  Status,
+  getRepository,
+} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('LoanProcessingSystem/LoanProcessingSystemSystem/loanPayment', () => {
+  beforeEach(() => {
+    clearRepositories(
+      getRepository(ApprovalLetter),
+      getRepository(CheckingAccount),
+      getRepository(CreditHistory),
+      getRepository(Loan),
+      getRepository(LoanAccount),
+      getRepository(LoanAgreement),
+      getRepository(LoanRequest),
+      getRepository(LoanTerm)
+    );
+  });
+
   it('Happy Path', () => {
     const service = new LoanProcessingSystemSystem();
     const loan = new Loan();
@@ -11,5 +39,10 @@ describe('LoanProcessingSystem/LoanProcessingSystemSystem/loanPayment', () => {
     const result = service.loanPayment(loan.LoanID);
     expect(result).toBe(true);
     expect(loan.RemainAmountToPay).toBe(9);
+  });
+
+  it('rejects when precondition is violated', () => {
+    const service = new LoanProcessingSystemSystem();
+    expectPreconditionRejected(() => service.loanPayment(99));
   });
 });

@@ -19,11 +19,11 @@ const operations = [
       new Parameter({name: 'barcode', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `user:User = User.allInstance()->any(u:User | u.UserID = uid),
-			stu:Student = Student.allInstance()->any(s:Student | s.UserID = uid),
-			fac:Faculty = Faculty.allInstance()->any(f:Faculty | f.UserID = uid),
-			copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),
-			loan:Loan = Loan.allInstance()->any(l:Loan | l.LoanedUser = user and l.LoanedCopy = copy)`,
+    definition: `user:User = User.allInstances()->any(u:User | u.UserID = uid),
+			stu:Student = Student.allInstances()->any(s:Student | s.UserID = uid),
+			fac:Faculty = Faculty.allInstances()->any(f:Faculty | f.UserID = uid),
+			copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),
+			loan:Loan = Loan.allInstances()->any(l:Loan | l.LoanedUser = user and l.LoanedCopy = copy and l.IsReturned = false)`,
     precondition: `user.BorrowStatus = BorrowStatus::NORMAL and
 			user.oclIsUndefined() = false and
 			copy.oclIsUndefined() = false and

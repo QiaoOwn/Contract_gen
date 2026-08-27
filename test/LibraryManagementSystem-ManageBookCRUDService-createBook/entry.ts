@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,7 +238,9 @@ export {
 };
 
 class ManageBookCRUDService {
-  /*Creates a new book.*/
+  /*Definition: The createBook operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createBook(
     callno: string,
     title: string,
@@ -242,22 +252,25 @@ class ManageBookCRUDService {
     copynum: number
   ): boolean {
     /*Definition Start*/
-    let book: Book = l({
-      logic: () =>
-        getRepository(Book).find(
-          (boo: Book) =>
-            l({
-              logic: () => boo.CallNo === callno,
-              description: 'boo.CallNo=callno',
-            }).build().pass
-        ),
-      description: 'Book.allInstance()->any(boo:Book|boo.CallNo=callno)',
-    }).build().pass;
+    let book: Book = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Book).find(
+              (boo: Book) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(boo.CallNo, callno),
+                  description: 'boo.CallNo=callno',
+                }).build().pass
+            ),
+          description: 'Book.allInstances()->any(boo:Book|boo.CallNo=callno)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(book) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(book), true),
       description: 'book.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -265,54 +278,116 @@ class ManageBookCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let boo: Book;
-    return l({
-      execute: () => (boo = new Book()),
-      description: 'boo.oclIsNew()',
-    })
-      .and({
-        execute: () => (boo.CallNo = callno),
-        description: 'boo.CallNo=callno',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let boo: Book;
+      return l({
+        execute: () => (boo = new Book()),
+        description: 'boo.oclIsNew()',
       })
-      .and({
-        execute: () => (boo.Title = title),
-        description: 'boo.Title=title',
+        .and({
+          execute: () => (boo.CallNo = callno),
+          description: 'boo.CallNo=callno',
+        })
+        .and({
+          execute: () => (boo.Title = title),
+          description: 'boo.Title=title',
+        })
+        .and({
+          execute: () => (boo.Edition = edition),
+          description: 'boo.Edition=edition',
+        })
+        .and({
+          execute: () => (boo.Author = author),
+          description: 'boo.Author=author',
+        })
+        .and({
+          execute: () => (boo.Publisher = publisher),
+          description: 'boo.Publisher=publisher',
+        })
+        .and({
+          execute: () => (boo.Description = description),
+          description: 'boo.Description=description',
+        })
+        .and({
+          execute: () => (boo.ISBn = isbn),
+          description: 'boo.ISBn=isbn',
+        })
+        .and({
+          execute: () => (boo.CopyNum = copynum),
+          description: 'boo.CopyNum=copynum',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Book), boo),
+          description: 'Book.allInstances()->includes(boo)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let boo: Book = oclState.findNew(Book);
+      return l({
+        logic: () => oclState.isNew(boo, Book),
+        description: 'boo.oclIsNew()',
       })
-      .and({
-        execute: () => (boo.Edition = edition),
-        description: 'boo.Edition=edition',
-      })
-      .and({
-        execute: () => (boo.Author = author),
-        description: 'boo.Author=author',
-      })
-      .and({
-        execute: () => (boo.Publisher = publisher),
-        description: 'boo.Publisher=publisher',
-      })
-      .and({
-        execute: () => (boo.Description = description),
-        description: 'boo.Description=description',
-      })
-      .and({
-        execute: () => (boo.ISBn = isbn),
-        description: 'boo.ISBn=isbn',
-      })
-      .and({
-        execute: () => (boo.CopyNum = copynum),
-        description: 'boo.CopyNum=copynum',
-      })
-      .and({
-        execute: () => getRepository(Book).push(boo),
-        description: 'Book.allInstance()->includes(boo)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.CallNo, callno),
+          description: 'boo.CallNo=callno',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.Title, title),
+          description: 'boo.Title=title',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.Edition, edition),
+          description: 'boo.Edition=edition',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.Author, author),
+          description: 'boo.Author=author',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.Publisher, publisher),
+          description: 'boo.Publisher=publisher',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.Description, description),
+          description: 'boo.Description=description',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.ISBn, isbn),
+          description: 'boo.ISBn=isbn',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(boo.CopyNum, copynum),
+          description: 'boo.CopyNum=copynum',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Book), boo),
+          description: 'Book.allInstances()->includes(boo)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageBookCRUDService};

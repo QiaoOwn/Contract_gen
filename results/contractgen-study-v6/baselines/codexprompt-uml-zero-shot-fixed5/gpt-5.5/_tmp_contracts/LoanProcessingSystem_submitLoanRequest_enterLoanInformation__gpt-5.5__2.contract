@@ -1,0 +1,26 @@
+Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {
+          precondition:
+          LoanRequest.allInstances()->forAll(lr | lr.RequestID <> requestid)
+            postcondition:
+          LoanRequest.allInstances()->exists(lr |
+        not LoanRequest.allInstances@pre()->includes(lr) and
+        lr.RequestID = requestid and
+        lr.Name = name and
+        lr.LoanAmount = loanamount and
+        lr.LoanPurpose = loanpurpose and
+        lr.Income = income and
+        lr.PhoneNumber = phonenumber and
+        lr.PostalAddress = postaladdress and
+        lr.ZipCode = zipcode and
+        lr.Email = email and
+        lr.WorkReferences = workreferences and
+        lr.CreditReferences = creditreferences and
+        lr.CheckingAccountNumber = checkingaccountnumber and
+        lr.SecurityNumber = securitynumber
+    ) and
+not self.CurrentLoanRequest.oclIsUndefined() and
+    not LoanRequest.allInstances@pre()->includes(self.CurrentLoanRequest) and
+    self.CurrentLoanRequest.RequestID = requestid and
+result = true
+            
+        }

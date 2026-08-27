@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageCashDeskCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the cash desk with provided id,
-   *if the cash desk not exist,
-   *create the cash desk with the provided and other info*/
+  /*Definition: The createCashDesk operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createCashDesk(id: number, name: string, isopened: boolean): boolean {
     /*Definition Start*/
-    let cashdesk: CashDesk = l({
-      logic: () =>
-        getRepository(CashDesk).find(
-          (cas: CashDesk) =>
-            l({
-              logic: () => cas.Id === id,
-              description: 'cas.Id=id',
-            }).build().pass
-        ),
-      description: 'CashDesk.allInstance()->any(cas:CashDesk|cas.Id=id)',
-    }).build().pass;
+    let cashdesk: CashDesk = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(CashDesk).find(
+              (cas: CashDesk) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(cas.Id, id),
+                  description: 'cas.Id=id',
+                }).build().pass
+            ),
+          description: 'CashDesk.allInstances()->any(cas:CashDesk|cas.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cashdesk) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cashdesk), true),
       description: 'cashdesk.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -221,34 +232,76 @@ class ManageCashDeskCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let cas: CashDesk;
-    return l({
-      execute: () => (cas = new CashDesk()),
-      description: 'cas.oclIsNew()',
-    })
-      .and({
-        execute: () => (cas.Id = id),
-        description: 'cas.Id=id',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let cas: CashDesk;
+      return l({
+        execute: () => (cas = new CashDesk()),
+        description: 'cas.oclIsNew()',
       })
-      .and({
-        execute: () => (cas.Name = name),
-        description: 'cas.Name=name',
+        .and({
+          execute: () => (cas.Id = id),
+          description: 'cas.Id=id',
+        })
+        .and({
+          execute: () => (cas.Name = name),
+          description: 'cas.Name=name',
+        })
+        .and({
+          execute: () => (cas.IsOpened = isopened),
+          description: 'cas.IsOpened=isopened',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(CashDesk), cas),
+          description: 'CashDesk.allInstances()->includes(cas)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let cas: CashDesk = oclState.findNew(CashDesk);
+      return l({
+        logic: () => oclState.isNew(cas, CashDesk),
+        description: 'cas.oclIsNew()',
       })
-      .and({
-        execute: () => (cas.IsOpened = isopened),
-        description: 'cas.IsOpened=isopened',
-      })
-      .and({
-        execute: () => getRepository(CashDesk).push(cas),
-        description: 'CashDesk.allInstance()->includes(cas)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(cas.Id, id),
+          description: 'cas.Id=id',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(cas.Name, name),
+          description: 'cas.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(cas.IsOpened, isopened),
+          description: 'cas.IsOpened=isopened',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(CashDesk), cas),
+          description: 'CashDesk.allInstances()->includes(cas)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageCashDeskCRUDService};

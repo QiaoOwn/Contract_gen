@@ -1,0 +1,151 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 12,
+  "operation_id": "AutomatedTellerMachine_manageUser_modifyUser",
+  "case_study": "ATM",
+  "project": "AutomatedTellerMachine",
+  "use_case": "manageUser",
+  "operation": "modifyUser",
+  "operation_signature": "modifyUser(userid: Integer, name: String, address: String): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "a16305b3f83bd3122e4d51d8f64b093122a361a24ae1ad3c0b872fb50c0ab0b8",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "undefined"
+  ],
+  "complexity_score": 49,
+  "contract": "Contract ManageUserCRUDService::modifyUser(userid: Integer,name: String,address: String): Boolean {\n\tdefinition:\n\t\ttargetUser: User = User.allInstances()->any(candidate: User|candidate.UserID = userid)\n\tprecondition:\n\t\ttargetUser.oclIsUndefined() = false\n\tpostcondition:\n\t\ttargetUser.UserID = userid and\n\t\ttargetUser.Name = name and\n\t\ttargetUser.Address = address and\n\t\tresult = true\n}",
+  "complexity_tier": "medium",
+  "scenarios": [
+    {
+      "scenario_id": "AutomatedTellerMachine_manageUser_modifyUser::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_manageUser_modifyUser\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_manageUser_modifyUser\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json",
+          "test_name": "AutomatedTellerMachine/ManageUserCRUDService/modifyUser Happy Path: updates user name and address"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json",
+          "test_name": "AutomatedTellerMachine/ManageUserCRUDService/modifyUser Happy Path: updates user name and address",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json"
+    },
+    {
+      "scenario_id": "AutomatedTellerMachine_manageUser_modifyUser::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_manageUser_modifyUser\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_manageUser_modifyUser\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json",
+          "test_name": "AutomatedTellerMachine/ManageUserCRUDService/modifyUser rejects when user does not exist"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json",
+          "test_name": "AutomatedTellerMachine/ManageUserCRUDService/modifyUser rejects when user does not exist",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json"
+    },
+    {
+      "scenario_id": "AutomatedTellerMachine_manageUser_modifyUser::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_manageUser_modifyUser.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

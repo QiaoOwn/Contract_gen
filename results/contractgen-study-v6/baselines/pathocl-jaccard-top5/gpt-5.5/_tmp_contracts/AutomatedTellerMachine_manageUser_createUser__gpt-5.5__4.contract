@@ -1,0 +1,13 @@
+Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {
+          precondition:
+          User.allInstances()->forAll(u | u.userid <> userid)
+            postcondition:
+          User.allInstances()->exists(u |
+        u.oclIsNew() and
+        u.userid = userid and
+        u.name = name and
+        u.address = address
+    ) and
+result = true
+            
+        }

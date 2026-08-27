@@ -1,0 +1,9 @@
+Contract ManageLoanTermCRUDService::deleteLoanTerm(itemid:Integer): Boolean {
+          definition:
+          targetLoanTerm:LoanTerm = LoanTerm.allInstances()->any(candidate:LoanTerm | candidate.ItemID = itemid)
+            precondition:
+          LoanTerm.allInstances()->exists(candidate:LoanTerm | candidate.ItemID = itemid)
+            postcondition:
+          LoanTerm.allInstances()->excludes(targetLoanTerm) and result = true
+            
+        }

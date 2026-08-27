@@ -1,0 +1,10 @@
+Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {
+          precondition:
+          LoanRequest.allInstances()->select(lr | lr.Status = LoanRequestStatus::APPROVED)->notEmpty()
+    or LoanRequest.allInstances()->select(lr | lr.Status = LoanRequestStatus::APPROVED)->isEmpty()
+            postcondition:
+          self.CurrentLoanRequests =
+        LoanRequest.allInstances()->select(lr | lr.Status = LoanRequestStatus::APPROVED) and
+result = self.CurrentLoanRequests
+            
+        }

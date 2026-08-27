@@ -1,9 +1,0 @@
-Contract ManageLoanTermCRUDService::deleteLoanTerm(itemid:Integer): Boolean {
-          definition:
-          lt:LoanTerm = LoanTerm.allInstance()->any(o:LoanTerm|o.ItemID=itemid), lr:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.AttachedLoanTerms->includes(lt))
-            precondition:
-          lt.oclIsUndefined() = false and lr.oclIsUndefined() = false
-            postcondition:
-          let lt:LoanTerm in lt.oclIsNew() = false and LoanTerm.allInstance()->excludes(lt) and lr.AttachedLoanTerms->excludes(lt) and result = true
-            
-        }

@@ -1,0 +1,208 @@
+{
+  "version": "ocl-generation-rules-v4",
+  "sections": [
+    {
+      "heading": "Requirement-to-field mapping",
+      "rules": [
+        {
+          "id": "G-MAP-01",
+          "text": "Map every Preconditions bullet into precondition only. Do not place input-admissibility checks in postcondition."
+        },
+        {
+          "id": "G-MAP-02",
+          "text": "Map Operation intent and every Postconditions bullet into postcondition. Conditional post-state effects may use if-then-else-endif."
+        },
+        {
+          "id": "G-MAP-03",
+          "text": "Put reusable query-only helpers in definition. Return JSON null for definition when no helper binding is required."
+        }
+      ]
+    },
+    {
+      "heading": "Syntax and grounding",
+      "rules": [
+        {
+          "id": "G-SYN-01",
+          "text": "Use only the executable operation-contract generation subset in the supplied grammar, with the exact ASCII operators shown."
+        },
+        {
+          "id": "G-SYN-02",
+          "text": "Use the standard plural spelling allInstances(); never emit the parser-only legacy singular spelling."
+        },
+        {
+          "id": "G-SYN-03",
+          "text": "Use only entities, attributes, associations, parameters, service state, types, and enumeration literals declared in the supplied operation context."
+        },
+        {
+          "id": "G-SYN-04",
+          "text": "Declare every definition, iterator, and let variable with an explicit type. Definition variables also require an initializer; iterator variables must not have one."
+        },
+        {
+          "id": "G-SYN-05",
+          "text": "Represent an enumeration literal as TypeName::LITERAL and service state as self.propertyName."
+        },
+        {
+          "id": "G-SYN-06",
+          "text": "Access each Temporary Variable / service global listed in the context as self.variableName, never as a bare identifier."
+        },
+        {
+          "id": "G-SYN-07",
+          "text": "Do not chain equality through result. Write a = b and result = a, not result = a = b."
+        },
+        {
+          "id": "G-SYN-08",
+          "text": "When a Boolean helper must encode a comparison, bind it in definition with if a = b then true else false endif."
+        },
+        {
+          "id": "G-SYN-09",
+          "text": "Type tests do not narrow a base-typed variable for OCLTSVM. When a branch reads a subtype-only feature, bind that subtype explicitly in definition with Subtype.allInstances()->any(candidate:Subtype | identity condition), then access the feature through the subtype binding; never write a subtype-only feature through a base-typed variable."
+        }
+      ]
+    },
+    {
+      "heading": "Definition queries",
+      "rules": [
+        {
+          "id": "G-DEF-01",
+          "text": "Bind all instances of an entity with objects:Set(Entity) = Entity.allInstances()."
+        },
+        {
+          "id": "G-DEF-02",
+          "text": "Filter instances with objects:Set(Entity) = Entity.allInstances()->select(object:Entity | condition)."
+        },
+        {
+          "id": "G-DEF-03",
+          "text": "Find one instance with object:Entity = Entity.allInstances()->any(candidate:Entity | condition)."
+        },
+        {
+          "id": "G-DEF-04",
+          "text": "Bind a one-valued navigation with object:Entity = owner.associationName and a collection navigation with objects:Set(Entity) = owner.associationName."
+        },
+        {
+          "id": "G-DEF-05",
+          "text": "Definition clauses are query-only and must not contain result, @pre, oclIsNew(), assignment effects, or user-defined operation calls."
+        }
+      ]
+    },
+    {
+      "heading": "Preconditions and queries",
+      "rules": [
+        {
+          "id": "G-QRY-01",
+          "text": "Test definedness with object.oclIsUndefined() = false and exact type with value.oclIsTypeOf(Entity)."
+        },
+        {
+          "id": "G-QRY-02",
+          "text": "Test collection emptiness, non-emptiness, or size with ->isEmpty(), ->notEmpty(), or ->size()."
+        },
+        {
+          "id": "G-QRY-03",
+          "text": "Use Entity.allInstances()->includes(object) or ->excludes(object) for repository membership queries."
+        },
+        {
+          "id": "G-QRY-04",
+          "text": "Use typed exists, one, select, any, collect, and isUnique iterators for collection queries."
+        },
+        {
+          "id": "G-QRY-05",
+          "text": "Definition and precondition clauses are non-mutating queries; @pre and oclIsNew() are not permitted there."
+        },
+        {
+          "id": "G-QRY-06",
+          "text": "includes(), excludes(), includesAll(), and excludesAll() accept a bound variable as their argument. Bind nested lookups in definition before using them in a collection operation."
+        },
+        {
+          "id": "G-QRY-07",
+          "text": "Aggregate numeric sets with objects->sum()."
+        }
+      ]
+    },
+    {
+      "heading": "Postcondition effects",
+      "rules": [
+        {
+          "id": "G-EFF-01",
+          "text": "Create an object with let object:Entity in object.oclIsNew(), followed by obligations that initialize the new object."
+        },
+        {
+          "id": "G-EFF-02",
+          "text": "Describe repository addition or removal with Entity.allInstances()->includes(object) or ->excludes(object)."
+        },
+        {
+          "id": "G-EFF-03",
+          "text": "Add or remove a collection association link with owner.associationName->includes(object) or ->excludes(object)."
+        },
+        {
+          "id": "G-EFF-04",
+          "text": "Set or clear a one-valued association with owner.associationName = object or owner.associationName = null."
+        },
+        {
+          "id": "G-EFF-05",
+          "text": "Describe an attribute update with object.attributeName = expression. In a postcondition, that \"=\" form is an update obligation, not a chained comparison."
+        },
+        {
+          "id": "G-EFF-06",
+          "text": "Use objects->forAll(object:Entity | effect) for repeated post-state updates only when the body contains an explicit state-changing obligation."
+        },
+        {
+          "id": "G-EFF-07",
+          "text": "Use result = expression only in the postcondition and only when the operation signature declares a return type."
+        }
+      ]
+    },
+    {
+      "heading": "Pre-state and temporal expressions",
+      "rules": [
+        {
+          "id": "G-TMP-01",
+          "text": "Use object.attributeName@pre only in a postcondition to read the value captured before operation execution."
+        },
+        {
+          "id": "G-TMP-02",
+          "text": "Compare dates with isBefore, isAfter, or isEqual, and express date offsets with After(numberOfDays) or Before(numberOfDays)."
+        },
+        {
+          "id": "G-TMP-03",
+          "text": "Use the declared read-only environment value Today for the calendar day at operation entry and Now for the corresponding date-time instant. Reference them as bare identifiers, never as self.Today or self.Now."
+        },
+        {
+          "id": "G-TMP-04",
+          "text": "Do not invent CurrentDate, self.CurrentDate, Date::now(), date literals, or numeric placeholders when the requirement refers to today or the current time. The execute and check paths share the same invocation-captured environment values."
+        }
+      ]
+    },
+    {
+      "heading": "Executable-subset restrictions",
+      "rules": [
+        {
+          "id": "G-SEM-01",
+          "text": "Use Set as the only collection kind; do not emit Bag, Sequence, Collection, OrderedSet, or Tuple values."
+        },
+        {
+          "id": "G-SEM-02",
+          "text": "Do not emit invalid, OclInvalid, or UnlimitedNatural values because they are outside the executable subset."
+        },
+        {
+          "id": "G-SEM-03",
+          "text": "Do not mix and and or at the same nesting level; parenthesize the intended subformula."
+        },
+        {
+          "id": "G-SEM-04",
+          "text": "Do not generate user-defined operation calls. Callable-operation signatures and effect summaries are not part of the generation context."
+        },
+        {
+          "id": "G-SEM-05",
+          "text": "In a postcondition, assignment, membership changes, and oclIsNew() denote effects; other expressions remain predicates over the resulting state."
+        },
+        {
+          "id": "G-SEM-06",
+          "text": "The supported contract subset has no standalone logical-negation keyword. Express negative conditions with comparisons, excludes(), isEmpty(), or oclIsUndefined()."
+        },
+        {
+          "id": "G-SEM-07",
+          "text": "Express type-dependent thresholds and effects with nested if-then-else-endif branches. Do not flatten three or more alternatives into an and/or chain; each branch must use the correctly typed definition binding."
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,0 @@
-Contract ProcessSaleService::makeNewSale(): Boolean {
-          definition:
-          curSale:Sale = CurrentSale, curCashDesk:CashDesk = curSale.BelongedCashDesk, curStore:Store = curSale.Belongedstore, saleExists:Boolean = curSale.oclIsUndefined() = false, deskExists:Boolean = curCashDesk.oclIsUndefined() = false, storeExists:Boolean = curStore.oclIsUndefined() = false, deskOpened:Boolean = curCashDesk.IsOpened = true, storeOpened:Boolean = curStore.IsOpened = true
-            precondition:
-          saleExists = true and deskExists = true and storeExists = true and deskOpened = true and storeOpened = true and curSale.IsComplete = false and curSale.IsReadytoPay = false
-            postcondition:
-          curSale.IsReadytoPay = true and curSale.IsComplete = false and curSale.BelongedCashDesk = curCashDesk and curSale.Belongedstore = curStore and curCashDesk.ContainedSales->includes(curSale) and curStore.Sales->includes(curSale) and result = true
-            
-        }

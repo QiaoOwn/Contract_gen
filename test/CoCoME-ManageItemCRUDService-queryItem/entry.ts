@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageItemCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the item with provided id,
-   *if the item exists,
-   *show the item*/
+  /*Definition: The queryItem operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   queryItem(barcode: number): Item {
     /*Definition Start*/
-    let item: Item = l({
-      logic: () =>
-        getRepository(Item).find(
-          (ite: Item) =>
-            l({
-              logic: () => ite.Barcode === barcode,
-              description: 'ite.Barcode=barcode',
-            }).build().pass
-        ),
-      description: 'Item.allInstance()->any(ite:Item|ite.Barcode=barcode)',
-    }).build().pass;
+    let item: Item = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Item).find(
+              (ite: Item) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(ite.Barcode, barcode),
+                  description: 'ite.Barcode=barcode',
+                }).build().pass
+            ),
+          description: 'Item.allInstances()->any(ite:Item|ite.Barcode=barcode)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(item) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(item), false),
       description: 'item.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -221,12 +232,32 @@ class ManageItemCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => item,
-      description: 'result=item',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => item,
+        description: 'result=item',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(result, item),
+        description: 'result=item',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageItemCRUDService};

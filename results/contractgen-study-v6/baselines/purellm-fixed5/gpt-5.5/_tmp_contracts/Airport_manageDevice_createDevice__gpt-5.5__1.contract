@@ -1,0 +1,9 @@
+Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {
+          definition:
+          selectedContact:Staff = Staff.allInstances()->any(staff:Staff | staff.Id = contactsid)
+            precondition:
+          Device.allInstances()->select(device:Device | device.Id = id)->isEmpty() and Staff.allInstances()->includes(selectedContact)
+            postcondition:
+          let device:Device in device.oclIsNew() and Device.allInstances()->includes(device) and device.Id = id and device.Name = name and device.Location = location and device.Contacts = selectedContact and result = true
+            
+        }

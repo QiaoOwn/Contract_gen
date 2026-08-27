@@ -33,7 +33,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     returnType: new ReturnedType('Set(LoanRequest)'),
     definition:
-      'rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::APPROVED)',
+      'rs:Set(LoanRequest) = LoanRequest.allInstances()->select(r:LoanRequest | r.Status =  LoanRequestStatus::APPROVED)',
     precondition: 'rs.oclIsUndefined() = false',
     postcondition: 'self.CurrentLoanRequests = rs and result = rs',
   }),
@@ -45,14 +45,14 @@ const operations = [
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
     definition:
-      'r:LoanRequest = LoanRequest.allInstance()->any(lr:LoanRequest | lr.RequestID = id)',
+      'r:LoanRequest = LoanRequest.allInstances()->any(lr:LoanRequest | lr.RequestID = id)',
     precondition: 'r.oclIsUndefined() = false',
     postcondition: `let l:ApprovalLetter in
 			l.oclIsNew() and
 			l.Content = "ApprovalLetterContent" and
 			r.AttachedApprovalLetter = l and
 			self.CurrentLoanRequest = r and
-			ApprovalLetter.allInstance()->includes(l) and
+			ApprovalLetter.allInstances()->includes(l) and
 			result = true`,
   }),
   // new Operation({
@@ -75,7 +75,7 @@ const operations = [
 			la.oclIsNew() and
 			la.Content = "Loan Agreement" and
 			self.CurrentLoanRequest.AttachedLoanAgreement = la and
-			LoanAgreement.allInstance()->includes(la) and
+			LoanAgreement.allInstances()->includes(la) and
 			result = true`,
   }),
   // new Operation({
@@ -101,14 +101,14 @@ const operations = [
       }),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `loanaccount:LoanAccount = LoanAccount.allInstance()->any(loa:LoanAccount | loa.LoanAccountID = loanaccountid)`,
+    definition: `loanaccount:LoanAccount = LoanAccount.allInstances()->any(loa:LoanAccount | loa.LoanAccountID = loanaccountid)`,
     precondition: `loanaccount.oclIsUndefined() = true`,
     postcondition: `let loa:LoanAccount in
 			loa.oclIsNew() and
 			loa.LoanAccountID = loanaccountid and
 			loa.Balance = balance and
 			loa.Status = status and
-			LoanAccount.allInstance()->includes(loa) and
+			LoanAccount.allInstances()->includes(loa) and
 			result = true`,
   }),
 ];

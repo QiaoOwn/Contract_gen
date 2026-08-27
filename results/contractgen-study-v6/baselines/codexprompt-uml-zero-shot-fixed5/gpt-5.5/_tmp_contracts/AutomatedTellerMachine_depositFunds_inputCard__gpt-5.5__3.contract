@@ -1,0 +1,25 @@
+Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {
+          precondition:
+          BankCard.allInstances()->exists(c |
+        c.CardID = cardid
+    ) and
+BankCard.allInstances()->exists(c |
+        c.CardID = cardid and
+        c.CardStatus = CardStatus::NORMAL
+    )
+            postcondition:
+          result = true implies
+        self.InputCard.CardID = cardid and
+        self.CardIDValidated = true and
+        BankCard.allInstances()->exists(c |
+            c.CardID = cardid and
+            c.BelongedUser <> null
+        ) and
+result = false implies
+        self.CardIDValidated = false and
+        BankCard.allInstances()->exists(c |
+            c.CardID = cardid and
+            c.BelongedUser = null
+        )
+            
+        }

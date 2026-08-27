@@ -1,0 +1,157 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 28,
+  "operation_id": "LibraryManagementSystem_borrowBook_borrowBook",
+  "case_study": "Library Management",
+  "project": "LibraryManagementSystem",
+  "use_case": "borrowBook",
+  "operation": "borrowBook",
+  "operation_signature": "borrowBook(uid: String, barcode: String): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "b131686868dafa8c4cc4fdc6cddcc56516760a5c794c5c12f5a91d21dcfa191d",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "conditional",
+    "temporal_at_pre",
+    "new_object",
+    "type_test",
+    "enumeration",
+    "repository_update",
+    "navigation_update"
+  ],
+  "complexity_score": 123,
+  "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstances()->any(candidate: User|candidate.UserID = uid),\n\t\tcopy: BookCopy = BookCopy.allInstances()->any(candidate: BookCopy|candidate.Barcode = barcode),\n\t\tstudent: Student = Student.allInstances()->any(candidate: Student|candidate.UserID = uid),\n\t\tfaculty: Faculty = Faculty.allInstances()->any(candidate: Faculty|candidate.UserID = uid),\n\t\treservation: Reserve = Reserve.allInstances()->any(candidate: Reserve|candidate.ReservedUser = user and\n\t\tcandidate.ReservedCopy = copy and\n\t\tcandidate.IsReserveClosed = false),\n\t\tdueDate: Date = if user.oclIsTypeOf(Student) \n\t\tthen Today.After(30) \n\t\telse Today.After(60) \n\t\tendif \n\tprecondition:\n\t\tUser.allInstances()->exists(candidate: User|candidate.UserID = uid) and\n\t\tBookCopy.allInstances()->exists(candidate: BookCopy|candidate.Barcode = barcode) and\n\t\tuser.BorrowStatus = BorrowStatus::NORMAL and\n\t\tuser.SuspensionDays = 0 and\n\t\t(if user.oclIsTypeOf(Student) \n\t\tthen if student.Programme = Programme::BACHELOR \n\t\tthen user.LoanedNumber<20 \n\t\telse if student.Programme = Programme::MASTER \n\t\tthen user.LoanedNumber<40 \n\t\telse user.LoanedNumber<60 \n\t\tendif  \n\t\tendif  \n\t\telse if user.oclIsTypeOf(Faculty) \n\t\tthen user.LoanedNumber<60 \n\t\telse false \n\t\tendif  \n\t\tendif ) and\n\t\t(copy.Status = CopyStatus::AVAILABLE or\n\t\t(copy.Status = CopyStatus::ONHOLDSHELF and\n\t\tcopy.IsReserved = true and\n\t\tReserve.allInstances()->exists(candidate: Reserve|candidate.ReservedUser = user and\n\t\tcandidate.ReservedCopy = copy and\n\t\tcandidate.IsReserveClosed = false)))\n\tpostcondition:\n\t\tlet loan: Loan in\n\t\tloan.oclIsNew() and\n\t\tLoan.allInstances()->includes(loan) and\n\t\tloan.LoanedUser = user and\n\t\tloan.LoanedCopy = copy and\n\t\tuser.LoanedBook->includes(loan) and\n\t\tcopy.LoanedRecord->includes(loan) and\n\t\tloan.LoanDate = Today and\n\t\tloan.IsReturned = false and\n\t\tloan.DueDate = dueDate and\n\t\tuser.LoanedNumber = user.LoanedNumber@pre+1 and\n\t\tcopy.Status = CopyStatus::LOANED and\n\t\tloan.OverDue3Days = false and\n\t\tloan.OverDue10Days = false and\n\t\tloan.OverDue17Days = false and\n\t\tloan.OverDue31Days = false and\n\t\t(if copy.Status@pre = CopyStatus::ONHOLDSHELF \n\t\tthen copy.IsReserved = false and\n\t\treservation.IsReserveClosed = true \n\t\telse copy.IsReserved = copy.IsReserved@pre \n\t\tendif ) and\n\t\tresult = true\n}",
+  "complexity_tier": "complex",
+  "scenarios": [
+    {
+      "scenario_id": "LibraryManagementSystem_borrowBook_borrowBook::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_borrowBook_borrowBook\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_borrowBook_borrowBook\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans a reserved copy to a student and records every post-state obligation"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans a reserved copy to a student and records every post-state obligation",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json"
+    },
+    {
+      "scenario_id": "LibraryManagementSystem_borrowBook_borrowBook::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_borrowBook_borrowBook\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_borrowBook_borrowBook\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects when user does not exist"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects when user does not exist",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json"
+    },
+    {
+      "scenario_id": "LibraryManagementSystem_borrowBook_borrowBook::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_borrowBook_borrowBook.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

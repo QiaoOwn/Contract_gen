@@ -13,9 +13,9 @@ const operations: Operation[] = [
   //     "The librarian records the return of a book, updating the status of the book copy and user's loan record.",
   //   parameters: [new Parameter({name: 'barcode', type: 'String'})],
   //   returnType: new ReturnedType('Boolean'),
-  //   definition: `copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),
-  // 		loan:Loan = Loan.allInstance()->any(l:Loan | l.LoanedCopy = copy and l.IsReturned = false),
-  // 		loans:Set(Loan) = Loan.allInstance()->select(l:Loan | l.LoanedUser = loan.LoanedUser and l.IsReturned = false and l.DueDate.isAfter(Today)),
+  //   definition: `copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),
+  // 		loan:Loan = Loan.allInstances()->any(l:Loan | l.LoanedCopy = copy and l.IsReturned = false),
+  // 		loans:Set(Loan) = Loan.allInstances()->select(l:Loan | l.LoanedUser = loan.LoanedUser and l.IsReturned = false and l.DueDate.isAfter(Today)),
   // 		res:Reserve = copy.ReservationRecord->any(r:Reserve | r.ReservedCopy = copy)`,
   //   precondition: `copy.oclIsUndefined() = false and
   // 		loan.oclIsUndefined() = false`,

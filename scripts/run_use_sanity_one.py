@@ -17,7 +17,10 @@ def main() -> None:
     parser.add_argument("--model", required=True)
     parser.add_argument("--cmd", required=True)
     parser.add_argument("--operation-id", required=True)
-    parser.add_argument("--output-dir", default="results/oclvm_sanity_check/use_runs")
+    parser.add_argument(
+        "--output-dir",
+        default="results/contractgen-study-v6/validation/ocltsvm_sanity_samples/use_runs",
+    )
     parser.add_argument("--timeout", type=int, default=60)
     args = parser.parse_args()
 

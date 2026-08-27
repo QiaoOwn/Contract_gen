@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*Represents a repair task with details including status and related staff.*/
 class Repair {
   /*The unique identifier of the repair task*/
@@ -75,45 +83,48 @@ const getRepository = <T>(clazz: new (...args: any[]) => T) => {
 export {Repair, Staff, Device, ApprovalHistory, getRepository};
 
 class RepairService {
-  /*find the repair with provided repair id and staff with provided staff id and
-   *if the repair and staff are exist then save a new approval history with provided info
-   *and if it is not reject if the process status is 0 and the role is 1, set the process to 1
-   *if the process status is 1 and the role is 2 then set tht process to 2
-   *if the process status is 2 and the role is 3 then set the process to 3
-   *if it is rejected, set the process to 5, finally save the repair instance*/
+  /*Definition: A Staff member records an approval decision for a Repair by creating an ApprovalHistory entry, including whether it is rejected and any Suggestion.
+   *Precondition: The Repair and Staff referenced by rid and sid exist.
+   *Postcondition: A new ApprovalHistory is added to Repair.History with Reject and Suggestion set from the input. The Repair.Process is updated to reflect the next stage when the decision is not rejected; otherwise it moves to the rejected stage.*/
   approve(sid: number, rid: number, reject: boolean, suggestion: string): ApprovalHistory {
     /*Definition Start*/
-    let rep: Repair = l({
-      logic: () =>
-        getRepository(Repair).find(
-          (u: Repair) =>
-            l({
-              logic: () => u.Id === rid,
-              description: 'u.Id=rid',
-            }).build().pass
-        ),
-      description: 'Repair.allInstance()->any(u:Repair|u.Id=rid)',
-    }).build().pass;
-    let sta: Staff = l({
-      logic: () =>
-        getRepository(Staff).find(
-          (uu: Staff) =>
-            l({
-              logic: () => uu.Id === sid,
-              description: 'uu.Id=sid',
-            }).build().pass
-        ),
-      description: 'Staff.allInstance()->any(uu:Staff|uu.Id=sid)',
-    }).build().pass;
+    let rep: Repair = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Repair).find(
+              (u: Repair) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.Id, rid),
+                  description: 'u.Id=rid',
+                }).build().pass
+            ),
+          description: 'Repair.allInstances()->any(u:Repair|u.Id=rid)',
+        }).build().pass
+    );
+    let sta: Staff = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Staff).find(
+              (uu: Staff) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(uu.Id, sid),
+                  description: 'uu.Id=sid',
+                }).build().pass
+            ),
+          description: 'Staff.allInstances()->any(uu:Staff|uu.Id=sid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(rep) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(rep), false),
       description: 'rep.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(sta) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(sta), false),
         description: 'sta.oclIsUndefined()=false',
       })
       .build();
@@ -122,95 +133,198 @@ class RepairService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let ah: ApprovalHistory;
-    return l({
-      execute: () => (ah = new ApprovalHistory()),
-      description: 'ah.oclIsNew()',
-    })
-      .and({
-        execute: () => (ah.Reject = reject),
-        description: 'ah.Reject=reject',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let ah: ApprovalHistory;
+      return l({
+        execute: () => (ah = new ApprovalHistory()),
+        description: 'ah.oclIsNew()',
       })
-      .and({
-        execute: () => (ah.Suggestion = suggestion),
-        description: 'ah.Suggestion=suggestion',
-      })
-      .and({
-        execute: () => getRepository(ApprovalHistory).push(ah),
-        description: 'ApprovalHistory.allInstance()->includes(ah)',
-      })
-      .and({
-        execute: () => rep.History.push(ah),
-        description: 'rep.History->includes(ah)',
-      })
-      .if({
-        logic: () =>
-          l({
-            logic: () => reject !== false,
-            description: 'reject<>false',
-          }),
-        description: 'reject<>false',
-        then: l().if({
+        .and({
+          execute: () => (ah.Reject = reject),
+          description: 'ah.Reject=reject',
+        })
+        .and({
+          execute: () => (ah.Suggestion = suggestion),
+          description: 'ah.Suggestion=suggestion',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(ApprovalHistory), ah),
+          description: 'ApprovalHistory.allInstances()->includes(ah)',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(rep.History, ah),
+          description: 'rep.History->includes(ah)',
+        })
+        .if({
           logic: () =>
             l({
-              logic: () => rep.Process === 0,
-              description: 'rep.Process=0',
-            }).and({
-              logic: () => sta.Role === 1,
-              description: 'sta.Role=1',
+              logic: () => !StandardOPs.oclEquals(reject, false),
+              description: 'reject<>false',
             }),
-          description: 'rep.Process=0andsta.Role=1',
-          then: l({
-            execute: () => (rep.Process = 1),
-            description: 'rep.Process=1',
-          }),
-          else: l().if({
+          description: 'reject<>false',
+          then: l().if({
             logic: () =>
               l({
-                logic: () => rep.Process === 1,
-                description: 'rep.Process=1',
+                logic: () => StandardOPs.oclEquals(rep.Process, 0),
+                description: 'rep.Process=0',
               }).and({
-                logic: () => sta.Role === 2,
-                description: 'sta.Role=2',
+                logic: () => StandardOPs.oclEquals(sta.Role, 1),
+                description: 'sta.Role=1',
               }),
-            description: 'rep.Process=1andsta.Role=2',
+            description: 'rep.Process=0andsta.Role=1',
             then: l({
-              execute: () => (rep.Process = 2),
-              description: 'rep.Process=2',
+              execute: () => (rep.Process = 1),
+              description: 'rep.Process=1',
             }),
             else: l().if({
               logic: () =>
                 l({
-                  logic: () => rep.Process === 2,
-                  description: 'rep.Process=2',
+                  logic: () => StandardOPs.oclEquals(rep.Process, 1),
+                  description: 'rep.Process=1',
                 }).and({
-                  logic: () => sta.Role === 3,
-                  description: 'sta.Role=3',
+                  logic: () => StandardOPs.oclEquals(sta.Role, 2),
+                  description: 'sta.Role=2',
                 }),
-              description: 'rep.Process=2andsta.Role=3',
+              description: 'rep.Process=1andsta.Role=2',
               then: l({
-                execute: () => (rep.Process = 3),
-                description: 'rep.Process=3',
+                execute: () => (rep.Process = 2),
+                description: 'rep.Process=2',
+              }),
+              else: l().if({
+                logic: () =>
+                  l({
+                    logic: () => StandardOPs.oclEquals(rep.Process, 2),
+                    description: 'rep.Process=2',
+                  }).and({
+                    logic: () => StandardOPs.oclEquals(sta.Role, 3),
+                    description: 'sta.Role=3',
+                  }),
+                description: 'rep.Process=2andsta.Role=3',
+                then: l({
+                  execute: () => (rep.Process = 3),
+                  description: 'rep.Process=3',
+                }),
               }),
             }),
           }),
-        }),
-        else: l({
-          execute: () => (rep.Process = 5),
-          description: 'rep.Process=5',
-        }),
+          else: l({
+            execute: () => (rep.Process = 5),
+            description: 'rep.Process=5',
+          }),
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Repair), rep),
+          description: 'Repair.allInstances()->includes(rep)',
+        })
+        .and({
+          execute: () => ah,
+          description: 'result=ah',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let ah: ApprovalHistory = oclState.findNew(ApprovalHistory);
+      return l({
+        logic: () => oclState.isNew(ah, ApprovalHistory),
+        description: 'ah.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(Repair).push(rep),
-        description: 'Repair.allInstance()->includes(rep)',
-      })
-      .and({
-        execute: () => ah,
-        description: 'result=ah',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(ah.Reject, reject),
+          description: 'ah.Reject=reject',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(ah.Suggestion, suggestion),
+          description: 'ah.Suggestion=suggestion',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(ApprovalHistory), ah),
+          description: 'ApprovalHistory.allInstances()->includes(ah)',
+        })
+        .and({
+          logic: () => StandardOPs.includes(rep.History, ah),
+          description: 'rep.History->includes(ah)',
+        })
+        .if({
+          logic: () =>
+            l({
+              logic: () => !StandardOPs.oclEquals(reject, false),
+              description: 'reject<>false',
+            }),
+          description: 'reject<>false',
+          then: l().if({
+            logic: () =>
+              l({
+                logic: () => StandardOPs.oclEquals(rep.Process, 0),
+                description: 'rep.Process=0',
+              }).and({
+                logic: () => StandardOPs.oclEquals(sta.Role, 1),
+                description: 'sta.Role=1',
+              }),
+            description: 'rep.Process=0andsta.Role=1',
+            then: l({
+              logic: () => StandardOPs.oclEquals(rep.Process, 1),
+              description: 'rep.Process=1',
+            }),
+            else: l().if({
+              logic: () =>
+                l({
+                  logic: () => StandardOPs.oclEquals(rep.Process, 1),
+                  description: 'rep.Process=1',
+                }).and({
+                  logic: () => StandardOPs.oclEquals(sta.Role, 2),
+                  description: 'sta.Role=2',
+                }),
+              description: 'rep.Process=1andsta.Role=2',
+              then: l({
+                logic: () => StandardOPs.oclEquals(rep.Process, 2),
+                description: 'rep.Process=2',
+              }),
+              else: l().if({
+                logic: () =>
+                  l({
+                    logic: () => StandardOPs.oclEquals(rep.Process, 2),
+                    description: 'rep.Process=2',
+                  }).and({
+                    logic: () => StandardOPs.oclEquals(sta.Role, 3),
+                    description: 'sta.Role=3',
+                  }),
+                description: 'rep.Process=2andsta.Role=3',
+                then: l({
+                  logic: () => StandardOPs.oclEquals(rep.Process, 3),
+                  description: 'rep.Process=3',
+                }),
+              }),
+            }),
+          }),
+          else: l({
+            logic: () => StandardOPs.oclEquals(rep.Process, 5),
+            description: 'rep.Process=5',
+          }),
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Repair), rep),
+          description: 'Repair.allInstances()->includes(rep)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, ah),
+          description: 'result=ah',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {RepairService};

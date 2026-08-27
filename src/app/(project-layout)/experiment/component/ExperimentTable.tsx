@@ -10,7 +10,6 @@ export type ExperimentTableProps = {
   ablationResult: ReturnType<typeof generateAblationStudyExperimentResult>;
 };
 const ExperimentTable: FC<ExperimentTableProps> = ({result, ablationResult}) => {
-  console.log('Experiment Result:', result);
   const modelsAggregated = result.aggregated;
   const models = Object.keys(modelsAggregated);
   const ablationModelsAggregated = ablationResult.aggregated;

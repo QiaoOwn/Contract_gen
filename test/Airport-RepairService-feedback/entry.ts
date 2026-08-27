@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*Represents a repair task with details including status and related staff.*/
 class Repair {
   /*The unique identifier of the repair task*/
@@ -75,47 +83,52 @@ const getRepository = <T>(clazz: new (...args: any[]) => T) => {
 export {Repair, Staff, Device, ApprovalHistory, getRepository};
 
 class RepairService {
-  /*find the repair and  staff with provided id, sid,
-   *if the repair raised staff is the staff and the role is 0, and the repair process is 7
-   *the repair score is provided score and if the score greater or equal to 3 then close the repair,
-   *or the repair shouldn't be closed and the repair descirption should be the des and the repair process is set to 0, and save the repair*/
+  /*Definition: The Staff who raised a Repair provides a Score and optional Description as feedback.
+   *Precondition: The Repair.RaiseStaff is the given Staff, the Staff.Role indicates GroundStaff, and the Repair is in the finished state.
+   *Postcondition: The Repair.Score is updated. If the Score is high enough the Repair.Close becomes true; otherwise the Repair remains open, its Description may be updated, and the Repair.Process returns to the initial stage.*/
   feedback(id: number, sid: number, score: number, des: string): boolean {
     /*Definition Start*/
-    let rep: Repair = l({
-      logic: () =>
-        getRepository(Repair).find(
-          (u: Repair) =>
-            l({
-              logic: () => u.Id === id,
-              description: 'u.Id=id',
-            }).build().pass
-        ),
-      description: 'Repair.allInstance()->any(u:Repair|u.Id=id)',
-    }).build().pass;
-    let sta: Staff = l({
-      logic: () =>
-        getRepository(Staff).find(
-          (uu: Staff) =>
-            l({
-              logic: () => uu.Id === sid,
-              description: 'uu.Id=sid',
-            }).build().pass
-        ),
-      description: 'Staff.allInstance()->any(uu:Staff|uu.Id=sid)',
-    }).build().pass;
+    let rep: Repair = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Repair).find(
+              (u: Repair) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.Id, id),
+                  description: 'u.Id=id',
+                }).build().pass
+            ),
+          description: 'Repair.allInstances()->any(u:Repair|u.Id=id)',
+        }).build().pass
+    );
+    let sta: Staff = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Staff).find(
+              (uu: Staff) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(uu.Id, sid),
+                  description: 'uu.Id=sid',
+                }).build().pass
+            ),
+          description: 'Staff.allInstances()->any(uu:Staff|uu.Id=sid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => rep.RaiseStaff === sta,
+      logic: () => StandardOPs.oclEquals(rep.RaiseStaff, sta),
       description: 'rep.RaiseStaff=sta',
     })
       .and({
-        logic: () => sta.Role === 0,
+        logic: () => StandardOPs.oclEquals(sta.Role, 0),
         description: 'sta.Role=0',
       })
       .and({
-        logic: () => rep.Process === 7,
+        logic: () => StandardOPs.oclEquals(rep.Process, 7),
         description: 'rep.Process=7',
       })
       .build();
@@ -124,45 +137,98 @@ class RepairService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (rep.Score = score),
-      description: 'rep.Score=score',
-    })
-      .if({
-        logic: () =>
-          l({
-            logic: () => score >= 3,
-            description: 'score>=3',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (rep.Score = score),
+        description: 'rep.Score=score',
+      })
+        .if({
+          logic: () =>
+            l({
+              logic: () => score >= 3,
+              description: 'score>=3',
+            }),
+          description: 'score>=3',
+          then: l({
+            execute: () => (rep.Close = true),
+            description: 'rep.Close=true',
           }),
-        description: 'score>=3',
-        then: l({
-          execute: () => (rep.Close = true),
-          description: 'rep.Close=true',
-        }),
-        else: l({
-          execute: () => (rep.Close = false),
-          description: 'rep.Close=false',
-        })
-          .and({
-            execute: () => (rep.Description = des),
-            description: 'rep.Description=des',
+          else: l({
+            execute: () => (rep.Close = false),
+            description: 'rep.Close=false',
           })
-          .and({
-            execute: () => (rep.Process = 0),
-            description: 'rep.Process=0',
+            .and({
+              execute: () => (rep.Description = des),
+              description: 'rep.Description=des',
+            })
+            .and({
+              execute: () => (rep.Process = 0),
+              description: 'rep.Process=0',
+            }),
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Repair), rep),
+          description: 'Repair.allInstances()->includes(rep)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(rep.Score, score),
+        description: 'rep.Score=score',
+      })
+        .if({
+          logic: () =>
+            l({
+              logic: () => score >= 3,
+              description: 'score>=3',
+            }),
+          description: 'score>=3',
+          then: l({
+            logic: () => StandardOPs.oclEquals(rep.Close, true),
+            description: 'rep.Close=true',
           }),
-      })
-      .and({
-        execute: () => getRepository(Repair).push(rep),
-        description: 'Repair.allInstance()->includes(rep)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+          else: l({
+            logic: () => StandardOPs.oclEquals(rep.Close, false),
+            description: 'rep.Close=false',
+          })
+            .and({
+              logic: () => StandardOPs.oclEquals(rep.Description, des),
+              description: 'rep.Description=des',
+            })
+            .and({
+              logic: () => StandardOPs.oclEquals(rep.Process, 0),
+              description: 'rep.Process=0',
+            }),
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Repair), rep),
+          description: 'Repair.allInstances()->includes(rep)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {RepairService};

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,73 +238,84 @@ export {
 };
 
 class LibraryManagementSystemSystem {
-  /*The user cancels a reservation.*/
+  /*Definition: The cancelReservation operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   cancelReservation(uid: string, barcode: string): boolean {
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (u: User) =>
-            l({
-              logic: () => u.UserID === uid,
-              description: 'u.UserID=uid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(u:User|u.UserID=uid)',
-    }).build().pass;
-    let copy: BookCopy = l({
-      logic: () =>
-        getRepository(BookCopy).find(
-          (bc: BookCopy) =>
-            l({
-              logic: () => bc.Barcode === barcode,
-              description: 'bc.Barcode=barcode',
-            }).build().pass
-        ),
-      description: 'BookCopy.allInstance()->any(bc:BookCopy|bc.Barcode=barcode)',
-    }).build().pass;
-    let res: Reserve = l({
-      logic: () =>
-        getRepository(Reserve).find(
-          (r: Reserve) =>
-            l({
-              logic: () => r.ReservedCopy === copy,
-              description: 'r.ReservedCopy=copy',
-            })
-              .and({
-                logic: () => r.ReservedUser === user,
-                description: 'r.ReservedUser=user',
-              })
-              .build().pass
-        ),
-      description:
-        'Reserve.allInstance()->any(r:Reserve|r.ReservedCopy=copyandr.ReservedUser=user)',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (u: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.UserID, uid),
+                  description: 'u.UserID=uid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(u:User|u.UserID=uid)',
+        }).build().pass
+    );
+    let copy: BookCopy = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(BookCopy).find(
+              (bc: BookCopy) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(bc.Barcode, barcode),
+                  description: 'bc.Barcode=barcode',
+                }).build().pass
+            ),
+          description: 'BookCopy.allInstances()->any(bc:BookCopy|bc.Barcode=barcode)',
+        }).build().pass
+    );
+    let res: Reserve = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Reserve).find(
+              (r: Reserve) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(r.ReservedCopy, copy),
+                  description: 'r.ReservedCopy=copy',
+                })
+                  .and({
+                    logic: () => StandardOPs.oclEquals(r.ReservedUser, user),
+                    description: 'r.ReservedUser=user',
+                  })
+                  .build().pass
+            ),
+          description:
+            'Reserve.allInstances()->any(r:Reserve|r.ReservedCopy=copyandr.ReservedUser=user)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(user) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), false),
       description: 'user.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(copy) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(copy), false),
         description: 'copy.oclIsUndefined()=false',
       })
       .and({
-        logic: () => copy.Status === CopyStatus.LOANED,
+        logic: () => StandardOPs.oclEquals(copy.Status, CopyStatus.LOANED),
         description: 'copy.Status=CopyStatus::LOANED',
       })
       .and({
-        logic: () => copy.IsReserved === true,
+        logic: () => StandardOPs.oclEquals(copy.IsReserved, true),
         description: 'copy.IsReserved=true',
       })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(res) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(res), false),
         description: 'res.oclIsUndefined()=false',
       })
       .and({
-        logic: () => res.IsReserveClosed === false,
+        logic: () => StandardOPs.oclEquals(res.IsReserveClosed, false),
         description: 'res.IsReserveClosed=false',
       })
       .build();
@@ -305,21 +324,50 @@ class LibraryManagementSystemSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (copy.IsReserved = false),
-      description: 'copy.IsReserved=false',
-    })
-      .and({
-        execute: () => (res.IsReserveClosed = true),
-        description: 'res.IsReserveClosed=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (copy.IsReserved = false),
+        description: 'copy.IsReserved=false',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+        .and({
+          execute: () => (res.IsReserveClosed = true),
+          description: 'res.IsReserveClosed=true',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(copy.IsReserved, false),
+        description: 'copy.IsReserved=false',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(res.IsReserveClosed, true),
+          description: 'res.IsReserveClosed=true',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {LibraryManagementSystemSystem};

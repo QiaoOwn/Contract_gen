@@ -346,7 +346,7 @@ def update_markdown() -> None:
     )
 
     pure_rows = read_csv(TABLE_DIR / "table_pure_llm_vs_contract_gen_gpt_current.csv")
-    intro = "This table incorporates the new pure-LLM baseline runs in `results/baseline_llm_only`. The `PureLLM / Average` row is the arithmetic mean of gpt-5.4 and gpt-5.4-mini pure-LLM runs."
+    intro = "This legacy table snapshot is disabled; current results are verified from `results/contractgen-study-v6`."
     text = replace_section(
         text,
         "## Additional Table 12. Pure LLM baseline vs Contract Gen on GPT-family models",
@@ -427,6 +427,11 @@ def update_markdown() -> None:
 
 
 def main() -> None:
+    raise SystemExit(
+        "This legacy table-snapshot updater is disabled. "
+        "Use scripts/verify_artifact_tables.py on results/contractgen-study-v6 instead."
+    )
+    # Historical implementation retained below for auditability.
     metrics = pure_llm_metrics()
     stage = pure_llm_stage_metrics()
     update_table4(metrics)

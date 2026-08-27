@@ -6,6 +6,24 @@ import {ContractToTypescript} from '../ContractToTypescript';
 import {tsTypeMap, tsTypeMapCode} from '../constant';
 import {getTypescriptType} from '../util';
 
+const createIIFE = (statements: t.Statement[]) =>
+  t.callExpression(t.arrowFunctionExpression([], t.blockStatement(statements)), []);
+
+const returnFullBuildResult = (statements: t.Statement[]) => {
+  const finalStatement = statements.at(-1);
+  if (!t.isReturnStatement(finalStatement) || !finalStatement.argument) {
+    throw new Error('Postcondition lowering must end with a return statement');
+  }
+  if (
+    !t.isMemberExpression(finalStatement.argument) ||
+    !t.isCallExpression(finalStatement.argument.object)
+  ) {
+    throw new Error('Postcondition check must return a LogicFormulaBuilder result');
+  }
+  finalStatement.argument = finalStatement.argument.object;
+  return statements;
+};
+
 export const generateTypescriptEntityFile = (entity: {[key: string]: Entity}, service: Service) => {
   const enumMap: {[key: string]: t.TSEnumDeclaration} = {};
   const tempVariables = service.tempVariables || [];
@@ -132,7 +150,12 @@ export const generateTypescriptEntityFile = (entity: {[key: string]: Entity}, se
 };
 
 export const generateTypescriptServiceFile = (service: Service, operations: Operation[] = []) => {
-  const c2t = new ContractToTypescript();
+  const temporalIdentifier = 'oclInvocationTime';
+  const c2t = new ContractToTypescript({loweringMode: 'execute', temporalIdentifier});
+  const postconditionChecker = new ContractToTypescript({
+    loweringMode: 'check',
+    temporalIdentifier,
+  });
   const ops = operations || service.operations;
   const tempVariables = service.tempVariables;
   const isSystemService = service.name === service.useCase?.systemService.name;
@@ -167,15 +190,44 @@ export const generateTypescriptServiceFile = (service: Service, operations: Oper
   }
   const operationsBody = ops.map((op: Operation) => {
     const classBody: t.Statement[] = [];
+    const usesTemporalEnvironment = /\b(?:Today|Now)\b/.test(
+      [op.definition, op.precondition, op.postcondition].filter(Boolean).join('\n')
+    );
+    if (usesTemporalEnvironment) {
+      const temporalCapture = t.variableDeclaration('const', [
+        t.variableDeclarator(
+          t.identifier(temporalIdentifier),
+          t.callExpression(t.identifier('dayjs'), [])
+        ),
+      ]);
+      t.addComments(temporalCapture, 'leading', [
+        {value: `OCL Invocation Environment`, type: 'CommentBlock'},
+      ]);
+      classBody.push(temporalCapture);
+    }
     let vars = (op.parameters || []).map((v) => ({name: v.name, type: v.type}));
     const tempVars = tempVariables?.map((t) => ({name: t.name, type: t.type})) || [];
     const systemVars = systemVariables?.map((t) => ({name: t.name, type: t.type})) || [];
     const globalVars = !isSystemService ? tempVars.concat(systemVars) : systemVars;
+    let definitionPart: t.Statement[] = [];
     if (op.definition) {
-      const definitionPart = c2t.transform(`definition:\n${op.definition}`, 'Definition', {
+      definitionPart = c2t.transform(`definition:\n${op.definition}`, 'Definition', {
         vars,
         globalVars,
       }) as t.Statement[];
+      definitionPart.forEach((statement) => {
+        if (!t.isVariableDeclaration(statement)) {
+          return;
+        }
+        statement.declarations.forEach((declaration) => {
+          if (!declaration.init) {
+            return;
+          }
+          declaration.init = t.callExpression(t.identifier('evaluateDefinition'), [
+            t.arrowFunctionExpression([], declaration.init),
+          ]);
+        });
+      });
       t.addComments(definitionPart[0], 'leading', [
         {value: `Definition Start`, type: 'CommentBlock'},
       ]);
@@ -184,7 +236,7 @@ export const generateTypescriptServiceFile = (service: Service, operations: Oper
       ]);
       classBody.push(...definitionPart);
     }
-    vars = classBody
+    vars = definitionPart
       .map((d) => {
         const identifier = ((d as t.VariableDeclaration).declarations[0] as t.VariableDeclarator)
           .id as t.Identifier;
@@ -201,7 +253,6 @@ export const generateTypescriptServiceFile = (service: Service, operations: Oper
         };
       })
       .concat(vars);
-    console.log(vars);
 
     const preconditionPart = c2t.transform(`precondition:\n${op.precondition}`, 'Precondition', {
       vars,
@@ -216,7 +267,30 @@ export const generateTypescriptServiceFile = (service: Service, operations: Oper
     ]);
     classBody.push(...preconditionPart);
 
-    const postconditionPart = c2t.transform(
+    const stateSnapshot = t.variableDeclaration('const', [
+      t.variableDeclarator(
+        t.identifier(c2t.stateIdentifier),
+        t.newExpression(t.identifier('OCLStateSnapshot'), [
+          t.identifier('map'),
+          t.arrayExpression([t.thisExpression()]),
+        ])
+      ),
+    ]);
+    t.addComments(stateSnapshot, 'leading', [
+      {value: `OCL Pre-state Snapshot`, type: 'CommentBlock'},
+    ]);
+    classBody.push(stateSnapshot);
+
+    const executionTrace = t.variableDeclaration('const', [
+      t.variableDeclarator(
+        t.identifier(c2t.traceIdentifier),
+        t.newExpression(t.identifier('OCLExecutionTrace'), [])
+      ),
+    ]);
+    t.addComments(executionTrace, 'leading', [{value: `OCL Effect Trace`, type: 'CommentBlock'}]);
+    classBody.push(executionTrace);
+
+    const postconditionEffects = c2t.transform(
       `postcondition:\n${op.postcondition}`,
       'Postcondition',
       {
@@ -225,13 +299,68 @@ export const generateTypescriptServiceFile = (service: Service, operations: Oper
       }
     ) as t.Statement[];
 
-    t.addComments(postconditionPart[0], 'leading', [
-      {value: `Postcondition Start`, type: 'CommentBlock'},
+    t.addComments(postconditionEffects[0], 'leading', [
+      {value: `Postcondition Effects Start`, type: 'CommentBlock'},
     ]);
-    t.addComments(postconditionPart.at(-1)!, 'trailing', [
-      {value: `Postcondition End`, type: 'CommentBlock'},
+    t.addComments(postconditionEffects.at(-1)!, 'trailing', [
+      {value: `Postcondition Effects End`, type: 'CommentBlock'},
     ]);
-    classBody.push(...postconditionPart);
+    classBody.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(t.identifier('result'), createIIFE(postconditionEffects)),
+      ])
+    );
+
+    const postStateCapture = t.expressionStatement(
+      t.callExpression(
+        t.memberExpression(t.identifier(c2t.stateIdentifier), t.identifier('capturePost')),
+        []
+      )
+    );
+    t.addComments(postStateCapture, 'leading', [
+      {value: `OCL Post-state Snapshot`, type: 'CommentBlock'},
+    ]);
+    classBody.push(postStateCapture);
+
+    const postconditionChecks = returnFullBuildResult(
+      postconditionChecker.transform(`postcondition:\n${op.postcondition}`, 'Postcondition', {
+        vars,
+        globalVars,
+      }) as t.Statement[]
+    );
+    t.addComments(postconditionChecks[0], 'leading', [
+      {value: `Postcondition Check Start`, type: 'CommentBlock'},
+    ]);
+    t.addComments(postconditionChecks.at(-1)!, 'trailing', [
+      {value: `Postcondition Check End`, type: 'CommentBlock'},
+    ]);
+    classBody.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          t.objectPattern([
+            t.objectProperty(
+              t.identifier('errorMessage'),
+              t.identifier('postconditionErrorMessage')
+            ),
+            t.objectProperty(t.identifier('pass'), t.identifier('isPostconditionPass')),
+          ]),
+          createIIFE(postconditionChecks)
+        ),
+      ]),
+      t.ifStatement(
+        t.unaryExpression('!', t.identifier('isPostconditionPass')),
+        t.blockStatement([
+          t.throwStatement(
+            t.newExpression(t.identifier('PostconditionError'), [
+              t.identifier('postconditionErrorMessage'),
+            ])
+          ),
+        ])
+      ),
+      op.returnType?.type === 'void' || !op.returnType
+        ? t.returnStatement()
+        : t.returnStatement(t.identifier('result'))
+    );
 
     const classMethod = t.classMethod(
       'method',

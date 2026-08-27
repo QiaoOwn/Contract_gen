@@ -4,6 +4,7 @@ import {ProjectParam} from '../type';
 export type GetOperationCodeParams = ProjectParam & {
   operation: string;
   removeExports?: boolean;
+  includeGraphImage?: boolean;
 };
 
 export function removeFileExportsAndImports(file: t.File) {

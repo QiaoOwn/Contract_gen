@@ -1,0 +1,19 @@
+Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {
+          precondition:
+          CashDesk.allInstances()->exists(cd: CashDesk |
+        cd.Id = cashDeskID and cd.IsOpened = false
+    ) and
+self.currentStore <> null and self.currentStore.IsOpened = true and
+self.currentStore.AssociationCashdeskes->exists(cd: CashDesk |
+        cd.Id = cashDeskID
+    )
+            postcondition:
+          CashDesk.allInstances()->any(cd: CashDesk |
+        cd.Id = cashDeskID
+    ).IsOpened = true and
+self.currentCashDesk = CashDesk.allInstances()->any(cd: CashDesk |
+        cd.Id = cashDeskID
+    ) and
+result = true
+            
+        }

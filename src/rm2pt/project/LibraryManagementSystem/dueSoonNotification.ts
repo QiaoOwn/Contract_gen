@@ -11,7 +11,7 @@ const operations: Operation[] = [
   //   name: 'dueSoonNotification',
   //   description:
   //     'The scheduler sends notifications to users whose borrowed books are due to be returned soon.',
-  //   definition: `users:Set(User) = User.allInstance()->select(user:User | user.LoanedBook->exists(loan:Loan | loan.IsReturned = false and Today.After(3).isAfter(loan.DueDate)))`,
+  //   definition: `users:Set(User) = User.allInstances()->select(user:User | user.LoanedBook->exists(loan:Loan | loan.IsReturned = false and Today.After(3).isAfter(loan.DueDate)))`,
   //   precondition: `true`,
   //   postcondition: `users->forAll(u:User |
   // 			sendNotificationEmail(u.Email))`,

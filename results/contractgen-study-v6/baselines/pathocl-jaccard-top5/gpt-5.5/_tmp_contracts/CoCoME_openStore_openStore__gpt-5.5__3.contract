@@ -1,0 +1,10 @@
+Contract CoCoMESystem::openStore(storeID:Integer): Boolean {
+          precondition:
+          Store.allInstances()->exists(s: Store | s.Id = storeID) and
+Store.allInstances()->any(s: Store | s.Id = storeID).IsOpened = false
+            postcondition:
+          Store.allInstances()->any(s: Store | s.Id = storeID).IsOpened = true and
+self.currentStore = Store.allInstances()->any(s: Store | s.Id = storeID) and
+result = true
+            
+        }

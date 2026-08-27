@@ -143,7 +143,6 @@ export const generateExperimentResult = () => {
       }
       aggregated[model]!['OCL Generator']!++;
     } else {
-      console.log(`OCL Generator failed for ${model} ${key} ${uc} ${op}`);
     }
 
     if (!opResult!['Contract Generator']) {
@@ -326,7 +325,6 @@ export const generateAblationStudyExperimentResult = () => {
       opResult!['OCL Generator'] = !!ocl;
       aggregated[model]!['OCL Generator']!++;
     } else {
-      console.log(`OCL Generator failed for ${model} ${key} ${uc} ${op}`);
     }
 
     if (!opResult!['Contract Generator']) {
@@ -358,7 +356,6 @@ export const generateAblationStudyExperimentResult = () => {
         experimentResult.some((s) => s['Test Result']?.result?.numPassingTests) &&
         experimentResult.some((s) => s['Contract Generator']?.contractErrors?.length === 0) &&
         experimentResult.some((s) => s['TypeScript Parser']?.typescriptErrors?.length === 0);
-      console.log("  opResult!['Test Result']", opResult!['Test Result']);
 
       if (opResult!['Test Result']) {
         aggregated[model]!['Test Result']!++;

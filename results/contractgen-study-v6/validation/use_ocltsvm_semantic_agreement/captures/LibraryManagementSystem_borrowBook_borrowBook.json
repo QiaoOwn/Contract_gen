@@ -1,0 +1,2501 @@
+{
+  "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+  "model": "gpt-5.5",
+  "sourceAttempt": 1,
+  "contract": "Contract LibraryManagementSystemSystem::borrowBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstances()->any(candidate: User|candidate.UserID = uid),\n\t\tcopy: BookCopy = BookCopy.allInstances()->any(candidate: BookCopy|candidate.Barcode = barcode),\n\t\tstudent: Student = Student.allInstances()->any(candidate: Student|candidate.UserID = uid),\n\t\tfaculty: Faculty = Faculty.allInstances()->any(candidate: Faculty|candidate.UserID = uid),\n\t\treservation: Reserve = Reserve.allInstances()->any(candidate: Reserve|candidate.ReservedUser = user and\n\t\tcandidate.ReservedCopy = copy and\n\t\tcandidate.IsReserveClosed = false),\n\t\tdueDate: Date = if user.oclIsTypeOf(Student) \n\t\tthen Today.After(30) \n\t\telse Today.After(60) \n\t\tendif \n\tprecondition:\n\t\tUser.allInstances()->exists(candidate: User|candidate.UserID = uid) and\n\t\tBookCopy.allInstances()->exists(candidate: BookCopy|candidate.Barcode = barcode) and\n\t\tuser.BorrowStatus = BorrowStatus::NORMAL and\n\t\tuser.SuspensionDays = 0 and\n\t\t(if user.oclIsTypeOf(Student) \n\t\tthen if student.Programme = Programme::BACHELOR \n\t\tthen user.LoanedNumber<20 \n\t\telse if student.Programme = Programme::MASTER \n\t\tthen user.LoanedNumber<40 \n\t\telse user.LoanedNumber<60 \n\t\tendif  \n\t\tendif  \n\t\telse if user.oclIsTypeOf(Faculty) \n\t\tthen user.LoanedNumber<60 \n\t\telse false \n\t\tendif  \n\t\tendif ) and\n\t\t(copy.Status = CopyStatus::AVAILABLE or\n\t\t(copy.Status = CopyStatus::ONHOLDSHELF and\n\t\tcopy.IsReserved = true and\n\t\tReserve.allInstances()->exists(candidate: Reserve|candidate.ReservedUser = user and\n\t\tcandidate.ReservedCopy = copy and\n\t\tcandidate.IsReserveClosed = false)))\n\tpostcondition:\n\t\tlet loan: Loan in\n\t\tloan.oclIsNew() and\n\t\tLoan.allInstances()->includes(loan) and\n\t\tloan.LoanedUser = user and\n\t\tloan.LoanedCopy = copy and\n\t\tuser.LoanedBook->includes(loan) and\n\t\tcopy.LoanedRecord->includes(loan) and\n\t\tloan.LoanDate = Today and\n\t\tloan.IsReturned = false and\n\t\tloan.DueDate = dueDate and\n\t\tuser.LoanedNumber = user.LoanedNumber@pre+1 and\n\t\tcopy.Status = CopyStatus::LOANED and\n\t\tloan.OverDue3Days = false and\n\t\tloan.OverDue10Days = false and\n\t\tloan.OverDue17Days = false and\n\t\tloan.OverDue31Days = false and\n\t\t(if copy.Status@pre = CopyStatus::ONHOLDSHELF \n\t\tthen copy.IsReserved = false and\n\t\treservation.IsReserveClosed = true \n\t\telse copy.IsReserved = copy.IsReserved@pre \n\t\tendif ) and\n\t\tresult = true\n}",
+  "testSuites": {
+    "passed": 1,
+    "failed": 0,
+    "total": 1
+  },
+  "tests": {
+    "passed": 12,
+    "failed": 0,
+    "pending": 0,
+    "total": 12
+  },
+  "captures": [
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans a reserved copy to a student and records every post-state obligation",
+      "before": {
+        "rootId": "o4",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369888,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o1"]
+          },
+          {
+            "className": "Student",
+            "members": ["o1"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o2"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": ["o3"]
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o1",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o2",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "ONHOLDSHELF",
+              "IsReserved": true,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o3",
+            "className": "Reserve",
+            "properties": {
+              "ReservedCopy": {
+                "kind": "ref",
+                "id": "o2"
+              },
+              "IsReserveClosed": false,
+              "ReservedUser": {
+                "kind": "ref",
+                "id": "o1"
+              }
+            }
+          },
+          {
+            "id": "o4",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o4",
+        "args": ["1", "1"],
+        "result": true,
+        "capturedNowMillis": 1786422369891,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o1"]
+          },
+          {
+            "className": "Student",
+            "members": ["o1"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o2"]
+          },
+          {
+            "className": "Loan",
+            "members": ["o5"]
+          },
+          {
+            "className": "Reserve",
+            "members": ["o3"]
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o1",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 1,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o5"
+                  }
+                ]
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o2",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "LOANED",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o5"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "o5",
+            "className": "Loan",
+            "properties": {
+              "LoanedUser": {
+                "kind": "ref",
+                "id": "o1"
+              },
+              "LoanedCopy": {
+                "kind": "ref",
+                "id": "o2"
+              },
+              "LoanDate": {
+                "kind": "date",
+                "epochMillis": 1786377600000
+              },
+              "IsReturned": false,
+              "DueDate": {
+                "kind": "date",
+                "epochMillis": 1788969600000
+              },
+              "OverDue3Days": false,
+              "OverDue10Days": false,
+              "OverDue17Days": false,
+              "OverDue31Days": false
+            }
+          },
+          {
+            "id": "o3",
+            "className": "Reserve",
+            "properties": {
+              "ReservedCopy": {
+                "kind": "ref",
+                "id": "o2"
+              },
+              "IsReserveClosed": true,
+              "ReservedUser": {
+                "kind": "ref",
+                "id": "o1"
+              }
+            }
+          },
+          {
+            "id": "o4",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "",
+      "errorMessage": "",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans an available copy to faculty with a 60-day due date",
+      "before": {
+        "rootId": "o8",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369893,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o6"]
+          },
+          {
+            "className": "Student",
+            "members": []
+          },
+          {
+            "className": "Faculty",
+            "members": ["o6"]
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o7"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o6",
+            "className": "Faculty",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o7",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o8",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o8",
+        "args": ["1", "1"],
+        "result": true,
+        "capturedNowMillis": 1786422369894,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o6"]
+          },
+          {
+            "className": "Student",
+            "members": []
+          },
+          {
+            "className": "Faculty",
+            "members": ["o6"]
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o7"]
+          },
+          {
+            "className": "Loan",
+            "members": ["o9"]
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o6",
+            "className": "Faculty",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 1,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o9"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "o7",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "LOANED",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o9"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "o9",
+            "className": "Loan",
+            "properties": {
+              "LoanedUser": {
+                "kind": "ref",
+                "id": "o6"
+              },
+              "LoanedCopy": {
+                "kind": "ref",
+                "id": "o7"
+              },
+              "LoanDate": {
+                "kind": "date",
+                "epochMillis": 1786377600000
+              },
+              "IsReturned": false,
+              "DueDate": {
+                "kind": "date",
+                "epochMillis": 1791561600000
+              },
+              "OverDue3Days": false,
+              "OverDue10Days": false,
+              "OverDue17Days": false,
+              "OverDue31Days": false
+            }
+          },
+          {
+            "id": "o8",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "",
+      "errorMessage": "",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects when user does not exist",
+      "before": {
+        "rootId": "o12",
+        "args": ["missing", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369895,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o10"]
+          },
+          {
+            "className": "Student",
+            "members": ["o10"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o11"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o10",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o11",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o12",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o12",
+        "args": ["missing", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369895,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o10"]
+          },
+          {
+            "className": "Student",
+            "members": ["o10"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o11"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o10",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o11",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o12",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - User.allInstances()->exists(candidate:User|candidate.UserID=uid))",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects when copy does not exist",
+      "before": {
+        "rootId": "o15",
+        "args": ["1", "missing"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369938,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o13"]
+          },
+          {
+            "className": "Student",
+            "members": ["o13"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o14"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o13",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o14",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o15",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o15",
+        "args": ["1", "missing"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369938,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o13"]
+          },
+          {
+            "className": "Student",
+            "members": ["o13"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o14"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o13",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o14",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o15",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - BookCopy.allInstances()->exists(candidate:BookCopy|candidate.Barcode=barcode))",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects a suspended user without changing state",
+      "before": {
+        "rootId": "o18",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369939,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o16"]
+          },
+          {
+            "className": "Student",
+            "members": ["o16"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o17"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o16",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "SUSPEND",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o17",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o18",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o18",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369940,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o16"]
+          },
+          {
+            "className": "Student",
+            "members": ["o16"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o17"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o16",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "SUSPEND",
+              "SuspensionDays": 0,
+              "LoanedNumber": 0,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o17",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o18",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - user.BorrowStatus=BorrowStatus::NORMAL)",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects a faculty member at the loan quota",
+      "before": {
+        "rootId": "o21",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369940,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o19"]
+          },
+          {
+            "className": "Student",
+            "members": []
+          },
+          {
+            "className": "Faculty",
+            "members": ["o19"]
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o20"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o19",
+            "className": "Faculty",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 60,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o20",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o21",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o21",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369941,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o19"]
+          },
+          {
+            "className": "Student",
+            "members": []
+          },
+          {
+            "className": "Faculty",
+            "members": ["o19"]
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o20"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o19",
+            "className": "Faculty",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 60,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o20",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o21",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - (ifuser.oclIsTypeOf(Student)thenifstudent.Programme=Programme::BACHELORthenuser.LoanedNumber<20elseifstudent.Programme=Programme::MASTERthenuser.LoanedNumber<40elseuser.LoanedNumber<60endifendifelseifuser.oclIsTypeOf(Faculty)thenuser.LoanedNumber<60elsefalseendifendif))",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects a BACHELOR student at the 20-loan quota",
+      "before": {
+        "rootId": "o24",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369941,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o22"]
+          },
+          {
+            "className": "Student",
+            "members": ["o22"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o23"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o22",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 20,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o23",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o24",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o24",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369941,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o22"]
+          },
+          {
+            "className": "Student",
+            "members": ["o22"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o23"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o22",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 20,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o23",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o24",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - (ifuser.oclIsTypeOf(Student)thenifstudent.Programme=Programme::BACHELORthenuser.LoanedNumber<20elseifstudent.Programme=Programme::MASTERthenuser.LoanedNumber<40elseuser.LoanedNumber<60endifendifelseifuser.oclIsTypeOf(Faculty)thenuser.LoanedNumber<60elsefalseendifendif))",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects a MASTER student at the 40-loan quota",
+      "before": {
+        "rootId": "o27",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369942,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o25"]
+          },
+          {
+            "className": "Student",
+            "members": ["o25"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o26"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o25",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 40,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "MASTER"
+            }
+          },
+          {
+            "id": "o26",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o27",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o27",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369943,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o25"]
+          },
+          {
+            "className": "Student",
+            "members": ["o25"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o26"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o25",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 40,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "MASTER"
+            }
+          },
+          {
+            "id": "o26",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o27",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - (ifuser.oclIsTypeOf(Student)thenifstudent.Programme=Programme::BACHELORthenuser.LoanedNumber<20elseifstudent.Programme=Programme::MASTERthenuser.LoanedNumber<40elseuser.LoanedNumber<60endifendifelseifuser.oclIsTypeOf(Faculty)thenuser.LoanedNumber<60elsefalseendifendif))",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook rejects a PHD student at the 60-loan quota",
+      "before": {
+        "rootId": "o30",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369944,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o28"]
+          },
+          {
+            "className": "Student",
+            "members": ["o28"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o29"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o28",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 60,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "PHD"
+            }
+          },
+          {
+            "id": "o29",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o30",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o30",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369944,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o28"]
+          },
+          {
+            "className": "Student",
+            "members": ["o28"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o29"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o28",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 60,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "PHD"
+            }
+          },
+          {
+            "id": "o29",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o30",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "PreconditionError",
+      "errorMessage": "Precondition validation failed:  (Build Failed - (ifuser.oclIsTypeOf(Student)thenifstudent.Programme=Programme::BACHELORthenuser.LoanedNumber<20elseifstudent.Programme=Programme::MASTERthenuser.LoanedNumber<40elseuser.LoanedNumber<60endifendifelseifuser.oclIsTypeOf(Faculty)thenuser.LoanedNumber<60elsefalseendifendif))",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook accepts a BACHELOR student immediately below the programme quota",
+      "before": {
+        "rootId": "o33",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369945,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o31"]
+          },
+          {
+            "className": "Student",
+            "members": ["o31"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o32"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o31",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 19,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o32",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o33",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o33",
+        "args": ["1", "1"],
+        "result": true,
+        "capturedNowMillis": 1786422369945,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o31"]
+          },
+          {
+            "className": "Student",
+            "members": ["o31"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o32"]
+          },
+          {
+            "className": "Loan",
+            "members": ["o34"]
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o31",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 20,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o34"
+                  }
+                ]
+              },
+              "Programme": "BACHELOR"
+            }
+          },
+          {
+            "id": "o32",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "LOANED",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o34"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "o34",
+            "className": "Loan",
+            "properties": {
+              "LoanedUser": {
+                "kind": "ref",
+                "id": "o31"
+              },
+              "LoanedCopy": {
+                "kind": "ref",
+                "id": "o32"
+              },
+              "LoanDate": {
+                "kind": "date",
+                "epochMillis": 1786377600000
+              },
+              "IsReturned": false,
+              "DueDate": {
+                "kind": "date",
+                "epochMillis": 1788969600000
+              },
+              "OverDue3Days": false,
+              "OverDue10Days": false,
+              "OverDue17Days": false,
+              "OverDue31Days": false
+            }
+          },
+          {
+            "id": "o33",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "",
+      "errorMessage": "",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook accepts a MASTER student immediately below the programme quota",
+      "before": {
+        "rootId": "o37",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369946,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o35"]
+          },
+          {
+            "className": "Student",
+            "members": ["o35"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o36"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o35",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 39,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "MASTER"
+            }
+          },
+          {
+            "id": "o36",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o37",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o37",
+        "args": ["1", "1"],
+        "result": true,
+        "capturedNowMillis": 1786422369946,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o35"]
+          },
+          {
+            "className": "Student",
+            "members": ["o35"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o36"]
+          },
+          {
+            "className": "Loan",
+            "members": ["o38"]
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o35",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 40,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o38"
+                  }
+                ]
+              },
+              "Programme": "MASTER"
+            }
+          },
+          {
+            "id": "o36",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "LOANED",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o38"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "o38",
+            "className": "Loan",
+            "properties": {
+              "LoanedUser": {
+                "kind": "ref",
+                "id": "o35"
+              },
+              "LoanedCopy": {
+                "kind": "ref",
+                "id": "o36"
+              },
+              "LoanDate": {
+                "kind": "date",
+                "epochMillis": 1786377600000
+              },
+              "IsReturned": false,
+              "DueDate": {
+                "kind": "date",
+                "epochMillis": 1788969600000
+              },
+              "OverDue3Days": false,
+              "OverDue10Days": false,
+              "OverDue17Days": false,
+              "OverDue31Days": false
+            }
+          },
+          {
+            "id": "o37",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "",
+      "errorMessage": "",
+      "testStatus": "passed",
+      "testFailure": ""
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "currentTestName": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook accepts a PHD student immediately below the programme quota",
+      "before": {
+        "rootId": "o41",
+        "args": ["1", "1"],
+        "result": {
+          "kind": "undefined"
+        },
+        "capturedNowMillis": 1786422369946,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o39"]
+          },
+          {
+            "className": "Student",
+            "members": ["o39"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o40"]
+          },
+          {
+            "className": "Loan",
+            "members": []
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o39",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 59,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              },
+              "Programme": "PHD"
+            }
+          },
+          {
+            "id": "o40",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "AVAILABLE",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": []
+              }
+            }
+          },
+          {
+            "id": "o41",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "after": {
+        "rootId": "o41",
+        "args": ["1", "1"],
+        "result": true,
+        "capturedNowMillis": 1786422369947,
+        "repositories": [
+          {
+            "className": "User",
+            "members": ["o39"]
+          },
+          {
+            "className": "Student",
+            "members": ["o39"]
+          },
+          {
+            "className": "Faculty",
+            "members": []
+          },
+          {
+            "className": "Book",
+            "members": []
+          },
+          {
+            "className": "Subject",
+            "members": []
+          },
+          {
+            "className": "BookCopy",
+            "members": ["o40"]
+          },
+          {
+            "className": "Loan",
+            "members": ["o42"]
+          },
+          {
+            "className": "Reserve",
+            "members": []
+          },
+          {
+            "className": "RecommendBook",
+            "members": []
+          },
+          {
+            "className": "Administrator",
+            "members": []
+          },
+          {
+            "className": "Librarian",
+            "members": []
+          }
+        ],
+        "objects": [
+          {
+            "id": "o39",
+            "className": "Student",
+            "properties": {
+              "UserID": "1",
+              "BorrowStatus": "NORMAL",
+              "SuspensionDays": 0,
+              "LoanedNumber": 60,
+              "LoanedBook": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o42"
+                  }
+                ]
+              },
+              "Programme": "PHD"
+            }
+          },
+          {
+            "id": "o40",
+            "className": "BookCopy",
+            "properties": {
+              "Barcode": "1",
+              "Status": "LOANED",
+              "IsReserved": false,
+              "LoanedRecord": {
+                "kind": "collection",
+                "ordered": true,
+                "items": [
+                  {
+                    "kind": "ref",
+                    "id": "o42"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "o42",
+            "className": "Loan",
+            "properties": {
+              "LoanedUser": {
+                "kind": "ref",
+                "id": "o39"
+              },
+              "LoanedCopy": {
+                "kind": "ref",
+                "id": "o40"
+              },
+              "LoanDate": {
+                "kind": "date",
+                "epochMillis": 1786377600000
+              },
+              "IsReturned": false,
+              "DueDate": {
+                "kind": "date",
+                "epochMillis": 1788969600000
+              },
+              "OverDue3Days": false,
+              "OverDue10Days": false,
+              "OverDue17Days": false,
+              "OverDue31Days": false
+            }
+          },
+          {
+            "id": "o41",
+            "className": "LibraryManagementSystemSystem_AutoGenerated",
+            "properties": {}
+          }
+        ]
+      },
+      "errorName": "",
+      "errorMessage": "",
+      "testStatus": "passed",
+      "testFailure": ""
+    }
+  ],
+  "success": true
+}

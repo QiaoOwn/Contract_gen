@@ -187,10 +187,24 @@ def make_skeleton(row: dict, index: int) -> tuple[str, str]:
 
 
 def main() -> None:
+    raise SystemExit(
+        "This legacy skeleton exporter is disabled for the v3 study. "
+        "Use scripts/generate_use_strong_114.py, which validates study, input, prompt, and model provenance."
+    )
+    # Historical implementation retained below for auditability.
     parser = argparse.ArgumentParser()
-    parser.add_argument("--attempts", default="results/rq_gpt_5_4_full_oracle_fixed/attempts.jsonl")
-    parser.add_argument("--out-dir", default="results/oclvm_sanity_check_114")
-    parser.add_argument("--manual-dir", default="results/oclvm_sanity_check")
+    parser.add_argument(
+        "--attempts",
+        default="results/contractgen-study-v6/contract_gen/full_feedback/attempts.jsonl",
+    )
+    parser.add_argument(
+        "--out-dir",
+        default="results/contractgen-study-v6/validation/legacy_use_skeleton_114",
+    )
+    parser.add_argument(
+        "--manual-dir",
+        default="results/contractgen-study-v6/validation/ocltsvm_sanity_samples",
+    )
     args = parser.parse_args()
 
     attempts = Path(args.attempts)

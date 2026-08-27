@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageProductCatalogCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the product catalog with provided id,
-   *if the product catalog not exist,
-   *create the product catalog with the provided and other info*/
+  /*Definition: The createProductCatalog operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createProductCatalog(id: number, name: string): boolean {
     /*Definition Start*/
-    let productcatalog: ProductCatalog = l({
-      logic: () =>
-        getRepository(ProductCatalog).find(
-          (pro: ProductCatalog) =>
-            l({
-              logic: () => pro.Id === id,
-              description: 'pro.Id=id',
-            }).build().pass
-        ),
-      description: 'ProductCatalog.allInstance()->any(pro:ProductCatalog|pro.Id=id)',
-    }).build().pass;
+    let productcatalog: ProductCatalog = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(ProductCatalog).find(
+              (pro: ProductCatalog) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(pro.Id, id),
+                  description: 'pro.Id=id',
+                }).build().pass
+            ),
+          description: 'ProductCatalog.allInstances()->any(pro:ProductCatalog|pro.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(productcatalog) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(productcatalog), true),
       description: 'productcatalog.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -221,30 +232,68 @@ class ManageProductCatalogCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let pro: ProductCatalog;
-    return l({
-      execute: () => (pro = new ProductCatalog()),
-      description: 'pro.oclIsNew()',
-    })
-      .and({
-        execute: () => (pro.Id = id),
-        description: 'pro.Id=id',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let pro: ProductCatalog;
+      return l({
+        execute: () => (pro = new ProductCatalog()),
+        description: 'pro.oclIsNew()',
       })
-      .and({
-        execute: () => (pro.Name = name),
-        description: 'pro.Name=name',
+        .and({
+          execute: () => (pro.Id = id),
+          description: 'pro.Id=id',
+        })
+        .and({
+          execute: () => (pro.Name = name),
+          description: 'pro.Name=name',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(ProductCatalog), pro),
+          description: 'ProductCatalog.allInstances()->includes(pro)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let pro: ProductCatalog = oclState.findNew(ProductCatalog);
+      return l({
+        logic: () => oclState.isNew(pro, ProductCatalog),
+        description: 'pro.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(ProductCatalog).push(pro),
-        description: 'ProductCatalog.allInstance()->includes(pro)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(pro.Id, id),
+          description: 'pro.Id=id',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(pro.Name, name),
+          description: 'pro.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(ProductCatalog), pro),
+          description: 'ProductCatalog.allInstances()->includes(pro)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageProductCatalogCRUDService};

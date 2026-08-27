@@ -1,0 +1,11 @@
+Contract ManageSubjectCRUDService::createSubject(name:String): Boolean {
+          precondition:
+          Subject.allInstances()->forAll(s | s.Name <> name)
+            postcondition:
+          Subject.allInstances()->exists(s |
+        s.oclIsNew() and
+        s.Name = name
+    ) and
+result = true
+            
+        }

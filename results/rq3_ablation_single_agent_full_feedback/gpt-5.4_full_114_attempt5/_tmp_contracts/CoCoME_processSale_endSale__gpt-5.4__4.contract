@@ -1,9 +1,0 @@
-Contract ProcessSaleService::endSale(): Real {
-  definition:
-    currentSale: Sale = Sale.allInstance()->any(s | s.IsComplete = false and s.IsReadytoPay = false),
-    salesLines: Set(SalesLineItem) = currentSale.ContainedSalesLine
-  precondition:
-    currentSale.oclIsUndefined() = false and Sale.allInstance()->includes(currentSale) and salesLines.isEmpty() = false and currentSale.IsComplete = false and currentSale.IsReadytoPay = false
-  postcondition:
-    currentSale.IsReadytoPay = true and result = currentSale.Amount
-}

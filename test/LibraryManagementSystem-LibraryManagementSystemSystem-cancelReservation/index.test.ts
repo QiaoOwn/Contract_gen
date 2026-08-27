@@ -1,13 +1,40 @@
 import {
+  Administrator,
+  Book,
   BookCopy,
   BorrowStatus,
   CopyStatus,
-  getRepository,
+  Faculty,
+  Librarian,
   LibraryManagementSystemSystem,
+  Loan,
+  RecommendBook,
   Reserve,
+  Status,
+  Student,
+  Subject,
   User,
+  getRepository,
 } from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('LibraryManagementSystem/LibraryManagementSystemSystem/cancelReservation', () => {
+  beforeEach(() => {
+    clearRepositories(
+      getRepository(Administrator),
+      getRepository(Book),
+      getRepository(BookCopy),
+      getRepository(Faculty),
+      getRepository(Librarian),
+      getRepository(Loan),
+      getRepository(RecommendBook),
+      getRepository(Reserve),
+      getRepository(Student),
+      getRepository(Subject),
+      getRepository(User)
+    );
+  });
+
   it('Happy Path', () => {
     const service = new LibraryManagementSystemSystem();
     const user = new User();
@@ -32,5 +59,10 @@ describe('LibraryManagementSystem/LibraryManagementSystemSystem/cancelReservatio
     expect(result).toBe(true);
     expect(copy.IsReserved).toBe(false);
     expect(reserve.IsReserveClosed).toBe(true);
+  });
+
+  it('rejects when user does not exist', () => {
+    const service = new LibraryManagementSystemSystem();
+    expectPreconditionRejected(() => service.cancelReservation('missing', 'missing'));
   });
 });

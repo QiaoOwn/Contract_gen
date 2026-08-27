@@ -6,7 +6,10 @@ This manifest maps artifact files to the manuscript's research questions, tables
 
 | File | Description |
 | --- | --- |
-| `data/operations.jsonl` | The 114 benchmark operations used in all reported experiments. Each row contains the operation description and associated project/model context. |
+| `data/operations.jsonl` | The 114 operation-context inputs, covering 107 distinct service operations and 106 distinct requirement specifications. Each row contains the structured requirement, context, oracle and requirement-group identifiers, return-value marker, version identifiers, and SHA-256 hashes; reference OCL is excluded. |
+| `src/rm2pt/benchmarkRequirements.ts` | Author-normalized structured requirement catalog for all 114 operations. |
+| `src/app/service/prompts/generationGrammar.txt` | Shared executable generation subset used by generation and controlled ablation scripts. |
+| `src/app/service/prompts/generationRules.json` | Versioned OCL generation rule catalog shared by Contract Gen and controlled baselines. |
 | `LibraryManagementSystem-borrowBook-borrowBook-run-1.json` | Logged running example used while preparing the paper's Library Management System example. |
 
 ## Implementation Source Map
@@ -16,12 +19,14 @@ This manifest maps artifact files to the manuscript's research questions, tables
 | `package.json` | Defines the Next.js/TypeScript artifact, test commands, experiment commands, and parser-generation command. |
 | `env.template` | Documents required LLM environment variables. Do not commit `.env`. |
 | `src/app/service/generateOCL.ts` | Main generation entry; selects `feedback` vs `linear` graph mode and `full`/`generic`/`none` feedback mode. |
-| `src/app/service/graph.ts` | Full Contract Gen graph: OCL Generator, Contract Generator/parser, TypeScript Generator, TypeScript Parser, and Test Result. |
-| `src/app/service/graph-line.ts` | Linear/no-feedback graph used by ablations. |
+| `src/app/service/createOperationInput.ts` | Builds and validates the canonical operation message and its provenance hashes. |
+| `src/app/service/graph.ts` | Full Contract Gen graph: OCL Generator, assembly/parser/generated-subset validation, TypeScript generation/checking, and terminal Jest evaluation. |
+| `src/app/service/graph-line.ts` | No-feedback graph that terminates at the first failed deterministic stage. |
 | `src/app/service/createG4Prompt.ts` | OCL grammar guidance prompt. |
 | `src/app/service/createDefinitionPrompt.ts` | Contract field guidance for definition/precondition/postcondition. |
 | `src/app/service/createProjectContextPrompt.ts` | Project/model context prompt. |
-| `src/app/service/createTransformRulesPrompt.ts` | Transformation-rule prompt. |
+| `src/app/service/createGenerationRulesPrompt.ts` | Renders and hashes the OCL generation rule catalog. |
+| `src/app/service/validateGeneratedContractSemantics.ts` | Enforces typed bindings and clause-local restrictions after parsing. |
 | `src/app/service/createCommonContractErrorPrompt.ts` | Localized OCL contract repair feedback. |
 | `src/app/service/createCommonTypescriptErrorPrompt.ts` | Localized TypeScript repair feedback. |
 | `src/app/ContractToTypescript.ts` | OCL-to-TypeScript translation support. |
@@ -36,45 +41,41 @@ This manifest maps artifact files to the manuscript's research questions, tables
 
 ## Paper Table Reconstruction
 
-The manuscript tables are reconstructed from the raw and summarized experiment folders under `results/`. No separate `results/paper_tables_current_data/` snapshot is required.
+The manuscript tables are reconstructed from raw and summarized records carrying the `contractgen-study-v6` marker under `results/contractgen-study-v6/`. Legacy result folders are excluded, and no separate `results/paper_tables_current_data/` snapshot is required.
 
 | Table family | Artifact source |
 | --- | --- |
-| RQ1 validity comparison | Full Contract Gen summaries, PureLLM summaries, CodexPrompt-style summary, and PathOCL-style summary. |
-| RQ2 execution comparison | The same result folders, using execution success fields and attempts logs. |
-| External USE/OCLTSVM funnel | `results/ocltsvm_sanity_check_114_strong/summary.json` and generated USE manifests. |
-| RQ3 feedback specificity | `results/rq3_ablation_no_feedback/`, `results/rq3_ablation_generic_feedback/`, and full Contract Gen result folders. |
-| RQ3 architecture ablation | `results/rq3_ablation_single_agent_full_feedback/` and `results/rq_gpt_5_4_full_oracle_fixed/`. |
+| RQ1 validity comparison | `results/contractgen-study-v6/contract_gen/full_feedback/` and `results/contractgen-study-v6/baselines/`. |
+| RQ2 execution comparison | The same v5 result folders, using execution-success fields from strict attempt records. |
+| External USE/OCLTSVM funnel | `results/contractgen-study-v6/validation/use_strong_114/summary.json` and its generated USE manifest. |
+| RQ3 feedback specificity | `results/contractgen-study-v6/contract_gen/{no_feedback,generic_feedback,full_feedback}/`. |
+| RQ3 pipeline-structure ablation | `results/contractgen-study-v6/ablations/end_to_end_full_feedback/` and the matching full-feedback Contract Gen run. |
+| Evaluation-unit sensitivity | `rq1_syntax_validity_by_evaluation_unit.csv` and `rq2_execution_success_by_evaluation_unit.csv` in each result directory. |
 
 ## Raw Result Directories
 
 | Directory | Contents | Used for |
 | --- | --- | --- |
-| `results/rq_gpt_5_4_full_oracle_fixed/` | Contract Gen + gpt-5.4 full-diagnostic run logs and summaries. | RQ1, RQ2, RQ3 selected setting, USE selected setting. |
-| `results/rq_gpt_5_4_mini_full_oracle_fixed/` | Contract Gen + gpt-5.4-mini full-diagnostic run logs and summaries. | RQ1, RQ2, RQ3 feedback specificity. |
-| `results/rq_claude_opus_4_7_full_oracle_fixed/` | Contract Gen + claude-opus-4-7 full-diagnostic run logs and summaries. | RQ1, RQ2, RQ3 feedback specificity. |
-| `results/rq_qwen3_coder_plus_full_oracle_fixed/` | Contract Gen + qwen3-coder-plus full-diagnostic run logs and summaries. | RQ1, RQ2, RQ3 feedback specificity. |
-| `results/rq_qwen3_coder_flash_full_oracle_fixed/` | Contract Gen + qwen3-coder-flash full-diagnostic run logs and summaries. | RQ1, RQ2, RQ3 feedback specificity. |
-| `results/baseline_llm_only/` | PureLLM runs with direct contract generation prompts. | RQ1 and RQ2 baseline. |
-| `results/codex_prompt_style/` | Reproduced CodexPrompt-style baseline runs. | RQ1 and RQ2 baseline. |
-| `results/pathocl_style/` | Reproduced PathOCL-style baseline runs. | RQ1 and RQ2 baseline. |
-| `results/rq3_ablation_no_feedback/` | Contract Gen without feedback repair. | RQ3 feedback ablation. |
-| `results/rq3_ablation_generic_feedback/` | Contract Gen with generic failure notice only. | RQ3 feedback ablation. |
-| `results/rq3_ablation_single_agent_full_feedback/` | Single-agent full-diagnostic ablation logs. | RQ3 architecture ablation. |
-| `results/ocltsvm_sanity_check_114_strong/` | Generated USE models/commands and USE run summary. | RQ2 external sanity check. |
-| `results/analysis_report/` | Analysis outputs regenerated from raw result folders. | Supporting reports and plots. |
+| `results/contractgen-study-v6/contract_gen/full_feedback/` | Contract Gen runs with parser and TypeScript diagnostic feedback. | RQ1, RQ2, RQ3 selected setting, USE selected setting. |
+| `results/contractgen-study-v6/contract_gen/generic_feedback/` | Contract Gen runs with a generic failure notice only. | RQ3 feedback-specificity ablation. |
+| `results/contractgen-study-v6/contract_gen/no_feedback/` | Contract Gen runs without repair feedback. | RQ3 feedback-specificity ablation. |
+| `results/contractgen-study-v6/baselines/purellm/` | PureLLM runs with direct contract-generation prompts. | RQ1 and RQ2 baseline. |
+| `results/contractgen-study-v6/baselines/codexprompt/` | Reproduced CodexPrompt-style baseline runs. | RQ1 and RQ2 baseline. |
+| `results/contractgen-study-v6/baselines/pathocl/` | Reproduced PathOCL-style baseline runs. | RQ1 and RQ2 baseline. |
+| `results/contractgen-study-v6/ablations/end_to_end_full_feedback/` | End-to-end full-feedback pipeline-structure ablation. | RQ3 pipeline-structure ablation. |
+| `results/contractgen-study-v6/validation/use_strong_114/` | Generated USE models, commands, manifest, and summary. | External semantic sanity check. |
+| `results/contractgen-study-v6/reports/` | Reports regenerated exclusively from v6 records. | Supporting tables and analysis. |
 
 ## Analysis Scripts
 
 | Script | Input | Output |
 | --- | --- | --- |
-| `scripts/build_rq_analysis_report.py` | `results/rq_*_full_oracle_fixed/` | `results/analysis_report/` CSV, PNG, and Markdown summaries. |
-| `scripts/build_rq3_ablation_report.py` | RQ3 ablation directories. | RQ3 ablation summaries. |
-| `scripts/build_rq3_generic_feedback_report.py` | Full, generic-feedback, and no-feedback result folders. | `results/rq3_generic_feedback_report/`. |
-| `scripts/update_purellm_paper_tables.py` | PureLLM and Contract Gen result folders. | Current PureLLM-related table CSV/Markdown files. |
+| `scripts/build_rq_analysis_report.py` | Frozen v6 Contract Gen and baseline records. | `results/contractgen-study-v6/reports/analysis/` summaries. |
+| `scripts/build_rq3_ablation_report.py` | v6 full-feedback and no-feedback records. | `results/contractgen-study-v6/reports/rq3_ablation/`. |
+| `scripts/build_rq3_generic_feedback_report.py` | v6 full-, generic-, and no-feedback records. | `results/contractgen-study-v6/reports/rq3_generic_feedback/`. |
 | `scripts/generate_use_strong_114.py` | `data/operations.jsonl` and selected Contract Gen attempts. | USE model files, command files, manifest, and summary. |
 | `scripts/run_oclvm_sanity_check.py` | Generated contracts and OCLTSVM inputs. | Internal OCLTSVM sanity-check outputs. |
-| `scripts/verify_artifact_tables.py` | Raw/summarized `results/` folders and USE summary. | Compact console summary of RQ1/RQ2/RQ3 values reconstructed from results. |
+| `scripts/verify_artifact_tables.py` | Marker-validated v5 records and USE summary. | Compact RQ1/RQ2/RQ3 reconstruction with legacy-data rejection. |
 
 ## Experiment Scripts
 
@@ -86,6 +87,7 @@ The manuscript tables are reconstructed from the raw and summarized experiment f
 | `script/run_pathocl_style_baseline.py` | Runs PathOCL-style baseline. |
 | `scripts/run_baseline_llm_batch.ps1` | Batch helper for baseline runs on Windows. |
 | `script/export-operations-jsonl.ts` | Exports benchmark operations to JSONL. |
+| `script/validate-operation-inputs.ts` | Rejects missing, placeholder, duplicated, or version-inconsistent inputs before an experiment. |
 
 ## Files to Exclude From Archival Packages
 
@@ -115,8 +117,8 @@ These files are present only when the implementation artifact is packaged togeth
 
 | Claim to inspect | Recommended file(s) |
 | --- | --- |
-| Contract Gen improves parser-valid contract generation over statement-level baselines. | `results/rq_*_full_oracle_fixed/`, `results/codex_prompt_style/`, `results/pathocl_style/` |
-| Parser validity is not enough for executable correctness. | RQ1/RQ2 summaries and attempts logs under `results/`. |
-| External USE loading supports the OCLTSVM validation boundary. | `results/ocltsvm_sanity_check_114_strong/summary.json` |
-| Full diagnostics improve over generic and no feedback. | `results/rq3_ablation_no_feedback/`, `results/rq3_ablation_generic_feedback/`, full result folders. |
-| Staged Contract Gen is more attempt-efficient than single-agent generation. | `results/rq3_ablation_single_agent_full_feedback/`, `results/rq_gpt_5_4_full_oracle_fixed/` |
+| Contract Gen improves parser-valid contract generation over statement-level baselines. | `results/contractgen-study-v6/contract_gen/full_feedback/` and `results/contractgen-study-v6/baselines/` |
+| Parser validity is not enough for executable correctness. | RQ1/RQ2 summaries and attempt records under `results/contractgen-study-v6/`. |
+| External USE loading supports the OCLTSVM validation boundary. | `results/contractgen-study-v6/validation/use_strong_114/summary.json` |
+| Full diagnostics improve over generic and no feedback. | `results/contractgen-study-v6/contract_gen/{no_feedback,generic_feedback,full_feedback}/` |
+| Staged Contract Gen is more attempt-efficient than end-to-end full-feedback generation. | `results/contractgen-study-v6/ablations/end_to_end_full_feedback/` and the matching full-feedback records. |

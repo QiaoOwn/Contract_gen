@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The BankCrad is a card that can deposit or withdraw money.*/
 class BankCard {
   /*The unique identifier of the bank card*/
@@ -54,32 +62,34 @@ class AutomatedTellerMachineSystem {
   DepositedNumber: number;
   /*SystemVariable End*/
 
-  /*find the card with the provided card id,
-   *if the card exists, means card id is validated,
-   *and the input card will be used in the next operation,
-   *if not exist, means the card id is invalidated*/
+  /*Definition: The inputCard operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   inputCard(cardid: number): boolean {
     /*Definition Start*/
-    let bc: BankCard = l({
-      logic: () =>
-        getRepository(BankCard).find(
-          (c: BankCard) =>
-            l({
-              logic: () => c.CardID === cardid,
-              description: 'c.CardID=cardid',
-            }).build().pass
-        ),
-      description: 'BankCard.allInstance()->any(c:BankCard|c.CardID=cardid)',
-    }).build().pass;
+    let bc: BankCard = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(BankCard).find(
+              (c: BankCard) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(c.CardID, cardid),
+                  description: 'c.CardID=cardid',
+                }).build().pass
+            ),
+          description: 'BankCard.allInstances()->any(c:BankCard|c.CardID=cardid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(bc) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bc), false),
       description: 'bc.oclIsUndefined()=false',
     })
       .and({
-        logic: () => bc.CardStatus === CardStatus.NORMAL,
+        logic: () => StandardOPs.oclEquals(bc.CardStatus, CardStatus.NORMAL),
         description: 'bc.CardStatus=CardStatus::NORMAL',
       })
       .build();
@@ -88,37 +98,84 @@ class AutomatedTellerMachineSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l()
-      .if({
-        logic: () =>
-          l({
-            logic: () => StandardOPs.oclIsUndefined(bc.BelongedUser) === false,
-            description: 'bc.BelongedUser.oclIsUndefined()=false',
-          }),
-        description: 'bc.BelongedUser.oclIsUndefined()=false',
-        then: l({
-          execute: () => (this.CardIDValidated = true),
-          description: 'self.CardIDValidated=true',
-        })
-          .and({
-            execute: () => (this.InputCard = bc),
-            description: 'self.InputCard=bc',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l()
+        .if({
+          logic: () =>
+            l({
+              logic: () =>
+                StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bc.BelongedUser), false),
+              description: 'bc.BelongedUser.oclIsUndefined()=false',
+            }),
+          description: 'bc.BelongedUser.oclIsUndefined()=false',
+          then: l({
+            execute: () => (this.CardIDValidated = true),
+            description: 'self.CardIDValidated=true',
           })
-          .and({
-            execute: () => true,
-            description: 'result=true',
+            .and({
+              execute: () => (this.InputCard = bc),
+              description: 'self.InputCard=bc',
+            })
+            .and({
+              execute: () => true,
+              description: 'result=true',
+            }),
+          else: l({
+            execute: () => (this.CardIDValidated = false),
+            description: 'self.CardIDValidated=false',
+          }).and({
+            execute: () => false,
+            description: 'result=false',
           }),
-        else: l({
-          execute: () => (this.CardIDValidated = false),
-          description: 'self.CardIDValidated=false',
-        }).and({
-          execute: () => false,
-          description: 'result=false',
-        }),
-      })
-      .build().value;
-    /*Postcondition End*/
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l()
+        .if({
+          logic: () =>
+            l({
+              logic: () =>
+                StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bc.BelongedUser), false),
+              description: 'bc.BelongedUser.oclIsUndefined()=false',
+            }),
+          description: 'bc.BelongedUser.oclIsUndefined()=false',
+          then: l({
+            logic: () => StandardOPs.oclEquals(this.CardIDValidated, true),
+            description: 'self.CardIDValidated=true',
+          })
+            .and({
+              logic: () => StandardOPs.oclEquals(this.InputCard, bc),
+              description: 'self.InputCard=bc',
+            })
+            .and({
+              logic: () => StandardOPs.oclEquals(result, true),
+              description: 'result=true',
+            }),
+          else: l({
+            logic: () => StandardOPs.oclEquals(this.CardIDValidated, false),
+            description: 'self.CardIDValidated=false',
+          }).and({
+            logic: () => StandardOPs.oclEquals(result, false),
+            description: 'result=false',
+          }),
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {AutomatedTellerMachineSystem};

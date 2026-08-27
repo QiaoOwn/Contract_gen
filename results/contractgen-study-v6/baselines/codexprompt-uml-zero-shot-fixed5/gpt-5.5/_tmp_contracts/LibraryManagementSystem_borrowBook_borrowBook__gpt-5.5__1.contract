@@ -1,0 +1,94 @@
+Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u | u.UserID = uid) and
+    BookCopy.allInstances()->exists(c | c.Barcode = barcode) and
+User.allInstances()->exists(u |
+        u.UserID = uid and
+        u.BorrowStatus = BorrowStatus::NORMAL and
+        u.SuspensionDays = 0
+    ) and
+User.allInstances()->exists(u |
+        u.UserID = uid and
+        (
+            (u.oclIsTypeOf(Student) and
+                (
+                    (u.oclAsType(Student).Programme = Programme::BACHELOR and u.LoanedNumber < 20) or
+                    (u.oclAsType(Student).Programme = Programme::MASTER and u.LoanedNumber < 40) or
+                    (u.oclAsType(Student).Programme <> Programme::BACHELOR and
+                     u.oclAsType(Student).Programme <> Programme::MASTER and
+                     u.LoanedNumber < 60)
+                )
+            )
+            or
+            (u.oclIsTypeOf(Faculty) and u.LoanedNumber < 60)
+        )
+    ) and
+BookCopy.allInstances()->exists(c |
+        c.Barcode = barcode and
+        (
+            c.Status = CopyStatus::AVAILABLE or
+            (
+                c.Status = CopyStatus::ONHOLDSHELF and
+                c.IsReserved = true and
+                c.ReservationRecord->exists(r |
+                    r.ReservedUser.UserID = uid and
+                    r.IsReserveClosed = false
+                )
+            )
+        )
+    )
+            postcondition:
+          Loan.allInstances()->exists(l |
+        l.oclIsNew() and
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        l.LoanDate = Today and
+        l.IsReturned = false and
+        l.RenewedTimes = 0 and
+        l.OverDue3Days = false and
+        l.OverDue10Days = false and
+        l.OverDue17Days = false and
+        l.OverDue31Days = false
+    ) and
+Loan.allInstances()->exists(l |
+        l.oclIsNew() and
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.Barcode = barcode and
+        (
+            (l.LoanedUser.oclIsTypeOf(Student) and l.DueDate = Today + 30) or
+            (l.LoanedUser.oclIsTypeOf(Faculty) and l.DueDate = Today + 60)
+        )
+    ) and
+User.allInstances()->forAll(u |
+        u.UserID = uid implies
+            u.LoanedNumber = u.LoanedNumber@pre + 1
+    ) and
+BookCopy.allInstances()->forAll(c |
+        c.Barcode = barcode implies
+            c.Status = CopyStatus::LOANED
+    ) and
+User.allInstances()->forAll(u |
+        u.UserID = uid implies
+            u.LoanedBook->exists(l |
+                l.oclIsNew() and
+                l.LoanedCopy.Barcode = barcode
+            )
+    ) and
+    BookCopy.allInstances()->forAll(c |
+        c.Barcode = barcode implies
+            c.LoanedRecord->exists(l |
+                l.oclIsNew() and
+                l.LoanedUser.UserID = uid
+            )
+    ) and
+BookCopy.allInstances()->forAll(c |
+        c.Barcode = barcode and c.Status@pre = CopyStatus::ONHOLDSHELF implies
+            c.IsReserved = false and
+            c.ReservationRecord->forAll(r |
+                r.ReservedUser.UserID = uid and r.IsReserveClosed@pre = false implies
+                    r.IsReserveClosed = true
+            )
+    ) and
+result = true
+            
+        }

@@ -1,0 +1,13 @@
+Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
+          precondition:
+          not self.CurrentLoanRequest.oclIsUndefined()
+            postcondition:
+          LoanAgreement.allInstances()->exists(agreement |
+        agreement.oclIsNew() and
+        agreement.Content = 'Standard loan agreement content' and
+        self.CurrentLoanRequest.AttachedLoanAgreement = agreement and
+        self.CurrentLoanAgreement = agreement
+    ) and
+result = true
+            
+        }

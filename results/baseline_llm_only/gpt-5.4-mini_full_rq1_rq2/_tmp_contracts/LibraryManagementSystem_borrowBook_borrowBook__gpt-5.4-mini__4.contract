@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::borrowBook(uid:String,barcode:String): Boolean {
-          definition:
-          u:User = User.allInstance()->any(x:User|x.UserID=uid), c:BookCopy = BookCopy.allInstance()->any(x:BookCopy|x.Barcode=barcode), reservedForUser:Reserve = c.ReservationRecord->any(r:Reserve|r.ReservedUser=u and r.IsReserveClosed=false), hasAvailableCopy:Boolean = c.Status=BookCopy::AVAILABLE, hasReservedCopy:Boolean = c.Status=BookCopy::ONHOLDSHELF and reservedForUser.oclIsUndefined() = false, canBorrow:Boolean = u.oclIsUndefined() = false and u.BorrowStatus=BorrowStatus::NORMAL and u.LoanedNumber<5 and (hasAvailableCopy = true or hasReservedCopy = true)
-            precondition:
-          u.oclIsUndefined() = false and c.oclIsUndefined() = false and u.BorrowStatus=BorrowStatus::NORMAL and u.LoanedNumber<5 and (c.Status=BookCopy::AVAILABLE or (c.Status=BookCopy::ONHOLDSHELF and reservedForUser.oclIsUndefined() = false))
-            postcondition:
-          let l:Loan in l.oclIsNew() and l.LoanedUser=u and l.LoanedCopy=c and l.IsReturned=false and l.RenewedTimes=0 and c.Status=BookCopy::LOANED and c.IsReserved=false and u.LoanedNumber=u.LoanedNumber@pre+1 and u.LoanedBook->includes(l) and c.LoanedRecord->includes(l) and result=true
-            
-        }

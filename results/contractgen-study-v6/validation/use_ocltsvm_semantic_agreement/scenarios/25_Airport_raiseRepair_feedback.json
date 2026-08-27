@@ -1,0 +1,151 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 25,
+  "operation_id": "Airport_raiseRepair_feedback",
+  "case_study": "Airport",
+  "project": "Airport",
+  "use_case": "raiseRepair",
+  "operation": "feedback",
+  "operation_signature": "feedback(id: Integer, sid: Integer, score: Integer, des: String): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "45b2f13dfda33d862181e2c74a487be2eec96bbe9bd3a10b639515ae0f69bbf9",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "conditional"
+  ],
+  "complexity_score": 60,
+  "contract": "Contract RepairService::feedback(id: Integer,sid: Integer,score: Integer,des: String): Boolean {\n\tdefinition:\n\t\tstaff: Staff = Staff.allInstances()->any(s: Staff|s.Id = sid),\n\t\trepair: Repair = Repair.allInstances()->any(r: Repair|r.Id = id)\n\tprecondition:\n\t\trepair.RaiseStaff = staff and\n\t\tstaff.Role = 0 and\n\t\trepair.Process = 7\n\tpostcondition:\n\t\trepair.Score = score and\n\t\tif score>=3 \n\t\tthen repair.Close = true \n\t\telse repair.Close = false and\n\t\trepair.Description = des and\n\t\trepair.Process = 0 \n\t\tendif  and\n\t\tresult = true\n}",
+  "complexity_tier": "complex",
+  "scenarios": [
+    {
+      "scenario_id": "Airport_raiseRepair_feedback::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_feedback\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_feedback\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json",
+          "test_name": "Airport/RepairService/feedback Happy Path: high score closes the repair"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json",
+          "test_name": "Airport/RepairService/feedback Happy Path: high score closes the repair",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json"
+    },
+    {
+      "scenario_id": "Airport_raiseRepair_feedback::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_feedback\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_feedback\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json",
+          "test_name": "Airport/RepairService/feedback rejects when staff did not raise the repair"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json",
+          "test_name": "Airport/RepairService/feedback rejects when staff did not raise the repair",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json"
+    },
+    {
+      "scenario_id": "Airport_raiseRepair_feedback::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_feedback.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

@@ -21,7 +21,7 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-    book:Book = Book.allInstance()->any(b:Book | b.CallNo = callNo),
+    book:Book = Book.allInstances()->any(b:Book | b.CallNo = callNo),
     bc:BookCopy = book.Copys->any(c:BookCopy | c.Barcode = barcode)`,
     precondition: `
     book.oclIsUndefined() = false and
@@ -36,7 +36,7 @@ const operations = [
     book.Copys->includes(copy) and
     copy.BookBelongs = book and
     book.CopyNum = book.CopyNum@pre + 1 and
-    BookCopy.allInstance()->includes(copy) and
+    BookCopy.allInstances()->includes(copy) and
     result = true`,
   }),
   // Similar operations for queryBookCopy, modifyBookCopy, deleteBookCopy

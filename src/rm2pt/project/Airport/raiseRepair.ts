@@ -24,14 +24,14 @@ const operations = [
       new Parameter({name: 'suggestion', type: 'String'}),
     ],
     returnType: new ReturnedType('ApprovalHistory'),
-    definition: `rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = rid),
-                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid)`,
+    definition: `rep:Repair = Repair.allInstances()->any(u:Repair | u.Id = rid),
+                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = sid)`,
     precondition: `rep.oclIsUndefined() = false and sta.oclIsUndefined() = false`,
     postcondition: `let ah:ApprovalHistory in
 			ah.oclIsNew() and
 			ah.Reject = reject and
 			ah.Suggestion = suggestion and
-			ApprovalHistory.allInstance()->includes(ah) and
+			ApprovalHistory.allInstances()->includes(ah) and
 			rep.History->includes(ah) and
 			if
 				reject <> false
@@ -59,7 +59,7 @@ const operations = [
 			else
 				rep.Process = 5 // REJECT
 			endif and
-			Repair.allInstance()->includes(rep) and
+			Repair.allInstances()->includes(rep) and
 			result = ah`,
     level: Level.Hard,
   }),
@@ -75,9 +75,9 @@ const operations = [
       new Parameter({name: 'res', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = id),
-                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid),
-                 dev:Device = Device.allInstance()->any(uuu:Device | uuu.Id = did)`,
+    definition: `rep:Repair = Repair.allInstances()->any(u:Repair | u.Id = id),
+                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = sid),
+                 dev:Device = Device.allInstances()->any(uuu:Device | uuu.Id = did)`,
     precondition: `dev.Contacts = sta and sta.Role = 3`,
     postcondition: `rep.Process = 7 and result = true`, // FINISH
   }),
@@ -93,13 +93,13 @@ const operations = [
       new Parameter({name: 'des', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `rep:Repair = Repair.allInstance()->any(u:Repair | u.Id = id),
-                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = sid)`,
+    definition: `rep:Repair = Repair.allInstances()->any(u:Repair | u.Id = id),
+                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = sid)`,
     precondition: `rep.RaiseStaff = sta and sta.Role = 0 and rep.Process = 7`, // FINISH
     postcondition: `rep.Score = score and
                     if score >= 3 then rep.Close = true
                     else rep.Close = false and rep.Description = des and rep.Process = 0 endif and
-                    Repair.allInstance()->includes(rep) and result = true`,
+                    Repair.allInstances()->includes(rep) and result = true`,
     level: Level.Hard,
   }),
 ];

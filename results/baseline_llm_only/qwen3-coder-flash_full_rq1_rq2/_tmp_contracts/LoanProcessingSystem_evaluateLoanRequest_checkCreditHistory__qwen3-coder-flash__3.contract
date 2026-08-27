@@ -1,9 +1,0 @@
-Contract EvaluateLoanRequestModule::checkCreditHistory(): CreditHistory {
-          definition:
-          loanReq:LoanRequest = LoanRequest.allInstance()->any(lr:LoanRequest|lr.RequestID=self.CurrentLoanRequest.RequestID), creditHist:CreditHistory = loanReq.RequestedCreditHistory
-            precondition:
-          self.CurrentLoanRequest.oclIsUndefined() = false and self.CurrentLoanRequest.Status <> 'APPROVED' and self.CurrentLoanRequest.Status <> 'READYFORREVIEW' and loanReq.oclIsUndefined() = false and creditHist.oclIsUndefined() = true
-            postcondition:
-          let ch:CreditHistory in ch.oclIsNew() and ch.OutstandingDebt = 0.0 and ch.BadDebits = 0 and loanReq.RequestedCreditHistory = ch and CreditHistory.allInstance()->includes(ch) and result = ch
-            
-        }

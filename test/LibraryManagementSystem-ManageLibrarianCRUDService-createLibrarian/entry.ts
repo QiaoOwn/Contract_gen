@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,25 +238,30 @@ export {
 };
 
 class ManageLibrarianCRUDService {
-  /*Creates a new librarian account.*/
+  /*Definition: The createLibrarian operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createLibrarian(librarianid: string, name: string, password: string): boolean {
     /*Definition Start*/
-    let librarian: Librarian = l({
-      logic: () =>
-        getRepository(Librarian).find(
-          (lib: Librarian) =>
-            l({
-              logic: () => lib.LibrarianID === librarianid,
-              description: 'lib.LibrarianID=librarianid',
-            }).build().pass
-        ),
-      description: 'Librarian.allInstance()->any(lib:Librarian|lib.LibrarianID=librarianid)',
-    }).build().pass;
+    let librarian: Librarian = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Librarian).find(
+              (lib: Librarian) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(lib.LibrarianID, librarianid),
+                  description: 'lib.LibrarianID=librarianid',
+                }).build().pass
+            ),
+          description: 'Librarian.allInstances()->any(lib:Librarian|lib.LibrarianID=librarianid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(librarian) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(librarian), true),
       description: 'librarian.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -256,34 +269,76 @@ class ManageLibrarianCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let lib: Librarian;
-    return l({
-      execute: () => (lib = new Librarian()),
-      description: 'lib.oclIsNew()',
-    })
-      .and({
-        execute: () => (lib.LibrarianID = librarianid),
-        description: 'lib.LibrarianID=librarianid',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let lib: Librarian;
+      return l({
+        execute: () => (lib = new Librarian()),
+        description: 'lib.oclIsNew()',
       })
-      .and({
-        execute: () => (lib.Name = name),
-        description: 'lib.Name=name',
+        .and({
+          execute: () => (lib.LibrarianID = librarianid),
+          description: 'lib.LibrarianID=librarianid',
+        })
+        .and({
+          execute: () => (lib.Name = name),
+          description: 'lib.Name=name',
+        })
+        .and({
+          execute: () => (lib.Password = password),
+          description: 'lib.Password=password',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Librarian), lib),
+          description: 'Librarian.allInstances()->includes(lib)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let lib: Librarian = oclState.findNew(Librarian);
+      return l({
+        logic: () => oclState.isNew(lib, Librarian),
+        description: 'lib.oclIsNew()',
       })
-      .and({
-        execute: () => (lib.Password = password),
-        description: 'lib.Password=password',
-      })
-      .and({
-        execute: () => getRepository(Librarian).push(lib),
-        description: 'Librarian.allInstance()->includes(lib)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(lib.LibrarianID, librarianid),
+          description: 'lib.LibrarianID=librarianid',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(lib.Name, name),
+          description: 'lib.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(lib.Password, password),
+          description: 'lib.Password=password',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Librarian), lib),
+          description: 'Librarian.allInstances()->includes(lib)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageLibrarianCRUDService};

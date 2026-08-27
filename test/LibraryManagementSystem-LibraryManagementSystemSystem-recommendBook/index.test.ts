@@ -1,5 +1,37 @@
-import {getRepository, LibraryManagementSystemSystem, RecommendBook, User} from './entry';
+import {
+  Administrator,
+  Book,
+  BookCopy,
+  Faculty,
+  Librarian,
+  LibraryManagementSystemSystem,
+  Loan,
+  RecommendBook,
+  Reserve,
+  Student,
+  Subject,
+  User,
+  getRepository,
+} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('LibraryManagementSystem/LibraryManagementSystemSystem/recommendBook', () => {
+  beforeEach(() => {
+    clearRepositories(
+      getRepository(Administrator),
+      getRepository(Book),
+      getRepository(BookCopy),
+      getRepository(Faculty),
+      getRepository(Librarian),
+      getRepository(Loan),
+      getRepository(RecommendBook),
+      getRepository(Reserve),
+      getRepository(Student),
+      getRepository(Subject),
+      getRepository(User)
+    );
+  });
+
   it('Happy Path', () => {
     const service = new LibraryManagementSystemSystem();
     const user = new User();
@@ -20,5 +52,10 @@ describe('LibraryManagementSystem/LibraryManagementSystemSystem/recommendBook', 
     expect(recommentBook.RecommendDate.isSame(new Date(), 'd')).toBe(true);
     expect(recommentBook.RecommendUser).toBe(user);
     expect(user.RecommendedBook).toContain(recommentBook);
+  });
+
+  it('rejects when precondition is violated', () => {
+    const service = new LibraryManagementSystemSystem();
+    expectPreconditionRejected(() => service.recommendBook(99, '1', '2', '3', '4', '5', '6', '7'));
   });
 });

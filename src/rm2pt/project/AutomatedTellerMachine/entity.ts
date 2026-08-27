@@ -2,7 +2,7 @@ import {Attribute} from '../../model/Attribute';
 import {Entity} from '../../model/Entity';
 import {Relationship} from '../../model/Relationship';
 
-export default {
+const entities = {
   BankCard: new Entity({
     name: 'BankCard',
     description: 'The BankCrad is a card that can deposit or withdraw money.',
@@ -72,3 +72,5 @@ export default {
     ],
   }),
 };
+
+export default entities;

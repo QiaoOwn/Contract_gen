@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,40 +238,48 @@ export {
 };
 
 class ManageBookCopyCRUDService {
-  /*Adds a new copy of a book.*/
+  /*Definition: The addBookCopy operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   addBookCopy(callNo: string, barcode: string, location: string): boolean {
     /*Definition Start*/
-    let book: Book = l({
-      logic: () =>
-        getRepository(Book).find(
-          (b: Book) =>
-            l({
-              logic: () => b.CallNo === callNo,
-              description: 'b.CallNo=callNo',
-            }).build().pass
-        ),
-      description: 'Book.allInstance()->any(b:Book|b.CallNo=callNo)',
-    }).build().pass;
-    let bc: BookCopy = l({
-      logic: () =>
-        book.Copys.find(
-          (c: BookCopy) =>
-            l({
-              logic: () => c.Barcode === barcode,
-              description: 'c.Barcode=barcode',
-            }).build().pass
-        ),
-      description: 'book.Copys->any(c:BookCopy|c.Barcode=barcode)',
-    }).build().pass;
+    let book: Book = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Book).find(
+              (b: Book) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(b.CallNo, callNo),
+                  description: 'b.CallNo=callNo',
+                }).build().pass
+            ),
+          description: 'Book.allInstances()->any(b:Book|b.CallNo=callNo)',
+        }).build().pass
+    );
+    let bc: BookCopy = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            book.Copys.find(
+              (c: BookCopy) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(c.Barcode, barcode),
+                  description: 'c.Barcode=barcode',
+                }).build().pass
+            ),
+          description: 'book.Copys->any(c:BookCopy|c.Barcode=barcode)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(book) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(book), false),
       description: 'book.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(bc) === true,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bc), true),
         description: 'bc.oclIsUndefined()=true',
       })
       .build();
@@ -272,50 +288,108 @@ class ManageBookCopyCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let copy: BookCopy;
-    return l({
-      execute: () => (copy = new BookCopy()),
-      description: 'copy.oclIsNew()',
-    })
-      .and({
-        execute: () => (copy.Barcode = barcode),
-        description: 'copy.Barcode=barcode',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let copy: BookCopy;
+      return l({
+        execute: () => (copy = new BookCopy()),
+        description: 'copy.oclIsNew()',
       })
-      .and({
-        execute: () => (copy.Status = CopyStatus.AVAILABLE),
-        description: 'copy.Status=CopyStatus::AVAILABLE',
+        .and({
+          execute: () => (copy.Barcode = barcode),
+          description: 'copy.Barcode=barcode',
+        })
+        .and({
+          execute: () => (copy.Status = CopyStatus.AVAILABLE),
+          description: 'copy.Status=CopyStatus::AVAILABLE',
+        })
+        .and({
+          execute: () => (copy.Location = location),
+          description: 'copy.Location=location',
+        })
+        .and({
+          execute: () => (copy.IsReserved = false),
+          description: 'copy.IsReserved=false',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(book.Copys, copy),
+          description: 'book.Copys->includes(copy)',
+        })
+        .and({
+          execute: () => (copy.BookBelongs = book),
+          description: 'copy.BookBelongs=book',
+        })
+        .and({
+          execute: () => (book.CopyNum = oclState.preValue(book, 'CopyNum') + 1),
+          description: 'book.CopyNum=book.CopyNum@pre+1',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(BookCopy), copy),
+          description: 'BookCopy.allInstances()->includes(copy)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let copy: BookCopy = oclState.findNew(BookCopy);
+      return l({
+        logic: () => oclState.isNew(copy, BookCopy),
+        description: 'copy.oclIsNew()',
       })
-      .and({
-        execute: () => (copy.Location = location),
-        description: 'copy.Location=location',
-      })
-      .and({
-        execute: () => (copy.IsReserved = false),
-        description: 'copy.IsReserved=false',
-      })
-      .and({
-        execute: () => book.Copys.push(copy),
-        description: 'book.Copys->includes(copy)',
-      })
-      .and({
-        execute: () => (copy.BookBelongs = book),
-        description: 'copy.BookBelongs=book',
-      })
-      .and({
-        execute: () => (book.CopyNum = book.CopyNum + 1),
-        description: 'book.CopyNum=book.CopyNum@pre+1',
-      })
-      .and({
-        execute: () => getRepository(BookCopy).push(copy),
-        description: 'BookCopy.allInstance()->includes(copy)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(copy.Barcode, barcode),
+          description: 'copy.Barcode=barcode',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(copy.Status, CopyStatus.AVAILABLE),
+          description: 'copy.Status=CopyStatus::AVAILABLE',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(copy.Location, location),
+          description: 'copy.Location=location',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(copy.IsReserved, false),
+          description: 'copy.IsReserved=false',
+        })
+        .and({
+          logic: () => StandardOPs.includes(book.Copys, copy),
+          description: 'book.Copys->includes(copy)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(copy.BookBelongs, book),
+          description: 'copy.BookBelongs=book',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(book.CopyNum, oclState.preValue(book, 'CopyNum') + 1),
+          description: 'book.CopyNum=book.CopyNum@pre+1',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(BookCopy), copy),
+          description: 'BookCopy.allInstances()->includes(copy)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageBookCopyCRUDService};

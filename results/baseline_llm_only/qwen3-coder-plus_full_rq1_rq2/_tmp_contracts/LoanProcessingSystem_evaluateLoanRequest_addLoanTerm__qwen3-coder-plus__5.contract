@@ -1,9 +1,0 @@
-Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {
-          definition:
-          loanTerm:LoanTerm = LoanTerm.allInstance()->any(lt:LoanTerm|lt.ItemID=termid), currentReq:LoanRequest = self.CurrentLoanRequest
-            precondition:
-          loanTerm.oclIsUndefined() = false and currentReq.oclIsUndefined() = false and currentReq.AttachedLoanTerms->includes(loanTerm) = false
-            postcondition:
-          self.CurrentLoanRequest.AttachedLoanTerms->includes(loanTerm) and result = true
-            
-        }

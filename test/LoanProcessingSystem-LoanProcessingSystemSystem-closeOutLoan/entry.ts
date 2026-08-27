@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -151,29 +159,34 @@ export {
 };
 
 class LoanProcessingSystemSystem {
-  /*find the loan with the provided loan id, if the loan exist and the status is ls open, set the loan status to closed*/
+  /*Definition: The closeOutLoan operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   closeOutLoan(loanid: number): boolean {
     /*Definition Start*/
-    let loan: Loan = l({
-      logic: () =>
-        getRepository(Loan).find(
-          (loa: Loan) =>
-            l({
-              logic: () => loa.LoanID === loanid,
-              description: 'loa.LoanID=loanid',
-            }).build().pass
-        ),
-      description: 'Loan.allInstance()->any(loa:Loan|loa.LoanID=loanid)',
-    }).build().pass;
+    let loan: Loan = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Loan).find(
+              (loa: Loan) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(loa.LoanID, loanid),
+                  description: 'loa.LoanID=loanid',
+                }).build().pass
+            ),
+          description: 'Loan.allInstances()->any(loa:Loan|loa.LoanID=loanid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(loan) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(loan), false),
       description: 'loan.oclIsUndefined()=false',
     })
       .and({
-        logic: () => loan.Status === LoanStatus.LSOPEN,
+        logic: () => StandardOPs.oclEquals(loan.Status, LoanStatus.LSOPEN),
         description: 'loan.Status=LoanStatus::LSOPEN',
       })
       .build();
@@ -182,17 +195,42 @@ class LoanProcessingSystemSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (loan.Status = LoanStatus.CLOSED),
-      description: 'loan.Status=LoanStatus::CLOSED',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (loan.Status = LoanStatus.CLOSED),
+        description: 'loan.Status=LoanStatus::CLOSED',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(loan.Status, LoanStatus.CLOSED),
+        description: 'loan.Status=LoanStatus::CLOSED',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {LoanProcessingSystemSystem};

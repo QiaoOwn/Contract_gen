@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::countDownSuspensionDay(): void {
-          definition:
-          overdueLoan:Loan = Loan.allInstance()->any(l:Loan|l.IsReturned = false and l.DueDate < today)
-            precondition:
-          overdueLoan.oclIsUndefined() = false
-            postcondition:
-          Loan.allInstance()->forAll(l:Loan|l.IsReturned = false and l.DueDate < today implies l.IsReturned = l@pre.IsReturned and l.OverDueFee = l@pre.OverDueFee and l.OverDue3Days = l@pre.OverDue3Days and l.OverDue10Days = l@pre.OverDue10Days and l.OverDue17Days = l@pre.OverDue17Days and l.OverDue31Days = l@pre.OverDue31Days)
-            
-        }

@@ -1,9 +1,0 @@
-Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {
-          definition:
-          copy:Set(BookCopy) = BookCopy.allInstance()->select(c:BookCopy|c.Barcode=barcode), books:Set(Book) = Book.allInstance()->select(b:Book|copy->includes(b.Copys))
-            precondition:
-          barcode <> '' and copy.isEmpty() = false
-            postcondition:
-          result = books
-            
-        }

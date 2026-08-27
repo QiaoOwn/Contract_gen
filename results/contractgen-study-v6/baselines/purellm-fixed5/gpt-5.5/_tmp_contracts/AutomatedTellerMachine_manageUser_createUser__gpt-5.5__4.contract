@@ -1,0 +1,7 @@
+Contract ManageUserCRUDService::createUser(userid:Integer,name:String,address:String): Boolean {
+          precondition:
+          User.allInstances()->forAll(user:User | user.UserID <> userid)
+            postcondition:
+          let user:User in user.oclIsNew() and User.allInstances()->includes(user) and user.UserID = userid and user.Name = name and user.Address = address and result = true
+            
+        }

@@ -1,0 +1,24 @@
+Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {
+          precondition:
+          self.currentSale <> null and
+    self.currentSale.IsComplete = false and
+    self.currentSale.IsReadytoPay = true and
+amount >= self.currentSale.Amount
+            postcondition:
+          Payment.allInstances()->exists(p |
+        p.oclIsNew() and
+        p.AmountTendered = amount and
+        p.BelongedSale = self.currentSale and
+        self.currentSale.AssoicatedPayment = p
+    ) and
+self.currentSale.Belongedstore = self.currentStore and
+    self.currentSale.Time <> null and
+    self.currentSale.IsComplete = true and
+Payment.allInstances()->exists(p |
+        p.oclIsNew() and
+        p.AmountTendered = amount and
+        p.BelongedSale = self.currentSale
+    ) and
+result = true
+            
+        }

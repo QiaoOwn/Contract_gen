@@ -1,8 +1,0 @@
-Contract ManageUserCRUDService::createUser(userid: Integer, name: String, address: String): Boolean {
-  definition:
-    user: User = User.allInstance()->any(o | o.UserID = userid)
-  precondition:
-    user.oclIsUndefined() = true and name <> "" and address <> ""
-  postcondition:
-    let newUser:User in newUser.oclIsNew() and User.allInstance()->includes(newUser) and newUser.UserID = userid and newUser.Name = name and newUser.Address = address and result = true
-}

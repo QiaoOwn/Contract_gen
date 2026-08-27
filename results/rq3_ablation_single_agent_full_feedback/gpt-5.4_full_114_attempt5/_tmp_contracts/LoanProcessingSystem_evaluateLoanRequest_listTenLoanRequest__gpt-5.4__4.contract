@@ -1,8 +1,0 @@
-Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {
-  definition:
-    readyForReviewRequests:Set(LoanRequest) = LoanRequest.allInstance()->select(o | o.Status = LoanRequestStatus::READYFORREVIEW)
-  precondition:
-    readyForReviewRequests.isEmpty() = false and readyForReviewRequests.size() >= 10
-  postcondition:
-    self.CurrentLoanRequests = readyForReviewRequests and result = readyForReviewRequests
-}

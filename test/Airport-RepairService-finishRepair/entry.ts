@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*Represents a repair task with details including status and related staff.*/
 class Repair {
   /*The unique identifier of the repair task*/
@@ -75,52 +83,62 @@ const getRepository = <T>(clazz: new (...args: any[]) => T) => {
 export {Repair, Staff, Device, ApprovalHistory, getRepository};
 
 class RepairService {
-  /*find the repair, staff and device with provided id, sid, did,
-   *if the device's contact is the staff and the staff role is 3, the repair process should be 7*/
+  /*Definition: A Staff member marks a Repair as finished for a specific Device and records the result text.
+   *Precondition: The Device.Contacts is the given Staff, and the Staff.Role indicates a Worker.
+   *Postcondition: The Repair.Process is set to the finished state and the operation returns true.*/
   finishRepair(id: number, sid: number, did: number, res: string): boolean {
     /*Definition Start*/
-    let rep: Repair = l({
-      logic: () =>
-        getRepository(Repair).find(
-          (u: Repair) =>
-            l({
-              logic: () => u.Id === id,
-              description: 'u.Id=id',
-            }).build().pass
-        ),
-      description: 'Repair.allInstance()->any(u:Repair|u.Id=id)',
-    }).build().pass;
-    let sta: Staff = l({
-      logic: () =>
-        getRepository(Staff).find(
-          (uu: Staff) =>
-            l({
-              logic: () => uu.Id === sid,
-              description: 'uu.Id=sid',
-            }).build().pass
-        ),
-      description: 'Staff.allInstance()->any(uu:Staff|uu.Id=sid)',
-    }).build().pass;
-    let dev: Device = l({
-      logic: () =>
-        getRepository(Device).find(
-          (uuu: Device) =>
-            l({
-              logic: () => uuu.Id === did,
-              description: 'uuu.Id=did',
-            }).build().pass
-        ),
-      description: 'Device.allInstance()->any(uuu:Device|uuu.Id=did)',
-    }).build().pass;
+    let rep: Repair = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Repair).find(
+              (u: Repair) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.Id, id),
+                  description: 'u.Id=id',
+                }).build().pass
+            ),
+          description: 'Repair.allInstances()->any(u:Repair|u.Id=id)',
+        }).build().pass
+    );
+    let sta: Staff = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Staff).find(
+              (uu: Staff) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(uu.Id, sid),
+                  description: 'uu.Id=sid',
+                }).build().pass
+            ),
+          description: 'Staff.allInstances()->any(uu:Staff|uu.Id=sid)',
+        }).build().pass
+    );
+    let dev: Device = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Device).find(
+              (uuu: Device) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(uuu.Id, did),
+                  description: 'uuu.Id=did',
+                }).build().pass
+            ),
+          description: 'Device.allInstances()->any(uuu:Device|uuu.Id=did)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => dev.Contacts === sta,
+      logic: () => StandardOPs.oclEquals(dev.Contacts, sta),
       description: 'dev.Contacts=sta',
     })
       .and({
-        logic: () => sta.Role === 3,
+        logic: () => StandardOPs.oclEquals(sta.Role, 3),
         description: 'sta.Role=3',
       })
       .build();
@@ -129,17 +147,42 @@ class RepairService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (rep.Process = 7),
-      description: 'rep.Process=7',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (rep.Process = 7),
+        description: 'rep.Process=7',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(rep.Process, 7),
+        description: 'rep.Process=7',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {RepairService};

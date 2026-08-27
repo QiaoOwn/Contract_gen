@@ -1,0 +1,25 @@
+Contract CoCoMEOrderProducts::orderItem(barcode:Integer,quantity:Integer): Boolean {
+          precondition:
+          Item.allInstances()->exists(i: Item | i.Barcode = barcode)
+            postcondition:
+          OrderEntry.allInstances()->exists(oe: OrderEntry |
+        not OrderEntry.allInstances@pre()->includes(oe) and
+        Item.allInstances()->exists(i: Item |
+            i.Barcode = barcode and
+            oe.Item = i and
+            oe.Quantity = quantity and
+            oe.SubAmount = quantity * i.OrderPrice
+        )
+    ) and
+self.ContainedEntries->exists(oe: OrderEntry |
+        not OrderEntry.allInstances@pre()->includes(oe) and
+        Item.allInstances()->exists(i: Item |
+            i.Barcode = barcode and
+            oe.Item = i and
+            oe.Quantity = quantity and
+            oe.SubAmount = quantity * i.OrderPrice
+        )
+    ) and
+result = true
+            
+        }

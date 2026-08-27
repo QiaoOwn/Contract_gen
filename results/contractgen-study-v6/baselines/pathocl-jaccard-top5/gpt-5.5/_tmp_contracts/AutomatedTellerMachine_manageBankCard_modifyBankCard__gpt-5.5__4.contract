@@ -1,0 +1,12 @@
+Contract ManageBankCardCRUDService::modifyBankCard(cardid:Integer,cardstatus:CardStatus[NORMAL|SUSPEND|CANCEL],catalog:CardCatalog[CREDIT|DEPOSIT],password:Integer,balance:Real): Boolean {
+          precondition:
+          BankCard.allInstances()->exists(bc | bc.cardid = cardid)
+            postcondition:
+          BankCard.allInstances()->any(bc | bc.cardid = cardid).cardid = cardid and
+    BankCard.allInstances()->any(bc | bc.cardid = cardid).cardstatus = cardstatus and
+    BankCard.allInstances()->any(bc | bc.cardid = cardid).catalog = catalog and
+    BankCard.allInstances()->any(bc | bc.cardid = cardid).password = password and
+    BankCard.allInstances()->any(bc | bc.cardid = cardid).balance = balance and
+result = true
+            
+        }

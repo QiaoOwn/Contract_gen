@@ -20,7 +20,7 @@ const operations = [
       new Parameter({name: 'password', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `librarian:Librarian = Librarian.allInstance()->any(lib:Librarian | lib.LibrarianID = librarianid)`,
+    definition: `librarian:Librarian = Librarian.allInstances()->any(lib:Librarian | lib.LibrarianID = librarianid)`,
     precondition: `librarian.oclIsUndefined() = true`,
     postcondition: `
     let lib:Librarian in
@@ -28,7 +28,7 @@ const operations = [
     lib.LibrarianID = librarianid and
     lib.Name = name and
     lib.Password = password and
-    Librarian.allInstance()->includes(lib) and
+    Librarian.allInstances()->includes(lib) and
     result = true`,
   }),
   // Similar operations for queryLibrarian, modifyLibrarian, deleteLibrarian

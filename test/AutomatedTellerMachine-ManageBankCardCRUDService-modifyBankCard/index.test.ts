@@ -1,6 +1,12 @@
 import {BankCard, CardCatalog, CardStatus, getRepository, ManageBankCardCRUDService} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('AutomatedTellerMachine/ManageBankCardCRUDService/modifyBankCard', () => {
-  it('Happy Path', () => {
+  beforeEach(() => {
+    clearRepositories(getRepository(BankCard));
+  });
+
+  it('Happy Path: updates card fields', () => {
     const service = new ManageBankCardCRUDService();
     const card = new BankCard();
     card.CardID = 1;
@@ -18,5 +24,13 @@ describe('AutomatedTellerMachine/ManageBankCardCRUDService/modifyBankCard', () =
     expect(card.Catalog).toBe(CardCatalog.CREDIT);
     expect(card.Password).toBe(111111);
     expect(card.Balance).toBe(9999);
+  });
+
+  it('rejects when card does not exist', () => {
+    const service = new ManageBankCardCRUDService();
+    expectPreconditionRejected(() =>
+      service.modifyBankCard(99, CardStatus.NORMAL, CardCatalog.CREDIT, 111111, 9999)
+    );
+    expect(getRepository(BankCard)).toHaveLength(0);
   });
 });

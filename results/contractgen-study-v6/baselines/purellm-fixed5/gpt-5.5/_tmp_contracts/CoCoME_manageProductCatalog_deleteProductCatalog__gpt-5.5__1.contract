@@ -1,0 +1,9 @@
+Contract ManageProductCatalogCRUDService::deleteProductCatalog(id:Integer): Boolean {
+          definition:
+          targetCatalog:ProductCatalog = ProductCatalog.allInstances()->any(candidate:ProductCatalog | candidate.Id = id)
+            precondition:
+          ProductCatalog.allInstances()->exists(candidate:ProductCatalog | candidate.Id = id)
+            postcondition:
+          ProductCatalog.allInstances()->excludes(targetCatalog) and result = true
+            
+        }

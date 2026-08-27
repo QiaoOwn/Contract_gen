@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+          precondition:
+          not self.oclIsUndefined()
+            postcondition:
+          self.OrderStatus = OrderStatus::REQUESTED and
+self.Amount = self.Amount@pre + self.entries->collect(e | e.subtotal)->sum() and
+result = true
+            
+        }

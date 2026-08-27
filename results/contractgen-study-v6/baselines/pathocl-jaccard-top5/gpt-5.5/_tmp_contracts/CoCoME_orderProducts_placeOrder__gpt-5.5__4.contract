@@ -1,0 +1,13 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+          precondition:
+          OrderProduct.allInstances()->notEmpty()
+            postcondition:
+          OrderProduct.allInstances()->forAll(op |
+        op.OrderStatus = OrderStatus::REQUESTED
+    ) and
+OrderProduct.allInstances()->forAll(op |
+        op.Amount = op.Amount@pre
+    ) and
+result = true
+            
+        }

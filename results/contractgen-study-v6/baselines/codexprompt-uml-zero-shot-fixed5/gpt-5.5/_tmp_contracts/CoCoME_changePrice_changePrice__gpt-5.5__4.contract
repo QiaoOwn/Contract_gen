@@ -1,0 +1,14 @@
+Contract CoCoMESystem::changePrice(barcode:Integer,newPrice:Real): Boolean {
+          precondition:
+          Item.allInstances()->exists(i: Item | i.Barcode = barcode)
+            postcondition:
+          Item.allInstances()->forAll(i: Item |
+        if i.Barcode = barcode then
+            i.Price = newPrice
+        else
+            i.Price = i.Price@pre
+        endif
+    ) and
+result = true
+            
+        }

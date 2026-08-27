@@ -1,0 +1,32 @@
+Contract LibraryManagementSystemSystem::recommendBook(uid:String,callNo:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u: User | u.UserID = uid) and
+RecommendBook.allInstances()->forAll(rb: RecommendBook |
+        rb.CallNo <> callNo
+    )
+            postcondition:
+          RecommendBook.allInstances()->exists(rb: RecommendBook |
+        rb.oclIsNew() and
+        rb.CallNo = callNo and
+        rb.Title = title and
+        rb.Edition = edition and
+        rb.Author = author and
+        rb.Publisher = publisher and
+        rb.Description = description and
+        rb.ISBn = isbn and
+        rb.RecommendDate = Date::today() and
+        rb.RecommendUser = User.allInstances()->any(u: User | u.UserID = uid)
+    ) and
+User.allInstances()->any(u: User | u.UserID = uid).RecommendedBook->exists(rb: RecommendBook |
+        rb.oclIsNew() and
+        rb.CallNo = callNo and
+        rb.Title = title and
+        rb.Edition = edition and
+        rb.Author = author and
+        rb.Publisher = publisher and
+        rb.Description = description and
+        rb.ISBn = isbn
+    ) and
+result = true
+            
+        }

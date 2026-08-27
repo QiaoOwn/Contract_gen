@@ -22,14 +22,14 @@ const operations = [
       new Parameter({name: 'name', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)`,
+    definition: `supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)`,
     precondition: `supplier.oclIsUndefined() = true`,
     postcondition: `
 let sup:Supplier in
 sup.oclIsNew() and
 sup.Id = id and
 sup.Name = name and
-Supplier.allInstance()->includes(sup) and
+Supplier.allInstances()->includes(sup) and
 result = true`,
   }),
   new Operation({
@@ -39,7 +39,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Supplier'),
-    definition: `supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)`,
+    definition: `supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)`,
     precondition: `supplier.oclIsUndefined() = false`,
     postcondition: `result = supplier`,
   }),
@@ -53,7 +53,7 @@ result = true`,
       new Parameter({name: 'name', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)`,
+    definition: `supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)`,
     precondition: `supplier.oclIsUndefined() = false`,
     postcondition: `
 supplier.Id = id and
@@ -67,12 +67,12 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `supplier:Supplier = Supplier.allInstance()->any(sup:Supplier | sup.Id = id)`,
+    definition: `supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)`,
     precondition: `
 supplier.oclIsUndefined() = false and
-Supplier.allInstance()->includes(supplier)`,
+Supplier.allInstances()->includes(supplier)`,
     postcondition: `
-Supplier.allInstance()->excludes(supplier) and
+Supplier.allInstances()->excludes(supplier) and
 result = true`,
   }),
 ];

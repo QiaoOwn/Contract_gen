@@ -1,0 +1,13 @@
+Contract ManageLibrarianCRUDService::createLibrarian(librarianid:String,name:String,password:String): Boolean {
+          precondition:
+          Librarian.allInstances()->forAll(l | l.LibrarianID <> librarianid)
+            postcondition:
+          Librarian.allInstances()->exists(l |
+        l.oclIsNew() and
+        l.LibrarianID = librarianid and
+        l.Name = name and
+        l.Password = password
+    ) and
+result = true
+            
+        }

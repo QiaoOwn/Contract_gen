@@ -1,0 +1,151 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 20,
+  "operation_id": "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement",
+  "case_study": "Loan Processing",
+  "project": "LoanProcessingSystem",
+  "use_case": "generateLoanLetterAndAgreement",
+  "operation": "generateLoanAgreement",
+  "operation_signature": "generateLoanAgreement(): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "b8848f94dbd04684c55e4839c48f6bab1b9cfc1f1f8daf00928f9c02cfae3873",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "new_object",
+    "undefined",
+    "repository_update"
+  ],
+  "complexity_score": 43,
+  "contract": "Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {\n\tprecondition:\n\t\tself.CurrentLoanRequest.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet newAgreement: LoanAgreement in\n\t\tnewAgreement.oclIsNew() and\n\t\tLoanAgreement.allInstances()->includes(newAgreement) and\n\t\tnewAgreement.Content = 'standard content' and\n\t\tself.CurrentLoanRequest.AttachedLoanAgreement = newAgreement and\n\t\tself.CurrentLoanAgreement = newAgreement and\n\t\tresult = true\n}",
+  "complexity_tier": "medium",
+  "scenarios": [
+    {
+      "scenario_id": "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json",
+          "test_name": "LoanProcessingSystem/GenerateLoanLetterAndAgreementModule/generateLoanAgreement Happy Path"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json",
+          "test_name": "LoanProcessingSystem/GenerateLoanLetterAndAgreementModule/generateLoanAgreement Happy Path",
+          "test_status": "failed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json"
+    },
+    {
+      "scenario_id": "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json",
+          "test_name": "LoanProcessingSystem/GenerateLoanLetterAndAgreementModule/generateLoanAgreement rejects when precondition is violated"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json",
+          "test_name": "LoanProcessingSystem/GenerateLoanLetterAndAgreementModule/generateLoanAgreement rejects when precondition is violated",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json"
+    },
+    {
+      "scenario_id": "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

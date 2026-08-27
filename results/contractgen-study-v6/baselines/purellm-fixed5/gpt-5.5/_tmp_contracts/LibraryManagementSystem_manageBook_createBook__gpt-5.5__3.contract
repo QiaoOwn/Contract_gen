@@ -1,0 +1,7 @@
+Contract ManageBookCRUDService::createBook(callno:String,title:String,edition:String,author:String,publisher:String,description:String,isbn:String,copynum:Integer): Boolean {
+          precondition:
+          Book.allInstances()->forAll(book:Book | book.CallNo <> callno)
+            postcondition:
+          let book:Book in book.oclIsNew() and book.CallNo = callno and book.Title = title and book.Edition = edition and book.Author = author and book.Publisher = publisher and book.Description = description and book.ISBn = isbn and book.CopyNum = copynum and Book.allInstances()->includes(book) and result = true
+            
+        }

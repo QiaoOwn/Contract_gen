@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -204,40 +212,45 @@ class ProcessSaleService {
   CurrentPaymentMethod: PaymentMethod;
   /*TempVariable End*/
 
-  /*find all sales lines in current sale, and collect the sales lines item's subamount.
-   *if the current sale is exist and current sale is not complete and is not ready to pay.
-   *then the current sale amount is equal to the sales lines items sum subamount
-   *and the current sale is ready to pay.*/
+  /*Definition: The endSale operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   endSale(): number {
     /*Definition Start*/
-    let sls: SalesLineItem[] = l({
-      logic: () => this.CurrentSale.ContainedSalesLine,
-      description: 'CurrentSale.ContainedSalesLine',
-    }).build().pass;
-    let sub: number[] = l({
-      logic: () =>
-        sls.map(
-          (s: SalesLineItem) =>
-            l({
-              logic: () => s.Subamount,
-              description: 's.Subamount',
-            }).build().pass
-        ),
-      description: 'sls->collect(s:SalesLineItem|s.Subamount)',
-    }).build().pass;
+    let sls: SalesLineItem[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () => this.CurrentSale.ContainedSalesLine,
+          description: 'CurrentSale.ContainedSalesLine',
+        }).build().pass
+    );
+    let sub: number[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            sls.map(
+              (s: SalesLineItem) =>
+                l({
+                  logic: () => s.Subamount,
+                  description: 's.Subamount',
+                }).build().pass
+            ),
+          description: 'sls->collect(s:SalesLineItem|s.Subamount)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentSale), false),
       description: 'CurrentSale.oclIsUndefined()=false',
     })
       .and({
-        logic: () => this.CurrentSale.IsComplete === false,
+        logic: () => StandardOPs.oclEquals(this.CurrentSale.IsComplete, false),
         description: 'CurrentSale.IsComplete=false',
       })
       .and({
-        logic: () => this.CurrentSale.IsReadytoPay === false,
+        logic: () => StandardOPs.oclEquals(this.CurrentSale.IsReadytoPay, false),
         description: 'CurrentSale.IsReadytoPay=false',
       })
       .build();
@@ -246,21 +259,50 @@ class ProcessSaleService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentSale.Amount = sub.sum()),
-      description: 'CurrentSale.Amount=sub.sum()',
-    })
-      .and({
-        execute: () => (this.CurrentSale.IsReadytoPay = true),
-        description: 'CurrentSale.IsReadytoPay=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentSale.Amount = StandardOPs.sum(sub)),
+        description: 'CurrentSale.Amount=sub.sum()',
       })
-      .and({
-        execute: () => this.CurrentSale.Amount,
-        description: 'result=CurrentSale.Amount',
+        .and({
+          execute: () => (this.CurrentSale.IsReadytoPay = true),
+          description: 'CurrentSale.IsReadytoPay=true',
+        })
+        .and({
+          execute: () => this.CurrentSale.Amount,
+          description: 'result=CurrentSale.Amount',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(this.CurrentSale.Amount, StandardOPs.sum(sub)),
+        description: 'CurrentSale.Amount=sub.sum()',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSale.IsReadytoPay, true),
+          description: 'CurrentSale.IsReadytoPay=true',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, this.CurrentSale.Amount),
+          description: 'result=CurrentSale.Amount',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ProcessSaleService};

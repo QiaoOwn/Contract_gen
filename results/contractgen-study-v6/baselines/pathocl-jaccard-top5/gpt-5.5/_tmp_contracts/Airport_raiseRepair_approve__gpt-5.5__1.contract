@@ -1,0 +1,42 @@
+Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {
+          precondition:
+          Repair.allInstances()->exists(r | r.Id = rid) and
+Staff.allInstances()->exists(s | s.Id = sid)
+            postcondition:
+          ApprovalHistory.allInstances()->exists(ah |
+        not ApprovalHistory.allInstances@pre()->includes(ah) and
+        ah.StaffId = sid and
+        ah.Reject = reject and
+        ah.Suggestion = suggestion
+    ) and
+Repair.allInstances()->any(r | r.Id = rid).History->exists(ah |
+        not ApprovalHistory.allInstances@pre()->includes(ah) and
+        ah.StaffId = sid and
+        ah.Reject = reject and
+        ah.Suggestion = suggestion
+    ) and
+reject = true and
+    Staff.allInstances()->any(s | s.Id = sid).Role = 1 and
+    Repair.allInstances()->any(r | r.Id = rid).Process@pre = 0
+    implies
+    Repair.allInstances()->any(r | r.Id = rid).Process = 1 and
+reject = true and
+    Staff.allInstances()->any(s | s.Id = sid).Role = 2 and
+    Repair.allInstances()->any(r | r.Id = rid).Process@pre = 1
+    implies
+    Repair.allInstances()->any(r | r.Id = rid).Process = 2 and
+reject = true and
+    Staff.allInstances()->any(s | s.Id = sid).Role = 3 and
+    Repair.allInstances()->any(r | r.Id = rid).Process@pre = 2
+    implies
+    Repair.allInstances()->any(r | r.Id = rid).Process = 3 and
+reject = false implies
+    Repair.allInstances()->any(r | r.Id = rid).Process = 5 and
+result = Repair.allInstances()->any(r | r.Id = rid).History->any(ah |
+        not ApprovalHistory.allInstances@pre()->includes(ah) and
+        ah.StaffId = sid and
+        ah.Reject = reject and
+        ah.Suggestion = suggestion
+    )
+            
+        }

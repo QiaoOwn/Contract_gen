@@ -16,13 +16,13 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'name', type: 'String'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `subject:Subject = Subject.allInstance()->any(sub:Subject | sub.Name = name)`,
+    definition: `subject:Subject = Subject.allInstances()->any(sub:Subject | sub.Name = name)`,
     precondition: `subject.oclIsUndefined() = true`,
     postcondition: `
     let sub:Subject in
     sub.oclIsNew() and
     sub.Name = name and
-    Subject.allInstance()->includes(sub) and
+    Subject.allInstances()->includes(sub) and
     result = true`,
   }),
   // Similar operations for querySubject, modifySubject, deleteSubject

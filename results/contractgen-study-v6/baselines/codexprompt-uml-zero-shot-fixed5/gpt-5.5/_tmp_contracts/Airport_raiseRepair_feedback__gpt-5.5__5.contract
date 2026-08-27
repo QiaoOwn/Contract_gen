@@ -1,0 +1,22 @@
+Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {
+          precondition:
+          Staff.allInstances()->exists(s | s.Id = sid) and
+Repair.allInstances()->exists(r | r.Id = id) and
+let staff : Staff = Staff.allInstances()->any(s | s.Id = sid),
+        repair : Repair = Repair.allInstances()->any(r | r.Id = id)
+    in repair.RaiseStaff = staff and
+Staff.allInstances()->any(s | s.Id = sid).Role = 0 and
+Repair.allInstances()->any(r | r.Id = id).Process = 7
+            postcondition:
+          let repair : Repair = Repair.allInstances()->any(r | r.Id = id)
+    in repair.Score = score and
+let repair : Repair = Repair.allInstances()->any(r | r.Id = id)
+    in score >= 3 implies repair.Close = true and
+let repair : Repair = Repair.allInstances()->any(r | r.Id = id)
+    in score < 3 implies
+        repair.Close = false and
+        repair.Description = des and
+        repair.Process = 0 and
+result = true
+            
+        }

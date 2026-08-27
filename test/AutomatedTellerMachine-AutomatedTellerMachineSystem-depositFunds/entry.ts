@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The BankCrad is a card that can deposit or withdraw money.*/
 class BankCard {
   /*The unique identifier of the bank card*/
@@ -54,21 +62,21 @@ class AutomatedTellerMachineSystem {
   DepositedNumber: number;
   /*SystemVariable End*/
 
-  /*if the card password and id is validated,
-   *and the input card exists and the input quantity greater or equal to 100, then the input card balance will plus the quantity
-   *and the deposited number is equal to the deposited number.*/
+  /*Definition: The depositFunds operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   depositFunds(quantity: number): boolean {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => this.PasswordValidated === true,
+      logic: () => StandardOPs.oclEquals(this.PasswordValidated, true),
       description: 'self.PasswordValidated=true',
     })
       .and({
-        logic: () => this.CardIDValidated === true,
+        logic: () => StandardOPs.oclEquals(this.CardIDValidated, true),
         description: 'self.CardIDValidated=true',
       })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(this.InputCard) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.InputCard), false),
         description: 'self.InputCard.oclIsUndefined()=false',
       })
       .and({
@@ -81,25 +89,63 @@ class AutomatedTellerMachineSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.InputCard.Balance = this.InputCard.Balance + quantity),
-      description: 'self.InputCard.Balance=self.InputCard.Balance@pre+quantity',
-    })
-      .and({
-        execute: () => (this.IsDeposit = true),
-        description: 'self.IsDeposit=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () =>
+          (this.InputCard.Balance = oclState.preValue(this.InputCard, 'Balance') + quantity),
+        description: 'self.InputCard.Balance=self.InputCard.Balance@pre+quantity',
       })
-      .and({
-        execute: () => (this.DepositedNumber = quantity),
-        description: 'self.DepositedNumber=quantity',
+        .and({
+          execute: () => (this.IsDeposit = true),
+          description: 'self.IsDeposit=true',
+        })
+        .and({
+          execute: () => (this.DepositedNumber = quantity),
+          description: 'self.DepositedNumber=quantity',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(
+            this.InputCard.Balance,
+            oclState.preValue(this.InputCard, 'Balance') + quantity
+          ),
+        description: 'self.InputCard.Balance=self.InputCard.Balance@pre+quantity',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(this.IsDeposit, true),
+          description: 'self.IsDeposit=true',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.DepositedNumber, quantity),
+          description: 'self.DepositedNumber=quantity',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {AutomatedTellerMachineSystem};

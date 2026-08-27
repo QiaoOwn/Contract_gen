@@ -26,8 +26,8 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-    user:User = User.allInstance()->any(u:User | u.UserID = uid),
-    rb:RecommendBook = RecommendBook.allInstance()->any(r:RecommendBook | r.CallNo = callNo)`,
+    user:User = User.allInstances()->any(u:User | u.UserID = uid),
+    rb:RecommendBook = RecommendBook.allInstances()->any(r:RecommendBook | r.CallNo = callNo)`,
     precondition: `
     user.oclIsUndefined() = false and
     rb.oclIsUndefined() = true`,
@@ -44,7 +44,7 @@ const operations = [
     r.RecommendDate = Today and
     r.RecommendUser = user and
     user.RecommendedBook->includes(r) and
-    RecommendBook.allInstance()->includes(r) and
+    RecommendBook.allInstances()->includes(r) and
     result = true`,
   }),
 ];

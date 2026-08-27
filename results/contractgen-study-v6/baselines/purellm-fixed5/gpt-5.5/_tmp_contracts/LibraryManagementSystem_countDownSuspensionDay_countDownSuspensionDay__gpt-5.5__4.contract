@@ -1,0 +1,7 @@
+Contract LibraryManagementSystemSystem::countDownSuspensionDay() {
+          precondition:
+          true
+            postcondition:
+          User.allInstances()->forAll(user:User | if user.SuspensionDays@pre > 0 then (user.SuspensionDays = user.SuspensionDays@pre - 1 and if user.BorrowStatus@pre = BorrowStatus::SUSPEND and user.OverDueFee@pre = 0.0 and user.SuspensionDays@pre = 1 then user.BorrowStatus = BorrowStatus::NORMAL else user.BorrowStatus = user.BorrowStatus@pre endif) else (user.SuspensionDays = user.SuspensionDays@pre and user.BorrowStatus = user.BorrowStatus@pre) endif)
+            
+        }

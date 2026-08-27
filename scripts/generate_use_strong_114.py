@@ -41,6 +41,7 @@ class Relationship:
 @dataclass
 class Entity:
     name: str
+    parent: str | None = None
     attributes: list[Attribute] = field(default_factory=list)
     relationships: list[Relationship] = field(default_factory=list)
 
@@ -70,7 +71,7 @@ def parse_type(raw: str) -> tuple[str, set[str], bool]:
         values = {safe_ident(v.strip().upper()) for v in enum_match.group(2).split("|") if v.strip()}
         return enum_name, values, many
     if raw in {"Date", "LocalDate", "DateTime"}:
-        return "String", set(), many
+        return "Integer", set(), many
     if raw in PRIMITIVES:
         return raw, set(), many
     return safe_ident(raw), set(), many
@@ -82,6 +83,7 @@ def parse_model_context(text: str) -> tuple[dict[str, Entity], dict[str, set[str
     current: Entity | None = None
     section: str | None = None
     pending_name: str | None = None
+    in_entities = False
 
     for raw_line in (text or "").splitlines():
         line = raw_line.rstrip()
@@ -89,6 +91,9 @@ def parse_model_context(text: str) -> tuple[dict[str, Entity], dict[str, set[str
         if stripped == "Entities":
             current = None
             section = None
+            in_entities = True
+            continue
+        if not in_entities:
             continue
         name_match = re.fullmatch(r"\d+\.Name:\s*(.+)", stripped)
         top_name_match = re.fullmatch(r"Name:\s*(.+)", stripped)
@@ -97,6 +102,11 @@ def parse_model_context(text: str) -> tuple[dict[str, Entity], dict[str, set[str
             current = entities.setdefault(entity_name, Entity(entity_name))
             section = None
             pending_name = None
+            continue
+        extends_match = re.fullmatch(r"Extends:\s*(.+)", stripped)
+        if extends_match and current:
+            current.parent = safe_ident(extends_match.group(1))
+            entities.setdefault(current.parent, Entity(current.parent))
             continue
         if stripped == "Attributes":
             section = "attributes"
@@ -167,8 +177,10 @@ def use_decl_type(raw: str) -> str:
     raw = raw.strip()
     set_match = re.fullmatch(r"Set\(([A-Za-z_][A-Za-z0-9_]*)\)", raw)
     if set_match:
-        return f"Set({safe_ident(set_match.group(1))})"
-    return safe_ident(raw)
+        item_type, _, _ = parse_type(set_match.group(1))
+        return f"Set({item_type})"
+    parsed_type, _, _ = parse_type(raw)
+    return parsed_type
 
 
 def base_type(type_name: str) -> str:
@@ -182,6 +194,10 @@ def normalize_ocl(expr: str, enum_values: set[str]) -> str:
     expr = (expr or "").strip()
     expr = re.sub(r'"([^"\\]*(?:\\.[^"\\]*)*)"', lambda m: "'" + m.group(1).replace("'", "\\'") + "'", expr)
     expr = re.sub(r"\ballInstance\s*\(", "allInstances(", expr)
+    expr = re.sub(r"\b([A-Za-z_][A-Za-z0-9_.@]*)\.After\s*\(([^()]+)\)", r"(\1 + \2)", expr)
+    expr = re.sub(r"\b([A-Za-z_][A-Za-z0-9_.@]*)\.Before\s*\(([^()]+)\)", r"(\1 - \2)", expr)
+    expr = re.sub(r"\b([A-Za-z_][A-Za-z0-9_.@]*)\.isAfter\s*\(([^()]+)\)", r"(\1 > \2)", expr)
+    expr = re.sub(r"\b([A-Za-z_][A-Za-z0-9_.@]*)\.isBefore\s*\(([^()]+)\)", r"(\1 < \2)", expr)
     expr = re.sub(r"\.isEmpty\s*\(\)", "->isEmpty()", expr)
     expr = re.sub(r"\.includes\s*\(", "->includes(", expr)
     expr = re.sub(r"\bnull\b", "undefined", expr)
@@ -203,6 +219,27 @@ def infer_self_context(
     attrs: dict[str, str] = {}
     navs: dict[str, str] = {}
     combined = "\n".join([precondition] + [expr for _, _, expr in definitions])
+
+    for ref, member in re.findall(
+        r"\bself\.([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)\b",
+        combined,
+    ):
+        ref = safe_ident(ref)
+        member = safe_ident(member)
+        if ref in param_names or ref in navs:
+            continue
+        candidates = []
+        for entity in entities.values():
+            entity_members = {attr.name for attr in entity.attributes}
+            entity_members.update(rel.name for rel in entity.relationships)
+            if member in entity_members:
+                candidates.append(entity.name)
+        name_hint = re.sub(r"^(?:Current|Selected|Active|Target)", "", ref, flags=re.I)
+        hinted = [name for name in candidates if name.lower() == name_hint.lower()]
+        if len(hinted) == 1:
+            navs[ref] = hinted[0]
+        elif len(candidates) == 1:
+            navs[ref] = candidates[0]
 
     for _, type_name, expr in definitions:
         match = re.fullmatch(r"\s*self\.([A-Za-z_][A-Za-z0-9_]*)\s*", expr.strip())
@@ -254,7 +291,33 @@ def default_value(type_name: str, name: str, operation_name: str, is_first_param
     return "'sample'"
 
 
-def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, dict]:
+def wrap_definitions(body: str, definitions: list[tuple[str, str, str]], enum_values: set[str]) -> str:
+    wrapped = body or "true"
+    for name, type_name, expr in reversed(definitions):
+        wrapped = f"let {name} : {type_name} = {normalize_ocl(expr, enum_values)} in\n      {wrapped}"
+    return wrapped
+
+
+def adapt_postcondition(expr: str) -> tuple[str, list[str]]:
+    adaptations: list[str] = []
+    match = re.fullmatch(
+        r"\s*let\s+([A-Za-z_][A-Za-z0-9_]*)\s*:\s*([A-Za-z_][A-Za-z0-9_]*)\s+in\s+(.+)",
+        expr or "",
+        re.S,
+    )
+    if not match:
+        return expr or "true", adaptations
+    variable, type_name, body = match.groups()
+    if re.search(rf"\b{re.escape(variable)}\.oclIsNew\s*\(\s*\)", body):
+        adaptations.append("new_object_let_to_exists")
+        return (
+            f"{type_name}.allInstances()->exists({variable}: {type_name} |\n      {body.strip()})",
+            adaptations,
+        )
+    return expr or "true", adaptations
+
+
+def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, str, str, dict]:
     entities, enums = parse_model_context(row.get("model_context", ""))
     enum_values = {value for values in enums.values() for value in values}
     contract = (attempt or {}).get("extracted_ocl") or ""
@@ -269,7 +332,20 @@ def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, d
                 precondition,
             )
     params = row.get("parameters") or []
-    self_attrs, self_navs = infer_self_context(definitions, sections["precondition"], entities, params)
+    self_attrs, self_navs = infer_self_context(
+        definitions,
+        "\n".join([sections["precondition"], sections["postcondition"]]),
+        entities,
+        params,
+    )
+    environment_text = (row.get("model_context") or "").split("  Entities", 1)[0]
+    for env_name, env_type in re.findall(
+        r"^\s*\d+\.([A-Za-z_][A-Za-z0-9_]*)\s*:\s*([A-Za-z_][A-Za-z0-9_]*)\s*$",
+        environment_text,
+        re.M,
+    ):
+        parsed_type, _, _ = parse_type(env_type)
+        self_attrs.setdefault(safe_ident(env_name), parsed_type)
     for target in self_navs.values():
         entities.setdefault(target, Entity(target))
 
@@ -296,7 +372,8 @@ def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, d
         lines.append("")
 
     for entity in sorted(entities.values(), key=lambda e: e.name):
-        lines.append(f"class {entity.name}")
+        parent_suffix = f" < {entity.parent}" if entity.parent else ""
+        lines.append(f"class {entity.name}{parent_suffix}")
         if entity.attributes:
             lines.append("attributes")
             seen = set()
@@ -316,6 +393,17 @@ def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, d
         lines.append(f"  {attr_name} : {attr_type}")
     if not params:
         lines.append("  sampleIndex : Integer")
+    source_operation_name = safe_ident(row["operation_name"])
+    operation_name = safe_ident(f"Contract_{source_operation_name}")
+    operation_params = ", ".join(
+        f"{safe_ident(param['name'])} : {use_type_for_param(param['type'])}" for param in params
+    )
+    return_suffix = ""
+    if row.get("has_return_value"):
+        return_suffix = f" : {use_decl_type(row.get('return_type') or 'String')}"
+    operation_signature = f"{operation_name}({operation_params}){return_suffix}"
+    lines.append("operations")
+    lines.append(f"  {operation_signature}")
     lines.append("end")
     lines.append("")
 
@@ -352,20 +440,38 @@ def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, d
             ]
         )
 
-    body = precondition if precondition else "true"
-    for name, type_name, expr in reversed(definitions):
-        body = f"let {name} : {type_name} = {normalize_ocl(expr, enum_values)} in\n      {body}"
-    for param in reversed(params):
-        pname = safe_ident(param["name"])
-        ptype = use_type_for_param(param["type"])
-        body = f"let {pname} : {ptype} = self.{pname} in\n      {body}"
-
-    lines.extend(["constraints", "", "context OperationContext", f"  inv {safe_ident(row['operation_name'])}DefinitionPreconditionTypecheck:"])
-    if contract and precondition:
-        lines.append("    " + body.replace("\n", "\n    "))
-    else:
-        lines.append("    true")
-    lines.append("")
+    base_lines = list(lines)
+    context_line = f"context OperationContext::{operation_signature}"
+    pre_body = wrap_definitions(precondition or "true", definitions, enum_values)
+    normalized_post = normalize_ocl(sections["postcondition"] or "true", enum_values)
+    adapted_post, post_adaptations = adapt_postcondition(normalized_post)
+    post_body = wrap_definitions(adapted_post, definitions, enum_values)
+    pre_block = [
+        "constraints",
+        "",
+        context_line,
+        f"  pre {source_operation_name}GeneratedPre:",
+        "    " + pre_body.replace("\n", "\n    "),
+        "",
+    ]
+    post_block = [
+        "constraints",
+        "",
+        context_line,
+        f"  post {source_operation_name}GeneratedPost:",
+        "    " + post_body.replace("\n", "\n    "),
+        "",
+    ]
+    combined_block = [
+        "constraints",
+        "",
+        context_line,
+        f"  pre {source_operation_name}GeneratedPre:",
+        "    " + pre_body.replace("\n", "\n    "),
+        f"  post {source_operation_name}GeneratedPost:",
+        "    " + post_body.replace("\n", "\n    "),
+        "",
+    ]
 
     cmd_lines = ["!create ctx : OperationContext"]
     for i, param in enumerate(params):
@@ -408,16 +514,53 @@ def make_model(row: dict, attempt: dict | None, index: int) -> tuple[str, str, d
         "has_generated_contract": bool(contract),
         "definition_count": len(definitions),
         "has_precondition": bool(precondition and precondition != "true"),
+        "has_postcondition": bool(sections["postcondition"]),
+        "postcondition_adaptations": post_adaptations,
+        "translation_adaptations": [
+            "date_values_as_integer_offsets"
+        ] if re.search(r"\b(?:Date|LocalDate|DateTime|Today|Now|\.After\s*\(|\.Before\s*\()", contract) else [],
         "entity_count": len(entities),
         "enum_count": len(enums),
     }
-    return "\n".join(lines), "\n".join(cmd_lines), meta
+    return (
+        "\n".join(base_lines + combined_block),
+        "\n".join(base_lines + pre_block),
+        "\n".join(base_lines + post_block),
+        "\n".join(cmd_lines),
+        meta,
+    )
 
 
-def choose_attempts(path: Path) -> dict[str, dict]:
+STUDY_VERSION = "contractgen-study-v6"
+INPUT_SCHEMA_VERSION = "contractgen-operation-input-v3"
+
+
+def choose_attempts(path: Path, model: str, operations: dict[str, dict]) -> dict[str, dict]:
     if not path.exists():
-        return {}
-    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        raise FileNotFoundError(f"Missing v6 Contract Gen attempts: {path}")
+    rows = []
+    for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}:{line_no}: invalid JSON: {exc}") from exc
+        if row.get("model") != model:
+            continue
+        operation_id = str(row.get("operation_id") or "")
+        operation = operations.get(operation_id)
+        shared_prompt_hash = row.get("shared_prompt_hash") or row.get("prompt_hash")
+        if (
+            row.get("study_version") != STUDY_VERSION
+            or row.get("input_schema_version") != INPUT_SCHEMA_VERSION
+            or operation is None
+            or row.get("input_hash") != operation.get("input_hash")
+            or shared_prompt_hash != operation.get("prompt_hash")
+            or not row.get("generation_prompt_version")
+        ):
+                raise ValueError(f"{path}:{line_no}: incompatible study-v6 experiment record")
+        rows.append(row)
 
     def score(row: dict) -> tuple[int, int, int, int]:
         return (
@@ -432,12 +575,31 @@ def choose_attempts(path: Path) -> dict[str, dict]:
         opid = row.get("operation_id")
         if opid and (opid not in best or score(row) > score(best[opid])):
             best[opid] = row
+    if set(best) != set(operations):
+        missing = sorted(set(operations) - set(best))
+        raise ValueError(
+            f"Expected {len(operations)} operations for {model}, found {len(best)}; "
+            f"missing={missing[:5]}"
+        )
     return best
 
 
-def run_use(use_bat: Path, model: Path, cmd: Path, operation_id: str, out_dir: Path, timeout: int) -> dict:
+def model_without_constraints(model_text: str) -> str:
+    marker = "\nconstraints\n"
+    return model_text.split(marker, 1)[0].rstrip() + "\n"
+
+
+def run_use(
+    use_bat: Path,
+    model: Path,
+    cmd: Path,
+    operation_id: str,
+    out_dir: Path,
+    timeout: int,
+    phase: str,
+) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
-    stem = safe_ident(operation_id)
+    stem = f"{safe_ident(operation_id)}.{safe_ident(phase)}"
     stdout_path = out_dir / f"{stem}.stdout.txt"
     stderr_path = out_dir / f"{stem}.stderr.txt"
     started = time.time()
@@ -445,17 +607,21 @@ def run_use(use_bat: Path, model: Path, cmd: Path, operation_id: str, out_dir: P
         proc = subprocess.run(
             [str(use_bat.resolve()), str(model.resolve()), str(cmd.resolve())],
             text=True,
+            encoding="utf-8",
+            errors="replace",
             capture_output=True,
             timeout=timeout,
         )
         stdout_path.write_text(proc.stdout or "", encoding="utf-8")
         stderr_path.write_text(proc.stderr or "", encoding="utf-8")
+        process_ok = proc.returncode == 0
         return {
             "operation_id": operation_id,
-            "status": "pass" if proc.returncode == 0 else "fail",
+            "phase": phase,
+            "status": "pass" if process_ok else "fail",
             "returncode": proc.returncode,
             "duration_sec": round(time.time() - started, 4),
-            "run_mode": "semantic_load_only",
+            "run_mode": "external_use_compile",
             "stdout_file": str(stdout_path),
             "stderr_file": str(stderr_path),
         }
@@ -464,10 +630,11 @@ def run_use(use_bat: Path, model: Path, cmd: Path, operation_id: str, out_dir: P
         stderr_path.write_text(exc.stderr or "", encoding="utf-8")
         return {
             "operation_id": operation_id,
+            "phase": phase,
             "status": "timeout",
             "returncode": "",
             "duration_sec": round(time.time() - started, 4),
-            "run_mode": "semantic_load_only",
+            "run_mode": "external_use_compile",
             "stdout_file": str(stdout_path),
             "stderr_file": str(stderr_path),
         }
@@ -476,44 +643,144 @@ def run_use(use_bat: Path, model: Path, cmd: Path, operation_id: str, out_dir: P
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--operations", default="data/operations.jsonl")
-    parser.add_argument("--attempts", default="results/rq_gpt_5_4_full_oracle_fixed/attempts.jsonl")
-    parser.add_argument("--out-dir", default="results/oclvm_sanity_check_114_strong")
+    parser.add_argument(
+        "--attempts",
+        default="results/contractgen-study-v6/contract_gen/full_feedback/gpt-5.5/attempts.jsonl",
+    )
+    parser.add_argument("--model", default="gpt-5.5")
+    parser.add_argument(
+        "--out-dir",
+        default="results/contractgen-study-v6/validation/use_strong_114",
+    )
     parser.add_argument("--use-bat", default="tools/use-7.5.0/bin/use.bat")
     parser.add_argument("--run-use", action="store_true")
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument("--operation-id", default="")
     parser.add_argument("--timeout", type=int, default=30)
     args = parser.parse_args()
 
     operations = [json.loads(line) for line in Path(args.operations).read_text(encoding="utf-8").splitlines() if line.strip()]
-    attempts = choose_attempts(Path(args.attempts))
+    operation_map = {str(row.get("id") or ""): row for row in operations}
+    if len(operations) != 114 or len(operation_map) != 114 or "" in operation_map:
+        raise ValueError("Expected 114 unique canonical operations")
+    attempts = choose_attempts(Path(args.attempts), args.model, operation_map)
     out_dir = Path(args.out_dir)
     model_dir = out_dir / "use_models"
+    base_model_dir = out_dir / "use_models_base"
+    pre_model_dir = out_dir / "use_models_pre"
+    post_model_dir = out_dir / "use_models_post"
     cmd_dir = out_dir / "use_cmds"
     run_dir = out_dir / "use_runs"
     model_dir.mkdir(parents=True, exist_ok=True)
+    base_model_dir.mkdir(parents=True, exist_ok=True)
+    pre_model_dir.mkdir(parents=True, exist_ok=True)
+    post_model_dir.mkdir(parents=True, exist_ok=True)
     cmd_dir.mkdir(parents=True, exist_ok=True)
 
     manifest = []
-    for index, row in enumerate(operations, start=1):
+    selected_operations = operations
+    if args.operation_id:
+        selected_operations = [row for row in operations if row["id"] == args.operation_id]
+        if not selected_operations:
+            raise ValueError(f"Unknown --operation-id: {args.operation_id}")
+    elif args.limit > 0:
+        selected_operations = operations[: args.limit]
+    for index, row in enumerate(selected_operations, start=1):
         opid = row["id"]
-        model, cmd, meta = make_model(row, attempts.get(opid), index)
+        model, pre_model, post_model, cmd, meta = make_model(row, attempts.get(opid), index)
         stem = f"{index:03d}_{safe_ident(opid)}"
         model_path = model_dir / f"{stem}.use"
+        base_model_path = base_model_dir / f"{stem}.use"
+        pre_model_path = pre_model_dir / f"{stem}.use"
+        post_model_path = post_model_dir / f"{stem}.use"
         cmd_path = cmd_dir / f"{stem}.cmd"
         model_path.write_text(model, encoding="utf-8")
-        cmd_path.write_text(cmd, encoding="utf-8")
+        base_model_path.write_text(model_without_constraints(model), encoding="utf-8")
+        pre_model_path.write_text(pre_model, encoding="utf-8")
+        post_model_path.write_text(post_model, encoding="utf-8")
+        cmd_path.write_text("-- compile-only validation\n", encoding="utf-8")
         record = {
             "sample_index": index,
             "operation_id": opid,
             "case_study": row.get("case_study", ""),
             "operation_signature": row.get("operation_signature", ""),
             "model_file": str(model_path),
+            "base_model_file": str(base_model_path),
+            "pre_model_file": str(pre_model_path),
+            "post_model_file": str(post_model_path),
             "cmd_file": str(cmd_path),
             **meta,
         }
         if args.run_use:
-            result = run_use(Path(args.use_bat), model_path, cmd_path, opid, run_dir, args.timeout)
-            (run_dir / f"{safe_ident(opid)}.result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-            record.update({f"use_{k}": v for k, v in result.items() if k != "operation_id"})
+            result_path = run_dir / f"{safe_ident(opid)}.result.json"
+            if args.resume and result_path.exists():
+                result = json.loads(result_path.read_text(encoding="utf-8"))
+            else:
+                base_result = run_use(
+                    Path(args.use_bat), base_model_path, cmd_path, opid, run_dir, args.timeout, "model_load"
+                )
+                precondition_result = (
+                    run_use(
+                        Path(args.use_bat), pre_model_path, cmd_path, opid, run_dir, args.timeout,
+                        "definition_precondition",
+                    )
+                    if base_result["status"] == "pass"
+                    else {
+                        "operation_id": opid,
+                        "phase": "definition_precondition",
+                        "status": "blocked_by_model_load",
+                        "returncode": "",
+                        "duration_sec": 0.0,
+                    }
+                )
+                postcondition_result = (
+                    run_use(
+                        Path(args.use_bat), post_model_path, cmd_path, opid, run_dir, args.timeout,
+                        "definition_postcondition",
+                    )
+                    if base_result["status"] == "pass"
+                    else {
+                        "operation_id": opid,
+                        "phase": "definition_postcondition",
+                        "status": "blocked_by_model_load",
+                        "returncode": "",
+                        "duration_sec": 0.0,
+                    }
+                )
+                combined_result = (
+                    run_use(
+                        Path(args.use_bat), model_path, cmd_path, opid, run_dir, args.timeout,
+                        "complete_contract",
+                    )
+                    if precondition_result["status"] == "pass"
+                    and postcondition_result["status"] == "pass"
+                    else {
+                        "operation_id": opid,
+                        "phase": "complete_contract",
+                        "status": "blocked_by_clause_compile",
+                        "returncode": "",
+                        "duration_sec": 0.0,
+                    }
+                )
+                result = {
+                    "operation_id": opid,
+                    "model_load": base_result,
+                    "definition_precondition": precondition_result,
+                    "definition_postcondition": postcondition_result,
+                    "complete_contract": combined_result,
+                }
+                result_path.write_text(
+                    json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
+                )
+            base_result = result["model_load"]
+            precondition_result = result["definition_precondition"]
+            postcondition_result = result["definition_postcondition"]
+            combined_result = result["complete_contract"]
+            record["use_model_load_status"] = base_result["status"]
+            record["use_definition_precondition_status"] = precondition_result["status"]
+            record["use_definition_postcondition_status"] = postcondition_result["status"]
+            record["use_complete_contract_status"] = combined_result["status"]
             print(json.dumps(result, ensure_ascii=False))
         manifest.append(record)
 
@@ -525,17 +792,34 @@ def main() -> None:
     (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     summary = {
-        "operation_count": len(operations),
+        "study_version": STUDY_VERSION,
+        "source_model": args.model,
+        "source_attempts": args.attempts,
+        "operation_count": len(selected_operations),
         "with_generated_contract": sum(1 for r in manifest if r["has_generated_contract"]),
         "with_precondition_expression": sum(1 for r in manifest if r["has_precondition"]),
-        "use_run_mode": "semantic_load_only",
-        "scope_note": "USE loads the model_context-derived class model and typechecks generated definition/precondition invariants; operation postconditions are preserved as comments.",
+        "use_run_mode": "external_operation_contract_compile",
+        "scope_note": "USE independently compiles the converted class model, generated definition/precondition, generated definition/postcondition, and complete operation contract. This is an external syntax/type check, not behavior-level equivalence testing.",
+        "postcondition_checked": True,
     }
     if args.run_use:
-        statuses: dict[str, int] = {}
+        model_statuses: dict[str, int] = {}
+        precondition_statuses: dict[str, int] = {}
+        postcondition_statuses: dict[str, int] = {}
+        complete_statuses: dict[str, int] = {}
         for r in manifest:
-            statuses[r.get("use_status", "not_run")] = statuses.get(r.get("use_status", "not_run"), 0) + 1
-        summary["use_status"] = statuses
+            model_status = r.get("use_model_load_status", "not_run")
+            precondition_status = r.get("use_definition_precondition_status", "not_run")
+            postcondition_status = r.get("use_definition_postcondition_status", "not_run")
+            complete_status = r.get("use_complete_contract_status", "not_run")
+            model_statuses[model_status] = model_statuses.get(model_status, 0) + 1
+            precondition_statuses[precondition_status] = precondition_statuses.get(precondition_status, 0) + 1
+            postcondition_statuses[postcondition_status] = postcondition_statuses.get(postcondition_status, 0) + 1
+            complete_statuses[complete_status] = complete_statuses.get(complete_status, 0) + 1
+        summary["use_model_load_status"] = model_statuses
+        summary["use_definition_precondition_status"] = precondition_statuses
+        summary["use_definition_postcondition_status"] = postcondition_statuses
+        summary["use_complete_contract_status"] = complete_statuses
     (out_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 

@@ -1,8 +1,0 @@
-Contract RepairService::feedback(id: Integer, sid: Integer, score: Integer, des: String): Boolean {
-  definition:
-    repair: Repair = Repair.allInstance()->any(r | r.Id = id), staff: Staff = Staff.allInstance()->any(s | s.Id = sid)
-  precondition:
-    Repair.allInstance()->includes(repair) and Staff.allInstance()->includes(staff) and repair.RaiseStaff = staff and staff.Role = 1 and repair.Process = 3 and score >= 1 and score <= 5
-  postcondition:
-    repair.Score = score and repair.Description = des and if score >= 4 then repair.Close = true and result = true else repair.Close = false and repair.Process = 0 and result = true endif
-}

@@ -1,0 +1,10 @@
+Contract EnterValidatedCreditReferencesModule::markRequestValid(): Boolean {
+          precondition:
+          LoanRequest.allInstances()->exists(lr | not lr.oclIsUndefined())
+            postcondition:
+          LoanRequest.allInstances()->forAll(lr |
+        lr.Status = LoanRequestStatus::REFERENCESVALIDATED
+    ) and
+result = true
+            
+        }

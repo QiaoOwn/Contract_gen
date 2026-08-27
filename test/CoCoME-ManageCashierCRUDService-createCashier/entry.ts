@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageCashierCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the cashier with provided id,
-   *if the cashier not exist,
-   *create the cashier with the provided and other info*/
+  /*Definition: The createCashier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createCashier(id: number, name: string): boolean {
     /*Definition Start*/
-    let cashier: Cashier = l({
-      logic: () =>
-        getRepository(Cashier).find(
-          (cas: Cashier) =>
-            l({
-              logic: () => cas.Id === id,
-              description: 'cas.Id=id',
-            }).build().pass
-        ),
-      description: 'Cashier.allInstance()->any(cas:Cashier|cas.Id=id)',
-    }).build().pass;
+    let cashier: Cashier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Cashier).find(
+              (cas: Cashier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(cas.Id, id),
+                  description: 'cas.Id=id',
+                }).build().pass
+            ),
+          description: 'Cashier.allInstances()->any(cas:Cashier|cas.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cashier) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cashier), true),
       description: 'cashier.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -221,30 +232,68 @@ class ManageCashierCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let cas: Cashier;
-    return l({
-      execute: () => (cas = new Cashier()),
-      description: 'cas.oclIsNew()',
-    })
-      .and({
-        execute: () => (cas.Id = id),
-        description: 'cas.Id=id',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let cas: Cashier;
+      return l({
+        execute: () => (cas = new Cashier()),
+        description: 'cas.oclIsNew()',
       })
-      .and({
-        execute: () => (cas.Name = name),
-        description: 'cas.Name=name',
+        .and({
+          execute: () => (cas.Id = id),
+          description: 'cas.Id=id',
+        })
+        .and({
+          execute: () => (cas.Name = name),
+          description: 'cas.Name=name',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Cashier), cas),
+          description: 'Cashier.allInstances()->includes(cas)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let cas: Cashier = oclState.findNew(Cashier);
+      return l({
+        logic: () => oclState.isNew(cas, Cashier),
+        description: 'cas.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(Cashier).push(cas),
-        description: 'Cashier.allInstance()->includes(cas)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(cas.Id, id),
+          description: 'cas.Id=id',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(cas.Name, name),
+          description: 'cas.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Cashier), cas),
+          description: 'Cashier.allInstances()->includes(cas)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageCashierCRUDService};

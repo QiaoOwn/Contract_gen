@@ -1,0 +1,20 @@
+Contract CoCoMEOrderProducts::makeNewOrder(orderid:Integer): Boolean {
+          precondition:
+          OrderProduct.allInstances()->forAll(o | o.Id <> orderid)
+            postcondition:
+          OrderProduct.allInstances()->exists(o |
+        o.oclIsNew() and
+        o.Id = orderid and
+        o.OrderStatus = OrderStatus::NEW and
+        o.Time = now and
+        o.ContainedEntries->isEmpty()
+    ) and
+OrderProduct.allInstances()->exists(o |
+        o.oclIsNew() and
+        o.Id = orderid and
+        self.currentProductOrder = o
+    ) and
+self.orderProductRepository->includes(self.currentProductOrder) and
+result = true
+            
+        }

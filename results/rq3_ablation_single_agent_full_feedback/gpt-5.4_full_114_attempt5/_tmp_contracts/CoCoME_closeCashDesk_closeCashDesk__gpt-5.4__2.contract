@@ -1,8 +1,0 @@
-Contract CoCoMESystem::closeCashDesk(cashDeskID: Integer): Boolean {
-  definition:
-    cashDesk: CashDesk = CashDesk.allInstance()->any(o | o.Id = cashDeskID), currentCashDesk: CashDesk = self.CurrentCashDesk, containedSales: Set(Sale) = cashDesk.ContainedSales, unfinishedSales: Set(Sale) = cashDesk.ContainedSales->select(o | o.IsComplete = false)
-  precondition:
-    cashDesk.oclIsUndefined() = false and currentCashDesk.oclIsUndefined() = false and CashDesk.allInstance()->includes(cashDesk) and cashDesk = currentCashDesk and cashDesk.IsOpened = true and containedSales->forAll(o:Sale | o.IsComplete = true) and unfinishedSales.isEmpty() = true
-  postcondition:
-    cashDesk.IsOpened = false and self.CurrentCashDesk = null and result = true
-}

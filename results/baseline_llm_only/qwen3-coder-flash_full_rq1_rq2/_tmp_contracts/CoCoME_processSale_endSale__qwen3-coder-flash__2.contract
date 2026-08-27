@@ -1,9 +1,0 @@
-Contract ProcessSaleService::endSale(): Real {
-          definition:
-          curSale:Sale = self.CurrentSale, curLine:Set(SalesLineItem) = self.CurrentSaleLine, paymentMethod:PaymentMethod = self.CurrentPaymentMethod
-            precondition:
-          curSale.oclIsUndefined() = false and curLine.isEmpty() = false and paymentMethod = PaymentMethod.CASH or paymentMethod = PaymentMethod.CARD
-            postcondition:
-          let s:Sale in s.oclIsNew() and s.IsComplete = true and s.Amount = curLine->collect(l:SalesLineItem|l.Subamount)->sum() and Sale.allInstance()->includes(s) and result = s.Amount
-            
-        }

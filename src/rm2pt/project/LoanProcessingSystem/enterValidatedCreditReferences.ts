@@ -25,7 +25,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     returnType: new ReturnedType('Set(LoanRequest)'),
     definition:
-      'rs:Set(LoanRequest) = LoanRequest.allInstance()->select(r:LoanRequest | r.Status =  LoanRequestStatus::SUBMITTED)',
+      'rs:Set(LoanRequest) = LoanRequest.allInstances()->select(r:LoanRequest | r.Status =  LoanRequestStatus::SUBMITTED)',
     precondition: 'rs.size() > 0',
     postcondition: `self.CurrentLoanRequests = rs and
 			result = rs`,

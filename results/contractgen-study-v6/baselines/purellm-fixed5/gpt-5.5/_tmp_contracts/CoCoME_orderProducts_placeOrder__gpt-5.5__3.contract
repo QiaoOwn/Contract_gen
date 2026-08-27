@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::placeOrder(): Boolean {
+          definition:
+          entrySubAmounts:Set(Real) = self.CurrentOrderProduct.ContainedEntries->collect(entry:OrderEntry | entry.SubAmount)
+            precondition:
+          self.CurrentOrderProduct.oclIsUndefined() = false
+            postcondition:
+          (self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED) and (self.CurrentOrderProduct.Amount = self.CurrentOrderProduct.Amount@pre + entrySubAmounts->sum()) and (result = true)
+            
+        }

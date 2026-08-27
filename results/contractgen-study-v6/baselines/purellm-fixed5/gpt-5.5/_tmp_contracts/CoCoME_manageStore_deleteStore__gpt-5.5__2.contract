@@ -1,0 +1,9 @@
+Contract ManageStoreCRUDService::deleteStore(id:Integer): Boolean {
+          definition:
+          targetStore:Store = Store.allInstances()->any(store:Store | store.Id = id)
+            precondition:
+          Store.allInstances()->exists(store:Store | store.Id = id)
+            postcondition:
+          Store.allInstances()->excludes(targetStore) and result = true
+            
+        }

@@ -1,0 +1,11 @@
+Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {
+          precondition:
+          self.CurrentStore <> null and self.CurrentStore.IsOpened = true
+  and self.CurrentStore.AssociationCashdeskes->exists(cd | cd.Id = cashDeskID and cd.IsOpened = false)
+            postcondition:
+          let cd : CashDesk = self.CurrentStore.AssociationCashdeskes->any(cd | cd.Id = cashDeskID) in
+    cd.IsOpened = true and
+    self.CurrentCashDesk = cd and
+    result = true
+            
+        }

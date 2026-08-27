@@ -1,0 +1,11 @@
+Contract SearchBook::searchBookByBarCode(barcode:String): Set(Book) {
+          precondition:
+          barcode.oclIsTypeOf(String)
+            postcondition:
+          result = Book.allInstances()->select(b |
+        b.copy->exists(c: BookCopy |
+            c.Barcode = barcode
+        )
+    )
+            
+        }

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -155,25 +163,30 @@ class SubmitLoanRequestModule {
   CurrentLoanRequest: LoanRequest;
   /*TempVariable End*/
 
-  /*if the current loan request exists,
-   *and it has the requested CA history and has the request credit history,
-   *the current loan request' credit score should be 100 and,
-   *the loan request status should be submitted then give the result the current loan request's credit score
-   *the current loan request requested ca history should be it*/
+  /*Definition: The calculateScore operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   calculateScore(): number {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentLoanRequest) === false,
+      logic: () =>
+        StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentLoanRequest), false),
       description: 'self.CurrentLoanRequest.oclIsUndefined()=false',
     })
       .and({
         logic: () =>
-          StandardOPs.oclIsUndefined(this.CurrentLoanRequest.RequestedCAHistory) === false,
+          StandardOPs.oclEquals(
+            StandardOPs.oclIsUndefined(this.CurrentLoanRequest.RequestedCAHistory),
+            false
+          ),
         description: 'CurrentLoanRequest.RequestedCAHistory.oclIsUndefined()=false',
       })
       .and({
         logic: () =>
-          StandardOPs.oclIsUndefined(this.CurrentLoanRequest.RequestedCreditHistory) === false,
+          StandardOPs.oclEquals(
+            StandardOPs.oclIsUndefined(this.CurrentLoanRequest.RequestedCreditHistory),
+            false
+          ),
         description: 'CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined()=false',
       })
       .build();
@@ -182,21 +195,51 @@ class SubmitLoanRequestModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentLoanRequest.CreditScore = 100),
-      description: 'self.CurrentLoanRequest.CreditScore=100',
-    })
-      .and({
-        execute: () => (this.CurrentLoanRequest.Status = LoanRequestStatus.SUBMITTED),
-        description: 'self.CurrentLoanRequest.Status=LoanRequestStatus::SUBMITTED',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentLoanRequest.CreditScore = 100),
+        description: 'self.CurrentLoanRequest.CreditScore=100',
       })
-      .and({
-        execute: () => this.CurrentLoanRequest.CreditScore,
-        description: 'result=self.CurrentLoanRequest.CreditScore',
+        .and({
+          execute: () => (this.CurrentLoanRequest.Status = LoanRequestStatus.SUBMITTED),
+          description: 'self.CurrentLoanRequest.Status=LoanRequestStatus::SUBMITTED',
+        })
+        .and({
+          execute: () => this.CurrentLoanRequest.CreditScore,
+          description: 'result=self.CurrentLoanRequest.CreditScore',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(this.CurrentLoanRequest.CreditScore, 100),
+        description: 'self.CurrentLoanRequest.CreditScore=100',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () =>
+            StandardOPs.oclEquals(this.CurrentLoanRequest.Status, LoanRequestStatus.SUBMITTED),
+          description: 'self.CurrentLoanRequest.Status=LoanRequestStatus::SUBMITTED',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, this.CurrentLoanRequest.CreditScore),
+          description: 'result=self.CurrentLoanRequest.CreditScore',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {SubmitLoanRequestModule};

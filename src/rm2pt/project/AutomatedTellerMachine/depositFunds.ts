@@ -25,7 +25,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'cardid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: 'bc:BankCard = BankCard.allInstance()->any(c:BankCard | c.CardID = cardid)',
+    definition: 'bc:BankCard = BankCard.allInstances()->any(c:BankCard | c.CardID = cardid)',
     precondition: 'bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL',
     postcondition: `
           if bc.BelongedUser.oclIsUndefined()=false then

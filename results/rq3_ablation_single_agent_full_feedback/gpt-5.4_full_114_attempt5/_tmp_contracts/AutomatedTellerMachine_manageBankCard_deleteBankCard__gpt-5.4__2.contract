@@ -1,9 +1,0 @@
-Contract ManageBankCardCRUDService::deleteBankCard(cardid: Integer): Boolean {
-  definition:
-    bankCard: BankCard = BankCard.allInstance()->any(o | o.CardID = cardid),
-    user: User = bankCard.BelongedUser
-  precondition:
-    bankCard.oclIsUndefined() = false and BankCard.allInstance()->includes(bankCard)
-  postcondition:
-    BankCard.allInstance()->excludes(bankCard) and user.OwnedCard = null and result = true
-}

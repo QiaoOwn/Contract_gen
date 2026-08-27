@@ -1,8 +1,0 @@
-Contract ManageStoreCRUDService::deleteStore(id: Integer): Boolean {
-  definition:
-    store: Store = Store.allInstance()->any(o | o.Id = id), cashdeskes: Set(CashDesk) = store.AssociationCashdeskes, productcatalogs: Set(ProductCatalog) = store.Productcatalogs, items: Set(Item) = store.Items, cashiers: Set(Cashier) = store.Cashiers, sales: Set(Sale) = store.Sales
-  precondition:
-    id.oclIsTypeOf(Integer) and store.oclIsUndefined() = false and Store.allInstance()->includes(store) and cashdeskes.isEmpty() = true and productcatalogs.isEmpty() = true and items.isEmpty() = true and cashiers.isEmpty() = true and sales.isEmpty() = true
-  postcondition:
-    Store.allInstance()->excludes(store) and result = true
-}

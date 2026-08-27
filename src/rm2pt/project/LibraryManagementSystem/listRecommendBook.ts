@@ -16,7 +16,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'uid', type: 'String'})],
     returnType: new ReturnedType('Set(RecommendBook)'),
-    definition: `user:User = User.allInstance()->any(u:User | u.UserID = uid),
+    definition: `user:User = User.allInstances()->any(u:User | u.UserID = uid),
      rBooks:Set(RecommendBook) = user.RecommendedBook`,
     precondition: `user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false`,
     postcondition: `result = rBooks`,

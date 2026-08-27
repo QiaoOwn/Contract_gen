@@ -1,0 +1,13 @@
+Contract ManageStoreCRUDService::createStore(id:Integer,name:String,address:String,isopened:Boolean): Boolean {
+          precondition:
+          Store.allInstances()->forAll(s | s.Id <> id)
+            postcondition:
+          Store.allInstances()->exists(s |
+    s.Id = id and
+    s.Name = name and
+    s.Address = address and
+    s.IsOpened = isopened
+  ) and
+result = true
+            
+        }

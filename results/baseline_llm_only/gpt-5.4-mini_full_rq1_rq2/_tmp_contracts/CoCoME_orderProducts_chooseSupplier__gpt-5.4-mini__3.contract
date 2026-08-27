@@ -1,9 +1,0 @@
-Contract CoCoMEOrderProducts::chooseSupplier(supplierID:Integer): Boolean {
-          definition:
-          sup:Supplier = Supplier.allInstance()->any(s:Supplier|s.Id=supplierID), ord:OrderProduct = self.CurrentOrderProduct
-            precondition:
-          sup.oclIsUndefined() = false and ord.oclIsUndefined() = false and OrderProduct.allInstance()->includes(ord) and Supplier.allInstance()->includes(sup) and ord.Supplier.oclIsUndefined() = true
-            postcondition:
-          ord.Supplier = sup and ord.OrderStatus = OrderProduct::REQUESTED and result = true
-            
-        }

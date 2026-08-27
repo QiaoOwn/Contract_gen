@@ -1,0 +1,151 @@
+model StrongUSE_098_LoanProcessingSystem_evaluateLoanRequest_chooseOneForReview
+
+-- operation_id: LoanProcessingSystem_evaluateLoanRequest_chooseOneForReview
+-- operation_signature: chooseOneForReview(requestid: Integer): LoanRequest
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract EvaluateLoanRequestModule::chooseOneForReview(requestid: Integer): LoanRequest {
+--   definition:
+--     matchingRequest: LoanRequest = self.CurrentLoanRequests->any(request: LoanRequest|request.RequestID = requestid)
+--   precondition:
+--     self.CurrentLoanRequests->exists(request: LoanRequest|request.RequestID = requestid)
+--   postcondition:
+--     self.CurrentLoanRequest = matchingRequest and
+--     result = matchingRequest
+-- }
+
+enum LoanAccountStatus { HASPAIDINFULL, NORMAL }
+enum LoanRequestStatus { APPROVED, INCOMPLETEINFORMATION, READYFORREVIEW, REFERENCESVALIDATED, SUBMITTED }
+enum LoanStatus { CLOSED, LSOPEN }
+enum Status { GOODSTANDING, SUSPENDED }
+
+class ApprovalLetter
+attributes
+  Content : String
+end
+
+class CheckingAccount
+attributes
+  Balance : Real
+  Status : Status
+end
+
+class CreditHistory
+attributes
+  OutstandingDebt : Real
+  BadDebits : Integer
+end
+
+class Loan
+attributes
+  LoanID : Integer
+  RemainAmountToPay : Real
+  Status : LoanStatus
+  IsPaidinFull : Boolean
+  StartDate : Integer
+  EndDate : Integer
+  CurrentOverDueDate : Integer
+  RePaymentDays : Integer
+  RepaymentAmount : Real
+end
+
+class LoanAccount
+attributes
+  LoanAccountID : Integer
+  Balance : Real
+  Status : LoanAccountStatus
+end
+
+class LoanAgreement
+attributes
+  Content : String
+end
+
+class LoanRequest
+attributes
+  Status : LoanRequestStatus
+  RequestID : Integer
+  Name : String
+  LoanAmount : Real
+  LoanPurpose : String
+  Income : Real
+  PhoneNumber : Integer
+  PostalAddress : String
+  ZipCode : Integer
+  Email : String
+  WorkReferences : String
+  CreditReferences : String
+  CheckingAccountNumber : Integer
+  SecurityNumber : Integer
+  CreditScore : Integer
+end
+
+class LoanTerm
+attributes
+  ItemID : Integer
+  Content : String
+end
+
+class OperationContext
+attributes
+  requestid : Integer
+  CurrentLoanRequest : Boolean
+  CurrentLoanRequests : Real
+  Now : Integer
+  Today : Integer
+operations
+  Contract_chooseOneForReview(requestid : Integer) : LoanRequest
+end
+
+association Loan_ReferedLoanRequest_LoanRequest between
+  Loan[0..*] role Loan_ReferedLoanRequest_Owner
+  LoanRequest[0..1] role ReferedLoanRequest
+end
+
+association Loan_BelongedLoanAccount_LoanAccount between
+  Loan[0..*] role Loan_BelongedLoanAccount_Owner
+  LoanAccount[0..1] role BelongedLoanAccount
+end
+
+association LoanRequest_ApprovalLoan_Loan between
+  LoanRequest[0..*] role LoanRequest_ApprovalLoan_Owner
+  Loan[0..1] role ApprovalLoan
+end
+
+association LoanRequest_RequestedCAHistory_CheckingAccount between
+  LoanRequest[0..*] role LoanRequest_RequestedCAHistory_Owner
+  CheckingAccount[0..1] role RequestedCAHistory
+end
+
+association LoanRequest_RequestedCreditHistory_CreditHistory between
+  LoanRequest[0..*] role LoanRequest_RequestedCreditHistory_Owner
+  CreditHistory[0..1] role RequestedCreditHistory
+end
+
+association LoanRequest_AttachedApprovalLetter_ApprovalLetter between
+  LoanRequest[0..*] role LoanRequest_AttachedApprovalLetter_Owner
+  ApprovalLetter[0..1] role AttachedApprovalLetter
+end
+
+association LoanRequest_AttachedLoanAgreement_LoanAgreement between
+  LoanRequest[0..*] role LoanRequest_AttachedLoanAgreement_Owner
+  LoanAgreement[0..1] role AttachedLoanAgreement
+end
+
+association LoanRequest_AttachedLoanTerms_LoanTerm between
+  LoanRequest[0..*] role LoanRequest_AttachedLoanTerms_Owner
+  LoanTerm[*] role AttachedLoanTerms
+end
+
+constraints
+
+context OperationContext::Contract_chooseOneForReview(requestid : Integer) : LoanRequest
+  pre chooseOneForReviewGeneratedPre:
+    let matchingRequest : LoanRequest = self.CurrentLoanRequests->any(request: LoanRequest|request.RequestID = requestid) in
+          self.CurrentLoanRequests->exists(request: LoanRequest|request.RequestID = requestid)
+  post chooseOneForReviewGeneratedPost:
+    let matchingRequest : LoanRequest = self.CurrentLoanRequests->any(request: LoanRequest|request.RequestID = requestid) in
+          self.CurrentLoanRequest = matchingRequest and
+    		result = matchingRequest

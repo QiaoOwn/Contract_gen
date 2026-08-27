@@ -22,7 +22,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'cashDeskID', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `cd:CashDesk = CashDesk.allInstance()->any(s:CashDesk | s.Id = cashDeskID)`,
+    definition: `cd:CashDesk = CashDesk.allInstances()->any(s:CashDesk | s.Id = cashDeskID)`,
     precondition: `
 cd.oclIsUndefined() = false and
 cd.IsOpened = false and

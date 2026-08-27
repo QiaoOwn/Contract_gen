@@ -1,9 +1,0 @@
-Contract ManageBookCopyCRUDService::addBookCopy(callNo: String, barcode: String, location: String): Boolean {
-  definition:
-    book: Book = Book.allInstance()->any(b | b.CallNo = callNo),
-    copy: BookCopy = BookCopy.allInstance()->any(c | c.Barcode = barcode)
-  precondition:
-    callNo <> "" and barcode <> "" and location <> "" and book.oclIsUndefined() = false and copy.oclIsUndefined() = true
-  postcondition:
-    let newCopy:BookCopy in newCopy.oclIsNew() and BookCopy.allInstance()->includes(newCopy) and newCopy.Barcode = barcode and newCopy.Location = location and newCopy.Status = CopyStatus::AVAILABLE and newCopy.IsReserved = false and newCopy.BookBelongs = book and book.Copys->includes(newCopy) and book.CopyNum = book.CopyNum@pre + 1 and result = true
-}

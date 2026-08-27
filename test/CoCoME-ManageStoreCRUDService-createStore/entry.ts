@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageStoreCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the store with provided id,
-   *if the store not exist,
-   *create the store with the provided and other info*/
+  /*Definition: The createStore operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createStore(id: number, name: string, address: string, isopened: boolean): boolean {
     /*Definition Start*/
-    let store: Store = l({
-      logic: () =>
-        getRepository(Store).find(
-          (sto: Store) =>
-            l({
-              logic: () => sto.Id === id,
-              description: 'sto.Id=id',
-            }).build().pass
-        ),
-      description: 'Store.allInstance()->any(sto:Store|sto.Id=id)',
-    }).build().pass;
+    let store: Store = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Store).find(
+              (sto: Store) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(sto.Id, id),
+                  description: 'sto.Id=id',
+                }).build().pass
+            ),
+          description: 'Store.allInstances()->any(sto:Store|sto.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(store) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(store), true),
       description: 'store.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -221,38 +232,84 @@ class ManageStoreCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let sto: Store;
-    return l({
-      execute: () => (sto = new Store()),
-      description: 'sto.oclIsNew()',
-    })
-      .and({
-        execute: () => (sto.Id = id),
-        description: 'sto.Id=id',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let sto: Store;
+      return l({
+        execute: () => (sto = new Store()),
+        description: 'sto.oclIsNew()',
       })
-      .and({
-        execute: () => (sto.Name = name),
-        description: 'sto.Name=name',
+        .and({
+          execute: () => (sto.Id = id),
+          description: 'sto.Id=id',
+        })
+        .and({
+          execute: () => (sto.Name = name),
+          description: 'sto.Name=name',
+        })
+        .and({
+          execute: () => (sto.Address = address),
+          description: 'sto.Address=address',
+        })
+        .and({
+          execute: () => (sto.IsOpened = isopened),
+          description: 'sto.IsOpened=isopened',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Store), sto),
+          description: 'Store.allInstances()->includes(sto)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let sto: Store = oclState.findNew(Store);
+      return l({
+        logic: () => oclState.isNew(sto, Store),
+        description: 'sto.oclIsNew()',
       })
-      .and({
-        execute: () => (sto.Address = address),
-        description: 'sto.Address=address',
-      })
-      .and({
-        execute: () => (sto.IsOpened = isopened),
-        description: 'sto.IsOpened=isopened',
-      })
-      .and({
-        execute: () => getRepository(Store).push(sto),
-        description: 'Store.allInstance()->includes(sto)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(sto.Id, id),
+          description: 'sto.Id=id',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sto.Name, name),
+          description: 'sto.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sto.Address, address),
+          description: 'sto.Address=address',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sto.IsOpened, isopened),
+          description: 'sto.IsOpened=isopened',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Store), sto),
+          description: 'Store.allInstances()->includes(sto)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageStoreCRUDService};

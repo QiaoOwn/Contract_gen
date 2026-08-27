@@ -19,13 +19,7 @@ MODELS = [
     "qwen3-coder-flash",
 ]
 
-FULL_RESULT_DIRS = {
-    "gpt-5.4": "rq_gpt_5_4_full_oracle_fixed",
-    "gpt-5.4-mini": "rq_gpt_5_4_mini_full_oracle_fixed",
-    "claude-opus-4-7": "rq_claude_opus_4_7_full_oracle_fixed",
-    "qwen3-coder-plus": "rq_qwen3_coder_plus_full_oracle_fixed",
-    "qwen3-coder-flash": "rq_qwen3_coder_flash_full_oracle_fixed",
-}
+STUDY_VERSION = "contractgen-study-v6"
 
 
 def read_jsonl(path: Path) -> List[Dict[str, Any]]:
@@ -37,6 +31,9 @@ def read_jsonl(path: Path) -> List[Dict[str, Any]]:
             line = line.strip()
             if line:
                 rows.append(json.loads(line))
+    bad = [row for row in rows if row.get("study_version") != STUDY_VERSION]
+    if bad:
+        raise ValueError(f"Legacy or foreign records found in {path}")
     return rows
 
 
@@ -108,9 +105,9 @@ def find_result_dir(root: Path, model: str) -> Optional[Path]:
 def collect(results_root: Path, generic_root: Path, no_feedback_root: Path) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for model in MODELS:
-        full_path = results_root / FULL_RESULT_DIRS[model] / "attempts.jsonl"
-        generic_dir = find_result_dir(generic_root, model)
-        nofb_dir = find_result_dir(no_feedback_root, model)
+        full_path = results_root / "contract_gen" / "full_feedback" / "attempts.jsonl"
+        generic_dir = generic_root if (generic_root / "attempts.jsonl").exists() else None
+        nofb_dir = no_feedback_root if (no_feedback_root / "attempts.jsonl").exists() else None
         full = summarize_attempts(full_path, model)
         generic = summarize_attempts(generic_dir / "attempts.jsonl", model) if generic_dir else None
         nofb = summarize_attempts(nofb_dir / "attempts.jsonl", model) if nofb_dir else None
@@ -200,10 +197,19 @@ def markdown_valid_pass(rows: Iterable[Dict[str, Any]]) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build Generic-feedback RQ3 ablation report.")
-    parser.add_argument("--results-root", default="results")
-    parser.add_argument("--generic-root", default="results/rq3_ablation_generic_feedback")
-    parser.add_argument("--no-feedback-root", default="results/rq3_ablation_no_feedback")
-    parser.add_argument("--output-dir", default="results/rq3_generic_feedback_report")
+    parser.add_argument("--results-root", default="results/contractgen-study-v6")
+    parser.add_argument(
+        "--generic-root",
+        default="results/contractgen-study-v6/contract_gen/generic_feedback",
+    )
+    parser.add_argument(
+        "--no-feedback-root",
+        default="results/contractgen-study-v6/contract_gen/no_feedback",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="results/contractgen-study-v6/reports/rq3_generic_feedback",
+    )
     args = parser.parse_args()
 
     rows = collect(Path(args.results_root), Path(args.generic_root), Path(args.no_feedback_root))

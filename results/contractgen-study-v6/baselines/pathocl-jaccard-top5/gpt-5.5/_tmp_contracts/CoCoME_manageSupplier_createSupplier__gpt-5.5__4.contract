@@ -1,0 +1,12 @@
+Contract ManageSupplierCRUDService::createSupplier(id:Integer,name:String): Boolean {
+          precondition:
+          Supplier.allInstances()->forAll(s | s.id <> id)
+            postcondition:
+          Supplier.allInstances()->exists(s |
+        s.oclIsNew() and
+        s.id = id and
+        s.name = name
+    ) and
+result = true
+            
+        }

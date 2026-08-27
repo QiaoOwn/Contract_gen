@@ -1,0 +1,19 @@
+model SemanticAgreementCheckBalance
+
+class BankCard
+attributes
+  Balance : Real
+end
+
+class OperationContext
+attributes
+  PasswordValidated : Boolean
+  CardIDValidated : Boolean
+  result : Real
+  preBalance : Real
+end
+
+association ContextInputCard between
+  OperationContext[0..1] role ContextOwner
+  BankCard[0..1] role InputCard
+end

@@ -1,0 +1,9 @@
+Contract ListBookHistory::listHodingBook(uid:String): Set(Loan) {
+          definition:
+          user:User = User.allInstances()->any(candidate:User | candidate.UserID = uid)
+            precondition:
+          user.oclIsUndefined() = false
+            postcondition:
+          result = user.LoanedBook->select(loan:Loan | loan.IsReturned = false)
+            
+        }

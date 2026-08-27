@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -156,11 +164,14 @@ class EvaluateLoanRequestModule {
   CurrentLoanRequests: LoanRequest[];
   /*TempVariable End*/
 
-  /*if the current loan request exist, set the status of current loan request to approved*/
+  /*Definition: The approveLoanRequest operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   approveLoanRequest(): boolean {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentLoanRequest) === false,
+      logic: () =>
+        StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentLoanRequest), false),
       description: 'self.CurrentLoanRequest.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -168,17 +179,43 @@ class EvaluateLoanRequestModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentLoanRequest.Status = LoanRequestStatus.APPROVED),
-      description: 'self.CurrentLoanRequest.Status=LoanRequestStatus::APPROVED',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentLoanRequest.Status = LoanRequestStatus.APPROVED),
+        description: 'self.CurrentLoanRequest.Status=LoanRequestStatus::APPROVED',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(this.CurrentLoanRequest.Status, LoanRequestStatus.APPROVED),
+        description: 'self.CurrentLoanRequest.Status=LoanRequestStatus::APPROVED',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {EvaluateLoanRequestModule};

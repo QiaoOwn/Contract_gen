@@ -1,0 +1,75 @@
+model StrongUSE_026_AutomatedTellerMachine_withdrawCash_printReceipt
+
+-- operation_id: AutomatedTellerMachine_withdrawCash_printReceipt
+-- operation_signature: printReceipt(): Real
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AutomatedTellerMachineSystem::printReceipt(): Real {
+--   precondition:
+--     self.CardIDValidated = true and
+--     self.PasswordValidated = true and
+--     self.InputCard.oclIsUndefined() = false
+--   postcondition:
+--     if self.IsWithdraw = true 
+--     then result = self.WithdrawedNumber 
+--     else if self.IsDeposit = true 
+--     then result = self.DepositedNumber 
+--     else result = 0 
+--     endif  
+--     endif 
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class OperationContext
+attributes
+  CardIDValidated : Boolean
+  DepositedNumber : Real
+  InputCard : Boolean
+  IsDeposit : Boolean
+  IsWithdraw : Boolean
+  Now : Integer
+  PasswordValidated : Boolean
+  Today : Integer
+  WithdrawedNumber : Real
+  sampleIndex : Integer
+operations
+  Contract_printReceipt() : Real
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+constraints
+
+context OperationContext::Contract_printReceipt() : Real
+  pre printReceiptGeneratedPre:
+    self.CardIDValidated = true and
+    		self.PasswordValidated = true and
+    		self.InputCard.oclIsUndefined() = false

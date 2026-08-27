@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,33 +238,41 @@ export {
 };
 
 class ListBookHistory {
-  /*Lists the books reserved by a user.*/
+  /*Definition: The listReservationBook operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   listReservationBook(uid: string): BookCopy[] {
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (u: User) =>
-            l({
-              logic: () => u.UserID === uid,
-              description: 'u.UserID=uid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(u:User|u.UserID=uid)',
-    }).build().pass;
-    let res: Reserve[] = l({
-      logic: () => user.ReservedBook,
-      description: 'user.ReservedBook',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (u: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.UserID, uid),
+                  description: 'u.UserID=uid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(u:User|u.UserID=uid)',
+        }).build().pass
+    );
+    let res: Reserve[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () => user.ReservedBook,
+          description: 'user.ReservedBook',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(user) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), false),
       description: 'user.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(res) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(res), false),
         description: 'res.oclIsUndefined()=false',
       })
       .build();
@@ -265,19 +281,49 @@ class ListBookHistory {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () =>
-        res.map(
-          (r: Reserve) =>
-            l({
-              execute: () => r.ReservedCopy,
-              description: 'r.ReservedCopy',
-            }).build().value
-        ),
-      description: 'result=res->collect(r:Reserve|r.ReservedCopy)',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () =>
+          res.map(
+            (r: Reserve) =>
+              l({
+                logic: () => r.ReservedCopy,
+                description: 'r.ReservedCopy',
+              }).build().pass
+          ),
+        description: 'result=res->collect(r:Reserve|r.ReservedCopy)',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(
+            result,
+            res.map(
+              (r: Reserve) =>
+                l({
+                  logic: () => r.ReservedCopy,
+                  description: 'r.ReservedCopy',
+                }).build().pass
+            )
+          ),
+        description: 'result=res->collect(r:Reserve|r.ReservedCopy)',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ListBookHistory};

@@ -1,0 +1,16 @@
+Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {
+          precondition:
+          LoanRequest.allInstances()->select(lr |
+        lr.status = LoanRequestStatus::REFERENCESVALIDATED
+    )->notEmpty()
+            postcondition:
+          self.currentRequestCollection =
+        LoanRequest.allInstances()->select(lr |
+            lr.status = LoanRequestStatus::REFERENCESVALIDATED
+        )->asSet() and
+result =
+        LoanRequest.allInstances()->select(lr |
+            lr.status = LoanRequestStatus::REFERENCESVALIDATED
+        )->asSet()
+            
+        }

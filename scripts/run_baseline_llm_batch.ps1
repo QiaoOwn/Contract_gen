@@ -13,11 +13,10 @@ $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $Root
 
 $models = @(
-    "claude-opus-4-7",
+    "gpt-5.5",
     "gpt-5.4",
-    "gpt-5.4-mini",
-    "qwen3-coder-plus",
-    "qwen3-coder-flash"
+    "gemini-3.5-flash",
+    "claude-opus-4-7"
 )
 
 $validateArgs = @()
@@ -29,7 +28,7 @@ if ($Validate) {
 }
 
 foreach ($model in $models) {
-    $out = "results/baseline_llm_only/$model"
+    $out = "results/contractgen-study-v5/baselines/purellm/$model"
     Write-Host "=== $model -> $out ===" -ForegroundColor Cyan
     $evalArgs = @()
     if ($EvalNextBaseUrl) {
@@ -47,4 +46,4 @@ foreach ($model in $models) {
         @evalArgs
 }
 
-Write-Host "All models finished. CSV/summary under results/baseline_llm_only/<model>/" -ForegroundColor Green
+Write-Host "All models finished. CSV/summary under results/contractgen-study-v5/baselines/purellm/<model>/" -ForegroundColor Green

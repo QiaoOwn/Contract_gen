@@ -1,0 +1,68 @@
+model StrongUSE_023_AutomatedTellerMachine_withdrawCash_inputCard
+
+-- operation_id: AutomatedTellerMachine_withdrawCash_inputCard
+-- operation_signature: inputCard(cardid: Integer): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {
+--   definition:
+--     card: BankCard = BankCard.allInstances()->any(candidate: BankCard|candidate.CardID = cardid)
+--   precondition:
+--     card.oclIsUndefined() = false and
+--     card.CardStatus = CardStatus::NORMAL
+--   postcondition:
+--     if card.BelongedUser.oclIsUndefined() = false 
+--     then self.InputCard = card and
+--     self.CardIDValidated = true and
+--     result = true 
+--     else self.CardIDValidated = false and
+--     result = false 
+--     endif 
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class OperationContext
+attributes
+  cardid : Integer
+  CardIDValidated : Boolean
+  DepositedNumber : Real
+  InputCard : BankCard
+  IsDeposit : Boolean
+  IsWithdraw : Boolean
+  Now : Integer
+  PasswordValidated : Boolean
+  Today : Integer
+  WithdrawedNumber : Real
+operations
+  Contract_inputCard(cardid : Integer) : Boolean
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end

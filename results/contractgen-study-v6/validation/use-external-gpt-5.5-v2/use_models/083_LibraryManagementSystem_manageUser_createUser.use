@@ -1,0 +1,250 @@
+model StrongUSE_083_LibraryManagementSystem_manageUser_createUser
+
+-- operation_id: LibraryManagementSystem_manageUser_createUser
+-- operation_signature: createUser(userid: String, name: String, sex: Sex [M|F], password: String, email: String, faculty: String, loanednumber: Integer, borrowstatus: BorrowStatus [NORMAL|SUSPEND], suspensiondays: Integer, overduefee: Real): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract ManageUserCRUDService::createUser(userid: String,name: String,sex: Sex[M|F],password: String,email: String,faculty: String,loanednumber: Integer,borrowstatus: BorrowStatus[NORMAL|SUSPEND],suspensiondays: Integer,overduefee: Real): Boolean {
+--   precondition:
+--     User.allInstances()->forAll(user: User|user.UserID<>userid)
+--   postcondition:
+--     let user: User in
+--     user.oclIsNew() and
+--     User.allInstances()->includes(user) and
+--     user.UserID = userid and
+--     user.Name = name and
+--     user.Sex = sex and
+--     user.Password = password and
+--     user.Email = email and
+--     user.Faculty = faculty and
+--     user.LoanedNumber = loanednumber and
+--     user.BorrowStatus = borrowstatus and
+--     user.SuspensionDays = suspensiondays and
+--     user.OverDueFee = overduefee and
+--     result = true
+-- }
+
+enum BorrowStatus { NORMAL, SUSPEND }
+enum CopyStatus { AVAILABLE, INPROCESSING, LIBUSEONLY, LOANED, ONHOLDSHELF }
+enum Position { ASSISTANTPROFESSORS, ASSOCIATEPROFESSOR, CHAIRPROFESSOR, PROFESSOR }
+enum Programme { BACHELOR, GRADUATED, MASTER, PHD, PROGRAMMING }
+enum Sex { F, M }
+enum Status { HASRETIRED, INPOSITION }
+
+class Administrator
+attributes
+  AdminID : String
+  UserName : String
+  Password : String
+end
+
+class Book
+attributes
+  CallNo : String
+  Title : String
+  Edition : String
+  Author : String
+  Publisher : String
+  Description : String
+  ISBn : String
+  CopyNum : Integer
+end
+
+class BookCopy
+attributes
+  Barcode : String
+  Status : CopyStatus
+  Location : String
+  IsReserved : Boolean
+end
+
+class Faculty < User
+attributes
+  Position : Position
+  Status : Status
+end
+
+class Librarian
+attributes
+  LibrarianID : String
+  Name : String
+  Password : String
+end
+
+class Loan
+attributes
+  LoanDate : Integer
+  RenewDate : Integer
+  DueDate : Integer
+  ReturnDate : Integer
+  RenewedTimes : Integer
+  IsReturned : Boolean
+  OverDueFee : Real
+  OverDue3Days : Boolean
+  OverDue10Days : Boolean
+  OverDue17Days : Boolean
+  OverDue31Days : Boolean
+end
+
+class RecommendBook < Book
+attributes
+  RecommendDate : Integer
+end
+
+class Reserve
+attributes
+  ReserveDate : Integer
+  IsReserveClosed : Boolean
+end
+
+class Student < User
+attributes
+  Major : String
+  Programme : Programme
+  RegistrationStatus : Programme
+end
+
+class Subject
+attributes
+  Name : String
+end
+
+class User
+attributes
+  UserID : String
+  Name : String
+  Sex : Sex
+  Password : String
+  Email : String
+  Faculty : String
+  LoanedNumber : Integer
+  BorrowStatus : BorrowStatus
+  SuspensionDays : Integer
+  OverDueFee : Real
+end
+
+class OperationContext
+attributes
+  userid : String
+  name : String
+  sex : String
+  password : String
+  email : String
+  faculty : String
+  loanednumber : Integer
+  borrowstatus : String
+  suspensiondays : Integer
+  overduefee : Real
+  Now : Integer
+  Today : Integer
+operations
+  Contract_createUser(userid : String, name : String, sex : String, password : String, email : String, faculty : String, loanednumber : Integer, borrowstatus : String, suspensiondays : Integer, overduefee : Real) : Boolean
+end
+
+association Book_Copys_BookCopy between
+  Book[0..*] role Book_Copys_Owner
+  BookCopy[*] role Copys
+end
+
+association Book_Subject_Subject between
+  Book[0..*] role Book_Subject_Owner
+  Subject[*] role Subject
+end
+
+association BookCopy_BookBelongs_Book between
+  BookCopy[0..*] role BookCopy_BookBelongs_Owner
+  Book[0..1] role BookBelongs
+end
+
+association BookCopy_LoanedRecord_Loan between
+  BookCopy[0..*] role BookCopy_LoanedRecord_Owner
+  Loan[*] role LoanedRecord
+end
+
+association BookCopy_ReservationRecord_Reserve between
+  BookCopy[0..*] role BookCopy_ReservationRecord_Owner
+  Reserve[*] role ReservationRecord
+end
+
+association Loan_LoanedUser_User between
+  Loan[0..*] role Loan_LoanedUser_Owner
+  User[0..1] role LoanedUser
+end
+
+association Loan_LoanedCopy_BookCopy between
+  Loan[0..*] role Loan_LoanedCopy_Owner
+  BookCopy[0..1] role LoanedCopy
+end
+
+association Loan_LoanLibrarian_Librarian between
+  Loan[0..*] role Loan_LoanLibrarian_Owner
+  Librarian[0..1] role LoanLibrarian
+end
+
+association Loan_ReturnLibrarian_Librarian between
+  Loan[0..*] role Loan_ReturnLibrarian_Owner
+  Librarian[0..1] role ReturnLibrarian
+end
+
+association RecommendBook_RecommendUser_User between
+  RecommendBook[0..*] role RecommendBook_RecommendUser_Owner
+  User[0..1] role RecommendUser
+end
+
+association Reserve_ReservedCopy_BookCopy between
+  Reserve[0..*] role Reserve_ReservedCopy_Owner
+  BookCopy[0..1] role ReservedCopy
+end
+
+association Reserve_ReservedUser_User between
+  Reserve[0..*] role Reserve_ReservedUser_Owner
+  User[0..1] role ReservedUser
+end
+
+association Subject_SuperSubject_Subject between
+  Subject[0..*] role Subject_SuperSubject_Owner
+  Subject[0..1] role SuperSubject
+end
+
+association Subject_SubSubject_Subject between
+  Subject[0..*] role Subject_SubSubject_Owner
+  Subject[0..1] role SubSubject
+end
+
+association User_LoanedBook_Loan between
+  User[0..*] role User_LoanedBook_Owner
+  Loan[*] role LoanedBook
+end
+
+association User_ReservedBook_Reserve between
+  User[0..*] role User_ReservedBook_Owner
+  Reserve[*] role ReservedBook
+end
+
+association User_RecommendedBook_RecommendBook between
+  User[0..*] role User_RecommendedBook_Owner
+  RecommendBook[*] role RecommendedBook
+end
+
+constraints
+
+context OperationContext::Contract_createUser(userid : String, name : String, sex : String, password : String, email : String, faculty : String, loanednumber : Integer, borrowstatus : String, suspensiondays : Integer, overduefee : Real) : Boolean
+  pre createUserGeneratedPre:
+    User.allInstances()->forAll(user: User|user.UserID<>userid)
+  post createUserGeneratedPost:
+    User.allInstances()->exists(user: User |
+          user.oclIsNew() and
+    		User.allInstances()->includes(user) and
+    		user.UserID = userid and
+    		user.Name = name and
+    		user.Sex = sex and
+    		user.Password = password and
+    		user.Email = email and
+    		user.Faculty = faculty and
+    		user.LoanedNumber = loanednumber and
+    		user.BorrowStatus = borrowstatus and
+    		user.SuspensionDays = suspensiondays and
+    		user.OverDueFee = overduefee and
+    		result = true)

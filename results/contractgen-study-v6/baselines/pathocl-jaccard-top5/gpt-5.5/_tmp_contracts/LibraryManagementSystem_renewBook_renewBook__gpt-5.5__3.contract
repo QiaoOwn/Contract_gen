@@ -1,0 +1,70 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u |
+        u.UserID = uid and
+        u.Status = UserStatus::NORMAL and
+        BookCopy.allInstances()->exists(bc |
+            bc.Barcode = barcode and
+            Loan.allInstances()->exists(l |
+                l.LoanedCopy = bc and
+                l.IsReturned = false and
+                l.LoanedUser = u
+            )
+        )
+    ) and
+Loan.allInstances()->exists(l |
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        l.LoanedUser.UserID = uid and
+        l.LoanedCopy.IsReserved = false and
+        l.DueDate > today and
+        l.OverDueFee = 0
+    ) and
+Loan.allInstances()->exists(l |
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        l.LoanedUser.UserID = uid and
+        (
+            (l.LoanedUser.oclIsTypeOf(Student) and l.RenewedTimes < 3) or
+            (l.LoanedUser.oclIsTypeOf(Faculty) and l.RenewedTimes < 6)
+        )
+    )
+            postcondition:
+          Loan.allInstances()->forAll(l |
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        l.LoanedUser.UserID = uid
+        implies
+        l.RenewedTimes = l.RenewedTimes@pre + 1 and
+        l.RenewDate = today
+    ) and
+Loan.allInstances()->forAll(l |
+        l.LoanedCopy.Barcode = barcode and
+        l.IsReturned = false and
+        l.LoanedUser.UserID = uid
+        implies
+        (
+            (l.LoanedUser.oclIsTypeOf(Student) and
+             l.LoanedUser.oclAsType(Student).StudentType = StudentType::BACHELOR
+             implies
+             l.DueDate = l.DueDate@pre + 20)
+            and
+            (l.LoanedUser.oclIsTypeOf(Student) and
+             l.LoanedUser.oclAsType(Student).StudentType = StudentType::MASTER
+             implies
+             l.DueDate = l.DueDate@pre + 40)
+            and
+            (l.LoanedUser.oclIsTypeOf(Student) and
+             l.LoanedUser.oclAsType(Student).StudentType <> StudentType::BACHELOR and
+             l.LoanedUser.oclAsType(Student).StudentType <> StudentType::MASTER
+             implies
+             l.DueDate = l.DueDate@pre + 60)
+            and
+            (l.LoanedUser.oclIsTypeOf(Faculty)
+             implies
+             l.DueDate = l.DueDate@pre + 60)
+        )
+    ) and
+result = true
+            
+        }

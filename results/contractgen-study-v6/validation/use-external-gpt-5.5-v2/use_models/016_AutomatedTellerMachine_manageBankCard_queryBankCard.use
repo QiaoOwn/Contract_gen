@@ -1,0 +1,64 @@
+model StrongUSE_016_AutomatedTellerMachine_manageBankCard_queryBankCard
+
+-- operation_id: AutomatedTellerMachine_manageBankCard_queryBankCard
+-- operation_signature: queryBankCard(cardid: Integer): BankCard
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract ManageBankCardCRUDService::queryBankCard(cardid: Integer): BankCard {
+--   definition:
+--     targetCard: BankCard = BankCard.allInstances()->any(card: BankCard|card.CardID = cardid)
+--   precondition:
+--     BankCard.allInstances()->exists(card: BankCard|card.CardID = cardid)
+--   postcondition:
+--     result = targetCard
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class OperationContext
+attributes
+  cardid : Integer
+  Now : Integer
+  Today : Integer
+operations
+  Contract_queryBankCard(cardid : Integer) : BankCard
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+constraints
+
+context OperationContext::Contract_queryBankCard(cardid : Integer) : BankCard
+  pre queryBankCardGeneratedPre:
+    let targetCard : BankCard = BankCard.allInstances()->any(card: BankCard|card.CardID = cardid) in
+          BankCard.allInstances()->exists(card: BankCard|card.CardID = cardid)
+  post queryBankCardGeneratedPost:
+    let targetCard : BankCard = BankCard.allInstances()->any(card: BankCard|card.CardID = cardid) in
+          result = targetCard

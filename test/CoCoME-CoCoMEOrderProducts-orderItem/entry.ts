@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -197,30 +205,30 @@ class CoCoMEOrderProducts {
   CurrentOrderProduct: OrderProduct;
   /*TempVariable End*/
 
-  /*find an item with the provided barcode,
-   *if the item is not exist,
-   *create an order entry,
-   *and the set the quantity to the provided quantity,
-   *and the subamount is the item price multiply the quantity and the order item is the item,
-   *and save the order entry and the current order product is contain the order entry*/
+  /*Definition: The orderItem operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   orderItem(barcode: number, quantity: number): boolean {
     /*Definition Start*/
-    let item: Item = l({
-      logic: () =>
-        getRepository(Item).find(
-          (i: Item) =>
-            l({
-              logic: () => i.Barcode === barcode,
-              description: 'i.Barcode=barcode',
-            }).build().pass
-        ),
-      description: 'Item.allInstance()->any(i:Item|i.Barcode=barcode)',
-    }).build().pass;
+    let item: Item = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Item).find(
+              (i: Item) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(i.Barcode, barcode),
+                  description: 'i.Barcode=barcode',
+                }).build().pass
+            ),
+          description: 'Item.allInstances()->any(i:Item|i.Barcode=barcode)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(item) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(item), false),
       description: 'item.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -228,38 +236,85 @@ class CoCoMEOrderProducts {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let order: OrderEntry;
-    return l({
-      execute: () => (order = new OrderEntry()),
-      description: 'order.oclIsNew()',
-    })
-      .and({
-        execute: () => (order.Quantity = quantity),
-        description: 'order.Quantity=quantity',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let order: OrderEntry;
+      return l({
+        execute: () => (order = new OrderEntry()),
+        description: 'order.oclIsNew()',
       })
-      .and({
-        execute: () => (order.SubAmount = item.OrderPrice * quantity),
-        description: 'order.SubAmount=item.OrderPrice*quantity',
+        .and({
+          execute: () => (order.Quantity = quantity),
+          description: 'order.Quantity=quantity',
+        })
+        .and({
+          execute: () => (order.SubAmount = item.OrderPrice * quantity),
+          description: 'order.SubAmount=item.OrderPrice*quantity',
+        })
+        .and({
+          execute: () => (order.Item = item),
+          description: 'order.Item=item',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(OrderEntry), order),
+          description: 'OrderEntry.allInstances()->includes(order)',
+        })
+        .and({
+          execute: () =>
+            StandardOPs.includeIfAbsent(this.CurrentOrderProduct.ContainedEntries, order),
+          description: 'CurrentOrderProduct.ContainedEntries->includes(order)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let order: OrderEntry = oclState.findNew(OrderEntry);
+      return l({
+        logic: () => oclState.isNew(order, OrderEntry),
+        description: 'order.oclIsNew()',
       })
-      .and({
-        execute: () => (order.Item = item),
-        description: 'order.Item=item',
-      })
-      .and({
-        execute: () => getRepository(OrderEntry).push(order),
-        description: 'OrderEntry.allInstance()->includes(order)',
-      })
-      .and({
-        execute: () => this.CurrentOrderProduct.ContainedEntries.push(order),
-        description: 'CurrentOrderProduct.ContainedEntries->includes(order)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(order.Quantity, quantity),
+          description: 'order.Quantity=quantity',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(order.SubAmount, item.OrderPrice * quantity),
+          description: 'order.SubAmount=item.OrderPrice*quantity',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(order.Item, item),
+          description: 'order.Item=item',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(OrderEntry), order),
+          description: 'OrderEntry.allInstances()->includes(order)',
+        })
+        .and({
+          logic: () => StandardOPs.includes(this.CurrentOrderProduct.ContainedEntries, order),
+          description: 'CurrentOrderProduct.ContainedEntries->includes(order)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMEOrderProducts};

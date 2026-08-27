@@ -11,7 +11,7 @@ const operations: Operation[] = [
   //     name: 'checkOverDueandComputeOverDueFee',
   //     description:
   //       'The scheduler checks all loan records to determine if any books are overdue and calculates the corresponding overdue fee.',
-  //     definition: `loans:Set(Loan) = Loan.allInstance()->select(loan:Loan | loan.IsReturned = false and loan.DueDate.isBefore(Today))`,
+  //     definition: `loans:Set(Loan) = Loan.allInstances()->select(loan:Loan | loan.IsReturned = false and loan.DueDate.isBefore(Today))`,
   //     precondition: `true`,
   //     postcondition: `loans->forAll(loan:Loan |
   // 				loan.IsReturned = false and

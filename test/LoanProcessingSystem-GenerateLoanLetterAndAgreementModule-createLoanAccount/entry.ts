@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -158,26 +166,31 @@ class GenerateLoanLetterAndAgreementModule {
   CurrentLoanRequests: LoanRequest[];
   /*TempVariable End*/
 
-  /*find the loan account which id is load account id and if it's not exist, then create loan account with loanaccountid, balance, status provided*/
+  /*Definition: The createLoanAccount operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createLoanAccount(loanaccountid: number, balance: number, status: LoanAccountStatus): boolean {
     /*Definition Start*/
-    let loanaccount: LoanAccount = l({
-      logic: () =>
-        getRepository(LoanAccount).find(
-          (loa: LoanAccount) =>
-            l({
-              logic: () => loa.LoanAccountID === loanaccountid,
-              description: 'loa.LoanAccountID=loanaccountid',
-            }).build().pass
-        ),
-      description:
-        'LoanAccount.allInstance()->any(loa:LoanAccount|loa.LoanAccountID=loanaccountid)',
-    }).build().pass;
+    let loanaccount: LoanAccount = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(LoanAccount).find(
+              (loa: LoanAccount) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(loa.LoanAccountID, loanaccountid),
+                  description: 'loa.LoanAccountID=loanaccountid',
+                }).build().pass
+            ),
+          description:
+            'LoanAccount.allInstances()->any(loa:LoanAccount|loa.LoanAccountID=loanaccountid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(loanaccount) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(loanaccount), true),
       description: 'loanaccount.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -185,34 +198,76 @@ class GenerateLoanLetterAndAgreementModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let loa: LoanAccount;
-    return l({
-      execute: () => (loa = new LoanAccount()),
-      description: 'loa.oclIsNew()',
-    })
-      .and({
-        execute: () => (loa.LoanAccountID = loanaccountid),
-        description: 'loa.LoanAccountID=loanaccountid',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let loa: LoanAccount;
+      return l({
+        execute: () => (loa = new LoanAccount()),
+        description: 'loa.oclIsNew()',
       })
-      .and({
-        execute: () => (loa.Balance = balance),
-        description: 'loa.Balance=balance',
+        .and({
+          execute: () => (loa.LoanAccountID = loanaccountid),
+          description: 'loa.LoanAccountID=loanaccountid',
+        })
+        .and({
+          execute: () => (loa.Balance = balance),
+          description: 'loa.Balance=balance',
+        })
+        .and({
+          execute: () => (loa.Status = status),
+          description: 'loa.Status=status',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(LoanAccount), loa),
+          description: 'LoanAccount.allInstances()->includes(loa)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let loa: LoanAccount = oclState.findNew(LoanAccount);
+      return l({
+        logic: () => oclState.isNew(loa, LoanAccount),
+        description: 'loa.oclIsNew()',
       })
-      .and({
-        execute: () => (loa.Status = status),
-        description: 'loa.Status=status',
-      })
-      .and({
-        execute: () => getRepository(LoanAccount).push(loa),
-        description: 'LoanAccount.allInstance()->includes(loa)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.LoanAccountID, loanaccountid),
+          description: 'loa.LoanAccountID=loanaccountid',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.Balance, balance),
+          description: 'loa.Balance=balance',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.Status, status),
+          description: 'loa.Status=status',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(LoanAccount), loa),
+          description: 'LoanAccount.allInstances()->includes(loa)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {GenerateLoanLetterAndAgreementModule};

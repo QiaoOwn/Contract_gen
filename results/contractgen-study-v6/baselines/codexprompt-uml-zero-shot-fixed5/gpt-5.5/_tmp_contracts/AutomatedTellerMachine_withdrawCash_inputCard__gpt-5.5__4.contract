@@ -1,0 +1,15 @@
+Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {
+          precondition:
+          BankCard.allInstances()->exists(c | c.CardID = cardid and c.CardStatus = CardStatus::NORMAL)
+            postcondition:
+          let c : BankCard = BankCard.allInstances()->any(c | c.CardID = cardid) in
+    if not c.BelongedUser.oclIsUndefined() then
+      self.InputCard = c and
+      self.CardIDValidated = true and
+      result = true
+    else
+      self.CardIDValidated = false and
+      result = false
+    endif
+            
+        }

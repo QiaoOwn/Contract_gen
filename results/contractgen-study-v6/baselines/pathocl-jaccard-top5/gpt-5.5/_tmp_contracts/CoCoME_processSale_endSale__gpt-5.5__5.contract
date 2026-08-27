@@ -1,0 +1,31 @@
+Contract ProcessSaleService::endSale(): Real {
+          precondition:
+          Sale.allInstances()->one(s |
+        s.IsComplete = false and
+        s.IsReadytoPay = false
+    )
+            postcondition:
+          let currentSale : Sale =
+        Sale.allInstances()->any(s |
+            s.IsComplete@pre = false and
+            s.IsReadytoPay@pre = false
+        )
+    in
+        currentSale.Amount =
+            currentSale.ContainedSalesLine->collect(li | li.Subamount)->sum() and
+let currentSale : Sale =
+        Sale.allInstances()->any(s |
+            s.IsComplete@pre = false and
+            s.IsReadytoPay@pre = false
+        )
+    in
+        currentSale.IsReadytoPay = true and
+let currentSale : Sale =
+        Sale.allInstances()->any(s |
+            s.IsComplete@pre = false and
+            s.IsReadytoPay@pre = false
+        )
+    in
+        result = currentSale.Amount
+            
+        }

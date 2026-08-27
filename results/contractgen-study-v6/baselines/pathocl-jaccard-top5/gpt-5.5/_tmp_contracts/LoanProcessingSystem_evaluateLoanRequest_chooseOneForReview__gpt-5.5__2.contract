@@ -1,0 +1,8 @@
+Contract EvaluateLoanRequestModule::chooseOneForReview(requestid:Integer): LoanRequest {
+          precondition:
+          LoanRequest.allInstances()->exists(lr | lr.RequestID = requestid)
+            postcondition:
+          self.currentLoanRequest = LoanRequest.allInstances()->any(lr | lr.RequestID = requestid) and
+result = self.currentLoanRequest
+            
+        }

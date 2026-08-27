@@ -1,0 +1,16 @@
+Contract AutomatedTellerMachineSystem::printReceipt(): Real {
+          precondition:
+          self.cardIdentifierValidated = true and self.passwordValidated = true and
+not self.currentBankCard.oclIsUndefined()
+            postcondition:
+          if self.withdrawalOccurred then
+        result = self.withdrawalAmount
+    else
+        if self.depositOccurred then
+            result = self.depositAmount
+        else
+            result = 0.0
+        endif
+    endif
+            
+        }

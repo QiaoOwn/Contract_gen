@@ -1,0 +1,9 @@
+Contract LoanProcessingSystemSystem::loanPayment(loanid:Integer): Boolean {
+          definition:
+          targetLoan:Loan = Loan.allInstances()->any(candidate:Loan | candidate.LoanID = loanid)
+            precondition:
+          targetLoan.oclIsUndefined() = false and targetLoan.Status = LoanStatus::LSOPEN
+            postcondition:
+          targetLoan.RemainAmountToPay = targetLoan.RemainAmountToPay@pre - targetLoan.RepaymentAmount@pre and result = true
+            
+        }

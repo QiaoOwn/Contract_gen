@@ -1,0 +1,10 @@
+Contract LibraryManagementSystemSystem::listRecommendBook(uid:String): Set(RecommendBook) {
+          precondition:
+          User.allInstances()->exists(u: User | u.UserID = uid) and
+User.allInstances()->any(u: User | u.UserID = uid).RecommendedBook->notEmpty() or
+    User.allInstances()->any(u: User | u.UserID = uid).RecommendedBook->isEmpty()
+            postcondition:
+          result =
+    User.allInstances()->any(u: User | u.UserID = uid).RecommendedBook->asSet()
+            
+        }

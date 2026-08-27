@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::countDownSuspensionDay(): void {
-          definition:
-          overdueLoans: Set(Loan) = Loan.allInstance()->select(o:Loan|o.IsReturned = false and o.DueDate < self.currentDate), userWithOverdue: Set(User) = User.allInstance()->select(u:User|u.LoanedBook->exists(l:Loan|l.IsReturned = false and l.DueDate < self.currentDate))
-            precondition:
-          overdueLoans.isEmpty() = false and userWithOverdue.isEmpty() = false
-            postcondition:
-          Loan.allInstance()->select(l:Loan|l.IsReturned = false and l.DueDate < self.currentDate)->forAll(l:Loan|l.OverDueFee = l.OverDueFee@pre and l.OverDue3Days = l.OverDue3Days@pre and l.OverDue10Days = l.OverDue10Days@pre and l.OverDue17Days = l.OverDue17Days@pre and l.OverDue31Days = l.OverDue31Days@pre) and User.allInstance()->forAll(u:User|u.LoanedBook->exists(l:Loan|l.IsReturned = false and l.DueDate < self.currentDate) implies (u.SuspensionDays = u.SuspensionDays@pre - 1 or u.SuspensionDays = 0) and (u.SuspensionDays = 0 implies u.BorrowStatus = User::SUSPEND) and (u.SuspensionDays > 0 implies u.BorrowStatus = User::NORMAL))
-            
-        }

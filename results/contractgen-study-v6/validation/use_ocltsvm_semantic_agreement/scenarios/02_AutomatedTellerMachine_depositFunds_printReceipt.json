@@ -1,0 +1,143 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 2,
+  "operation_id": "AutomatedTellerMachine_depositFunds_printReceipt",
+  "case_study": "ATM",
+  "project": "AutomatedTellerMachine",
+  "use_case": "depositFunds",
+  "operation": "printReceipt",
+  "operation_signature": "printReceipt(): Real",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "0e23d0daebc8c378fe415460b7558e984d994c96da899437ccf9919f77f05b2f",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": ["precondition", "postcondition", "conditional", "undefined"],
+  "complexity_score": 28,
+  "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n\tprecondition:\n\t\tself.CardIDValidated = true and\n\t\tself.PasswordValidated = true and\n\t\tself.InputCard.oclIsUndefined() = false\n\tpostcondition:\n\t\tif self.IsDeposit = true \n\t\tthen result = self.DepositedNumber \n\t\telse result = 0.0 \n\t\tendif \n}",
+  "complexity_tier": "simple",
+  "scenarios": [
+    {
+      "scenario_id": "AutomatedTellerMachine_depositFunds_printReceipt::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_printReceipt\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_printReceipt\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/printReceipt returns deposited amount after deposit"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/printReceipt returns deposited amount after deposit",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json"
+    },
+    {
+      "scenario_id": "AutomatedTellerMachine_depositFunds_printReceipt::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_printReceipt\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_printReceipt\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/printReceipt rejects when session is not authenticated"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/printReceipt rejects when session is not authenticated",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json"
+    },
+    {
+      "scenario_id": "AutomatedTellerMachine_depositFunds_printReceipt::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_printReceipt.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

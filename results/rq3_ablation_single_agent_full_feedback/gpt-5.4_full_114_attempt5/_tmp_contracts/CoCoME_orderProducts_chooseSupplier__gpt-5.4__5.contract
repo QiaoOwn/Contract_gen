@@ -1,9 +1,0 @@
-Contract CoCoMEOrderProducts::chooseSupplier(supplierID: Integer): Boolean {
-  definition:
-    supplier: Supplier = Supplier.allInstance()->any(o | o.Id = supplierID),
-    currentOrderProduct: OrderProduct = self.CurrentOrderProduct
-  precondition:
-    supplierID.oclIsTypeOf(Integer) and supplier.oclIsUndefined() = false and currentOrderProduct.oclIsUndefined() = false and Supplier.allInstance()->includes(supplier)
-  postcondition:
-    currentOrderProduct.Supplier = supplier and result = true
-}

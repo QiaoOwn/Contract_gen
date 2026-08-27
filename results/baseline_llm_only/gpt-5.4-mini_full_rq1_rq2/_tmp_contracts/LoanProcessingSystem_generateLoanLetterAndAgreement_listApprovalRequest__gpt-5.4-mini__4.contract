@@ -1,9 +1,0 @@
-Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {
-          definition:
-          currentLoanRequests:Set(LoanRequest) = self.CurrentLoanRequests, approvedRequests:Set(LoanRequest) = currentLoanRequests->select(lr:LoanRequest|lr.Status = LoanRequestStatus::APPROVED)
-            precondition:
-          currentLoanRequests.oclIsUndefined() = false and approvedRequests.isEmpty() = false
-            postcondition:
-          result = approvedRequests
-            
-        }

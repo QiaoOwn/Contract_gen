@@ -21,7 +21,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'storeID', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `sto:Store = Store.allInstance()->any(s:Store | s.Id = storeID)`,
+    definition: `sto:Store = Store.allInstances()->any(s:Store | s.Id = storeID)`,
     precondition: `
 sto.oclIsUndefined() = false and
 sto.IsOpened = false`,

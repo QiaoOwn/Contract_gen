@@ -1,9 +1,0 @@
-Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
-          definition:
-          currentLoanRequest:LoanRequest = CurrentLoanRequest
-            precondition:
-          currentLoanRequest.oclIsUndefined() = false and currentLoanRequest.Status = LoanRequestStatus::APPROVED and currentLoanRequest.AttachedApprovalLetter.oclIsUndefined() = false and currentLoanRequest.AttachedLoanAgreement.oclIsUndefined() = true
-            postcondition:
-          let newAgreement:LoanAgreement in newAgreement.oclIsNew() and newAgreement.Content = currentLoanRequest.AttachedApprovalLetter.Content and currentLoanRequest.AttachedLoanAgreement = newAgreement and CurrentLoanAgreement = newAgreement and result = true
-            
-        }

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The BankCrad is a card that can deposit or withdraw money.*/
 class BankCard {
   /*The unique identifier of the bank card*/
@@ -54,26 +62,30 @@ class ManageBankCardCRUDService {
   DepositedNumber: number;
   /*SystemVariable End*/
 
-  /*find the card with provided card id,
-   *if the card exists, you can check it's info*/
+  /*Definition: The queryBankCard operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   queryBankCard(cardid: number): BankCard {
     /*Definition Start*/
-    let bankcard: BankCard = l({
-      logic: () =>
-        getRepository(BankCard).find(
-          (ban: BankCard) =>
-            l({
-              logic: () => ban.CardID === cardid,
-              description: 'ban.CardID=cardid',
-            }).build().pass
-        ),
-      description: 'BankCard.allInstance()->any(ban:BankCard|ban.CardID=cardid)',
-    }).build().pass;
+    let bankcard: BankCard = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(BankCard).find(
+              (ban: BankCard) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(ban.CardID, cardid),
+                  description: 'ban.CardID=cardid',
+                }).build().pass
+            ),
+          description: 'BankCard.allInstances()->any(ban:BankCard|ban.CardID=cardid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(bankcard) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bankcard), false),
       description: 'bankcard.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -81,12 +93,32 @@ class ManageBankCardCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => bankcard,
-      description: 'result=bankcard',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => bankcard,
+        description: 'result=bankcard',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(result, bankcard),
+        description: 'result=bankcard',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageBankCardCRUDService};

@@ -26,8 +26,8 @@ const operations = [
       new Parameter({name: 'bossid', type: 'Integer'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `sta:Staff = Staff.allInstance()->any(u:Staff | u.Id = id),
-                 bo:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = bossid)`,
+    definition: `sta:Staff = Staff.allInstances()->any(u:Staff | u.Id = id),
+                 bo:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = bossid)`,
     precondition: `sta.oclIsUndefined() = true`,
     postcondition: `let s:Staff in
                      s.oclIsNew() and
@@ -37,7 +37,7 @@ const operations = [
                      s.Phone = phone and
                      s.Role = role and
                      if bo.oclIsUndefined() = false then s.Boss = bo endif and
-                     Staff.allInstance()->includes(s) and result = true`,
+                     Staff.allInstances()->includes(s) and result = true`,
   }),
 ];
 

@@ -1,8 +1,0 @@
-Contract ListBookHistory::listBorrowHistory(uid: String): Set(Loan) {
-  definition:
-    user: User = User.allInstance()->any(u | u.UserID = uid), loans: Set(Loan) = user.LoanedBook
-  precondition:
-    uid.oclIsUndefined() = false and user.oclIsUndefined() = false and User.allInstance()->includes(user)
-  postcondition:
-    result = loans
-}

@@ -1,13 +1,24 @@
 import {getRepository, ManageUserCRUDService, User} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('AutomatedTellerMachine/ManageUserCRUDService/deleteUser', () => {
-  it('Happy Path', () => {
+  beforeEach(() => {
+    clearRepositories(getRepository(User));
+  });
+
+  it('Happy Path: removes user from repository', () => {
     const service = new ManageUserCRUDService();
     const user = new User();
     user.UserID = 1;
     getRepository(User).push(user);
-    expect(getRepository(User).length).toBe(1);
     const result = service.deleteUser(user.UserID);
     expect(result).toBe(true);
-    expect(getRepository(User).length).toBe(0);
+    expect(getRepository(User)).toHaveLength(0);
+  });
+
+  it('rejects when user does not exist', () => {
+    const service = new ManageUserCRUDService();
+    expectPreconditionRejected(() => service.deleteUser(99));
+    expect(getRepository(User)).toHaveLength(0);
   });
 });

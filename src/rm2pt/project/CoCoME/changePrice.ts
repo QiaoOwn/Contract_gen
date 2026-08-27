@@ -22,7 +22,7 @@ const operations = [
       new Parameter({name: 'newPrice', type: 'Real'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `item:Item = Item.allInstance()->any(i:Item | i.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(i:Item | i.Barcode = barcode)`,
     precondition: `item.oclIsUndefined() = false`,
     postcondition: `
 item.Price = newPrice and

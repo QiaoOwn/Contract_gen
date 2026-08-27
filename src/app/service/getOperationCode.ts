@@ -20,7 +20,13 @@ export type {GetOperationCodeParams} from './operationCodeShared';
 export {removeFileExportsAndImports} from './operationCodeShared';
 
 export default async function getOperationCode(params: GetOperationCodeParams) {
-  const {project: key, useCase: uc, operation: op, removeExports = true} = params;
+  const {
+    project: key,
+    useCase: uc,
+    operation: op,
+    removeExports = true,
+    includeGraphImage = true,
+  } = params;
   const p = project[key];
   const entity = p.entity;
   const useCase = p.useCase[uc as keyof typeof p.useCase] as UseCase;
@@ -78,14 +84,16 @@ export default async function getOperationCode(params: GetOperationCodeParams) {
     removeFileExportsAndImports(preconditionErrorFile);
     removeFileExportsAndImports(testFile);
   }
-  const representation = await graph.getGraphAsync();
   let src = '';
-  try {
-    const image = await representation.drawMermaidPng();
-    const arrayBuffer = Buffer.from(await image.arrayBuffer());
-    src = `data:image/jpeg;base64,${arrayBuffer.toString('base64')}`;
-  } catch (error) {
-    console.error(error);
+  if (includeGraphImage) {
+    try {
+      const representation = await graph.getGraphAsync();
+      const image = await representation.drawMermaidPng();
+      const arrayBuffer = Buffer.from(await image.arrayBuffer());
+      src = `data:image/jpeg;base64,${arrayBuffer.toString('base64')}`;
+    } catch (error) {
+      console.error('Unable to render the optional workflow preview.', error);
+    }
   }
 
   return {

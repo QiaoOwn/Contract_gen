@@ -1,9 +1,0 @@
-Contract SubmitLoanRequestModule::enterLoanInformation(requestid:Integer,name:String,loanamount:Real,loanpurpose:String,income:Real,phonenumber:Integer,postaladdress:String,zipcode:Integer,email:String,workreferences:String,creditreferences:String,checkingaccountnumber:Integer,securitynumber:Integer): Boolean {
-          definition:
-          req:LoanRequest = LoanRequest.allInstance()->any(l:LoanRequest|l.RequestID=requestid)
-            precondition:
-          req.oclIsUndefined() = false and req.Status = LoanRequestStatus::SUBMITTED
-            postcondition:
-          let r:LoanRequest in r.oclIsNew() and r.RequestID=requestid and r.Name=name and r.LoanAmount=loanamount and r.LoanPurpose=loanpurpose and r.Income=income and r.PhoneNumber=phonenumber and r.PostalAddress=postaladdress and r.ZipCode=zipcode and r.Email=email and r.WorkReferences=workreferences and r.CreditReferences=creditreferences and r.CheckingAccountNumber=checkingaccountnumber and r.SecurityNumber=securitynumber and result=true
-            
-        }

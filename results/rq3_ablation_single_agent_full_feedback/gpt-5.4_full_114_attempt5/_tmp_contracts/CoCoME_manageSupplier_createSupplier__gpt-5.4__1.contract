@@ -1,8 +1,0 @@
-Contract ManageSupplierCRUDService::createSupplier(id: Integer, name: String): Boolean {
-  definition:
-    supplier: Supplier = Supplier.allInstance()->any(s | s.Id = id)
-  precondition:
-    supplier.oclIsUndefined() = true and Supplier.allInstance()->isUnique(s:Supplier | s.Id) and name.oclIsTypeOf(String) and id.oclIsTypeOf(Integer)
-  postcondition:
-    let newSupplier:Supplier in newSupplier.oclIsNew() and Supplier.allInstance()->includes(newSupplier) and newSupplier.Id = id and newSupplier.Name = name and result = true
-}

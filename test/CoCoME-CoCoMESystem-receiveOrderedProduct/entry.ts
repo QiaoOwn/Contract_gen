@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,28 +201,30 @@ class CoCoMESystem {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find order product with provided order id,
-   *if the order product exists,
-   *the status should be received,
-   *and the contained entries' items' stock number should plus the quentity*/
+  /*Definition: The receiveOrderedProduct operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   receiveOrderedProduct(orderID: number): boolean {
     /*Definition Start*/
-    let op: OrderProduct = l({
-      logic: () =>
-        getRepository(OrderProduct).find(
-          (i: OrderProduct) =>
-            l({
-              logic: () => i.Id === orderID,
-              description: 'i.Id=orderID',
-            }).build().pass
-        ),
-      description: 'OrderProduct.allInstance()->any(i:OrderProduct|i.Id=orderID)',
-    }).build().pass;
+    let op: OrderProduct = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(OrderProduct).find(
+              (i: OrderProduct) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(i.Id, orderID),
+                  description: 'i.Id=orderID',
+                }).build().pass
+            ),
+          description: 'OrderProduct.allInstances()->any(i:OrderProduct|i.Id=orderID)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(op) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(op), false),
       description: 'op.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -222,29 +232,71 @@ class CoCoMESystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (op.OrderStatus = OrderStatus.RECEIVED),
-      description: 'op.OrderStatus=OrderStatus::RECEIVED',
-    })
-      .and({
-        execute: () =>
-          op.ContainedEntries.forEach(
-            (oe: OrderEntry) =>
-              l({
-                execute: () => (oe.Item.StockNumber = oe.Item.StockNumber + oe.Quantity),
-                description: 'oe.Item.StockNumber=oe.Item.StockNumber@pre+oe.Quantity',
-              }).build().value
-          ),
-        description:
-          'op.ContainedEntries->forAll(oe:OrderEntry|oe.Item.StockNumber=oe.Item.StockNumber@pre+oe.Quantity)',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (op.OrderStatus = OrderStatus.RECEIVED),
+        description: 'op.OrderStatus=OrderStatus::RECEIVED',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+        .and({
+          execute: () =>
+            op.ContainedEntries.forEach(
+              (oe: OrderEntry) =>
+                l({
+                  execute: () =>
+                    (oe.Item.StockNumber = oclState.preValue(oe.Item, 'StockNumber') + oe.Quantity),
+                  description: 'oe.Item.StockNumber=oe.Item.StockNumber@pre+oe.Quantity',
+                }).build().value
+            ),
+          description:
+            'op.ContainedEntries->forAll(oe:OrderEntry|oe.Item.StockNumber=oe.Item.StockNumber@pre+oe.Quantity)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(op.OrderStatus, OrderStatus.RECEIVED),
+        description: 'op.OrderStatus=OrderStatus::RECEIVED',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () =>
+            op.ContainedEntries.every(
+              (oe: OrderEntry) =>
+                l({
+                  logic: () =>
+                    StandardOPs.oclEquals(
+                      oe.Item.StockNumber,
+                      oclState.preValue(oe.Item, 'StockNumber') + oe.Quantity
+                    ),
+                  description: 'oe.Item.StockNumber=oe.Item.StockNumber@pre+oe.Quantity',
+                }).build().pass
+            ),
+          description:
+            'op.ContainedEntries->forAll(oe:OrderEntry|oe.Item.StockNumber=oe.Item.StockNumber@pre+oe.Quantity)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMESystem};

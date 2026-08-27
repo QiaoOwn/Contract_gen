@@ -1,9 +1,0 @@
-Contract LoanProcessingSystemSystem::loanPayment(loanid:Integer): Boolean {
-          definition:
-          loan:Loan = Loan.allInstance()->any(l:Loan|l.LoanID=loanid), loanAccount:LoanAccount = loan.BelongedLoanAccount
-            precondition:
-          loan.oclIsUndefined() = false and loanAccount.oclIsUndefined() = false and loan.Status = Loan::LSOPEN and loan.IsPaidinFull = false and loan.RemainAmountToPay > 0 and loan.RepaymentAmount > 0
-            postcondition:
-          loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount@pre and loanAccount.Balance = loanAccount.Balance@pre + loan.RepaymentAmount@pre and loan.RemainAmountToPay > 0 implies loan.Status = Loan::LSOPEN and loan.IsPaidinFull = false and loan.RemainAmountToPay = 0 implies loan.Status = Loan::CLOSED and loan.IsPaidinFull = true and loanAccount.Status = LoanAccount::HASPAIDINFULL and result=true
-            
-        }

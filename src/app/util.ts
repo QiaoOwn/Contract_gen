@@ -82,19 +82,30 @@ export function formatContract(ast: RuleContractContext, tokens: CommonTokenStre
 }
 
 export const parse = (inputCode: string) => {
-  const {parser, tokens} = getRemodelAntlr(inputCode);
+  const {lexer, parser, tokens} = getRemodelAntlr(inputCode);
   const errors: {line: number; column: number; msg: string}[] = [];
-  parser.addErrorListener({
-    syntaxError: function (_recognizer, _offendingSymbol, line, column, msg) {
+  const errorListener = {
+    syntaxError: function (
+      _recognizer: unknown,
+      _offendingSymbol: unknown,
+      line: number,
+      column: number,
+      msg: string
+    ) {
       errors.push({line, column, msg});
     },
-  });
+  };
+  lexer.removeErrorListeners();
+  parser.removeErrorListeners();
+  lexer.addErrorListener(errorListener);
+  parser.addErrorListener(errorListener);
   let tree: RuleContractContext | undefined;
   try {
-    tree = parser.ruleContract();
+    tree = parser.ruleStandaloneContract().ruleContract();
   } catch (error) {
     console.log(error);
   }
+  lexer.removeErrorListeners();
   parser.removeErrorListeners();
   return {errors, tree, tokens};
 };

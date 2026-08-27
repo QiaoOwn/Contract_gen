@@ -8,8 +8,9 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS_DIR = ROOT / "results"
-OUT_DIR = RESULTS_DIR / "analysis_report"
+STUDY_ROOT = ROOT / "results" / "contractgen-study-v6"
+RESULTS_DIR = STUDY_ROOT / "contract_gen" / "full_feedback"
+OUT_DIR = STUDY_ROOT / "reports" / "analysis"
 
 MODEL_ORDER = [
     "claude-opus-4-7",
@@ -37,14 +38,11 @@ MODEL_COLORS = {
 
 
 def result_dirs() -> list[Path]:
-    return sorted(
-        path
-        for path in RESULTS_DIR.iterdir()
-        if path.is_dir()
-        and path.name.startswith("rq_")
-        and path.name.endswith("_full_oracle_fixed")
-        and (path / "summary.json").exists()
-    )
+    if not (RESULTS_DIR / "summary.json").exists():
+        raise FileNotFoundError(
+            f"Missing v6 Contract Gen results: {RESULTS_DIR / 'summary.json'}"
+        )
+    return [RESULTS_DIR]
 
 
 def read_by_model(filename: str) -> pd.DataFrame:
@@ -131,10 +129,10 @@ def save_valid_at_k_curve() -> pd.DataFrame:
     for folder in result_dirs():
         with (folder / "summary.json").open("r", encoding="utf-8") as f:
             summary = json.load(f)
-        row = summary["exp1_by_model"][0]
-        model = row["model"]
-        for k, rate in row["valid_at_rates"].items():
-            records.append({"model": model, "k": int(k), "valid_at_k_rate": float(rate)})
+        for row in summary["exp1_by_model"]:
+            model = row["model"]
+            for k, rate in row["valid_at_rates"].items():
+                records.append({"model": model, "k": int(k), "valid_at_k_rate": float(rate)})
 
     df = order_models(pd.DataFrame(records))
     df.to_csv(OUT_DIR / "valid_at_k_curve_data.csv", index=False)

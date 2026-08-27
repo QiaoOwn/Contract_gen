@@ -1,0 +1,154 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 23,
+  "operation_id": "Airport_manageUser_createStaff",
+  "case_study": "Airport",
+  "project": "Airport",
+  "use_case": "manageUser",
+  "operation": "createStaff",
+  "operation_signature": "createStaff(id: Integer, name: String, pswd: String, phone: String, role: Integer, bossid: Integer): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "08a1973eef13186e22d2f6cb1f7be7418ef6ad10bd32e974531ec0e3e9f7b9c2",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "conditional",
+    "new_object",
+    "undefined",
+    "repository_update"
+  ],
+  "complexity_score": 80,
+  "contract": "Contract AirportSystem::createStaff(id: Integer,name: String,pswd: String,phone: String,role: Integer,bossid: Integer): Boolean {\n\tdefinition:\n\t\texistingBoss: Staff = Staff.allInstances()->any(candidate: Staff|candidate.Id = bossid)\n\tprecondition:\n\t\tStaff.allInstances()->forAll(staff: Staff|staff.Id<>id)\n\tpostcondition:\n\t\tlet newStaff: Staff in\n\t\tnewStaff.oclIsNew() and\n\t\tStaff.allInstances()->includes(newStaff) and\n\t\tnewStaff.Id = id and\n\t\tnewStaff.Name = name and\n\t\tnewStaff.Password = pswd and\n\t\tnewStaff.Phone = phone and\n\t\tnewStaff.Role = role and\n\t\tif existingBoss.oclIsUndefined() = false \n\t\tthen newStaff.Boss = existingBoss \n\t\telse newStaff.Boss = null \n\t\tendif  and\n\t\tresult = true\n}",
+  "complexity_tier": "complex",
+  "scenarios": [
+    {
+      "scenario_id": "Airport_manageUser_createStaff::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_manageUser_createStaff\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_manageUser_createStaff\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json",
+          "test_name": "Airport/AirportSystem/createStaff Happy Path: creates staff without boss and returns true"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json",
+          "test_name": "Airport/AirportSystem/createStaff Happy Path: creates staff without boss and returns true",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json"
+    },
+    {
+      "scenario_id": "Airport_manageUser_createStaff::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_manageUser_createStaff\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_manageUser_createStaff\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json",
+          "test_name": "Airport/AirportSystem/createStaff rejects when staff identifier is already used"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json",
+          "test_name": "Airport/AirportSystem/createStaff rejects when staff identifier is already used",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json"
+    },
+    {
+      "scenario_id": "Airport_manageUser_createStaff::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_manageUser_createStaff.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

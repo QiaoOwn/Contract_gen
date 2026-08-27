@@ -1,0 +1,10 @@
+Contract ListBookHistory::listHodingBook(uid:String): Set(Loan) {
+          precondition:
+          User.allInstances()->exists(u: User | u.UserID = uid)
+            postcondition:
+          result = User.allInstances()
+        ->any(u: User | u.UserID = uid)
+        .LoanedBook
+        ->select(l: Loan | l.IsReturned = false)
+            
+        }

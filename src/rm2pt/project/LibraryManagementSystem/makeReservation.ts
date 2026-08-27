@@ -20,8 +20,8 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-    user:User = User.allInstance()->any(u:User | u.UserID = uid),
-    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode)`,
+    user:User = User.allInstances()->any(u:User | u.UserID = uid),
+    copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode)`,
     precondition: `
     user.oclIsUndefined() = false and
     copy.oclIsUndefined() = false and
@@ -32,12 +32,12 @@ const operations = [
     res.oclIsNew() and
     copy.IsReserved = true and
     res.IsReserveClosed = false and
-    res.ReserveDate.isEqual(Today) and
+    res.ReserveDate = Today and
     res.ReservedUser = user and
     res.ReservedCopy = copy and
     user.ReservedBook->includes(res) and
     copy.ReservationRecord->includes(res) and
-    Reserve.allInstance()->includes(res) and
+    Reserve.allInstances()->includes(res) and
     result = true`,
   }),
 ];

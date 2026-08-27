@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -204,41 +212,38 @@ class ProcessSaleService {
   CurrentPaymentMethod: PaymentMethod;
   /*TempVariable End*/
 
-  /*find an item with provided barcode,
-   *if current sale exists and not complete
-   *and the item exists and the stock number is greater than 0, create a sales line item
-   *and this sale line will be used in other operation.
-   *the current sale will include this sale line and the sale line is belong to the current sale.
-   *the sale line's quantity is provided quantity and the item stock number will minus the quantity.
-   *then caculate the sale line subamount is the item price multiply the quantity.
-   *don't forget to save the sale line.
-   **/
+  /*Definition: The enterItem operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   enterItem(barcode: number, quantity: number): boolean {
     /*Definition Start*/
-    let item: Item = l({
-      logic: () =>
-        getRepository(Item).find(
-          (i: Item) =>
-            l({
-              logic: () => i.Barcode === barcode,
-              description: 'i.Barcode=barcode',
-            }).build().pass
-        ),
-      description: 'Item.allInstance()->any(i:Item|i.Barcode=barcode)',
-    }).build().pass;
+    let item: Item = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Item).find(
+              (i: Item) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(i.Barcode, barcode),
+                  description: 'i.Barcode=barcode',
+                }).build().pass
+            ),
+          description: 'Item.allInstances()->any(i:Item|i.Barcode=barcode)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentSale), false),
       description: 'CurrentSale.oclIsUndefined()=false',
     })
       .and({
-        logic: () => this.CurrentSale.IsComplete === false,
+        logic: () => StandardOPs.oclEquals(this.CurrentSale.IsComplete, false),
         description: 'CurrentSale.IsComplete=false',
       })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(item) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(item), false),
         description: 'item.oclIsUndefined()=false',
       })
       .and({
@@ -251,50 +256,112 @@ class ProcessSaleService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let sli: SalesLineItem;
-    return l({
-      execute: () => (sli = new SalesLineItem()),
-      description: 'sli.oclIsNew()',
-    })
-      .and({
-        execute: () => (this.CurrentSaleLine = sli),
-        description: 'self.CurrentSaleLine=sli',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let sli: SalesLineItem;
+      return l({
+        execute: () => (sli = new SalesLineItem()),
+        description: 'sli.oclIsNew()',
       })
-      .and({
-        execute: () => (sli.BelongedSale = this.CurrentSale),
-        description: 'sli.BelongedSale=CurrentSale',
+        .and({
+          execute: () => (this.CurrentSaleLine = sli),
+          description: 'self.CurrentSaleLine=sli',
+        })
+        .and({
+          execute: () => (sli.BelongedSale = this.CurrentSale),
+          description: 'sli.BelongedSale=CurrentSale',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(this.CurrentSale.ContainedSalesLine, sli),
+          description: 'CurrentSale.ContainedSalesLine->includes(sli)',
+        })
+        .and({
+          execute: () => (sli.Quantity = quantity),
+          description: 'sli.Quantity=quantity',
+        })
+        .and({
+          execute: () => (sli.BelongedItem = item),
+          description: 'sli.BelongedItem=item',
+        })
+        .and({
+          execute: () => (item.StockNumber = oclState.preValue(item, 'StockNumber') - quantity),
+          description: 'item.StockNumber=item.StockNumber@pre-quantity',
+        })
+        .and({
+          execute: () => (sli.Subamount = item.Price * quantity),
+          description: 'sli.Subamount=item.Price*quantity',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(SalesLineItem), sli),
+          description: 'SalesLineItem.allInstances()->includes(sli)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let sli: SalesLineItem = oclState.findNew(SalesLineItem);
+      return l({
+        logic: () => oclState.isNew(sli, SalesLineItem),
+        description: 'sli.oclIsNew()',
       })
-      .and({
-        execute: () => this.CurrentSale.ContainedSalesLine.push(sli),
-        description: 'CurrentSale.ContainedSalesLine->includes(sli)',
-      })
-      .and({
-        execute: () => (sli.Quantity = quantity),
-        description: 'sli.Quantity=quantity',
-      })
-      .and({
-        execute: () => (sli.BelongedItem = item),
-        description: 'sli.BelongedItem=item',
-      })
-      .and({
-        execute: () => (item.StockNumber = item.StockNumber - quantity),
-        description: 'item.StockNumber=item.StockNumber@pre-quantity',
-      })
-      .and({
-        execute: () => (sli.Subamount = item.Price * quantity),
-        description: 'sli.Subamount=item.Price*quantity',
-      })
-      .and({
-        execute: () => getRepository(SalesLineItem).push(sli),
-        description: 'SalesLineItem.allInstance()->includes(sli)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSaleLine, sli),
+          description: 'self.CurrentSaleLine=sli',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sli.BelongedSale, this.CurrentSale),
+          description: 'sli.BelongedSale=CurrentSale',
+        })
+        .and({
+          logic: () => StandardOPs.includes(this.CurrentSale.ContainedSalesLine, sli),
+          description: 'CurrentSale.ContainedSalesLine->includes(sli)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sli.Quantity, quantity),
+          description: 'sli.Quantity=quantity',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sli.BelongedItem, item),
+          description: 'sli.BelongedItem=item',
+        })
+        .and({
+          logic: () =>
+            StandardOPs.oclEquals(
+              item.StockNumber,
+              oclState.preValue(item, 'StockNumber') - quantity
+            ),
+          description: 'item.StockNumber=item.StockNumber@pre-quantity',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(sli.Subamount, item.Price * quantity),
+          description: 'sli.Subamount=item.Price*quantity',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(SalesLineItem), sli),
+          description: 'SalesLineItem.allInstances()->includes(sli)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ProcessSaleService};

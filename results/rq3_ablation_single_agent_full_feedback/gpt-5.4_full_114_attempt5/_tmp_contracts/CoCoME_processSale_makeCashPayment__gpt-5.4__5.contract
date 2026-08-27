@@ -1,8 +1,0 @@
-Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {
-  definition:
-    currentSale: Sale = self.CurrentSale, currentPayment: Payment = currentSale.AssoicatedPayment
-  precondition:
-    amount > 0 and currentSale.oclIsUndefined() = false and Sale.allInstance()->includes(currentSale) and currentSale.IsReadytoPay = true and currentSale.IsComplete = false and self.CurrentPaymentMethod = PaymentMethod::CASH and amount >= currentSale.Amount and currentPayment.oclIsUndefined() = false and Payment.allInstance()->includes(currentPayment)
-  postcondition:
-    currentPayment.AmountTendered = amount and currentSale.IsComplete = true and result = true
-}

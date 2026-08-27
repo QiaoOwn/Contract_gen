@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The BankCrad is a card that can deposit or withdraw money.*/
 class BankCard {
   /*The unique identifier of the bank card*/
@@ -54,26 +62,30 @@ class ManageUserCRUDService {
   DepositedNumber: number;
   /*SystemVariable End*/
 
-  /*find the user with provided user id,
-   *if the user not exist, create a new user with provided info*/
+  /*Definition: The createUser operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createUser(userid: number, name: string, address: string): boolean {
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (use: User) =>
-            l({
-              logic: () => use.UserID === userid,
-              description: 'use.UserID=userid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(use:User|use.UserID=userid)',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (use: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(use.UserID, userid),
+                  description: 'use.UserID=userid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(use:User|use.UserID=userid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(user) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), true),
       description: 'user.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -81,34 +93,76 @@ class ManageUserCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let use: User;
-    return l({
-      execute: () => (use = new User()),
-      description: 'use.oclIsNew()',
-    })
-      .and({
-        execute: () => (use.UserID = userid),
-        description: 'use.UserID=userid',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let use: User;
+      return l({
+        execute: () => (use = new User()),
+        description: 'use.oclIsNew()',
       })
-      .and({
-        execute: () => (use.Name = name),
-        description: 'use.Name=name',
+        .and({
+          execute: () => (use.UserID = userid),
+          description: 'use.UserID=userid',
+        })
+        .and({
+          execute: () => (use.Name = name),
+          description: 'use.Name=name',
+        })
+        .and({
+          execute: () => (use.Address = address),
+          description: 'use.Address=address',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(User), use),
+          description: 'User.allInstances()->includes(use)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let use: User = oclState.findNew(User);
+      return l({
+        logic: () => oclState.isNew(use, User),
+        description: 'use.oclIsNew()',
       })
-      .and({
-        execute: () => (use.Address = address),
-        description: 'use.Address=address',
-      })
-      .and({
-        execute: () => getRepository(User).push(use),
-        description: 'User.allInstance()->includes(use)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(use.UserID, userid),
+          description: 'use.UserID=userid',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Name, name),
+          description: 'use.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Address, address),
+          description: 'use.Address=address',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(User), use),
+          description: 'User.allInstances()->includes(use)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageUserCRUDService};

@@ -1,0 +1,9 @@
+Contract ManageItemCRUDService::deleteItem(barcode:Integer): Boolean {
+          definition:
+          targetItem:Item = Item.allInstances()->any(candidate:Item | candidate.Barcode = barcode)
+            precondition:
+          targetItem.oclIsUndefined() = false
+            postcondition:
+          Item.allInstances()->excludes(targetItem) and result = true
+            
+        }

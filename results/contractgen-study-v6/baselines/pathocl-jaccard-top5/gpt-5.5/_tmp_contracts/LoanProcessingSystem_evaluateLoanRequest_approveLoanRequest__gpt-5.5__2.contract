@@ -1,0 +1,11 @@
+Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
+          precondition:
+          LoanRequest.allInstances()->exists(lr | lr.Status = LoanRequestStatus::SUBMITTED)
+            postcondition:
+          LoanRequest.allInstances()->exists(lr |
+        lr.Status@pre = LoanRequestStatus::SUBMITTED and
+        lr.Status = LoanRequestStatus::APPROVED
+    ) and
+result = true
+            
+        }

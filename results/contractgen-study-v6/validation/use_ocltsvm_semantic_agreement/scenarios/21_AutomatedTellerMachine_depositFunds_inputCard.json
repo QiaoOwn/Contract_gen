@@ -1,0 +1,154 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 21,
+  "operation_id": "AutomatedTellerMachine_depositFunds_inputCard",
+  "case_study": "ATM",
+  "project": "AutomatedTellerMachine",
+  "use_case": "depositFunds",
+  "operation": "inputCard",
+  "operation_signature": "inputCard(cardid: Integer): Boolean",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "a2e288af7ae69baf28aab97e8dd310d79b342b92e68ecf1edc1b72cfd8effdb1",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "conditional",
+    "undefined",
+    "enumeration",
+    "repository_update"
+  ],
+  "complexity_score": 59,
+  "contract": "Contract AutomatedTellerMachineSystem::inputCard(cardid: Integer): Boolean {\n\tdefinition:\n\t\tcard: BankCard = BankCard.allInstances()->any(candidate: BankCard|candidate.CardID = cardid)\n\tprecondition:\n\t\tBankCard.allInstances()->includes(card) and\n\t\tcard.CardStatus = CardStatus::NORMAL\n\tpostcondition:\n\t\tif card.BelongedUser.oclIsUndefined() = false \n\t\tthen self.InputCard = card and\n\t\tself.CardIDValidated = true and\n\t\tresult = true \n\t\telse self.CardIDValidated = false and\n\t\tresult = false \n\t\tendif \n}",
+  "complexity_tier": "complex",
+  "scenarios": [
+    {
+      "scenario_id": "AutomatedTellerMachine_depositFunds_inputCard::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_inputCard\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_inputCard\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/inputCard Happy Path: validates card with owner and returns true"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/inputCard Happy Path: validates card with owner and returns true",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json"
+    },
+    {
+      "scenario_id": "AutomatedTellerMachine_depositFunds_inputCard::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_inputCard\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\AutomatedTellerMachine_depositFunds_inputCard\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/inputCard rejects when card does not exist"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json",
+          "test_name": "AutomatedTellerMachine/AutomatedTellerMachineSystem/inputCard rejects when card does not exist",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json"
+    },
+    {
+      "scenario_id": "AutomatedTellerMachine_depositFunds_inputCard::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\AutomatedTellerMachine_depositFunds_inputCard.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

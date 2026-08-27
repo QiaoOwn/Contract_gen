@@ -1,0 +1,30 @@
+Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u | u.UserID = uid) and
+    BookCopy.allInstances()->exists(c | c.Barcode = barcode) and
+BookCopy.allInstances()->exists(c |
+        c.Barcode = barcode and
+        c.Status = CopyStatus::LOANED and
+        c.IsReserved = false
+    )
+            postcondition:
+          Reserve.allInstances()->exists(r |
+        r.oclIsNew() and
+        r.ReserveDate = Today and
+        r.IsReserveClosed = false and
+        r.ReservedUser = User.allInstances()->any(u | u.UserID = uid) and
+        r.ReservedCopy = BookCopy.allInstances()->any(c | c.Barcode = barcode)
+    ) and
+BookCopy.allInstances()->any(c | c.Barcode = barcode).IsReserved = true and
+let u: User = User.allInstances()->any(x | x.UserID = uid) in
+    let c: BookCopy = BookCopy.allInstances()->any(x | x.Barcode = barcode) in
+    Reserve.allInstances()->exists(r |
+        r.oclIsNew() and
+        r.ReservedUser = u and
+        r.ReservedCopy = c and
+        u.ReservedBook->includes(r) and
+        c.ReservationRecord->includes(r)
+    ) and
+result = true
+            
+        }

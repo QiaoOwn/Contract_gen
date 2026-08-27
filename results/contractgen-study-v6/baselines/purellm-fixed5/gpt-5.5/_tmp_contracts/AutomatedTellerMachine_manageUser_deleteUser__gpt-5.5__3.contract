@@ -1,0 +1,9 @@
+Contract ManageUserCRUDService::deleteUser(userid:Integer): Boolean {
+          definition:
+          targetUser:User = User.allInstances()->any(user:User | user.UserID = userid)
+            precondition:
+          targetUser.oclIsUndefined() = false
+            postcondition:
+          User.allInstances()->excludes(targetUser) and result = true
+            
+        }

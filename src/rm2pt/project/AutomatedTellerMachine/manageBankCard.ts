@@ -26,7 +26,7 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)
+      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)
     `,
     precondition: `
       bankcard.oclIsUndefined() = true
@@ -39,7 +39,7 @@ const operations = [
       ban.Catalog = catalog and
       ban.Password = password and
       ban.Balance = balance and
-      BankCard.allInstance()->includes(ban) and
+      BankCard.allInstances()->includes(ban) and
       result = true
     `,
   }),
@@ -51,7 +51,7 @@ const operations = [
     parameters: [new Parameter({name: 'cardid', type: 'Integer'})],
     returnType: new ReturnedType('BankCard'),
     definition: `
-      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)
+      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)
     `,
     precondition: `
      bankcard.oclIsUndefined() = false
@@ -77,7 +77,7 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)
+      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)
     `,
     precondition: `
       bankcard.oclIsUndefined() = false
@@ -99,14 +99,14 @@ const operations = [
     parameters: [new Parameter({name: 'cardid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
     definition: `
-      bankcard:BankCard = BankCard.allInstance()->any(ban:BankCard | ban.CardID = cardid)
+      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)
     `,
     precondition: `
      bankcard.oclIsUndefined() = false and
-			BankCard.allInstance()->includes(bankcard)
+			BankCard.allInstances()->includes(bankcard)
     `,
     postcondition: `
-     BankCard.allInstance()->excludes(bankcard) and
+     BankCard.allInstances()->excludes(bankcard) and
 			result = true
     `,
   }),

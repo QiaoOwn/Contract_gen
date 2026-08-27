@@ -4,6 +4,14 @@ This artifact accompanies the manuscript **"Contract Gen: Verification-Driven OC
 
 Repository URL: <https://github.com/QiaoOwn/Contract_gen>
 
+> **Input-version notice.** The canonical benchmark now uses
+> `contractgen-operation-input-v2` and `contractgen-system-prompt-v5`. Result
+> directories produced before this migration are historical records and must
+> not be combined with current v5 runs in a submitted table. Re-run the reported
+> methods and ablations before finalizing the manuscript numbers.
+> All current runners write under `results/contractgen-study-v6/`; analysis and
+> revalidation tools reject records without that study marker.
+
 The implementation repository is a Next.js/TypeScript project. The artifact combines that implementation with the experiment data and manuscript material used in the paper.
 
 ## 1. Artifact Scope
@@ -20,24 +28,26 @@ The artifact is designed so that reviewers can verify the paper's main claims wi
 
 | Path | Purpose |
 | --- | --- |
-| `data/operations.jsonl` | Benchmark input: 114 operations from five case studies. |
+| `data/operations.jsonl` | Oracle-isolated canonical input for 114 operation-context instances, covering 107 distinct service operations and 106 distinct requirement specifications. |
+| `src/rm2pt/benchmarkRequirements.ts` | Auditable structured requirements: operation intent, preconditions, and postconditions. |
+| `src/app/service/createOperationInput.ts` | Shared operation-message builder and input validator. |
+| `src/app/service/prompts/generationGrammar.txt` | Versioned executable generation subset shared by Contract Gen and controlled baselines. |
+| `src/app/service/prompts/generationRules.json` | Versioned, identifier-bearing OCL generation rule catalog. |
+| `src/app/service/validateGeneratedContractSemantics.ts` | Clause-level generated-subset checks over the parsed REMODEL syntax tree. |
 | `src/app/service/generateOCL.ts` | Main programmatic entry for Contract Gen. It selects the feedback graph, linear graph, and feedback mode. |
 | `src/app/service/graph.ts` | LangGraph implementation of OCL generation, contract parsing, TypeScript generation, TypeScript checking, and Jest-based execution validation. |
-| `src/app/service/graph-line.ts` | Linear/no-feedback variant used by ablation settings. |
-| `src/app/service/create*Prompt.ts` | Prompt builders for grammar guidance, definitions, project context, transformation rules, and localized repair feedback. |
+| `src/app/service/graph-line.ts` | No-feedback variant that stops at the first failed deterministic validation stage. |
+| `src/app/service/create*Prompt.ts` | Prompt builders for grammar guidance, definitions, project context, OCL generation rules, and localized repair feedback. |
 | `src/app/ContractToTypescript.ts` and `src/app/service/generateTypescriptCode.ts` | OCL-to-TypeScript translation support used by OCLTSVM. |
 | `src/app/api/generate-ocl/route.ts` | HTTP API route for running the full generation/validation stream. |
 | `src/rm2pt/project/` | Encoded benchmark projects, services, entities, and operations. |
 | `test/` | Operation-level Jest tests used for execution-grounded validation. |
 | `antlr4/` | REMODEL grammar and generated TypeScript parser files. |
-| `results/rq_*_full_oracle_fixed/` | Full-diagnostic Contract Gen runs for the five evaluated models. |
-| `results/baseline_llm_only/` | PureLLM baseline runs. |
-| `results/codex_prompt_style/` | Reproduced CodexPrompt-style baseline results. |
-| `results/pathocl_style/` | Reproduced PathOCL-style baseline results. |
-| `results/rq3_ablation_no_feedback/` | No-feedback ablation logs. |
-| `results/rq3_ablation_generic_feedback/` | Generic-feedback ablation logs. |
-| `results/rq3_ablation_single_agent_full_feedback/` | Single-agent full-diagnostic ablation logs. |
-| `results/ocltsvm_sanity_check_114_strong/` | External USE sanity-check artifacts and summary for OCLTSVM support evidence. |
+| `results/contractgen-study-v6/contract_gen/` | Full-, generic-, and no-feedback Contract Gen runs. |
+| `results/contractgen-study-v6/baselines/` | PureLLM, CodexPrompt-style, and PathOCL-style runs. |
+| `results/contractgen-study-v6/ablations/` | End-to-end full-feedback pipeline-structure ablation. |
+| `results/contractgen-study-v6/validation/` | OCLTSVM revalidation and external USE artifacts. |
+| Other directories under `results/` | Historical records from earlier study configurations; excluded from current analysis. |
 | `scripts/` | Python analysis and USE artifact-generation scripts. |
 | `script/` | Experiment-running scripts for Contract Gen, PureLLM, and baseline-style prompting. |
 | `main.tex`, `sections/`, `figures/`, `refs.bib` | Optional LaTeX manuscript source when this artifact is packaged together with the paper source archive. |
@@ -86,21 +96,21 @@ The implementation reads the following environment variables:
 Use this path when the goal is to check that the artifact contains the same data used by the paper.
 
 ```powershell
+npm run export-operations-jsonl
+npm run preflight:experiments
 python scripts/verify_artifact_tables.py
-python scripts/build_rq_analysis_report.py
-python scripts/build_rq3_generic_feedback_report.py --output-dir results/rq3_generic_feedback_report_check
-python scripts/generate_use_strong_114.py --out-dir results/ocltsvm_sanity_check_114_strong_check
+python scripts/build_rq3_generic_feedback_report.py
+python scripts/generate_use_strong_114.py --run-use
 ```
 
 Expected outputs:
 
-- `results/analysis_report/rq_analysis_report.md`
-- `results/analysis_report/rq1_syntax_validity_summary.csv`
-- `results/analysis_report/rq2_execution_success_summary.csv`
-- Console output from `scripts/verify_artifact_tables.py` summarizing RQ1/RQ2/RQ3 directly from `results/`.
-- `results/rq3_generic_feedback_report_check/rq3_generic_feedback_by_model.csv`
-- `results/ocltsvm_sanity_check_114_strong_check/manifest.csv`
-- `results/ocltsvm_sanity_check_114_strong_check/summary.json`
+- A successful 114-operation input audit with 114 unique input hashes.
+- A preflight report showing the frozen input/prompt hashes, isolated v5 result count, and excluded legacy-file count.
+- Console output from `scripts/verify_artifact_tables.py` summarizing RQ1/RQ2/RQ3 only from `results/contractgen-study-v6/`.
+- `results/contractgen-study-v6/reports/rq3_generic_feedback/rq3_generic_feedback_by_model.csv`
+- `results/contractgen-study-v6/validation/use_strong_114/manifest.csv`
+- `results/contractgen-study-v6/validation/use_strong_114/summary.json`
 
 The paper tables are derived from the raw and summarized result folders under `results/`; no separate table snapshot directory is required. The regenerated `*_check` directories are useful sanity checks and should not be treated as new experiment runs unless the manuscript is intentionally updated.
 
@@ -126,13 +136,8 @@ The implementation-only GitHub repository does not need to include the paper sou
 
 Evidence:
 
-- `results/rq_*_full_oracle_fixed/`
-- `results/baseline_llm_only/`
-- `results/codex_prompt_style/`
-- `results/pathocl_style/`
-- `results/*/summary.json`
-- `results/*/rq1_syntax_validity_by_model.csv`
-- `results/*/rq2_execution_success_by_model.csv`
+- `results/contractgen-study-v6/contract_gen/full_feedback/`
+- `results/contractgen-study-v6/baselines/`
 
 Analysis command:
 
@@ -146,26 +151,22 @@ The key paper-level comparison is the syntax-validity rate across reproduced bas
 
 Evidence:
 
-- `results/rq_*_full_oracle_fixed/`
-- `results/baseline_llm_only/`
-- `results/codex_prompt_style/`
-- `results/pathocl_style/`
-- `results/ocltsvm_sanity_check_114_strong/summary.json`
-- `results/*/summary.json`
-- `results/*/rq2_execution_success_by_model.csv`
+- `results/contractgen-study-v6/contract_gen/full_feedback/`
+- `results/contractgen-study-v6/baselines/`
+- `results/contractgen-study-v6/validation/use_strong_114/summary.json`
 
 The USE sanity check is an external agreement check for generated definition and precondition clauses. It does not claim full post-state equivalence because USE invariants do not directly model operation postconditions involving `oclIsNew`, `@pre`, mutation, and result values.
 
 To regenerate the USE artifacts without running USE:
 
 ```powershell
-python scripts/generate_use_strong_114.py --out-dir results/ocltsvm_sanity_check_114_strong_check
+python scripts/generate_use_strong_114.py
 ```
 
 To also run USE, provide a USE executable:
 
 ```powershell
-python scripts/generate_use_strong_114.py --run-use --use-bat tools/use-7.5.0/bin/use.bat --out-dir results/ocltsvm_sanity_check_114_strong_check
+python scripts/generate_use_strong_114.py --run-use --use-bat tools/use-7.5.0/bin/use.bat
 ```
 
 Expected paper result from the included run:
@@ -178,17 +179,14 @@ Expected paper result from the included run:
 
 Evidence:
 
-- `results/rq3_ablation_no_feedback/`
-- `results/rq3_ablation_generic_feedback/`
-- `results/rq3_ablation_single_agent_full_feedback/`
-- `results/rq_*_full_oracle_fixed/`
-- `results/*/attempts.jsonl`
+- `results/contractgen-study-v6/contract_gen/{no_feedback,generic_feedback,full_feedback}/`
+- `results/contractgen-study-v6/ablations/end_to_end_full_feedback/`
 
 Paper-level interpretation:
 
 - Generic failure notices improve over no feedback.
 - Full localized diagnostics improve further.
-- The staged Contract Gen architecture reaches useful results with far fewer attempts than the single-agent full-diagnostic setting, even though the single-agent setting has a slightly higher final Pass@5 in the current gpt-5.4 run.
+- The staged Contract Gen architecture reaches useful results with far fewer attempts than end-to-end full-feedback generation, even though the end-to-end variant has a slightly higher final Pass@5 in the current GPT-5.4 run. Both treatments use one LLM; this comparison isolates pipeline structure rather than agent count.
 
 ## 7. Full Experiment Re-run Notes
 
@@ -197,12 +195,26 @@ Full LLM experiments are intentionally separated from table reproduction because
 | Experiment | Script |
 | --- | --- |
 | Contract Gen full-diagnostic runs | `script/run_rq1_validity_experiments.py` |
+| End-to-end full-feedback pipeline ablation | `script/run_rq3_end_to_end_full_feedback.py` |
 | PureLLM baseline | `script/run_baseline_llm_only.py` |
 | CodexPrompt-style baseline | `script/run_codex_prompt_style_baseline.py` |
 | PathOCL-style baseline | `script/run_pathocl_style_baseline.py` |
 | Baseline batch helper | `scripts/run_baseline_llm_batch.ps1` |
 
 Before re-running, record the model provider, model identifier, temperature/top-p/seed if available, date, and API endpoint version. These details matter because LLM services can change over time.
+Run `npm run export-operations-jsonl` and then `npm run preflight:experiments` before issuing model calls. The Contract Gen runner defaults to `--backend next`; its `direct` backend is a prompt-level diagnostic path and is not the treatment reported in the paper.
+All experiment runners require `contractgen-operation-input-v2`, verify oracle isolation, and reject an existing result directory whose input, manifest prompt, method prompt, feedback, or graph configuration does not match the current run.
+Current defaults use isolated subdirectories under `results/contractgen-study-v6/`. `--force` refuses to delete legacy or foreign records; choose a new output directory when the study marker or configuration differs.
+Each new result row records both the frozen manifest hashes and the version/hash of the actual method-specific prompt sent to the model; comparisons with mismatched hashes are invalid.
+
+Each manifest row also records an `oracle_id`, a `requirement_group_id`, and a
+Boolean `has_return_value`. These fields link an operation-context instance to its
+Jest oracle, identify repeated requirement text across different contexts, and make
+void operations explicit. Main results use all 114 instances. The runner additionally
+writes `rq1_syntax_validity_by_evaluation_unit.csv` and
+`rq2_execution_success_by_evaluation_unit.csv`; their strict requirement-level rows
+count a requirement as successful only when every context instance in the group
+succeeds.
 
 For a local implementation smoke test:
 
@@ -222,11 +234,11 @@ The current manuscript is based on the following result families:
 | Result family | Artifact source |
 | --- | --- |
 | Dataset summary | `data/operations.jsonl` |
-| RQ1 validity | `results/rq_*_full_oracle_fixed/`, `results/baseline_llm_only/`, `results/codex_prompt_style/`, `results/pathocl_style/` |
+| RQ1 validity | `results/contractgen-study-v6/contract_gen/full_feedback/` and `results/contractgen-study-v6/baselines/` |
 | RQ2 execution success | Same result folders plus execution summaries and attempts logs. |
-| External USE funnel | `results/ocltsvm_sanity_check_114_strong/summary.json` |
-| RQ3 feedback specificity | `results/rq3_ablation_no_feedback/`, `results/rq3_ablation_generic_feedback/`, `results/rq_*_full_oracle_fixed/` |
-| RQ3 architecture ablation | `results/rq3_ablation_single_agent_full_feedback/`, `results/rq_gpt_5_4_full_oracle_fixed/` |
+| External USE funnel | `results/contractgen-study-v6/validation/use_strong_114/summary.json` |
+| RQ3 feedback specificity | `results/contractgen-study-v6/contract_gen/{no_feedback,generic_feedback,full_feedback}/` |
+| RQ3 pipeline-structure ablation | `results/contractgen-study-v6/ablations/end_to_end_full_feedback/` and the full-feedback Contract Gen run |
 
 ## 9. Known Limitations
 

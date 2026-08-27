@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {
+          definition:
+          user:User = User.allInstances()->any(u:User | u.UserID = uid), applicableLoans:Set(Loan) = Loan.allInstances()->select(l:Loan | l.LoanedUser = user and l.IsReturned = true and l.OverDueFee > 0.0), totalFee:Real = applicableLoans.OverDueFee->sum()
+            precondition:
+          User.allInstances()->exists(u:User | u.UserID = uid) and applicableLoans->notEmpty() and fee >= totalFee
+            postcondition:
+          user.OverDueFee = 0.0 and applicableLoans->forAll(l:Loan | l.OverDueFee = 0.0) and result = true
+            
+        }

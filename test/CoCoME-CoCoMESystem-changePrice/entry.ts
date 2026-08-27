@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class CoCoMESystem {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the item with provided barcode,
-   *if the item exists,
-   *the item price is new price*/
+  /*Definition: The changePrice operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   changePrice(barcode: number, newPrice: number): boolean {
     /*Definition Start*/
-    let item: Item = l({
-      logic: () =>
-        getRepository(Item).find(
-          (i: Item) =>
-            l({
-              logic: () => i.Barcode === barcode,
-              description: 'i.Barcode=barcode',
-            }).build().pass
-        ),
-      description: 'Item.allInstance()->any(i:Item|i.Barcode=barcode)',
-    }).build().pass;
+    let item: Item = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Item).find(
+              (i: Item) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(i.Barcode, barcode),
+                  description: 'i.Barcode=barcode',
+                }).build().pass
+            ),
+          description: 'Item.allInstances()->any(i:Item|i.Barcode=barcode)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(item) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(item), false),
       description: 'item.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -221,17 +232,42 @@ class CoCoMESystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (item.Price = newPrice),
-      description: 'item.Price=newPrice',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (item.Price = newPrice),
+        description: 'item.Price=newPrice',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(item.Price, newPrice),
+        description: 'item.Price=newPrice',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMESystem};

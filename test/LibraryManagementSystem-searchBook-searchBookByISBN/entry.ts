@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,7 +238,9 @@ export {
 };
 
 class SearchBook {
-  /*The user searches for a book by its ISBN number.*/
+  /*Definition: The searchBookByISBN operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   searchBookByISBN(iSBNnumber: string): Book[] {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
@@ -242,19 +252,49 @@ class SearchBook {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () =>
-        getRepository(Book).filter(
-          (book: Book) =>
-            l({
-              logic: () => book.ISBn === iSBNnumber,
-              description: 'book.ISBn=iSBNnumber',
-            }).build().pass
-        ),
-      description: 'result=Book.allInstance()->select(book:Book|book.ISBn=iSBNnumber)',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () =>
+          getRepository(Book).filter(
+            (book: Book) =>
+              l({
+                logic: () => StandardOPs.oclEquals(book.ISBn, iSBNnumber),
+                description: 'book.ISBn=iSBNnumber',
+              }).build().pass
+          ),
+        description: 'result=Book.allInstances()->select(book:Book|book.ISBn=iSBNnumber)',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(
+            result,
+            getRepository(Book).filter(
+              (book: Book) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(book.ISBn, iSBNnumber),
+                  description: 'book.ISBn=iSBNnumber',
+                }).build().pass
+            )
+          ),
+        description: 'result=Book.allInstances()->select(book:Book|book.ISBn=iSBNnumber)',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {SearchBook};

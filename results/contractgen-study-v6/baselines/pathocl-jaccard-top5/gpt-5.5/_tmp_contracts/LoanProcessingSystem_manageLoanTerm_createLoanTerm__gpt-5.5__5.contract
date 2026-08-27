@@ -1,0 +1,12 @@
+Contract ManageLoanTermCRUDService::createLoanTerm(itemid:Integer,content:String): Boolean {
+          precondition:
+          LoanTerm.allInstances()->forAll(lt | lt.itemid <> itemid)
+            postcondition:
+          LoanTerm.allInstances()->exists(lt |
+        lt.oclIsNew() and
+        lt.itemid = itemid and
+        lt.content = content
+    ) and
+result = true
+            
+        }

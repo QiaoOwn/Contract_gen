@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -151,25 +159,30 @@ export {
 };
 
 class ManageLoanTermCRUDService {
-  /*find a loan term which id is the term id, if exist, update the term id and content to this load term*/
+  /*Definition: The modifyLoanTerm operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   modifyLoanTerm(itemid: number, content: string): boolean {
     /*Definition Start*/
-    let loanterm: LoanTerm = l({
-      logic: () =>
-        getRepository(LoanTerm).find(
-          (loa: LoanTerm) =>
-            l({
-              logic: () => loa.ItemID === itemid,
-              description: 'loa.ItemID=itemid',
-            }).build().pass
-        ),
-      description: 'LoanTerm.allInstance()->any(loa:LoanTerm|loa.ItemID=itemid)',
-    }).build().pass;
+    let loanterm: LoanTerm = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(LoanTerm).find(
+              (loa: LoanTerm) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(loa.ItemID, itemid),
+                  description: 'loa.ItemID=itemid',
+                }).build().pass
+            ),
+          description: 'LoanTerm.allInstances()->any(loa:LoanTerm|loa.ItemID=itemid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(loanterm) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(loanterm), false),
       description: 'loanterm.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -177,21 +190,50 @@ class ManageLoanTermCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (loanterm.ItemID = itemid),
-      description: 'loanterm.ItemID=itemid',
-    })
-      .and({
-        execute: () => (loanterm.Content = content),
-        description: 'loanterm.Content=content',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (loanterm.ItemID = itemid),
+        description: 'loanterm.ItemID=itemid',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+        .and({
+          execute: () => (loanterm.Content = content),
+          description: 'loanterm.Content=content',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(loanterm.ItemID, itemid),
+        description: 'loanterm.ItemID=itemid',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(loanterm.Content, content),
+          description: 'loanterm.Content=content',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageLoanTermCRUDService};

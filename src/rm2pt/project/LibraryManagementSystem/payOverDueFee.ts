@@ -19,8 +19,8 @@ const operations = [
       new Parameter({name: 'fee', type: 'Real'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `user:User = User.allInstance()->any(u:User | u.UserID = uid),
-			loans:Set(Loan) = Loan.allInstance()->select(l:Loan | l.LoanedUser = user and l.DueDate.isBefore(Today)and l.IsReturned = true and l.OverDueFee > 0)`,
+    definition: `user:User = User.allInstances()->any(u:User | u.UserID = uid),
+			loans:Set(Loan) = Loan.allInstances()->select(l:Loan | l.LoanedUser = user and l.DueDate.isBefore(Today)and l.IsReturned = true and l.OverDueFee > 0)`,
     precondition: `user.oclIsUndefined() = false and
 			loans.notEmpty() and
 			fee >= user.OverDueFee`,

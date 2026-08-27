@@ -1,9 +1,0 @@
-Contract RepairService::feedback(id:Integer,sid:Integer,score:Integer,des:String): Boolean {
-          definition:
-          rep:Repair = Repair.allInstance()->any(r:Repair|r.Id=id), sta:Staff = Staff.allInstance()->any(s:Staff|s.Id=sid)
-            precondition:
-          rep.oclIsUndefined() = false and sta.oclIsUndefined() = false and rep.RaiseStaff = sta and sta.Role = 1 and rep.Process = 3
-            postcondition:
-          let r:Repair in r.oclIsNew() = false and r.Score = score and (score >= 4 implies r.Close = true) and (score < 4 implies r.Close = false) and r.Description = des and result = true
-            
-        }

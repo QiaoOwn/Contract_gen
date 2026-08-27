@@ -25,7 +25,7 @@ const operations = [
       new Parameter({name: 'isopened', type: 'Boolean'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)`,
+    definition: `cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)`,
     precondition: `cashdesk.oclIsUndefined() = true`,
     postcondition: `
 let cas:CashDesk in
@@ -33,7 +33,7 @@ cas.oclIsNew() and
 cas.Id = id and
 cas.Name = name and
 cas.IsOpened = isopened and
-CashDesk.allInstance()->includes(cas) and
+CashDesk.allInstances()->includes(cas) and
 result = true`,
   }),
   new Operation({
@@ -43,7 +43,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('CashDesk'),
-    definition: `cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)`,
+    definition: `cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)`,
     precondition: `cashdesk.oclIsUndefined() = false`,
     postcondition: `result = cashdesk`,
   }),
@@ -58,7 +58,7 @@ result = true`,
       new Parameter({name: 'isopened', type: 'Boolean'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)`,
+    definition: `cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)`,
     precondition: `cashdesk.oclIsUndefined() = false`,
     postcondition: `
 cashdesk.Id = id and
@@ -73,12 +73,12 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `cashdesk:CashDesk = CashDesk.allInstance()->any(cas:CashDesk | cas.Id = id)`,
+    definition: `cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)`,
     precondition: `
 cashdesk.oclIsUndefined() = false and
-CashDesk.allInstance()->includes(cashdesk)`,
+CashDesk.allInstances()->includes(cashdesk)`,
     postcondition: `
-CashDesk.allInstance()->excludes(cashdesk) and
+CashDesk.allInstances()->excludes(cashdesk) and
 result = true`,
   }),
 ];

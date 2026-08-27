@@ -1,6 +1,12 @@
 import {AutomatedTellerMachineSystem, BankCard, CardStatus, getRepository} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('AutomatedTellerMachine/AutomatedTellerMachineSystem/ejectCard', () => {
-  it('Happy Path', () => {
+  beforeEach(() => {
+    clearRepositories(getRepository(BankCard));
+  });
+
+  it('Happy Path: clears session and transaction state', () => {
     const service = new AutomatedTellerMachineSystem();
     const card = new BankCard();
     card.CardID = 1;
@@ -11,6 +17,10 @@ describe('AutomatedTellerMachine/AutomatedTellerMachineSystem/ejectCard', () => 
     service.InputCard = card;
     service.CardIDValidated = true;
     service.PasswordValidated = true;
+    service.IsWithdraw = true;
+    service.IsDeposit = true;
+    service.WithdrawedNumber = 50;
+    service.DepositedNumber = 100;
     const result = service.ejectCard();
     expect(result).toBe(true);
     expect(service.InputCard).toBeUndefined();
@@ -20,5 +30,16 @@ describe('AutomatedTellerMachine/AutomatedTellerMachineSystem/ejectCard', () => 
     expect(service.IsDeposit).toBe(false);
     expect(service.WithdrawedNumber).toBe(0);
     expect(service.DepositedNumber).toBe(0);
+    expect(getRepository(BankCard)).toContain(card);
+  });
+
+  it('rejects when session is not authenticated', () => {
+    const service = new AutomatedTellerMachineSystem();
+    const card = new BankCard();
+    service.InputCard = card;
+    service.CardIDValidated = false;
+    service.PasswordValidated = false;
+    expectPreconditionRejected(() => service.ejectCard());
+    expect(service.InputCard).toBe(card);
   });
 });

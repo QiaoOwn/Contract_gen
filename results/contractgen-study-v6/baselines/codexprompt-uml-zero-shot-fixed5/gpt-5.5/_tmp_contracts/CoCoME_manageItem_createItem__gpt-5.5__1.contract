@@ -1,0 +1,13 @@
+Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
+          precondition:
+          Item.allInstances()->forAll(i | i.Barcode <> barcode)
+            postcondition:
+          let newItem : Item = Item.allInstances()->any(i | i.Barcode = barcode) in
+    newItem.Barcode = barcode and
+    newItem.Name = name and
+    newItem.Price = price and
+    newItem.StockNumber = stocknumber and
+    newItem.OrderPrice = orderprice and
+    result = true
+            
+        }

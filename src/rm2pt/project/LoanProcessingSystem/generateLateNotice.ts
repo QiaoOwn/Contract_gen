@@ -16,7 +16,7 @@ const operations: Operation[] = [
   //   description: `find all the loans with the status is ls open and today is after the loan current over due date,
   //   if the loans exist,
   //   send email to all these loans refered request email with the title ""OverDued"" and the content "You are overdued, please repayment ASAP"`,
-  //   definition: `loans:Set(Loan) = Loan.allInstance()->select(loa:Loan | loa.Status = LoanStatus::LSOPEN and Today.isAfter(loa.CurrentOverDueDate))`,
+  //   definition: `loans:Set(Loan) = Loan.allInstances()->select(loa:Loan | loa.Status = LoanStatus::LSOPEN and Today.isAfter(loa.CurrentOverDueDate))`,
   //   precondition: `loans.oclIsUndefined() = false`,
   //   postcondition: `loans->forAll(l:Loan |
   // 			sendEmail(l.ReferedLoanRequest.Email, "OverDued", "You are overdued, please repayment ASAP"))

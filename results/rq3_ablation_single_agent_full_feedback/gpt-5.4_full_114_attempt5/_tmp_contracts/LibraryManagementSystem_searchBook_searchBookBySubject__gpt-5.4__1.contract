@@ -1,8 +1,0 @@
-Contract SearchBook::searchBookBySubject(subject: String): Set(Book) {
-  definition:
-    matchedSubjects:Set(Subject) = Subject.allInstance()->select(s | s.Name = subject), matchedBooks:Set(Book) = Book.allInstance()->select(b | b.Subject->exists(s | s.Name = subject))
-  precondition:
-    subject.oclIsTypeOf(String) and matchedSubjects.isEmpty() = false
-  postcondition:
-    result = matchedBooks
-}

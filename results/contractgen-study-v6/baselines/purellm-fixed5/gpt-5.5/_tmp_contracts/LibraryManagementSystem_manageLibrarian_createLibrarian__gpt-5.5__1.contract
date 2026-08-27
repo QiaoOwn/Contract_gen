@@ -1,0 +1,7 @@
+Contract ManageLibrarianCRUDService::createLibrarian(librarianid:String,name:String,password:String): Boolean {
+          precondition:
+          Librarian.allInstances()->forAll(l:Librarian | l.LibrarianID <> librarianid)
+            postcondition:
+          let newLibrarian:Librarian in newLibrarian.oclIsNew() and Librarian.allInstances()->includes(newLibrarian) and newLibrarian.LibrarianID = librarianid and newLibrarian.Name = name and newLibrarian.Password = password and result = true
+            
+        }

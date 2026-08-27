@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,100 +238,124 @@ export {
 };
 
 class LibraryManagementSystemSystem {
-  /*The librarian renews a book for a user, extending the loan period by a predefined amount.*/
+  /*Definition: The renewBook operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   renewBook(uid: string, barcode: string): boolean {
+    /*OCL Invocation Environment*/
+    const oclInvocationTime = dayjs();
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (u: User) =>
-            l({
-              logic: () => u.UserID === uid,
-              description: 'u.UserID=uid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(u:User|u.UserID=uid)',
-    }).build().pass;
-    let stu: Student = l({
-      logic: () =>
-        getRepository(Student).find(
-          (s: Student) =>
-            l({
-              logic: () => s.UserID === uid,
-              description: 's.UserID=uid',
-            }).build().pass
-        ),
-      description: 'Student.allInstance()->any(s:Student|s.UserID=uid)',
-    }).build().pass;
-    let fac: Faculty = l({
-      logic: () =>
-        getRepository(Faculty).find(
-          (f: Faculty) =>
-            l({
-              logic: () => f.UserID === uid,
-              description: 'f.UserID=uid',
-            }).build().pass
-        ),
-      description: 'Faculty.allInstance()->any(f:Faculty|f.UserID=uid)',
-    }).build().pass;
-    let copy: BookCopy = l({
-      logic: () =>
-        getRepository(BookCopy).find(
-          (bc: BookCopy) =>
-            l({
-              logic: () => bc.Barcode === barcode,
-              description: 'bc.Barcode=barcode',
-            })
-              .and({
-                logic: () => bc.Status === CopyStatus.LOANED,
-                description: 'bc.Status=CopyStatus::LOANED',
-              })
-              .build().pass
-        ),
-      description:
-        'BookCopy.allInstance()->any(bc:BookCopy|bc.Barcode=barcodeandbc.Status=CopyStatus::LOANED)',
-    }).build().pass;
-    let loan: Loan = l({
-      logic: () =>
-        getRepository(Loan).find(
-          (_l: Loan) =>
-            l({
-              logic: () => _l.LoanedUser === user,
-              description: 'l.LoanedUser=user',
-            })
-              .and({
-                logic: () => _l.LoanedCopy === copy,
-                description: 'l.LoanedCopy=copy',
-              })
-              .build().pass
-        ),
-      description: 'Loan.allInstance()->any(l:Loan|l.LoanedUser=userandl.LoanedCopy=copy)',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (u: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.UserID, uid),
+                  description: 'u.UserID=uid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(u:User|u.UserID=uid)',
+        }).build().pass
+    );
+    let stu: Student = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Student).find(
+              (s: Student) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(s.UserID, uid),
+                  description: 's.UserID=uid',
+                }).build().pass
+            ),
+          description: 'Student.allInstances()->any(s:Student|s.UserID=uid)',
+        }).build().pass
+    );
+    let fac: Faculty = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Faculty).find(
+              (f: Faculty) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(f.UserID, uid),
+                  description: 'f.UserID=uid',
+                }).build().pass
+            ),
+          description: 'Faculty.allInstances()->any(f:Faculty|f.UserID=uid)',
+        }).build().pass
+    );
+    let copy: BookCopy = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(BookCopy).find(
+              (bc: BookCopy) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(bc.Barcode, barcode),
+                  description: 'bc.Barcode=barcode',
+                })
+                  .and({
+                    logic: () => StandardOPs.oclEquals(bc.Status, CopyStatus.LOANED),
+                    description: 'bc.Status=CopyStatus::LOANED',
+                  })
+                  .build().pass
+            ),
+          description:
+            'BookCopy.allInstances()->any(bc:BookCopy|bc.Barcode=barcodeandbc.Status=CopyStatus::LOANED)',
+        }).build().pass
+    );
+    let loan: Loan = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Loan).find(
+              (_l: Loan) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(_l.LoanedUser, user),
+                  description: 'l.LoanedUser=user',
+                })
+                  .and({
+                    logic: () => StandardOPs.oclEquals(_l.LoanedCopy, copy),
+                    description: 'l.LoanedCopy=copy',
+                  })
+                  .and({
+                    logic: () => StandardOPs.oclEquals(_l.IsReturned, false),
+                    description: 'l.IsReturned=false',
+                  })
+                  .build().pass
+            ),
+          description:
+            'Loan.allInstances()->any(l:Loan|l.LoanedUser=userandl.LoanedCopy=copyandl.IsReturned=false)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => user.BorrowStatus === BorrowStatus.NORMAL,
+      logic: () => StandardOPs.oclEquals(user.BorrowStatus, BorrowStatus.NORMAL),
       description: 'user.BorrowStatus=BorrowStatus::NORMAL',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(user) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), false),
         description: 'user.oclIsUndefined()=false',
       })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(copy) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(copy), false),
         description: 'copy.oclIsUndefined()=false',
       })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(loan) === false,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(loan), false),
         description: 'loan.oclIsUndefined()=false',
       })
       .and({
-        logic: () => copy.IsReserved === false,
+        logic: () => StandardOPs.oclEquals(copy.IsReserved, false),
         description: 'copy.IsReserved=false',
       })
       .and({
-        logic: () => dayjs(loan.DueDate).isAfter(dayjs(), 'd'),
+        logic: () => dayjs(loan.DueDate).isAfter(oclInvocationTime.startOf('day'), 'd'),
         description: 'loan.DueDate.isAfter(Today)',
       })
       .if({
@@ -343,7 +375,7 @@ class LibraryManagementSystemSystem {
         }),
       })
       .and({
-        logic: () => loan.OverDueFee === 0,
+        logic: () => StandardOPs.oclEquals(loan.OverDueFee, 0),
         description: 'loan.OverDueFee=0',
       })
       .build();
@@ -352,61 +384,150 @@ class LibraryManagementSystemSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (loan.RenewedTimes = loan.RenewedTimes + 1),
-      description: 'loan.RenewedTimes=loan.RenewedTimes@pre+1',
-    })
-      .and({
-        execute: () => (loan.RenewDate = dayjs()),
-        description: 'loan.RenewDate=Today',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (loan.RenewedTimes = oclState.preValue(loan, 'RenewedTimes') + 1),
+        description: 'loan.RenewedTimes=loan.RenewedTimes@pre+1',
       })
-      .if({
-        logic: () =>
-          l({
-            logic: () => StandardOPs.oclIsTypeOf(user, Student),
-            description: 'user.oclIsTypeOf(Student)',
-          }),
-        description: 'user.oclIsTypeOf(Student)',
-        then: l().if({
+        .and({
+          execute: () => (loan.RenewDate = oclInvocationTime.startOf('day')),
+          description: 'loan.RenewDate=Today',
+        })
+        .if({
           logic: () =>
             l({
-              logic: () => stu.Programme === Programme.BACHELOR,
-              description: 'stu.Programme=Programme::BACHELOR',
+              logic: () => StandardOPs.oclIsTypeOf(user, Student),
+              description: 'user.oclIsTypeOf(Student)',
             }),
-          description: 'stu.Programme=Programme::BACHELOR',
-          then: l({
-            execute: () => (loan.DueDate = dayjs(loan.DueDate).add(20, 'd')),
-            description: 'loan.DueDate=loan.DueDate@pre.After(20)',
-          }),
-          else: l().if({
+          description: 'user.oclIsTypeOf(Student)',
+          then: l().if({
             logic: () =>
               l({
-                logic: () => stu.Programme === Programme.MASTER,
-                description: 'stu.Programme=Programme::MASTER',
+                logic: () => StandardOPs.oclEquals(stu.Programme, Programme.BACHELOR),
+                description: 'stu.Programme=Programme::BACHELOR',
               }),
-            description: 'stu.Programme=Programme::MASTER',
+            description: 'stu.Programme=Programme::BACHELOR',
             then: l({
-              execute: () => (loan.DueDate = dayjs(loan.DueDate).add(40, 'd')),
-              description: 'loan.DueDate=loan.DueDate@pre.After(40)',
+              execute: () =>
+                (loan.DueDate = dayjs(oclState.preValue(loan, 'DueDate')).add(20, 'd')),
+              description: 'loan.DueDate=loan.DueDate@pre.After(20)',
             }),
-            else: l({
-              execute: () => (loan.DueDate = dayjs(loan.DueDate).add(60, 'd')),
-              description: 'loan.DueDate=loan.DueDate@pre.After(60)',
+            else: l().if({
+              logic: () =>
+                l({
+                  logic: () => StandardOPs.oclEquals(stu.Programme, Programme.MASTER),
+                  description: 'stu.Programme=Programme::MASTER',
+                }),
+              description: 'stu.Programme=Programme::MASTER',
+              then: l({
+                execute: () =>
+                  (loan.DueDate = dayjs(oclState.preValue(loan, 'DueDate')).add(40, 'd')),
+                description: 'loan.DueDate=loan.DueDate@pre.After(40)',
+              }),
+              else: l({
+                execute: () =>
+                  (loan.DueDate = dayjs(oclState.preValue(loan, 'DueDate')).add(60, 'd')),
+                description: 'loan.DueDate=loan.DueDate@pre.After(60)',
+              }),
             }),
           }),
-        }),
-        else: l({
-          execute: () => (loan.DueDate = dayjs(loan.DueDate).add(60, 'd')),
-          description: 'loan.DueDate=loan.DueDate@pre.After(60)',
-        }),
+          else: l({
+            execute: () => (loan.DueDate = dayjs(oclState.preValue(loan, 'DueDate')).add(60, 'd')),
+            description: 'loan.DueDate=loan.DueDate@pre.After(60)',
+          }),
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(loan.RenewedTimes, oclState.preValue(loan, 'RenewedTimes') + 1),
+        description: 'loan.RenewedTimes=loan.RenewedTimes@pre+1',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(loan.RenewDate, oclInvocationTime.startOf('day')),
+          description: 'loan.RenewDate=Today',
+        })
+        .if({
+          logic: () =>
+            l({
+              logic: () => StandardOPs.oclIsTypeOf(user, Student),
+              description: 'user.oclIsTypeOf(Student)',
+            }),
+          description: 'user.oclIsTypeOf(Student)',
+          then: l().if({
+            logic: () =>
+              l({
+                logic: () => StandardOPs.oclEquals(stu.Programme, Programme.BACHELOR),
+                description: 'stu.Programme=Programme::BACHELOR',
+              }),
+            description: 'stu.Programme=Programme::BACHELOR',
+            then: l({
+              logic: () =>
+                StandardOPs.oclEquals(
+                  loan.DueDate,
+                  dayjs(oclState.preValue(loan, 'DueDate')).add(20, 'd')
+                ),
+              description: 'loan.DueDate=loan.DueDate@pre.After(20)',
+            }),
+            else: l().if({
+              logic: () =>
+                l({
+                  logic: () => StandardOPs.oclEquals(stu.Programme, Programme.MASTER),
+                  description: 'stu.Programme=Programme::MASTER',
+                }),
+              description: 'stu.Programme=Programme::MASTER',
+              then: l({
+                logic: () =>
+                  StandardOPs.oclEquals(
+                    loan.DueDate,
+                    dayjs(oclState.preValue(loan, 'DueDate')).add(40, 'd')
+                  ),
+                description: 'loan.DueDate=loan.DueDate@pre.After(40)',
+              }),
+              else: l({
+                logic: () =>
+                  StandardOPs.oclEquals(
+                    loan.DueDate,
+                    dayjs(oclState.preValue(loan, 'DueDate')).add(60, 'd')
+                  ),
+                description: 'loan.DueDate=loan.DueDate@pre.After(60)',
+              }),
+            }),
+          }),
+          else: l({
+            logic: () =>
+              StandardOPs.oclEquals(
+                loan.DueDate,
+                dayjs(oclState.preValue(loan, 'DueDate')).add(60, 'd')
+              ),
+            description: 'loan.DueDate=loan.DueDate@pre.After(60)',
+          }),
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {LibraryManagementSystemSystem};

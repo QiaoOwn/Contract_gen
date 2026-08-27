@@ -23,13 +23,13 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition:
-      'loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)',
+      'loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)',
     precondition: 'loanterm.oclIsUndefined() = true',
     postcondition: `let loa:LoanTerm in
 			loa.oclIsNew() and
 			loa.ItemID = itemid and
 			loa.Content = content and
-			LoanTerm.allInstance()->includes(loa) and
+			LoanTerm.allInstances()->includes(loa) and
 			result = true`,
   }),
   new Operation({
@@ -39,7 +39,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'itemid', type: 'Integer'})],
     returnType: new ReturnedType('LoanTerm'),
-    definition: `loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)`,
+    definition: `loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)`,
     precondition: `loanterm.oclIsUndefined() = false`,
     postcondition: `result = loanterm`,
   }),
@@ -53,7 +53,7 @@ const operations = [
       new Parameter({name: 'content', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)`,
+    definition: `loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)`,
     precondition: `loanterm.oclIsUndefined() = false`,
     postcondition: `loanterm.ItemID = itemid and
 			loanterm.Content = content and
@@ -66,9 +66,9 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'itemid', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `loanterm:LoanTerm = LoanTerm.allInstance()->any(loa:LoanTerm | loa.ItemID = itemid)`,
+    definition: `loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)`,
     precondition: `loanterm.oclIsUndefined() = false`,
-    postcondition: `LoanTerm.allInstance()->excludes(loanterm) and
+    postcondition: `LoanTerm.allInstances()->excludes(loanterm) and
 			result = true`,
   }),
 ];

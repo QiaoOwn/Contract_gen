@@ -1,9 +1,0 @@
-Contract EvaluateLoanRequestModule::approveLoanRequest(): Boolean {
-          definition:
-          currentRequest:LoanRequest = self.CurrentLoanRequest
-            precondition:
-          currentRequest.oclIsUndefined() = false and currentRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and currentRequest.RequestID > 0 and currentRequest.LoanAmount > 0 and currentRequest.Income > 0 and currentRequest.CreditScore > 0 and currentRequest.RequestedCAHistory.oclIsUndefined() = false and currentRequest.RequestedCreditHistory.oclIsUndefined() = false and currentRequest.ApprovalLoan.oclIsUndefined() = false
-            postcondition:
-          currentRequest.Status = LoanRequestStatus::APPROVED and currentRequest.ApprovalLoan.Status = LoanStatus::LSOPEN and currentRequest.ApprovalLoan.ReferedLoanRequest = currentRequest and result = true
-            
-        }

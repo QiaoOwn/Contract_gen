@@ -1,9 +1,0 @@
-Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {
-          definition:
-          order:OrderProduct = OrderProduct.allInstance()->any(o:OrderProduct|o.Id=orderID), items:Set(Item) = Item.allInstance()->select(i:Item|i.BelongedCatalog.ContainedItems->includes(i))
-            precondition:
-          order.oclIsUndefined() = false and order.OrderStatus = OrderProduct::NEW and items.isEmpty() = false
-            postcondition:
-          order.OrderStatus = OrderProduct::RECEIVED and result = true
-            
-        }

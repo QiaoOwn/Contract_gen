@@ -25,7 +25,7 @@ const operations = [
       new Parameter({name: 'orderprice', type: 'Real'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)`,
     precondition: `item.oclIsUndefined() = true`,
     postcondition: `
 let ite:Item in
@@ -35,7 +35,7 @@ ite.Name = name and
 ite.Price = price and
 ite.StockNumber = stocknumber and
 ite.OrderPrice = orderprice and
-Item.allInstance()->includes(ite) and
+Item.allInstances()->includes(ite) and
 result = true`,
   }),
   new Operation({
@@ -45,7 +45,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'barcode', type: 'Integer'})],
     returnType: new ReturnedType('Item'),
-    definition: `item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)`,
     precondition: `item.oclIsUndefined() = false`,
     postcondition: `result = item`,
   }),
@@ -62,7 +62,7 @@ result = true`,
       new Parameter({name: 'orderprice', type: 'Real'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)`,
     precondition: `item.oclIsUndefined() = false`,
     postcondition: `
 item.Barcode = barcode and
@@ -79,12 +79,12 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'barcode', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `item:Item = Item.allInstance()->any(ite:Item | ite.Barcode = barcode)`,
+    definition: `item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)`,
     precondition: `
 item.oclIsUndefined() = false and
-Item.allInstance()->includes(item)`,
+Item.allInstances()->includes(item)`,
     postcondition: `
-Item.allInstance()->excludes(item) and
+Item.allInstances()->excludes(item) and
 result = true`,
   }),
 ];

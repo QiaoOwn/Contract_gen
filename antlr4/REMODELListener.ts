@@ -1,4 +1,4 @@
-// Generated from ./antlr4/REMODEL.g4 by ANTLR 4.13.2
+// Generated from REMODEL.g4 by ANTLR 4.13.2
 
 import {ParseTreeListener} from 'antlr4';
 
@@ -51,6 +51,10 @@ import {RuleEnumEntityContext} from './REMODELParser.js';
 import {RuleEnumItemContext} from './REMODELParser.js';
 import {RuleUSECASE_RELATIONContext} from './REMODELParser.js';
 import {RuleContractContext} from './REMODELParser.js';
+import {RuleStandaloneContractContext} from './REMODELParser.js';
+import {RuleStandaloneDefinitionContext} from './REMODELParser.js';
+import {RuleStandalonePreconditionContext} from './REMODELParser.js';
+import {RuleStandalonePostconditionContext} from './REMODELParser.js';
 import {RuleDefinitionContext} from './REMODELParser.js';
 import {RulePreconditionContext} from './REMODELParser.js';
 import {RulePostconditionContext} from './REMODELParser.js';
@@ -87,7 +91,6 @@ import {RuleLetExpCSContext} from './REMODELParser.js';
 import {RuleVariableDeclarationCSContext} from './REMODELParser.js';
 import {RuleLiteralExpCSContext} from './REMODELParser.js';
 import {RuleEnumLiteralExpCSContext} from './REMODELParser.js';
-import {RuleTupleLiteralExpCSContext} from './REMODELParser.js';
 import {RuleCollectionTypeCSContext} from './REMODELParser.js';
 import {RuleCollectionLiteralExpCSContext} from './REMODELParser.js';
 import {RuleCollectionLiteralPartCSContext} from './REMODELParser.js';
@@ -97,15 +100,12 @@ import {RulePrimitiveLiteralExpCSContext} from './REMODELParser.js';
 import {RuleNumberLiteralExpCSContext} from './REMODELParser.js';
 import {RuleIntegerLiteralExpCSContext} from './REMODELParser.js';
 import {RuleRealLiteralExpCSContext} from './REMODELParser.js';
-import {RuleUnlimitedNaturalLiteralExpCSContext} from './REMODELParser.js';
 import {RuleBooleanLiteralExpCSContext} from './REMODELParser.js';
 import {RuleStringLiteralExpCSContext} from './REMODELParser.js';
 import {RuleNullLiteralExpCSContext} from './REMODELParser.js';
-import {RuleInvalidLiteralExpCSContext} from './REMODELParser.js';
 import {RuleFloatContext} from './REMODELParser.js';
 import {RuleCollectionTypeIdentifierCSContext} from './REMODELParser.js';
 import {RulePrimitiveTypeCSContext} from './REMODELParser.js';
-import {RuleOclTypeCSContext} from './REMODELParser.js';
 import {RuleAssociationTypeCSContext} from './REMODELParser.js';
 
 /**
@@ -604,6 +604,46 @@ export default class REMODELListener extends ParseTreeListener {
    */
   exitRuleContract?: (ctx: RuleContractContext) => void;
   /**
+   * Enter a parse tree produced by `REMODELParser.ruleStandaloneContract`.
+   * @param ctx the parse tree
+   */
+  enterRuleStandaloneContract?: (ctx: RuleStandaloneContractContext) => void;
+  /**
+   * Exit a parse tree produced by `REMODELParser.ruleStandaloneContract`.
+   * @param ctx the parse tree
+   */
+  exitRuleStandaloneContract?: (ctx: RuleStandaloneContractContext) => void;
+  /**
+   * Enter a parse tree produced by `REMODELParser.ruleStandaloneDefinition`.
+   * @param ctx the parse tree
+   */
+  enterRuleStandaloneDefinition?: (ctx: RuleStandaloneDefinitionContext) => void;
+  /**
+   * Exit a parse tree produced by `REMODELParser.ruleStandaloneDefinition`.
+   * @param ctx the parse tree
+   */
+  exitRuleStandaloneDefinition?: (ctx: RuleStandaloneDefinitionContext) => void;
+  /**
+   * Enter a parse tree produced by `REMODELParser.ruleStandalonePrecondition`.
+   * @param ctx the parse tree
+   */
+  enterRuleStandalonePrecondition?: (ctx: RuleStandalonePreconditionContext) => void;
+  /**
+   * Exit a parse tree produced by `REMODELParser.ruleStandalonePrecondition`.
+   * @param ctx the parse tree
+   */
+  exitRuleStandalonePrecondition?: (ctx: RuleStandalonePreconditionContext) => void;
+  /**
+   * Enter a parse tree produced by `REMODELParser.ruleStandalonePostcondition`.
+   * @param ctx the parse tree
+   */
+  enterRuleStandalonePostcondition?: (ctx: RuleStandalonePostconditionContext) => void;
+  /**
+   * Exit a parse tree produced by `REMODELParser.ruleStandalonePostcondition`.
+   * @param ctx the parse tree
+   */
+  exitRuleStandalonePostcondition?: (ctx: RuleStandalonePostconditionContext) => void;
+  /**
    * Enter a parse tree produced by `REMODELParser.ruleDefinition`.
    * @param ctx the parse tree
    */
@@ -966,16 +1006,6 @@ export default class REMODELListener extends ParseTreeListener {
    */
   exitRuleEnumLiteralExpCS?: (ctx: RuleEnumLiteralExpCSContext) => void;
   /**
-   * Enter a parse tree produced by `REMODELParser.ruleTupleLiteralExpCS`.
-   * @param ctx the parse tree
-   */
-  enterRuleTupleLiteralExpCS?: (ctx: RuleTupleLiteralExpCSContext) => void;
-  /**
-   * Exit a parse tree produced by `REMODELParser.ruleTupleLiteralExpCS`.
-   * @param ctx the parse tree
-   */
-  exitRuleTupleLiteralExpCS?: (ctx: RuleTupleLiteralExpCSContext) => void;
-  /**
    * Enter a parse tree produced by `REMODELParser.ruleCollectionTypeCS`.
    * @param ctx the parse tree
    */
@@ -1066,16 +1096,6 @@ export default class REMODELListener extends ParseTreeListener {
    */
   exitRuleRealLiteralExpCS?: (ctx: RuleRealLiteralExpCSContext) => void;
   /**
-   * Enter a parse tree produced by `REMODELParser.ruleUnlimitedNaturalLiteralExpCS`.
-   * @param ctx the parse tree
-   */
-  enterRuleUnlimitedNaturalLiteralExpCS?: (ctx: RuleUnlimitedNaturalLiteralExpCSContext) => void;
-  /**
-   * Exit a parse tree produced by `REMODELParser.ruleUnlimitedNaturalLiteralExpCS`.
-   * @param ctx the parse tree
-   */
-  exitRuleUnlimitedNaturalLiteralExpCS?: (ctx: RuleUnlimitedNaturalLiteralExpCSContext) => void;
-  /**
    * Enter a parse tree produced by `REMODELParser.ruleBooleanLiteralExpCS`.
    * @param ctx the parse tree
    */
@@ -1106,16 +1126,6 @@ export default class REMODELListener extends ParseTreeListener {
    */
   exitRuleNullLiteralExpCS?: (ctx: RuleNullLiteralExpCSContext) => void;
   /**
-   * Enter a parse tree produced by `REMODELParser.ruleInvalidLiteralExpCS`.
-   * @param ctx the parse tree
-   */
-  enterRuleInvalidLiteralExpCS?: (ctx: RuleInvalidLiteralExpCSContext) => void;
-  /**
-   * Exit a parse tree produced by `REMODELParser.ruleInvalidLiteralExpCS`.
-   * @param ctx the parse tree
-   */
-  exitRuleInvalidLiteralExpCS?: (ctx: RuleInvalidLiteralExpCSContext) => void;
-  /**
    * Enter a parse tree produced by `REMODELParser.ruleFloat`.
    * @param ctx the parse tree
    */
@@ -1145,16 +1155,6 @@ export default class REMODELListener extends ParseTreeListener {
    * @param ctx the parse tree
    */
   exitRulePrimitiveTypeCS?: (ctx: RulePrimitiveTypeCSContext) => void;
-  /**
-   * Enter a parse tree produced by `REMODELParser.ruleOclTypeCS`.
-   * @param ctx the parse tree
-   */
-  enterRuleOclTypeCS?: (ctx: RuleOclTypeCSContext) => void;
-  /**
-   * Exit a parse tree produced by `REMODELParser.ruleOclTypeCS`.
-   * @param ctx the parse tree
-   */
-  exitRuleOclTypeCS?: (ctx: RuleOclTypeCSContext) => void;
   /**
    * Enter a parse tree produced by `REMODELParser.ruleAssociationTypeCS`.
    * @param ctx the parse tree

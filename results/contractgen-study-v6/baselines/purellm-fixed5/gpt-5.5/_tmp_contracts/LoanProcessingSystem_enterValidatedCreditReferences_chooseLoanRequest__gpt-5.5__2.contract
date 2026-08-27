@@ -1,0 +1,9 @@
+Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {
+          definition:
+          matchingRequest:LoanRequest = self.CurrentLoanRequests->any(request:LoanRequest | request.RequestID = requestid)
+            precondition:
+          self.CurrentLoanRequests->exists(request:LoanRequest | request.RequestID = requestid)
+            postcondition:
+          self.CurrentLoanRequest = matchingRequest and result = matchingRequest
+            
+        }

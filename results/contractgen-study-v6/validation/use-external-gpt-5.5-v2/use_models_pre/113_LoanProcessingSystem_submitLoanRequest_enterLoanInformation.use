@@ -1,0 +1,172 @@
+model StrongUSE_113_LoanProcessingSystem_submitLoanRequest_enterLoanInformation
+
+-- operation_id: LoanProcessingSystem_submitLoanRequest_enterLoanInformation
+-- operation_signature: enterLoanInformation(requestid: Integer, name: String, loanamount: Real, loanpurpose: String, income: Real, phonenumber: Integer, postaladdress: String, zipcode: Integer, email: String, workreferences: String, creditreferences: String, checkingaccountnumber: Integer, securitynumber: Integer): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract SubmitLoanRequestModule::enterLoanInformation(requestid: Integer,name: String,loanamount: Real,loanpurpose: String,income: Real,phonenumber: Integer,postaladdress: String,zipcode: Integer,email: String,workreferences: String,creditreferences: String,checkingaccountnumber: Integer,securitynumber: Integer): Boolean {
+--   precondition:
+--     LoanRequest.allInstances()->forAll(request: LoanRequest|request.RequestID<>requestid)
+--   postcondition:
+--     let loanRequest: LoanRequest in
+--     loanRequest.oclIsNew() and
+--     LoanRequest.allInstances()->includes(loanRequest) and
+--     loanRequest.RequestID = requestid and
+--     loanRequest.Name = name and
+--     loanRequest.LoanAmount = loanamount and
+--     loanRequest.LoanPurpose = loanpurpose and
+--     loanRequest.Income = income and
+--     loanRequest.PhoneNumber = phonenumber and
+--     loanRequest.PostalAddress = postaladdress and
+--     loanRequest.ZipCode = zipcode and
+--     loanRequest.Email = email and
+--     loanRequest.WorkReferences = workreferences and
+--     loanRequest.CreditReferences = creditreferences and
+--     loanRequest.CheckingAccountNumber = checkingaccountnumber and
+--     loanRequest.SecurityNumber = securitynumber and
+--     loanRequest.Status = LoanRequestStatus::SUBMITTED and
+--     self.CurrentLoanRequest = loanRequest and
+--     result = true
+-- }
+
+enum LoanAccountStatus { HASPAIDINFULL, NORMAL }
+enum LoanRequestStatus { APPROVED, INCOMPLETEINFORMATION, READYFORREVIEW, REFERENCESVALIDATED, SUBMITTED }
+enum LoanStatus { CLOSED, LSOPEN }
+enum Status { GOODSTANDING, SUSPENDED }
+
+class ApprovalLetter
+attributes
+  Content : String
+end
+
+class CheckingAccount
+attributes
+  Balance : Real
+  Status : Status
+end
+
+class CreditHistory
+attributes
+  OutstandingDebt : Real
+  BadDebits : Integer
+end
+
+class Loan
+attributes
+  LoanID : Integer
+  RemainAmountToPay : Real
+  Status : LoanStatus
+  IsPaidinFull : Boolean
+  StartDate : Integer
+  EndDate : Integer
+  CurrentOverDueDate : Integer
+  RePaymentDays : Integer
+  RepaymentAmount : Real
+end
+
+class LoanAccount
+attributes
+  LoanAccountID : Integer
+  Balance : Real
+  Status : LoanAccountStatus
+end
+
+class LoanAgreement
+attributes
+  Content : String
+end
+
+class LoanRequest
+attributes
+  Status : LoanRequestStatus
+  RequestID : Integer
+  Name : String
+  LoanAmount : Real
+  LoanPurpose : String
+  Income : Real
+  PhoneNumber : Integer
+  PostalAddress : String
+  ZipCode : Integer
+  Email : String
+  WorkReferences : String
+  CreditReferences : String
+  CheckingAccountNumber : Integer
+  SecurityNumber : Integer
+  CreditScore : Integer
+end
+
+class LoanTerm
+attributes
+  ItemID : Integer
+  Content : String
+end
+
+class OperationContext
+attributes
+  requestid : Integer
+  name : String
+  loanamount : Real
+  loanpurpose : String
+  income : Real
+  phonenumber : Integer
+  postaladdress : String
+  zipcode : Integer
+  email : String
+  workreferences : String
+  creditreferences : String
+  checkingaccountnumber : Integer
+  securitynumber : Integer
+  CurrentLoanRequest : Boolean
+  Now : Integer
+  Today : Integer
+operations
+  Contract_enterLoanInformation(requestid : Integer, name : String, loanamount : Real, loanpurpose : String, income : Real, phonenumber : Integer, postaladdress : String, zipcode : Integer, email : String, workreferences : String, creditreferences : String, checkingaccountnumber : Integer, securitynumber : Integer) : Boolean
+end
+
+association Loan_ReferedLoanRequest_LoanRequest between
+  Loan[0..*] role Loan_ReferedLoanRequest_Owner
+  LoanRequest[0..1] role ReferedLoanRequest
+end
+
+association Loan_BelongedLoanAccount_LoanAccount between
+  Loan[0..*] role Loan_BelongedLoanAccount_Owner
+  LoanAccount[0..1] role BelongedLoanAccount
+end
+
+association LoanRequest_ApprovalLoan_Loan between
+  LoanRequest[0..*] role LoanRequest_ApprovalLoan_Owner
+  Loan[0..1] role ApprovalLoan
+end
+
+association LoanRequest_RequestedCAHistory_CheckingAccount between
+  LoanRequest[0..*] role LoanRequest_RequestedCAHistory_Owner
+  CheckingAccount[0..1] role RequestedCAHistory
+end
+
+association LoanRequest_RequestedCreditHistory_CreditHistory between
+  LoanRequest[0..*] role LoanRequest_RequestedCreditHistory_Owner
+  CreditHistory[0..1] role RequestedCreditHistory
+end
+
+association LoanRequest_AttachedApprovalLetter_ApprovalLetter between
+  LoanRequest[0..*] role LoanRequest_AttachedApprovalLetter_Owner
+  ApprovalLetter[0..1] role AttachedApprovalLetter
+end
+
+association LoanRequest_AttachedLoanAgreement_LoanAgreement between
+  LoanRequest[0..*] role LoanRequest_AttachedLoanAgreement_Owner
+  LoanAgreement[0..1] role AttachedLoanAgreement
+end
+
+association LoanRequest_AttachedLoanTerms_LoanTerm between
+  LoanRequest[0..*] role LoanRequest_AttachedLoanTerms_Owner
+  LoanTerm[*] role AttachedLoanTerms
+end
+
+constraints
+
+context OperationContext::Contract_enterLoanInformation(requestid : Integer, name : String, loanamount : Real, loanpurpose : String, income : Real, phonenumber : Integer, postaladdress : String, zipcode : Integer, email : String, workreferences : String, creditreferences : String, checkingaccountnumber : Integer, securitynumber : Integer) : Boolean
+  pre enterLoanInformationGeneratedPre:
+    LoanRequest.allInstances()->forAll(request: LoanRequest|request.RequestID<>requestid)

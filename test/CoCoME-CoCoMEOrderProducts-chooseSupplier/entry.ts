@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -197,32 +205,35 @@ class CoCoMEOrderProducts {
   CurrentOrderProduct: OrderProduct;
   /*TempVariable End*/
 
-  /*find a supplier with the provided supplier id,
-   *if the supplier exists,
-   *and the current order product exists,
-   *then the current order product's supplier is the supplier finded*/
+  /*Definition: The chooseSupplier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   chooseSupplier(supplierID: number): boolean {
     /*Definition Start*/
-    let sup: Supplier = l({
-      logic: () =>
-        getRepository(Supplier).find(
-          (s: Supplier) =>
-            l({
-              logic: () => s.Id === supplierID,
-              description: 's.Id=supplierID',
-            }).build().pass
-        ),
-      description: 'Supplier.allInstance()->any(s:Supplier|s.Id=supplierID)',
-    }).build().pass;
+    let sup: Supplier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Supplier).find(
+              (s: Supplier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(s.Id, supplierID),
+                  description: 's.Id=supplierID',
+                }).build().pass
+            ),
+          description: 'Supplier.allInstances()->any(s:Supplier|s.Id=supplierID)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(sup) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(sup), false),
       description: 'sup.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(this.CurrentOrderProduct) === false,
+        logic: () =>
+          StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentOrderProduct), false),
         description: 'CurrentOrderProduct.oclIsUndefined()=false',
       })
       .build();
@@ -231,17 +242,42 @@ class CoCoMEOrderProducts {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentOrderProduct.Supplier = sup),
-      description: 'CurrentOrderProduct.Supplier=sup',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentOrderProduct.Supplier = sup),
+        description: 'CurrentOrderProduct.Supplier=sup',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(this.CurrentOrderProduct.Supplier, sup),
+        description: 'CurrentOrderProduct.Supplier=sup',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMEOrderProducts};

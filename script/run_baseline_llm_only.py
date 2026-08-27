@@ -4,8 +4,9 @@
 Pure-LLM baseline (standalone).
 
 - Does NOT call Next.js, LangGraph, or run_rq1_validity_experiments.py.
-- One OpenAI-compatible HTTP LLM request per attempt; no in-pipeline error feedback.
-- Prompt targets REMODEL dialect (allInstance(), transform rules), not standard OCL.
+- Exactly K independent OpenAI-compatible generations per operation; no validation result
+  changes a later request or stops the fixed sampling schedule.
+- Prompt targets the executable REMODEL OCL subset (allInstances() and project rules).
 - Optional REMODEL syntax check via external --validate-cmd (e.g. tsx validator).
 - Optional execution-grounded validation via Next.js POST /api/evaluate-contract.
 
@@ -13,7 +14,7 @@ Example (114 ops, one model, 5 independent attempts, with syntax check):
 
   python script/run_baseline_llm_only.py ^
     --models gpt-5.4 ^
-    --output-dir results/baseline_llm_only/gpt-5.4 ^
+  --output-dir results/contractgen-study-v6/baselines/purellm ^
     --max-attempts 5 ^
     --validate-cmd "npx tsx script/validate-remodel-contract.ts {input_file}" ^
     --parser-use-shell
@@ -27,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import logging
 import os
@@ -44,8 +46,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 ALL_MODELS: Tuple[str, ...] = (
+    "gpt-5.5",
     "gpt-5.4",
     "gpt-5.4-mini",
+    "gemini-3.5-flash",
     "deepseek-v4-pro",
     "deepseek-v4-flash",
     "claude-opus-4-7",
@@ -54,9 +58,296 @@ ALL_MODELS: Tuple[str, ...] = (
     "qwen3-coder-flash",
 )
 
+EXPECTED_INPUT_SCHEMA_VERSION = "contractgen-operation-input-v3"
+EXPECTED_MANIFEST_PROMPT_VERSION = "contractgen-system-prompt-v7"
+EXPECTED_GENERATION_CONFIG_VERSION = "llm-generation-config-v5"
+EXPECTED_GENERATION_GRAMMAR_VERSION = "ocl-generation-grammar-v2"
+EXPECTED_GENERATION_RULES_VERSION = "ocl-generation-rules-v4"
+EXPECTED_GENERATION_OUTPUT_MODE = "json"
+EXPECTED_GENERATION_TEMPERATURE = 0.2
+EXPECTED_GENERATION_MAX_TOKENS = 4096
+EXPECTED_REASONING_POLICY = {
+    "gpt5ReasoningEffort": "none",
+    "gemini35FlashThinkingLevel": "minimal",
+    "claudeOpus47Effort": "low",
+    "qwen3CoderThinkingEnabled": False,
+}
+PURELLM_PROMPT_VERSION = EXPECTED_MANIFEST_PROMPT_VERSION
+PURELLM_PROTOCOL_VERSION = "purellm-fixed-independent-sampling-v1"
+STUDY_VERSION = "contractgen-study-v6"
+STUDY_RESULTS_ROOT = f"results/{STUDY_VERSION}"
+EXPECTED_OPERATION_COUNT = 114
+
 
 def repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
+
+
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def generation_configuration_hash(
+    output_mode: str, temperature: float, max_tokens: int
+) -> str:
+    values = {
+        "outputMode": output_mode,
+        "temperature": temperature,
+        "maxTokens": max_tokens,
+        "reasoningPolicy": EXPECTED_REASONING_POLICY,
+    }
+    return sha256_text(json.dumps(values, ensure_ascii=False, separators=(",", ":")))
+
+
+def assert_generation_configuration(temperature: float, max_tokens: int) -> None:
+    if temperature != EXPECTED_GENERATION_TEMPERATURE:
+        raise ValueError(
+            f"The study freezes temperature={EXPECTED_GENERATION_TEMPERATURE}; "
+            f"got {temperature}. Use a separate study namespace for another setting."
+        )
+    if max_tokens != EXPECTED_GENERATION_MAX_TOKENS:
+        raise ValueError(
+            f"The study freezes max_tokens={EXPECTED_GENERATION_MAX_TOKENS}; "
+            f"got {max_tokens}. Use a separate study namespace for another setting."
+        )
+
+
+def model_reasoning_parameters(model: str) -> Dict[str, Any]:
+    normalized = model.lower()
+    if normalized.startswith("gpt-5"):
+        return {"reasoning_effort": EXPECTED_REASONING_POLICY["gpt5ReasoningEffort"]}
+    if normalized.startswith("gemini-3.5-flash"):
+        return {
+            "reasoning_effort": EXPECTED_REASONING_POLICY["gemini35FlashThinkingLevel"]
+        }
+    if normalized.startswith(("claude-opus-4-7", "claude-opus-4.7")):
+        return {"reasoning_effort": EXPECTED_REASONING_POLICY["claudeOpus47Effort"]}
+    if normalized.startswith("qwen3-coder"):
+        return {"enable_thinking": EXPECTED_REASONING_POLICY["qwen3CoderThinkingEnabled"]}
+    return {}
+
+
+def validate_manifest_row(row: Dict[str, Any], line_no: int) -> None:
+    required = (
+        "id",
+        "oracle_id",
+        "requirement_group_id",
+        "description",
+        "model_context",
+        "canonical_user_message",
+        "input_hash",
+        "requirement_hash",
+        "context_hash",
+        "prompt_hash",
+        "generation_config_version",
+        "generation_config_hash",
+        "generation_grammar_version",
+        "generation_grammar_hash",
+        "generation_rules_version",
+        "generation_rules_hash",
+        "generation_output_mode",
+    )
+    missing = [name for name in required if not str(row.get(name) or "").strip()]
+    if missing:
+        raise ValueError(f"line {line_no}: missing current manifest fields: {', '.join(missing)}")
+    if not isinstance(row.get("has_return_value"), bool):
+        raise ValueError(f"line {line_no}: has_return_value must be a Boolean")
+    if row.get("input_schema_version") != EXPECTED_INPUT_SCHEMA_VERSION:
+        raise ValueError(
+            f"line {line_no}: expected {EXPECTED_INPUT_SCHEMA_VERSION}, "
+            f"got {row.get('input_schema_version')!r}"
+        )
+    if row.get("prompt_version") != EXPECTED_MANIFEST_PROMPT_VERSION:
+        raise ValueError(
+            f"line {line_no}: expected {EXPECTED_MANIFEST_PROMPT_VERSION}, "
+            f"got {row.get('prompt_version')!r}"
+        )
+    if row.get("oracle_available_to_generator") is not False:
+        raise ValueError(f"line {line_no}: oracle isolation flag must be false")
+    if row.get("generation_config_version") != EXPECTED_GENERATION_CONFIG_VERSION:
+        raise ValueError(
+            f"line {line_no}: expected {EXPECTED_GENERATION_CONFIG_VERSION}, "
+            f"got {row.get('generation_config_version')!r}"
+        )
+    if row.get("generation_grammar_version") != EXPECTED_GENERATION_GRAMMAR_VERSION:
+        raise ValueError(f"line {line_no}: generation grammar version mismatch")
+    if row.get("generation_rules_version") != EXPECTED_GENERATION_RULES_VERSION:
+        raise ValueError(f"line {line_no}: generation rule catalog version mismatch")
+    if row.get("generation_output_mode") != EXPECTED_GENERATION_OUTPUT_MODE:
+        raise ValueError(f"line {line_no}: Contract Gen output mode must be json")
+    if row.get("generation_temperature") != EXPECTED_GENERATION_TEMPERATURE:
+        raise ValueError(f"line {line_no}: Contract Gen temperature must be 0.2")
+    if row.get("generation_max_tokens") != EXPECTED_GENERATION_MAX_TOKENS:
+        raise ValueError(f"line {line_no}: Contract Gen max tokens must be 4096")
+    expected_config_hash = generation_configuration_hash(
+        EXPECTED_GENERATION_OUTPUT_MODE,
+        EXPECTED_GENERATION_TEMPERATURE,
+        EXPECTED_GENERATION_MAX_TOKENS,
+    )
+    if row.get("generation_config_hash") != expected_config_hash:
+        raise ValueError(f"line {line_no}: generation configuration hash mismatch")
+    for name in (
+        "input_hash",
+        "requirement_hash",
+        "context_hash",
+        "prompt_hash",
+        "generation_config_hash",
+        "generation_grammar_hash",
+        "generation_rules_hash",
+    ):
+        if not re.fullmatch(r"[0-9a-f]{64}", str(row.get(name) or "")):
+            raise ValueError(f"line {line_no}: invalid SHA-256 field {name}")
+    canonical = str(row.get("canonical_user_message") or "")
+    for section in ("Operation intent:", "Preconditions:", "Postconditions:"):
+        if section not in canonical:
+            raise ValueError(f"line {line_no}: canonical input is missing {section}")
+    if row.get("prompt_hash") != sha256_text(CONTRACTGEN_SYSTEM_PROMPT):
+        raise ValueError(
+            f"line {line_no}: frozen manifest prompt does not match Contract Gen"
+        )
+
+
+def assert_existing_records_match_manifest(
+    records: List[Dict[str, Any]],
+    operations: List[Dict[str, Any]],
+    generation_prompt_version: str,
+    generation_output_mode: str,
+    temperature: float,
+    max_tokens: int,
+    *,
+    sampling_protocol_version: Optional[str] = None,
+    expected_generation_prompt_hashes: Optional[Dict[Any, str]] = None,
+    uses_shared_generation_assets: bool = True,
+) -> None:
+    expected = {op["id"]: op for op in operations}
+    mismatches: List[str] = []
+    for record in records:
+        operation_id = str(record.get("operation_id") or "")
+        operation = expected.get(operation_id)
+        if operation is None:
+            if len(expected) == EXPECTED_OPERATION_COUNT:
+                mismatches.append(f"unknown operation id in existing results: {operation_id!r}")
+            continue
+        checks = (
+            ("study version", record.get("study_version"), STUDY_VERSION),
+            ("input schema", record.get("input_schema_version"), operation["input_schema_version"]),
+            ("input hash", record.get("input_hash"), operation["input_hash"]),
+            ("oracle id", record.get("oracle_id"), operation["oracle_id"]),
+            (
+                "requirement group id",
+                record.get("requirement_group_id"),
+                operation["requirement_group_id"],
+            ),
+            (
+                "has return value",
+                record.get("has_return_value"),
+                operation["has_return_value"],
+            ),
+            (
+                "manifest prompt hash",
+                record.get("shared_prompt_hash") or record.get("prompt_hash"),
+                operation["prompt_hash"],
+            ),
+            (
+                "generation prompt version",
+                record.get("generation_prompt_version"),
+                generation_prompt_version,
+            ),
+            (
+                "generation config version",
+                record.get("generation_config_version"),
+                EXPECTED_GENERATION_CONFIG_VERSION,
+            ),
+            (
+                "generation config hash",
+                record.get("generation_config_hash"),
+                generation_configuration_hash(
+                    generation_output_mode, temperature, max_tokens
+                ),
+            ),
+            ("generation output mode", record.get("generation_output_mode"), generation_output_mode),
+            ("generation temperature", record.get("generation_temperature"), temperature),
+            ("generation max tokens", record.get("generation_max_tokens"), max_tokens),
+        )
+        for name, actual, wanted in checks:
+            if actual != wanted:
+                mismatches.append(
+                    f"{operation_id} {name}: existing={actual!r}, expected={wanted!r}"
+                )
+                break
+        if uses_shared_generation_assets:
+            for name, actual, wanted in (
+                (
+                    "generation grammar version",
+                    record.get("generation_grammar_version"),
+                    operation["generation_grammar_version"],
+                ),
+                (
+                    "generation grammar hash",
+                    record.get("generation_grammar_hash"),
+                    operation["generation_grammar_hash"],
+                ),
+                (
+                    "generation rules version",
+                    record.get("generation_rules_version"),
+                    operation["generation_rules_version"],
+                ),
+                (
+                    "generation rules hash",
+                    record.get("generation_rules_hash"),
+                    operation["generation_rules_hash"],
+                ),
+            ):
+                if actual != wanted:
+                    mismatches.append(
+                        f"{operation_id} {name}: existing={actual!r}, expected={wanted!r}"
+                    )
+                    break
+        if (
+            sampling_protocol_version is not None
+            and record.get("sampling_protocol_version") != sampling_protocol_version
+        ):
+            mismatches.append(
+                f"{operation_id} sampling protocol version: "
+                f"existing={record.get('sampling_protocol_version')!r}, "
+                f"expected={sampling_protocol_version!r}"
+            )
+        prompt_hashes = expected_generation_prompt_hashes or {}
+        expected_prompt_hash = prompt_hashes.get(
+            (operation_id, int(record.get("attempt") or 0)),
+            prompt_hashes.get(operation_id),
+        )
+        if (
+            expected_prompt_hash is not None
+            and record.get("generation_prompt_hash") != expected_prompt_hash
+        ):
+            mismatches.append(
+                f"{operation_id} generation prompt hash: "
+                f"existing={record.get('generation_prompt_hash')!r}, "
+                f"expected={expected_prompt_hash!r}"
+            )
+        if len(mismatches) >= 5:
+            break
+    if mismatches:
+        raise RuntimeError(
+            f"Existing results do not match the frozen {STUDY_VERSION} configuration. "
+            f"Use a new --output-dir under {STUDY_RESULTS_ROOT}. "
+            + " | ".join(mismatches)
+        )
+
+
+def assert_force_target_is_current_study(records: List[Dict[str, Any]]) -> None:
+    legacy = [
+        str(record.get("operation_id") or "<unknown>")
+        for record in records
+        if record.get("study_version") != STUDY_VERSION
+    ]
+    if legacy:
+        raise RuntimeError(
+            "Refusing --force because the target contains legacy or foreign results. "
+            f"Preserve that directory and choose a path under {STUDY_RESULTS_ROOT}. "
+            f"First mismatches: {', '.join(legacy[:5])}"
+        )
 
 
 def load_env_file(path: Path) -> None:
@@ -98,13 +389,13 @@ def read_jsonl(path: Path) -> List[Dict[str, Any]]:
         return []
     rows: List[Dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as f:
-        for line in f:
+        for line_no, line in enumerate(f, 1):
             line = line.strip()
             if line:
                 try:
                     rows.append(json.loads(line))
-                except json.JSONDecodeError:
-                    pass
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"{path}:{line_no}: invalid JSON: {exc}") from exc
     return rows
 
 
@@ -114,67 +405,100 @@ def append_jsonl(path: Path, obj: Dict[str, Any]) -> None:
         f.write(json.dumps(obj, ensure_ascii=False) + "\n")
 
 
-REMODEL_TRANSFORM_RULES = """
-Here are REMODEL transform rules (must follow):
 
-Rule: ClassName::EnumValue — retrieve enum value.
-Rule: self.GlobalVariableName — global variable from Service/Module.
-
-definition (optional; variables are comma-separated, names in smallCamelCase):
-  obs:Set(ClassName) = ClassName.allInstance()
-  obs:Set(ClassName) = ClassName.allInstance()->select(o:ClassName|conditions)
-  obs:ClassName = ClassName.allInstance()->any(o:ClassName|conditions)
-  o:ClassName = ob.assoName
-
-precondition:
-  ob.oclIsUndefined() = bool
-  obs.isEmpty() = bool
-  ClassName.allInstance()->includes(ob) / ->excludes(ob)
-  ob.AttriName = value  (use = or <>; combine with and / or)
-
-postcondition:
-  let ob:ClassName in ob.oclIsNew() and ...  (first when creating objects)
-  ClassName.allInstance()->includes(ob) / ->excludes(ob)
-  ob.assoName = addOb  or  ob.assoName->includes(addOb)
-  ob.attriName = value
-  result = var  (last statement when return type is Boolean or entity)
-
-Iterator syntax: ClassName.allInstance()->any(o:ClassName|o.Id=id)  (typed iterator before |)
-""".strip()
-
-REMODEL_COMMON_MISTAKES = """
-Avoid these REMODEL grammar mistakes:
-- NEVER use allInstances(); ONLY ClassName.allInstance()
-- NEVER use keyword not; use = false or oclIsUndefined() = true instead
-- Do NOT write result = (a = b); bind booleans in definition if needed
-- Do NOT abuse extra parentheses like (exprA) and (exprB); write exprA and exprB
-- In definition, separate declarations with commas, not newlines
-- includes()/excludes() take a single variable name only; bind complex lookups in definition first
-- Validation logic belongs in precondition, not postcondition if/else tricks
-- definition JSON value must be omitted or a real expression; never the literal string "null"
-""".strip()
-
-REMODEL_SECTION_GUIDE = """
-definition: optional helper variables for precondition/postcondition (smallCamelCase names).
-precondition: state assumed before the operation; use definition variables when helpful.
-postcondition: state after the operation; use let ... in ... oclIsNew() for new objects.
-""".strip()
+def _read_shared_prompt_asset(relative_path: str) -> str:
+    path = repo_root() / relative_path
+    if path.suffix == ".json":
+        values = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(values, list) and all(isinstance(value, str) for value in values):
+            return "\n".join(values)
+        if isinstance(values, dict) and isinstance(values.get("sections"), list):
+            rendered: List[str] = []
+            for section in values["sections"]:
+                if not isinstance(section, dict) or not isinstance(section.get("rules"), list):
+                    raise RuntimeError(f"Invalid generation-rule section in {path}")
+                rendered.append(f"{section.get('heading', 'Rules')}:")
+                for rule in section["rules"]:
+                    if not isinstance(rule, dict) or not rule.get("id") or not rule.get("text"):
+                        raise RuntimeError(f"Invalid generation rule in {path}")
+                    rendered.append(f"[{rule['id']}] {rule['text']}")
+            return "\n".join(rendered)
+        raise RuntimeError(f"Unsupported prompt asset structure in {path}")
+    return path.read_text(encoding="utf-8").strip()
 
 
-def normalize_remodel_expression(text: Optional[str]) -> str:
-    if not text:
-        return ""
-    out = str(text).strip()
-    if not out:
-        return ""
-    out = re.sub(r"\.allInstances\s*\(\s*\)", ".allInstance()", out, flags=re.IGNORECASE)
-    return out
+# These assets are the same source files consumed by Contract Gen. Keeping the
+# method wrapper separate while sharing grammar and generation rules makes the
+# PureLLM comparison differ in workflow, not in hidden input knowledge.
+REMODEL_GENERATION_GRAMMAR = _read_shared_prompt_asset(
+    "src/app/service/prompts/generationGrammar.txt"
+)
+REMODEL_GENERATION_RULES = _read_shared_prompt_asset(
+    "src/app/service/prompts/generationRules.json"
+)
+REMODEL_COMMON_MISTAKES = _read_shared_prompt_asset(
+    "src/app/service/prompts/commonContractErrors.json"
+)
+
+
+CONTRACT_FIELD_SEMANTICS = "\n".join(
+    [
+        "Contract-field semantics:",
+        "definition: The optional definition field introduces query-only helper bindings used by the precondition or postcondition.\n"
+        "Each binding has the form name:Type = expression, uses lowerCamelCase for name, and is separated from the next binding by a comma.\n"
+        "Do not encode state changes in definition. Return null when no helper binding is needed.",
+        "precondition: The precondition is a non-mutating Boolean expression over the state before operation execution.\n"
+        "Use it only for input admissibility, existence, status, quota, and other conditions that must already hold.\n"
+        "It may use operation parameters, service state, and helper bindings from definition.",
+        "postcondition: The postcondition is a Boolean expression describing the required state after successful operation execution.\n"
+        "It may create or remove repository objects, update attributes and associations, update service state, and constrain result.\n"
+        "Use @pre only when an effect depends on a value from before execution.",
+    ]
+)
+
+
+def build_system_prompt() -> str:
+    grammar_prompt = "\n".join(
+        [
+            "Generate only the definition, precondition, and postcondition fields of one executable REMODEL operation contract.",
+            'In a postcondition, "=" on attributes, associations, service state, or result denotes an update obligation; never write chained equalities such as result = a = b.',
+            "Generate only constructs admitted by this executable operation-contract generation subset:",
+            REMODEL_GENERATION_GRAMMAR,
+        ]
+    )
+    return "\n\n".join(
+        [
+            "You are the OCL Generator in Contract Gen. Translate one structured natural-language operation requirement into an executable REMODEL OCL contract.",
+            "The caller supplies operation metadata, the structured requirement, model context, and read-only environment values. Preserve the stated semantics and remain grounded in those declarations.",
+            "\n".join(
+                [
+                    "Requirement-to-field mapping:",
+                    "- Preconditions bullets go only into precondition.",
+                    "- Operation intent and Postconditions bullets go into postcondition.",
+                    "- Reusable query helpers go into definition; otherwise set definition to JSON null.",
+                ]
+            ),
+            grammar_prompt,
+            CONTRACT_FIELD_SEMANTICS,
+            "OCL generation rule catalog:",
+            REMODEL_GENERATION_RULES,
+            "Return exactly one JSON object with keys definition, precondition, and postcondition.",
+            "Use JSON null for definition when no helper binding is required. The other two values must be expression strings.",
+            "Do not return a Contract wrapper, Markdown, comments, explanations, or additional keys.",
+            REMODEL_COMMON_MISTAKES,
+        ]
+    )
+
+
+CONTRACTGEN_SYSTEM_PROMPT = build_system_prompt()
 
 
 def normalize_definition_value(defn: Any) -> Optional[str]:
     if defn is None:
         return None
-    s = normalize_remodel_expression(str(defn))
+    if not isinstance(defn, str):
+        return None
+    s = defn.strip()
     if not s or s.lower() in ("null", "none", "n/a", "undefined", '""', "''"):
         return None
     return s
@@ -183,10 +507,12 @@ def normalize_definition_value(defn: Any) -> Optional[str]:
 def safe_operation(row: Dict[str, Any], line_no: int) -> Optional[Dict[str, Any]]:
     oid = row.get("id") or row.get("operation_id")
     if not oid:
-        logging.warning("line %s: missing id, skipped", line_no)
-        return None
+        raise ValueError(f"line {line_no}: missing operation id")
+    validate_manifest_row(row, line_no)
     return {
         "id": str(oid),
+        "oracle_id": str(row.get("oracle_id") or ""),
+        "requirement_group_id": str(row.get("requirement_group_id") or ""),
         "case_study": str(row.get("case_study") or row.get("case") or "unknown"),
         "project": str(row.get("project") or row.get("case_study") or row.get("case") or ""),
         "useCase": str(row.get("useCase") or row.get("use_case") or ""),
@@ -199,47 +525,36 @@ def safe_operation(row: Dict[str, Any], line_no: int) -> Optional[Dict[str, Any]
         "description": str(row.get("description") or ""),
         "parameters": row.get("parameters") or [],
         "return_type": str(row.get("return_type") or ""),
+        "has_return_value": bool(row.get("has_return_value")),
         "model_context": str(row.get("model_context") or row.get("context") or ""),
+        "canonical_user_message": str(row.get("canonical_user_message") or ""),
+        "input_schema_version": str(row.get("input_schema_version") or ""),
+        "input_hash": str(row.get("input_hash") or ""),
+        "requirement_hash": str(row.get("requirement_hash") or ""),
+        "context_hash": str(row.get("context_hash") or ""),
+        "prompt_version": str(row.get("prompt_version") or ""),
+        "prompt_hash": str(row.get("prompt_hash") or ""),
+        "generation_config_version": str(row.get("generation_config_version") or ""),
+        "generation_config_hash": str(row.get("generation_config_hash") or ""),
+        "generation_grammar_version": str(row.get("generation_grammar_version") or ""),
+        "generation_grammar_hash": str(row.get("generation_grammar_hash") or ""),
+        "generation_rules_version": str(row.get("generation_rules_version") or ""),
+        "generation_rules_hash": str(row.get("generation_rules_hash") or ""),
+        "generation_output_mode": str(row.get("generation_output_mode") or ""),
+        "generation_temperature": row.get("generation_temperature"),
+        "generation_max_tokens": row.get("generation_max_tokens"),
     }
 
 
 def build_prompt(op: Dict[str, Any]) -> str:
-    params_str = json.dumps(op.get("parameters") or [], ensure_ascii=False)
-    return f"""You are a REMODEL contract code generator. Generate definition / precondition / postcondition expressions for the operation below.
+    return json.dumps(build_messages(op), ensure_ascii=False, separators=(",", ":"))
 
-IMPORTANT: Output REMODEL dialect only (project-specific grammar). This is NOT standard OCL.
-- Always use ClassName.allInstance() — never allInstances(), never OCL library names unknown to REMODEL.
-- Use result, self, @pre where appropriate; combine conditions with and / or.
 
-{REMODEL_SECTION_GUIDE}
-
-{REMODEL_TRANSFORM_RULES}
-
-{REMODEL_COMMON_MISTAKES}
-
-Output format:
-1. Return exactly one JSON object, no Markdown or explanation.
-2. Keys: definition, precondition, postcondition.
-3. definition may be JSON null if unused; never the string "null".
-4. Values are REMODEL expression strings only (no Contract wrapper).
-5. Use only classes, attributes, associations, and operations from model_context.
-
-Example (createDevice-style):
-{{"definition": "dev:Device = Device.allInstance()->any(u:Device|u.Id=id), sta:Staff = Staff.allInstance()->any(uu:Staff|uu.Id=contactsid)", "precondition": "dev.oclIsUndefined() = true and sta.oclIsUndefined() = false", "postcondition": "let d:Device in d.oclIsNew() and d.Id=id and d.Name=name and d.Location=location and d.Contacts=sta and Device.allInstance()->includes(d) and result=true"}}
-
-Operation input:
-Case Study: {op["case_study"]}
-Service: {op["service"]}
-Operation Signature: {op["operation_signature"]}
-Description: {op["description"]}
-Parameters: {params_str}
-Return Type: {op["return_type"]}
-
-Model Context:
-{op["model_context"]}
-
-Return JSON only.
-"""
+def build_messages(op: Dict[str, Any]) -> List[Dict[str, str]]:
+    return [
+        {"role": "system", "content": CONTRACTGEN_SYSTEM_PROMPT},
+        {"role": "user", "content": op["canonical_user_message"]},
+    ]
 
 
 def wrap_contract(
@@ -298,9 +613,16 @@ def parse_json_from_llm(text: str) -> Optional[Dict[str, Any]]:
 
 def extract_contract_text(raw: str, op: Dict[str, Any]) -> Dict[str, Any]:
     obj = parse_json_from_llm(raw)
-    if obj and ("precondition" in obj or "postcondition" in obj):
-        pre = normalize_remodel_expression(str(obj.get("precondition") or ""))
-        post = normalize_remodel_expression(str(obj.get("postcondition") or ""))
+    schema_ok = bool(
+        obj
+        and set(("definition", "precondition", "postcondition")).issubset(obj)
+        and (obj.get("definition") is None or isinstance(obj.get("definition"), str))
+        and isinstance(obj.get("precondition"), str)
+        and isinstance(obj.get("postcondition"), str)
+    )
+    if schema_ok:
+        pre = obj["precondition"].strip()
+        post = obj["postcondition"].strip()
         defn_s = normalize_definition_value(obj.get("definition"))
         contract = wrap_contract(
             op, definition=defn_s, precondition=pre, postcondition=post
@@ -311,16 +633,6 @@ def extract_contract_text(raw: str, op: Dict[str, Any]) -> Dict[str, Any]:
             "precondition": pre,
             "postcondition": post,
             "json_parsed": True,
-            "extraction_ok": bool(pre.strip() or post.strip()),
-        }
-    stripped = (raw or "").strip()
-    if stripped.lower().startswith("contract "):
-        return {
-            "contract": stripped,
-            "definition": None,
-            "precondition": "",
-            "postcondition": "",
-            "json_parsed": False,
             "extraction_ok": True,
         }
     return {
@@ -347,7 +659,14 @@ def _http_json(
 
 
 def call_llm(
-    model: str, prompt: str, *, temperature: float, max_tokens: int, timeout: float
+    model: str,
+    messages: Any,
+    *,
+    temperature: float,
+    max_tokens: int,
+    timeout: float,
+    json_mode: bool = True,
+    stop_sequences: Optional[List[str]] = None,
 ) -> str:
     key = os.environ.get("OPENAI_API_KEY", "")
     if not key:
@@ -358,13 +677,22 @@ def call_llm(
     last_err: Optional[BaseException] = None
     for attempt in range(1, 4):
         try:
+            normalized_messages = (
+                [{"role": "user", "content": messages}]
+                if isinstance(messages, str)
+                else messages
+            )
             payload: Dict[str, Any] = {
                 "model": model,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": normalized_messages,
+                "temperature": temperature,
                 "max_tokens": max_tokens,
             }
-            if not model.startswith("claude-"):
-                payload["temperature"] = temperature
+            if json_mode:
+                payload["response_format"] = {"type": "json_object"}
+            if stop_sequences:
+                payload["stop"] = stop_sequences
+            payload.update(model_reasoning_parameters(model))
             out = _http_json(
                 url,
                 payload,
@@ -458,12 +786,14 @@ def evaluate_contract_with_next(
     if not payload["project"] or not payload["useCase"] or not payload["operation"]:
         return {
             "execution_eval_skipped": True,
+            "execution_infrastructure_error": False,
             "execution_eval_error": "missing project/useCase/operation fields",
             "execution_valid": False,
         }
     if not payload["ocl"]["precondition"] or not payload["ocl"]["postcondition"]:
         return {
             "execution_eval_skipped": True,
+            "execution_infrastructure_error": False,
             "execution_eval_error": "missing extracted precondition/postcondition",
             "execution_valid": False,
         }
@@ -478,12 +808,14 @@ def evaluate_contract_with_next(
         body = e.read().decode("utf-8", errors="replace")
         return {
             "execution_eval_skipped": False,
+            "execution_infrastructure_error": True,
             "execution_eval_error": f"HTTP {e.code}: {body[:1000]}",
             "execution_valid": False,
         }
     except Exception as e:
         return {
             "execution_eval_skipped": False,
+            "execution_infrastructure_error": True,
             "execution_eval_error": str(e),
             "execution_valid": False,
         }
@@ -495,6 +827,7 @@ def evaluate_contract_with_next(
     )
     return {
         "execution_eval_skipped": False,
+        "execution_infrastructure_error": False,
         "execution_eval_error": "",
         "execution_valid": execution_valid,
         "contract_parse_ok": bool(out.get("contract_parse_ok")),
@@ -510,6 +843,17 @@ def evaluate_contract_with_next(
     }
 
 
+def raise_if_evaluation_infrastructure_error(
+    result: Dict[str, Any], operation_id: str, model: str, attempt: int
+) -> None:
+    if result.get("execution_infrastructure_error"):
+        raise RuntimeError(
+            "Execution evaluator infrastructure failed; no experimental attempt was consumed "
+            f"(op={operation_id}, model={model}, attempt={attempt}): "
+            f"{result.get('execution_eval_error', 'unknown evaluator error')}"
+        )
+
+
 def pair_is_complete(
     operation_id: str,
     model: str,
@@ -522,12 +866,9 @@ def pair_is_complete(
         for r in attempts
         if r.get("operation_id") == operation_id and r.get("model") == model
     ]
-    if not rows:
-        return False
-    success_field = "execution_valid" if require_execution else "syntax_valid"
-    if any(r.get(success_field) for r in rows):
-        return True
-    return max(int(r["attempt"]) for r in rows) >= max_attempts
+    del require_execution
+    attempts_recorded = {int(r["attempt"]) for r in rows}
+    return all(attempt in attempts_recorded for attempt in range(1, max_attempts + 1))
 
 
 def count_completed_pairs(
@@ -607,6 +948,10 @@ def write_summary(
     attempts = read_jsonl(output_dir / "attempts.jsonl")
     op_ids = {op["id"] for op in operations}
     op_case = {op["id"]: op["case_study"] for op in operations}
+    op_requirement = {
+        op["id"]: op.get("requirement_group_id") or op.get("requirement_hash") or op["id"]
+        for op in operations
+    }
     by_key, succeeded = reindex(attempts, max_attempts)
 
     def agg(model: str, op_set: Set[str]) -> Dict[str, Any]:
@@ -693,6 +1038,85 @@ def write_summary(
                 ]
             )
 
+    def write_evaluation_unit_metric(
+        path: Path,
+        metric_field: str,
+        success_name: str,
+        rate_name: str,
+    ) -> None:
+        requirement_groups: Dict[str, Set[str]] = defaultdict(set)
+        for operation_id in op_ids:
+            requirement_groups[str(op_requirement[operation_id])].add(operation_id)
+
+        def operation_succeeds(operation_id: str, model: str) -> bool:
+            return any(
+                bool(row.get(metric_field))
+                for row in by_key.get((operation_id, model), [])
+            )
+
+        with path.open("w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(
+                [
+                    "model",
+                    "evaluation_unit",
+                    "total_units",
+                    success_name,
+                    f"non_{success_name}",
+                    rate_name,
+                ]
+            )
+            for model in models:
+                instance_success = sum(
+                    1 for operation_id in op_ids if operation_succeeds(operation_id, model)
+                )
+                instance_rate = 100.0 * instance_success / len(op_ids) if op_ids else 0.0
+                w.writerow(
+                    [
+                        model,
+                        "operation_context_instance",
+                        len(op_ids),
+                        instance_success,
+                        len(op_ids) - instance_success,
+                        f"{instance_rate:.4f}",
+                    ]
+                )
+
+                requirement_success = sum(
+                    1
+                    for group in requirement_groups.values()
+                    if all(operation_succeeds(operation_id, model) for operation_id in group)
+                )
+                requirement_total = len(requirement_groups)
+                requirement_rate = (
+                    100.0 * requirement_success / requirement_total
+                    if requirement_total
+                    else 0.0
+                )
+                w.writerow(
+                    [
+                        model,
+                        "distinct_requirement_strict",
+                        requirement_total,
+                        requirement_success,
+                        requirement_total - requirement_success,
+                        f"{requirement_rate:.4f}",
+                    ]
+                )
+
+    write_evaluation_unit_metric(
+        output_dir / "rq1_syntax_validity_by_evaluation_unit.csv",
+        "syntax_valid",
+        "syntax_valid_count",
+        "syntax_validity_rate",
+    )
+    write_evaluation_unit_metric(
+        output_dir / "rq2_execution_success_by_evaluation_unit.csv",
+        "execution_valid",
+        "execution_success_count",
+        "execution_success_rate",
+    )
+
     hdr = ["model", "total_operations"] + [f"valid_at_{k}_rate" for k in range(1, max_attempts + 1)]
     with (output_dir / "baseline_valid_at_k_by_model.csv").open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -740,7 +1164,16 @@ def write_summary(
             )
 
     summary = {
+        "study_version": STUDY_VERSION,
         "experiment": "baseline_llm_only",
+        "treatment": "purellm_fixed_independent_sampling",
+        "sampling_protocol_version": PURELLM_PROTOCOL_VERSION,
+        "sampling_protocol": {
+            "samples_per_operation_model_pair": max_attempts,
+            "feedback_to_model": False,
+            "validation_guided_early_stopping": False,
+            "selection": "post_hoc_valid_at_k_and_pass_at_k",
+        },
         "generated_at": utc_now_iso(),
         "max_attempts": max_attempts,
         "by_model": model_rows,
@@ -762,30 +1195,42 @@ def parse_models(s: str) -> List[str]:
 def main() -> None:
     p = argparse.ArgumentParser(description="Pure-LLM baseline (standalone script).")
     p.add_argument("--input", default="data/operations.jsonl")
-    p.add_argument("--output-dir", default="results/baseline_llm_only")
+    p.add_argument(
+        "--output-dir",
+        default=f"{STUDY_RESULTS_ROOT}/baselines/purellm",
+    )
     p.add_argument("--models", default="gpt-5.4", type=parse_models)
-    p.add_argument("--max-attempts", type=int, default=5)
+    p.add_argument(
+        "--max-attempts",
+        type=int,
+        default=5,
+        help="Fixed number of independent samples per operation-model pair (1-5).",
+    )
     p.add_argument("--limit", type=int, default=0)
     p.add_argument("--temperature", type=float, default=0.2)
-    p.add_argument("--max-tokens", type=int, default=2048)
+    p.add_argument("--max-tokens", type=int, default=4096)
     p.add_argument("--http-timeout", type=float, default=120.0)
     p.add_argument("--sleep-between-calls", type=float, default=1.0)
     p.add_argument(
         "--validate-cmd",
-        default="",
+        default="npx tsx script/validate-remodel-contract.ts {input_file}",
         help='External validator with {input_file}, e.g. npx tsx script/validate-remodel-contract.ts {input_file}',
     )
     p.add_argument("--parser-use-shell", action="store_true")
     p.add_argument("--parser-timeout", type=int, default=60)
     p.add_argument(
         "--eval-next-base-url",
-        default="",
-        help="Optional Next.js app origin for execution-grounded validation via /api/evaluate-contract.",
+        default=os.environ.get("NEXT_EVAL_BASE_URL", "http://127.0.0.1:3000"),
+        help="Required Next.js app origin for common OCLTSVM/Jest post-hoc evaluation.",
     )
     p.add_argument("--eval-timeout", type=float, default=600.0)
     p.add_argument("--force", action="store_true")
     p.add_argument("--analyze-only", action="store_true")
     args = p.parse_args()
+    if args.max_attempts < 1 or args.max_attempts > 5:
+        p.error("--max-attempts must be between 1 and 5 independent samples")
+    if not args.eval_next_base_url.strip():
+        p.error("--eval-next-base-url is required for the frozen PureLLM study")
 
     load_env_file(repo_root() / ".env")
     output_dir = Path(args.output_dir)
@@ -805,15 +1250,40 @@ def main() -> None:
                     continue
                 try:
                     row = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"{input_path}:{i}: invalid JSON: {exc}") from exc
                 op = safe_operation(row, i)
                 if op:
                     operations.append(op)
+    if len(operations) != EXPECTED_OPERATION_COUNT:
+        raise RuntimeError(
+            f"Expected {EXPECTED_OPERATION_COUNT} canonical operations in {input_path}, "
+            f"found {len(operations)}"
+        )
+    if len({op["id"] for op in operations}) != len(operations):
+        raise RuntimeError(f"Duplicate operation ids in {input_path}")
+    assert_generation_configuration(args.temperature, args.max_tokens)
     if args.limit > 0:
         operations = operations[: args.limit]
 
+    existing = read_jsonl(attempts_path)
+    assert_existing_records_match_manifest(
+        existing,
+        operations,
+        PURELLM_PROMPT_VERSION,
+        "json",
+        args.temperature,
+        args.max_tokens,
+        sampling_protocol_version=PURELLM_PROTOCOL_VERSION,
+        expected_generation_prompt_hashes={
+            operation["id"]: sha256_text(CONTRACTGEN_SYSTEM_PROMPT)
+            for operation in operations
+        },
+    )
+
     if args.analyze_only:
+        if not attempts_path.is_file():
+            raise FileNotFoundError(f"analyze-only requires {attempts_path}")
         if not operations:
             logging.error("analyze-only needs --input with operations")
             sys.exit(1)
@@ -826,22 +1296,18 @@ def main() -> None:
         sys.exit(1)
 
     if args.force:
+        assert_force_target_is_current_study(existing)
         for fp in [attempts_path, output_dir / "summary.json"]:
             if fp.exists():
                 fp.unlink()
         for pat in ("baseline_*.csv",):
             for f in output_dir.glob(pat):
                 f.unlink()
+        existing = []
 
     validate_cmd = args.validate_cmd.strip() or None
     eval_next_base_url = args.eval_next_base_url.strip()
     require_execution_success = bool(eval_next_base_url)
-    existing = read_jsonl(attempts_path)
-    done_success: Set[Tuple[str, str]] = set()
-    for row in existing:
-        if row.get("execution_valid") if require_execution_success else row.get("syntax_valid"):
-            done_success.add((row["operation_id"], row["model"]))
-
     planned = len(operations) * len(args.models)
     pairs_completed = count_completed_pairs(
         operations,
@@ -873,23 +1339,25 @@ def main() -> None:
                 + 1
             )
             prompt = build_prompt(op)
+            messages = build_messages(op)
             for att in range(start_att, args.max_attempts + 1):
-                if (oid, model) in done_success:
-                    break
                 t0 = time.perf_counter()
                 err_type = ""
                 raw = ""
                 try:
                     raw = call_llm(
                         model,
-                        prompt,
+                        messages,
                         temperature=args.temperature,
                         max_tokens=args.max_tokens,
                         timeout=args.http_timeout,
                     )
-                except Exception:
+                except Exception as exc:
                     logging.exception("LLM failed op=%s model=%s att=%s", oid, model, att)
-                    err_type = "llm_api_error"
+                    raise RuntimeError(
+                        "LLM infrastructure failed; no experimental attempt was consumed "
+                        f"(op={oid}, model={model}, attempt={att})"
+                    ) from exc
                 ext = extract_contract_text(raw, op)
                 contract = ext["contract"]
                 if validate_cmd and contract:
@@ -923,7 +1391,7 @@ def main() -> None:
                     "execution_eval_skipped": not bool(eval_next_base_url),
                     "execution_valid": False,
                 }
-                if eval_next_base_url and val.get("syntax_valid"):
+                if eval_next_base_url and ext["extraction_ok"]:
                     eval_res = evaluate_contract_with_next(
                         eval_next_base_url,
                         op,
@@ -931,12 +1399,70 @@ def main() -> None:
                         ext,
                         args.eval_timeout,
                     )
+                raise_if_evaluation_infrastructure_error(eval_res, oid, model, att)
+                syntax_valid = (
+                    bool(eval_res.get("contract_parse_ok"))
+                    if eval_next_base_url and not eval_res.get("execution_eval_skipped")
+                    else bool(val.get("syntax_valid"))
+                )
+                pre_execution_valid = (
+                    syntax_valid
+                    and bool(eval_res.get("typescript_generation_ok"))
+                    and bool(eval_res.get("typescript_parse_ok"))
+                    if eval_next_base_url
+                    else syntax_valid
+                )
+                if not ext["extraction_ok"]:
+                    validation_stage = "output_extraction"
+                    final_error_type = "extraction_failed"
+                elif not syntax_valid:
+                    validation_stage = "parser"
+                    final_error_type = "syntax_invalid"
+                elif not bool(eval_res.get("typescript_generation_ok")):
+                    validation_stage = "typescript_generator"
+                    final_error_type = "typescript_generation_invalid"
+                elif not bool(eval_res.get("typescript_parse_ok")):
+                    validation_stage = "typescript_parser"
+                    final_error_type = "typescript_parse_invalid"
+                elif not bool(eval_res.get("test_execution_ok")):
+                    validation_stage = "jest"
+                    final_error_type = "execution_invalid"
+                else:
+                    validation_stage = "passed"
+                    final_error_type = "none"
                 rec = {
+                    "study_version": STUDY_VERSION,
+                    "treatment": "purellm",
                     "operation_id": oid,
+                    "oracle_id": op.get("oracle_id", ""),
+                    "requirement_group_id": op.get("requirement_group_id", ""),
                     "case_study": op["case_study"],
                     "project": op.get("project", ""),
                     "useCase": op.get("useCase", ""),
                     "operation": op.get("operation", ""),
+                    "has_return_value": op.get("has_return_value", False),
+                    "input_schema_version": op.get("input_schema_version", ""),
+                    "input_hash": op.get("input_hash", ""),
+                    "requirement_hash": op.get("requirement_hash", ""),
+                    "context_hash": op.get("context_hash", ""),
+                    "shared_prompt_version": op.get("prompt_version", ""),
+                    "shared_prompt_hash": op.get("prompt_hash", ""),
+                    "generation_prompt_version": PURELLM_PROMPT_VERSION,
+                    "generation_prompt_hash": sha256_text(CONTRACTGEN_SYSTEM_PROMPT),
+                    "generation_request_hash": sha256_text(prompt),
+                    "sampling_protocol": "fixed_independent_samples",
+                    "sampling_protocol_version": PURELLM_PROTOCOL_VERSION,
+                    "generation_config_version": EXPECTED_GENERATION_CONFIG_VERSION,
+                    "generation_config_hash": generation_configuration_hash(
+                        "json", args.temperature, args.max_tokens
+                    ),
+                    "generation_grammar_version": op.get("generation_grammar_version", ""),
+                    "generation_grammar_hash": op.get("generation_grammar_hash", ""),
+                    "generation_rules_version": op.get("generation_rules_version", ""),
+                    "generation_rules_hash": op.get("generation_rules_hash", ""),
+                    "generation_output_mode": "json",
+                    "generation_temperature": args.temperature,
+                    "generation_max_tokens": args.max_tokens,
                     "model": model,
                     "attempt": att,
                     "prompt": prompt,
@@ -947,25 +1473,17 @@ def main() -> None:
                     "postcondition": ext.get("postcondition", ""),
                     "json_parsed": ext["json_parsed"],
                     "extraction_ok": ext["extraction_ok"],
-                    "syntax_valid": bool(val.get("syntax_valid")),
+                    "syntax_valid": syntax_valid,
+                    "pre_execution_valid": pre_execution_valid,
+                    "external_syntax_valid": bool(val.get("syntax_valid")),
                     "execution_valid": bool(eval_res.get("execution_valid")),
+                    "typescript_valid": bool(eval_res.get("typescript_generation_ok"))
+                    and bool(eval_res.get("typescript_parse_ok")),
+                    "jest_passed": bool(eval_res.get("test_execution_ok")),
+                    "final_pass": bool(eval_res.get("execution_valid")),
+                    "validation_stage": validation_stage,
                     "validate_skipped": bool(val.get("validate_skipped")),
-                    "error_type": (
-                        "none"
-                        if (
-                            eval_res.get("execution_valid")
-                            if require_execution_success
-                            else val.get("syntax_valid")
-                        )
-                        else (
-                            err_type
-                            or (
-                                "execution_invalid"
-                                if val.get("syntax_valid") and eval_next_base_url
-                                else "syntax_invalid"
-                            )
-                        )
-                    ),
+                    "error_type": err_type or final_error_type,
                     "latency_sec": round(time.perf_counter() - t0, 4),
                     "timestamp": utc_now_iso(),
                     **{k: v for k, v in val.items() if k != "syntax_valid"},
@@ -973,8 +1491,7 @@ def main() -> None:
                 }
                 append_jsonl(attempts_path, rec)
                 existing.append(rec)
-                pair_success = rec["execution_valid"] if require_execution_success else rec["syntax_valid"]
-                pair_done = pair_success or att >= args.max_attempts
+                pair_done = att >= args.max_attempts
                 if pair_done and not pair_is_complete(
                     oid,
                     model,
@@ -986,9 +1503,6 @@ def main() -> None:
                 print_progress(
                     pairs_completed, planned, rec, max_attempts=args.max_attempts
                 )
-                if pair_success:
-                    done_success.add((oid, model))
-                    break
                 time.sleep(max(0.0, args.sleep_between_calls))
 
     write_summary(output_dir, operations, args.models, args.max_attempts)

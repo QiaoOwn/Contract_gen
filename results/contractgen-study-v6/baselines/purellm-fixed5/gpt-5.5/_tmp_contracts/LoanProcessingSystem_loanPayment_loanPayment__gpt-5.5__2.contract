@@ -1,0 +1,9 @@
+Contract LoanProcessingSystemSystem::loanPayment(loanid:Integer): Boolean {
+          definition:
+          loan:Loan = Loan.allInstances()->any(candidate:Loan | candidate.LoanID = loanid)
+            precondition:
+          Loan.allInstances()->includes(loan) and loan.Status = LoanStatus::LSOPEN
+            postcondition:
+          loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount and result = true
+            
+        }

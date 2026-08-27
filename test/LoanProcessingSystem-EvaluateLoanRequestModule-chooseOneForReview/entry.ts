@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -156,25 +164,30 @@ class EvaluateLoanRequestModule {
   CurrentLoanRequests: LoanRequest[];
   /*TempVariable End*/
 
-  /*choose a loan request which id equals the request id from the current loan requests, if exist, then the current loan request should be it.*/
+  /*Definition: The chooseOneForReview operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   chooseOneForReview(requestid: number): LoanRequest {
     /*Definition Start*/
-    let rs: LoanRequest = l({
-      logic: () =>
-        this.CurrentLoanRequests.find(
-          (r: LoanRequest) =>
-            l({
-              logic: () => r.RequestID === requestid,
-              description: 'r.RequestID=requestid',
-            }).build().pass
-        ),
-      description: 'self.CurrentLoanRequests->any(r:LoanRequest|r.RequestID=requestid)',
-    }).build().pass;
+    let rs: LoanRequest = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            this.CurrentLoanRequests.find(
+              (r: LoanRequest) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(r.RequestID, requestid),
+                  description: 'r.RequestID=requestid',
+                }).build().pass
+            ),
+          description: 'self.CurrentLoanRequests->any(r:LoanRequest|r.RequestID=requestid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(rs) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(rs), false),
       description: 'rs.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -182,17 +195,42 @@ class EvaluateLoanRequestModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentLoanRequest = rs),
-      description: 'self.CurrentLoanRequest=rs',
-    })
-      .and({
-        execute: () => rs,
-        description: 'result=rs',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentLoanRequest = rs),
+        description: 'self.CurrentLoanRequest=rs',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => rs,
+          description: 'result=rs',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(this.CurrentLoanRequest, rs),
+        description: 'self.CurrentLoanRequest=rs',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, rs),
+          description: 'result=rs',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {EvaluateLoanRequestModule};

@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
-          definition:
-          usr:User = User.allInstance()->any(u:User|u.UserID=uid), copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy|bc.Barcode=barcode), loan:Loan = Loan.allInstance()->any(l:Loan|l.LoanedUser=usr and l.LoanedCopy=copy and l.IsReturned=false)
-            precondition:
-          usr.oclIsUndefined() = false and copy.oclIsUndefined() = false and loan.oclIsUndefined() = false and usr.BorrowStatus = User::NORMAL and loan.RenewedTimes < 3
-            postcondition:
-          loan.RenewDate = self.CurrentDate and loan.DueDate = self.CalculateNewDueDate(loan.DueDate) and loan.RenewedTimes = loan@pre.RenewedTimes + 1 and result = true
-            
-        }

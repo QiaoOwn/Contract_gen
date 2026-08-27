@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*Represents a repair task with details including status and related staff.*/
 class Repair {
   /*The unique identifier of the repair task*/
@@ -75,8 +83,9 @@ const getRepository = <T>(clazz: new (...args: any[]) => T) => {
 export {Repair, Staff, Device, ApprovalHistory, getRepository};
 
 class AirportSystem {
-  /*find staff with provided id and boss with provided boss id, if the staff not exist,
-   *create a new staff with provided info, and set the staff's boss to the boss you find*/
+  /*Definition: When the airport adds a new Staff member, the admin records their basic information so the person can be identified and contacted, and their Role and reporting line are clear.
+   *Precondition: The staff ID is unique and not already assigned to an existing employee.
+   *Postcondition: A new Staff is created with Id, Name, Password, Phone, and Role. If a Boss is provided and exists, the Staff is linked to that Boss, so the organizational relationship is established.*/
   createStaff(
     id: number,
     name: string,
@@ -86,33 +95,39 @@ class AirportSystem {
     bossid: number
   ): boolean {
     /*Definition Start*/
-    let sta: Staff = l({
-      logic: () =>
-        getRepository(Staff).find(
-          (u: Staff) =>
-            l({
-              logic: () => u.Id === id,
-              description: 'u.Id=id',
-            }).build().pass
-        ),
-      description: 'Staff.allInstance()->any(u:Staff|u.Id=id)',
-    }).build().pass;
-    let bo: Staff = l({
-      logic: () =>
-        getRepository(Staff).find(
-          (uu: Staff) =>
-            l({
-              logic: () => uu.Id === bossid,
-              description: 'uu.Id=bossid',
-            }).build().pass
-        ),
-      description: 'Staff.allInstance()->any(uu:Staff|uu.Id=bossid)',
-    }).build().pass;
+    let sta: Staff = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Staff).find(
+              (u: Staff) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.Id, id),
+                  description: 'u.Id=id',
+                }).build().pass
+            ),
+          description: 'Staff.allInstances()->any(u:Staff|u.Id=id)',
+        }).build().pass
+    );
+    let bo: Staff = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Staff).find(
+              (uu: Staff) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(uu.Id, bossid),
+                  description: 'uu.Id=bossid',
+                }).build().pass
+            ),
+          description: 'Staff.allInstances()->any(uu:Staff|uu.Id=bossid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(sta) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(sta), true),
       description: 'sta.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -120,54 +135,116 @@ class AirportSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let s: Staff;
-    return l({
-      execute: () => (s = new Staff()),
-      description: 's.oclIsNew()',
-    })
-      .and({
-        execute: () => (s.Id = id),
-        description: 's.Id=id',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let s: Staff;
+      return l({
+        execute: () => (s = new Staff()),
+        description: 's.oclIsNew()',
       })
-      .and({
-        execute: () => (s.Name = name),
-        description: 's.Name=name',
-      })
-      .and({
-        execute: () => (s.Password = pswd),
-        description: 's.Password=pswd',
-      })
-      .and({
-        execute: () => (s.Phone = phone),
-        description: 's.Phone=phone',
-      })
-      .and({
-        execute: () => (s.Role = role),
-        description: 's.Role=role',
-      })
-      .if({
-        logic: () =>
-          l({
-            logic: () => StandardOPs.oclIsUndefined(bo) === false,
-            description: 'bo.oclIsUndefined()=false',
+        .and({
+          execute: () => (s.Id = id),
+          description: 's.Id=id',
+        })
+        .and({
+          execute: () => (s.Name = name),
+          description: 's.Name=name',
+        })
+        .and({
+          execute: () => (s.Password = pswd),
+          description: 's.Password=pswd',
+        })
+        .and({
+          execute: () => (s.Phone = phone),
+          description: 's.Phone=phone',
+        })
+        .and({
+          execute: () => (s.Role = role),
+          description: 's.Role=role',
+        })
+        .if({
+          logic: () =>
+            l({
+              logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bo), false),
+              description: 'bo.oclIsUndefined()=false',
+            }),
+          description: 'bo.oclIsUndefined()=false',
+          then: l({
+            execute: () => (s.Boss = bo),
+            description: 's.Boss=bo',
           }),
-        description: 'bo.oclIsUndefined()=false',
-        then: l({
-          execute: () => (s.Boss = bo),
-          description: 's.Boss=bo',
-        }),
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Staff), s),
+          description: 'Staff.allInstances()->includes(s)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let s: Staff = oclState.findNew(Staff);
+      return l({
+        logic: () => oclState.isNew(s, Staff),
+        description: 's.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(Staff).push(s),
-        description: 'Staff.allInstance()->includes(s)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(s.Id, id),
+          description: 's.Id=id',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(s.Name, name),
+          description: 's.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(s.Password, pswd),
+          description: 's.Password=pswd',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(s.Phone, phone),
+          description: 's.Phone=phone',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(s.Role, role),
+          description: 's.Role=role',
+        })
+        .if({
+          logic: () =>
+            l({
+              logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(bo), false),
+              description: 'bo.oclIsUndefined()=false',
+            }),
+          description: 'bo.oclIsUndefined()=false',
+          then: l({
+            logic: () => StandardOPs.oclEquals(s.Boss, bo),
+            description: 's.Boss=bo',
+          }),
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Staff), s),
+          description: 'Staff.allInstances()->includes(s)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {AirportSystem};

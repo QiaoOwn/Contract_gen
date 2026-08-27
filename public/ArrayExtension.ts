@@ -21,10 +21,10 @@ Array.prototype.sum = function (this: number[]): number {
 };
 
 Array.prototype.remove = function <T>(this: T[], target: T): T[] {
-  this.splice(
-    this.findIndex((e) => e === target),
-    1
-  );
+  const index = this.findIndex((e) => e === target);
+  if (index >= 0) {
+    this.splice(index, 1);
+  }
   return this;
 };
 

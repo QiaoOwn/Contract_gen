@@ -1,0 +1,3280 @@
+[
+  {
+    "id": "LibraryManagementSystem_borrowBook_borrowBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "borrowBook",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "borrowBook",
+    "requirement": "Operation intent:\nProcess a borrowing request from a user identifier and a book-copy barcode.\n\nPreconditions:\n- The User and BookCopy exist.\n- The User has NORMAL borrowing status and no suspension days.\n- A BACHELOR Student has fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60.\n- The copy is AVAILABLE, or it is ONHOLDSHELF, marked reserved, and has a matching open reservation for this user.\n\nPostconditions:\n- A new unreturned Loan is created and linked to the User and BookCopy with today as the loan date.\n- The due date is 30 days for a Student and 60 days for a Faculty user.\n- The user loan count increases by one, the copy becomes LOANED, and the 3-, 10-, 17-, and 31-day overdue flags start as false.\n- If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n    user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    stu:Student = Student.allInstances()->any(s:Student | s.UserID = uid),\n    fac:Faculty = Faculty.allInstances()->any(f:Faculty | f.UserID = uid),\n    copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode),\n    res:Reserve = Reserve.allInstances()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user and r.IsReserveClosed = false)",
+      "precondition": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    user.BorrowStatus = BorrowStatus::NORMAL and\n    user.SuspensionDays = 0 and\n    if\n      user.oclIsTypeOf(Student)\n    then\n      if\n        stu.Programme = Programme::BACHELOR\n      then\n        stu.LoanedNumber < 20\n      else\n        if\n          stu.Programme = Programme::MASTER\n        then\n          stu.LoanedNumber < 40\n        else\n          stu.LoanedNumber < 60\n        endif\n      endif\n    else\n      fac.LoanedNumber < 60\n    endif and\n    (copy.Status = CopyStatus::AVAILABLE or\n      (copy.Status = CopyStatus::ONHOLDSHELF and\n        copy.IsReserved = true and\n        res.oclIsUndefined() = false and\n        res.IsReserveClosed = false\n      )\n    )",
+      "postcondition": "\n    let loan:Loan in\n    loan.oclIsNew() and\n    loan.LoanedUser = user and\n    loan.LoanedCopy = copy and\n    loan.IsReturned = false and\n    loan.LoanDate = Today and\n    user.LoanedNumber = user.LoanedNumber@pre + 1 and\n    user.LoanedBook->includes(loan) and\n    copy.LoanedRecord->includes(loan) and\n    if\n      user.oclIsTypeOf(Student)\n    then\n      loan.DueDate = Today.After(30)\n    else\n      loan.DueDate = Today.After(60)\n    endif and\n    if\n      copy.Status@pre = CopyStatus::ONHOLDSHELF\n    then\n      copy.IsReserved = false and\n      res.IsReserveClosed = true\n    endif and\n    copy.Status = CopyStatus::LOANED and\n    loan.OverDue3Days = false and\n    loan.OverDue10Days = false and\n    loan.OverDue17Days = false and\n    loan.OverDue31Days = false and\n    Loan.allInstances()->includes(loan) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "LoanedUser",
+        "LoanedCopy",
+        "IsReturned",
+        "LoanedNumber",
+        "IsReserved",
+        "IsReserveClosed",
+        "OverDue3Days",
+        "OverDue10Days",
+        "OverDue17Days",
+        "OverDue31Days"
+      ],
+      "conditionalCount": 5,
+      "requirementConditionalCount": 1,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 14
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-borrowBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_submitLoanRequest_enterLoanInformation",
+    "project": "LoanProcessingSystem",
+    "useCase": "submitLoanRequest",
+    "service": "SubmitLoanRequestModule",
+    "operation": "enterLoanInformation",
+    "requirement": "Operation intent:\nCreate a loan request from the applicant, requested-loan, contact, reference, and account information.\n\nPreconditions:\n- The request identifier is unused.\n\nPostconditions:\n- A new LoanRequest stores all supplied application fields and enters the repository.\n- The request becomes the current LoanRequest and the operation returns true.",
+    "reference": {
+      "definition": "loanrequest:LoanRequest = LoanRequest.allInstances()->any(loa:LoanRequest | loa.RequestID = requestid)",
+      "precondition": "loanrequest.oclIsUndefined() = true",
+      "postcondition": "let loa:LoanRequest in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.RequestID = requestid and\n\t\t\tloa.Name = name and\n\t\t\tloa.LoanAmount = loanamount and\n\t\t\tloa.LoanPurpose = loanpurpose and\n\t\t\tloa.Income = income and\n\t\t\tloa.PhoneNumber = phonenumber and\n\t\t\tloa.PostalAddress = postaladdress and\n\t\t\tloa.ZipCode = zipcode and\n\t\t\tloa.Email = email and\n\t\t\tloa.WorkReferences = workreferences and\n\t\t\tloa.CreditReferences = creditreferences and\n\t\t\tloa.CheckingAccountNumber = checkingaccountnumber and\n\t\t\tloa.SecurityNumber = securitynumber and\n\t\t\tLoanRequest.allInstances()->includes(loa) and\n\t\t\tself.CurrentLoanRequest = loa and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "Name",
+        "LoanAmount",
+        "LoanPurpose",
+        "Income",
+        "PhoneNumber",
+        "PostalAddress",
+        "ZipCode",
+        "Email",
+        "WorkReferences",
+        "CreditReferences",
+        "CheckingAccountNumber",
+        "SecurityNumber"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 12
+    },
+    "oraclePath": "test\\LoanProcessingSystem-SubmitLoanRequestModule-enterLoanInformation\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_recommendBook_recommendBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "recommendBook",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "recommendBook",
+    "requirement": "Operation intent:\nRecord a user recommendation for a book not yet represented by that recommendation call number.\n\nPreconditions:\n- The User exists.\n- The recommendation call number is unused.\n\nPostconditions:\n- A RecommendBook is created with the supplied catalog data and today as the recommendation date.\n- It is linked to the User and stored.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n    user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    rb:RecommendBook = RecommendBook.allInstances()->any(r:RecommendBook | r.CallNo = callNo)",
+      "precondition": "\n    user.oclIsUndefined() = false and\n    rb.oclIsUndefined() = true",
+      "postcondition": "\n    let r:RecommendBook in\n    r.oclIsNew() and\n    r.CallNo = callNo and\n    r.Title = title and\n    r.Edition = edition and\n    r.Author = author and\n    r.Publisher = publisher and\n    r.Description = description and\n    r.ISBn = isbn and\n    r.RecommendDate = Today and\n    r.RecommendUser = user and\n    user.RecommendedBook->includes(r) and\n    RecommendBook.allInstances()->includes(r) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "CallNo",
+        "Title",
+        "Edition",
+        "Author",
+        "Publisher",
+        "Description",
+        "ISBn",
+        "RecommendDate",
+        "RecommendUser"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 9
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-recommendBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_manageUser_createUser",
+    "project": "LibraryManagementSystem",
+    "useCase": "manageUser",
+    "service": "ManageUserCRUDService",
+    "operation": "createUser",
+    "requirement": "Operation intent:\nRegister a library user with identity, authentication, faculty, and borrowing-state data.\n\nPreconditions:\n- The user identifier is unused.\n\nPostconditions:\n- A new User stores all supplied personal, login, loan-count, status, suspension, and fee values.\n- The User is stored and the operation returns true.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(use:User | use.UserID = userid)",
+      "precondition": "user.oclIsUndefined() = true",
+      "postcondition": "\n    let use:User in\n    use.oclIsNew() and\n    use.UserID = userid and\n    use.Name = name and\n    use.Sex = sex and\n    use.Password = password and\n    use.Email = email and\n    use.Faculty = faculty and\n    use.LoanedNumber = loanednumber and\n    use.BorrowStatus = borrowstatus and\n    use.SuspensionDays = suspensiondays and\n    use.OverDueFee = overduefee and\n    User.allInstances()->includes(use) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "Name",
+        "Sex",
+        "Password",
+        "Email",
+        "LoanedNumber",
+        "BorrowStatus",
+        "SuspensionDays",
+        "OverDueFee"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 8
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ManageUserCRUDService-createUser\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_checkBalance_ejectCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "checkBalance",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "ejectCard",
+    "requirement": "Operation intent:\nEnd the authenticated ATM session and eject the current card.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n\nPostconditions:\n- The current card is cleared.\n- Authentication, deposit, and withdrawal state is reset, including transaction amounts.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "InputCard",
+        "PasswordValidated",
+        "CardIDValidated",
+        "IsWithdraw",
+        "IsDeposit",
+        "WithdrawedNumber",
+        "DepositedNumber"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 7
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-ejectCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_depositFunds_ejectCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "depositFunds",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "ejectCard",
+    "requirement": "Operation intent:\nEnd the authenticated ATM session and eject the current card.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n\nPostconditions:\n- The current card is cleared.\n- Authentication, deposit, and withdrawal state is reset, including transaction amounts.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "InputCard",
+        "PasswordValidated",
+        "CardIDValidated",
+        "IsWithdraw",
+        "IsDeposit",
+        "WithdrawedNumber",
+        "DepositedNumber"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 7
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-ejectCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_withdrawCash_ejectCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "withdrawCash",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "ejectCard",
+    "requirement": "Operation intent:\nEnd the authenticated ATM session and eject the current card.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n\nPostconditions:\n- The current card is cleared.\n- Authentication, deposit, and withdrawal state is reset, including transaction amounts.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      self.InputCard = null and\n      self.PasswordValidated = false and\n      self.CardIDValidated = false and\n      self.IsWithdraw = false and\n      self.IsDeposit = false and\n      self.WithdrawedNumber = 0 and\n      self.DepositedNumber = 0 and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "InputCard",
+        "PasswordValidated",
+        "CardIDValidated",
+        "IsWithdraw",
+        "IsDeposit",
+        "WithdrawedNumber",
+        "DepositedNumber"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 7
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-ejectCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_renewBook_renewBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "renewBook",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "renewBook",
+    "requirement": "Operation intent:\nRenew an active loan for a user and a loaned book copy.\n\nPreconditions:\n- The User, BookCopy, and matching Loan exist and the User has NORMAL status.\n- The copy is not reserved, the due date is after today, and the Loan has no overdue fee.\n- A Student has fewer than 3 renewals and a Faculty user has fewer than 6.\n\nPostconditions:\n- The renewal count increases and the renewal date becomes today.\n- From its previous value, the due date is extended by 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student, and 60 for Faculty.\n- The operation returns true.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid),\n\t\t\tstu:Student = Student.allInstances()->any(s:Student | s.UserID = uid),\n\t\t\tfac:Faculty = Faculty.allInstances()->any(f:Faculty | f.UserID = uid),\n\t\t\tcopy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode and bc.Status = CopyStatus::LOANED),\n\t\t\tloan:Loan = Loan.allInstances()->any(l:Loan | l.LoanedUser = user and l.LoanedCopy = copy and l.IsReturned = false)",
+      "precondition": "user.BorrowStatus = BorrowStatus::NORMAL and\n\t\t\tuser.oclIsUndefined() = false and\n\t\t\tcopy.oclIsUndefined() = false and\n\t\t\tloan.oclIsUndefined() = false and\n\t\t\tcopy.IsReserved = false and\n\t\t\tloan.DueDate.isAfter(Today) and\n\t\t\tif\n\t\t\t\tuser.oclIsTypeOf(Student)\n\t\t\tthen\n\t\t\t\tloan.RenewedTimes < 3\n\t\t\telse\n\t\t\t\tloan.RenewedTimes < 6\n\t\t\tendif and\n\t\t\tloan.OverDueFee = 0",
+      "postcondition": "loan.RenewedTimes = loan.RenewedTimes@pre + 1 and\n\t\t\tloan.RenewDate = Today and\n\t\t\tif\n\t\t\t\tuser.oclIsTypeOf(Student)\n\t\t\tthen\n\t\t\t\tif\n\t\t\t\t\tstu.Programme = Programme::BACHELOR\n\t\t\t\tthen\n\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(20)\n\t\t\t\telse\n\t\t\t\t\tif\n\t\t\t\t\t\tstu.Programme = Programme::MASTER\n\t\t\t\t\tthen\n\t\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(40)\n\t\t\t\t\telse\n\t\t\t\t\t\tloan.DueDate = loan.DueDate@pre.After(60)\n\t\t\t\t\tendif\n\t\t\t\tendif\n\t\t\telse\n\t\t\t\tloan.DueDate = loan.DueDate@pre.After(60)\n\t\t\tendif and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["RenewedTimes", "RenewDate", "Programme"],
+      "conditionalCount": 4,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 7
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-renewBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_processSale_makeCashPayment",
+    "project": "CoCoME",
+    "useCase": "processSale",
+    "service": "ProcessSaleService",
+    "operation": "makeCashPayment",
+    "requirement": "Operation intent:\nPay the current sale with the supplied cash amount.\n\nPreconditions:\n- The current Sale exists, is incomplete, and is ready for payment.\n- The tendered amount covers the Sale amount.\n\nPostconditions:\n- A CashPayment records the tendered amount and change and is linked to the Sale.\n- The Sale is linked to the current Store, timestamped, and marked complete.\n- The payment is stored and the operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nCurrentSale.IsReadytoPay = true and\namount >= CurrentSale.Amount",
+      "postcondition": "\nlet cp:CashPayment in\ncp.oclIsNew() and\ncp.AmountTendered = amount and\ncp.BelongedSale = CurrentSale and\nCurrentSale.AssoicatedPayment = cp and\nCurrentSale.Belongedstore = CurrentStore and\nCurrentStore.Sales->includes(CurrentSale) and\nCurrentSale.IsComplete = true and\nCurrentSale.Time = Now and\ncp.Balance = amount - CurrentSale.Amount and\nCashPayment.allInstances()->includes(cp) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "AmountTendered",
+        "BelongedSale",
+        "AssoicatedPayment",
+        "Belongedstore",
+        "IsComplete",
+        "Balance"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 6
+    },
+    "oraclePath": "test\\CoCoME-ProcessSaleService-makeCashPayment\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_processSale_enterItem",
+    "project": "CoCoME",
+    "useCase": "processSale",
+    "service": "ProcessSaleService",
+    "operation": "enterItem",
+    "requirement": "Operation intent:\nAdd a scanned item and quantity to the current sale.\n\nPreconditions:\n- The current Sale exists and is incomplete.\n- The scanned Item exists and has positive stock.\n\nPostconditions:\n- A SalesLineItem is created, linked to the Sale and Item, and records the quantity and subtotal.\n- The Item stock decreases by the entered quantity.\n- The operation returns true.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(i:Item | i.Barcode = barcode)",
+      "precondition": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nitem.oclIsUndefined() = false and\nitem.StockNumber > 0",
+      "postcondition": "\nlet sli:SalesLineItem in\nsli.oclIsNew() and\nself.CurrentSaleLine = sli and\nsli.BelongedSale = CurrentSale and\nCurrentSale.ContainedSalesLine->includes(sli) and\nsli.Quantity = quantity and\nsli.BelongedItem = item and\nitem.StockNumber = item.StockNumber@pre - quantity and\nsli.Subamount = item.Price * quantity and\nSalesLineItem.allInstances()->includes(sli) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "CurrentSaleLine",
+        "BelongedSale",
+        "BelongedItem",
+        "StockNumber",
+        "Subamount"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 5
+    },
+    "oraclePath": "test\\CoCoME-ProcessSaleService-enterItem\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_makeReservation_makeReservation",
+    "project": "LibraryManagementSystem",
+    "useCase": "makeReservation",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "makeReservation",
+    "requirement": "Operation intent:\nCreate a reservation for a user and a currently loaned copy.\n\nPreconditions:\n- The User and BookCopy exist.\n- The copy is LOANED and is not already reserved.\n\nPostconditions:\n- A new open Reserve record is created for today and linked to the User and BookCopy.\n- The copy is marked reserved and the reservation is stored.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n    user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode)",
+      "precondition": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    copy.Status = CopyStatus::LOANED and\n    copy.IsReserved = false",
+      "postcondition": "\n    let res:Reserve in\n    res.oclIsNew() and\n    copy.IsReserved = true and\n    res.IsReserveClosed = false and\n    res.ReserveDate = Today and\n    res.ReservedUser = user and\n    res.ReservedCopy = copy and\n    user.ReservedBook->includes(res) and\n    copy.ReservationRecord->includes(res) and\n    Reserve.allInstances()->includes(res) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [
+        "IsReserved",
+        "IsReserveClosed",
+        "ReserveDate",
+        "ReservedUser",
+        "ReservedCopy"
+      ],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 5
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-makeReservation\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_manageBookCopy_addBookCopy",
+    "project": "LibraryManagementSystem",
+    "useCase": "manageBookCopy",
+    "service": "ManageBookCopyCRUDService",
+    "operation": "addBookCopy",
+    "requirement": "Operation intent:\nAdd a physical copy to an existing book.\n\nPreconditions:\n- The Book identified by call number exists.\n- That Book has no copy with the supplied barcode.\n\nPostconditions:\n- A new AVAILABLE and unreserved BookCopy is created with the supplied barcode and location.\n- The copy is linked to the Book, the copy count increases, and the copy is stored.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n    book:Book = Book.allInstances()->any(b:Book | b.CallNo = callNo),\n    bc:BookCopy = book.Copys->any(c:BookCopy | c.Barcode = barcode)",
+      "precondition": "\n    book.oclIsUndefined() = false and\n    bc.oclIsUndefined() = true",
+      "postcondition": "\n    let copy:BookCopy in\n    copy.oclIsNew() and\n    copy.Barcode = barcode and\n    copy.Status = CopyStatus::AVAILABLE and\n    copy.Location = location and\n    copy.IsReserved = false and\n    book.Copys->includes(copy) and\n    copy.BookBelongs = book and\n    book.CopyNum = book.CopyNum@pre + 1 and\n    BookCopy.allInstances()->includes(copy) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["Status", "IsReserved", "BookBelongs", "CopyNum"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 4
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ManageBookCopyCRUDService-addBookCopy\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_depositFunds_printReceipt",
+    "project": "AutomatedTellerMachine",
+    "useCase": "depositFunds",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "printReceipt",
+    "requirement": "Operation intent:\nReturn the amount to print on the receipt for the current ATM transaction.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n\nPostconditions:\n- The withdrawal amount is returned after a withdrawal, the deposit amount after a deposit, and zero when neither occurred.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.CardIDValidated = true and\n      self.PasswordValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      if\n\t\t\t\tself.IsWithdraw = true\n\t\t\tthen\n\t\t\t\tresult = self.WithdrawedNumber\n\t\t\telse\n\t\t\t\tif\n\t\t\t\t\tself.IsDeposit = true\n\t\t\t\tthen\n\t\t\t\t\tresult = self.DepositedNumber\n\t\t\t\telse\n\t\t\t\t\tresult = 0\n\t\t\t\tendif\n\t\t\tendif\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsWithdraw", "IsDeposit"],
+      "conditionalCount": 2,
+      "requirementConditionalCount": 1,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 3
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-printReceipt\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_withdrawCash_printReceipt",
+    "project": "AutomatedTellerMachine",
+    "useCase": "withdrawCash",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "printReceipt",
+    "requirement": "Operation intent:\nReturn the amount to print on the receipt for the current ATM transaction.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n\nPostconditions:\n- The withdrawal amount is returned after a withdrawal, the deposit amount after a deposit, and zero when neither occurred.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.CardIDValidated = true and\n      self.PasswordValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      if\n\t\t\t\tself.IsWithdraw = true\n\t\t\tthen\n\t\t\t\tresult = self.WithdrawedNumber\n\t\t\telse\n\t\t\t\tif\n\t\t\t\t\tself.IsDeposit = true\n\t\t\t\tthen\n\t\t\t\t\tresult = self.DepositedNumber\n\t\t\t\telse\n\t\t\t\t\tresult = 0\n\t\t\t\tendif\n\t\t\tendif\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsWithdraw", "IsDeposit"],
+      "conditionalCount": 2,
+      "requirementConditionalCount": 1,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 3
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-printReceipt\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "Airport_raiseRepair_approve",
+    "project": "Airport",
+    "useCase": "raiseRepair",
+    "service": "RepairService",
+    "operation": "approve",
+    "requirement": "Operation intent:\nRecord a staff approval decision for a repair request.\n\nPreconditions:\n- The referenced Repair exists.\n- The referenced Staff member exists.\n\nPostconditions:\n- A new ApprovalHistory records the decision and suggestion and is linked to the Repair.\n- When reject is true, Process advances from 0 to 1 for a role-1 Staff member, from 1 to 2 for role 2, and from 2 to 3 for role 3.\n- When reject is false, Repair.Process is set to the rejected stage value 5.\n- The operation returns the new ApprovalHistory.",
+    "reference": {
+      "definition": "rep:Repair = Repair.allInstances()->any(u:Repair | u.Id = rid),\n                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = sid)",
+      "precondition": "rep.oclIsUndefined() = false and sta.oclIsUndefined() = false",
+      "postcondition": "let ah:ApprovalHistory in\n\t\t\tah.oclIsNew() and\n\t\t\tah.Reject = reject and\n\t\t\tah.Suggestion = suggestion and\n\t\t\tApprovalHistory.allInstances()->includes(ah) and\n\t\t\trep.History->includes(ah) and\n\t\t\tif\n\t\t\t\treject <> false\n\t\t\tthen\n\t\t\t\tif\n\t\t\t\t\trep.Process = 0 and // STAFFREQUEST\n\t\t\t\t\tsta.Role = 1 // MASTER\n\t\t\t\tthen\n\t\t\t\t\trep.Process = 1 // MASTERAPPROVE\n\t\t\t\telse\n\t\t\t\t\tif\n\t\t\t\t\t\trep.Process = 1 and // MASTERAPPROVE\n\t\t\t\t\t\tsta.Role = 2 // MANAGER\n\t\t\t\t\tthen\n\t\t\t\t\t\trep.Process = 2 // MANAGERAPPROVE\n\t\t\t\t\telse\n\t\t\t\t\t\tif\n\t\t\t\t\t\t\trep.Process = 2 and // MANAGERAPPROVE\n\t\t\t\t\t\t\tsta.Role = 3 // WORKER\n\t\t\t\t\t\tthen\n\t\t\t\t\t\t\trep.Process = 3 // WORKERAPPROVE\n\t\t\t\t\t\tendif\n\t\t\t\t\tendif\n\t\t\t\tendif\n\t\t\telse\n\t\t\t\trep.Process = 5 // REJECT\n\t\t\tendif and\n\t\t\tRepair.allInstances()->includes(rep) and\n\t\t\tresult = ah"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 4,
+      "requirementConditionalCount": 2,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\Airport-RepairService-approve\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_checkBalance_inputCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "checkBalance",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "inputCard",
+    "requirement": "Operation intent:\nRead a bank-card identifier and start an authenticated ATM session.\n\nPreconditions:\n- The BankCard exists and has NORMAL status.\n\nPostconditions:\n- If the card belongs to a user, the ATM stores it as the current card, marks the card identifier as validated, and returns true.\n- Otherwise, the card identifier remains unvalidated and the operation returns false.",
+    "reference": {
+      "definition": "bc:BankCard = BankCard.allInstances()->any(c:BankCard | c.CardID = cardid)",
+      "precondition": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+      "postcondition": "\n          if bc.BelongedUser.oclIsUndefined()=false then\n            self.CardIDValidated = true and\n            self.InputCard = bc and\n            result = true\n          else\n            self.CardIDValidated = false and\n            result = false\n          endif\n        "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CardIDValidated", "InputCard"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 2,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-inputCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_checkBalance_inputPassword",
+    "project": "AutomatedTellerMachine",
+    "useCase": "checkBalance",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "inputPassword",
+    "requirement": "Operation intent:\nValidate the supplied password for the card in the current ATM session.\n\nPreconditions:\n- The card identifier has been validated.\n- A current BankCard is present.\n\nPostconditions:\n- A matching password marks the session password as validated and returns true.\n- A non-matching password marks it as unvalidated and returns false.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n          self.CardIDValidated = true and\n          self.InputCard.oclIsUndefined() = false\n        ",
+      "postcondition": "\n          if self.InputCard.Password = password then\n            self.PasswordValidated = true and\n            result = true\n          else\n            self.PasswordValidated = false and\n            result = false\n          endif\n        "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["PasswordValidated"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-inputPassword\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_depositFunds_inputCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "depositFunds",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "inputCard",
+    "requirement": "Operation intent:\nRead a bank-card identifier and start an authenticated ATM session.\n\nPreconditions:\n- The BankCard exists and has NORMAL status.\n\nPostconditions:\n- If the card belongs to a user, the ATM stores it as the current card, marks the card identifier as validated, and returns true.\n- Otherwise, the card identifier remains unvalidated and the operation returns false.",
+    "reference": {
+      "definition": "bc:BankCard = BankCard.allInstances()->any(c:BankCard | c.CardID = cardid)",
+      "precondition": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+      "postcondition": "\n          if bc.BelongedUser.oclIsUndefined()=false then\n            self.CardIDValidated = true and\n            self.InputCard = bc and\n            result = true\n          else\n            self.CardIDValidated = false and\n            result = false\n          endif\n        "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CardIDValidated", "InputCard"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 2,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-inputCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_depositFunds_inputPassword",
+    "project": "AutomatedTellerMachine",
+    "useCase": "depositFunds",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "inputPassword",
+    "requirement": "Operation intent:\nValidate the supplied password for the card in the current ATM session.\n\nPreconditions:\n- The card identifier has been validated.\n- A current BankCard is present.\n\nPostconditions:\n- A matching password marks the session password as validated and returns true.\n- A non-matching password marks it as unvalidated and returns false.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n          self.CardIDValidated = true and\n          self.InputCard.oclIsUndefined() = false\n        ",
+      "postcondition": "\n          if self.InputCard.Password = password then\n            self.PasswordValidated = true and\n            result = true\n          else\n            self.PasswordValidated = false and\n            result = false\n          endif\n        "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["PasswordValidated"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-inputPassword\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_depositFunds_depositFunds",
+    "project": "AutomatedTellerMachine",
+    "useCase": "depositFunds",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "depositFunds",
+    "requirement": "Operation intent:\nDeposit the supplied amount into the card account in the authenticated ATM session.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n- The deposit amount is at least 100.\n\nPostconditions:\n- The card balance increases by the deposited amount.\n- The session records the deposit and its amount.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false and\n      quantity >= 100\n    ",
+      "postcondition": "\n      self.InputCard.Balance = self.InputCard.Balance@pre + quantity and\n      self.IsDeposit = true and\n      self.DepositedNumber = quantity and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsDeposit", "DepositedNumber"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-depositFunds\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_withdrawCash_inputCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "withdrawCash",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "inputCard",
+    "requirement": "Operation intent:\nRead a bank-card identifier and start an authenticated ATM session.\n\nPreconditions:\n- The BankCard exists and has NORMAL status.\n\nPostconditions:\n- If the card belongs to a user, the ATM stores it as the current card, marks the card identifier as validated, and returns true.\n- Otherwise, the card identifier remains unvalidated and the operation returns false.",
+    "reference": {
+      "definition": "bc:BankCard = BankCard.allInstances()->any(c:BankCard | c.CardID = cardid)",
+      "precondition": "bc.oclIsUndefined() = false and bc.CardStatus=CardStatus::NORMAL",
+      "postcondition": "\n           if bc.BelongedUser.oclIsUndefined()=false then\n             self.CardIDValidated = true and\n             self.InputCard = bc and\n             result = true\n           else\n             self.CardIDValidated = false and\n             result = false\n           endif\n         "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CardIDValidated", "InputCard"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 2,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-inputCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_withdrawCash_inputPassword",
+    "project": "AutomatedTellerMachine",
+    "useCase": "withdrawCash",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "inputPassword",
+    "requirement": "Operation intent:\nValidate the supplied password for the card in the current ATM session.\n\nPreconditions:\n- The card identifier has been validated.\n- A current BankCard is present.\n\nPostconditions:\n- A matching password marks the session password as validated and returns true.\n- A non-matching password marks it as unvalidated and returns false.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      if self.InputCard.Password = password then\n        self.PasswordValidated = true and\n        result = true\n      else\n        self.PasswordValidated = false and\n        result = false\n      endif\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["PasswordValidated"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-inputPassword\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_withdrawCash_withdrawCash",
+    "project": "AutomatedTellerMachine",
+    "useCase": "withdrawCash",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "withdrawCash",
+    "requirement": "Operation intent:\nWithdraw the supplied amount from the card account in the authenticated ATM session.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n- The card balance covers the requested amount.\n\nPostconditions:\n- The card balance decreases by the withdrawn amount.\n- The session records the withdrawal and its amount.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false and\n      self.InputCard.Balance >= quantity\n    ",
+      "postcondition": "\n      self.InputCard.Balance = self.InputCard.Balance@pre - quantity and\n      self.WithdrawedNumber = quantity and\n      self.IsWithdraw = true and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["WithdrawedNumber", "IsWithdraw"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-withdrawCash\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_orderProducts_makeNewOrder",
+    "project": "CoCoME",
+    "useCase": "orderProducts",
+    "service": "CoCoMEOrderProducts",
+    "operation": "makeNewOrder",
+    "requirement": "Operation intent:\nStart a new product order with the supplied order identifier.\n\nPreconditions:\n- The order identifier is unused.\n\nPostconditions:\n- A new OrderProduct is created in NEW status with the current time.\n- The order is stored as the current product order and added to the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "o:OrderProduct = OrderProduct.allInstances()->any(o:OrderProduct | o.Id = orderid)",
+      "precondition": "o.oclIsUndefined() = true",
+      "postcondition": "\nlet op:OrderProduct in\nop.oclIsNew() and\nop.OrderStatus = OrderStatus::NEW and\nop.Id = orderid and\nop.Time = Now and\nOrderProduct.allInstances()->includes(op) and\nself.CurrentOrderProduct = op and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["OrderStatus", "CurrentOrderProduct"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\CoCoME-CoCoMEOrderProducts-makeNewOrder\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_processSale_makeNewSale",
+    "project": "CoCoME",
+    "useCase": "processSale",
+    "service": "ProcessSaleService",
+    "operation": "makeNewSale",
+    "requirement": "Operation intent:\nStart a new sale at the current cash desk.\n\nPreconditions:\n- The current CashDesk exists and is open.\n- There is no current Sale, or the previous current Sale is complete.\n\nPostconditions:\n- A new incomplete and not-yet-payable Sale is created and linked to the current CashDesk.\n- The Sale is stored as the current sale and added to the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n    CurrentCashDesk.oclIsUndefined() = false and\n    CurrentCashDesk.IsOpened = true and\n    (CurrentSale.oclIsUndefined() = true or\n    (CurrentSale.oclIsUndefined() = false and\n        CurrentSale.IsComplete = true\n    )\n    )",
+      "postcondition": "\n    let s:Sale in\n    s.oclIsNew() and\n    s.BelongedCashDesk = CurrentCashDesk and\n    CurrentCashDesk.ContainedSales->includes(s) and\n    s.IsComplete = false and\n    s.IsReadytoPay = false and\n    Sale.allInstances()->includes(s) and\n    self.CurrentSale = s and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["BelongedCashDesk", "IsReadytoPay"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\CoCoME-ProcessSaleService-makeNewSale\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_cancelReservation_cancelReservation",
+    "project": "LibraryManagementSystem",
+    "useCase": "cancelReservation",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "cancelReservation",
+    "requirement": "Operation intent:\nCancel an open reservation for a user and a borrowed book copy.\n\nPreconditions:\n- The User, BookCopy, and matching Reserve record exist.\n- The copy is LOANED, marked reserved, and the reservation is still open.\n\nPostconditions:\n- The copy is no longer marked reserved.\n- The reservation is closed.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n    user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode),\n    res:Reserve = Reserve.allInstances()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user)",
+      "precondition": "\n    user.oclIsUndefined() = false and\n    copy.oclIsUndefined() = false and\n    copy.Status = CopyStatus::LOANED and\n    copy.IsReserved = true and\n    res.oclIsUndefined() = false and\n    res.IsReserveClosed = false",
+      "postcondition": "\n    copy.IsReserved = false and\n    res.IsReserveClosed = true and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsReserved", "IsReserveClosed"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-cancelReservation\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay",
+    "project": "LibraryManagementSystem",
+    "useCase": "countDownSuspensionDay",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "countDownSuspensionDay",
+    "requirement": "Operation intent:\nAdvance the daily suspension countdown for every suspended user.\n\nPreconditions:\n- No additional business condition is required.\n\nPostconditions:\n- Every User with remaining suspension days has the count reduced by one.\n- A suspended User with no overdue fee returns to NORMAL status when the countdown reaches zero.",
+    "reference": {
+      "definition": "users:Set(User) = User.allInstances()->select(u:User | u.SuspensionDays > 0)",
+      "precondition": "true",
+      "postcondition": "users->forAll(u:User |\n\t\t\t\tu.SuspensionDays = u.SuspensionDays@pre - 1 and\n\t\t\t\tif\n\t\t\t\t\tu.BorrowStatus = BorrowStatus::SUSPEND and\n\t\t\t\t\tu.OverDueFee = 0 and\n\t\t\t\t\tu.SuspensionDays = 0\n\t\t\t\tthen\n\t\t\t\t\tu.BorrowStatus = BorrowStatus::NORMAL\n\t\t\t\tendif\n\t\t\t)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["BorrowStatus", "OverDueFee"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 1,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-countDownSuspensionDay\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_manageBook_createBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "manageBook",
+    "service": "ManageBookCRUDService",
+    "operation": "createBook",
+    "requirement": "Operation intent:\nCreate a bibliographic Book record from the supplied catalog information.\n\nPreconditions:\n- No existing Book uses the supplied call number.\n\nPostconditions:\n- A new Book stores the call number, title, edition, author, publisher, description, ISBN, and copy count.\n- The Book is stored and the operation returns true.",
+    "reference": {
+      "definition": "book:Book = Book.allInstances()->any(boo:Book | boo.CallNo = callno)",
+      "precondition": "book.oclIsUndefined() = true",
+      "postcondition": "\n    let boo:Book in\n    boo.oclIsNew() and\n    boo.CallNo = callno and\n    boo.Title = title and\n    boo.Edition = edition and\n    boo.Author = author and\n    boo.Publisher = publisher and\n    boo.Description = description and\n    boo.ISBn = isbn and\n    boo.CopyNum = copynum and\n    Book.allInstances()->includes(boo) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CallNo", "CopyNum"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ManageBookCRUDService-createBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_generateLoanLetterAndAgreement_genereateApprovalLetter",
+    "project": "LoanProcessingSystem",
+    "useCase": "generateLoanLetterAndAgreement",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "operation": "genereateApprovalLetter",
+    "requirement": "Operation intent:\nGenerate an approval letter for an existing loan request.\n\nPreconditions:\n- The LoanRequest identified by the supplied identifier exists.\n\nPostconditions:\n- A new ApprovalLetter with the standard content is created and attached to the request.\n- The request becomes current, the letter is stored, and the operation returns true.",
+    "reference": {
+      "definition": "r:LoanRequest = LoanRequest.allInstances()->any(lr:LoanRequest | lr.RequestID = id)",
+      "precondition": "r.oclIsUndefined() = false",
+      "postcondition": "let l:ApprovalLetter in\n\t\t\tl.oclIsNew() and\n\t\t\tl.Content = \"ApprovalLetterContent\" and\n\t\t\tr.AttachedApprovalLetter = l and\n\t\t\tself.CurrentLoanRequest = r and\n\t\t\tApprovalLetter.allInstances()->includes(l) and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["AttachedApprovalLetter", "CurrentLoanRequest"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 2
+    },
+    "oraclePath": "test\\LoanProcessingSystem-GenerateLoanLetterAndAgreementModule-genereateApprovalLetter\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "Airport_manageDevice_createDevice",
+    "project": "Airport",
+    "useCase": "manageDevice",
+    "service": "AirportSystem",
+    "operation": "createDevice",
+    "requirement": "Operation intent:\nRegister a newly installed airport device and assign its responsible staff contact.\n\nPreconditions:\n- The device identifier is unused.\n- The selected contact identifies an existing Staff member.\n\nPostconditions:\n- A Device is created with the supplied identifier, name, and location.\n- The Device is linked to the selected Staff contact and stored.\n- The operation returns true.",
+    "reference": {
+      "definition": "dev:Device = Device.allInstances()->any(u:Device | u.Id = id),\n                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = contactsid)",
+      "precondition": "dev.oclIsUndefined() = true and sta.oclIsUndefined() = false",
+      "postcondition": "let d:Device in\n                     d.oclIsNew() and\n                     d.Id = id and\n                     d.Name = name and\n                     d.Location = location and\n                     d.Contacts = sta and\n                     Device.allInstances()->includes(d) and result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["Contacts"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\Airport-AirportSystem-createDevice\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "Airport_manageUser_createStaff",
+    "project": "Airport",
+    "useCase": "manageUser",
+    "service": "AirportSystem",
+    "operation": "createStaff",
+    "requirement": "Operation intent:\nRegister a new airport Staff member with contact, role, and optional reporting information.\n\nPreconditions:\n- The staff identifier is unused.\n\nPostconditions:\n- A Staff member is created with the supplied identity, password, phone, and role.\n- If bossid identifies an existing Staff member, the new Staff member is linked to that Boss; otherwise the Boss relationship remains undefined.\n- The operation returns true.",
+    "reference": {
+      "definition": "sta:Staff = Staff.allInstances()->any(u:Staff | u.Id = id),\n                 bo:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = bossid)",
+      "precondition": "sta.oclIsUndefined() = true",
+      "postcondition": "let s:Staff in\n                     s.oclIsNew() and\n                     s.Id = id and\n                     s.Name = name and\n                     s.Password = pswd and\n                     s.Phone = phone and\n                     s.Role = role and\n                     if bo.oclIsUndefined() = false then s.Boss = bo endif and\n                     Staff.allInstances()->includes(s) and result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["Name"],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 2,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\Airport-AirportSystem-createStaff\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "Airport_raiseRepair_feedback",
+    "project": "Airport",
+    "useCase": "raiseRepair",
+    "service": "RepairService",
+    "operation": "feedback",
+    "requirement": "Operation intent:\nRecord feedback from the staff member who raised a completed repair.\n\nPreconditions:\n- The supplied Staff member raised the Repair.\n- The Staff member has the GroundStaff role value 0.\n- The Repair.Process is the finished stage value 7.\n\nPostconditions:\n- The Repair score is updated.\n- A score greater than or equal to 3 closes the Repair.\n- A score below 3 leaves the Repair open, records des as its Description, and sets Process to the initial stage value 0.\n- The operation returns true.",
+    "reference": {
+      "definition": "rep:Repair = Repair.allInstances()->any(u:Repair | u.Id = id),\n                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = sid)",
+      "precondition": "rep.RaiseStaff = sta and sta.Role = 0 and rep.Process = 7",
+      "postcondition": "rep.Score = score and\n                    if score >= 3 then rep.Close = true\n                    else rep.Close = false and rep.Description = des and rep.Process = 0 endif and\n                    Repair.allInstances()->includes(rep) and result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 1,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\Airport-RepairService-feedback\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageBankCard_createBankCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageBankCard",
+    "service": "ManageBankCardCRUDService",
+    "operation": "createBankCard",
+    "requirement": "Operation intent:\nCreate a BankCard record from the supplied card identifier, status, catalog, password, balance.\n\nPreconditions:\n- No existing BankCard has the supplied card identifier.\n\nPostconditions:\n- A new BankCard is stored with the supplied card identifier, status, catalog, password, balance.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+      "precondition": "\n      bankcard.oclIsUndefined() = true\n    ",
+      "postcondition": "\n      let ban:BankCard in\n      ban.oclIsNew() and\n      ban.CardID = cardid and\n      ban.CardStatus = cardstatus and\n      ban.Catalog = catalog and\n      ban.Password = password and\n      ban.Balance = balance and\n      BankCard.allInstances()->includes(ban) and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CardStatus"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageBankCardCRUDService-createBankCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageBankCard_modifyBankCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageBankCard",
+    "service": "ManageBankCardCRUDService",
+    "operation": "modifyBankCard",
+    "requirement": "Operation intent:\nUpdate the BankCard identified by card identifier with the supplied card identifier, status, catalog, password, balance.\n\nPreconditions:\n- The referenced BankCard exists.\n\nPostconditions:\n- The stored BankCard contains the supplied card identifier, status, catalog, password, balance.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+      "precondition": "\n      bankcard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      \tbankcard.CardID = cardid and\n        bankcard.CardStatus = cardstatus and\n        bankcard.Catalog = catalog and\n        bankcard.Password = password and\n        bankcard.Balance = balance and\n        result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CardStatus"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageBankCardCRUDService-modifyBankCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_closeCashDesk_closeCashDesk",
+    "project": "CoCoME",
+    "useCase": "closeCashDesk",
+    "service": "CoCoMESystem",
+    "operation": "closeCashDesk",
+    "requirement": "Operation intent:\nClose a cash desk in the current open store.\n\nPreconditions:\n- The CashDesk exists and is open.\n- The current Store exists and is open.\n\nPostconditions:\n- The CashDesk becomes closed and remains the current cash desk.\n- The operation returns true.",
+    "reference": {
+      "definition": "cd:CashDesk = CashDesk.allInstances()->any(s:CashDesk | s.Id = cashDeskID)",
+      "precondition": "\ncd.oclIsUndefined() = false and\ncd.IsOpened = true and\nCurrentStore.oclIsUndefined() = false and\nCurrentStore.IsOpened = true",
+      "postcondition": "\nself.CurrentCashDesk = cd and\ncd.IsOpened = false and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-closeCashDesk\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_closeStore_closeStore",
+    "project": "CoCoME",
+    "useCase": "closeStore",
+    "service": "CoCoMESystem",
+    "operation": "closeStore",
+    "requirement": "Operation intent:\nClose an existing open store.\n\nPreconditions:\n- The Store exists and is currently open.\n\nPostconditions:\n- The Store becomes closed.\n- The operation returns true.",
+    "reference": {
+      "definition": "sto:Store = Store.allInstances()->any(s:Store | s.Id = storeID)",
+      "precondition": "\nsto.oclIsUndefined() = false and\nsto.IsOpened = true",
+      "postcondition": "\nsto.IsOpened = false and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-closeStore\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashDesk_createCashDesk",
+    "project": "CoCoME",
+    "useCase": "manageCashDesk",
+    "service": "ManageCashDeskCRUDService",
+    "operation": "createCashDesk",
+    "requirement": "Operation intent:\nCreate a CashDesk record from the supplied identifier, name, open state.\n\nPreconditions:\n- No existing CashDesk has the supplied identifier.\n\nPostconditions:\n- A new CashDesk is stored with the supplied identifier, name, open state.\n- The operation returns true.",
+    "reference": {
+      "definition": "cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)",
+      "precondition": "cashdesk.oclIsUndefined() = true",
+      "postcondition": "\nlet cas:CashDesk in\ncas.oclIsNew() and\ncas.Id = id and\ncas.Name = name and\ncas.IsOpened = isopened and\nCashDesk.allInstances()->includes(cas) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ManageCashDeskCRUDService-createCashDesk\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashDesk_modifyCashDesk",
+    "project": "CoCoME",
+    "useCase": "manageCashDesk",
+    "service": "ManageCashDeskCRUDService",
+    "operation": "modifyCashDesk",
+    "requirement": "Operation intent:\nUpdate the CashDesk identified by identifier with the supplied identifier, name, open state.\n\nPreconditions:\n- The referenced CashDesk exists.\n\nPostconditions:\n- The stored CashDesk contains the supplied identifier, name, open state.\n- The operation returns true.",
+    "reference": {
+      "definition": "cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)",
+      "precondition": "cashdesk.oclIsUndefined() = false",
+      "postcondition": "\ncashdesk.Id = id and\ncashdesk.Name = name and\ncashdesk.IsOpened = isopened and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ManageCashDeskCRUDService-modifyCashDesk\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageStore_createStore",
+    "project": "CoCoME",
+    "useCase": "manageStore",
+    "service": "ManageStoreCRUDService",
+    "operation": "createStore",
+    "requirement": "Operation intent:\nCreate a Store record from the supplied identifier, name, address, open state.\n\nPreconditions:\n- No existing Store has the supplied identifier.\n\nPostconditions:\n- A new Store is stored with the supplied identifier, name, address, open state.\n- The operation returns true.",
+    "reference": {
+      "definition": "store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)",
+      "precondition": "store.oclIsUndefined() = true",
+      "postcondition": "\nlet sto:Store in\nsto.oclIsNew() and\nsto.Id = id and\nsto.Name = name and\nsto.Address = address and\nsto.IsOpened = isopened and\nStore.allInstances()->includes(sto) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ManageStoreCRUDService-createStore\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageStore_modifyStore",
+    "project": "CoCoME",
+    "useCase": "manageStore",
+    "service": "ManageStoreCRUDService",
+    "operation": "modifyStore",
+    "requirement": "Operation intent:\nUpdate the Store identified by identifier with the supplied identifier, name, address, open state.\n\nPreconditions:\n- The referenced Store exists.\n\nPostconditions:\n- The stored Store contains the supplied identifier, name, address, open state.\n- The operation returns true.",
+    "reference": {
+      "definition": "store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)",
+      "precondition": "store.oclIsUndefined() = false",
+      "postcondition": "\nstore.Id = id and\nstore.Name = name and\nstore.Address = address and\nstore.IsOpened = isopened and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ManageStoreCRUDService-modifyStore\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageItem_createItem",
+    "project": "CoCoME",
+    "useCase": "manageItem",
+    "service": "ManageItemCRUDService",
+    "operation": "createItem",
+    "requirement": "Operation intent:\nCreate a Item record from the supplied barcode, name, sale price, stock quantity, order price.\n\nPreconditions:\n- No existing Item has the supplied barcode.\n\nPostconditions:\n- A new Item is stored with the supplied barcode, name, sale price, stock quantity, order price.\n- The operation returns true.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)",
+      "precondition": "item.oclIsUndefined() = true",
+      "postcondition": "\nlet ite:Item in\nite.oclIsNew() and\nite.Barcode = barcode and\nite.Name = name and\nite.Price = price and\nite.StockNumber = stocknumber and\nite.OrderPrice = orderprice and\nItem.allInstances()->includes(ite) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["StockNumber"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ManageItemCRUDService-createItem\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageItem_modifyItem",
+    "project": "CoCoME",
+    "useCase": "manageItem",
+    "service": "ManageItemCRUDService",
+    "operation": "modifyItem",
+    "requirement": "Operation intent:\nUpdate the Item identified by barcode with the supplied barcode, name, sale price, stock quantity, order price.\n\nPreconditions:\n- The referenced Item exists.\n\nPostconditions:\n- The stored Item contains the supplied barcode, name, sale price, stock quantity, order price.\n- The operation returns true.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)",
+      "precondition": "item.oclIsUndefined() = false",
+      "postcondition": "\nitem.Barcode = barcode and\nitem.Name = name and\nitem.Price = price and\nitem.StockNumber = stocknumber and\nitem.OrderPrice = orderprice and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["StockNumber"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ManageItemCRUDService-modifyItem\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_openCashDesk_openCashDesk",
+    "project": "CoCoME",
+    "useCase": "openCashDesk",
+    "service": "CoCoMESystem",
+    "operation": "openCashDesk",
+    "requirement": "Operation intent:\nOpen a cash desk in the current store and make it the current cash desk.\n\nPreconditions:\n- The CashDesk exists and is closed.\n- The current Store exists and is open.\n\nPostconditions:\n- The CashDesk becomes open and is stored as the current cash desk.\n- The operation returns true.",
+    "reference": {
+      "definition": "cd:CashDesk = CashDesk.allInstances()->any(s:CashDesk | s.Id = cashDeskID)",
+      "precondition": "\ncd.oclIsUndefined() = false and\ncd.IsOpened = false and\nCurrentStore.oclIsUndefined() = false and\nCurrentStore.IsOpened = true",
+      "postcondition": "\nself.CurrentCashDesk = cd and\ncd.IsOpened = true and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-openCashDesk\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_openStore_openStore",
+    "project": "CoCoME",
+    "useCase": "openStore",
+    "service": "CoCoMESystem",
+    "operation": "openStore",
+    "requirement": "Operation intent:\nOpen an existing store and make it the current store.\n\nPreconditions:\n- The Store exists and is currently closed.\n\nPostconditions:\n- The Store becomes open and is stored as the current store.\n- The operation returns true.",
+    "reference": {
+      "definition": "sto:Store = Store.allInstances()->any(s:Store | s.Id = storeID)",
+      "precondition": "\nsto.oclIsUndefined() = false and\nsto.IsOpened = false",
+      "postcondition": "\nself.CurrentStore = sto and\nsto.IsOpened = true and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsOpened"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-openStore\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_orderProducts_listAllOutOfStoreProducts",
+    "project": "CoCoME",
+    "useCase": "orderProducts",
+    "service": "CoCoMEOrderProducts",
+    "operation": "listAllOutOfStoreProducts",
+    "requirement": "Operation intent:\nList products whose stock is exhausted.\n\nPreconditions:\n- No additional business condition is required.\n\nPostconditions:\n- The operation returns every Item with a stock quantity of zero.",
+    "reference": {
+      "definition": null,
+      "precondition": "true",
+      "postcondition": "\nresult = Item.allInstances()->select(item:Item | item.StockNumber = 0)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["StockNumber"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMEOrderProducts-listAllOutOfStoreProducts\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_orderProducts_orderItem",
+    "project": "CoCoME",
+    "useCase": "orderProducts",
+    "service": "CoCoMEOrderProducts",
+    "operation": "orderItem",
+    "requirement": "Operation intent:\nAdd a requested item and quantity to the current product order.\n\nPreconditions:\n- The Item identified by the supplied barcode exists.\n\nPostconditions:\n- A new OrderEntry records the Item, quantity, and order-price subtotal.\n- The entry is stored and linked to the current OrderProduct.\n- The operation returns true.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(i:Item | i.Barcode = barcode)",
+      "precondition": "item.oclIsUndefined() = false",
+      "postcondition": "\nlet order:OrderEntry in\norder.oclIsNew() and\norder.Quantity = quantity and\norder.SubAmount = item.OrderPrice * quantity and\norder.Item = item and\nOrderEntry.allInstances()->includes(order) and\nCurrentOrderProduct.ContainedEntries->includes(order) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["SubAmount"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMEOrderProducts-orderItem\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_processSale_endSale",
+    "project": "CoCoME",
+    "useCase": "processSale",
+    "service": "ProcessSaleService",
+    "operation": "endSale",
+    "requirement": "Operation intent:\nFinish item entry and calculate the amount due for the current sale.\n\nPreconditions:\n- The current Sale exists, is incomplete, and is not yet ready for payment.\n\nPostconditions:\n- The Sale amount becomes the sum of its line-item subtotals.\n- The Sale becomes ready for payment and the operation returns the amount due.",
+    "reference": {
+      "definition": "\nsls:Set(SalesLineItem) = CurrentSale.ContainedSalesLine,\nsub:Set(Real) = sls->collect(s:SalesLineItem | s.Subamount)",
+      "precondition": "\nCurrentSale.oclIsUndefined() = false and\nCurrentSale.IsComplete = false and\nCurrentSale.IsReadytoPay = false",
+      "postcondition": "\nCurrentSale.Amount = sub.sum() and\nCurrentSale.IsReadytoPay = true and\nresult = CurrentSale.Amount"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsReadytoPay"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-ProcessSaleService-endSale\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_receiveOrderedProduct_receiveOrderedProduct",
+    "project": "CoCoME",
+    "useCase": "receiveOrderedProduct",
+    "service": "CoCoMESystem",
+    "operation": "receiveOrderedProduct",
+    "requirement": "Operation intent:\nReceive an existing product order and replenish stock from its entries.\n\nPreconditions:\n- The referenced OrderProduct exists.\n\nPostconditions:\n- The order status becomes RECEIVED.\n- Each ordered Item stock increases by the quantity in its OrderEntry.\n- The operation returns true.",
+    "reference": {
+      "definition": "op:OrderProduct = OrderProduct.allInstances()->any(i:OrderProduct | i.Id = orderID)",
+      "precondition": "op.oclIsUndefined() = false",
+      "postcondition": "\nop.OrderStatus = OrderStatus::RECEIVED and\nop.ContainedEntries->forAll(oe:OrderEntry |\n  oe.Item.StockNumber = oe.Item.StockNumber@pre + oe.Quantity)\nand\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["StockNumber"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-receiveOrderedProduct\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_listBookHistory_listHodingBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "listBookHistory",
+    "service": "ListBookHistory",
+    "operation": "listHodingBook",
+    "requirement": "Operation intent:\nList the loans currently held by a user.\n\nPreconditions:\n- The referenced User exists.\n\nPostconditions:\n- The operation returns the User loans that have not been returned.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid)",
+      "precondition": "user.oclIsUndefined() = false",
+      "postcondition": "result = user.LoanedBook->select(l:Loan | l.IsReturned = false)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["IsReturned"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ListBookHistory-listHodingBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_payOverDueFee_payOverDueFee",
+    "project": "LibraryManagementSystem",
+    "useCase": "payOverDueFee",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "payOverDueFee",
+    "requirement": "Operation intent:\nPay the outstanding overdue fee for a user and the associated returned overdue loans.\n\nPreconditions:\n- The User exists and has returned overdue loans with positive fees.\n- The supplied payment covers the user total overdue fee.\n\nPostconditions:\n- The User overdue fee and each applicable Loan overdue fee become zero.\n- The operation returns true.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid),\n\t\t\tloans:Set(Loan) = Loan.allInstances()->select(l:Loan | l.LoanedUser = user and l.DueDate.isBefore(Today)and l.IsReturned = true and l.OverDueFee > 0)",
+      "precondition": "user.oclIsUndefined() = false and\n\t\t\tloans.notEmpty() and\n\t\t\tfee >= user.OverDueFee",
+      "postcondition": "user.OverDueFee = 0 and\n\t\t\tloans->forAll(l:Loan |\n\t\t\t\tl.OverDueFee = 0)\n\t\t\tand\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["OverDueFee"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-payOverDueFee\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_enterValidatedCreditReferences_listSubmitedLoanRequest",
+    "project": "LoanProcessingSystem",
+    "useCase": "enterValidatedCreditReferences",
+    "service": "EnterValidatedCreditReferencesModule",
+    "operation": "listSubmitedLoanRequest",
+    "requirement": "Operation intent:\nLoad all submitted loan requests for credit-reference validation.\n\nPreconditions:\n- At least one submitted LoanRequest exists.\n\nPostconditions:\n- The submitted requests become the current request collection and are returned.",
+    "reference": {
+      "definition": "rs:Set(LoanRequest) = LoanRequest.allInstances()->select(r:LoanRequest | r.Status =  LoanRequestStatus::SUBMITTED)",
+      "precondition": "rs.size() > 0",
+      "postcondition": "self.CurrentLoanRequests = rs and\n\t\t\tresult = rs"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CurrentLoanRequests"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EnterValidatedCreditReferencesModule-listSubmitedLoanRequest\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_listTenLoanRequest",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "listTenLoanRequest",
+    "requirement": "Operation intent:\nLoad LoanRequest records whose status is REFERENCESVALIDATED for evaluation.\n\nPreconditions:\n- The collection of matching LoanRequest records can be resolved.\n\nPostconditions:\n- The matching requests become the current request collection and are returned.",
+    "reference": {
+      "definition": "rs:Set(LoanRequest) = LoanRequest.allInstances()->select(r:LoanRequest | r.Status =  LoanRequestStatus::REFERENCESVALIDATED)",
+      "precondition": "rs.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequests = rs and result = rs"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CurrentLoanRequests"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-listTenLoanRequest\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_generateLoanLetterAndAgreement_listApprovalRequest",
+    "project": "LoanProcessingSystem",
+    "useCase": "generateLoanLetterAndAgreement",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "operation": "listApprovalRequest",
+    "requirement": "Operation intent:\nLoad all approved loan requests for document generation.\n\nPreconditions:\n- The collection of approved LoanRequest records can be resolved.\n\nPostconditions:\n- The approved requests become the current request collection and are returned.",
+    "reference": {
+      "definition": "rs:Set(LoanRequest) = LoanRequest.allInstances()->select(r:LoanRequest | r.Status =  LoanRequestStatus::APPROVED)",
+      "precondition": "rs.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequests = rs and result = rs"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["CurrentLoanRequests"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LoanProcessingSystem-GenerateLoanLetterAndAgreementModule-listApprovalRequest\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement",
+    "project": "LoanProcessingSystem",
+    "useCase": "generateLoanLetterAndAgreement",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "operation": "generateLoanAgreement",
+    "requirement": "Operation intent:\nGenerate a loan agreement for the current approved request.\n\nPreconditions:\n- A current LoanRequest exists.\n\nPostconditions:\n- A new LoanAgreement with the standard content is attached to the current request and stored.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false",
+      "postcondition": "let la:LoanAgreement in\n\t\t\tla.oclIsNew() and\n\t\t\tla.Content = \"Loan Agreement\" and\n\t\t\tself.CurrentLoanRequest.AttachedLoanAgreement = la and\n\t\t\tLoanAgreement.allInstances()->includes(la) and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["AttachedLoanAgreement"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LoanProcessingSystem-GenerateLoanLetterAndAgreementModule-generateLoanAgreement\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_loanPayment_loanPayment",
+    "project": "LoanProcessingSystem",
+    "useCase": "loanPayment",
+    "service": "LoanProcessingSystemSystem",
+    "operation": "loanPayment",
+    "requirement": "Operation intent:\nApply one scheduled repayment to an open loan.\n\nPreconditions:\n- The Loan exists and has LSOPEN status.\n\nPostconditions:\n- The remaining amount decreases by the Loan repayment amount.\n- The operation returns true.",
+    "reference": {
+      "definition": "loan:Loan = Loan.allInstances()->any(loa:Loan | loa.LoanID = loanid)",
+      "precondition": "loan.oclIsUndefined() = false and\n\t\t\tloan.Status = LoanStatus::LSOPEN",
+      "postcondition": "loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": ["RemainAmountToPay"],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 1
+    },
+    "oraclePath": "test\\LoanProcessingSystem-LoanProcessingSystemSystem-loanPayment\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "Airport_raiseRepair_finishRepair",
+    "project": "Airport",
+    "useCase": "raiseRepair",
+    "service": "RepairService",
+    "operation": "finishRepair",
+    "requirement": "Operation intent:\nMark a repair assigned to a worker as finished and record its result.\n\nPreconditions:\n- The referenced Device is assigned to the supplied Staff member.\n- The Staff member has the Worker role value 3.\n\nPostconditions:\n- The Repair.Process is set to the finished stage value 7.\n- The operation returns true.",
+    "reference": {
+      "definition": "rep:Repair = Repair.allInstances()->any(u:Repair | u.Id = id),\n                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = sid),\n                 dev:Device = Device.allInstances()->any(uuu:Device | uuu.Id = did)",
+      "precondition": "dev.Contacts = sta and sta.Role = 3",
+      "postcondition": "rep.Process = 7 and result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\Airport-RepairService-finishRepair\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_checkBalance_checkBalance",
+    "project": "AutomatedTellerMachine",
+    "useCase": "checkBalance",
+    "service": "AutomatedTellerMachineSystem",
+    "operation": "checkBalance",
+    "requirement": "Operation intent:\nRead the balance of the card in the authenticated ATM session.\n\nPreconditions:\n- The card identifier and password are validated.\n- A current BankCard is present.\n\nPostconditions:\n- The operation returns the current card balance without changing it.",
+    "reference": {
+      "definition": null,
+      "precondition": "\n      self.PasswordValidated = true and\n      self.CardIDValidated = true and\n      self.InputCard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      result = self.InputCard.Balance\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-AutomatedTellerMachineSystem-checkBalance\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageBankCard_queryBankCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageBankCard",
+    "service": "ManageBankCardCRUDService",
+    "operation": "queryBankCard",
+    "requirement": "Operation intent:\nRetrieve the BankCard identified by the supplied card identifier.\n\nPreconditions:\n- The referenced BankCard exists.\n\nPostconditions:\n- The operation returns the referenced BankCard.",
+    "reference": {
+      "definition": "\n      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+      "precondition": "\n     bankcard.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      result = bankcard\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageBankCardCRUDService-queryBankCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageBankCard_deleteBankCard",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageBankCard",
+    "service": "ManageBankCardCRUDService",
+    "operation": "deleteBankCard",
+    "requirement": "Operation intent:\nDelete the BankCard identified by the supplied card identifier.\n\nPreconditions:\n- The referenced BankCard exists in the repository.\n\nPostconditions:\n- The BankCard is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n      bankcard:BankCard = BankCard.allInstances()->any(ban:BankCard | ban.CardID = cardid)\n    ",
+      "precondition": "\n     bankcard.oclIsUndefined() = false and\n\t\t\tBankCard.allInstances()->includes(bankcard)\n    ",
+      "postcondition": "\n     BankCard.allInstances()->excludes(bankcard) and\n\t\t\tresult = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageBankCardCRUDService-deleteBankCard\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageUser_createUser",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageUser",
+    "service": "ManageUserCRUDService",
+    "operation": "createUser",
+    "requirement": "Operation intent:\nCreate a User record from the supplied user identifier, name, address.\n\nPreconditions:\n- No existing User has the supplied user identifier.\n\nPostconditions:\n- A new User is stored with the supplied user identifier, name, address.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n      user:User = User.allInstances()->any(use:User | use.UserID = userid)\n    ",
+      "precondition": "\n      user.oclIsUndefined() = true\n    ",
+      "postcondition": "\n      let use:User in\n      use.oclIsNew() and\n      use.UserID = userid and\n      use.Name = name and\n      use.Address = address and\n      User.allInstances()->includes(use) and\n      result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageUserCRUDService-createUser\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageUser_queryUser",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageUser",
+    "service": "ManageUserCRUDService",
+    "operation": "queryUser",
+    "requirement": "Operation intent:\nRetrieve the User identified by the supplied user identifier.\n\nPreconditions:\n- The referenced User exists.\n\nPostconditions:\n- The operation returns the referenced User.",
+    "reference": {
+      "definition": "\n      user:User = User.allInstances()->any(use:User | use.UserID = userid)\n    ",
+      "precondition": "\n      user.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      result = user\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageUserCRUDService-queryUser\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageUser_modifyUser",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageUser",
+    "service": "ManageUserCRUDService",
+    "operation": "modifyUser",
+    "requirement": "Operation intent:\nUpdate the User identified by user identifier with the supplied user identifier, name, address.\n\nPreconditions:\n- The referenced User exists.\n\nPostconditions:\n- The stored User contains the supplied user identifier, name, address.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n      user:User = User.allInstances()->any(use:User | use.UserID = userid)\n    ",
+      "precondition": "\n      user.oclIsUndefined() = false\n    ",
+      "postcondition": "\n        user.UserID = userid and\n        user.Name = name and\n        user.Address = address and\n        result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageUserCRUDService-modifyUser\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "AutomatedTellerMachine_manageUser_deleteUser",
+    "project": "AutomatedTellerMachine",
+    "useCase": "manageUser",
+    "service": "ManageUserCRUDService",
+    "operation": "deleteUser",
+    "requirement": "Operation intent:\nDelete the User identified by the supplied user identifier.\n\nPreconditions:\n- The referenced User exists in the repository.\n\nPostconditions:\n- The User is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "\n      user:User = User.allInstances()->any(use:User | use.UserID = userid)\n    ",
+      "precondition": "\n     user.oclIsUndefined() = false\n    ",
+      "postcondition": "\n      User.allInstances()->excludes(user) and\n\t  result = true\n    "
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\AutomatedTellerMachine-ManageUserCRUDService-deleteUser\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_changePrice_changePrice",
+    "project": "CoCoME",
+    "useCase": "changePrice",
+    "service": "CoCoMESystem",
+    "operation": "changePrice",
+    "requirement": "Operation intent:\nChange the sale price of the item identified by a barcode.\n\nPreconditions:\n- The referenced Item exists.\n\nPostconditions:\n- The Item price is set to the supplied new price.\n- The operation returns true.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(i:Item | i.Barcode = barcode)",
+      "precondition": "item.oclIsUndefined() = false",
+      "postcondition": "\nitem.Price = newPrice and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-changePrice\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_listSuppliers_listSuppliers",
+    "project": "CoCoME",
+    "useCase": "listSuppliers",
+    "service": "CoCoMESystem",
+    "operation": "listSuppliers",
+    "requirement": "Operation intent:\nList all registered suppliers.\n\nPreconditions:\n- No additional business condition is required.\n\nPostconditions:\n- The operation returns all Supplier records.",
+    "reference": {
+      "definition": null,
+      "precondition": "true",
+      "postcondition": "result = Supplier.allInstances()"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-listSuppliers\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashDesk_queryCashDesk",
+    "project": "CoCoME",
+    "useCase": "manageCashDesk",
+    "service": "ManageCashDeskCRUDService",
+    "operation": "queryCashDesk",
+    "requirement": "Operation intent:\nRetrieve the CashDesk identified by the supplied identifier.\n\nPreconditions:\n- The referenced CashDesk exists.\n\nPostconditions:\n- The operation returns the referenced CashDesk.",
+    "reference": {
+      "definition": "cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)",
+      "precondition": "cashdesk.oclIsUndefined() = false",
+      "postcondition": "result = cashdesk"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageCashDeskCRUDService-queryCashDesk\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashDesk_deleteCashDesk",
+    "project": "CoCoME",
+    "useCase": "manageCashDesk",
+    "service": "ManageCashDeskCRUDService",
+    "operation": "deleteCashDesk",
+    "requirement": "Operation intent:\nDelete the CashDesk identified by the supplied identifier.\n\nPreconditions:\n- The referenced CashDesk exists in the repository.\n\nPostconditions:\n- The CashDesk is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "cashdesk:CashDesk = CashDesk.allInstances()->any(cas:CashDesk | cas.Id = id)",
+      "precondition": "\ncashdesk.oclIsUndefined() = false and\nCashDesk.allInstances()->includes(cashdesk)",
+      "postcondition": "\nCashDesk.allInstances()->excludes(cashdesk) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageCashDeskCRUDService-deleteCashDesk\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashier_createCashier",
+    "project": "CoCoME",
+    "useCase": "manageCashier",
+    "service": "ManageCashierCRUDService",
+    "operation": "createCashier",
+    "requirement": "Operation intent:\nCreate a Cashier record from the supplied identifier, name.\n\nPreconditions:\n- No existing Cashier has the supplied identifier.\n\nPostconditions:\n- A new Cashier is stored with the supplied identifier, name.\n- The operation returns true.",
+    "reference": {
+      "definition": "cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)",
+      "precondition": "cashier.oclIsUndefined() = true",
+      "postcondition": "\nlet cas:Cashier in\ncas.oclIsNew() and\ncas.Id = id and\ncas.Name = name and\nCashier.allInstances()->includes(cas) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageCashierCRUDService-createCashier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashier_queryCashier",
+    "project": "CoCoME",
+    "useCase": "manageCashier",
+    "service": "ManageCashierCRUDService",
+    "operation": "queryCashier",
+    "requirement": "Operation intent:\nRetrieve the Cashier identified by the supplied identifier.\n\nPreconditions:\n- The referenced Cashier exists.\n\nPostconditions:\n- The operation returns the referenced Cashier.",
+    "reference": {
+      "definition": "cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)",
+      "precondition": "cashier.oclIsUndefined() = false",
+      "postcondition": "result = cashier"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageCashierCRUDService-queryCashier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashier_modifyCashier",
+    "project": "CoCoME",
+    "useCase": "manageCashier",
+    "service": "ManageCashierCRUDService",
+    "operation": "modifyCashier",
+    "requirement": "Operation intent:\nUpdate the Cashier identified by identifier with the supplied identifier, name.\n\nPreconditions:\n- The referenced Cashier exists.\n\nPostconditions:\n- The stored Cashier contains the supplied identifier, name.\n- The operation returns true.",
+    "reference": {
+      "definition": "cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)",
+      "precondition": "cashier.oclIsUndefined() = false",
+      "postcondition": "\ncashier.Id = id and\ncashier.Name = name and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageCashierCRUDService-modifyCashier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageCashier_deleteCashier",
+    "project": "CoCoME",
+    "useCase": "manageCashier",
+    "service": "ManageCashierCRUDService",
+    "operation": "deleteCashier",
+    "requirement": "Operation intent:\nDelete the Cashier identified by the supplied identifier.\n\nPreconditions:\n- The referenced Cashier exists in the repository.\n\nPostconditions:\n- The Cashier is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)",
+      "precondition": "\ncashier.oclIsUndefined() = false and\nCashier.allInstances()->includes(cashier)",
+      "postcondition": "\nCashier.allInstances()->excludes(cashier) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageCashierCRUDService-deleteCashier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageProductCatalog_createProductCatalog",
+    "project": "CoCoME",
+    "useCase": "manageProductCatalog",
+    "service": "ManageProductCatalogCRUDService",
+    "operation": "createProductCatalog",
+    "requirement": "Operation intent:\nCreate a ProductCatalog record from the supplied identifier, name.\n\nPreconditions:\n- No existing ProductCatalog has the supplied identifier.\n\nPostconditions:\n- A new ProductCatalog is stored with the supplied identifier, name.\n- The operation returns true.",
+    "reference": {
+      "definition": "productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)",
+      "precondition": "productcatalog.oclIsUndefined() = true",
+      "postcondition": "\nlet pro:ProductCatalog in\npro.oclIsNew() and\npro.Id = id and\npro.Name = name and\nProductCatalog.allInstances()->includes(pro) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageProductCatalogCRUDService-createProductCatalog\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageProductCatalog_queryProductCatalog",
+    "project": "CoCoME",
+    "useCase": "manageProductCatalog",
+    "service": "ManageProductCatalogCRUDService",
+    "operation": "queryProductCatalog",
+    "requirement": "Operation intent:\nRetrieve the ProductCatalog identified by the supplied identifier.\n\nPreconditions:\n- The referenced ProductCatalog exists.\n\nPostconditions:\n- The operation returns the referenced ProductCatalog.",
+    "reference": {
+      "definition": "productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)",
+      "precondition": "productcatalog.oclIsUndefined() = false",
+      "postcondition": "result = productcatalog"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageProductCatalogCRUDService-queryProductCatalog\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageProductCatalog_modifyProductCatalog",
+    "project": "CoCoME",
+    "useCase": "manageProductCatalog",
+    "service": "ManageProductCatalogCRUDService",
+    "operation": "modifyProductCatalog",
+    "requirement": "Operation intent:\nUpdate the ProductCatalog identified by identifier with the supplied identifier, name.\n\nPreconditions:\n- The referenced ProductCatalog exists.\n\nPostconditions:\n- The stored ProductCatalog contains the supplied identifier, name.\n- The operation returns true.",
+    "reference": {
+      "definition": "productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)",
+      "precondition": "productcatalog.oclIsUndefined() = false",
+      "postcondition": "\nproductcatalog.Id = id and\nproductcatalog.Name = name and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageProductCatalogCRUDService-modifyProductCatalog\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageProductCatalog_deleteProductCatalog",
+    "project": "CoCoME",
+    "useCase": "manageProductCatalog",
+    "service": "ManageProductCatalogCRUDService",
+    "operation": "deleteProductCatalog",
+    "requirement": "Operation intent:\nDelete the ProductCatalog identified by the supplied identifier.\n\nPreconditions:\n- The referenced ProductCatalog exists in the repository.\n\nPostconditions:\n- The ProductCatalog is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "productcatalog:ProductCatalog = ProductCatalog.allInstances()->any(pro:ProductCatalog | pro.Id = id)",
+      "precondition": "\nproductcatalog.oclIsUndefined() = false and\nProductCatalog.allInstances()->includes(productcatalog)",
+      "postcondition": "\nProductCatalog.allInstances()->excludes(productcatalog) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageProductCatalogCRUDService-deleteProductCatalog\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageStore_queryStore",
+    "project": "CoCoME",
+    "useCase": "manageStore",
+    "service": "ManageStoreCRUDService",
+    "operation": "queryStore",
+    "requirement": "Operation intent:\nRetrieve the Store identified by the supplied identifier.\n\nPreconditions:\n- The referenced Store exists.\n\nPostconditions:\n- The operation returns the referenced Store.",
+    "reference": {
+      "definition": "store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)",
+      "precondition": "store.oclIsUndefined() = false",
+      "postcondition": "result = store"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageStoreCRUDService-queryStore\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageStore_deleteStore",
+    "project": "CoCoME",
+    "useCase": "manageStore",
+    "service": "ManageStoreCRUDService",
+    "operation": "deleteStore",
+    "requirement": "Operation intent:\nDelete the Store identified by the supplied identifier.\n\nPreconditions:\n- The referenced Store exists in the repository.\n\nPostconditions:\n- The Store is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)",
+      "precondition": "\nstore.oclIsUndefined() = false and\nStore.allInstances()->includes(store)",
+      "postcondition": "\nStore.allInstances()->excludes(store) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageStoreCRUDService-deleteStore\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageSupplier_createSupplier",
+    "project": "CoCoME",
+    "useCase": "manageSupplier",
+    "service": "ManageSupplierCRUDService",
+    "operation": "createSupplier",
+    "requirement": "Operation intent:\nCreate a Supplier record from the supplied identifier, name.\n\nPreconditions:\n- No existing Supplier has the supplied identifier.\n\nPostconditions:\n- A new Supplier is stored with the supplied identifier, name.\n- The operation returns true.",
+    "reference": {
+      "definition": "supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)",
+      "precondition": "supplier.oclIsUndefined() = true",
+      "postcondition": "\nlet sup:Supplier in\nsup.oclIsNew() and\nsup.Id = id and\nsup.Name = name and\nSupplier.allInstances()->includes(sup) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageSupplierCRUDService-createSupplier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageSupplier_querySupplier",
+    "project": "CoCoME",
+    "useCase": "manageSupplier",
+    "service": "ManageSupplierCRUDService",
+    "operation": "querySupplier",
+    "requirement": "Operation intent:\nRetrieve the Supplier identified by the supplied identifier.\n\nPreconditions:\n- The referenced Supplier exists.\n\nPostconditions:\n- The operation returns the referenced Supplier.",
+    "reference": {
+      "definition": "supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)",
+      "precondition": "supplier.oclIsUndefined() = false",
+      "postcondition": "result = supplier"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageSupplierCRUDService-querySupplier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageSupplier_modifySupplier",
+    "project": "CoCoME",
+    "useCase": "manageSupplier",
+    "service": "ManageSupplierCRUDService",
+    "operation": "modifySupplier",
+    "requirement": "Operation intent:\nUpdate the Supplier identified by identifier with the supplied identifier, name.\n\nPreconditions:\n- The referenced Supplier exists.\n\nPostconditions:\n- The stored Supplier contains the supplied identifier, name.\n- The operation returns true.",
+    "reference": {
+      "definition": "supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)",
+      "precondition": "supplier.oclIsUndefined() = false",
+      "postcondition": "\nsupplier.Id = id and\nsupplier.Name = name and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageSupplierCRUDService-modifySupplier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageSupplier_deleteSupplier",
+    "project": "CoCoME",
+    "useCase": "manageSupplier",
+    "service": "ManageSupplierCRUDService",
+    "operation": "deleteSupplier",
+    "requirement": "Operation intent:\nDelete the Supplier identified by the supplied identifier.\n\nPreconditions:\n- The referenced Supplier exists in the repository.\n\nPostconditions:\n- The Supplier is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "supplier:Supplier = Supplier.allInstances()->any(sup:Supplier | sup.Id = id)",
+      "precondition": "\nsupplier.oclIsUndefined() = false and\nSupplier.allInstances()->includes(supplier)",
+      "postcondition": "\nSupplier.allInstances()->excludes(supplier) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageSupplierCRUDService-deleteSupplier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageItem_queryItem",
+    "project": "CoCoME",
+    "useCase": "manageItem",
+    "service": "ManageItemCRUDService",
+    "operation": "queryItem",
+    "requirement": "Operation intent:\nRetrieve the Item identified by the supplied barcode.\n\nPreconditions:\n- The referenced Item exists.\n\nPostconditions:\n- The operation returns the referenced Item.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)",
+      "precondition": "item.oclIsUndefined() = false",
+      "postcondition": "result = item"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageItemCRUDService-queryItem\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_manageItem_deleteItem",
+    "project": "CoCoME",
+    "useCase": "manageItem",
+    "service": "ManageItemCRUDService",
+    "operation": "deleteItem",
+    "requirement": "Operation intent:\nDelete the Item identified by the supplied barcode.\n\nPreconditions:\n- The referenced Item exists in the repository.\n\nPostconditions:\n- The Item is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "item:Item = Item.allInstances()->any(ite:Item | ite.Barcode = barcode)",
+      "precondition": "\nitem.oclIsUndefined() = false and\nItem.allInstances()->includes(item)",
+      "postcondition": "\nItem.allInstances()->excludes(item) and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-ManageItemCRUDService-deleteItem\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_orderProducts_chooseSupplier",
+    "project": "CoCoME",
+    "useCase": "orderProducts",
+    "service": "CoCoMEOrderProducts",
+    "operation": "chooseSupplier",
+    "requirement": "Operation intent:\nAssign a supplier to the current product order.\n\nPreconditions:\n- The Supplier exists.\n- A current OrderProduct exists.\n\nPostconditions:\n- The current order is linked to the selected Supplier.\n- The operation returns true.",
+    "reference": {
+      "definition": "sup:Supplier = Supplier.allInstances()->any(s:Supplier | s.Id = supplierID)",
+      "precondition": "\nsup.oclIsUndefined() = false and\nCurrentOrderProduct.oclIsUndefined() = false",
+      "postcondition": "\nCurrentOrderProduct.Supplier = sup and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-CoCoMEOrderProducts-chooseSupplier\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_orderProducts_placeOrder",
+    "project": "CoCoME",
+    "useCase": "orderProducts",
+    "service": "CoCoMEOrderProducts",
+    "operation": "placeOrder",
+    "requirement": "Operation intent:\nPlace the current product order after its entries have been assembled.\n\nPreconditions:\n- A current OrderProduct exists.\n\nPostconditions:\n- The order status becomes REQUESTED.\n- The order amount increases by the sum of all entry subtotals.\n- The operation returns true.",
+    "reference": {
+      "definition": "sub:Set(Real) = CurrentOrderProduct.ContainedEntries->collect(o:OrderEntry | o.SubAmount)",
+      "precondition": "CurrentOrderProduct.oclIsUndefined() = false",
+      "postcondition": "\nCurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and\nCurrentOrderProduct.Amount = CurrentOrderProduct.Amount@pre + sub.sum() and\nresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-CoCoMEOrderProducts-placeOrder\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "CoCoME_showStockReports_showStockReports",
+    "project": "CoCoME",
+    "useCase": "showStockReports",
+    "service": "CoCoMESystem",
+    "operation": "showStockReports",
+    "requirement": "Operation intent:\nProduce a stock report containing all items.\n\nPreconditions:\n- No additional business condition is required.\n\nPostconditions:\n- The operation returns all Item records.",
+    "reference": {
+      "definition": null,
+      "precondition": "true",
+      "postcondition": "result = Item.allInstances()"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\CoCoME-CoCoMESystem-showStockReports\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_listBookHistory_listBorrowHistory",
+    "project": "LibraryManagementSystem",
+    "useCase": "listBookHistory",
+    "service": "ListBookHistory",
+    "operation": "listBorrowHistory",
+    "requirement": "Operation intent:\nList the complete loan history of a user.\n\nPreconditions:\n- The referenced User exists.\n\nPostconditions:\n- The operation returns all Loan records linked to the User.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid)",
+      "precondition": "user.oclIsUndefined() = false",
+      "postcondition": "result = user.LoanedBook"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ListBookHistory-listBorrowHistory\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_listBookHistory_listOverDueBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "listBookHistory",
+    "service": "ListBookHistory",
+    "operation": "listOverDueBook",
+    "requirement": "Operation intent:\nList copies associated with a user overdue loans.\n\nPreconditions:\n- The referenced User exists.\n- The overdue active-loan collection can be resolved.\n\nPostconditions:\n- The operation returns the BookCopy of each active Loan with a positive overdue fee.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    loans:Set(Loan) = user.LoanedBook->select(l:Loan | l.IsReturned = false and l.OverDueFee > 0)",
+      "precondition": "user.oclIsUndefined() = false and loans.oclIsUndefined() = false",
+      "postcondition": "result = loans->collect(l:Loan | l.LoanedCopy)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ListBookHistory-listOverDueBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_listBookHistory_listReservationBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "listBookHistory",
+    "service": "ListBookHistory",
+    "operation": "listReservationBook",
+    "requirement": "Operation intent:\nList book copies reserved by a user.\n\nPreconditions:\n- The referenced User exists.\n- The reservation collection can be resolved.\n\nPostconditions:\n- The operation returns the BookCopy associated with each user reservation.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    res:Set(Reserve) = user.ReservedBook",
+      "precondition": "user.oclIsUndefined() = false and res.oclIsUndefined() = false",
+      "postcondition": "result = res->collect(r:Reserve | r.ReservedCopy)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ListBookHistory-listReservationBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_listBookHistory_listRecommendBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "listBookHistory",
+    "service": "ListBookHistory",
+    "operation": "listRecommendBook",
+    "requirement": "Operation intent:\nList the books recommended by a user.\n\nPreconditions:\n- The referenced User exists.\n- The recommendation collection can be resolved.\n\nPostconditions:\n- The operation returns all RecommendBook records linked to the User.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid),\n    rBooks:Set(RecommendBook) = user.RecommendedBook",
+      "precondition": "user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false",
+      "postcondition": "result = rBooks"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ListBookHistory-listRecommendBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_listRecommendBook_listRecommendBook",
+    "project": "LibraryManagementSystem",
+    "useCase": "listRecommendBook",
+    "service": "LibraryManagementSystemSystem",
+    "operation": "listRecommendBook",
+    "requirement": "Operation intent:\nList the books recommended by a user.\n\nPreconditions:\n- The referenced User exists.\n- The recommendation collection can be resolved.\n\nPostconditions:\n- The operation returns all RecommendBook records linked to the User.",
+    "reference": {
+      "definition": "user:User = User.allInstances()->any(u:User | u.UserID = uid),\n     rBooks:Set(RecommendBook) = user.RecommendedBook",
+      "precondition": "user.oclIsUndefined() = false and rBooks.oclIsUndefined() = false",
+      "postcondition": "result = rBooks"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-LibraryManagementSystemSystem-listRecommendBook\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_manageLibrarian_createLibrarian",
+    "project": "LibraryManagementSystem",
+    "useCase": "manageLibrarian",
+    "service": "ManageLibrarianCRUDService",
+    "operation": "createLibrarian",
+    "requirement": "Operation intent:\nRegister a librarian with an identifier, name, and password.\n\nPreconditions:\n- The librarian identifier is unused.\n\nPostconditions:\n- A new Librarian is stored with the supplied data.\n- The operation returns true.",
+    "reference": {
+      "definition": "librarian:Librarian = Librarian.allInstances()->any(lib:Librarian | lib.LibrarianID = librarianid)",
+      "precondition": "librarian.oclIsUndefined() = true",
+      "postcondition": "\n    let lib:Librarian in\n    lib.oclIsNew() and\n    lib.LibrarianID = librarianid and\n    lib.Name = name and\n    lib.Password = password and\n    Librarian.allInstances()->includes(lib) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ManageLibrarianCRUDService-createLibrarian\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_manageSubject_createSubject",
+    "project": "LibraryManagementSystem",
+    "useCase": "manageSubject",
+    "service": "ManageSubjectCRUDService",
+    "operation": "createSubject",
+    "requirement": "Operation intent:\nCreate a library subject category.\n\nPreconditions:\n- No existing Subject has the supplied name.\n\nPostconditions:\n- A new Subject with that name is stored.\n- The operation returns true.",
+    "reference": {
+      "definition": "subject:Subject = Subject.allInstances()->any(sub:Subject | sub.Name = name)",
+      "precondition": "subject.oclIsUndefined() = true",
+      "postcondition": "\n    let sub:Subject in\n    sub.oclIsNew() and\n    sub.Name = name and\n    Subject.allInstances()->includes(sub) and\n    result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ManageSubjectCRUDService-createSubject\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_searchBook_searchBookByBarCode",
+    "project": "LibraryManagementSystem",
+    "useCase": "searchBook",
+    "service": "SearchBook",
+    "operation": "searchBookByBarCode",
+    "requirement": "Operation intent:\nSearch the library catalog by book-copy barcode.\n\nPreconditions:\n- The supplied barcode is a String value.\n\nPostconditions:\n- The operation returns Books having a copy with the supplied barcode.",
+    "reference": {
+      "definition": null,
+      "precondition": "barcode.oclIsTypeOf(String)",
+      "postcondition": "result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-SearchBook-searchBookByBarCode\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_searchBook_searchBookByTitle",
+    "project": "LibraryManagementSystem",
+    "useCase": "searchBook",
+    "service": "SearchBook",
+    "operation": "searchBookByTitle",
+    "requirement": "Operation intent:\nSearch the library catalog by title.\n\nPreconditions:\n- The supplied title is not empty.\n\nPostconditions:\n- The operation returns Books whose title equals the supplied title.",
+    "reference": {
+      "definition": null,
+      "precondition": "title <> \"\"",
+      "postcondition": "result = Book.allInstances()->select(book:Book | book.Title = title)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-SearchBook-searchBookByTitle\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_searchBook_searchBookByAuthor",
+    "project": "LibraryManagementSystem",
+    "useCase": "searchBook",
+    "service": "SearchBook",
+    "operation": "searchBookByAuthor",
+    "requirement": "Operation intent:\nSearch the library catalog by author.\n\nPreconditions:\n- The supplied author name is not empty.\n\nPostconditions:\n- The operation returns Books whose author equals the supplied name.",
+    "reference": {
+      "definition": null,
+      "precondition": "authorname <> \"\"",
+      "postcondition": "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-SearchBook-searchBookByAuthor\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_searchBook_searchBookByISBN",
+    "project": "LibraryManagementSystem",
+    "useCase": "searchBook",
+    "service": "SearchBook",
+    "operation": "searchBookByISBN",
+    "requirement": "Operation intent:\nSearch the library catalog by ISBN.\n\nPreconditions:\n- The supplied ISBN is a String value.\n\nPostconditions:\n- The operation returns Books whose ISBN equals the supplied value.",
+    "reference": {
+      "definition": null,
+      "precondition": "iSBNnumber.oclIsTypeOf(String)",
+      "postcondition": "result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-SearchBook-searchBookByISBN\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_searchBook_searchBookBySubject",
+    "project": "LibraryManagementSystem",
+    "useCase": "searchBook",
+    "service": "SearchBook",
+    "operation": "searchBookBySubject",
+    "requirement": "Operation intent:\nSearch the library catalog by subject.\n\nPreconditions:\n- The supplied subject is a String value.\n\nPostconditions:\n- The operation returns Books linked to a Subject with the supplied name.",
+    "reference": {
+      "definition": null,
+      "precondition": "subject.oclIsTypeOf(String)",
+      "postcondition": "result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-SearchBook-searchBookBySubject\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LibraryManagementSystem_sendNotificationEmail_sendNotificationEmail",
+    "project": "LibraryManagementSystem",
+    "useCase": "sendNotificationEmail",
+    "service": "ThirdPartyServices",
+    "operation": "sendNotificationEmail",
+    "requirement": "Operation intent:\nSend a notification to a supplied email address.\n\nPreconditions:\n- The email address is not empty.\n\nPostconditions:\n- The notification request succeeds and the operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "email <> \"\"",
+      "postcondition": "result = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LibraryManagementSystem-ThirdPartyServices-sendNotificationEmail\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_closeOutLoan_closeOutLoan",
+    "project": "LoanProcessingSystem",
+    "useCase": "closeOutLoan",
+    "service": "LoanProcessingSystemSystem",
+    "operation": "closeOutLoan",
+    "requirement": "Operation intent:\nClose an existing open loan.\n\nPreconditions:\n- The Loan exists and has LSOPEN status.\n\nPostconditions:\n- The Loan status becomes CLOSED.\n- The operation returns true.",
+    "reference": {
+      "definition": "loan:Loan = Loan.allInstances()->any(loa:Loan | loa.LoanID = loanid)",
+      "precondition": "loan.oclIsUndefined() = false and\n\t\t\tloan.Status = LoanStatus::LSOPEN",
+      "postcondition": "loan.Status = LoanStatus::CLOSED and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-LoanProcessingSystemSystem-closeOutLoan\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_enterValidatedCreditReferences_chooseLoanRequest",
+    "project": "LoanProcessingSystem",
+    "useCase": "enterValidatedCreditReferences",
+    "service": "EnterValidatedCreditReferencesModule",
+    "operation": "chooseLoanRequest",
+    "requirement": "Operation intent:\nSelect one loan request from the current request collection.\n\nPreconditions:\n- The supplied request identifier matches a current LoanRequest.\n\nPostconditions:\n- The matching request becomes the current LoanRequest and is returned.",
+    "reference": {
+      "definition": "rs:LoanRequest = self.CurrentLoanRequests->any(r:LoanRequest | r.RequestID = requestid)",
+      "precondition": "rs.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequest = rs and result = rs"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EnterValidatedCreditReferencesModule-chooseLoanRequest\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_enterValidatedCreditReferences_markRequestValid",
+    "project": "LoanProcessingSystem",
+    "useCase": "enterValidatedCreditReferences",
+    "service": "EnterValidatedCreditReferencesModule",
+    "operation": "markRequestValid",
+    "requirement": "Operation intent:\nMark the selected loan request references as validated.\n\nPreconditions:\n- A current LoanRequest exists.\n\nPostconditions:\n- Its status becomes REFERENCESVALIDATED.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EnterValidatedCreditReferencesModule-markRequestValid\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_chooseOneForReview",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "chooseOneForReview",
+    "requirement": "Operation intent:\nSelect a loan request from the current collection for review.\n\nPreconditions:\n- The supplied identifier matches a current LoanRequest.\n\nPostconditions:\n- The matching request becomes the current LoanRequest and is returned.",
+    "reference": {
+      "definition": "rs:LoanRequest = self.CurrentLoanRequests->any(r:LoanRequest | r.RequestID = requestid)",
+      "precondition": "rs.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequest = rs and result = rs"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-chooseOneForReview\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_checkCreditHistory",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "checkCreditHistory",
+    "requirement": "Operation intent:\nRetrieve the credit history attached to the current loan request.\n\nPreconditions:\n- A current LoanRequest and its requested CreditHistory exist.\n\nPostconditions:\n- The operation returns that CreditHistory.",
+    "reference": {
+      "definition": null,
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+      "postcondition": "result = CurrentLoanRequest.RequestedCreditHistory"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-checkCreditHistory\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_reviewCheckingAccount",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "reviewCheckingAccount",
+    "requirement": "Operation intent:\nRetrieve the checking-account history attached to the current loan request.\n\nPreconditions:\n- A current LoanRequest and its requested CheckingAccount exist.\n\nPostconditions:\n- The operation returns that CheckingAccount.",
+    "reference": {
+      "definition": null,
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false",
+      "postcondition": "result = CurrentLoanRequest.RequestedCAHistory"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-reviewCheckingAccount\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_listAvaiableLoanTerm",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "listAvaiableLoanTerm",
+    "requirement": "Operation intent:\nList all loan terms available for evaluation.\n\nPreconditions:\n- No additional business condition is required.\n\nPostconditions:\n- The operation returns all LoanTerm records.",
+    "reference": {
+      "definition": null,
+      "precondition": "true",
+      "postcondition": "result = LoanTerm.allInstances()"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-listAvaiableLoanTerm\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_addLoanTerm",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "addLoanTerm",
+    "requirement": "Operation intent:\nAttach a selected loan term to the current loan request.\n\nPreconditions:\n- A current LoanRequest exists.\n- The selected LoanTerm exists.\n\nPostconditions:\n- The LoanTerm is linked to the current request.\n- The operation returns true.",
+    "reference": {
+      "definition": "loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = termid)",
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tloanterm.oclIsUndefined() = false",
+      "postcondition": "CurrentLoanRequest.AttachedLoanTerms->includes(loanterm) and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-addLoanTerm\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_evaluateLoanRequest_approveLoanRequest",
+    "project": "LoanProcessingSystem",
+    "useCase": "evaluateLoanRequest",
+    "service": "EvaluateLoanRequestModule",
+    "operation": "approveLoanRequest",
+    "requirement": "Operation intent:\nApprove the current loan request.\n\nPreconditions:\n- A current LoanRequest exists.\n\nPostconditions:\n- Its status becomes APPROVED.\n- The operation returns true.",
+    "reference": {
+      "definition": null,
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequest.Status = LoanRequestStatus::APPROVED and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-EvaluateLoanRequestModule-approveLoanRequest\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_generateLoanLetterAndAgreement_createLoanAccount",
+    "project": "LoanProcessingSystem",
+    "useCase": "generateLoanLetterAndAgreement",
+    "service": "GenerateLoanLetterAndAgreementModule",
+    "operation": "createLoanAccount",
+    "requirement": "Operation intent:\nCreate a loan account with the supplied identifier, balance, and status.\n\nPreconditions:\n- The loan-account identifier is unused.\n\nPostconditions:\n- A new LoanAccount stores the supplied values and enters the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "loanaccount:LoanAccount = LoanAccount.allInstances()->any(loa:LoanAccount | loa.LoanAccountID = loanaccountid)",
+      "precondition": "loanaccount.oclIsUndefined() = true",
+      "postcondition": "let loa:LoanAccount in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.LoanAccountID = loanaccountid and\n\t\t\tloa.Balance = balance and\n\t\t\tloa.Status = status and\n\t\t\tLoanAccount.allInstances()->includes(loa) and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-GenerateLoanLetterAndAgreementModule-createLoanAccount\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_manageLoanTerm_createLoanTerm",
+    "project": "LoanProcessingSystem",
+    "useCase": "manageLoanTerm",
+    "service": "ManageLoanTermCRUDService",
+    "operation": "createLoanTerm",
+    "requirement": "Operation intent:\nCreate a LoanTerm record from the supplied item identifier, content.\n\nPreconditions:\n- No existing LoanTerm has the supplied item identifier.\n\nPostconditions:\n- A new LoanTerm is stored with the supplied item identifier, content.\n- The operation returns true.",
+    "reference": {
+      "definition": "loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)",
+      "precondition": "loanterm.oclIsUndefined() = true",
+      "postcondition": "let loa:LoanTerm in\n\t\t\tloa.oclIsNew() and\n\t\t\tloa.ItemID = itemid and\n\t\t\tloa.Content = content and\n\t\t\tLoanTerm.allInstances()->includes(loa) and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-ManageLoanTermCRUDService-createLoanTerm\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_manageLoanTerm_queryLoanTerm",
+    "project": "LoanProcessingSystem",
+    "useCase": "manageLoanTerm",
+    "service": "ManageLoanTermCRUDService",
+    "operation": "queryLoanTerm",
+    "requirement": "Operation intent:\nRetrieve the LoanTerm identified by the supplied item identifier.\n\nPreconditions:\n- The referenced LoanTerm exists.\n\nPostconditions:\n- The operation returns the referenced LoanTerm.",
+    "reference": {
+      "definition": "loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)",
+      "precondition": "loanterm.oclIsUndefined() = false",
+      "postcondition": "result = loanterm"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-ManageLoanTermCRUDService-queryLoanTerm\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_manageLoanTerm_modifyLoanTerm",
+    "project": "LoanProcessingSystem",
+    "useCase": "manageLoanTerm",
+    "service": "ManageLoanTermCRUDService",
+    "operation": "modifyLoanTerm",
+    "requirement": "Operation intent:\nUpdate the LoanTerm identified by item identifier with the supplied item identifier, content.\n\nPreconditions:\n- The referenced LoanTerm exists.\n\nPostconditions:\n- The stored LoanTerm contains the supplied item identifier, content.\n- The operation returns true.",
+    "reference": {
+      "definition": "loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)",
+      "precondition": "loanterm.oclIsUndefined() = false",
+      "postcondition": "loanterm.ItemID = itemid and\n\t\t\tloanterm.Content = content and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-ManageLoanTermCRUDService-modifyLoanTerm\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_manageLoanTerm_deleteLoanTerm",
+    "project": "LoanProcessingSystem",
+    "useCase": "manageLoanTerm",
+    "service": "ManageLoanTermCRUDService",
+    "operation": "deleteLoanTerm",
+    "requirement": "Operation intent:\nDelete the LoanTerm identified by the supplied item identifier.\n\nPreconditions:\n- The referenced LoanTerm exists in the repository.\n\nPostconditions:\n- The LoanTerm is removed from the repository.\n- The operation returns true.",
+    "reference": {
+      "definition": "loanterm:LoanTerm = LoanTerm.allInstances()->any(loa:LoanTerm | loa.ItemID = itemid)",
+      "precondition": "loanterm.oclIsUndefined() = false",
+      "postcondition": "LoanTerm.allInstances()->excludes(loanterm) and\n\t\t\tresult = true"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-ManageLoanTermCRUDService-deleteLoanTerm\\index.test.ts",
+    "oraclePresent": true
+  },
+  {
+    "id": "LoanProcessingSystem_submitLoanRequest_calculateScore",
+    "project": "LoanProcessingSystem",
+    "useCase": "submitLoanRequest",
+    "service": "SubmitLoanRequestModule",
+    "operation": "calculateScore",
+    "requirement": "Operation intent:\nCalculate and record the credit score for the current loan request.\n\nPreconditions:\n- A current LoanRequest, its checking-account history, and its credit history exist.\n\nPostconditions:\n- The request credit score becomes 100 and its status becomes SUBMITTED.\n- The operation returns the calculated score.",
+    "reference": {
+      "definition": null,
+      "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and\n\t\t\tCurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+      "postcondition": "self.CurrentLoanRequest.CreditScore = 100 and\n\t\t\tself.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and\n\t\t\tresult = self.CurrentLoanRequest.CreditScore"
+    },
+    "audit": {
+      "missingNumbers": [],
+      "missingEnums": [],
+      "unmentionedAssignedFeatures": [],
+      "conditionalCount": 0,
+      "requirementConditionalCount": 0,
+      "suspiciousTemporalPredicates": [],
+      "unobservedAssignedFeatures": [],
+      "unobservedCollectionEffects": [],
+      "unobservedRepositoryEffects": [],
+      "strictProblems": [],
+      "riskScore": 0
+    },
+    "oraclePath": "test\\LoanProcessingSystem-SubmitLoanRequestModule-calculateScore\\index.test.ts",
+    "oraclePresent": true
+  }
+]

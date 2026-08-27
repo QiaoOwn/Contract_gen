@@ -19,7 +19,7 @@ const operations = [
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'orderID', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `op:OrderProduct = OrderProduct.allInstance()->any(i:OrderProduct | i.Id = orderID)`,
+    definition: `op:OrderProduct = OrderProduct.allInstances()->any(i:OrderProduct | i.Id = orderID)`,
     precondition: `op.oclIsUndefined() = false`,
     postcondition: `
 op.OrderStatus = OrderStatus::RECEIVED and

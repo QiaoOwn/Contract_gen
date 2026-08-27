@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -197,13 +205,31 @@ class CoCoMEOrderProducts {
   CurrentOrderProduct: OrderProduct;
   /*TempVariable End*/
 
-  /*the current order product exists,
-   *then the current order product's status is requested
-   *and the current order product's amount is its contained entries sum the submount*/
+  /*Definition: The placeOrder operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   placeOrder(): boolean {
+    /*Definition Start*/
+    let sub: number[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            this.CurrentOrderProduct.ContainedEntries.map(
+              (o: OrderEntry) =>
+                l({
+                  logic: () => o.SubAmount,
+                  description: 'o.SubAmount',
+                }).build().pass
+            ),
+          description: 'CurrentOrderProduct.ContainedEntries->collect(o:OrderEntry|o.SubAmount)',
+        }).build().pass
+    );
+    /*Definition End*/
+
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentOrderProduct) === false,
+      logic: () =>
+        StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentOrderProduct), false),
       description: 'CurrentOrderProduct.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -211,31 +237,57 @@ class CoCoMEOrderProducts {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentOrderProduct.OrderStatus = OrderStatus.REQUESTED),
-      description: 'CurrentOrderProduct.OrderStatus=OrderStatus::REQUESTED',
-    })
-      .and({
-        execute: () =>
-          this.CurrentOrderProduct.ContainedEntries.forEach(
-            (o: OrderEntry) =>
-              l({
-                execute: () =>
-                  (this.CurrentOrderProduct.Amount = this.CurrentOrderProduct.Amount + o.SubAmount),
-                description:
-                  'CurrentOrderProduct.Amount=CurrentOrderProduct.Amount@pre+o.SubAmount',
-              }).build().value
-          ),
-        description:
-          'CurrentOrderProduct.ContainedEntries->forAll(o:OrderEntry|CurrentOrderProduct.Amount=CurrentOrderProduct.Amount@pre+o.SubAmount)',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentOrderProduct.OrderStatus = OrderStatus.REQUESTED),
+        description: 'CurrentOrderProduct.OrderStatus=OrderStatus::REQUESTED',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+        .and({
+          execute: () =>
+            (this.CurrentOrderProduct.Amount =
+              oclState.preValue(this.CurrentOrderProduct, 'Amount') + StandardOPs.sum(sub)),
+          description: 'CurrentOrderProduct.Amount=CurrentOrderProduct.Amount@pre+sub.sum()',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(this.CurrentOrderProduct.OrderStatus, OrderStatus.REQUESTED),
+        description: 'CurrentOrderProduct.OrderStatus=OrderStatus::REQUESTED',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () =>
+            StandardOPs.oclEquals(
+              this.CurrentOrderProduct.Amount,
+              oclState.preValue(this.CurrentOrderProduct, 'Amount') + StandardOPs.sum(sub)
+            ),
+          description: 'CurrentOrderProduct.Amount=CurrentOrderProduct.Amount@pre+sub.sum()',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMEOrderProducts};

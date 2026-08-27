@@ -34,7 +34,7 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition:
-      'loanrequest:LoanRequest = LoanRequest.allInstance()->any(loa:LoanRequest | loa.RequestID = requestid)',
+      'loanrequest:LoanRequest = LoanRequest.allInstances()->any(loa:LoanRequest | loa.RequestID = requestid)',
     precondition: 'loanrequest.oclIsUndefined() = true',
     postcondition: `let loa:LoanRequest in
 			loa.oclIsNew() and
@@ -51,7 +51,7 @@ const operations = [
 			loa.CreditReferences = creditreferences and
 			loa.CheckingAccountNumber = checkingaccountnumber and
 			loa.SecurityNumber = securitynumber and
-			LoanRequest.allInstance()->includes(loa) and
+			LoanRequest.allInstances()->includes(loa) and
 			self.CurrentLoanRequest = loa and
 			result = true`,
   }),
@@ -66,7 +66,7 @@ const operations = [
   // 		his.oclIsNew() and
   // 		his = getCreditHistory(CurrentLoanRequest.SecurityNumber, CurrentLoanRequest.Name) and
   // 		CurrentLoanRequest.RequestedCreditHistory = his and
-  // 		CreditHistory.allInstance()->includes(his) and
+  // 		CreditHistory.allInstances()->includes(his) and
   // 		result = true`,
   // }),
   // new Operation({
@@ -80,7 +80,7 @@ const operations = [
   // 		ca.oclIsNew() and
   // 		ca = getCheckingAccountStatus(self.CurrentLoanRequest.CheckingAccountNumber) and
   // 		self.CurrentLoanRequest.RequestedCAHistory = ca and
-  // 		CheckingAccount.allInstance()->includes(ca) and
+  // 		CheckingAccount.allInstances()->includes(ca) and
   // 		result = true`,
   // }),
   new Operation({

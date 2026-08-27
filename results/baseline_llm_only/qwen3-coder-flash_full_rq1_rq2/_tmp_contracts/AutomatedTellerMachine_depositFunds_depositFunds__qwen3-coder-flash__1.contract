@@ -1,9 +1,0 @@
-Contract AutomatedTellerMachineSystem::depositFunds(quantity:Real): Boolean {
-          definition:
-          card:BankCard = BankCard.allInstance()->any(c:BankCard|c.CardID=InputCard.CardID), user:User = card.BelongedUser
-            precondition:
-          InputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true and quantity > 0 and card.oclIsUndefined() = false and card.CardStatus = BankCard::NORMAL and card.Catalog = BankCard::DESPOSIT
-            postcondition:
-          let updatedCard:BankCard in updatedCard.oclIsNew() = false and updatedCard.Balance = card.Balance + quantity and result = true
-            
-        }

@@ -1,0 +1,9 @@
+Contract CoCoMEOrderProducts::chooseSupplier(supplierID:Integer): Boolean {
+          precondition:
+          Supplier.allInstances()->exists(s | s.Id = supplierID)
+  and self.CurrentOrderProduct <> null
+            postcondition:
+          self.CurrentOrderProduct.Supplier = Supplier.allInstances()->any(s | s.Id = supplierID)
+  and result = true
+            
+        }

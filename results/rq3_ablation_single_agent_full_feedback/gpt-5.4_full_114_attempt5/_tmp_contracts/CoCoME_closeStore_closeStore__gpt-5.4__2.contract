@@ -1,9 +1,0 @@
-Contract CoCoMESystem::closeStore(storeID: Integer): Boolean {
-  definition:
-    store: Store = Store.allInstance()->any(s | s.Id = storeID),
-    cashDesks: Set(CashDesk) = store.AssociationCashdeskes
-  precondition:
-    store.oclIsUndefined() = false and Store.allInstance()->includes(store) and store.IsOpened = true and cashDesks->select(c | c.IsOpened = true)->isEmpty() = true
-  postcondition:
-    store.IsOpened = false and self.CurrentStore = store and result = true
-}

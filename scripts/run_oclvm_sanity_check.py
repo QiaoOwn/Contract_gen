@@ -31,6 +31,9 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+STUDY_VERSION = "contractgen-study-v6"
+INPUT_SCHEMA_VERSION = "contractgen-operation-input-v2"
+
 
 DEFAULT_CASE_QUOTAS = {
     "Airport": 4,
@@ -42,11 +45,16 @@ DEFAULT_CASE_QUOTAS = {
 
 
 def read_jsonl(path: Path) -> List[Dict[str, Any]]:
+    if not path.is_file():
+        raise FileNotFoundError(path)
     rows: List[Dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as f:
-        for line in f:
+        for line_no, line in enumerate(f, 1):
             if line.strip():
-                rows.append(json.loads(line))
+                try:
+                    rows.append(json.loads(line))
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"{path}:{line_no}: invalid JSON: {exc}") from exc
     return rows
 
 
@@ -256,9 +264,14 @@ def main() -> None:
     )
     parser.add_argument("--input", default="data/operations.jsonl")
     parser.add_argument(
-        "--attempts", default="results/rq_gpt_5_4_full_oracle_fixed/attempts.jsonl"
+        "--attempts",
+        default="results/contractgen-study-v6/contract_gen/full_feedback/attempts.jsonl",
     )
-    parser.add_argument("--output-dir", default="results/oclvm_sanity_check")
+    parser.add_argument("--model", default="gpt-5.4")
+    parser.add_argument(
+        "--output-dir",
+        default="results/contractgen-study-v6/validation/ocltsvm_sanity_samples",
+    )
     parser.add_argument("--sample-size", type=int, default=20)
     parser.add_argument(
         "--remodel-validate-cmd",
@@ -271,7 +284,29 @@ def main() -> None:
     args = parser.parse_args()
 
     operations = read_jsonl(Path(args.input))
-    attempts = read_jsonl(Path(args.attempts))
+    operation_map = {str(row.get("id") or ""): row for row in operations}
+    if len(operations) != 114 or len(operation_map) != 114 or "" in operation_map:
+        raise ValueError("Expected 114 unique canonical operations")
+    attempts = []
+    for line_no, row in enumerate(read_jsonl(Path(args.attempts)), 1):
+        if row.get("model") != args.model:
+            continue
+        operation = operation_map.get(str(row.get("operation_id") or ""))
+        shared_prompt_hash = row.get("shared_prompt_hash") or row.get("prompt_hash")
+        if (
+            row.get("study_version") != STUDY_VERSION
+            or row.get("input_schema_version") != INPUT_SCHEMA_VERSION
+            or operation is None
+            or row.get("input_hash") != operation.get("input_hash")
+            or shared_prompt_hash != operation.get("prompt_hash")
+            or not row.get("generation_prompt_version")
+        ):
+            raise ValueError(
+                    f"{args.attempts}:{line_no}: incompatible v5 experiment record"
+            )
+        attempts.append(row)
+    if {str(row.get("operation_id") or "") for row in attempts} != set(operation_map):
+        raise ValueError(f"Incomplete {args.model} Contract Gen result for OCLTSVM sanity check")
     selected = select_representative_contracts(operations, attempts, args.sample_size)
     out_dir = Path(args.output_dir)
     contracts_dir = out_dir / "contracts"
@@ -363,6 +398,8 @@ def main() -> None:
         markdown_table(rows), encoding="utf-8"
     )
     summary = {
+        "study_version": STUDY_VERSION,
+        "source_model": args.model,
         "generated_at_epoch": time.time(),
         "sample_size": len(rows),
         "source_attempts": args.attempts,

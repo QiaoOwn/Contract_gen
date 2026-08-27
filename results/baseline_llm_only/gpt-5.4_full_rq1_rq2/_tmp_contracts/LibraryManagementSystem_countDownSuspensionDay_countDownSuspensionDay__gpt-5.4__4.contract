@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::countDownSuspensionDay(): void {
-          definition:
-          users:Set(User) = User.allInstance()->select(u:User|u.SuspensionDays > 0)
-            precondition:
-          true
-            postcondition:
-          User.allInstance()->forAll(u:User|users->includes(u) implies u.SuspensionDays = u.SuspensionDays@pre - 1 and (u.SuspensionDays = 0 implies u.BorrowStatus = BorrowStatus::SUSPEND) and (u.SuspensionDays > 0 implies u.BorrowStatus = u.BorrowStatus@pre)) and User.allInstance()->forAll(u:User|users->excludes(u) implies u.SuspensionDays = u.SuspensionDays@pre and u.BorrowStatus = u.BorrowStatus@pre)
-            
-        }

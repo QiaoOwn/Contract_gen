@@ -1,0 +1,155 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 24,
+  "operation_id": "Airport_raiseRepair_approve",
+  "case_study": "Airport",
+  "project": "Airport",
+  "use_case": "raiseRepair",
+  "operation": "approve",
+  "operation_signature": "approve(sid: Integer, rid: Integer, reject: Boolean, suggestion: String): ApprovalHistory",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "dd47bf558fb099b3e46af44a3ec3a42335d103d9f252f3f27cde6d28ed56f719",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "conditional",
+    "temporal_at_pre",
+    "new_object",
+    "repository_update",
+    "navigation_update"
+  ],
+  "complexity_score": 88,
+  "contract": "Contract RepairService::approve(sid: Integer,rid: Integer,reject: Boolean,suggestion: String): ApprovalHistory {\n\tdefinition:\n\t\trepair: Repair = Repair.allInstances()->any(r: Repair|r.Id = rid),\n\t\tstaff: Staff = Staff.allInstances()->any(s: Staff|s.Id = sid)\n\tprecondition:\n\t\tRepair.allInstances()->exists(r: Repair|r.Id = rid) and\n\t\tStaff.allInstances()->exists(s: Staff|s.Id = sid)\n\tpostcondition:\n\t\tlet history: ApprovalHistory in\n\t\thistory.oclIsNew() and\n\t\tApprovalHistory.allInstances()->includes(history) and\n\t\thistory.StaffId = sid and\n\t\thistory.Reject = reject and\n\t\thistory.Suggestion = suggestion and\n\t\trepair.History->includes(history) and\n\t\tif reject = true \n\t\tthen if staff.Role = 1 \n\t\tthen repair.Process = 1 \n\t\telse if staff.Role = 2 \n\t\tthen repair.Process = 2 \n\t\telse if staff.Role = 3 \n\t\tthen repair.Process = 3 \n\t\telse repair.Process = repair.Process@pre \n\t\tendif  \n\t\tendif  \n\t\tendif  \n\t\telse repair.Process = 5 \n\t\tendif  and\n\t\tresult = history\n}",
+  "complexity_tier": "complex",
+  "scenarios": [
+    {
+      "scenario_id": "Airport_raiseRepair_approve::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_approve\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_approve\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json",
+          "test_name": "Airport/RepairService/approve Happy Path: records approval history and advances process for role 1"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json",
+          "test_name": "Airport/RepairService/approve Happy Path: records approval history and advances process for role 1",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json"
+    },
+    {
+      "scenario_id": "Airport_raiseRepair_approve::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_approve\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\Airport_raiseRepair_approve\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json",
+          "test_name": "Airport/RepairService/approve rejects when repair does not exist"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json",
+          "test_name": "Airport/RepairService/approve rejects when repair does not exist",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json"
+    },
+    {
+      "scenario_id": "Airport_raiseRepair_approve::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\Airport_raiseRepair_approve.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

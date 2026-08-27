@@ -1,8 +1,0 @@
-Contract ManageCashierCRUDService::createCashier(id: Integer, name: String): Boolean {
-  definition:
-    store: Store = Store.allInstance()->any(s | s.Id >= 0), cashier: Cashier = Cashier.allInstance()->any(c | c.Id = id)
-  precondition:
-    id.oclIsTypeOf(Integer) and name.oclIsTypeOf(String) and store.oclIsUndefined() = false and cashier.oclIsUndefined() = true
-  postcondition:
-    let newCashier:Cashier in newCashier.oclIsNew() and Cashier.allInstance()->includes(newCashier) and newCashier.Id = id and newCashier.Name = name and newCashier.WorkedStore = store and store.Cashiers->includes(newCashier) and result = true
-}

@@ -1,9 +1,0 @@
-Contract ManageUserCRUDService::createUser(userid:String,name:String,sex:Sex [M|F],password:String,email:String,faculty:String,loanednumber:Integer,borrowstatus:BorrowStatus [NORMAL|SUSPEND],suspensiondays:Integer,overduefee:Real): Boolean {
-          definition:
-          user:User = User.allInstance()->any(u:User|u.UserID=userid)
-            precondition:
-          user.oclIsUndefined() = true and userid <> '' and name <> '' and password <> '' and email <> '' and faculty <> ''
-            postcondition:
-          let user:User in user.oclIsNew() and user.UserID=userid and user.Name=name and user.Sex=sex and user.Password=password and user.Email=email and user.Faculty=faculty and user.LoanedNumber=loanednumber and user.BorrowStatus=borrowstatus and user.SuspensionDays=suspensiondays and user.OverDueFee=overduefee and User.allInstance()->includes(user) and result=true
-            
-        }

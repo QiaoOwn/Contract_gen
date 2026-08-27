@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,25 +238,30 @@ export {
 };
 
 class ManageSubjectCRUDService {
-  /*Creates a new subject.*/
+  /*Definition: The createSubject operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createSubject(name: string): boolean {
     /*Definition Start*/
-    let subject: Subject = l({
-      logic: () =>
-        getRepository(Subject).find(
-          (sub: Subject) =>
-            l({
-              logic: () => sub.Name === name,
-              description: 'sub.Name=name',
-            }).build().pass
-        ),
-      description: 'Subject.allInstance()->any(sub:Subject|sub.Name=name)',
-    }).build().pass;
+    let subject: Subject = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Subject).find(
+              (sub: Subject) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(sub.Name, name),
+                  description: 'sub.Name=name',
+                }).build().pass
+            ),
+          description: 'Subject.allInstances()->any(sub:Subject|sub.Name=name)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(subject) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(subject), true),
       description: 'subject.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -256,26 +269,60 @@ class ManageSubjectCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let sub: Subject;
-    return l({
-      execute: () => (sub = new Subject()),
-      description: 'sub.oclIsNew()',
-    })
-      .and({
-        execute: () => (sub.Name = name),
-        description: 'sub.Name=name',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let sub: Subject;
+      return l({
+        execute: () => (sub = new Subject()),
+        description: 'sub.oclIsNew()',
       })
-      .and({
-        execute: () => getRepository(Subject).push(sub),
-        description: 'Subject.allInstance()->includes(sub)',
+        .and({
+          execute: () => (sub.Name = name),
+          description: 'sub.Name=name',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Subject), sub),
+          description: 'Subject.allInstances()->includes(sub)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let sub: Subject = oclState.findNew(Subject);
+      return l({
+        logic: () => oclState.isNew(sub, Subject),
+        description: 'sub.oclIsNew()',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(sub.Name, name),
+          description: 'sub.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Subject), sub),
+          description: 'Subject.allInstances()->includes(sub)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageSubjectCRUDService};

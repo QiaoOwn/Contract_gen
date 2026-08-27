@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,7 +238,9 @@ export {
 };
 
 class LibraryManagementSystemSystem {
-  /*The user recommends books to the library.*/
+  /*Definition: The recommendBook operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   recommendBook(
     uid: string,
     callNo: string,
@@ -241,38 +251,46 @@ class LibraryManagementSystemSystem {
     description: string,
     isbn: string
   ): boolean {
+    /*OCL Invocation Environment*/
+    const oclInvocationTime = dayjs();
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (u: User) =>
-            l({
-              logic: () => u.UserID === uid,
-              description: 'u.UserID=uid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(u:User|u.UserID=uid)',
-    }).build().pass;
-    let rb: RecommendBook = l({
-      logic: () =>
-        getRepository(RecommendBook).find(
-          (r: RecommendBook) =>
-            l({
-              logic: () => r.CallNo === callNo,
-              description: 'r.CallNo=callNo',
-            }).build().pass
-        ),
-      description: 'RecommendBook.allInstance()->any(r:RecommendBook|r.CallNo=callNo)',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (u: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(u.UserID, uid),
+                  description: 'u.UserID=uid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(u:User|u.UserID=uid)',
+        }).build().pass
+    );
+    let rb: RecommendBook = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(RecommendBook).find(
+              (r: RecommendBook) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(r.CallNo, callNo),
+                  description: 'r.CallNo=callNo',
+                }).build().pass
+            ),
+          description: 'RecommendBook.allInstances()->any(r:RecommendBook|r.CallNo=callNo)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(user) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), false),
       description: 'user.oclIsUndefined()=false',
     })
       .and({
-        logic: () => StandardOPs.oclIsUndefined(rb) === true,
+        logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(rb), true),
         description: 'rb.oclIsUndefined()=true',
       })
       .build();
@@ -281,62 +299,132 @@ class LibraryManagementSystemSystem {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let r: RecommendBook;
-    return l({
-      execute: () => (r = new RecommendBook()),
-      description: 'r.oclIsNew()',
-    })
-      .and({
-        execute: () => (r.CallNo = callNo),
-        description: 'r.CallNo=callNo',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let r: RecommendBook;
+      return l({
+        execute: () => (r = new RecommendBook()),
+        description: 'r.oclIsNew()',
       })
-      .and({
-        execute: () => (r.Title = title),
-        description: 'r.Title=title',
+        .and({
+          execute: () => (r.CallNo = callNo),
+          description: 'r.CallNo=callNo',
+        })
+        .and({
+          execute: () => (r.Title = title),
+          description: 'r.Title=title',
+        })
+        .and({
+          execute: () => (r.Edition = edition),
+          description: 'r.Edition=edition',
+        })
+        .and({
+          execute: () => (r.Author = author),
+          description: 'r.Author=author',
+        })
+        .and({
+          execute: () => (r.Publisher = publisher),
+          description: 'r.Publisher=publisher',
+        })
+        .and({
+          execute: () => (r.Description = description),
+          description: 'r.Description=description',
+        })
+        .and({
+          execute: () => (r.ISBn = isbn),
+          description: 'r.ISBn=isbn',
+        })
+        .and({
+          execute: () => (r.RecommendDate = oclInvocationTime.startOf('day')),
+          description: 'r.RecommendDate=Today',
+        })
+        .and({
+          execute: () => (r.RecommendUser = user),
+          description: 'r.RecommendUser=user',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(user.RecommendedBook, r),
+          description: 'user.RecommendedBook->includes(r)',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(RecommendBook), r),
+          description: 'RecommendBook.allInstances()->includes(r)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let r: RecommendBook = oclState.findNew(RecommendBook);
+      return l({
+        logic: () => oclState.isNew(r, RecommendBook),
+        description: 'r.oclIsNew()',
       })
-      .and({
-        execute: () => (r.Edition = edition),
-        description: 'r.Edition=edition',
-      })
-      .and({
-        execute: () => (r.Author = author),
-        description: 'r.Author=author',
-      })
-      .and({
-        execute: () => (r.Publisher = publisher),
-        description: 'r.Publisher=publisher',
-      })
-      .and({
-        execute: () => (r.Description = description),
-        description: 'r.Description=description',
-      })
-      .and({
-        execute: () => (r.ISBn = isbn),
-        description: 'r.ISBn=isbn',
-      })
-      .and({
-        execute: () => (r.RecommendDate = dayjs()),
-        description: 'r.RecommendDate=Today',
-      })
-      .and({
-        execute: () => (r.RecommendUser = user),
-        description: 'r.RecommendUser=user',
-      })
-      .and({
-        execute: () => user.RecommendedBook.push(r),
-        description: 'user.RecommendedBook->includes(r)',
-      })
-      .and({
-        execute: () => getRepository(RecommendBook).push(r),
-        description: 'RecommendBook.allInstance()->includes(r)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(r.CallNo, callNo),
+          description: 'r.CallNo=callNo',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.Title, title),
+          description: 'r.Title=title',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.Edition, edition),
+          description: 'r.Edition=edition',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.Author, author),
+          description: 'r.Author=author',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.Publisher, publisher),
+          description: 'r.Publisher=publisher',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.Description, description),
+          description: 'r.Description=description',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.ISBn, isbn),
+          description: 'r.ISBn=isbn',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.RecommendDate, oclInvocationTime.startOf('day')),
+          description: 'r.RecommendDate=Today',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.RecommendUser, user),
+          description: 'r.RecommendUser=user',
+        })
+        .and({
+          logic: () => StandardOPs.includes(user.RecommendedBook, r),
+          description: 'user.RecommendedBook->includes(r)',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(RecommendBook), r),
+          description: 'RecommendBook.allInstances()->includes(r)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {LibraryManagementSystemSystem};

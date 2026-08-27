@@ -2,7 +2,7 @@ import {Attribute} from '../../model/Attribute';
 import {Entity} from '../../model/Entity';
 import {Relationship} from '../../model/Relationship';
 
-export default {
+const entities = {
   Repair: new Entity({
     name: 'Repair',
     description: 'Represents a repair task with details including status and related staff.',
@@ -169,3 +169,5 @@ export default {
     ],
   }),
 };
+
+export default entities;

@@ -1,0 +1,9 @@
+Contract EvaluateLoanRequestModule::listTenLoanRequest(): Set(LoanRequest) {
+          definition:
+          matchingRequests:Set(LoanRequest) = LoanRequest.allInstances()->select(request:LoanRequest | request.Status = LoanRequestStatus::REFERENCESVALIDATED)
+            precondition:
+          matchingRequests.oclIsUndefined() = false
+            postcondition:
+          self.CurrentLoanRequests = matchingRequests and result = matchingRequests
+            
+        }

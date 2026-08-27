@@ -1,9 +1,0 @@
-Contract ManageCashierCRUDService::deleteCashier(id: Integer): Boolean {
-  definition:
-    cashier: Cashier = Cashier.allInstance()->any(c | c.Id = id),
-    store: Store = cashier.WorkedStore
-  precondition:
-    cashier.oclIsUndefined() = false and Cashier.allInstance()->includes(cashier) and store.oclIsUndefined() = false and store.Cashiers->includes(cashier)
-  postcondition:
-    Cashier.allInstance()->excludes(cashier) and store.Cashiers->excludes(cashier) and cashier.WorkedStore = null and result = true
-}

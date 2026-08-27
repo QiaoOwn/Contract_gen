@@ -1,9 +1,0 @@
-Contract LibraryManagementSystemSystem::payOverDueFee(uid:String,fee:Real): Boolean {
-          definition:
-          usr:User = User.allInstance()->any(u:User|u.UserID=uid)
-            precondition:
-          usr.oclIsUndefined() = false and usr.OverDueFee > 0 and fee > 0 and fee <= usr.OverDueFee
-            postcondition:
-          let u:User in u.oclIsNew() and u.OverDueFee = usr.OverDueFee - fee and result = true
-            
-        }

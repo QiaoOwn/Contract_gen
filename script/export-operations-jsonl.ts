@@ -1,11 +1,12 @@
 /**
- * Writes data/operations.jsonl — one JSON object per operation in rm2pt/project,
- * aligned with script/experiment.ts iteration order and RQ1 script fields.
+ * Exports the canonical 114-operation benchmark input. Reference OCL clauses
+ * are intentionally excluded so generation scripts cannot consume the oracle.
  */
 import fs from 'fs-extra';
 import path from 'path';
 import * as allProjects from '@/rm2pt/project';
-import {createProjectContextPrompt} from '@/app/service/createProjectContextPrompt';
+import {buildOperationInput, formatOperationSignature} from '@/app/service/createOperationInput';
+import {createOCLGenerationSystemPrompt} from '@/app/service/createOCLGenerationSystemPrompt';
 import type {UseCaseKeys} from '@/app/type';
 
 const CASE_STUDY_LABEL: Record<keyof typeof allProjects, string> = {
@@ -20,43 +21,55 @@ const outPath = path.resolve(process.cwd(), 'data', 'operations.jsonl');
 
 const main = async () => {
   const lines: string[] = [];
-  for (const [p, mod] of Object.entries(allProjects)) {
-    const project = p as keyof typeof allProjects;
-    const {useCase} = mod;
-    for (const [uc, ucObj] of Object.entries(useCase)) {
-      const useCase = uc as UseCaseKeys;
-      const {relatedService} = ucObj as {
-        relatedService: {
-          name: string;
-          operations: {
-            name: string;
-            description: string;
-            parameters?: {name: string; type: string}[];
-            returnType?: {type: string};
-          }[];
-        };
-      };
-      const modelContext = createProjectContextPrompt({project, useCase});
-      for (const op of relatedService.operations) {
-        const params = (op.parameters ?? []).map((e) => ({name: e.name, type: e.type}));
-        const paramSig = params.map((e) => `${e.name}: ${e.type}`).join(', ');
-        const ret = op.returnType?.type ?? 'void';
-        const id = `${project}_${useCase}_${op.name}`.replace(/\s+/g, '_');
+  const prompt = createOCLGenerationSystemPrompt();
+  for (const [projectName, projectModule] of Object.entries(allProjects)) {
+    const project = projectName as keyof typeof allProjects;
+    for (const [useCaseName, useCaseObject] of Object.entries(projectModule.useCase)) {
+      const useCase = useCaseName as UseCaseKeys;
+      const relatedService = useCaseObject.relatedService;
+      for (const operation of relatedService.operations) {
+        const input = buildOperationInput({project, useCase, operation: operation.name});
+        const parameters = (operation.parameters || []).map((parameter) => ({
+          name: parameter.name,
+          type: parameter.type,
+        }));
+        const id = [project, useCase, operation.name].join('_').replace(/\s+/g, '_');
+        const oracleId = [project, relatedService.name, operation.name].join('-');
+        const returnType = operation.returnType?.type || null;
         const row = {
           id,
+          oracle_id: oracleId,
+          requirement_group_id: input.metadata.requirementHash,
           case_study: CASE_STUDY_LABEL[project],
           project,
           useCase,
-          operation: op.name,
+          operation: operation.name,
           service: relatedService.name,
-          entity: relatedService.name,
-          operation_name: op.name,
-          operation_signature: `${op.name}(${paramSig}): ${ret}`,
-          description: op.description?.trim() ?? '',
-          parameters: params,
-          return_type: ret,
-          model_context: modelContext,
-          reference_contract: '',
+          operation_name: operation.name,
+          operation_signature: formatOperationSignature(operation),
+          description: input.requirement,
+          parameters,
+          return_type: returnType,
+          has_return_value: returnType !== null,
+          model_context: input.modelContext,
+          canonical_user_message: input.content,
+          input_schema_version: input.metadata.schemaVersion,
+          requirement_provenance: input.metadata.requirementProvenance,
+          requirement_hash: input.metadata.requirementHash,
+          context_hash: input.metadata.contextHash,
+          input_hash: input.metadata.inputHash,
+          prompt_version: prompt.version,
+          prompt_hash: prompt.hash,
+          generation_config_version: prompt.generationConfig.version,
+          generation_config_hash: prompt.generationConfig.hash,
+          generation_grammar_version: prompt.components.grammar.version,
+          generation_grammar_hash: prompt.components.grammar.hash,
+          generation_rules_version: prompt.components.generationRules.version,
+          generation_rules_hash: prompt.components.generationRules.hash,
+          generation_output_mode: prompt.generationConfig.outputMode,
+          generation_temperature: prompt.generationConfig.temperature,
+          generation_max_tokens: prompt.generationConfig.maxTokens,
+          oracle_available_to_generator: false,
         };
         lines.push(JSON.stringify(row));
       }
@@ -64,7 +77,7 @@ const main = async () => {
   }
   await fs.ensureDir(path.dirname(outPath));
   await fs.writeFile(outPath, lines.join('\n') + '\n', 'utf8');
-  console.log(`Wrote ${lines.length} operations to ${outPath}`);
+  console.log('Wrote ' + lines.length + ' canonical operations to ' + outPath);
 };
 
 void main();

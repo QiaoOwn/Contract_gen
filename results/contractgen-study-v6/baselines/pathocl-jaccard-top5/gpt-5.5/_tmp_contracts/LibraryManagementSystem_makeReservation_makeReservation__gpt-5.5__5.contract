@@ -1,0 +1,34 @@
+Contract LibraryManagementSystemSystem::makeReservation(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u: User | u.UserID = uid) and
+BookCopy.allInstances()->exists(c: BookCopy | c.Barcode = barcode) and
+BookCopy.allInstances()->exists(c: BookCopy |
+        c.Barcode = barcode and
+        c.Status = CopyStatus::LOANED
+    ) and
+BookCopy.allInstances()->exists(c: BookCopy |
+        c.Barcode = barcode and
+        c.IsReserved = false
+    )
+            postcondition:
+          Reserve.allInstances()->exists(r: Reserve |
+        Reserve.allInstances()@pre->excludes(r) and
+        r.ReserveDate = Date::today() and
+        r.IsReserveClosed = false and
+        r.ReservedUser = User.allInstances()->any(u: User | u.UserID = uid) and
+        r.ReservedCopy = BookCopy.allInstances()->any(c: BookCopy | c.Barcode = barcode)
+    ) and
+BookCopy.allInstances()->any(c: BookCopy | c.Barcode = barcode).IsReserved = true and
+BookCopy.allInstances()->any(c: BookCopy | c.Barcode = barcode).ReservationRecord->exists(r: Reserve |
+        Reserve.allInstances()@pre->excludes(r) and
+        r.ReservedUser = User.allInstances()->any(u: User | u.UserID = uid) and
+        r.ReservedCopy = BookCopy.allInstances()->any(c: BookCopy | c.Barcode = barcode)
+    ) and
+User.allInstances()->any(u: User | u.UserID = uid).ReservedBook->exists(r: Reserve |
+        Reserve.allInstances()@pre->excludes(r) and
+        r.ReservedUser = User.allInstances()->any(u: User | u.UserID = uid) and
+        r.ReservedCopy = BookCopy.allInstances()->any(c: BookCopy | c.Barcode = barcode)
+    ) and
+result = true
+            
+        }

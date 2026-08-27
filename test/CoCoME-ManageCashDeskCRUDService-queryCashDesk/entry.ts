@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageCashDeskCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the cash desk with provided id,
-   *if the cash desk exists,
-   *show the cash desk*/
+  /*Definition: The queryCashDesk operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   queryCashDesk(id: number): CashDesk {
     /*Definition Start*/
-    let cashdesk: CashDesk = l({
-      logic: () =>
-        getRepository(CashDesk).find(
-          (cas: CashDesk) =>
-            l({
-              logic: () => cas.Id === id,
-              description: 'cas.Id=id',
-            }).build().pass
-        ),
-      description: 'CashDesk.allInstance()->any(cas:CashDesk|cas.Id=id)',
-    }).build().pass;
+    let cashdesk: CashDesk = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(CashDesk).find(
+              (cas: CashDesk) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(cas.Id, id),
+                  description: 'cas.Id=id',
+                }).build().pass
+            ),
+          description: 'CashDesk.allInstances()->any(cas:CashDesk|cas.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cashdesk) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cashdesk), false),
       description: 'cashdesk.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -221,12 +232,32 @@ class ManageCashDeskCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => cashdesk,
-      description: 'result=cashdesk',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => cashdesk,
+        description: 'result=cashdesk',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(result, cashdesk),
+        description: 'result=cashdesk',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageCashDeskCRUDService};

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -197,7 +205,9 @@ class CoCoMEOrderProducts {
   CurrentOrderProduct: OrderProduct;
   /*TempVariable End*/
 
-  /*select all the items with the stock number is equal to 0*/
+  /*Definition: The listAllOutOfStoreProducts operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   listAllOutOfStoreProducts(): Item[] {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
@@ -209,19 +219,49 @@ class CoCoMEOrderProducts {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () =>
-        getRepository(Item).filter(
-          (item: Item) =>
-            l({
-              logic: () => item.StockNumber === 0,
-              description: 'item.StockNumber=0',
-            }).build().pass
-        ),
-      description: 'result=Item.allInstance()->select(item:Item|item.StockNumber=0)',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () =>
+          getRepository(Item).filter(
+            (item: Item) =>
+              l({
+                logic: () => StandardOPs.oclEquals(item.StockNumber, 0),
+                description: 'item.StockNumber=0',
+              }).build().pass
+          ),
+        description: 'result=Item.allInstances()->select(item:Item|item.StockNumber=0)',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () =>
+          StandardOPs.oclEquals(
+            result,
+            getRepository(Item).filter(
+              (item: Item) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(item.StockNumber, 0),
+                  description: 'item.StockNumber=0',
+                }).build().pass
+            )
+          ),
+        description: 'result=Item.allInstances()->select(item:Item|item.StockNumber=0)',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {CoCoMEOrderProducts};

@@ -24,7 +24,7 @@ const operations = [
       new Parameter({name: 'isopened', type: 'Boolean'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)`,
+    definition: `store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)`,
     precondition: `store.oclIsUndefined() = true`,
     postcondition: `
 let sto:Store in
@@ -33,7 +33,7 @@ sto.Id = id and
 sto.Name = name and
 sto.Address = address and
 sto.IsOpened = isopened and
-Store.allInstance()->includes(sto) and
+Store.allInstances()->includes(sto) and
 result = true`,
   }),
   new Operation({
@@ -43,7 +43,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Store'),
-    definition: `store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)`,
+    definition: `store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)`,
     precondition: `store.oclIsUndefined() = false`,
     postcondition: `result = store`,
   }),
@@ -59,7 +59,7 @@ result = true`,
       new Parameter({name: 'isopened', type: 'Boolean'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)`,
+    definition: `store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)`,
     precondition: `store.oclIsUndefined() = false`,
     postcondition: `
 store.Id = id and
@@ -75,12 +75,12 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `store:Store = Store.allInstance()->any(sto:Store | sto.Id = id)`,
+    definition: `store:Store = Store.allInstances()->any(sto:Store | sto.Id = id)`,
     precondition: `
 store.oclIsUndefined() = false and
-Store.allInstance()->includes(store)`,
+Store.allInstances()->includes(store)`,
     postcondition: `
-Store.allInstance()->excludes(store) and
+Store.allInstances()->excludes(store) and
 result = true`,
   }),
 ];

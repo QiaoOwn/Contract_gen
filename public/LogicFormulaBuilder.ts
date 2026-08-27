@@ -124,7 +124,15 @@ class LogicFormulaBuilder<T = boolean> {
           } else if (!pass) {
             errorMessage = rule.description;
           } else {
-            value = (rule as LogicalRule).execute?.() as T;
+            const executionResult = (rule as LogicalRule).execute?.();
+            if (executionResult instanceof LogicFormulaBuilder) {
+              const result = executionResult.build();
+              pass = result.pass as T;
+              value = result.value as T;
+              errorMessage = this.createErrorMessage(result.errors);
+            } else {
+              value = executionResult as T;
+            }
           }
           if (!pass) {
             fullErrorMessagesArr.push(errorMessage);

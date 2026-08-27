@@ -1,8 +1,0 @@
-Contract SearchBook::searchBookByBarCode(barcode: String): Set(Book) {
-  definition:
-    bookCopies:Set(BookCopy) = BookCopy.allInstance()->select(o | o.Barcode = barcode), books:Set(Book) = bookCopies->collect(o | o.BookBelongs)
-  precondition:
-    barcode.oclIsTypeOf(String) and bookCopies.isEmpty() = false
-  postcondition:
-    result = books
-}

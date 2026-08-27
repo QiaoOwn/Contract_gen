@@ -22,14 +22,14 @@ const operations = [
       new Parameter({name: 'name', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)`,
+    definition: `cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)`,
     precondition: `cashier.oclIsUndefined() = true`,
     postcondition: `
 let cas:Cashier in
 cas.oclIsNew() and
 cas.Id = id and
 cas.Name = name and
-Cashier.allInstance()->includes(cas) and
+Cashier.allInstances()->includes(cas) and
 result = true`,
   }),
   new Operation({
@@ -39,7 +39,7 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Cashier'),
-    definition: `cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)`,
+    definition: `cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)`,
     precondition: `cashier.oclIsUndefined() = false`,
     postcondition: `result = cashier`,
   }),
@@ -53,7 +53,7 @@ result = true`,
       new Parameter({name: 'name', type: 'String'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)`,
+    definition: `cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)`,
     precondition: `cashier.oclIsUndefined() = false`,
     postcondition: `
 cashier.Id = id and
@@ -67,12 +67,12 @@ result = true`,
     Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.`,
     parameters: [new Parameter({name: 'id', type: 'Integer'})],
     returnType: new ReturnedType('Boolean'),
-    definition: `cashier:Cashier = Cashier.allInstance()->any(cas:Cashier | cas.Id = id)`,
+    definition: `cashier:Cashier = Cashier.allInstances()->any(cas:Cashier | cas.Id = id)`,
     precondition: `
 cashier.oclIsUndefined() = false and
-Cashier.allInstance()->includes(cashier)`,
+Cashier.allInstances()->includes(cashier)`,
     postcondition: `
-Cashier.allInstance()->excludes(cashier) and
+Cashier.allInstances()->excludes(cashier) and
 result = true`,
   }),
 ];

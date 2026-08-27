@@ -1,0 +1,73 @@
+model StrongUSE_009_AutomatedTellerMachine_checkBalance_ejectCard
+
+-- operation_id: AutomatedTellerMachine_checkBalance_ejectCard
+-- operation_signature: ejectCard(): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AutomatedTellerMachineSystem::ejectCard(): Boolean {
+--   precondition:
+--     self.CardIDValidated = true and
+--     self.PasswordValidated = true and
+--     self.InputCard.oclIsUndefined() = false
+--   postcondition:
+--     self.InputCard = null and
+--     self.CardIDValidated = false and
+--     self.PasswordValidated = false and
+--     result = true
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class OperationContext
+attributes
+  CardIDValidated : Boolean
+  InputCard : Boolean
+  Now : Integer
+  PasswordValidated : Boolean
+  Today : Integer
+  sampleIndex : Integer
+operations
+  Contract_ejectCard() : Boolean
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+constraints
+
+context OperationContext::Contract_ejectCard() : Boolean
+  pre ejectCardGeneratedPre:
+    self.CardIDValidated = true and
+    		self.PasswordValidated = true and
+    		self.InputCard.oclIsUndefined() = false
+  post ejectCardGeneratedPost:
+    self.InputCard.oclIsUndefined() = true and
+    		self.CardIDValidated = false and
+    		self.PasswordValidated = false and
+    		result = true

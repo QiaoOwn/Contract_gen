@@ -1,0 +1,10 @@
+Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {
+          precondition:
+          self.currentLoanRequest <> null and
+LoanTerm.allInstances()->exists(t | t.termID = termid)
+            postcondition:
+          self.currentLoanRequest.loanTerm =
+        LoanTerm.allInstances()->any(t | t.termID = termid) and
+result = true
+            
+        }

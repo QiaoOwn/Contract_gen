@@ -1,0 +1,13 @@
+Contract LoanProcessingSystemSystem::closeOutLoan(loanid:Integer): Boolean {
+          precondition:
+          LoanAccount.allInstances()->exists(l: LoanAccount |
+        l.LoanAccountID = loanid and
+        l.Status = LoanAccountStatus::NORMAL
+    )
+            postcondition:
+          LoanAccount.allInstances()->any(l: LoanAccount |
+        l.LoanAccountID = loanid
+    ).Status = LoanAccountStatus::HASPAIDINFULL and
+result = true
+            
+        }

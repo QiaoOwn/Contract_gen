@@ -1,0 +1,31 @@
+Contract ProcessSaleService::makeNewSale(): Boolean {
+          precondition:
+          self.CurrentCashDesk <> null and
+    self.CurrentCashDesk.IsOpened = true and
+self.CurrentSale = null or
+    self.CurrentSale.IsComplete = true
+            postcondition:
+          Sale.allInstances()->exists(s : Sale |
+        s.oclIsNew() and
+        s.IsComplete = false and
+        s.IsReadytoPay = false and
+        s.Amount = 0 and
+        s.Time = self.Now and
+        s.BelongedCashDesk = self.CurrentCashDesk and
+        s.Belongedstore = self.CurrentCashDesk.BelongedStore
+    ) and
+self.CurrentSale.oclIsNew() and
+    self.CurrentSale.IsComplete = false and
+    self.CurrentSale.IsReadytoPay = false and
+    self.CurrentSale.Amount = 0 and
+    self.CurrentSale.Time = self.Now and
+    self.CurrentSale.BelongedCashDesk = self.CurrentCashDesk and
+    self.CurrentSale.Belongedstore = self.CurrentCashDesk.BelongedStore and
+Sale.allInstances()->includes(self.CurrentSale) and
+self.CurrentCashDesk.ContainedSales = 
+        self.CurrentCashDesk.ContainedSales@pre->including(self.CurrentSale) and
+self.CurrentCashDesk.BelongedStore.Sales =
+        self.CurrentCashDesk.BelongedStore.Sales@pre->including(self.CurrentSale) and
+result = true
+            
+        }

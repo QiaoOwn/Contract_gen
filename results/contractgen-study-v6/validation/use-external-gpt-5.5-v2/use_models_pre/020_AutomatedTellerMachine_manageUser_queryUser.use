@@ -1,0 +1,61 @@
+model StrongUSE_020_AutomatedTellerMachine_manageUser_queryUser
+
+-- operation_id: AutomatedTellerMachine_manageUser_queryUser
+-- operation_signature: queryUser(userid: Integer): User
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract ManageUserCRUDService::queryUser(userid: Integer): User {
+--   definition:
+--     queriedUser: User = User.allInstances()->any(user: User|user.UserID = userid)
+--   precondition:
+--     User.allInstances()->includes(queriedUser)
+--   postcondition:
+--     result = queriedUser
+-- }
+
+enum CardCatalog { CREDIT, DESPOSIT }
+enum CardStatus { CANNEL, NORMAL, SUSPEND }
+
+class BankCard
+attributes
+  CardID : Integer
+  CardStatus : CardStatus
+  Catalog : CardCatalog
+  Password : Integer
+  Balance : Real
+end
+
+class User
+attributes
+  UserID : Integer
+  Name : String
+  Address : String
+end
+
+class OperationContext
+attributes
+  userid : Integer
+  Now : Integer
+  Today : Integer
+operations
+  Contract_queryUser(userid : Integer) : User
+end
+
+association BankCard_BelongedUser_User between
+  BankCard[0..*] role BankCard_BelongedUser_Owner
+  User[0..1] role BelongedUser
+end
+
+association User_OwnedCard_BankCard between
+  User[0..*] role User_OwnedCard_Owner
+  BankCard[0..1] role OwnedCard
+end
+
+constraints
+
+context OperationContext::Contract_queryUser(userid : Integer) : User
+  pre queryUserGeneratedPre:
+    let queriedUser : User = User.allInstances()->any(user: User|user.UserID = userid) in
+          User.allInstances()->includes(queriedUser)

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -204,35 +212,32 @@ class ProcessSaleService {
   CurrentPaymentMethod: PaymentMethod;
   /*TempVariable End*/
 
-  /*The current cash desk exists and the cash desk is opened.
-   *There is no ongoing sale, or the current sale is complete.
-   *Then a new sale is created.
-   *The sale is linked to the current cash desk.
-   *The sale is initialized is not complete and not ready to pay.
-   *The sale is added to the system.
-   *The new created sale will be used in other step*/
+  /*Definition: The makeNewSale operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   makeNewSale(): boolean {
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(this.CurrentCashDesk) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentCashDesk), false),
       description: 'CurrentCashDesk.oclIsUndefined()=false',
     })
       .and({
-        logic: () => this.CurrentCashDesk.IsOpened === true,
+        logic: () => StandardOPs.oclEquals(this.CurrentCashDesk.IsOpened, true),
         description: 'CurrentCashDesk.IsOpened=true',
       })
       .and({
         logic: () =>
           l({
-            logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === true,
+            logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentSale), true),
             description: 'CurrentSale.oclIsUndefined()=true',
           }).or({
             logic: () =>
               l({
-                logic: () => StandardOPs.oclIsUndefined(this.CurrentSale) === false,
+                logic: () =>
+                  StandardOPs.oclEquals(StandardOPs.oclIsUndefined(this.CurrentSale), false),
                 description: 'CurrentSale.oclIsUndefined()=false',
               }).and({
-                logic: () => this.CurrentSale.IsComplete === true,
+                logic: () => StandardOPs.oclEquals(this.CurrentSale.IsComplete, true),
                 description: 'CurrentSale.IsComplete=true',
               }),
             description: '(CurrentSale.oclIsUndefined()=falseandCurrentSale.IsComplete=true)',
@@ -246,42 +251,92 @@ class ProcessSaleService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let s: Sale;
-    return l({
-      execute: () => (s = new Sale()),
-      description: 's.oclIsNew()',
-    })
-      .and({
-        execute: () => (s.BelongedCashDesk = this.CurrentCashDesk),
-        description: 's.BelongedCashDesk=CurrentCashDesk',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let s: Sale;
+      return l({
+        execute: () => (s = new Sale()),
+        description: 's.oclIsNew()',
       })
-      .and({
-        execute: () => this.CurrentCashDesk.ContainedSales.push(s),
-        description: 'CurrentCashDesk.ContainedSales->includes(s)',
+        .and({
+          execute: () => (s.BelongedCashDesk = this.CurrentCashDesk),
+          description: 's.BelongedCashDesk=CurrentCashDesk',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(this.CurrentCashDesk.ContainedSales, s),
+          description: 'CurrentCashDesk.ContainedSales->includes(s)',
+        })
+        .and({
+          execute: () => (s.IsComplete = false),
+          description: 's.IsComplete=false',
+        })
+        .and({
+          execute: () => (s.IsReadytoPay = false),
+          description: 's.IsReadytoPay=false',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(Sale), s),
+          description: 'Sale.allInstances()->includes(s)',
+        })
+        .and({
+          execute: () => (this.CurrentSale = s),
+          description: 'self.CurrentSale=s',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let s: Sale = oclState.findNew(Sale);
+      return l({
+        logic: () => oclState.isNew(s, Sale),
+        description: 's.oclIsNew()',
       })
-      .and({
-        execute: () => (s.IsComplete = false),
-        description: 's.IsComplete=false',
-      })
-      .and({
-        execute: () => (s.IsReadytoPay = false),
-        description: 's.IsReadytoPay=false',
-      })
-      .and({
-        execute: () => getRepository(Sale).push(s),
-        description: 'Sale.allInstance()->includes(s)',
-      })
-      .and({
-        execute: () => (this.CurrentSale = s),
-        description: 'self.CurrentSale=s',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(s.BelongedCashDesk, this.CurrentCashDesk),
+          description: 's.BelongedCashDesk=CurrentCashDesk',
+        })
+        .and({
+          logic: () => StandardOPs.includes(this.CurrentCashDesk.ContainedSales, s),
+          description: 'CurrentCashDesk.ContainedSales->includes(s)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(s.IsComplete, false),
+          description: 's.IsComplete=false',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(s.IsReadytoPay, false),
+          description: 's.IsReadytoPay=false',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(Sale), s),
+          description: 'Sale.allInstances()->includes(s)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentSale, s),
+          description: 'self.CurrentSale=s',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ProcessSaleService};

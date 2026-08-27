@@ -1,0 +1,21 @@
+Contract CoCoMESystem::closeCashDesk(cashDeskID:Integer): Boolean {
+          precondition:
+          CashDesk.allInstances()->exists(cd |
+        cd.Id = cashDeskID and cd.IsOpened = true
+    ) and
+Store.allInstances()->exists(s |
+        s.IsOpened = true and
+        s.AssociationCashdeskes->exists(cd |
+            cd.Id = cashDeskID and cd.IsOpened = true
+        )
+    )
+            postcondition:
+          CashDesk.allInstances()->any(cd |
+        cd.Id = cashDeskID
+    ).IsOpened = false and
+CashDesk.allInstances()->any(cd |
+        cd.Id = cashDeskID
+    ).Id = cashDeskID and
+result = true
+            
+        }

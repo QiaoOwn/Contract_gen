@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -155,7 +163,9 @@ class SubmitLoanRequestModule {
   CurrentLoanRequest: LoanRequest;
   /*TempVariable End*/
 
-  /*find a loan request with provided request id, if the loan request is not exist, create a new loan request with provided info and save it, then the current loan request is it*/
+  /*Definition: The enterLoanInformation operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   enterLoanInformation(
     requestid: number,
     name: string,
@@ -172,22 +182,25 @@ class SubmitLoanRequestModule {
     securitynumber: number
   ): boolean {
     /*Definition Start*/
-    let loanrequest: LoanRequest = l({
-      logic: () =>
-        getRepository(LoanRequest).find(
-          (loa: LoanRequest) =>
-            l({
-              logic: () => loa.RequestID === requestid,
-              description: 'loa.RequestID=requestid',
-            }).build().pass
-        ),
-      description: 'LoanRequest.allInstance()->any(loa:LoanRequest|loa.RequestID=requestid)',
-    }).build().pass;
+    let loanrequest: LoanRequest = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(LoanRequest).find(
+              (loa: LoanRequest) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(loa.RequestID, requestid),
+                  description: 'loa.RequestID=requestid',
+                }).build().pass
+            ),
+          description: 'LoanRequest.allInstances()->any(loa:LoanRequest|loa.RequestID=requestid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(loanrequest) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(loanrequest), true),
       description: 'loanrequest.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -195,78 +208,164 @@ class SubmitLoanRequestModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let loa: LoanRequest;
-    return l({
-      execute: () => (loa = new LoanRequest()),
-      description: 'loa.oclIsNew()',
-    })
-      .and({
-        execute: () => (loa.RequestID = requestid),
-        description: 'loa.RequestID=requestid',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let loa: LoanRequest;
+      return l({
+        execute: () => (loa = new LoanRequest()),
+        description: 'loa.oclIsNew()',
       })
-      .and({
-        execute: () => (loa.Name = name),
-        description: 'loa.Name=name',
+        .and({
+          execute: () => (loa.RequestID = requestid),
+          description: 'loa.RequestID=requestid',
+        })
+        .and({
+          execute: () => (loa.Name = name),
+          description: 'loa.Name=name',
+        })
+        .and({
+          execute: () => (loa.LoanAmount = loanamount),
+          description: 'loa.LoanAmount=loanamount',
+        })
+        .and({
+          execute: () => (loa.LoanPurpose = loanpurpose),
+          description: 'loa.LoanPurpose=loanpurpose',
+        })
+        .and({
+          execute: () => (loa.Income = income),
+          description: 'loa.Income=income',
+        })
+        .and({
+          execute: () => (loa.PhoneNumber = phonenumber),
+          description: 'loa.PhoneNumber=phonenumber',
+        })
+        .and({
+          execute: () => (loa.PostalAddress = postaladdress),
+          description: 'loa.PostalAddress=postaladdress',
+        })
+        .and({
+          execute: () => (loa.ZipCode = zipcode),
+          description: 'loa.ZipCode=zipcode',
+        })
+        .and({
+          execute: () => (loa.Email = email),
+          description: 'loa.Email=email',
+        })
+        .and({
+          execute: () => (loa.WorkReferences = workreferences),
+          description: 'loa.WorkReferences=workreferences',
+        })
+        .and({
+          execute: () => (loa.CreditReferences = creditreferences),
+          description: 'loa.CreditReferences=creditreferences',
+        })
+        .and({
+          execute: () => (loa.CheckingAccountNumber = checkingaccountnumber),
+          description: 'loa.CheckingAccountNumber=checkingaccountnumber',
+        })
+        .and({
+          execute: () => (loa.SecurityNumber = securitynumber),
+          description: 'loa.SecurityNumber=securitynumber',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(LoanRequest), loa),
+          description: 'LoanRequest.allInstances()->includes(loa)',
+        })
+        .and({
+          execute: () => (this.CurrentLoanRequest = loa),
+          description: 'self.CurrentLoanRequest=loa',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let loa: LoanRequest = oclState.findNew(LoanRequest);
+      return l({
+        logic: () => oclState.isNew(loa, LoanRequest),
+        description: 'loa.oclIsNew()',
       })
-      .and({
-        execute: () => (loa.LoanAmount = loanamount),
-        description: 'loa.LoanAmount=loanamount',
-      })
-      .and({
-        execute: () => (loa.LoanPurpose = loanpurpose),
-        description: 'loa.LoanPurpose=loanpurpose',
-      })
-      .and({
-        execute: () => (loa.Income = income),
-        description: 'loa.Income=income',
-      })
-      .and({
-        execute: () => (loa.PhoneNumber = phonenumber),
-        description: 'loa.PhoneNumber=phonenumber',
-      })
-      .and({
-        execute: () => (loa.PostalAddress = postaladdress),
-        description: 'loa.PostalAddress=postaladdress',
-      })
-      .and({
-        execute: () => (loa.ZipCode = zipcode),
-        description: 'loa.ZipCode=zipcode',
-      })
-      .and({
-        execute: () => (loa.Email = email),
-        description: 'loa.Email=email',
-      })
-      .and({
-        execute: () => (loa.WorkReferences = workreferences),
-        description: 'loa.WorkReferences=workreferences',
-      })
-      .and({
-        execute: () => (loa.CreditReferences = creditreferences),
-        description: 'loa.CreditReferences=creditreferences',
-      })
-      .and({
-        execute: () => (loa.CheckingAccountNumber = checkingaccountnumber),
-        description: 'loa.CheckingAccountNumber=checkingaccountnumber',
-      })
-      .and({
-        execute: () => (loa.SecurityNumber = securitynumber),
-        description: 'loa.SecurityNumber=securitynumber',
-      })
-      .and({
-        execute: () => getRepository(LoanRequest).push(loa),
-        description: 'LoanRequest.allInstance()->includes(loa)',
-      })
-      .and({
-        execute: () => (this.CurrentLoanRequest = loa),
-        description: 'self.CurrentLoanRequest=loa',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.RequestID, requestid),
+          description: 'loa.RequestID=requestid',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.Name, name),
+          description: 'loa.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.LoanAmount, loanamount),
+          description: 'loa.LoanAmount=loanamount',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.LoanPurpose, loanpurpose),
+          description: 'loa.LoanPurpose=loanpurpose',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.Income, income),
+          description: 'loa.Income=income',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.PhoneNumber, phonenumber),
+          description: 'loa.PhoneNumber=phonenumber',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.PostalAddress, postaladdress),
+          description: 'loa.PostalAddress=postaladdress',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.ZipCode, zipcode),
+          description: 'loa.ZipCode=zipcode',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.Email, email),
+          description: 'loa.Email=email',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.WorkReferences, workreferences),
+          description: 'loa.WorkReferences=workreferences',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.CreditReferences, creditreferences),
+          description: 'loa.CreditReferences=creditreferences',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.CheckingAccountNumber, checkingaccountnumber),
+          description: 'loa.CheckingAccountNumber=checkingaccountnumber',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(loa.SecurityNumber, securitynumber),
+          description: 'loa.SecurityNumber=securitynumber',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(LoanRequest), loa),
+          description: 'LoanRequest.allInstances()->includes(loa)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentLoanRequest, loa),
+          description: 'self.CurrentLoanRequest=loa',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {SubmitLoanRequestModule};

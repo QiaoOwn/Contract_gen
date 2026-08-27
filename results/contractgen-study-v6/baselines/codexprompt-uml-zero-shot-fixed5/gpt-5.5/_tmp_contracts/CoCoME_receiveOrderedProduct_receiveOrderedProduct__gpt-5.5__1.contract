@@ -1,0 +1,12 @@
+Contract CoCoMESystem::receiveOrderedProduct(orderID:Integer): Boolean {
+          precondition:
+          OrderProduct.allInstances()->exists(op | op.Id = orderID)
+            postcondition:
+          OrderProduct.allInstances()->any(op | op.Id = orderID).OrderStatus = OrderStatus::RECEIVED and
+OrderProduct.allInstances()->any(op | op.Id = orderID).ContainedEntries->forAll(entry |
+        entry.Item.StockNumber =
+            entry.Item.StockNumber@pre + entry.Quantity
+    ) and
+result = true
+            
+        }

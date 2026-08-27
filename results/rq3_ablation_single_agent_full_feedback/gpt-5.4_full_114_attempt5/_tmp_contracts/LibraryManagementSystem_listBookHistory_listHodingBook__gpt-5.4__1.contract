@@ -1,8 +1,0 @@
-Contract ListBookHistory::listHodingBook(uid: String): Set(Loan) {
-  definition:
-    user: User = User.allInstance()->any(u | u.UserID = uid), loans: Set(Loan) = user.LoanedBook->select(l | l.IsReturned = false)
-  precondition:
-    uid.oclIsUndefined() = false and User.allInstance()->includes(user) and user.oclIsUndefined() = false
-  postcondition:
-    result = loans
-}

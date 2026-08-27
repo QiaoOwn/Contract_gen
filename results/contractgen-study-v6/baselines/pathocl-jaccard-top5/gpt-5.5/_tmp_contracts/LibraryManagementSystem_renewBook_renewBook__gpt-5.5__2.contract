@@ -1,0 +1,79 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          precondition:
+          User.allInstances()->exists(u |
+        u.UserID = uid and
+        u.Status = UserStatus::NORMAL and
+        BookCopy.allInstances()->exists(bc |
+            bc.Barcode = barcode and
+            bc.LoanedRecord->exists(l |
+                l.LoanedCopy = bc and
+                l.IsReturned = false and
+                l.User = u
+            )
+        )
+    ) and
+BookCopy.allInstances()->exists(bc |
+        bc.Barcode = barcode and
+        bc.IsReserved = false and
+        bc.LoanedRecord->exists(l |
+            l.IsReturned = false and
+            l.DueDate > Date::today() and
+            l.OverDueFee = 0
+        )
+    ) and
+User.allInstances()->forAll(u |
+        u.UserID = uid implies
+            BookCopy.allInstances()->forAll(bc |
+                bc.Barcode = barcode implies
+                    bc.LoanedRecord->forAll(l |
+                        l.IsReturned = false implies
+                            (
+                                (u.oclIsKindOf(Student) implies l.RenewedTimes < 3) and
+                                (u.oclIsKindOf(Faculty) implies l.RenewedTimes < 6)
+                            )
+                    )
+            )
+    )
+            postcondition:
+          BookCopy.allInstances()->forAll(bc |
+        bc.Barcode = barcode implies
+            bc.LoanedRecord->forAll(l |
+                l.IsReturned = false implies
+                    l.RenewedTimes = l.RenewedTimes@pre + 1
+            )
+    ) and
+BookCopy.allInstances()->forAll(bc |
+        bc.Barcode = barcode implies
+            bc.LoanedRecord->forAll(l |
+                l.IsReturned = false implies
+                    l.RenewDate = Date::today()
+            )
+    ) and
+User.allInstances()->forAll(u |
+        u.UserID = uid implies
+            BookCopy.allInstances()->forAll(bc |
+                bc.Barcode = barcode implies
+                    bc.LoanedRecord->forAll(l |
+                        l.IsReturned = false implies
+                            (
+                                (u.oclIsKindOf(Student) and u.oclAsType(Student).Level = StudentLevel::BACHELOR implies
+                                    l.DueDate = l.DueDate@pre + 20
+                                ) and
+                                (u.oclIsKindOf(Student) and u.oclAsType(Student).Level = StudentLevel::MASTER implies
+                                    l.DueDate = l.DueDate@pre + 40
+                                ) and
+                                (u.oclIsKindOf(Student) and
+                                    u.oclAsType(Student).Level <> StudentLevel::BACHELOR and
+                                    u.oclAsType(Student).Level <> StudentLevel::MASTER implies
+                                    l.DueDate = l.DueDate@pre + 60
+                                ) and
+                                (u.oclIsKindOf(Faculty) implies
+                                    l.DueDate = l.DueDate@pre + 60
+                                )
+                            )
+                    )
+            )
+    ) and
+result = true
+            
+        }

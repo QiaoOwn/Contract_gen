@@ -1,0 +1,17 @@
+Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {
+          precondition:
+          LoanRequest.allInstances()->exists(lr: LoanRequest | lr.RequestID = id)
+            postcondition:
+          LoanAgreement.allInstances()->exists(la: LoanAgreement |
+        la.oclIsNew() and
+        la.Content = 'standard content' and
+        LoanRequest.allInstances()->any(lr: LoanRequest | lr.RequestID = id).AttachedLoanAgreement = la
+    ) and
+LoanRequest.allInstances()->any(lr: LoanRequest | lr.RequestID = id).Status = LoanRequestStatus::APPROVED and
+LoanAgreement.allInstances()->exists(la: LoanAgreement |
+        la.oclIsNew() and
+        la.Content = 'standard content'
+    ) and
+result = true
+            
+        }

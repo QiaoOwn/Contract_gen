@@ -1,5 +1,41 @@
-import {getRepository, Item, ManageItemCRUDService} from './entry';
+import {
+  CardPayment,
+  CashDesk,
+  CashPayment,
+  Cashier,
+  Item,
+  ManageItemCRUDService,
+  OrderEntry,
+  OrderProduct,
+  Payment,
+  ProductCatalog,
+  Sale,
+  SalesLineItem,
+  Store,
+  Supplier,
+  getRepository,
+} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('CoCoME/ManageItemCRUDService/modifyItem', () => {
+  beforeEach(() => {
+    clearRepositories(
+      getRepository(CardPayment),
+      getRepository(CashDesk),
+      getRepository(CashPayment),
+      getRepository(Cashier),
+      getRepository(Item),
+      getRepository(OrderEntry),
+      getRepository(OrderProduct),
+      getRepository(Payment),
+      getRepository(ProductCatalog),
+      getRepository(Sale),
+      getRepository(SalesLineItem),
+      getRepository(Store),
+      getRepository(Supplier)
+    );
+  });
+
   it('Happy Path', () => {
     const service = new ManageItemCRUDService();
     const item = new Item();
@@ -15,5 +51,10 @@ describe('CoCoME/ManageItemCRUDService/modifyItem', () => {
     expect(item.Price).toBe(2);
     expect(item.OrderPrice).toBe(2);
     expect(item.StockNumber).toBe(2);
+  });
+
+  it('rejects when referenced entity does not exist', () => {
+    const service = new ManageItemCRUDService();
+    expectPreconditionRejected(() => service.modifyItem(99, 'modifiedName', 2, 2, 2));
   });
 });

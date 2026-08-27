@@ -1,0 +1,53 @@
+contract-fields      ::= definition? precondition postcondition
+definition           ::= "definition:" initialized-binding ("," initialized-binding)*
+precondition         ::= "precondition:" expression
+postcondition        ::= "postcondition:" expression
+initialized-binding  ::= identifier ":" type "=" expression
+iterator-binding     ::= identifier ":" type
+let-binding          ::= identifier ":" type ("=" expression)?
+
+expression           ::= logic-expression | if-expression | let-expression | nested-expression
+nested-expression    ::= "(" expression ")"
+logic-expression     ::= atomic-expression (("and" | "or") (atomic-expression | if-expression | nested-expression))*
+atomic-expression    ::= operand (comparison-operator operand (arithmetic-operator (literal | atomic-expression))?)?
+operand              ::= literal | variable | feature-call | iterator
+
+feature-call         ::= property | repository | standard-call | collection-call | date-call
+repository           ::= type-name ".allInstances()"
+property             ::= ("self" | identifier) "." identifier ("." identifier)? ("@pre")?
+standard-call        ::= (variable | property) ("." | "->") none-parameter-operation
+                       | (variable | property) ".oclIsTypeOf(" type ")"
+none-parameter-operation ::= "oclIsNew()" | "oclIsUndefined()" | "isEmpty()" | "notEmpty()" | "size()" | "sum()"
+collection-call      ::= (repository | property | identifier) "->" collection-operation "(" identifier ")"
+collection-operation ::= "includes" | "excludes" | "includesAll" | "excludesAll"
+date-call            ::= (variable | property) "." date-operation "(" date-argument ")"
+date-operation       ::= "After" | "Before" | "isAfter" | "isBefore" | "isEqual"
+date-argument        ::= identifier | number | property
+
+iterator             ::= (repository | property | identifier) "->" iterator-name "(" iterator-binding "|" (logic-expression | if-expression) ")"
+iterator-name        ::= "one" | "exists" | "select" | "any" | "forAll" | "collect" | "isUnique"
+if-expression        ::= "if" expression "then" expression ("else" expression)? "endif"
+let-expression       ::= "let" let-binding ("," let-binding)* "in" expression
+
+comparison-operator  ::= "=" | "<>" | ">" | "<" | ">=" | "<="
+arithmetic-operator  ::= "+" | "-" | "*" | "/"
+literal              ::= integer | real | string | boolean | "null" | set-literal | enum-literal
+set-literal          ::= "Set{" (expression (".." expression)? ("," expression (".." expression)?)*)? "}"
+enum-literal         ::= type-name "::" identifier
+boolean              ::= "true" | "false"
+number               ::= integer | real
+variable             ::= "self" | "result" | identifier
+type                  ::= primitive-type | collection-type | type-name
+primitive-type       ::= "Boolean" | "Integer" | "Real" | "String" | "Date"
+collection-type      ::= "Set(" type ")"
+identifier           ::= letter (letter | digit | "_")*
+type-name            ::= identifier
+integer              ::= digit+
+real                 ::= digit+ "." digit+
+string               ::= single-quoted-string | double-quoted-string
+single-quoted-string ::= "'" character* "'"
+double-quoted-string ::= "\"" character* "\""
+character            ::= letter | digit | "_" | " " | punctuation
+punctuation          ::= "." | "," | ":" | ";" | "-" | "+" | "/"
+letter               ::= "A".."Z" | "a".."z"
+digit                ::= "0".."9"

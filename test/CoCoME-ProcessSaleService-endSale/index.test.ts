@@ -1,5 +1,41 @@
-import {ProcessSaleService, Sale, SalesLineItem} from './entry';
+import {
+  CardPayment,
+  CashDesk,
+  CashPayment,
+  Cashier,
+  Item,
+  OrderEntry,
+  OrderProduct,
+  Payment,
+  ProcessSaleService,
+  ProductCatalog,
+  Sale,
+  SalesLineItem,
+  Store,
+  Supplier,
+  getRepository,
+} from './entry';
+import {clearRepositories, expectPreconditionRejected} from '../helpers/contractOracle';
+
 describe('CoCoME/ProcessSaleService/endSale', () => {
+  beforeEach(() => {
+    clearRepositories(
+      getRepository(CardPayment),
+      getRepository(CashDesk),
+      getRepository(CashPayment),
+      getRepository(Cashier),
+      getRepository(Item),
+      getRepository(OrderEntry),
+      getRepository(OrderProduct),
+      getRepository(Payment),
+      getRepository(ProductCatalog),
+      getRepository(Sale),
+      getRepository(SalesLineItem),
+      getRepository(Store),
+      getRepository(Supplier)
+    );
+  });
+
   it('Happy Path', () => {
     const service = new ProcessSaleService();
     service.CurrentSale = new Sale();
@@ -16,5 +52,14 @@ describe('CoCoME/ProcessSaleService/endSale', () => {
     expect(result).toBe(6);
     expect(service.CurrentSale.Amount).toBe(6);
     expect(service.CurrentSale.IsReadytoPay).toBe(true);
+  });
+
+  it('rejects when current sale is already complete', () => {
+    const service = new ProcessSaleService();
+    service.CurrentSale = new Sale();
+    service.CurrentSale.IsComplete = true;
+    service.CurrentSale.IsReadytoPay = false;
+    service.CurrentSale.ContainedSalesLine = [];
+    expectPreconditionRejected(() => service.endSale());
   });
 });

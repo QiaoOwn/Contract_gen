@@ -1,0 +1,111 @@
+model StrongUSE_002_Airport_manageUser_createStaff
+
+-- operation_id: Airport_manageUser_createStaff
+-- operation_signature: createStaff(id: Integer, name: String, pswd: String, phone: String, role: Integer, bossid: Integer): Boolean
+-- conversion_scope: model_context + generated definition/precondition
+-- postcondition is retained as comment because USE invariants do not model operation post-state directly.
+
+-- Generated contract:
+-- Contract AirportSystem::createStaff(id: Integer,name: String,pswd: String,phone: String,role: Integer,bossid: Integer): Boolean {
+--   definition:
+--     existingBoss: Staff = Staff.allInstances()->any(candidate: Staff|candidate.Id = bossid)
+--   precondition:
+--     Staff.allInstances()->forAll(staff: Staff|staff.Id<>id)
+--   postcondition:
+--     let newStaff: Staff in
+--     newStaff.oclIsNew() and
+--     Staff.allInstances()->includes(newStaff) and
+--     newStaff.Id = id and
+--     newStaff.Name = name and
+--     newStaff.Password = pswd and
+--     newStaff.Phone = phone and
+--     newStaff.Role = role and
+--     if existingBoss.oclIsUndefined() = false 
+--     then newStaff.Boss = existingBoss 
+--     else newStaff.Boss = null 
+--     endif  and
+--     result = true
+-- }
+
+class ApprovalHistory
+attributes
+  Id : Integer
+  StaffId : Integer
+  Reject : Boolean
+  Suggestion : String
+end
+
+class Device
+attributes
+  Id : Integer
+  Name : String
+  Location : String
+end
+
+class Repair
+attributes
+  Id : Integer
+  Repairname : String
+  Price : Integer
+  Description : String
+  Score : Integer
+  FailTime : Integer
+  Close : Boolean
+  Process : Integer
+  Result : String
+end
+
+class Staff
+attributes
+  Id : Integer
+  Name : String
+  Password : String
+  Phone : String
+  Role : Integer
+end
+
+class OperationContext
+attributes
+  id : Integer
+  name : String
+  pswd : String
+  phone : String
+  role : Integer
+  bossid : Integer
+  Now : Integer
+  Today : Integer
+operations
+  Contract_createStaff(id : Integer, name : String, pswd : String, phone : String, role : Integer, bossid : Integer) : Boolean
+end
+
+association Device_Contacts_Staff between
+  Device[0..*] role Device_Contacts_Owner
+  Staff[0..1] role Contacts
+end
+
+association Repair_History_ApprovalHistory between
+  Repair[0..*] role Repair_History_Owner
+  ApprovalHistory[*] role History
+end
+
+association Repair_RelatedDevice_Device between
+  Repair[0..*] role Repair_RelatedDevice_Owner
+  Device[0..1] role RelatedDevice
+end
+
+association Repair_RaiseStaff_Staff between
+  Repair[0..*] role Repair_RaiseStaff_Owner
+  Staff[0..1] role RaiseStaff
+end
+
+association Staff_Boss_Staff between
+  Staff[0..*] role Staff_Boss_Owner
+  Staff[0..1] role Boss
+end
+
+constraints
+
+context OperationContext::Contract_createStaff(id : Integer, name : String, pswd : String, phone : String, role : Integer, bossid : Integer) : Boolean
+  pre createStaffGeneratedPre:
+    let existingBoss : Staff = Staff.allInstances()->any(candidate: Staff|candidate.Id = bossid) in
+          Staff.allInstances()->forAll(staff: Staff|staff.Id<>id)

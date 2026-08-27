@@ -1,0 +1,9 @@
+Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {
+          definition:
+          user:User = User.allInstances()->any(candidate:User | candidate.UserID = uid), copy:BookCopy = BookCopy.allInstances()->any(candidate:BookCopy | candidate.Barcode = barcode), loan:Loan = Loan.allInstances()->any(candidate:Loan | candidate.LoanedUser = user and candidate.LoanedCopy = copy and candidate.IsReturned = false), student:Student = Student.allInstances()->any(candidate:Student | candidate.UserID = uid), faculty:Faculty = Faculty.allInstances()->any(candidate:Faculty | candidate.UserID = uid)
+            precondition:
+          User.allInstances()->includes(user) and BookCopy.allInstances()->includes(copy) and Loan.allInstances()->includes(loan) and user.BorrowStatus = BorrowStatus::NORMAL and copy.IsReserved = false and loan.DueDate.isAfter(Today) and loan.OverDueFee = 0.0 and ((user.oclIsTypeOf(Student) and loan.RenewedTimes < 3) or (user.oclIsTypeOf(Faculty) and loan.RenewedTimes < 6))
+            postcondition:
+          loan.RenewedTimes = loan.RenewedTimes@pre + 1 and loan.RenewDate = Today and loan.DueDate = if user.oclIsTypeOf(Student) then if student.Programme = Programme::BACHELOR then loan.DueDate@pre.After(20) else if student.Programme = Programme::MASTER then loan.DueDate@pre.After(40) else loan.DueDate@pre.After(60) endif endif else loan.DueDate@pre.After(60) endif and result = true
+            
+        }

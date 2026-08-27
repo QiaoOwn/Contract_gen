@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,31 +201,35 @@ class ManageSupplierCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the supplier with provided id,
-   *if the supplier exists*/
+  /*Definition: The deleteSupplier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   deleteSupplier(id: number): boolean {
     /*Definition Start*/
-    let supplier: Supplier = l({
-      logic: () =>
-        getRepository(Supplier).find(
-          (sup: Supplier) =>
-            l({
-              logic: () => sup.Id === id,
-              description: 'sup.Id=id',
-            }).build().pass
-        ),
-      description: 'Supplier.allInstance()->any(sup:Supplier|sup.Id=id)',
-    }).build().pass;
+    let supplier: Supplier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Supplier).find(
+              (sup: Supplier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(sup.Id, id),
+                  description: 'sup.Id=id',
+                }).build().pass
+            ),
+          description: 'Supplier.allInstances()->any(sup:Supplier|sup.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(supplier) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(supplier), false),
       description: 'supplier.oclIsUndefined()=false',
     })
       .and({
-        logic: () => getRepository(Supplier).includes(supplier),
-        description: 'Supplier.allInstance()->includes(supplier)',
+        logic: () => StandardOPs.includes(getRepository(Supplier), supplier),
+        description: 'Supplier.allInstances()->includes(supplier)',
       })
       .build();
     if (!isPreconditionPass) {
@@ -225,17 +237,42 @@ class ManageSupplierCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => getRepository(Supplier).remove(supplier),
-      description: 'Supplier.allInstance()->excludes(supplier)',
-    })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => StandardOPs.removeIfPresent(getRepository(Supplier), supplier),
+        description: 'Supplier.allInstances()->excludes(supplier)',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => !StandardOPs.includes(getRepository(Supplier), supplier),
+        description: 'Supplier.allInstances()->excludes(supplier)',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageSupplierCRUDService};

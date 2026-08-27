@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageSupplierCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the supplier with provided id,
-   *if the supplier exists,
-   *update the supplier with provided id and info*/
+  /*Definition: The modifySupplier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   modifySupplier(id: number, name: string): boolean {
     /*Definition Start*/
-    let supplier: Supplier = l({
-      logic: () =>
-        getRepository(Supplier).find(
-          (sup: Supplier) =>
-            l({
-              logic: () => sup.Id === id,
-              description: 'sup.Id=id',
-            }).build().pass
-        ),
-      description: 'Supplier.allInstance()->any(sup:Supplier|sup.Id=id)',
-    }).build().pass;
+    let supplier: Supplier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Supplier).find(
+              (sup: Supplier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(sup.Id, id),
+                  description: 'sup.Id=id',
+                }).build().pass
+            ),
+          description: 'Supplier.allInstances()->any(sup:Supplier|sup.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(supplier) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(supplier), false),
       description: 'supplier.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -221,21 +232,50 @@ class ManageSupplierCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (supplier.Id = id),
-      description: 'supplier.Id=id',
-    })
-      .and({
-        execute: () => (supplier.Name = name),
-        description: 'supplier.Name=name',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (supplier.Id = id),
+        description: 'supplier.Id=id',
       })
-      .and({
-        execute: () => true,
-        description: 'result=true',
+        .and({
+          execute: () => (supplier.Name = name),
+          description: 'supplier.Name=name',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(supplier.Id, id),
+        description: 'supplier.Id=id',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(supplier.Name, name),
+          description: 'supplier.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageSupplierCRUDService};

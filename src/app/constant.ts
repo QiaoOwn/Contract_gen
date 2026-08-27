@@ -1,5 +1,6 @@
 import * as t from '@babel/types';
 import {OpenAIChatModelId} from '@langchain/openai';
+
 export const tsTypeMap = {
   Integer: t.tsNumberKeyword(),
   String: t.tsStringKeyword(),
@@ -8,29 +9,35 @@ export const tsTypeMap = {
   Date: t.tsTypeReference(t.identifier('dayjs.Dayjs')),
   LocalDate: t.tsTypeReference(t.identifier('dayjs.Dayjs')),
 };
+
 export const tsTypeMapCode = {
   TSAnyKeyword: 'any',
 };
 
-export const whatIsDefination = `
-Variables can be defined and can be used in the precondition or postcondition section. 
-You should find the entity or entities you need for the next step and must set the proper value to it. 
-The variable name \`must be smallCamelCase\`.
-The variables are separate with a comma.
-Note: the definition section is not required.
+export const whatIsDefinition = `
+The optional definition field introduces query-only helper bindings used by the precondition or postcondition.
+Each binding has the form name:Type = expression, uses lowerCamelCase for name, and is separated from the next binding by a comma.
+Do not encode state changes in definition. Return null when no helper binding is needed.
 `;
+
 export const whatIsPrecondition = `
-The contract of a system operation specifies the conditions that the state of the system is assumed to satisfy before the execution of the postcondition.
-You should use the variables from the definition if provided or use the global variable from the context to check the conditions
+The precondition is a non-mutating Boolean expression over the state before operation execution.
+Use it only for input admissibility, existence, status, quota, and other conditions that must already hold.
+It may use operation parameters, service state, and helper bindings from definition.
 `;
-export const whatIsPostcondition = `The conditions that the system state is required to satisfy after the execution (if it terminated), called the postcondition of the system operation. 
-Typically, the precondition specifies the properties of the system state that need to be checked when system operation is to be executed, and the postcondition defines the possible changes that the execution of the system operation is to realize. 
-The global variable can only be set value in postcondition`;
+
+export const whatIsPostcondition = `
+The postcondition is a Boolean expression describing the required state after successful operation execution.
+It may create or remove repository objects, update attributes and associations, update service state, and constrain result.
+Use @pre only when an effect depends on a value from before execution.
+`;
 
 export const defaultModel: OpenAIChatModelId = 'gpt-5.4-mini';
 export const models: OpenAIChatModelId[] = [
+  'gpt-5.5',
   'gpt-5.4',
   'gpt-5.4-mini',
+  'gemini-3.5-flash',
   'deepseek-v4-pro',
   'deepseek-v4-flash',
   'claude-opus-4-7',

@@ -1,0 +1,151 @@
+{
+  "schema_version": "use-ocltsvm-semantic-agreement-v1",
+  "sample_index": 17,
+  "operation_id": "LibraryManagementSystem_listRecommendBook_listRecommendBook",
+  "case_study": "Library Management",
+  "project": "LibraryManagementSystem",
+  "use_case": "listRecommendBook",
+  "operation": "listRecommendBook",
+  "operation_signature": "listRecommendBook(uid: String): Set(RecommendBook)",
+  "source_model": "gpt-5.5",
+  "source_attempt": 1,
+  "source_input_hash": "8421f94d32be687750b8b403563278ab7ca6bc1247a0ffb6a6d6d7af7cbd6368",
+  "source_prompt_hash": "0ff1653505d97729ae702b3f84d8c269b7bce904f6ff9d70113795203cf25ac9",
+  "constructs": [
+    "definition",
+    "precondition",
+    "postcondition",
+    "allInstances",
+    "collection",
+    "iterator",
+    "undefined"
+  ],
+  "complexity_score": 45,
+  "contract": "Contract LibraryManagementSystemSystem::listRecommendBook(uid: String): Set(RecommendBook) {\n\tdefinition:\n\t\tuser: User = User.allInstances()->any(candidate: User|candidate.UserID = uid),\n\t\trecommendedBooks: Set(RecommendBook) = user.RecommendedBook\n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\trecommendedBooks.oclIsUndefined() = false\n\tpostcondition:\n\t\tresult = recommendedBooks\n}",
+  "complexity_tier": "medium",
+  "scenarios": [
+    {
+      "scenario_id": "LibraryManagementSystem_listRecommendBook_listRecommendBook::pre-positive",
+      "clause": "precondition",
+      "expected_decision": true,
+      "description": "A state satisfying the generated precondition.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_listRecommendBook_listRecommendBook\\pre-positive.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_listRecommendBook_listRecommendBook\\pre-positive.cmd"
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/listRecommendBook Happy Path"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/listRecommendBook Happy Path",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json"
+    },
+    {
+      "scenario_id": "LibraryManagementSystem_listRecommendBook_listRecommendBook::pre-negative",
+      "clause": "precondition",
+      "expected_decision": false,
+      "description": "A boundary or negative state violating one precondition conjunct.",
+      "status": "ready",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "ready",
+          "model_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_listRecommendBook_listRecommendBook\\pre-negative.use",
+          "command_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\batch\\LibraryManagementSystem_listRecommendBook_listRecommendBook\\pre-negative.cmd"
+        },
+        "ocltsvm": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/listRecommendBook rejects when recommended book list is undefined"
+        },
+        "jest": {
+          "decision": false,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json",
+          "test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/listRecommendBook rejects when recommended book list is undefined",
+          "test_status": "passed"
+        }
+      },
+      "state_provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json"
+    },
+    {
+      "scenario_id": "LibraryManagementSystem_listRecommendBook_listRecommendBook::post-positive",
+      "clause": "postcondition",
+      "expected_decision": true,
+      "description": "A paired pre/post state produced by OCLTSVM from a valid pre-state.",
+      "status": "partial",
+      "validators": {
+        "use": {
+          "decision": null,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "unsupported",
+          "reason": "The batch adapter performs same-pre-state validation only; USE post-state compilation is reported separately."
+        },
+        "ocltsvm": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json"
+        },
+        "jest": {
+          "decision": true,
+          "command": [],
+          "working_directory": ".",
+          "decision_regex": "(?:SEMANTIC_DECISION\\s*:\\s*|->\\s*)(true|false)(?:\\s*:\\s*Boolean)?",
+          "timeout_seconds": 120,
+          "status": "recorded",
+          "provenance": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json"
+        }
+      }
+    }
+  ],
+  "batch_configuration": {
+    "scope": "same-pre-state positive/negative agreement",
+    "capture_file": "results\\contractgen-study-v6\\validation\\use_ocltsvm_semantic_agreement\\captures\\LibraryManagementSystem_listRecommendBook_listRecommendBook.json",
+    "postcondition_use_status": "unsupported_in_batch; use complete-contract compilation separately"
+  }
+}

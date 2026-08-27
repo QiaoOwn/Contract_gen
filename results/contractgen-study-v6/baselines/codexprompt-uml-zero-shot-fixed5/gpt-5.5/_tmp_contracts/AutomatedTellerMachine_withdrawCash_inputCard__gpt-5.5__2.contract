@@ -1,0 +1,22 @@
+Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {
+          precondition:
+          BankCard.allInstances()->exists(card |
+        card.Name = cardid and
+        card.CardStatus = CardStatus::NORMAL
+    )
+            postcondition:
+          let card : BankCard =
+        BankCard.allInstances()->any(c |
+            c.Name = cardid
+        )
+    in
+        if card.BelongedUser->notEmpty() then
+            self.InputCard = card and
+            self.CardIDValidated = true and
+            result = true
+        else
+            self.CardIDValidated = false and
+            result = false
+        endif
+            
+        }

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -158,32 +166,30 @@ class GenerateLoanLetterAndAgreementModule {
   CurrentLoanRequests: LoanRequest[];
   /*TempVariable End*/
 
-  /*choose a loan request which id equals the request id,
-   *if exist,
-   *then create a new approval letter and set it's content to "ApprovalLetterContent"
-   *and
-   *save it
-   *and
-   *attach it to the loan request
-   *then set the loan request to the current loan request*/
+  /*Definition: The genereateApprovalLetter operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   genereateApprovalLetter(id: number): boolean {
     /*Definition Start*/
-    let r: LoanRequest = l({
-      logic: () =>
-        getRepository(LoanRequest).find(
-          (lr: LoanRequest) =>
-            l({
-              logic: () => lr.RequestID === id,
-              description: 'lr.RequestID=id',
-            }).build().pass
-        ),
-      description: 'LoanRequest.allInstance()->any(lr:LoanRequest|lr.RequestID=id)',
-    }).build().pass;
+    let r: LoanRequest = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(LoanRequest).find(
+              (lr: LoanRequest) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(lr.RequestID, id),
+                  description: 'lr.RequestID=id',
+                }).build().pass
+            ),
+          description: 'LoanRequest.allInstances()->any(lr:LoanRequest|lr.RequestID=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(r) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(r), false),
       description: 'r.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -191,34 +197,76 @@ class GenerateLoanLetterAndAgreementModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let _l: ApprovalLetter;
-    return l({
-      execute: () => (_l = new ApprovalLetter()),
-      description: 'l.oclIsNew()',
-    })
-      .and({
-        execute: () => (_l.Content = 'ApprovalLetterContent'),
-        description: 'l.Content="ApprovalLetterContent"',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let _l: ApprovalLetter;
+      return l({
+        execute: () => (_l = new ApprovalLetter()),
+        description: 'l.oclIsNew()',
       })
-      .and({
-        execute: () => (r.AttachedApprovalLetter = _l),
-        description: 'r.AttachedApprovalLetter=l',
+        .and({
+          execute: () => (_l.Content = 'ApprovalLetterContent'),
+          description: 'l.Content="ApprovalLetterContent"',
+        })
+        .and({
+          execute: () => (r.AttachedApprovalLetter = _l),
+          description: 'r.AttachedApprovalLetter=l',
+        })
+        .and({
+          execute: () => (this.CurrentLoanRequest = r),
+          description: 'self.CurrentLoanRequest=r',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(ApprovalLetter), _l),
+          description: 'ApprovalLetter.allInstances()->includes(l)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let _l: ApprovalLetter = oclState.findNew(ApprovalLetter);
+      return l({
+        logic: () => oclState.isNew(_l, ApprovalLetter),
+        description: 'l.oclIsNew()',
       })
-      .and({
-        execute: () => (this.CurrentLoanRequest = r),
-        description: 'self.CurrentLoanRequest=r',
-      })
-      .and({
-        execute: () => getRepository(ApprovalLetter).push(_l),
-        description: 'ApprovalLetter.allInstance()->includes(l)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(_l.Content, 'ApprovalLetterContent'),
+          description: 'l.Content="ApprovalLetterContent"',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(r.AttachedApprovalLetter, _l),
+          description: 'r.AttachedApprovalLetter=l',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(this.CurrentLoanRequest, r),
+          description: 'self.CurrentLoanRequest=r',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(ApprovalLetter), _l),
+          description: 'ApprovalLetter.allInstances()->includes(l)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {GenerateLoanLetterAndAgreementModule};

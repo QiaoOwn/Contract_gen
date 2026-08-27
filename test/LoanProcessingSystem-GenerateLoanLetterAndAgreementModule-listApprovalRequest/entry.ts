@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 class LoanRequest {
   /*The Status of LoanRequest*/
   Status: LoanRequestStatus;
@@ -158,26 +166,31 @@ class GenerateLoanLetterAndAgreementModule {
   CurrentLoanRequests: LoanRequest[];
   /*TempVariable End*/
 
-  /*find all the loan requests which status is approved, and check if the loan requests exist, and then the current loan requests should be them.*/
+  /*Definition: The listApprovalRequest operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   listApprovalRequest(): LoanRequest[] {
     /*Definition Start*/
-    let rs: LoanRequest[] = l({
-      logic: () =>
-        getRepository(LoanRequest).filter(
-          (r: LoanRequest) =>
-            l({
-              logic: () => r.Status === LoanRequestStatus.APPROVED,
-              description: 'r.Status=LoanRequestStatus::APPROVED',
-            }).build().pass
-        ),
-      description:
-        'LoanRequest.allInstance()->select(r:LoanRequest|r.Status=LoanRequestStatus::APPROVED)',
-    }).build().pass;
+    let rs: LoanRequest[] = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(LoanRequest).filter(
+              (r: LoanRequest) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(r.Status, LoanRequestStatus.APPROVED),
+                  description: 'r.Status=LoanRequestStatus::APPROVED',
+                }).build().pass
+            ),
+          description:
+            'LoanRequest.allInstances()->select(r:LoanRequest|r.Status=LoanRequestStatus::APPROVED)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(rs) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(rs), false),
       description: 'rs.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -185,17 +198,42 @@ class GenerateLoanLetterAndAgreementModule {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => (this.CurrentLoanRequests = rs),
-      description: 'self.CurrentLoanRequests=rs',
-    })
-      .and({
-        execute: () => rs,
-        description: 'result=rs',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => (this.CurrentLoanRequests = rs),
+        description: 'self.CurrentLoanRequests=rs',
       })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          execute: () => rs,
+          description: 'result=rs',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(this.CurrentLoanRequests, rs),
+        description: 'self.CurrentLoanRequests=rs',
+      })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, rs),
+          description: 'result=rs',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {GenerateLoanLetterAndAgreementModule};

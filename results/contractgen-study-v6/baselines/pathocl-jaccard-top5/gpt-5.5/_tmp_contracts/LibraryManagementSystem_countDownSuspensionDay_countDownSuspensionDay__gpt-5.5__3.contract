@@ -1,0 +1,46 @@
+Contract LibraryManagementSystemSystem::countDownSuspensionDay() {
+          precondition:
+          true
+            postcondition:
+          User.allInstances()->forAll(u : User |
+        u.SuspensionDays@pre > 0 implies
+            u.SuspensionDays = u.SuspensionDays@pre - 1
+    ) and
+User.allInstances()->forAll(u : User |
+        u.SuspensionDays@pre <= 0 implies
+            u.SuspensionDays = u.SuspensionDays@pre
+    ) and
+User.allInstances()->forAll(u : User |
+        u.BorrowStatus@pre = BorrowStatus::SUSPEND and
+        u.SuspensionDays@pre > 0 and
+        u.SuspensionDays = 0 and
+        u.OverDueFee@pre <= 0
+        implies
+            u.BorrowStatus = BorrowStatus::NORMAL
+    ) and
+User.allInstances()->forAll(u : User |
+        u.BorrowStatus@pre = BorrowStatus::SUSPEND and
+        not (
+            u.SuspensionDays@pre > 0 and
+            u.SuspensionDays@pre - 1 = 0 and
+            u.OverDueFee@pre <= 0
+        )
+        implies
+            u.BorrowStatus = u.BorrowStatus@pre
+    ) and
+User.allInstances()->forAll(u : User |
+        u.BorrowStatus@pre = BorrowStatus::NORMAL implies
+            u.BorrowStatus = BorrowStatus::NORMAL
+    ) and
+User.allInstances()->forAll(u : User |
+        u.UserID = u.UserID@pre and
+        u.Name = u.Name@pre and
+        u.Sex = u.Sex@pre and
+        u.Password = u.Password@pre and
+        u.Email = u.Email@pre and
+        u.Faculty = u.Faculty@pre and
+        u.LoanedNumber = u.LoanedNumber@pre and
+        u.OverDueFee = u.OverDueFee@pre
+    )
+            
+        }

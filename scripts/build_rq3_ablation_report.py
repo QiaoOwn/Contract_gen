@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Build the RQ3 feedback-loop ablation table.
 
-The full-feedback results come from the formal ``rq_*_full_oracle_fixed`` runs.
+The full-feedback results come from the frozen ``contractgen-study-v6`` runs.
 The no-feedback results should be generated with:
 ``script/run_rq1_validity_experiments.py --backend next --next-graph-mode linear``.
 """
@@ -15,13 +15,13 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
 
-FULL_RESULT_DIRS = {
-    "gpt-5.4": "rq_gpt_5_4_full_oracle_fixed",
-    "gpt-5.4-mini": "rq_gpt_5_4_mini_full_oracle_fixed",
-    "claude-opus-4-7": "rq_claude_opus_4_7_full_oracle_fixed",
-    "qwen3-coder-plus": "rq_qwen3_coder_plus_full_oracle_fixed",
-    "qwen3-coder-flash": "rq_qwen3_coder_flash_full_oracle_fixed",
-}
+MODELS = (
+    "gpt-5.4",
+    "gpt-5.4-mini",
+    "claude-opus-4-7",
+    "qwen3-coder-plus",
+    "qwen3-coder-flash",
+)
 
 
 def read_first_row(path: Path) -> Optional[Dict[str, str]]:
@@ -67,15 +67,14 @@ def pct(value: str) -> float:
 
 
 def build_rows(results_root: Path, no_feedback_root: Path) -> List[Dict[str, object]]:
-    no_feedback_dirs = find_no_feedback_dirs(no_feedback_root)
     rows: List[Dict[str, object]] = []
-    for model, full_dir_name in FULL_RESULT_DIRS.items():
-        full_dir = results_root / full_dir_name
-        full_rq2 = read_first_row(full_dir / "rq2_execution_success_by_model.csv")
-        full_rq3 = read_first_row(full_dir / "rq3_feedback_utility_by_model.csv")
-        no_dir = no_feedback_dirs.get(model)
-        no_rq2 = read_model_row(no_dir / "rq2_execution_success_by_model.csv", model) if no_dir else None
-        no_rq3 = read_model_row(no_dir / "rq3_feedback_utility_by_model.csv", model) if no_dir else None
+    full_dir = results_root / "contract_gen" / "full_feedback"
+    for model in MODELS:
+        full_rq2 = read_model_row(full_dir / "rq2_execution_success_by_model.csv", model)
+        full_rq3 = read_model_row(full_dir / "rq3_feedback_utility_by_model.csv", model)
+        no_dir = no_feedback_root
+        no_rq2 = read_model_row(no_dir / "rq2_execution_success_by_model.csv", model)
+        no_rq3 = read_model_row(no_dir / "rq3_feedback_utility_by_model.csv", model)
         if not full_rq2 or not full_rq3:
             continue
 
@@ -171,9 +170,15 @@ def markdown_table(rows: Iterable[Dict[str, object]]) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build RQ3 no-feedback ablation table.")
-    parser.add_argument("--results-root", default="results")
-    parser.add_argument("--no-feedback-root", default="results/rq3_ablation_no_feedback")
-    parser.add_argument("--output-dir", default="results/rq3_ablation_report")
+    parser.add_argument("--results-root", default="results/contractgen-study-v6")
+    parser.add_argument(
+        "--no-feedback-root",
+        default="results/contractgen-study-v6/contract_gen/no_feedback",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="results/contractgen-study-v6/reports/rq3_ablation",
+    )
     args = parser.parse_args()
 
     rows = build_rows(Path(args.results_root), Path(args.no_feedback_root))

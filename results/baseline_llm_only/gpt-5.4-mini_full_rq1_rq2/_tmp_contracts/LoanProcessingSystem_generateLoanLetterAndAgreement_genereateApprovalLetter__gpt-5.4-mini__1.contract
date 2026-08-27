@@ -1,9 +1,0 @@
-Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {
-          definition:
-          currentLoanRequest:LoanRequest = LoanRequest.allInstance()->any(lr:LoanRequest|lr.RequestID=id)
-            precondition:
-          currentLoanRequest.oclIsUndefined() = false and currentLoanRequest.Status = LoanRequestStatus::APPROVED and currentLoanRequest.AttachedApprovalLetter.oclIsUndefined() = true
-            postcondition:
-          let approvalLetter:ApprovalLetter in approvalLetter.oclIsNew() and currentLoanRequest.AttachedApprovalLetter = approvalLetter and approvalLetter.Content <> '' and result = true
-            
-        }

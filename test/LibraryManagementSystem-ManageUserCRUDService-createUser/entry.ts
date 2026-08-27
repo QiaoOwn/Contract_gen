@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The user account*/
 class User {
   /*User ID*/
@@ -230,7 +238,9 @@ export {
 };
 
 class ManageUserCRUDService {
-  /*Creates a new user.*/
+  /*Definition: The createUser operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   createUser(
     userid: string,
     name: string,
@@ -244,22 +254,25 @@ class ManageUserCRUDService {
     overduefee: number
   ): boolean {
     /*Definition Start*/
-    let user: User = l({
-      logic: () =>
-        getRepository(User).find(
-          (use: User) =>
-            l({
-              logic: () => use.UserID === userid,
-              description: 'use.UserID=userid',
-            }).build().pass
-        ),
-      description: 'User.allInstance()->any(use:User|use.UserID=userid)',
-    }).build().pass;
+    let user: User = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(User).find(
+              (use: User) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(use.UserID, userid),
+                  description: 'use.UserID=userid',
+                }).build().pass
+            ),
+          description: 'User.allInstances()->any(use:User|use.UserID=userid)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(user) === true,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(user), true),
       description: 'user.oclIsUndefined()=true',
     }).build();
     if (!isPreconditionPass) {
@@ -267,62 +280,132 @@ class ManageUserCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    let use: User;
-    return l({
-      execute: () => (use = new User()),
-      description: 'use.oclIsNew()',
-    })
-      .and({
-        execute: () => (use.UserID = userid),
-        description: 'use.UserID=userid',
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      let use: User;
+      return l({
+        execute: () => (use = new User()),
+        description: 'use.oclIsNew()',
       })
-      .and({
-        execute: () => (use.Name = name),
-        description: 'use.Name=name',
+        .and({
+          execute: () => (use.UserID = userid),
+          description: 'use.UserID=userid',
+        })
+        .and({
+          execute: () => (use.Name = name),
+          description: 'use.Name=name',
+        })
+        .and({
+          execute: () => (use.Sex = sex),
+          description: 'use.Sex=sex',
+        })
+        .and({
+          execute: () => (use.Password = password),
+          description: 'use.Password=password',
+        })
+        .and({
+          execute: () => (use.Email = email),
+          description: 'use.Email=email',
+        })
+        .and({
+          execute: () => (use.Faculty = faculty),
+          description: 'use.Faculty=faculty',
+        })
+        .and({
+          execute: () => (use.LoanedNumber = loanednumber),
+          description: 'use.LoanedNumber=loanednumber',
+        })
+        .and({
+          execute: () => (use.BorrowStatus = borrowstatus),
+          description: 'use.BorrowStatus=borrowstatus',
+        })
+        .and({
+          execute: () => (use.SuspensionDays = suspensiondays),
+          description: 'use.SuspensionDays=suspensiondays',
+        })
+        .and({
+          execute: () => (use.OverDueFee = overduefee),
+          description: 'use.OverDueFee=overduefee',
+        })
+        .and({
+          execute: () => StandardOPs.includeIfAbsent(getRepository(User), use),
+          description: 'User.allInstances()->includes(use)',
+        })
+        .and({
+          execute: () => true,
+          description: 'result=true',
+        })
+        .build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      let use: User = oclState.findNew(User);
+      return l({
+        logic: () => oclState.isNew(use, User),
+        description: 'use.oclIsNew()',
       })
-      .and({
-        execute: () => (use.Sex = sex),
-        description: 'use.Sex=sex',
-      })
-      .and({
-        execute: () => (use.Password = password),
-        description: 'use.Password=password',
-      })
-      .and({
-        execute: () => (use.Email = email),
-        description: 'use.Email=email',
-      })
-      .and({
-        execute: () => (use.Faculty = faculty),
-        description: 'use.Faculty=faculty',
-      })
-      .and({
-        execute: () => (use.LoanedNumber = loanednumber),
-        description: 'use.LoanedNumber=loanednumber',
-      })
-      .and({
-        execute: () => (use.BorrowStatus = borrowstatus),
-        description: 'use.BorrowStatus=borrowstatus',
-      })
-      .and({
-        execute: () => (use.SuspensionDays = suspensiondays),
-        description: 'use.SuspensionDays=suspensiondays',
-      })
-      .and({
-        execute: () => (use.OverDueFee = overduefee),
-        description: 'use.OverDueFee=overduefee',
-      })
-      .and({
-        execute: () => getRepository(User).push(use),
-        description: 'User.allInstance()->includes(use)',
-      })
-      .and({
-        execute: () => true,
-        description: 'result=true',
-      })
-      .build().value;
-    /*Postcondition End*/
+        .and({
+          logic: () => StandardOPs.oclEquals(use.UserID, userid),
+          description: 'use.UserID=userid',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Name, name),
+          description: 'use.Name=name',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Sex, sex),
+          description: 'use.Sex=sex',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Password, password),
+          description: 'use.Password=password',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Email, email),
+          description: 'use.Email=email',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.Faculty, faculty),
+          description: 'use.Faculty=faculty',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.LoanedNumber, loanednumber),
+          description: 'use.LoanedNumber=loanednumber',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.BorrowStatus, borrowstatus),
+          description: 'use.BorrowStatus=borrowstatus',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.SuspensionDays, suspensiondays),
+          description: 'use.SuspensionDays=suspensiondays',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(use.OverDueFee, overduefee),
+          description: 'use.OverDueFee=overduefee',
+        })
+        .and({
+          logic: () => StandardOPs.includes(getRepository(User), use),
+          description: 'User.allInstances()->includes(use)',
+        })
+        .and({
+          logic: () => StandardOPs.oclEquals(result, true),
+          description: 'result=true',
+        })
+        .build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageUserCRUDService};

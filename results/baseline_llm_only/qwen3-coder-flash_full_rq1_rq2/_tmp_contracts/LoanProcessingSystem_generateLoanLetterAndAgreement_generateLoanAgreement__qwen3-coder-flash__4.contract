@@ -1,9 +1,0 @@
-Contract GenerateLoanLetterAndAgreementModule::generateLoanAgreement(): Boolean {
-          definition:
-          lr:LoanRequest = LoanRequest.allInstance()->any(o:LoanRequest|o.RequestID=self.CurrentLoanRequest.RequestID), la:LoanAgreement = LoanAgreement.allInstance()->any(o:LoanAgreement|o.Content=self.CurrentLoanAgreement.Content), al:ApprovalLetter = ApprovalLetter.allInstance()->any(o:ApprovalLetter|o.Content=self.CurrentApprovalLetter.Content)
-            precondition:
-          self.CurrentLoanRequest.oclIsUndefined() = false and self.CurrentLoanAgreement.oclIsUndefined() = false and self.CurrentApprovalLetter.oclIsUndefined() = false and lr.Status = 'APPROVED' and lr.AttachedLoanAgreement = null and lr.AttachedApprovalLetter = null
-            postcondition:
-          let la:LoanAgreement in la.oclIsNew() and la.Content = self.CurrentLoanAgreement.Content and let al:ApprovalLetter in al.oclIsNew() and al.Content = self.CurrentApprovalLetter.Content and lr.AttachedLoanAgreement = la and lr.AttachedApprovalLetter = al and result = true
-            
-        }

@@ -1,5 +1,13 @@
 import dayjs from 'dayjs';
-import {l, PreconditionError, StandardOPs} from '../globalEntry';
+import {
+  evaluateDefinition,
+  l,
+  OCLExecutionTrace,
+  OCLStateSnapshot,
+  PostconditionError,
+  PreconditionError,
+  StandardOPs,
+} from '../globalEntry';
 /*The place where items are sold*/
 class Store {
   /*Store ID*/
@@ -193,27 +201,30 @@ class ManageCashierCRUDService {
   CurrentStore: Store;
   /*SystemVariable End*/
 
-  /*find the cashier with provided id,
-   *if the cashier exists,
-   *show the cashier*/
+  /*Definition: The queryCashier operation handles its intended business action in this system.
+   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.
+   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/
   queryCashier(id: number): Cashier {
     /*Definition Start*/
-    let cashier: Cashier = l({
-      logic: () =>
-        getRepository(Cashier).find(
-          (cas: Cashier) =>
-            l({
-              logic: () => cas.Id === id,
-              description: 'cas.Id=id',
-            }).build().pass
-        ),
-      description: 'Cashier.allInstance()->any(cas:Cashier|cas.Id=id)',
-    }).build().pass;
+    let cashier: Cashier = evaluateDefinition(
+      () =>
+        l({
+          logic: () =>
+            getRepository(Cashier).find(
+              (cas: Cashier) =>
+                l({
+                  logic: () => StandardOPs.oclEquals(cas.Id, id),
+                  description: 'cas.Id=id',
+                }).build().pass
+            ),
+          description: 'Cashier.allInstances()->any(cas:Cashier|cas.Id=id)',
+        }).build().pass
+    );
     /*Definition End*/
 
     /*Precondition Start*/
     const {errorMessage: preconditionErrorMessage, pass: isPreconditionPass} = l({
-      logic: () => StandardOPs.oclIsUndefined(cashier) === false,
+      logic: () => StandardOPs.oclEquals(StandardOPs.oclIsUndefined(cashier), false),
       description: 'cashier.oclIsUndefined()=false',
     }).build();
     if (!isPreconditionPass) {
@@ -221,12 +232,32 @@ class ManageCashierCRUDService {
     }
     /*Precondition End*/
 
-    /*Postcondition Start*/
-    return l({
-      execute: () => cashier,
-      description: 'result=cashier',
-    }).build().value;
-    /*Postcondition End*/
+    /*OCL Pre-state Snapshot*/
+    const oclState = new OCLStateSnapshot(map, [this]);
+    /*OCL Effect Trace*/
+    const oclExecutionTrace = new OCLExecutionTrace();
+    const result = (() => {
+      /*Postcondition Effects Start*/
+      return l({
+        execute: () => cashier,
+        description: 'result=cashier',
+      }).build().value;
+      /*Postcondition Effects End*/
+    })();
+    /*OCL Post-state Snapshot*/
+    oclState.capturePost();
+    const {errorMessage: postconditionErrorMessage, pass: isPostconditionPass} = (() => {
+      /*Postcondition Check Start*/
+      return l({
+        logic: () => StandardOPs.oclEquals(result, cashier),
+        description: 'result=cashier',
+      }).build();
+      /*Postcondition Check End*/
+    })();
+    if (!isPostconditionPass) {
+      throw new PostconditionError(postconditionErrorMessage);
+    }
+    return result;
   }
 }
 export {ManageCashierCRUDService};

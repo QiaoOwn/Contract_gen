@@ -1,9 +1,0 @@
-Contract ManageItemCRUDService::createItem(barcode:Integer,name:String,price:Real,stocknumber:Integer,orderprice:Real): Boolean {
-          definition:
-          existingItem:Item = Item.allInstance()->any(i:Item|i.Barcode=barcode)
-            precondition:
-          existingItem.oclIsUndefined() = true and barcode > 0 and name <> '' and price >= 0 and stocknumber >= 0 and orderprice >= 0
-            postcondition:
-          let newItem:Item in newItem.oclIsNew() and newItem.Barcode=barcode and newItem.Name=name and newItem.Price=price and newItem.StockNumber=stocknumber and newItem.OrderPrice=orderprice and Item.allInstance()->includes(newItem) and result=true
-            
-        }

@@ -1,0 +1,9 @@
+Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {
+          precondition:
+          User.allInstances()->exists(u | u.id = uid) and
+User.allInstances()->any(u | u.id = uid).reservation->notEmpty()
+            postcondition:
+          result =
+        User.allInstances()->any(u | u.id = uid).reservation.bookCopy->asSet()
+            
+        }

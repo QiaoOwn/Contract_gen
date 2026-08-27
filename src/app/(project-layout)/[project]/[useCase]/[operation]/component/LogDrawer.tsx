@@ -1,7 +1,7 @@
 import {GenerateOCLResult} from '@/app/service/generateOCL';
 import {buildRunLogFilename, downloadRunLogsJson} from '@/app/util/downloadRunLogs';
 import {DownloadOutlined} from '@ant-design/icons';
-import {Button, Collapse, Drawer, DrawerProps, Space, StepProps, Steps} from 'antd';
+import {Button, Collapse, Drawer, DrawerProps, StepProps, Steps} from 'antd';
 import {FC, useState} from 'react';
 import LogModal from './LogModal';
 export type LogDrawerProps = {

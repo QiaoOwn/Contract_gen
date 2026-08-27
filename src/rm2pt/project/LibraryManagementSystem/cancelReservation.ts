@@ -20,9 +20,9 @@ const operations = [
     ],
     returnType: new ReturnedType('Boolean'),
     definition: `
-    user:User = User.allInstance()->any(u:User | u.UserID = uid),
-    copy:BookCopy = BookCopy.allInstance()->any(bc:BookCopy | bc.Barcode = barcode),
-    res:Reserve = Reserve.allInstance()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user)`,
+    user:User = User.allInstances()->any(u:User | u.UserID = uid),
+    copy:BookCopy = BookCopy.allInstances()->any(bc:BookCopy | bc.Barcode = barcode),
+    res:Reserve = Reserve.allInstances()->any(r:Reserve | r.ReservedCopy = copy and r.ReservedUser = user)`,
     precondition: `
     user.oclIsUndefined() = false and
     copy.oclIsUndefined() = false and

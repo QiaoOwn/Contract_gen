@@ -1,0 +1,38 @@
+Contract ManageBookCopyCRUDService::addBookCopy(callNo:String,barcode:String,location:String): Boolean {
+          precondition:
+          Book.allInstances()->exists(b: Book | b.CallNo = callNo) and
+Book.allInstances()->forAll(b: Book |
+        b.CallNo = callNo implies
+            b.Copys->forAll(c: BookCopy | c.Barcode <> barcode)
+    )
+            postcondition:
+          BookCopy.allInstances()->exists(c: BookCopy |
+        c.oclIsNew() and
+        c.Barcode = barcode and
+        c.Location = location and
+        c.Status = CopyStatus::AVAILABLE and
+        c.IsReserved = false and
+        c.BookBelongs.CallNo = callNo
+    ) and
+Book.allInstances()->exists(b: Book |
+        b.CallNo = callNo and
+        b.Copys->exists(c: BookCopy |
+            c.oclIsNew() and
+            c.Barcode = barcode and
+            c.Location = location and
+            c.Status = CopyStatus::AVAILABLE and
+            c.IsReserved = false and
+            c.BookBelongs = b
+        )
+    ) and
+Book.allInstances()->forAll(b: Book |
+        b.CallNo = callNo implies
+            b.CopyNum = b.CopyNum@pre + 1
+    ) and
+Book.allInstances()->forAll(b: Book |
+        b.CallNo <> callNo implies
+            b.CopyNum = b.CopyNum@pre
+    ) and
+result = true
+            
+        }

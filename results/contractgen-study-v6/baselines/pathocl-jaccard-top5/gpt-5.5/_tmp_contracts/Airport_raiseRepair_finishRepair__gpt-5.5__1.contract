@@ -1,0 +1,22 @@
+Contract RepairService::finishRepair(id:Integer,sid:Integer,did:Integer,res:String): Boolean {
+          precondition:
+          Device.allInstances()->exists(d: Device |
+    d.Id = did and
+    d.Contacts.Id = sid
+  ) and
+Staff.allInstances()->exists(s: Staff |
+    s.Id = sid and
+    s.Role = 3
+  )
+            postcondition:
+          Repair.allInstances()->any(r: Repair |
+    r.Id = id and
+    r.RelatedDevice.Id = did
+  ).Process = 7 and
+Repair.allInstances()->any(r: Repair |
+    r.Id = id and
+    r.RelatedDevice.Id = did
+  ).Result = res and
+result = true
+            
+        }

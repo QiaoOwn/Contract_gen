@@ -1,0 +1,9 @@
+Contract AutomatedTellerMachineSystem::inputCard(cardid:Integer): Boolean {
+          definition:
+          card:BankCard = BankCard.allInstances()->any(candidate:BankCard | candidate.CardID = cardid)
+            precondition:
+          card.oclIsUndefined() = false and card.CardStatus = CardStatus::NORMAL
+            postcondition:
+          if card.BelongedUser.oclIsUndefined() = false then self.InputCard = card and self.CardIDValidated = true and result = true else self.CardIDValidated = false and result = false endif
+            
+        }

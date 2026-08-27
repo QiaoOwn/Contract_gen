@@ -16,7 +16,7 @@ const operations = [
     parameters: [new Parameter({name: 'barcode', type: 'String'})],
     returnType: new ReturnedType('Set(Book)'),
     precondition: `barcode.oclIsTypeOf(String)`,
-    postcondition: `result = Book.allInstance()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))`,
+    postcondition: `result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))`,
   }),
 
   new Operation({
@@ -27,7 +27,7 @@ const operations = [
     parameters: [new Parameter({name: 'title', type: 'String'})],
     returnType: new ReturnedType('Set(Book)'),
     precondition: `title <> ""`,
-    postcondition: `result = Book.allInstance()->select(book:Book | book.Title = title)`,
+    postcondition: `result = Book.allInstances()->select(book:Book | book.Title = title)`,
   }),
 
   new Operation({
@@ -38,7 +38,7 @@ const operations = [
     parameters: [new Parameter({name: 'authorname', type: 'String'})],
     returnType: new ReturnedType('Set(Book)'),
     precondition: `authorname <> ""`,
-    postcondition: `result = Book.allInstance()->select(book:Book | book.Author = authorname)`,
+    postcondition: `result = Book.allInstances()->select(book:Book | book.Author = authorname)`,
   }),
 
   new Operation({
@@ -49,7 +49,7 @@ const operations = [
     parameters: [new Parameter({name: 'iSBNnumber', type: 'String'})],
     returnType: new ReturnedType('Set(Book)'),
     precondition: `iSBNnumber.oclIsTypeOf(String)`,
-    postcondition: `result = Book.allInstance()->select(book:Book | book.ISBn = iSBNnumber)`,
+    postcondition: `result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)`,
   }),
 
   new Operation({
@@ -60,7 +60,7 @@ const operations = [
     parameters: [new Parameter({name: 'subject', type: 'String'})],
     returnType: new ReturnedType('Set(Book)'),
     precondition: `subject.oclIsTypeOf(String)`,
-    postcondition: `result = Book.allInstance()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))`,
+    postcondition: `result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))`,
   }),
 ];
 

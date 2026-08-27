@@ -1,0 +1,9 @@
+Contract SearchBook::searchBookBySubject(subject:String): Set(Book) {
+          precondition:
+          subject.oclIsTypeOf(String)
+            postcondition:
+          result = Book.allInstances()->select(b: Book |
+        b.Subject->exists(s: Subject | s.Name = subject)
+    )
+            
+        }

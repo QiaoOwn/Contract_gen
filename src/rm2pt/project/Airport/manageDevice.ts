@@ -24,8 +24,8 @@ const operations = [
       new Parameter({name: 'contactsid', type: 'Integer'}),
     ],
     returnType: new ReturnedType('Boolean'),
-    definition: `dev:Device = Device.allInstance()->any(u:Device | u.Id = id),
-                 sta:Staff = Staff.allInstance()->any(uu:Staff | uu.Id = contactsid)`,
+    definition: `dev:Device = Device.allInstances()->any(u:Device | u.Id = id),
+                 sta:Staff = Staff.allInstances()->any(uu:Staff | uu.Id = contactsid)`,
     precondition: `dev.oclIsUndefined() = true and sta.oclIsUndefined() = false`,
     postcondition: `let d:Device in
                      d.oclIsNew() and
@@ -33,7 +33,7 @@ const operations = [
                      d.Name = name and
                      d.Location = location and
                      d.Contacts = sta and
-                     Device.allInstance()->includes(dev) and result = true`,
+                     Device.allInstances()->includes(d) and result = true`,
   }),
 ];
 

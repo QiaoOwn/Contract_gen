@@ -1,0 +1,14 @@
+Contract GenerateLoanLetterAndAgreementModule::genereateApprovalLetter(id:Integer): Boolean {
+          precondition:
+          LoanRequest.allInstances()->exists(lr: LoanRequest | lr.RequestID = id)
+            postcondition:
+          self.CurrentLoanRequest =
+        LoanRequest.allInstances()->any(lr: LoanRequest | lr.RequestID = id) and
+self.CurrentApprovalLetter.oclIsNew() and
+    self.CurrentApprovalLetter.oclIsTypeOf(ApprovalLetter) and
+self.CurrentApprovalLetter.Content = 'Standard Approval Letter' and
+self.CurrentLoanRequest.AttachedApprovalLetter = self.CurrentApprovalLetter and
+self.CurrentLoanRequest.RequestID = id and
+result = true
+            
+        }
