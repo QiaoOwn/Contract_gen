@@ -20,7 +20,7 @@ The artifact supports three levels of reproducibility.
 
 1. **Inspect precomputed results.** Review the benchmark, raw result folders, USE sanity-check outputs, and generated paper PDF.
 2. **Recompute paper tables from stored results.** Run the analysis scripts on the included result folders. This does not require LLM API access.
-3. **Re-run generation experiments.** Re-execute Contract Gen, PureLLM, baseline-style prompting, ablations, and USE checks. This requires model API credentials and, for USE, a local USE installation.
+3. **Re-run generation experiments.** Re-execute Contract Gen, PureLLM, baseline-style prompting, ablations, and USE checks. This requires model API credentials; USE 7.5.0 is bundled under `tools/` and requires Java 21.
 
 The artifact is designed so that reviewers can verify the paper's main claims without re-running expensive LLM calls. Full regeneration is optional and may produce small variations unless model versions, decoding settings, and service behavior are fixed.
 
@@ -256,4 +256,4 @@ The current manuscript is based on the following result families:
 - [x] External USE sanity-check artifacts are included.
 - [x] Manuscript source and figures are included.
 - [ ] Full LLM re-run requires reviewer-provided API credentials.
-- [ ] Full USE re-run requires a local USE installation.
+- [ ] Full USE re-run uses `tools/use-7.5.0/` and requires Java 21.

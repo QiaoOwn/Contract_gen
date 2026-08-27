@@ -38,6 +38,7 @@ This manifest maps artifact files to the manuscript's research questions, tables
 | `src/rm2pt/project/` | Five benchmark projects and their encoded services/entities/operations. |
 | `test/` | Jest tests used for execution-grounded validation. |
 | `antlr4/` | REMODEL grammar and generated TypeScript parser files. |
+| `tools/` | Bundled ANTLR 4.13.2 and USE 7.5.0 executables used by the documented reproduction commands. |
 
 ## Paper Table Reconstruction
 

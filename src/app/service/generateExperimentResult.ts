@@ -49,8 +49,6 @@ export const generateExperimentResult = () => {
       Omit<
         Record<keyof GenerateOCLResult, number> & {
           rougeL: number;
-          cosineSimilarity: number;
-          bleu: number;
           validity: number;
           correctness: number;
         },
@@ -84,8 +82,6 @@ export const generateExperimentResult = () => {
         'TypeScript Parser': 0,
         'Test Result': 0,
         rougeL: 0,
-        cosineSimilarity: 0,
-        bleu: 0,
         validity: 0,
         correctness: 0,
       };
@@ -178,25 +174,9 @@ export const generateExperimentResult = () => {
       }
     }
   }
-  const bleuDataPath = path.resolve(process.cwd(), 'public', 'langchain-ocl-result.json');
-  const bleuData = fs.readJSONSync(bleuDataPath, {throws: false}) || {};
   for (const model of Object.keys(aggregated)) {
     aggregated[model]!['rougeL'] = parseFloat(
       ((aggregated[model]!['rougeL'] * 100) / rougeCount[model]!).toFixed(2)
-    );
-    const cosineSimilarityData = fs.readJsonSync(
-      path.join(process.cwd(), 'cosine-similarity', `${model}.json`)
-    );
-    aggregated[model]!.bleu = parseFloat((bleuData[model]?.bleu.average || 0).toFixed(2));
-    aggregated[model]!['cosineSimilarity'] = parseFloat(
-      (
-        (cosineSimilarityData.reduce(
-          (prev: number, cur: {cosineSimilarity: number}) => prev + cur.cosineSimilarity,
-          0
-        ) *
-          100) /
-        cosineSimilarityData.length
-      ).toFixed(2)
     );
     aggregated[model]!['validity'] = parseFloat(
       ((aggregated[model]!['TypeScript Parser'] * 100) / 114).toFixed(2)
@@ -213,8 +193,6 @@ export const generateExperimentResult = () => {
       'TypeScript Parser': 0,
       'Test Result': 0,
       rougeL: 18.31,
-      cosineSimilarity: 0,
-      bleu: 7.56,
       validity: 0,
       correctness: 0,
     },
@@ -225,8 +203,6 @@ export const generateExperimentResult = () => {
       'TypeScript Parser': 0,
       'Test Result': 0,
       rougeL: 0,
-      cosineSimilarity: 0,
-      bleu: 0,
       validity: 61.9,
       correctness: 47.6,
     },
@@ -237,8 +213,6 @@ export const generateExperimentResult = () => {
       'TypeScript Parser': 0,
       'Test Result': 0,
       rougeL: 0,
-      cosineSimilarity: 80,
-      bleu: 0,
       validity: 53.2,
       correctness: 39,
     },

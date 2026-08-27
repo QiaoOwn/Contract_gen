@@ -15,8 +15,6 @@ const ExperimentTable: FC<ExperimentTableProps> = ({result, ablationResult}) => 
   const ablationModelsAggregated = ablationResult.aggregated;
   const ablationModels = Object.keys(ablationModelsAggregated);
   let maxRougeL = 0;
-  let maxBleu = 0;
-  let maxCosineSimilarity = 0;
   let maxOCLGenerator = 0;
   let maxContractGenerator = 0;
   let maxTypescriptGenerator = 0;
@@ -34,8 +32,6 @@ const ExperimentTable: FC<ExperimentTableProps> = ({result, ablationResult}) => 
   let maxAblationCorrectness = 0;
 
   let minRougeL = Infinity;
-  let minBleu = Infinity;
-  let minCosineSimilarity = Infinity;
 
   let minOCLGenerator = Infinity;
   let minContractGenerator = Infinity;
@@ -69,30 +65,6 @@ const ExperimentTable: FC<ExperimentTableProps> = ({result, ablationResult}) => 
           minRougeL = Math.min(rougeL, minRougeL);
         }
         return {...acc, [model]: rougeL};
-      }, {}),
-    },
-    {
-      metric: 'Bleu',
-      key: 'bleu',
-      ...models.reduce((acc, model) => {
-        const bleu = modelsAggregated[model]?.bleu || 0;
-        maxBleu = Math.max(bleu, maxBleu);
-        if (bleu !== 0) {
-          minBleu = Math.min(bleu, minBleu);
-        }
-        return {...acc, [model]: bleu};
-      }, {}),
-    },
-    {
-      metric: 'Cosine Similarity',
-      key: 'cosineSimilarity',
-      ...models.reduce((acc, model) => {
-        const cosineSimilarity = modelsAggregated[model]?.cosineSimilarity || 0;
-        maxCosineSimilarity = Math.max(cosineSimilarity, maxCosineSimilarity);
-        if (cosineSimilarity !== 0) {
-          minCosineSimilarity = Math.min(cosineSimilarity, minCosineSimilarity);
-        }
-        return {...acc, [model]: cosineSimilarity};
       }, {}),
     },
     {
@@ -274,8 +246,6 @@ const ExperimentTable: FC<ExperimentTableProps> = ({result, ablationResult}) => 
   ];
   const max = [
     maxRougeL,
-    maxBleu,
-    maxCosineSimilarity,
     maxOCLGenerator,
     maxContractGenerator,
     maxTypescriptGenerator,
@@ -295,8 +265,6 @@ const ExperimentTable: FC<ExperimentTableProps> = ({result, ablationResult}) => 
   ];
   const min = [
     minRougeL,
-    minBleu,
-    minCosineSimilarity,
     minOCLGenerator,
     minContractGenerator,
     minTypescriptGenerator,
