@@ -10,7 +10,7 @@ const ProjectLayout = ({children}: PropsWithChildren) => {
   const params = useParams();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
-  const projectTitle = 'LangChain OCL';
+  const projectTitle = 'ContractGen';
   const title = 'Project / Use Case / Operation';
   const router = useRouter();
   const {token} = theme.useToken();

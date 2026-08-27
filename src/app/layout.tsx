@@ -3,8 +3,8 @@ import Registry from './Registry';
 import './globals.css';
 import {AntdRegistry} from '@ant-design/nextjs-registry';
 export const metadata: Metadata = {
-  title: 'Langchain OCL',
-  description: 'Langchain OCL',
+  title: 'ContractGen',
+  description: 'ContractGen',
 };
 export default async function RootLayout({
   children,

@@ -3,7 +3,7 @@
 """
 RQ1 validity experiments: Exp1 validity rate, Exp2 Valid@k, Exp3 parser error taxonomy.
 
-Designed to run inside this repo (langchain-ocl-next-main):
+Designed to run inside the ContractGen repository:
 
   - ``--backend next`` (default): calls the Next.js app ``POST /api/generate-ocl`` so generation
     matches the in-repo LangGraph (OCL → contract → TypeScript → tests). Validity

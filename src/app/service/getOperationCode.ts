@@ -13,6 +13,7 @@ import * as babel from '@babel/core';
 import presetTypescript from '@babel/preset-typescript';
 import {createProjectContextPrompt} from './createProjectContextPrompt';
 import {graph} from './graph';
+import {formatStructuredRequirement, getBenchmarkRequirement} from '@/rm2pt/benchmarkRequirements';
 import type {GetOperationCodeParams} from './operationCodeShared';
 import {removeFileExportsAndImports} from './operationCodeShared';
 
@@ -102,7 +103,9 @@ export default async function getOperationCode(params: GetOperationCodeParams) {
     projectName: key,
     serviceName,
     operationName,
-    operationDescription: operation.description || '',
+    operationDescription: formatStructuredRequirement(
+      getBenchmarkRequirement(key, String(uc), operationName)
+    ),
     contract: formatContract(tree!, tokens),
     typescript: {
       entity: await formatTypescript(generate(entityFile).code),
