@@ -59,14 +59,6 @@ const ProjectLayout = ({children}: PropsWithChildren) => {
               },
             },
             {
-              key: 'experiment',
-              label: 'Experiment',
-              onClick: () => {
-                setSelecedtKeys(['experiment']);
-                router.push('/experiment');
-              },
-            },
-            {
               key: 'test-coverage',
               label: 'Test Coverage',
               onClick: () => {
