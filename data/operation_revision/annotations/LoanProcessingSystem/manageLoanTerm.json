@@ -1,0 +1,68 @@
+[
+  {
+    "name": "createLoanTerm",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "loan term",
+      "entity": "LoanTerm",
+      "selected": "loanterm",
+      "binding": "loa",
+      "key": ["ItemID", "itemid"],
+      "variable": "loa",
+      "assignments": [
+        ["ItemID", "itemid", "item identifier"],
+        ["Content", "content", "content"]
+      ],
+      "positive_audit": "Stored term has ID/content and true result.",
+      "negative_audit": "Repeated ItemID violates absence guard."
+    }
+  },
+  {
+    "name": "queryLoanTerm",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "loan term",
+      "entity": "LoanTerm",
+      "selected": "loanterm",
+      "binding": "loa",
+      "key": ["ItemID", "itemid"],
+      "variable": "loanterm",
+      "assignments": [],
+      "positive_audit": "Exact selected term returned.",
+      "negative_audit": "Unknown ItemID violates existence guard."
+    }
+  },
+  {
+    "name": "modifyLoanTerm",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "loan term",
+      "entity": "LoanTerm",
+      "selected": "loanterm",
+      "binding": "loa",
+      "key": ["ItemID", "itemid"],
+      "variable": "loanterm",
+      "assignments": [
+        ["ItemID", "itemid", "item identifier"],
+        ["Content", "content", "content"]
+      ],
+      "positive_audit": "Content changes and true result checked; identifier reassignment is reference-only.",
+      "negative_audit": "Unknown ItemID violates existence guard."
+    }
+  },
+  {
+    "name": "deleteLoanTerm",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "loan term",
+      "entity": "LoanTerm",
+      "selected": "loanterm",
+      "binding": "loa",
+      "key": ["ItemID", "itemid"],
+      "variable": "loanterm",
+      "assignments": [],
+      "positive_audit": "Selected term removed from repository; true result checked. No removal from requests' AttachedLoanTerms specified.",
+      "negative_audit": "Unknown ItemID violates existence guard."
+    }
+  }
+]

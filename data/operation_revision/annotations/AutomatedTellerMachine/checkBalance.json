@@ -1,0 +1,180 @@
+[
+  {
+    "name": "inputCard",
+    "status": "VERIFIED",
+    "intent": [
+      "Check the supplied bank card and establish the card session when the card has an owner.",
+      "if bc.BelongedUser.oclIsUndefined()=false then"
+    ],
+    "pre": [
+      ["A bank card with the supplied cardid exists.", "bc.oclIsUndefined() = false"],
+      ["The selected card has status NORMAL.", "bc.CardStatus=CardStatus::NORMAL"]
+    ],
+    "post": [
+      ["If the card has an owner, mark the card ID as validated.", "self.CardIDValidated = true"],
+      ["If the card has an owner, make it the current session card.", "self.InputCard = bc"],
+      ["If the card has an owner, return true.", "result = true"],
+      [
+        "If the card has no owner, mark the card ID as not validated.",
+        "self.CardIDValidated = false"
+      ],
+      ["If the card has no owner, return false.", "result = false"]
+    ],
+    "features": [
+      ["conditional_effect", "postcondition", "if bc.BelongedUser"],
+      ["temporary_state", "postcondition", "self.InputCard = bc"],
+      ["result_constraint", "postcondition", "result = false"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Owner-dependent branch controls the result and persistent session bindings.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Owned-card scenario checks validation, session card and true result."
+      ],
+      [
+        "positive",
+        ["q3", "q4"],
+        "Ownerless-card scenario exercises the permitted false-result branch, not a failed precondition."
+      ],
+      [
+        "negative",
+        ["p0"],
+        "Missing-card rejection is explained by the existence guard; unchanged session is an oracle rejection convention."
+      ],
+      ["negative", ["p1"], "SUSPEND violates the NORMAL guard."]
+    ],
+    "effects_audit": "Both return branches and session effects retained. No owner-existence precondition or session-clearing effect invented."
+  },
+  {
+    "name": "inputPassword",
+    "status": "VERIFIED",
+    "intent": [
+      "Validate the supplied password for the current bank-card session.",
+      "if self.InputCard.Password = password then"
+    ],
+    "pre": [
+      ["The current card ID has been validated.", "self.CardIDValidated = true"],
+      ["A current session card is present.", "self.InputCard.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "If the supplied password matches the card password, mark the password as validated.",
+        "self.PasswordValidated = true"
+      ],
+      ["If the supplied password matches the card password, return true.", "result = true"],
+      [
+        "If the supplied password does not match, mark the password as not validated.",
+        "self.PasswordValidated = false"
+      ],
+      ["If the supplied password does not match, return false.", "result = false"]
+    ],
+    "features": [
+      ["conditional_effect", "postcondition", "if self.InputCard.Password"],
+      ["temporary_state", "postcondition", "self.PasswordValidated"],
+      ["result_constraint", "postcondition", "result = false"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Conditional result and session-state effects.",
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Matching password sets the flag and returns true."],
+      ["positive", ["q2", "q3"], "Mismatch is a specified false-result branch."],
+      ["negative", ["p0"], "Unvalidated card violates the guard."],
+      ["negative", ["p1"], "Missing current card violates the guard."]
+    ],
+    "effects_audit": "No retry counter, lockout policy or password update is added."
+  },
+  {
+    "name": "checkBalance",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "Report the balance of the current session card.",
+      "result = self.InputCard.Balance"
+    ],
+    "pre": [
+      ["The session password has been validated.", "self.PasswordValidated = true"],
+      ["The session card ID has been validated.", "self.CardIDValidated = true"],
+      ["A current session card is present.", "self.InputCard.oclIsUndefined() = false"]
+    ],
+    "post": [
+      ["Return the balance of the current session card.", "result = self.InputCard.Balance"]
+    ],
+    "features": [
+      ["query", "postcondition", "result = self.InputCard.Balance"],
+      ["result_constraint", "postcondition", "result = self.InputCard.Balance"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Authenticated scalar lookup with no specified update.",
+    "conflicts": [
+      "Positive Jest additionally asserts unchanged balance, card binding and validation flags; the reference has no explicit frame conditions. No mutation or frame guarantee was invented."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Returned balance matches; unchanged-state assertions exceed explicit reference clauses."
+      ],
+      ["negative", ["p0"], "Unvalidated password explains rejection."],
+      ["negative", ["p2"], "Missing current card explains rejection."]
+    ],
+    "effects_audit": "Only result obligation recovered. No state changes introduced; stronger frame assertions require review."
+  },
+  {
+    "name": "ejectCard",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "End the authenticated card session and clear its transaction indicators.",
+      "self.InputCard = null"
+    ],
+    "pre": [
+      ["The session password has been validated.", "self.PasswordValidated = true"],
+      ["The session card ID has been validated.", "self.CardIDValidated = true"],
+      ["A current session card is present.", "self.InputCard.oclIsUndefined() = false"]
+    ],
+    "post": [
+      ["Clear the current session card.", "self.InputCard = null"],
+      ["Mark the session password as not validated.", "self.PasswordValidated = false"],
+      ["Mark the session card ID as not validated.", "self.CardIDValidated = false"],
+      ["Clear the withdrawal indicator.", "self.IsWithdraw = false"],
+      ["Clear the deposit indicator.", "self.IsDeposit = false"],
+      ["Reset the recorded withdrawal amount to zero.", "self.WithdrawedNumber = 0"],
+      ["Reset the recorded deposit amount to zero.", "self.DepositedNumber = 0"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["temporary_state", "postcondition", "self.InputCard = null"],
+      ["state_transition", "postcondition", "self.PasswordValidated = false"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Unconditional reset of several session fields; no object deletion or branches.",
+    "conflicts": [
+      "Jest checks that the card remains stored without an explicit reference frame clause. The null/undefined representation question has been resolved from the actual lowering code and is no longer a blocker."
+    ],
+    "review_findings": [
+      {
+        "assessment": "The executable dialect lowers the OCL null literal to the TypeScript undefined identifier. Thus clearing InputCard and the Jest toBeUndefined assertion agree in this backend; this is not a claim about every OCL engine. The unrelated repository-frame assertion still needs review.",
+        "evidence": [
+          {
+            "path": "src/app/ContractToTypescript.ts",
+            "quote": "if (ctx.ruleNullLiteralExpCS()) {\n      return t.identifier('undefined');\n    }"
+          },
+          {
+            "path": "test/AutomatedTellerMachine-AutomatedTellerMachineSystem-ejectCard/index.test.ts",
+            "quote": "expect(service.InputCard).toBeUndefined();"
+          }
+        ]
+      }
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7"],
+        "All reset obligations checked. The source lowerer resolves null/undefined equivalence; the additional repository-frame assertion remains under review."
+      ],
+      ["negative", ["p0", "p1"], "Unauthenticated session violates the validation guards."]
+    ],
+    "effects_audit": "All seven resets and result restored. No bank-card deletion inferred from session clearing."
+  }
+]

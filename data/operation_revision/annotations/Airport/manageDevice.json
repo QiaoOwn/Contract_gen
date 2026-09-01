@@ -1,0 +1,73 @@
+[
+  {
+    "name": "createDevice",
+    "status": "VERIFIED",
+    "intent": [
+      "Register a newly installed airport device and assign its responsible staff contact.",
+      "the admin adds it to the system and assigns a responsible staff contact",
+      "description"
+    ],
+    "pre": [
+      [
+        "The supplied device identifier is not assigned to an existing device.",
+        "dev.oclIsUndefined() = true"
+      ],
+      [
+        "The supplied contact identifier identifies a registered staff member.",
+        "sta.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      ["A new device is created.", "d.oclIsNew()"],
+      ["The new device has the supplied identifier.", "d.Id = id"],
+      ["The new device has the supplied name.", "d.Name = name"],
+      ["The new device has the supplied location.", "d.Location = location"],
+      [
+        "The new device is assigned to the staff member identified by contactsid.",
+        "d.Contacts = sta"
+      ],
+      [
+        "The new device is stored among the system's devices.",
+        "Device.allInstances()->includes(d)"
+      ],
+      ["The operation returns true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "d.oclIsNew()"],
+      ["attribute_update", "postcondition", "d.Name = name"],
+      ["association_add", "postcondition", "d.Contacts = sta"],
+      ["collection_operation", "postcondition", "Device.allInstances()->includes(d)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Creation with three initialized fields, repository insertion and a staff association; two separately evidenced guards.",
+    "scenarios": [
+      [
+        "positive",
+        [
+          "postconditions_nl[0]",
+          "postconditions_nl[1]",
+          "postconditions_nl[2]",
+          "postconditions_nl[3]",
+          "postconditions_nl[4]",
+          "postconditions_nl[5]",
+          "postconditions_nl[6]"
+        ],
+        "Assertions check the new device, supplied fields, staff contact, storage and true result."
+      ],
+      [
+        "negative",
+        ["preconditions_nl[0]"],
+        "Duplicate device identifier explains rejection; test also checks repository preservation."
+      ],
+      [
+        "negative",
+        ["preconditions_nl[1]"],
+        "Missing staff contact explains rejection; test also checks no device is stored."
+      ]
+    ],
+    "description_audit": "KEEP + NORMALIZE. Preserve creation and contact assignment. Do not promote the final searchability/consistency sentence into an untested independent obligation or infer an admin-authorization guard.",
+    "reference_audit": "Local encoded reference supplies the omitted true result and repository membership. All text is copied verbatim only into the hidden reference field.",
+    "effects_audit": "Creation, each field, association, repository membership and return are separately represented. No deletion, cascading action or extra uniqueness rule added."
+  }
+]

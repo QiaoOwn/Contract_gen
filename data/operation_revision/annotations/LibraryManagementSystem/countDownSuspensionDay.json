@@ -1,0 +1,45 @@
+[
+  {
+    "name": "countDownSuspensionDay",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Reduce the remaining suspension days for users with a positive suspension duration.",
+      "u.SuspensionDays = u.SuspensionDays@pre - 1"
+    ],
+    "pre": [],
+    "post": [
+      [
+        "For each user selected because their suspension days are positive, reduce their suspension days by one relative to the value before this operation.",
+        "u.SuspensionDays = u.SuspensionDays@pre - 1"
+      ]
+    ],
+    "features": [
+      ["pre_state_relation", "postcondition", "u.SuspensionDays@pre - 1"],
+      ["collection_operation", "definition", "u.SuspensionDays > 0"],
+      ["conditional_effect", "postcondition", "u.BorrowStatus = BorrowStatus::NORMAL"],
+      ["multi_object_effect", "postcondition", "users->forAll"],
+      ["attribute_update", "postcondition", "u.SuspensionDays ="],
+      ["state_transition", "postcondition", "u.BorrowStatus = BorrowStatus::NORMAL"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Time of conditional evaluation and no-branch frame effects remain unresolved.",
+    "missing": [
+      "Original operation specification must clarify conditional evaluation timing: reference both tests BorrowStatus SUSPEND and assigns NORMAL without an explicit prior-state marker. Jest expects evaluation after decrement but before changing BorrowStatus. No sequential interpretation was silently promoted to declarative ground truth.",
+      "Source is needed for unchanged-state guarantees on unselected users and users with fees: Jest asserts these, while reference has no else/frame obligations."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Durations 1/1/3 become 0/0/2. NORMAL transition for fee-free suspended user follows an imperative timing interpretation requiring source confirmation."
+      ],
+      [
+        "positive",
+        ["q0"],
+        "Owing user's duration decrements; unchanged zero-day user, BorrowStatus and fee assertions are stronger frame requirements."
+      ]
+    ],
+    "effects_audit": "No guards added to true precondition. Return type is void; no result invented. Conditional NORMAL transition exists in source but its precise temporal requirement is withheld."
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "name": "renewBook",
+    "status": "VERIFIED",
+    "intent": [
+      "Renew the selected user's outstanding loan for the selected copy.",
+      "loan.RenewedTimes = loan.RenewedTimes@pre + 1"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      ["The user's borrowing status is NORMAL.", "user.BorrowStatus = BorrowStatus::NORMAL"],
+      [
+        "A copy with the supplied barcode exists with status LOANED.",
+        "copy.oclIsUndefined() = false"
+      ],
+      ["An unreturned loan links this user and copy.", "loan.oclIsUndefined() = false"],
+      ["The copy is not reserved.", "copy.IsReserved = false"],
+      ["The loan's due date is later than today.", "loan.DueDate.isAfter(Today)"],
+      ["For a student, the loan has been renewed fewer than three times.", "loan.RenewedTimes < 3"],
+      [
+        "For a non-student, the loan has been renewed fewer than six times.",
+        "loan.RenewedTimes < 6"
+      ],
+      ["The loan's overdue fee equals zero.", "loan.OverDueFee = 0"]
+    ],
+    "post": [
+      [
+        "Increase the loan's renewal count by one relative to its value before this operation.",
+        "loan.RenewedTimes = loan.RenewedTimes@pre + 1"
+      ],
+      ["Set the loan's renewal date to today.", "loan.RenewDate = Today"],
+      [
+        "For a BACHELOR student, extend the previous due date by 20 days.",
+        "loan.DueDate = loan.DueDate@pre.After(20)"
+      ],
+      [
+        "For a MASTER student, extend the previous due date by 40 days.",
+        "loan.DueDate = loan.DueDate@pre.After(40)"
+      ],
+      [
+        "For a student whose programme is neither BACHELOR nor MASTER, extend the previous due date by 60 days.",
+        "loan.DueDate = loan.DueDate@pre.After(60)"
+      ],
+      [
+        "For a non-student, extend the previous due date by 60 days.",
+        "loan.DueDate = loan.DueDate@pre.After(60)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["pre_state_relation", "postcondition", "loan.RenewedTimes@pre + 1"],
+      ["conditional_effect", "postcondition", "stu.Programme = Programme::BACHELOR"],
+      ["attribute_update", "postcondition", "loan.RenewDate = Today"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Subtype-dependent renewal limits and nested programme-dependent date arithmetic against previous due date.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6"],
+        "Four parameterized student/faculty cases cover 20/40/60/60 day extensions, renewal count/date/result; seedLoan inspected."
+      ],
+      ["negative", ["p6"], "Student renewal count 3 violates strict limit."],
+      ["negative", ["p7"], "Faculty renewal count 6 violates strict limit."],
+      ["negative", ["p4"], "Reserved copy violates guard."],
+      ["negative", ["p5"], "Due today fails strictly-later requirement."],
+      ["negative", ["p8"], "Positive overdue fee violates zero-fee guard."],
+      ["negative", ["p1"], "SUSPEND violates NORMAL status."]
+    ],
+    "effects_audit": "Renewal extends prior due date, not today. No new loan, loan-count update, suspension-days guard or reservation update inferred."
+  }
+]

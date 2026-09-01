@@ -1,0 +1,42 @@
+[
+  {
+    "name": "receiveOrderedProduct",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Record receipt of the selected product order and update the stock referenced by its entries.",
+      "op.OrderStatus = OrderStatus::RECEIVED"
+    ],
+    "pre": [["A product order with the supplied orderID exists.", "op.oclIsUndefined() = false"]],
+    "post": [
+      ["Set the selected order's status to RECEIVED.", "op.OrderStatus = OrderStatus::RECEIVED"],
+      [
+        "For each entry in the selected order, its item's resulting stock must equal that item's stock before this operation plus that entry's quantity.",
+        "oe.Item.StockNumber = oe.Item.StockNumber@pre + oe.Quantity"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "OrderStatus::RECEIVED"],
+      ["pre_state_relation", "postcondition", "oe.Item.StockNumber@pre + oe.Quantity"],
+      ["multi_object_effect", "postcondition", "op.ContainedEntries->forAll"],
+      ["collection_operation", "postcondition", "op.ContainedEntries->forAll"],
+      ["attribute_update", "postcondition", "oe.Item.StockNumber ="],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Per-entry stock effects are explicit, but repeated references to the same item are unresolved.",
+    "missing": [
+      "Original order-entry invariant or receipt specification must resolve multiple entries referencing the same Item. Reference imposes per-entry equations against one pre-state; with different quantities for the same item these cannot all hold. Jest uses three distinct items. No aggregate-per-item policy or uniqueness guard invented."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Three distinct items have stocks 1/2/3 changed to 2/4/6; RECEIVED and true agree. Aliasing is untested."
+      ],
+      ["negative", ["p0"], "Absent order violates existence guard."]
+    ],
+    "effects_audit": "No REQUESTED-status guard, cumulative sequential update or entry deletion inferred; literal simultaneous per-entry relation retained pending aliasing clarification."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "closeOutLoan",
+    "status": "VERIFIED",
+    "intent": ["Close the selected open loan.", "loan.Status = LoanStatus::CLOSED"],
+    "pre": [
+      ["A loan with the supplied loanid exists.", "loan.oclIsUndefined() = false"],
+      ["The selected loan has status LSOPEN.", "loan.Status = LoanStatus::LSOPEN"]
+    ],
+    "post": [
+      ["Set the selected loan's status to CLOSED.", "loan.Status = LoanStatus::CLOSED"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "LoanStatus::CLOSED"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Existing-loan guard and one open-to-closed transition.",
+    "scenarios": [
+      ["positive", ["q0", "q1"], "LSOPEN loan becomes CLOSED and returns true."],
+      ["negative", ["p0"], "Absent loan violates existence guard."]
+    ],
+    "effects_audit": "No paid-off balance guard, loan deletion, payment cleanup or closing date invented."
+  }
+]

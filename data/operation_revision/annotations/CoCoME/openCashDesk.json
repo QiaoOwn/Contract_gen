@@ -1,0 +1,37 @@
+[
+  {
+    "name": "openCashDesk",
+    "status": "VERIFIED",
+    "intent": [
+      "Open the selected cash desk and make it the current cash desk.",
+      "self.CurrentCashDesk = cd"
+    ],
+    "pre": [
+      ["A cash desk with the supplied cashDeskID exists.", "cd.oclIsUndefined() = false"],
+      ["The selected cash desk is closed.", "cd.IsOpened = false"],
+      ["A current store is selected.", "CurrentStore.oclIsUndefined() = false"],
+      ["The current store is open.", "CurrentStore.IsOpened = true"]
+    ],
+    "post": [
+      ["Make the selected cash desk the current cash desk.", "self.CurrentCashDesk = cd"],
+      ["Mark the selected cash desk as open.", "cd.IsOpened = true"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["temporary_state", "postcondition", "self.CurrentCashDesk = cd"],
+      ["state_transition", "postcondition", "cd.IsOpened = true"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Guarded desk transition and current-desk binding; no branch.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Closed desk becomes open and current; true result asserted."
+      ],
+      ["negative", ["p0", "p2"], "Missing desk/current store violate explicit guards."]
+    ],
+    "effects_audit": "No desk-store membership constraint, authentication guard or sale creation inferred."
+  }
+]

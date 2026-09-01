@@ -1,0 +1,202 @@
+[
+  {
+    "name": "approve",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Record a staff member's decision and suggestion for a repair request in its approval history.",
+      "A Staff member records an approval decision for a Repair",
+      "description"
+    ],
+    "pre": [
+      ["The repair identified by rid exists.", "rep.oclIsUndefined() = false"],
+      ["The staff member identified by sid exists.", "sta.oclIsUndefined() = false"]
+    ],
+    "post": [
+      ["A new approval-history entry is created.", "ah.oclIsNew()"],
+      ["The entry records the supplied reject value.", "ah.Reject = reject"],
+      ["The entry records the supplied suggestion.", "ah.Suggestion = suggestion"],
+      [
+        "The entry is stored among approval-history records.",
+        "ApprovalHistory.allInstances()->includes(ah)"
+      ],
+      ["The entry is added to the repair's history.", "rep.History->includes(ah)"],
+      ["The repair remains stored in the system.", "Repair.allInstances()->includes(rep)"],
+      ["The operation returns the new history entry.", "result = ah"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "ah.oclIsNew()"],
+      ["attribute_update", "postcondition", "ah.Reject = reject"],
+      ["association_add", "postcondition", "rep.History->includes(ah)"],
+      ["collection_operation", "postcondition", "ApprovalHistory.allInstances()->includes(ah)"],
+      ["multi_object_effect", "postcondition", "rep.History->includes(ah)"],
+      ["result_constraint", "postcondition", "result = ah"],
+      ["conditional_effect", "postcondition", "reject <> false"],
+      ["state_transition", "postcondition", "rep.Process = 5"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Workflow branch meaning is unresolved; the scaffold's Hard label is not promoted to a final assessment.",
+    "missing": [
+      "Original RM2PT approval specification or confirmed reference resolving whether reject=true advances approval or rejects it, including role/stage transitions.",
+      "Original specification must also clarify evaluation timing of Process guards versus Process assignments; current reference uses unqualified Process in both condition and effect."
+    ],
+    "conflicts": [
+      "Existing description advances when not rejected; local OCL and Jest advance when reject=true and set stage 5 when reject=false. Neither polarity is silently selected as the restored requirement."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        [
+          "postconditions_nl[0]",
+          "postconditions_nl[1]",
+          "postconditions_nl[2]",
+          "postconditions_nl[3]",
+          "postconditions_nl[4]",
+          "postconditions_nl[6]"
+        ],
+        "History assertions match known obligations; role-1 stage advancement is unresolved against the original description."
+      ],
+      [
+        "positive",
+        ["postconditions_nl[1]"],
+        "Both parameterized role/stage cases agree with local OCL but conflict with the description's reject polarity; stage obligations withheld."
+      ],
+      [
+        "positive",
+        ["postconditions_nl[1]"],
+        "Records false and asserts stage 5; the latter is unresolved, not called requirement-correct."
+      ],
+      ["negative", ["preconditions_nl[0]"], "Missing repair explains rejection."],
+      ["negative", ["preconditions_nl[1]"], "Missing staff explains rejection."]
+    ],
+    "description_audit": "KEEP + NORMALIZE common history semantics only; preserve the disputed workflow prose in description_original.",
+    "reference_audit": "Candidate reference located but not accepted as ground truth because branch meaning conflicts with the preserved description.",
+    "effects_audit": "Known creation, history insertion, field initialization and result restored. Conditional process effects explicitly unresolved rather than omitted silently."
+  },
+  {
+    "name": "finishRepair",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Mark the identified device repair as finished by its responsible worker.",
+      "A Staff member marks a Repair as finished for a specific Device",
+      "description"
+    ],
+    "pre": [
+      [
+        "The device identified by did is assigned to the staff member identified by sid.",
+        "dev.Contacts = sta"
+      ],
+      ["The staff member has worker role value 3.", "sta.Role = 3"]
+    ],
+    "post": [
+      ["The repair identified by id is placed in finished process state 7.", "rep.Process = 7"],
+      ["The operation returns true.", "result = true"]
+    ],
+    "features": [
+      ["attribute_update", "postcondition", "rep.Process = 7"],
+      ["state_transition", "postcondition", "rep.Process = 7"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "The result-text effect is unresolved; do not finalize complexity from the operation name.",
+    "missing": [
+      "Confirm whether res must be written to Repair.Result: this attribute exists in the local entity model, but neither the encoded postcondition nor the Jest assertions assigns/checks it. Also supply original behavior when the identified repair/device/staff is absent. Attribute existence alone does not establish an assignment obligation."
+    ],
+    "review_findings": [
+      {
+        "assessment": "The local model does contain Repair.Result. The remaining gap is behavioral evidence for assigning res to that attribute, not absence of a possible storage field. The original description/reference conflict is still unresolved.",
+        "evidence": [
+          {
+            "path": "src/rm2pt/project/Airport/entity.ts",
+            "quote": "name: 'Result',\n        type: 'String',\n        description: 'Final result or outcome of the repair'"
+          }
+        ]
+      }
+    ],
+    "conflicts": [
+      "Description says the result text is recorded; local postcondition changes only Process and result, and Jest never asserts storage of res."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["postconditions_nl[0]", "postconditions_nl[1]"],
+        "Checks state 7 and true; does not establish result-text persistence."
+      ],
+      ["negative", ["preconditions_nl[0]"], "Wrong assigned staff explains rejection."],
+      ["negative", ["preconditions_nl[1]"], "Role other than 3 explains rejection."]
+    ],
+    "description_audit": "KEEP + NORMALIZE established state change; record the result-text phrase as unresolved, not as an invented field update.",
+    "reference_audit": "Local candidate preserved by pointer but not installed as reliable ground truth pending description/effect reconciliation.",
+    "effects_audit": "Process update and Boolean result covered. No assignment from res or additional state guard inferred."
+  },
+  {
+    "name": "feedback",
+    "status": "VERIFIED",
+    "intent": [
+      "Record a repair requester's score and feedback for a finished repair.",
+      "The Staff who raised a Repair provides a Score",
+      "description"
+    ],
+    "pre": [
+      [
+        "The staff member identified by sid is the person who raised the repair identified by id.",
+        "rep.RaiseStaff = sta"
+      ],
+      ["The staff member has ground-staff role value 0.", "sta.Role = 0"],
+      ["The repair is in finished process state 7.", "rep.Process = 7"]
+    ],
+    "post": [
+      ["The repair records the supplied score.", "rep.Score = score"],
+      [
+        "If the score is at least 3, the repair is marked closed.",
+        "if score >= 3 then rep.Close = true"
+      ],
+      ["If the score is below 3, the repair is marked not closed.", "else rep.Close = false"],
+      [
+        "If the score is below 3, the repair description becomes the supplied des text.",
+        "rep.Description = des"
+      ],
+      ["If the score is below 3, the repair returns to process state 0.", "rep.Process = 0"],
+      ["The repair remains stored in the system.", "Repair.allInstances()->includes(rep)"],
+      ["The operation returns true.", "result = true"]
+    ],
+    "features": [
+      ["attribute_update", "postcondition", "rep.Score = score"],
+      ["conditional_effect", "postcondition", "if score >= 3"],
+      ["state_transition", "postcondition", "rep.Process = 0"],
+      ["collection_operation", "postcondition", "Repair.allInstances()->includes(rep)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Three guards and branch-specific score, closure, description and workflow-state effects.",
+    "scenarios": [
+      [
+        "positive",
+        [
+          "postconditions_nl[0]",
+          "postconditions_nl[1]",
+          "postconditions_nl[5]",
+          "postconditions_nl[6]"
+        ],
+        "Threshold score 3 closes repair and returns true."
+      ],
+      [
+        "positive",
+        [
+          "postconditions_nl[0]",
+          "postconditions_nl[2]",
+          "postconditions_nl[3]",
+          "postconditions_nl[4]",
+          "postconditions_nl[6]"
+        ],
+        "Score 2 exercises the open/reset/description branch."
+      ],
+      ["negative", ["preconditions_nl[0]"], "Different requester explains rejection."],
+      ["negative", ["preconditions_nl[2]"], "Unfinished repair explains rejection."]
+    ],
+    "description_audit": "KEEP + NORMALIZE. Replace vague high-enough threshold with the explicitly evidenced value 3; preserve conditional low-score description update.",
+    "reference_audit": "Local OCL and both positive branches support the detailed threshold. No score range guard is inferred from model prose.",
+    "effects_audit": "Score, closure branches, low-score description, state reset, retained record and return covered. No high-score description change added."
+  }
+]

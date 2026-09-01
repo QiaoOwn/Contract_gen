@@ -1,0 +1,200 @@
+[
+  {
+    "name": "makeNewOrder",
+    "status": "VERIFIED",
+    "intent": [
+      "Create a new product order and make it the current order.",
+      "self.CurrentOrderProduct = op"
+    ],
+    "pre": [["No product order with the supplied orderid exists.", "o.oclIsUndefined() = true"]],
+    "post": [
+      ["Create a new product order.", "op.oclIsNew()"],
+      ["Set the new order's status to NEW.", "op.OrderStatus = OrderStatus::NEW"],
+      ["Set the new order's identifier to orderid.", "op.Id = orderid"],
+      ["Record the current time as the new order's time.", "op.Time = Now"],
+      [
+        "Store the new order in the system's product orders.",
+        "OrderProduct.allInstances()->includes(op)"
+      ],
+      ["Make the new order the current product order.", "self.CurrentOrderProduct = op"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "op.oclIsNew()"],
+      ["temporary_state", "postcondition", "self.CurrentOrderProduct = op"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Object creation with field initialization and current-order binding, without branches.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6"],
+        "Stored new order has NEW state, ID and current-time timestamp; session binding/result checked. Time assertion uses second precision."
+      ],
+      ["negative", ["p0"], "Duplicate order ID violates explicit absence guard."]
+    ],
+    "effects_audit": "No initial total, supplier, empty-entry initialization or existing-session guard added."
+  },
+  {
+    "name": "listAllOutOfStoreProducts",
+    "status": "NEEDS_REVIEW",
+    "intent": ["List the items whose stock quantity is zero.", "item.StockNumber = 0"],
+    "pre": [],
+    "post": [
+      [
+        "Return every registered item with zero stock quantity and no other items.",
+        "result = Item.allInstances()->select(item:Item | item.StockNumber = 0)"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = Item.allInstances()"],
+      ["collection_operation", "postcondition", "item.StockNumber = 0"],
+      ["result_constraint", "postcondition", "result = Item.allInstances()"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "One collection filter and result; unconditional precondition.",
+    "conflicts": [
+      "Positive Jest compares an ordered JavaScript array [b,c], while the reference collection has no explicit ordering constraint."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Both zero-stock items returned; positive-stock items absent. Ordering assertion is stronger than source."
+      ],
+      ["positive", ["q0"], "No zero-stock items yields empty result."]
+    ],
+    "effects_audit": "No state change or negative-stock inclusion inferred. No precondition added to source true."
+  },
+  {
+    "name": "orderItem",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Add an entry for the selected item to the current product order.",
+      "CurrentOrderProduct.ContainedEntries->includes(order)"
+    ],
+    "pre": [["An item with the supplied barcode exists.", "item.oclIsUndefined() = false"]],
+    "post": [
+      ["Create a new order entry.", "order.oclIsNew()"],
+      ["Set the new entry's quantity to quantity.", "order.Quantity = quantity"],
+      [
+        "Set the new entry's subtotal to the selected item's order price multiplied by quantity.",
+        "order.SubAmount = item.OrderPrice * quantity"
+      ],
+      ["Link the new entry to the selected item.", "order.Item = item"],
+      [
+        "Store the new entry among the system's order entries.",
+        "OrderEntry.allInstances()->includes(order)"
+      ],
+      [
+        "Add the new entry to the current product order's entries.",
+        "CurrentOrderProduct.ContainedEntries->includes(order)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "order.oclIsNew()"],
+      ["association_add", "postcondition", "CurrentOrderProduct.ContainedEntries->includes(order)"],
+      ["multi_object_effect", "postcondition", "order.Item = item"],
+      ["collection_operation", "postcondition", "ContainedEntries->includes(order)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Current-order availability contract is unresolved.",
+    "missing": [
+      "Original workflow/operation specification must establish whether CurrentOrderProduct and its entry collection must already exist. OCL precondition only guards Item; positive Jest initializes both. No additional precondition was invented."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6"],
+        "New entry has quantity 2, subtotal 2, item link and order membership; relies on test-provided current order."
+      ],
+      [
+        "negative",
+        ["p0"],
+        "Missing item explains rejection; does not test missing-current-order behavior."
+      ]
+    ],
+    "effects_audit": "Creation, association, subtotal and result recovered. No positive quantity or current-order existence guard silently added."
+  },
+  {
+    "name": "chooseSupplier",
+    "status": "VERIFIED",
+    "intent": [
+      "Assign the selected supplier to the current product order.",
+      "CurrentOrderProduct.Supplier = sup"
+    ],
+    "pre": [
+      ["A supplier with the supplied supplierID exists.", "sup.oclIsUndefined() = false"],
+      ["A current product order is present.", "CurrentOrderProduct.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "Set the current product order's supplier to the selected supplier.",
+        "CurrentOrderProduct.Supplier = sup"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["association_add", "postcondition", "CurrentOrderProduct.Supplier = sup"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Two existing-object guards and one association assignment.",
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Current order points to selected supplier and returns true."],
+      [
+        "negative",
+        ["p0", "p1"],
+        "Supplier and current order both absent; explicit guards explain rejection."
+      ]
+    ],
+    "effects_audit": "No inverse supplier collection update or NEW-state guard inferred."
+  },
+  {
+    "name": "placeOrder",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Mark the current product order as requested.",
+      "CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED"
+    ],
+    "pre": [
+      ["A current product order is present.", "CurrentOrderProduct.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "Set the current order's status to REQUESTED.",
+        "CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "OrderStatus::REQUESTED"],
+      ["pre_state_relation", "postcondition", "CurrentOrderProduct.Amount@pre + sub.sum()"],
+      [
+        "collection_operation",
+        "definition",
+        "ContainedEntries->collect(o:OrderEntry | o.SubAmount)"
+      ],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Aggregate collection type and repeated-subtotal semantics need source confirmation.",
+    "missing": [
+      "Authoritative definition of subtotal aggregation is needed: reference declares sub as Set(Real) but computes it by collecting entry subtotals. It is unclear whether duplicate subtotal values contribute once or once per entry. Jest uses distinct values 1 and 2 only. Amount-update NL is withheld instead of choosing a multiplicity interpretation."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1"],
+        "REQUESTED/true agree. Amount 666 to 669 demonstrates additive accumulation, but not duplicate-subtotal handling."
+      ],
+      ["negative", ["p0"], "Missing current order explains rejection."]
+    ],
+    "effects_audit": "Status/result restored. Source explicitly adds an aggregate to the prior amount; final arithmetic obligation awaits resolution of collection multiplicity. No supplier or nonempty-entry guard invented."
+  }
+]

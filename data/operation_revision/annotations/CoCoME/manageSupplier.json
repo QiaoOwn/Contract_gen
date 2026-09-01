@@ -1,0 +1,72 @@
+[
+  {
+    "name": "createSupplier",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "supplier",
+      "entity": "Supplier",
+      "selected": "supplier",
+      "binding": "sup",
+      "key": ["Id", "id"],
+      "variable": "sup",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "New supplier is stored with ID and name; true result checked.",
+      "negative_audit": "Repeated ID violates absence guard."
+    }
+  },
+  {
+    "name": "querySupplier",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "supplier",
+      "entity": "Supplier",
+      "selected": "supplier",
+      "binding": "sup",
+      "key": ["Id", "id"],
+      "variable": "supplier",
+      "assignments": [],
+      "membership_guard": false,
+      "positive_audit": "Selected supplier returned by identity.",
+      "negative_audit": "Missing supplier violates existence guard."
+    }
+  },
+  {
+    "name": "modifySupplier",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "supplier",
+      "entity": "Supplier",
+      "selected": "supplier",
+      "binding": "sup",
+      "key": ["Id", "id"],
+      "variable": "supplier",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Supplier name and true result checked; Id assignment is reference-only.",
+      "negative_audit": "Missing supplier violates existence guard."
+    }
+  },
+  {
+    "name": "deleteSupplier",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "supplier",
+      "entity": "Supplier",
+      "selected": "supplier",
+      "binding": "sup",
+      "key": ["Id", "id"],
+      "variable": "supplier",
+      "assignments": [],
+      "membership_guard": true,
+      "positive_audit": "Supplier removed from repository; true result checked. No order cascade specified.",
+      "negative_audit": "Missing supplier violates existence/membership guards."
+    }
+  }
+]

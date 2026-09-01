@@ -1,0 +1,76 @@
+[
+  {
+    "name": "createStore",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "store",
+      "entity": "Store",
+      "selected": "store",
+      "binding": "sto",
+      "key": ["Id", "id"],
+      "variable": "sto",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"],
+        ["Address", "address", "address"],
+        ["IsOpened", "isopened", "open status"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Repository contains newly created store with all four supplied fields; true result asserted.",
+      "negative_audit": "Repeated ID violates absence guard."
+    }
+  },
+  {
+    "name": "queryStore",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "store",
+      "entity": "Store",
+      "selected": "store",
+      "binding": "sto",
+      "key": ["Id", "id"],
+      "variable": "store",
+      "assignments": [],
+      "membership_guard": false,
+      "positive_audit": "Selected store object returned.",
+      "negative_audit": "Missing ID violates existence guard."
+    }
+  },
+  {
+    "name": "modifyStore",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "store",
+      "entity": "Store",
+      "selected": "store",
+      "binding": "sto",
+      "key": ["Id", "id"],
+      "variable": "store",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"],
+        ["Address", "address", "address"],
+        ["IsOpened", "isopened", "open status"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Name, address, open status and true result checked; identifier assignment is reference-only.",
+      "negative_audit": "Missing ID violates existence guard."
+    }
+  },
+  {
+    "name": "deleteStore",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "store",
+      "entity": "Store",
+      "selected": "store",
+      "binding": "sto",
+      "key": ["Id", "id"],
+      "variable": "store",
+      "assignments": [],
+      "membership_guard": true,
+      "positive_audit": "Selected store removed; true result checked. No cash-desk/product cascade specified.",
+      "negative_audit": "Missing ID violates existence/membership guards."
+    }
+  }
+]

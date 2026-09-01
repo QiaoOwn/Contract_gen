@@ -1,0 +1,37 @@
+[
+  {
+    "name": "listSuppliers",
+    "status": "NEEDS_REVIEW",
+    "intent": ["List the suppliers registered in the system.", "result = Supplier.allInstances()"],
+    "pre": [],
+    "post": [
+      [
+        "Return all registered suppliers, or an empty collection when none are registered.",
+        "result = Supplier.allInstances()"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = Supplier.allInstances()"],
+      ["collection_operation", "postcondition", "Supplier.allInstances()"],
+      ["result_constraint", "postcondition", "result = Supplier.allInstances()"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Unconditional collection result with no filtering or effects.",
+    "conflicts": [
+      "Jest requires JavaScript repository-array identity; the reference specifies collection contents, not a particular array instance or order."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Two suppliers are returned and unrelated Item excluded; toBe(repository) is stronger representation-specific assertion."
+      ],
+      [
+        "positive",
+        ["q0"],
+        "Empty supplier store returns empty collection; same array-identity caveat."
+      ]
+    ],
+    "effects_audit": "Reference precondition is true, so no guards added. No mutation, sorting or identity guarantee inferred."
+  }
+]

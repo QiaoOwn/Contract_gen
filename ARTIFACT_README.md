@@ -1,259 +1,198 @@
 # Artifact README
 
-This artifact accompanies the manuscript **"Contract Gen: Verification-Driven OCL Contract Generation"**. It provides the implementation, benchmark data, generated outputs, validation logs, and analysis scripts needed to inspect and reproduce the paper's reported results.
+This repository accompanies **Contract Gen: Validation-Guided Generation of Executable OCL Operation Contracts**.
+Repository: <https://github.com/QiaoOwn/Contract_gen>.
 
-Repository URL: <https://github.com/QiaoOwn/Contract_gen>
+## 1. Frozen Evidence and Scope
 
-> **Input-version notice.** The canonical benchmark now uses
-> `contractgen-operation-input-v2` and `contractgen-system-prompt-v5`. Result
-> directories produced before this migration are historical records and must
-> not be combined with current v5 runs in a submitted table. Re-run the reported
-> methods and ablations before finalizing the manuscript numbers.
-> All current runners write under `results/contractgen-study-v6/`; analysis and
-> revalidation tools reject records without that study marker.
+The retained study is `results/contractgen-study-v6/`. Its canonical input versions
+are `contractgen-operation-input-v3` and `contractgen-system-prompt-v7`, with
+`llm-generation-config-v5`, `ocl-generation-grammar-v2`, and `ocl-generation-rules-v4`.
+Study version and input/prompt version are different identifiers.
 
-The implementation repository is a Next.js/TypeScript project. The artifact combines that implementation with the experiment data and manuscript material used in the paper.
+The benchmark has 114 operation-context instances, 107 distinct service-operation
+oracles, and 106 requirement groups. Inputs are structured requirements containing
+intent, preconditions, and postconditions, together with operation signatures and
+model context. This is not unrestricted prose-to-contract generation. Reference OCL
+and Jest outcomes are not generator inputs.
 
-## 1. Artifact Scope
+ContractGen uses one generative LLM and deterministic assembly, parsing,
+translation, and TypeScript checking. Eligible pre-execution diagnostics can
+trigger regeneration. On reaching Jest, the graph terminates whether Jest passes
+or fails. Generation stops at the pre-execution boundary or budget exhaustion,
+not after repeatedly using hidden Jest results to find a passing candidate.
 
-The artifact supports three levels of reproducibility.
+The target language is the documented executable REMODEL/OCLTSVM subset.
+Parser acceptance, compilation, scenario success, and general semantic correctness
+are distinct claims. The artifact does not establish full standard-OCL support.
 
-1. **Inspect precomputed results.** Review the benchmark, raw result folders, USE sanity-check outputs, and generated paper PDF.
-2. **Recompute paper tables from stored results.** Run the analysis scripts on the included result folders. This does not require LLM API access.
-3. **Re-run generation experiments.** Re-execute Contract Gen, PureLLM, baseline-style prompting, ablations, and USE checks. This requires model API credentials; USE 7.5.0 is bundled under `tools/` and requires Java 21.
+## 2. Read-Only Inspection
 
-The artifact is designed so that reviewers can verify the paper's main claims without re-running expensive LLM calls. Full regeneration is optional and may produce small variations unless model versions, decoding settings, and service behavior are fixed.
-
-## 2. Repository Layout
-
-| Path | Purpose |
-| --- | --- |
-| `data/operations.jsonl` | Oracle-isolated canonical input for 114 operation-context instances, covering 107 distinct service operations and 106 distinct requirement specifications. |
-| `src/rm2pt/benchmarkRequirements.ts` | Auditable structured requirements: operation intent, preconditions, and postconditions. |
-| `src/app/service/createOperationInput.ts` | Shared operation-message builder and input validator. |
-| `src/app/service/prompts/generationGrammar.txt` | Versioned executable generation subset shared by Contract Gen and controlled baselines. |
-| `src/app/service/prompts/generationRules.json` | Versioned, identifier-bearing OCL generation rule catalog. |
-| `src/app/service/validateGeneratedContractSemantics.ts` | Clause-level generated-subset checks over the parsed REMODEL syntax tree. |
-| `src/app/service/generateOCL.ts` | Main programmatic entry for Contract Gen. It selects the feedback graph, linear graph, and feedback mode. |
-| `src/app/service/graph.ts` | LangGraph implementation of OCL generation, contract parsing, TypeScript generation, TypeScript checking, and Jest-based execution validation. |
-| `src/app/service/graph-line.ts` | No-feedback variant that stops at the first failed deterministic validation stage. |
-| `src/app/service/create*Prompt.ts` | Prompt builders for grammar guidance, definitions, project context, OCL generation rules, and localized repair feedback. |
-| `src/app/ContractToTypescript.ts` and `src/app/service/generateTypescriptCode.ts` | OCL-to-TypeScript translation support used by OCLTSVM. |
-| `src/app/api/generate-ocl/route.ts` | HTTP API route for running the full generation/validation stream. |
-| `src/rm2pt/project/` | Encoded benchmark projects, services, entities, and operations. |
-| `test/` | Operation-level Jest tests used for execution-grounded validation. |
-| `antlr4/` | REMODEL grammar and generated TypeScript parser files. |
-| `results/contractgen-study-v6/contract_gen/` | Full-, generic-, and no-feedback Contract Gen runs. |
-| `results/contractgen-study-v6/baselines/` | PureLLM, CodexPrompt-style, and PathOCL-style runs. |
-| `results/contractgen-study-v6/ablations/` | End-to-end full-feedback pipeline-structure ablation. |
-| `results/contractgen-study-v6/validation/` | OCLTSVM revalidation and external USE artifacts. |
-| Other directories under `results/` | Historical records from earlier study configurations; excluded from current analysis. |
-| `scripts/` | Python analysis and USE artifact-generation scripts. |
-| `script/` | Experiment-running scripts for Contract Gen, PureLLM, and baseline-style prompting. |
-| `main.tex`, `sections/`, `figures/`, `refs.bib` | Optional LaTeX manuscript source when this artifact is packaged together with the paper source archive. |
-| `ARTIFACT_MANIFEST.md` | Detailed mapping from directories/files to paper RQs and tables. |
-
-Generated or private folders/files such as `node_modules/`, `.next/`, `.next-build/`, `coverage/`, `test/tmp/`, and `.env` should not be included in an archival package. Use `env.template` to document required environment variables.
-The repository also includes `.artifactignore` as an explicit packaging checklist.
-
-## 3. Hardware and Software Requirements
-
-### Minimum environment for table reproduction
-
-- Windows 10/11, macOS, or Linux.
-- Python 3.10 or later.
-- Python packages: `pandas`, `matplotlib`.
-
-Install the lightweight analysis dependencies:
+Requirements: Python 3.10+ and its standard library. No model API, Java, Node,
+server, pandas, or plotting packages are needed for these commands:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements-artifact.txt
-```
-
-On macOS/Linux, activate the virtual environment with `source .venv/bin/activate`.
-
-### Optional environment for full regeneration
-
-- Node.js and TypeScript tooling, for running the TypeScript experiment scripts in `script/`.
-- Yarn or npm. The repository includes `yarn.lock`; either `yarn install --frozen-lockfile` or `npm install` can be used depending on the reviewer environment.
-- LLM API credentials for the evaluated models.
-- USE OCL 7.5.0 or compatible, for external sanity checks.
-- Tectonic or another LaTeX engine, for rebuilding the manuscript PDF.
-
-The manuscript directory includes `tools/tectonic/tectonic.exe` for the current Windows workspace. If it is unavailable after cloning, install Tectonic separately or use a standard ACM-compatible LaTeX toolchain.
-
-The implementation reads the following environment variables:
-
-| Variable | Purpose |
-| --- | --- |
-| `OPENAI_API_KEY` | API key for the OpenAI-compatible model provider. |
-| `OPENAI_BASE_URL` | Optional OpenAI-compatible endpoint; see `env.template`. |
-
-## 4. Quick Validation Path
-
-Use this path when the goal is to check that the artifact contains the same data used by the paper.
-
-```powershell
-npm run export-operations-jsonl
-npm run preflight:experiments
 python scripts/verify_artifact_tables.py
-python scripts/build_rq3_generic_feedback_report.py
-python scripts/generate_use_strong_114.py --run-use
+python -m unittest scripts.test_verify_artifact_tables -v
 ```
 
-Expected outputs:
-
-- A successful 114-operation input audit with 114 unique input hashes.
-- A preflight report showing the frozen input/prompt hashes, isolated v5 result count, and excluded legacy-file count.
-- Console output from `scripts/verify_artifact_tables.py` summarizing RQ1/RQ2/RQ3 only from `results/contractgen-study-v6/`.
-- `results/contractgen-study-v6/reports/rq3_generic_feedback/rq3_generic_feedback_by_model.csv`
-- `results/contractgen-study-v6/validation/use_strong_114/manifest.csv`
-- `results/contractgen-study-v6/validation/use_strong_114/summary.json`
-
-The paper tables are derived from the raw and summarized result folders under `results/`; no separate table snapshot directory is required. The regenerated `*_check` directories are useful sanity checks and should not be treated as new experiment runs unless the manuscript is intentionally updated.
-
-## 5. Rebuilding the Paper
-
-If the LaTeX manuscript source is included in the same archive, rebuild it with:
+For machine-readable output, including the selected attempt for every offline
+replay operation:
 
 ```powershell
-tools\tectonic\tectonic.exe main.tex
-Copy-Item -LiteralPath main.pdf -Destination Contract_Gen_LaTeX.pdf -Force
+python scripts/verify_artifact_tables.py --json
 ```
 
-Expected output:
+The verifier reads, but never rewrites, inputs or results. It checks operation
+coverage, duplicate attempts, recorded input/prompt provenance, generation budgets,
+paired initial-candidate hashes, and selected stored summaries. It recomputes
+Parse@5/Pass@5 counts, recorded generation counts, the paired pilot, USE compile
+status counts, and decidable shared-state agreement denominators.
 
-- `main.pdf`
-- `Contract_Gen_LaTeX.pdf`
+This is not a replay of backend execution or a proof that recorded validator
+decisions are correct. It does not yet reconstruct every manuscript statistic,
+figure, significance test, or confidence interval. Historical report builders
+under `scripts/` have not all been re-audited for the current paths and protocols;
+do not treat their defaults as the canonical reproduction route.
 
-The implementation-only GitHub repository does not need to include the paper source for artifact validation; the experiment and table checks above are independent of LaTeX compilation.
+Do not export inputs or regenerate USE files merely to inspect frozen evidence:
+those commands write files. New runs and revised semantics need separate output
+directories and versioned configurations, never silent replacement of v6 records.
 
-## 6. Reproducing Each Research Question
+## 3. Main Recorded Counts
 
-### RQ1: Contract-generation effectiveness
+All rows below use 114 operation-context instances. Parse@5 and Pass@5 are observed
+attainment counts within up to five generations, not unbiased sampling estimators.
+Calls count model generations, including internal repair generations, not graph
+nodes or the number of stream records.
 
-Evidence:
+| Setting | Model | Parse@5 | Pass@5 | Calls |
+| --- | --- | ---: | ---: | ---: |
+| ContractGen full feedback | gpt-5.5 | 114 | 104 | 122 |
+| ContractGen full feedback | gpt-5.4 | 111 | 102 | 134 |
+| ContractGen full feedback | gemini-3.5-flash | 114 | 101 | 128 |
+| ContractGen full feedback | claude-opus-4-7 | 114 | 102 | 122 |
+| PureLLM fixed-five | gpt-5.5 | 111 | 103 | 570 |
+| CodexPrompt contract transfer | gpt-5.5 | 75 | 34 | 570 |
+| PathOCL contract transfer | gpt-5.5 | 70 | 17 | 570 |
 
-- `results/contractgen-study-v6/contract_gen/full_feedback/`
-- `results/contractgen-study-v6/baselines/`
+PureLLM shares the generation guidance with ContractGen. The two prompting
+transfers use text output and omit the shared generation grammar/rules; PathOCL
+also varies ranked path context. Their shared manifest hash does not imply
+identical actual prompts. They are adaptations to the operation-contract task,
+not exact reruns of the original papers or controlled tests of feedback alone.
+Three CodexPrompt attempts record parser failures with subsequent execution
+skipped; these remain unsuccessful attempts, not missing successes or removals.
 
-Analysis command:
+### Stopping Versus Feedback
+
+The full-feedback primary run uses 122 calls versus 570 fixed-five PureLLM calls.
+Offline replay takes each stored PureLLM sequence in attempt order and stops at
+the first pre-execution-valid candidate, irrespective of its Jest outcome, or at
+attempt five. It requires 139 counterfactual calls and retains 111 Parse@5 and
+103 Pass@5 on these particular sequences.
+
+Thus 431 of the 448 calls in the fixed-five-to-ContractGen difference are avoidable
+under this replay. The remaining 17-call difference compares different generation
+trajectories and is not a causal estimate of diagnostic feedback. Call counts are
+not token expenditure, monetary cost, or measured online latency. Equal replay
+success on these records is not a guarantee for other runs.
+
+### Paired Feedback Pilot
+
+Source: `results/contractgen-study-v6/rq3_paired/gpt-5.5/`.
+All treatments reuse the same 114 initial candidates. Only five fail pre-execution
+validation and enter repair branches.
+
+| Treatment | Recovered initial failures | Final Pass | Total calls |
+| --- | ---: | ---: | ---: |
+| No feedback | 2/5 | 102/114 | 129 |
+| Generic feedback | 1/5 | 101/114 | 131 |
+| Full diagnostics | 5/5 | 104/114 | 124 |
+
+This is a small mechanism pilot, not general evidence that every feedback type
+improves success. Generic does not outperform no feedback here. The paired
+full-feedback count of 124 must not be substituted for the primary run's 122.
+Unpaired generic/no-feedback runs are separate trajectories and must not be pooled
+with these branches as additional independent paired samples. The retained v6
+directories do not contain the previously documented end-to-end architecture run.
+
+## 4. External and Internal Checks
+
+External compile source:
+`results/contractgen-study-v6/validation/use-external-gpt-5.5-v2/`.
+
+| USE compilation stage | Successful / planned |
+| --- | ---: |
+| Class model | 114/114 |
+| Definitions and precondition | 108/114 |
+| Definitions and postcondition | 106/114 |
+| Complete converted operation contract | 105/114 |
+
+Conversion adaptations are recorded in `manifest.json`. These are syntax/type
+compilation results for converted artifacts, not successful execution of 105
+operations or proof of equivalence to the original contracts.
+
+Shared-state source:
+`results/contractgen-study-v6/validation/use_ocltsvm_semantic_agreement/final_30ops/`.
+
+| Comparison | Planned | Decidable/recorded pairs | Agreements |
+| --- | ---: | ---: | ---: |
+| USE vs OCLTSVM, preconditions | 60 | 55 | 54 |
+| USE vs OCLTSVM, postconditions | 30 | 0 | Not evaluated independently |
+| OCLTSVM vs Jest, preconditions | 60 | 57 | 57 |
+| OCLTSVM vs Jest, postconditions | 30 | 30 | 28 |
+
+Unsupported, error, and missing decisions are not agreements. The 85/87 internal
+OCLTSVM-Jest agreement may share implementation assumptions and is not an
+independent postcondition validation. Pilot directories and earlier USE conversion
+versions are diagnostic history, not additional independent samples.
+
+## 5. Optional Regeneration
+
+Use Node.js, the repository's `package.json`/`yarn.lock`, Python, and compatible
+model credentials. Install application dependencies with
+`yarn install --frozen-lockfile`. `env.template` documents `OPENAI_API_KEY` and
+`OPENAI_BASE_URL`; never publish a populated `.env`.
+
+`tools/` retains USE 7.5.0 and the ANTLR JAR. USE requires Java 21. Preserve these
+bundled tools and their distribution notices in the reproducibility archive.
+
+The relevant runner help is available without making model requests:
 
 ```powershell
-python scripts/build_rq_analysis_report.py
+python script/run_rq1_validity_experiments.py --help
+python script/run_baseline_llm_only.py --help
+python script/run_paired_feedback_ablation.py --help
+python scripts/generate_use_strong_114.py --help
+python scripts/run_use_ocltsvm_semantic_agreement.py --help
 ```
 
-The key paper-level comparison is the syntax-validity rate across reproduced baseline-style prompts, PureLLM, and Contract Gen.
+For generation, start the application with `yarn dev`, then use the documented
+runner options and a fresh output directory. ContractGen's reported path uses
+`--backend next`; `direct` is not that treatment. Do not run `--force` against the
+retained study to reproduce a table. Before starting a new study, validate inputs
+with `npm run validate-inputs`, record configurations and the repository revision,
+and explicitly inspect any export/preflight output changes.
 
-### RQ2: Beyond-syntax reliability
+Record model/provider, request parameters, actual input/output tokens when
+available, request and validation latency, failures, retries, and configuration
+hashes. Hosted model reruns are not guaranteed to match archived responses.
+Missing historical token counts cannot be replaced by call counts or current
+provider prices.
 
-Evidence:
+## 6. Manuscript and Release Status
 
-- `results/contractgen-study-v6/contract_gen/full_feedback/`
-- `results/contractgen-study-v6/baselines/`
-- `results/contractgen-study-v6/validation/use_strong_114/summary.json`
+LaTeX manuscript source is not currently included in this repository. The read-only
+result checks do not require it. `docs/TOSEM_REVISION_PLAN.md` contains revision
+instructions and proposed replacement passages, not a modified manuscript PDF.
 
-The USE sanity check is an external agreement check for generated definition and precondition clauses. It does not claim full post-state equivalence because USE invariants do not directly model operation postconditions involving `oclIsNew`, `@pre`, mutation, and result values.
+`CITATION.cff.example` and `.zenodo.json.example` remain templates, not completed
+release metadata. Confirm author order, title, version, licensing, and the actual
+Zenodo record before creating the final citation metadata and frozen release.
+GitHub-Zenodo linkage alone does not establish that a final DOI has been published.
 
-To regenerate the USE artifacts without running USE:
-
-```powershell
-python scripts/generate_use_strong_114.py
-```
-
-To also run USE, provide a USE executable:
-
-```powershell
-python scripts/generate_use_strong_114.py --run-use --use-bat tools/use-7.5.0/bin/use.bat
-```
-
-Expected paper result from the included run:
-
-- Generated contracts from selected setting: 100.00%.
-- USE-encodable precondition: 99.12%.
-- USE semantic load: 96.49%.
-
-### RQ3: Mechanism and efficiency
-
-Evidence:
-
-- `results/contractgen-study-v6/contract_gen/{no_feedback,generic_feedback,full_feedback}/`
-- `results/contractgen-study-v6/ablations/end_to_end_full_feedback/`
-
-Paper-level interpretation:
-
-- Generic failure notices improve over no feedback.
-- Full localized diagnostics improve further.
-- The staged Contract Gen architecture reaches useful results with far fewer attempts than end-to-end full-feedback generation, even though the end-to-end variant has a slightly higher final Pass@5 in the current GPT-5.4 run. Both treatments use one LLM; this comparison isolates pipeline structure rather than agent count.
-
-## 7. Full Experiment Re-run Notes
-
-Full LLM experiments are intentionally separated from table reproduction because they require paid or rate-limited model endpoints. The relevant scripts are:
-
-| Experiment | Script |
-| --- | --- |
-| Contract Gen full-diagnostic runs | `script/run_rq1_validity_experiments.py` |
-| End-to-end full-feedback pipeline ablation | `script/run_rq3_end_to_end_full_feedback.py` |
-| PureLLM baseline | `script/run_baseline_llm_only.py` |
-| CodexPrompt-style baseline | `script/run_codex_prompt_style_baseline.py` |
-| PathOCL-style baseline | `script/run_pathocl_style_baseline.py` |
-| Baseline batch helper | `scripts/run_baseline_llm_batch.ps1` |
-
-Before re-running, record the model provider, model identifier, temperature/top-p/seed if available, date, and API endpoint version. These details matter because LLM services can change over time.
-Run `npm run export-operations-jsonl` and then `npm run preflight:experiments` before issuing model calls. The Contract Gen runner defaults to `--backend next`; its `direct` backend is a prompt-level diagnostic path and is not the treatment reported in the paper.
-All experiment runners require `contractgen-operation-input-v2`, verify oracle isolation, and reject an existing result directory whose input, manifest prompt, method prompt, feedback, or graph configuration does not match the current run.
-Current defaults use isolated subdirectories under `results/contractgen-study-v6/`. `--force` refuses to delete legacy or foreign records; choose a new output directory when the study marker or configuration differs.
-Each new result row records both the frozen manifest hashes and the version/hash of the actual method-specific prompt sent to the model; comparisons with mismatched hashes are invalid.
-
-Each manifest row also records an `oracle_id`, a `requirement_group_id`, and a
-Boolean `has_return_value`. These fields link an operation-context instance to its
-Jest oracle, identify repeated requirement text across different contexts, and make
-void operations explicit. Main results use all 114 instances. The runner additionally
-writes `rq1_syntax_validity_by_evaluation_unit.csv` and
-`rq2_execution_success_by_evaluation_unit.csv`; their strict requirement-level rows
-count a requirement as successful only when every context instance in the group
-succeeds.
-
-For a local implementation smoke test:
-
-```powershell
-yarn install --frozen-lockfile
-yarn lint
-yarn test
-yarn dev
-```
-
-The web API route `src/app/api/generate-ocl/route.ts` streams one JSON object per line for each graph step. The generation entry point supports `graphMode = "feedback"` or `"linear"` and `feedbackMode = "full"`, `"generic"`, or `"none"`.
-
-## 8. Expected Result Summary
-
-The current manuscript is based on the following result families:
-
-| Result family | Artifact source |
-| --- | --- |
-| Dataset summary | `data/operations.jsonl` |
-| RQ1 validity | `results/contractgen-study-v6/contract_gen/full_feedback/` and `results/contractgen-study-v6/baselines/` |
-| RQ2 execution success | Same result folders plus execution summaries and attempts logs. |
-| External USE funnel | `results/contractgen-study-v6/validation/use_strong_114/summary.json` |
-| RQ3 feedback specificity | `results/contractgen-study-v6/contract_gen/{no_feedback,generic_feedback,full_feedback}/` |
-| RQ3 pipeline-structure ablation | `results/contractgen-study-v6/ablations/end_to_end_full_feedback/` and the full-feedback Contract Gen run |
-
-## 9. Known Limitations
-
-- The included results are single recorded LLM experiment runs. Re-running against hosted models may not produce byte-identical outputs.
-- Some scripts are designed for the original Windows development environment. Paths may need small adjustments on macOS/Linux.
-- The current external USE check validates semantic loading of generated definitions and preconditions, not full operation postcondition execution.
-- The Git metadata in some copied workspace folders may be incomplete. Use the GitHub URL above as the canonical public source.
-
-## 10. Artifact Evaluation Checklist
-
-- [x] Benchmark inputs are included.
-- [x] Raw and consolidated experimental outputs are included.
-- [x] Scripts for recomputing analysis reports are included.
-- [x] Current paper tables can be reconstructed from included result folders.
-- [x] External USE sanity-check artifacts are included.
-- [x] Manuscript source and figures are included.
-- [ ] Full LLM re-run requires reviewer-provided API credentials.
-- [ ] Full USE re-run uses `tools/use-7.5.0/` and requires Java 21.
+Exclude `.env`, dependencies, build caches, coverage, and `test/tmp/` from archival
+packages; consult `.artifactignore`. Keep benchmark inputs, raw results, tests,
+source, generation guidance, bundled tools, and analysis scripts. See
+`ARTIFACT_MANIFEST.md` for the current source map.

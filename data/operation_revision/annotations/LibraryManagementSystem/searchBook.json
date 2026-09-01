@@ -1,0 +1,209 @@
+[
+  {
+    "name": "searchBookByBarCode",
+    "status": "VERIFIED",
+    "intent": [
+      "Find books by a copy barcode.",
+      "result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))"
+    ],
+    "pre": [["The supplied barcode is a string.", "barcode.oclIsTypeOf(String)"]],
+    "post": [
+      [
+        "Return exactly the registered books having at least one copy whose barcode equals barcode.",
+        "result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))"
+      ]
+    ],
+    "features": [
+      [
+        "query",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))"
+      ],
+      [
+        "collection_operation",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))"
+      ],
+      [
+        "result_constraint",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Copys->exists(c:BookCopy | c.Barcode = barcode))"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Book-to-copy traversal and nested existence filter.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Matching copy leads to its book being returned; nonmatching/multiple/empty cases untested."
+      ],
+      ["negative", ["p0"], "Numeric barcode violates explicit string-type guard."]
+    ],
+    "effects_audit": "No mutation, case normalization, fuzzy matching, sorting, authentication or additional nonempty guard added. Returned collection can be empty; tests do not exhaust filter correctness."
+  },
+  {
+    "name": "searchBookByTitle",
+    "status": "VERIFIED",
+    "intent": [
+      "Find books by their exact title.",
+      "result = Book.allInstances()->select(book:Book | book.Title = title)"
+    ],
+    "pre": [["The supplied title is not empty.", "title <> \"\""]],
+    "post": [
+      [
+        "Return exactly the registered books whose title equals title.",
+        "result = Book.allInstances()->select(book:Book | book.Title = title)"
+      ]
+    ],
+    "features": [
+      [
+        "query",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Title = title)"
+      ],
+      [
+        "collection_operation",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Title = title)"
+      ],
+      [
+        "result_constraint",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Title = title)"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "One exact field filter.",
+    "scenarios": [
+      ["positive", ["q0"], "Matching title included; exclusion/empty-result cases untested."],
+      ["negative", ["p0"], "Empty title violates nonempty guard."]
+    ],
+    "effects_audit": "No mutation, case normalization, fuzzy matching, sorting, authentication or additional nonempty guard added. Returned collection can be empty; tests do not exhaust filter correctness."
+  },
+  {
+    "name": "searchBookByAuthor",
+    "status": "VERIFIED",
+    "intent": [
+      "Find books by their exact author field.",
+      "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+    ],
+    "pre": [["The supplied authorname is not empty.", "authorname <> \"\""]],
+    "post": [
+      [
+        "Return exactly the registered books whose author equals authorname.",
+        "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+      ]
+    ],
+    "features": [
+      [
+        "query",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+      ],
+      [
+        "collection_operation",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+      ],
+      [
+        "result_constraint",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "One exact field filter.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Matching author included; no substring or multi-author policy asserted."
+      ],
+      ["negative", ["p0"], "Empty authorname violates nonempty guard."]
+    ],
+    "effects_audit": "No mutation, case normalization, fuzzy matching, sorting, authentication or additional nonempty guard added. Returned collection can be empty; tests do not exhaust filter correctness."
+  },
+  {
+    "name": "searchBookByISBN",
+    "status": "VERIFIED",
+    "intent": [
+      "Find books by their exact ISBN.",
+      "result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)"
+    ],
+    "pre": [["The supplied iSBNnumber is a string.", "iSBNnumber.oclIsTypeOf(String)"]],
+    "post": [
+      [
+        "Return exactly the registered books whose ISBN equals iSBNnumber.",
+        "result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)"
+      ]
+    ],
+    "features": [
+      [
+        "query",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)"
+      ],
+      [
+        "collection_operation",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)"
+      ],
+      [
+        "result_constraint",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.ISBn = iSBNnumber)"
+      ]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "One exact field filter.",
+    "scenarios": [
+      ["positive", ["q0"], "Matching ISBN included; no uniqueness assumption."],
+      ["negative", ["p0"], "Numeric ISBN violates explicit type guard."]
+    ],
+    "effects_audit": "No mutation, case normalization, fuzzy matching, sorting, authentication or additional nonempty guard added. Returned collection can be empty; tests do not exhaust filter correctness."
+  },
+  {
+    "name": "searchBookBySubject",
+    "status": "VERIFIED",
+    "intent": [
+      "Find books associated with a subject of the supplied name.",
+      "result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))"
+    ],
+    "pre": [["The supplied subject is a string.", "subject.oclIsTypeOf(String)"]],
+    "post": [
+      [
+        "Return exactly the registered books having at least one associated subject whose name equals subject.",
+        "result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))"
+      ]
+    ],
+    "features": [
+      [
+        "query",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))"
+      ],
+      [
+        "collection_operation",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))"
+      ],
+      [
+        "result_constraint",
+        "postcondition",
+        "result = Book.allInstances()->select(book:Book | book.Subject->exists(s:Subject | s.Name = subject))"
+      ]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Book-to-subject traversal and nested existence filter.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Associated subject's name matches and book is returned; hierarchy expansion untested and unspecified."
+      ],
+      ["negative", ["p0"], "Numeric subject violates explicit type guard."]
+    ],
+    "effects_audit": "No mutation, case normalization, fuzzy matching, sorting, authentication or additional nonempty guard added. Returned collection can be empty; tests do not exhaust filter correctness."
+  }
+]

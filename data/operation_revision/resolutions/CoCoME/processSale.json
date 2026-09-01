@@ -1,0 +1,26 @@
+{
+  "endSale": {
+    "assessment": "The retrieved original model also declares Set(Real) for collected line subtotals; its RM2DOC text is derived from the same expression. Neither source distinguishes equal subtotals. The local map-based implementation shows backend behavior but cannot independently certify the intended requirement. Do not use the implementation under evaluation to resolve its own gold semantics.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract ProcessSaleService::endSale() : Real {"
+    },
+    "updates": {
+      "missing": [
+        "Confirm whether the total counts each sales line or each distinct subtotal value. The original Set/collect formulation and its generated documentation do not independently resolve multiplicity; existing tests use distinct subtotals only."
+      ]
+    }
+  },
+  "makeCashPayment": {
+    "assessment": "The original precondition also omits CurrentStore availability, although postconditions link it and update its Sales collection. Its RM2DOC prose does not add such an invariant. Preserved local context and native context are not silently merged; confirmation of the session/environment contract is still needed.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract ProcessSaleService::makeCashPayment(amount : Real) : Boolean {"
+    },
+    "updates": {
+      "missing": [
+        "Provide or confirm the session invariant guaranteeing CurrentStore before payment, or specify failure behavior when it is missing. The retrieved original formal contract has the same missing guard; test setup is not sufficient evidence to invent one."
+      ]
+    }
+  }
+}

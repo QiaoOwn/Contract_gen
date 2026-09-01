@@ -1,0 +1,179 @@
+[
+  {
+    "name": "listBorrowHistory",
+    "status": "NEEDS_REVIEW",
+    "intent": ["Retrieve the selected user's loan history.", "result = user.LoanedBook"],
+    "pre": [["A user with the supplied uid exists.", "user.oclIsUndefined() = false"]],
+    "post": [["Return the selected user's loan records.", "result = user.LoanedBook"]],
+    "features": [
+      ["query", "postcondition", "result = user.LoanedBook"],
+      ["collection_operation", "postcondition", "user.LoanedBook"],
+      ["result_constraint", "postcondition", "result = user.LoanedBook"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "User lookup and direct collection result.",
+    "conflicts": [
+      "Positive Jest asserts JavaScript array identity rather than only collection contents. Negative Jest passes numeric 99 although preserved uid type is String."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Returns user's loan list; array-identity assertion is representation-specific."
+      ],
+      [
+        "negative",
+        ["p0"],
+        "Unknown user explains rejection, but numeric uid is outside the declared input type."
+      ]
+    ],
+    "effects_audit": "Returned and unreturned loans are not filtered; no mutation inferred."
+  },
+  {
+    "name": "listHodingBook",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "List the selected user's loans that have not been returned.",
+      "l.IsReturned = false"
+    ],
+    "pre": [["A user with the supplied uid exists.", "user.oclIsUndefined() = false"]],
+    "post": [
+      [
+        "Return exactly the user's loan records marked as not returned.",
+        "result = user.LoanedBook->select(l:Loan | l.IsReturned = false)"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = user.LoanedBook"],
+      ["collection_operation", "postcondition", "l.IsReturned = false"],
+      ["result_constraint", "postcondition", "result = user.LoanedBook"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Single user-specific loan filter.",
+    "conflicts": [
+      "Negative Jest passes numeric 99 for preserved String uid; no signature correction made."
+    ],
+    "scenarios": [
+      ["positive", ["q0"], "Unreturned loan included and returned loan excluded."],
+      [
+        "negative",
+        ["p0"],
+        "Unknown user guard explains rejection, but fixture uses out-of-type uid."
+      ]
+    ],
+    "effects_audit": "Result is Loan records, not Book/BookCopy objects; original spelling listHodingBook preserved."
+  },
+  {
+    "name": "listOverDueBook",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "List copies associated with the selected user's unreturned loans that carry an overdue fee.",
+      "l.IsReturned = false and l.OverDueFee > 0",
+      "definition"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      [
+        "The collection of this user's unreturned loans with positive overdue fees is defined.",
+        "loans.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      [
+        "Return the book copies linked to the user's unreturned loans with positive overdue fees.",
+        "result = loans->collect(l:Loan | l.LoanedCopy)"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = loans"],
+      ["collection_operation", "postcondition", "loans->collect"],
+      ["result_constraint", "postcondition", "result = loans"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Return collection multiplicity is unresolved.",
+    "missing": [
+      "Original result specification is needed to resolve preserved Set(BookCopy) return type versus collected loan-to-copy values, which may repeat the same copy. No distinctness invariant or deduplication policy is supplied; positive Jest checks one matching copy only."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Matching unreturned fee-positive loan's copy included; exclusivity, empty result and repeated-copy semantics untested."
+      ],
+      [
+        "negative",
+        ["p0"],
+        "Unknown String uid violates user existence; unchanged loan repository is a rejection convention."
+      ]
+    ],
+    "effects_audit": "Overdue criterion is positive fee, not date comparison. No fee computation, returned-loan inclusion or deduplication invented."
+  },
+  {
+    "name": "listReservationBook",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "List the copies referenced by the selected user's reservations.",
+      "result = res->collect(r:Reserve | r.ReservedCopy)"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      ["The selected user's reservation collection is defined.", "res.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "Return the copies referenced by the selected user's reservation records.",
+        "result = res->collect(r:Reserve | r.ReservedCopy)"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = res"],
+      ["collection_operation", "postcondition", "res->collect"],
+      ["result_constraint", "postcondition", "result = res"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Return collection multiplicity is unresolved.",
+    "missing": [
+      "Original result specification must resolve Set(BookCopy) return type versus potentially repeated copy values from multiple reservations. No uniqueness invariant or deduplication policy is established by the single-reservation Jest scenario."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Referenced copy included; no test distinguishes duplicate reservation-copy projections."
+      ],
+      ["negative", ["p1"], "Undefined reservation collection violates explicit guard."]
+    ],
+    "effects_audit": "No open-reservation filter added; source returns copies of all user reservation records, not only active ones."
+  },
+  {
+    "name": "listRecommendBook",
+    "status": "VERIFIED",
+    "intent": ["List the selected user's book recommendation records.", "result = rBooks"],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      [
+        "The selected user's recommendation collection is defined.",
+        "rBooks.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [["Return the selected user's recommendation records.", "result = rBooks"]],
+    "features": [
+      ["query", "postcondition", "result = rBooks"],
+      ["collection_operation", "definition", "rBooks:Set(RecommendBook) = user.RecommendedBook"],
+      ["result_constraint", "postcondition", "result = rBooks"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Guarded direct collection return.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "User's recommendation present in result; complete collection equality untested."
+      ],
+      ["negative", ["p1"], "Undefined recommendation list violates guard."]
+    ],
+    "effects_audit": "No recommendation creation, sorting or filtering inferred."
+  }
+]

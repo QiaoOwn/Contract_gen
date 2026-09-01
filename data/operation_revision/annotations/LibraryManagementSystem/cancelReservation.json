@@ -1,0 +1,40 @@
+[
+  {
+    "name": "cancelReservation",
+    "status": "VERIFIED",
+    "intent": [
+      "Cancel the selected user's reservation for the selected book copy.",
+      "res.IsReserveClosed = true"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      ["A book copy with the supplied barcode exists.", "copy.oclIsUndefined() = false"],
+      ["The copy's status is LOANED.", "copy.Status = CopyStatus::LOANED"],
+      ["The copy is marked as reserved.", "copy.IsReserved = true"],
+      ["A reservation linking this user and copy exists.", "res.oclIsUndefined() = false"],
+      ["The selected reservation is open.", "res.IsReserveClosed = false"]
+    ],
+    "post": [
+      ["Clear the copy's reserved flag.", "copy.IsReserved = false"],
+      ["Mark the selected reservation as closed.", "res.IsReserveClosed = true"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["attribute_update", "postcondition", "copy.IsReserved = false"],
+      ["state_transition", "postcondition", "res.IsReserveClosed = true"],
+      ["multi_object_effect", "postcondition", "copy.IsReserved = false"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Existing user/copy/reservation lookup with two unconditional flag updates.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Reserved flag cleared, reservation closed, true result asserted; NORMAL and suspension zero in setup are not reference guards."
+      ],
+      ["negative", ["p0", "p1", "p4"], "Missing user/copy/reservation violate source guards."]
+    ],
+    "effects_audit": "Reservation is closed, not deleted; no association removal or copy availability change inferred."
+  }
+]

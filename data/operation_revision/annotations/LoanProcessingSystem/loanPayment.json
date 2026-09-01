@@ -1,0 +1,37 @@
+[
+  {
+    "name": "loanPayment",
+    "status": "VERIFIED",
+    "intent": [
+      "Reduce the selected open loan's outstanding amount by its repayment amount.",
+      "loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount"
+    ],
+    "pre": [
+      ["A loan with the supplied loanid exists.", "loan.oclIsUndefined() = false"],
+      ["The loan has status LSOPEN.", "loan.Status = LoanStatus::LSOPEN"]
+    ],
+    "post": [
+      [
+        "Set the loan's remaining amount to its remaining amount before this operation minus its repayment amount.",
+        "loan.RemainAmountToPay = loan.RemainAmountToPay@pre - loan.RepaymentAmount"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["pre_state_relation", "postcondition", "loan.RemainAmountToPay@pre - loan.RepaymentAmount"],
+      ["attribute_update", "postcondition", "loan.RemainAmountToPay ="],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "One pre-state arithmetic update and open-loan guard.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1"],
+        "Remaining amount 10 becomes 9 for repayment 1; true result asserted."
+      ],
+      ["negative", ["p0"], "Unknown loan ID violates existence guard."]
+    ],
+    "effects_audit": "No nonnegative remaining-balance guard, bank transfer, payment record, automatic closure or repayment amount update inferred."
+  }
+]

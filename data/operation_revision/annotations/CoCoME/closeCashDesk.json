@@ -1,0 +1,37 @@
+[
+  {
+    "name": "closeCashDesk",
+    "status": "VERIFIED",
+    "intent": [
+      "Close the selected cash desk and make it the current cash desk.",
+      "self.CurrentCashDesk = cd"
+    ],
+    "pre": [
+      ["A cash desk with the supplied cashDeskID exists.", "cd.oclIsUndefined() = false"],
+      ["The selected cash desk is open.", "cd.IsOpened = true"],
+      ["A current store is selected.", "CurrentStore.oclIsUndefined() = false"],
+      ["The current store is open.", "CurrentStore.IsOpened = true"]
+    ],
+    "post": [
+      ["Make the selected cash desk the current cash desk.", "self.CurrentCashDesk = cd"],
+      ["Mark the selected cash desk as closed.", "cd.IsOpened = false"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["temporary_state", "postcondition", "self.CurrentCashDesk = cd"],
+      ["state_transition", "postcondition", "cd.IsOpened = false"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Guarded desk-state change and current-desk binding without branching.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Opened desk/store become closed desk and current binding; true result checked."
+      ],
+      ["negative", ["p0", "p2"], "Missing desk and current store violate explicit guards."]
+    ],
+    "effects_audit": "No requirement that selected desk belongs to current store is invented; current-desk binding retained."
+  }
+]

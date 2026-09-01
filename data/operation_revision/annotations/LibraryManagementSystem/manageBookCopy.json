@@ -1,0 +1,52 @@
+[
+  {
+    "name": "addBookCopy",
+    "status": "VERIFIED",
+    "intent": ["Add a new physical copy to the selected book.", "book.Copys->includes(copy)"],
+    "pre": [
+      ["A book with the supplied callNo exists.", "book.oclIsUndefined() = false"],
+      ["The selected book has no copy with the supplied barcode.", "bc.oclIsUndefined() = true"]
+    ],
+    "post": [
+      ["Create a new book copy.", "copy.oclIsNew()"],
+      ["Set the new copy's barcode to barcode.", "copy.Barcode = barcode"],
+      ["Set the new copy's status to AVAILABLE.", "copy.Status = CopyStatus::AVAILABLE"],
+      ["Set the new copy's location to location.", "copy.Location = location"],
+      ["Mark the new copy as not reserved.", "copy.IsReserved = false"],
+      ["Add the new copy to the selected book's copies.", "book.Copys->includes(copy)"],
+      ["Link the new copy to the selected book.", "copy.BookBelongs = book"],
+      [
+        "Increase the book's copy count by one relative to its value before this operation.",
+        "book.CopyNum = book.CopyNum@pre + 1"
+      ],
+      [
+        "Store the new copy among the system's book copies.",
+        "BookCopy.allInstances()->includes(copy)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "copy.oclIsNew()"],
+      ["association_add", "postcondition", "book.Copys->includes(copy)"],
+      ["collection_operation", "postcondition", "book.Copys->includes(copy)"],
+      ["pre_state_relation", "postcondition", "book.CopyNum@pre + 1"],
+      ["multi_object_effect", "postcondition", "copy.BookBelongs = book"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Book-scoped duplicate guard, new copy, bidirectional association and counter increment.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q6", "q7", "q8", "q9"],
+        "Stored copy fields, book link, count increment and true checked; book.Copys membership not directly asserted."
+      ],
+      [
+        "negative",
+        ["p1"],
+        "Second copy with same barcode for same book is rejected; setup's first success indirectly depends on adding to book copies."
+      ]
+    ],
+    "effects_audit": "Uniqueness scope is only selected book.Copys, not all copies globally. No automatic loan/reservation-record initialization inferred."
+  }
+]

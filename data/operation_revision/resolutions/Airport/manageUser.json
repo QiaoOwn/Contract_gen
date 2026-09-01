@@ -1,0 +1,31 @@
+{
+  "createStaff": {
+    "assessment": "V2 retains all specified creation, field, boss-branch and result checks. Remove only the unprovided missing-boss else effect; this is source alignment, not evidence that arbitrary boss updates are desirable. Historical tests are unchanged.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/Airport/airms.remodel",
+      "quote": "Contract AirportSystem::createStaff("
+    },
+    "updates": {
+      "status": "VERIFIED",
+      "conflicts": [],
+      "reference_audit": "The original formal contract has only an existing-boss conditional. V2 tests no longer require an undefined boss when that branch is inactive."
+    },
+    "oracle_edits": [
+      {
+        "before": "    expect(staff?.Boss).toBeUndefined();\n",
+        "after": "",
+        "reason": "No else-branch boss constraint exists in the local or upstream formal contract."
+      },
+      {
+        "before": "Happy Path: creates staff without boss and returns true",
+        "after": "creates staff when boss lookup has no match and returns true",
+        "reason": "Do not imply an unspecified boss post-state in the test title."
+      }
+    ],
+    "scenario_assessments": [
+      "Creation, specified field values, storage and true result checked; no else-branch boss assertion.",
+      "Existing boss assignment and result checked.",
+      "Duplicate staff ID violates the explicit absence guard; rejection checks retained."
+    ]
+  }
+}

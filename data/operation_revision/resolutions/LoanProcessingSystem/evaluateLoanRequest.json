@@ -1,0 +1,57 @@
+{
+  "listTenLoanRequest": {
+    "assessment": "The pinned RM2PT specification selects every REFERENCESVALIDATED request, assigns the collection to CurrentLoanRequests and returns it. Despite the legacy name, it specifies no ten-item limit or ordering. V2 checks exact unordered membership in both outputs.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+      "quote": "Contract EvaluateLoanRequestModule::listTenLoanRequest() : Set(LoanRequest) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toContain(loanRequest);\n    expect(service.CurrentLoanRequests).toContain(loanRequest);",
+        "after": "    expectSameMembers(result, [loanRequest]);\n    expectSameMembers(service.CurrentLoanRequests, [loanRequest]);",
+        "reason": "Require complete collection values rather than subset containment."
+      },
+      {
+        "before": "    expect(result).toEqual([validatedA, validatedB]);\n    expect(result).not.toContain(submitted);\n    expect(service.CurrentLoanRequests).toEqual(result);",
+        "after": "    expectSameMembers(result, [validatedA, validatedB]);\n    expectSameMembers(service.CurrentLoanRequests, [validatedA, validatedB]);",
+        "reason": "Check exact unordered filtered values and temporary state; exclusion follows from exact membership."
+      }
+    ],
+    "scenario_assessments": [
+      "Exactly the validated request is returned and loaded into CurrentLoanRequests.",
+      "Exactly all REFERENCESVALIDATED requests are returned and stored; a SUBMITTED request is excluded and ordering is ignored."
+    ]
+  },
+  "listAvaiableLoanTerm": {
+    "assessment": "The pinned RM2PT specification has no guard and returns every registered LoanTerm. It does not require repository-array identity, ordering or an additional repository frame clause. V2 checks exact unordered result membership against an independent expected list.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+      "quote": "Contract EvaluateLoanRequestModule::listAvaiableLoanTerm() : Set(LoanTerm) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toBe(getRepository(LoanTerm));",
+        "after": "    expectSameMembers(result, []);",
+        "reason": "The empty repository must yield an empty result; array identity is not specified."
+      },
+      {
+        "before": "    expect(result).toBe(terms);\n    expect(result).toEqual([first, second]);\n    expect(terms).toHaveLength(2);",
+        "after": "    expectSameMembers(result, [first, second]);",
+        "reason": "Exact unordered result membership replaces identity, ordering and an unsupported repository-frame assertion."
+      },
+      {
+        "before": "returns all available terms without copying or filtering the repository",
+        "after": "returns all registered loan terms irrespective of array representation",
+        "reason": "Align the title with the explicit operation contract."
+      }
+    ],
+    "scenario_assessments": [
+      "No registered terms produces an empty result.",
+      "Exactly all registered terms are returned; omissions, extras and duplicates fail while ordering is ignored."
+    ]
+  }
+}

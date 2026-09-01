@@ -1,0 +1,130 @@
+[
+  {
+    "name": "enterLoanInformation",
+    "status": "VERIFIED",
+    "intent": [
+      "Record the supplied loan application information as the current new request.",
+      "self.CurrentLoanRequest = loa"
+    ],
+    "pre": [
+      ["No loan request with the supplied requestid exists.", "loanrequest.oclIsUndefined() = true"]
+    ],
+    "post": [
+      ["Create a new loan request.", "loa.oclIsNew()"],
+      ["Set the new request's request identifier to requestid.", "loa.RequestID = requestid"],
+      ["Set the new request's name to name.", "loa.Name = name"],
+      ["Set the new request's requested loan amount to loanamount.", "loa.LoanAmount = loanamount"],
+      ["Set the new request's loan purpose to loanpurpose.", "loa.LoanPurpose = loanpurpose"],
+      ["Set the new request's income to income.", "loa.Income = income"],
+      ["Set the new request's phone number to phonenumber.", "loa.PhoneNumber = phonenumber"],
+      [
+        "Set the new request's postal address to postaladdress.",
+        "loa.PostalAddress = postaladdress"
+      ],
+      ["Set the new request's zip code to zipcode.", "loa.ZipCode = zipcode"],
+      ["Set the new request's email to email.", "loa.Email = email"],
+      [
+        "Set the new request's work references to workreferences.",
+        "loa.WorkReferences = workreferences"
+      ],
+      [
+        "Set the new request's credit references to creditreferences.",
+        "loa.CreditReferences = creditreferences"
+      ],
+      [
+        "Set the new request's checking-account number to checkingaccountnumber.",
+        "loa.CheckingAccountNumber = checkingaccountnumber"
+      ],
+      [
+        "Set the new request's security number to securitynumber.",
+        "loa.SecurityNumber = securitynumber"
+      ],
+      [
+        "Store the new request among the system's loan requests.",
+        "LoanRequest.allInstances()->includes(loa)"
+      ],
+      ["Make the new request the current loan request.", "self.CurrentLoanRequest = loa"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "loa.oclIsNew()"],
+      ["temporary_state", "postcondition", "self.CurrentLoanRequest = loa"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Many explicit scalar initializations but no branching, association effects or pre-state arithmetic.",
+    "scenarios": [
+      [
+        "positive",
+        [
+          "q0",
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q5",
+          "q6",
+          "q7",
+          "q8",
+          "q9",
+          "q10",
+          "q11",
+          "q12",
+          "q13",
+          "q14",
+          "q15",
+          "q16"
+        ],
+        "All thirteen supplied fields, stored request, current binding and true result checked."
+      ],
+      ["negative", ["p0"], "Duplicate RequestID violates absence guard."]
+    ],
+    "effects_audit": "No initial status or score, credit/account-history creation, income/amount validation or submission side effect inferred. Associated histories required by calculateScore are not created here."
+  },
+  {
+    "name": "calculateScore",
+    "status": "VERIFIED",
+    "intent": [
+      "Assign the benchmark credit score to the current request and submit it.",
+      "self.CurrentLoanRequest.CreditScore = 100"
+    ],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"],
+      [
+        "The current request has checking-account history.",
+        "CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false"
+      ],
+      [
+        "The current request has credit history.",
+        "CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      [
+        "Set the current request's credit score to 100.",
+        "self.CurrentLoanRequest.CreditScore = 100"
+      ],
+      [
+        "Set the current request's status to SUBMITTED.",
+        "self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED"
+      ],
+      ["Return the resulting credit score.", "result = self.CurrentLoanRequest.CreditScore"]
+    ],
+    "features": [
+      ["attribute_update", "postcondition", "CreditScore = 100"],
+      ["state_transition", "postcondition", "LoanRequestStatus::SUBMITTED"],
+      ["result_constraint", "postcondition", "result = self.CurrentLoanRequest.CreditScore"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Constant score assignment and status transition under history-presence guards.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Score/result 100 and SUBMITTED checked with both histories present."
+      ],
+      ["negative", ["p0"], "Missing current request violates guard."]
+    ],
+    "effects_audit": "Score is the literal benchmark constant 100, not a formula based on credit history. No actual risk scoring, history fetching or workflow guard invented."
+  }
+]

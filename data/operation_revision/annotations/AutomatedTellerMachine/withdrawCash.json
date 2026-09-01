@@ -1,0 +1,55 @@
+[
+  {
+    "name": "inputCard",
+    "reuse": ["AutomatedTellerMachine", "checkBalance"],
+    "allow_whitespace_only": true
+  },
+  {
+    "name": "inputPassword",
+    "reuse": ["AutomatedTellerMachine", "checkBalance"],
+    "allow_whitespace_only": true
+  },
+  {
+    "name": "withdrawCash",
+    "status": "VERIFIED",
+    "intent": [
+      "Debit the requested withdrawal amount from the current card and record the withdrawal in the session.",
+      "self.InputCard.Balance = self.InputCard.Balance@pre - quantity"
+    ],
+    "pre": [
+      ["The session password has been validated.", "self.PasswordValidated = true"],
+      ["The session card ID has been validated.", "self.CardIDValidated = true"],
+      ["A current session card is present.", "self.InputCard.oclIsUndefined() = false"],
+      ["The card balance is at least quantity.", "self.InputCard.Balance >= quantity"]
+    ],
+    "post": [
+      [
+        "Reduce the current card balance by quantity relative to its balance before this operation.",
+        "self.InputCard.Balance = self.InputCard.Balance@pre - quantity"
+      ],
+      ["Record quantity as the session withdrawal amount.", "self.WithdrawedNumber = quantity"],
+      ["Mark the session as having a withdrawal.", "self.IsWithdraw = true"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["pre_state_relation", "postcondition", "self.InputCard.Balance@pre - quantity"],
+      ["attribute_update", "postcondition", "self.InputCard.Balance ="],
+      ["temporary_state", "postcondition", "self.IsWithdraw = true"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Balance arithmetic relative to the starting state plus session effects.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3"],
+        "9999 minus 100 is 9899; withdrawal amount, flag and true result agree."
+      ],
+      ["negative", ["p3"], "50 balance cannot satisfy requested quantity 100."],
+      ["negative", ["p0"], "Password validation is false."]
+    ],
+    "effects_audit": "No positive-quantity guard, denomination rule, withdrawal limit or physical-cash side effect added; none appears in reference."
+  },
+  {"name": "printReceipt", "reuse": ["AutomatedTellerMachine", "depositFunds"]},
+  {"name": "ejectCard", "reuse": ["AutomatedTellerMachine", "checkBalance"]}
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "createProductCatalog",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "product catalog",
+      "entity": "ProductCatalog",
+      "selected": "productcatalog",
+      "binding": "pro",
+      "key": ["Id", "id"],
+      "variable": "pro",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Catalog found with ID 1/name test; true result checked.",
+      "negative_audit": "Repeated ID violates explicit absence guard."
+    }
+  },
+  {
+    "name": "queryProductCatalog",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "product catalog",
+      "entity": "ProductCatalog",
+      "selected": "productcatalog",
+      "binding": "pro",
+      "key": ["Id", "id"],
+      "variable": "productcatalog",
+      "assignments": [],
+      "membership_guard": false,
+      "positive_audit": "Selected catalog returned by object identity.",
+      "negative_audit": "Missing ID violates existence guard."
+    }
+  },
+  {
+    "name": "modifyProductCatalog",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "product catalog",
+      "entity": "ProductCatalog",
+      "selected": "productcatalog",
+      "binding": "pro",
+      "key": ["Id", "id"],
+      "variable": "productcatalog",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Catalog name changed and true result asserted; ID reassignment is explicit reference-only.",
+      "negative_audit": "Missing ID violates existence guard."
+    }
+  },
+  {
+    "name": "deleteProductCatalog",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "product catalog",
+      "entity": "ProductCatalog",
+      "selected": "productcatalog",
+      "binding": "pro",
+      "key": ["Id", "id"],
+      "variable": "productcatalog",
+      "assignments": [],
+      "membership_guard": true,
+      "positive_audit": "Catalog removed from repository; true result checked. No item deletion specified.",
+      "negative_audit": "Missing ID violates existence/membership guards."
+    }
+  }
+]

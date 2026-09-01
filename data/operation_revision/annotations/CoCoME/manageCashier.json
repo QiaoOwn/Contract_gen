@@ -1,0 +1,72 @@
+[
+  {
+    "name": "createCashier",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "cashier",
+      "entity": "Cashier",
+      "selected": "cashier",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cas",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Created cashier has supplied ID/name and true result.",
+      "negative_audit": "Second creation of ID 1 violates the absence guard."
+    }
+  },
+  {
+    "name": "queryCashier",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "cashier",
+      "entity": "Cashier",
+      "selected": "cashier",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cashier",
+      "assignments": [],
+      "membership_guard": false,
+      "positive_audit": "Returned object identity is the selected cashier.",
+      "negative_audit": "Missing ID violates existence guard."
+    }
+  },
+  {
+    "name": "modifyCashier",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "cashier",
+      "entity": "Cashier",
+      "selected": "cashier",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cashier",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Changed Name and true result checked; Id assignment is reference-only.",
+      "negative_audit": "Missing ID violates existence guard."
+    }
+  },
+  {
+    "name": "deleteCashier",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "cashier",
+      "entity": "Cashier",
+      "selected": "cashier",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cashier",
+      "assignments": [],
+      "membership_guard": true,
+      "positive_audit": "Cashier repository removal and true result checked.",
+      "negative_audit": "Missing ID violates existence/membership guards."
+    }
+  }
+]

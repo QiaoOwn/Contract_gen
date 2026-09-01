@@ -1,0 +1,80 @@
+{
+  "listBorrowHistory": {
+    "assessment": "The pinned RM2PT specification requires an existing user and returns that user's LoanedBook collection. Collection value, not JavaScript array identity, is the obligation. The V2 negative scenario uses a String uid as declared by the preserved signature.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+      "quote": "Contract ListBookHistory::listBorrowHistory(uid:String): Set(Loan) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toBe(user.LoanedBook);",
+        "after": "    expectSameMembers(result, user.LoanedBook);",
+        "reason": "Check exact unordered collection membership rather than JavaScript array identity."
+      },
+      {
+        "before": "service.listBorrowHistory(99)",
+        "after": "service.listBorrowHistory('99')",
+        "reason": "Exercise the unknown-user guard with the preserved String parameter type."
+      }
+    ],
+    "scenario_assessments": [
+      "Exactly the selected user's loan records are returned; ordering and array identity are not imposed.",
+      "An unknown String uid violates the explicit user-existence guard."
+    ]
+  },
+  "listHodingBook": {
+    "assessment": "The pinned RM2PT specification returns exactly the selected user's unreturned loans. V2 checks complete unordered membership and supplies the declared String uid in the rejection scenario.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+      "quote": "Contract ListBookHistory::listHodingBook(uid:String): Set(Loan) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toContain(loan);\n    expect(result).not.toContain(loan1);",
+        "after": "    expectSameMembers(result, [loan]);",
+        "reason": "Exact membership catches missing, extra and duplicate values while treating the declared Set as unordered."
+      },
+      {
+        "before": "service.listHodingBook(99)",
+        "after": "service.listHodingBook('99')",
+        "reason": "Exercise the unknown-user guard with the preserved String parameter type."
+      }
+    ],
+    "scenario_assessments": [
+      "Exactly the selected user's unreturned loans are returned.",
+      "An unknown String uid violates the explicit user-existence guard."
+    ]
+  },
+  "listOverDueBook": {
+    "assessment": "The pinned original formal specification confirms the same projection into a declared Set(BookCopy), but does not state whether repeated copies from distinct loans are deduplicated or whether such aliasing is impossible. The single-value Jest case cannot resolve this multiplicity question.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+      "quote": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {"
+    },
+    "updates": {
+      "status": "NEEDS_SOURCE",
+      "missing": [
+        "The pinned RM2PT specification does not resolve the declared Set(BookCopy) result against potentially repeated LoanedCopy values. A domain uniqueness invariant or an authoritative deduplication rule is required."
+      ],
+      "conflicts": []
+    }
+  },
+  "listReservationBook": {
+    "assessment": "The pinned original formal specification confirms the same projection into a declared Set(BookCopy), but provides no uniqueness invariant for ReservedCopy across reservations and no explicit deduplication rule. The single-reservation Jest case cannot decide multiplicity.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+      "quote": "Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {"
+    },
+    "updates": {
+      "status": "NEEDS_SOURCE",
+      "missing": [
+        "The pinned RM2PT specification does not resolve the declared Set(BookCopy) result against potentially repeated ReservedCopy values. A domain uniqueness invariant or an authoritative deduplication rule is required."
+      ],
+      "conflicts": []
+    }
+  }
+}

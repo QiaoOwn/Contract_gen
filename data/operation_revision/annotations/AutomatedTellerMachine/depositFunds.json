@@ -1,0 +1,88 @@
+[
+  {"name": "inputCard", "reuse": ["AutomatedTellerMachine", "checkBalance"]},
+  {"name": "inputPassword", "reuse": ["AutomatedTellerMachine", "checkBalance"]},
+  {
+    "name": "depositFunds",
+    "status": "VERIFIED",
+    "intent": [
+      "Credit the supplied deposit amount to the current card and record the deposit in the session.",
+      "self.InputCard.Balance = self.InputCard.Balance@pre + quantity"
+    ],
+    "pre": [
+      ["The session password has been validated.", "self.PasswordValidated = true"],
+      ["The session card ID has been validated.", "self.CardIDValidated = true"],
+      ["A current session card is present.", "self.InputCard.oclIsUndefined() = false"],
+      ["The deposit quantity is at least 100.", "quantity >= 100"]
+    ],
+    "post": [
+      [
+        "Increase the current card balance by quantity relative to its balance before this operation.",
+        "self.InputCard.Balance = self.InputCard.Balance@pre + quantity"
+      ],
+      ["Mark the session as having a deposit.", "self.IsDeposit = true"],
+      ["Record quantity as the session deposit amount.", "self.DepositedNumber = quantity"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["pre_state_relation", "postcondition", "self.InputCard.Balance@pre + quantity"],
+      ["attribute_update", "postcondition", "self.InputCard.Balance ="],
+      ["temporary_state", "postcondition", "self.IsDeposit = true"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Pre-state balance arithmetic plus session transaction state.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3"],
+        "1000 plus 100 becomes 1100; deposit markers and result match."
+      ],
+      ["negative", ["p3"], "50 is below the explicit minimum."],
+      ["negative", ["p0", "p1"], "Unauthenticated session violates both guards."]
+    ],
+    "effects_audit": "Balance increment, amount, flag and result retained. No denomination/multiple-of-100 rule added."
+  },
+  {
+    "name": "printReceipt",
+    "status": "VERIFIED",
+    "intent": [
+      "Report the amount associated with the session transaction.",
+      "result = self.WithdrawedNumber"
+    ],
+    "pre": [
+      ["The session card ID has been validated.", "self.CardIDValidated = true"],
+      ["The session password has been validated.", "self.PasswordValidated = true"],
+      ["A current session card is present.", "self.InputCard.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "If the withdrawal indicator is set, return the recorded withdrawal amount.",
+        "result = self.WithdrawedNumber"
+      ],
+      [
+        "If the withdrawal indicator is not set and the deposit indicator is set, return the recorded deposit amount.",
+        "result = self.DepositedNumber"
+      ],
+      ["If neither transaction indicator is set, return zero.", "result = 0"]
+    ],
+    "features": [
+      ["query", "postcondition", "result = self.WithdrawedNumber"],
+      ["conditional_effect", "postcondition", "self.IsWithdraw = true"],
+      ["result_constraint", "postcondition", "result = 0"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Three-way return selection with withdrawal priority and authenticated session dependencies.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Withdrawal amount 100 agrees with the numeric branch and preserved Real signature."
+      ],
+      ["positive", ["q1"], "Deposit amount 200 agrees with the numeric branch."],
+      ["positive", ["q2"], "Zero agrees with fallback branch."],
+      ["negative", ["p0", "p1", "p2"], "Missing authentication/current card explains rejection."]
+    ],
+    "effects_audit": "All three return branches recovered; no printing side effect inferred. Both indicators true is not covered by the current scenarios, but withdrawal priority is explicit in the reference."
+  },
+  {"name": "ejectCard", "reuse": ["AutomatedTellerMachine", "checkBalance"]}
+]

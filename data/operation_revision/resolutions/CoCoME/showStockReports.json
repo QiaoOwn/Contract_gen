@@ -1,0 +1,32 @@
+{
+  "showStockReports": {
+    "assessment": "Both sources specify all registered items with no array identity/order requirement. V2 checks a snapshot of expected members and cardinality, avoiding self-comparison against a possibly mutated repository. No unsupported successful-path frame constraint is added.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract CoCoMESystem::showStockReports() : Set(Item) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toBe(getRepository(Item));",
+        "after": "    expectSameMembers(result, []);",
+        "reason": "The first fixture has no items; assert that result, not repository identity."
+      },
+      {
+        "before": "    expect(result).toBe(items);\n    expect(result).toEqual([first, second]);\n    expect(items).toHaveLength(2);",
+        "after": "    expectSameMembers(result, [first, second]);",
+        "reason": "Exact unordered result membership replaces array identity/order and unprovided repository-frame conditions."
+      },
+      {
+        "before": "returns every stocked item without changing the repository",
+        "after": "returns all registered items irrespective of array representation",
+        "reason": "Align title with the explicit collection obligation."
+      }
+    ],
+    "scenario_assessments": [
+      "Empty input repository gives an empty result.",
+      "Exactly both registered items returned; duplicates, omissions, wrong identities and extras fail, ordering is ignored."
+    ]
+  }
+}

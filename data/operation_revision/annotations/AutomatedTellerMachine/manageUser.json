@@ -1,0 +1,70 @@
+[
+  {
+    "name": "createUser",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "user",
+      "entity": "User",
+      "variable": "use",
+      "selected": "user",
+      "binding": "use",
+      "key": ["UserID", "userid"],
+      "assignments": [
+        ["UserID", "userid", "user identifier"],
+        ["Name", "name", "name"],
+        ["Address", "address", "address"]
+      ],
+      "positive_audit": "Stored user found by ID; name, address and true result asserted.",
+      "negative_audit": "Existing UserID violates absence guard."
+    }
+  },
+  {
+    "name": "queryUser",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "user",
+      "entity": "User",
+      "variable": "user",
+      "selected": "user",
+      "binding": "use",
+      "key": ["UserID", "userid"],
+      "assignments": [],
+      "positive_audit": "Returned object identity matches selected user.",
+      "negative_audit": "Missing user violates existence guard."
+    }
+  },
+  {
+    "name": "modifyUser",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "user",
+      "entity": "User",
+      "variable": "user",
+      "selected": "user",
+      "binding": "use",
+      "key": ["UserID", "userid"],
+      "assignments": [
+        ["UserID", "userid", "user identifier"],
+        ["Name", "name", "name"],
+        ["Address", "address", "address"]
+      ],
+      "positive_audit": "Name, address and true result asserted; identifier assignment appears in reference, not separately checked.",
+      "negative_audit": "Missing user violates existence guard."
+    }
+  },
+  {
+    "name": "deleteUser",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "user",
+      "entity": "User",
+      "variable": "user",
+      "selected": "user",
+      "binding": "use",
+      "key": ["UserID", "userid"],
+      "assignments": [],
+      "positive_audit": "User repository removal and true result asserted; no card cascade specified.",
+      "negative_audit": "Missing user violates existence guard."
+    }
+  }
+]

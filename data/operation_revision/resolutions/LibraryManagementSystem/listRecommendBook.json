@@ -1,0 +1,18 @@
+{
+  "listRecommendBook": {
+    "assessment": "The local encoded reference and both positive and negative scenarios consistently require an existing user, a defined recommendation collection, and return of that collection. No direct upstream operation with the same preserved LibraryManagementSystemSystem owner was found, so no upstream mapping is claimed. V2 removes only the unsupported JavaScript array-identity requirement.",
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toBe(user.RecommendedBook);",
+        "after": "    expectSameMembers(result, user.RecommendedBook);",
+        "reason": "Check exact unordered collection value without imposing JavaScript array identity."
+      }
+    ],
+    "scenario_assessments": [
+      "Exactly the selected user's recommendation records are returned.",
+      "An undefined recommendation collection violates the explicit guard."
+    ]
+  }
+}

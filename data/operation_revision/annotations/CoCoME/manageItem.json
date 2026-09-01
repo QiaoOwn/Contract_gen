@@ -1,0 +1,78 @@
+[
+  {
+    "name": "createItem",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "item",
+      "entity": "Item",
+      "selected": "item",
+      "binding": "ite",
+      "key": ["Barcode", "barcode"],
+      "variable": "ite",
+      "assignments": [
+        ["Barcode", "barcode", "barcode"],
+        ["Name", "name", "name"],
+        ["Price", "price", "price"],
+        ["StockNumber", "stocknumber", "stock quantity"],
+        ["OrderPrice", "orderprice", "order price"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Stored new item has barcode, name, price, stock quantity and order price; true result asserted.",
+      "negative_audit": "Duplicate barcode violates absence guard."
+    }
+  },
+  {
+    "name": "queryItem",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "item",
+      "entity": "Item",
+      "selected": "item",
+      "binding": "ite",
+      "key": ["Barcode", "barcode"],
+      "variable": "item",
+      "assignments": [],
+      "membership_guard": false,
+      "positive_audit": "Selected item returned by identity.",
+      "negative_audit": "Missing barcode violates existence guard."
+    }
+  },
+  {
+    "name": "modifyItem",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "item",
+      "entity": "Item",
+      "selected": "item",
+      "binding": "ite",
+      "key": ["Barcode", "barcode"],
+      "variable": "item",
+      "assignments": [
+        ["Barcode", "barcode", "barcode"],
+        ["Name", "name", "name"],
+        ["Price", "price", "price"],
+        ["StockNumber", "stocknumber", "stock quantity"],
+        ["OrderPrice", "orderprice", "order price"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Name, price, order price, stock quantity and true result asserted; barcode assignment is reference-only.",
+      "negative_audit": "Missing barcode violates existence guard."
+    }
+  },
+  {
+    "name": "deleteItem",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "item",
+      "entity": "Item",
+      "selected": "item",
+      "binding": "ite",
+      "key": ["Barcode", "barcode"],
+      "variable": "item",
+      "assignments": [],
+      "membership_guard": true,
+      "positive_audit": "Selected item removed from repository; true result checked.",
+      "negative_audit": "Missing barcode violates existence/membership guards."
+    }
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "listApprovalRequest": {
+    "assessment": "The pinned RM2PT specification selects every APPROVED request, assigns the collection to CurrentLoanRequests and returns it. No ordering is specified. V2 checks exact unordered membership for both result and temporary state.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+      "quote": "Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest() : Set(LoanRequest) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toContain(loanRequest);\n    expect(service.CurrentLoanRequests).toContain(loanRequest);",
+        "after": "    expectSameMembers(result, [loanRequest]);\n    expectSameMembers(service.CurrentLoanRequests, [loanRequest]);",
+        "reason": "Require complete collection values rather than subset containment."
+      },
+      {
+        "before": "    expect(result).toEqual([approvedA, approvedB]);\n    expect(result).not.toContain(submitted);\n    expect(service.CurrentLoanRequests).toEqual(result);",
+        "after": "    expectSameMembers(result, [approvedA, approvedB]);\n    expectSameMembers(service.CurrentLoanRequests, [approvedA, approvedB]);",
+        "reason": "Check exact unordered filtered values and temporary state; exclusion follows from exact membership."
+      }
+    ],
+    "scenario_assessments": [
+      "Exactly the approved request is returned and loaded into CurrentLoanRequests.",
+      "Exactly all APPROVED requests are returned and stored; a SUBMITTED request is excluded and ordering is ignored."
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "recommendBook": {
+    "assessment": "The pinned RM2PT specification explicitly covers user lookup, call-number nonexistence, recommendation creation, every supplied field, today's date, both user associations, repository inclusion and a true result. The only test defect is a numeric uid in the negative scenario despite the preserved String signature.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+      "quote": "Contract LibraryManagementSystemSystem::recommendBook(uid:String, callNo : String, title : String, edition : String, author : String, publisher : String, description : String, isbn : String) : Boolean {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "oracle_edits": [
+      {
+        "before": "service.recommendBook(99,",
+        "after": "service.recommendBook('99',",
+        "reason": "Exercise the missing-user guard with the preserved String uid type."
+      },
+      {
+        "before": "    expectPreconditionRejected(() => service.recommendBook('99', '1', '2', '3', '4', '5', '6', '7'));",
+        "after": "    expectPreconditionRejected(() =>\n      service.recommendBook('99', '1', '2', '3', '4', '5', '6', '7')\n    );",
+        "reason": "Keep the reviewed V2 oracle byte-stable under the repository's mandatory Prettier hook."
+      }
+    ],
+    "scenario_assessments": [
+      "Creation, supplied fields, current date, both associations, repository inclusion and true result are checked.",
+      "An unknown String uid violates the explicit user-existence guard."
+    ]
+  }
+}

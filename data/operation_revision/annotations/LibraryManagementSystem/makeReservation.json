@@ -1,0 +1,53 @@
+[
+  {
+    "name": "makeReservation",
+    "status": "VERIFIED",
+    "intent": [
+      "Reserve the selected loaned copy for the selected user.",
+      "res.ReservedUser = user"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      ["A book copy with the supplied barcode exists.", "copy.oclIsUndefined() = false"],
+      ["The copy's status is LOANED.", "copy.Status = CopyStatus::LOANED"],
+      ["The copy is not marked as reserved.", "copy.IsReserved = false"]
+    ],
+    "post": [
+      ["Create a new reservation.", "res.oclIsNew()"],
+      ["Mark the copy as reserved.", "copy.IsReserved = true"],
+      ["Mark the new reservation as open.", "res.IsReserveClosed = false"],
+      ["Set the reservation date to today.", "res.ReserveDate = Today"],
+      ["Link the new reservation to the selected user.", "res.ReservedUser = user"],
+      ["Link the new reservation to the selected copy.", "res.ReservedCopy = copy"],
+      ["Add the new reservation to the user's reservations.", "user.ReservedBook->includes(res)"],
+      [
+        "Add the new reservation to the copy's reservation records.",
+        "copy.ReservationRecord->includes(res)"
+      ],
+      [
+        "Store the new reservation among the system's reservations.",
+        "Reserve.allInstances()->includes(res)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "res.oclIsNew()"],
+      ["association_add", "postcondition", "user.ReservedBook->includes(res)"],
+      ["collection_operation", "postcondition", "copy.ReservationRecord->includes(res)"],
+      ["multi_object_effect", "postcondition", "copy.IsReserved = true"],
+      ["attribute_update", "postcondition", "copy.IsReserved = true"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "New reservation plus user/copy associations and reserved-state update.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9"],
+        "All creation, date, links, memberships, flags and true result checked."
+      ],
+      ["negative", ["p0", "p1"], "Missing user/copy violate existence guards."]
+    ],
+    "effects_audit": "No borrowing-status/quota guard, reservation ID uniqueness or change from LOANED to ONHOLDSHELF inferred."
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "listSubmitedLoanRequest": {
+    "assessment": "The pinned RM2PT specification filters all SUBMITTED requests, requires a nonempty result, stores that collection as CurrentLoanRequests and returns it. V2 checks exact unordered value for both outputs without requiring them to share one JavaScript array object.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+      "quote": "Contract EnterValidatedCreditReferencesModule::listSubmitedLoanRequest() : Set(LoanRequest) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toContain(loanRequest);\n    expect(service.CurrentLoanRequests).toBe(result);",
+        "after": "    expectSameMembers(result, [loanRequest]);\n    expectSameMembers(service.CurrentLoanRequests, [loanRequest]);",
+        "reason": "Check exact collection values for result and temporary state without imposing JavaScript object identity."
+      }
+    ],
+    "scenario_assessments": [
+      "Exactly the submitted requests are returned and loaded into CurrentLoanRequests.",
+      "An empty submitted-request selection violates the explicit nonempty guard."
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "listAllOutOfStoreProducts": {
+    "assessment": "The original and local filters select exactly zero stock, with no ordering requirement. V2 checks exact unordered results and retains the empty-result scenario.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract CoCoMEOrderProducts::listAllOutOfStoreProducts() : Set(Item) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toEqual([b, c]);",
+        "after": "    expectSameMembers(result, [b, c]);",
+        "reason": "The returned collection is unordered; complete membership is retained."
+      }
+    ],
+    "scenario_assessments": [
+      "Both zero-stock items and no stocked item are returned, without an order assertion.",
+      "No qualifying item produces an empty collection."
+    ]
+  },
+  "orderItem": {
+    "assessment": "The original source is now available. Its precondition also guards only item existence, while the effect navigates CurrentOrderProduct. It supplies no missing-current-order policy. It also spells order.subAmount differently from the local SubAmount field. Neither workflow preconditions nor a renamed field were invented; a native-source pointer is not evidence that this underspecification is resolved.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer, quantity : Integer) : Boolean {"
+    },
+    "updates": {
+      "missing": [
+        "Confirm the required session invariant or the operation's behavior when CurrentOrderProduct is absent. The retrieved original specification also lacks this guard. Confirm the upstream subAmount versus local SubAmount adaptation without silently changing the frozen model context."
+      ]
+    }
+  },
+  "placeOrder": {
+    "assessment": "The retrieved original contract is materially different: it gives one Amount=Amount@pre+o.SubAmount equation for each entry, while the local contract adds a sum. For distinct entry subtotals those original simultaneous equations conflict. This is not resolved by choosing standard Set or local array semantics. Keep the local candidate unaccepted and do not rewrite a gold contract.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract CoCoMEOrderProducts::placeOrder() : Boolean {"
+    },
+    "updates": {
+      "missing": [
+        "Author confirmation is required for the intended total calculation: the original per-entry previous-amount equations differ from the local sum repair. Also confirm whether equal subtotals contribute per entry. No total-calculation requirement or corrected reference is invented."
+      ],
+      "conflicts": [
+        "Original: one previous-amount equation per entry. Local: previous amount plus summed collected subtotals. These are not equivalent for ordinary multi-entry orders."
+      ]
+    }
+  }
+}

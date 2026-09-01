@@ -1,0 +1,206 @@
+[
+  {
+    "name": "makeNewSale",
+    "status": "VERIFIED",
+    "intent": [
+      "Start a new sale at the current cash desk.",
+      "s.BelongedCashDesk = CurrentCashDesk"
+    ],
+    "pre": [
+      ["A current cash desk is selected.", "CurrentCashDesk.oclIsUndefined() = false"],
+      ["The current cash desk is open.", "CurrentCashDesk.IsOpened = true"],
+      [
+        "There is no current sale, or the current sale is complete.",
+        "CurrentSale.oclIsUndefined() = true or"
+      ]
+    ],
+    "post": [
+      ["Create a new sale.", "s.oclIsNew()"],
+      ["Link the new sale to the current cash desk.", "s.BelongedCashDesk = CurrentCashDesk"],
+      [
+        "Add the new sale to the current cash desk's sales.",
+        "CurrentCashDesk.ContainedSales->includes(s)"
+      ],
+      ["Mark the new sale as incomplete.", "s.IsComplete = false"],
+      ["Mark the new sale as not ready for payment.", "s.IsReadytoPay = false"],
+      ["Store the new sale among the system's sales.", "Sale.allInstances()->includes(s)"],
+      ["Make the new sale the current sale.", "self.CurrentSale = s"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "s.oclIsNew()"],
+      ["association_add", "postcondition", "ContainedSales->includes(s)"],
+      ["multi_object_effect", "postcondition", "s.BelongedCashDesk = CurrentCashDesk"],
+      ["temporary_state", "postcondition", "self.CurrentSale = s"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Disjunctive workflow guard, new object, two-way association and session binding.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7"],
+        "Current sale, both desk links, two flags, stored membership and true result checked. Prior completed-sale branch is untested."
+      ],
+      ["negative", ["p0"], "Missing cash desk violates guard."]
+    ],
+    "effects_audit": "No zero-total initialization, current-store guard or invented sale ID requirement."
+  },
+  {
+    "name": "enterItem",
+    "status": "VERIFIED",
+    "intent": [
+      "Add a sales line for the selected item to the current sale and reduce its stock.",
+      "CurrentSale.ContainedSalesLine->includes(sli)"
+    ],
+    "pre": [
+      ["A current sale is present.", "CurrentSale.oclIsUndefined() = false"],
+      ["The current sale is incomplete.", "CurrentSale.IsComplete = false"],
+      ["An item with the supplied barcode exists.", "item.oclIsUndefined() = false"],
+      ["The selected item's stock quantity is greater than zero.", "item.StockNumber > 0"]
+    ],
+    "post": [
+      ["Create a new sales line item.", "sli.oclIsNew()"],
+      ["Make the new sales line the current sale line.", "self.CurrentSaleLine = sli"],
+      ["Link the new sales line to the current sale.", "sli.BelongedSale = CurrentSale"],
+      [
+        "Add the new sales line to the current sale's lines.",
+        "CurrentSale.ContainedSalesLine->includes(sli)"
+      ],
+      ["Set the new line's quantity to quantity.", "sli.Quantity = quantity"],
+      ["Link the new line to the selected item.", "sli.BelongedItem = item"],
+      [
+        "Reduce the item's stock quantity by quantity relative to its stock before this operation.",
+        "item.StockNumber = item.StockNumber@pre - quantity"
+      ],
+      [
+        "Set the line subtotal to the item's price multiplied by quantity.",
+        "sli.Subamount = item.Price * quantity"
+      ],
+      [
+        "Store the new line among the system's sales line items.",
+        "SalesLineItem.allInstances()->includes(sli)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "sli.oclIsNew()"],
+      ["association_add", "postcondition", "ContainedSalesLine->includes(sli)"],
+      ["pre_state_relation", "postcondition", "item.StockNumber@pre - quantity"],
+      ["attribute_update", "postcondition", "item.StockNumber ="],
+      ["multi_object_effect", "postcondition", "sli.BelongedItem = item"],
+      ["temporary_state", "postcondition", "self.CurrentSaleLine = sli"],
+      ["collection_operation", "postcondition", "ContainedSalesLine->includes(sli)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "New line, multi-object associations, stock arithmetic and session state.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9"],
+        "All listed effects checked with stock 2 to 1 and subtotal 3.5."
+      ],
+      ["negative", ["p0", "p2"], "Missing current sale/item violates guards."]
+    ],
+    "effects_audit": "Source guards only stock > 0, not stock >= quantity; no positive-quantity or no-overselling guard added."
+  },
+  {
+    "name": "endSale",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Make the current sale ready for payment and report its resulting amount.",
+      "CurrentSale.IsReadytoPay = true"
+    ],
+    "pre": [
+      ["A current sale is present.", "CurrentSale.oclIsUndefined() = false"],
+      ["The current sale is incomplete.", "CurrentSale.IsComplete = false"],
+      ["The current sale is not yet ready for payment.", "CurrentSale.IsReadytoPay = false"]
+    ],
+    "post": [
+      ["Mark the current sale as ready for payment.", "CurrentSale.IsReadytoPay = true"],
+      ["Return the sale amount after this operation.", "result = CurrentSale.Amount"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "CurrentSale.IsReadytoPay = true"],
+      ["collection_operation", "definition", "sls->collect(s:SalesLineItem | s.Subamount)"],
+      ["attribute_update", "postcondition", "CurrentSale.Amount = sub.sum()"],
+      ["result_constraint", "postcondition", "result = CurrentSale.Amount"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Subtotal multiplicity is unresolved.",
+    "missing": [
+      "Original subtotal aggregation specification must resolve Set(Real) declaration versus collected line subtotals, especially equal subtotals on different lines. Jest only uses distinct 1, 2, 3. Exact amount-calculation obligation is withheld."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1"],
+        "Ready-to-pay and returning updated amount agree; sum 6 does not establish duplicate-value semantics."
+      ],
+      ["negative", ["p1"], "Already complete sale violates guard."]
+    ],
+    "effects_audit": "No completion flag change or payment creation inferred. Amount assignment exists but precise aggregate semantics remain pending."
+  },
+  {
+    "name": "makeCashPayment",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": [
+      "Record a cash payment for the current sale and complete the sale.",
+      "CurrentSale.IsComplete = true"
+    ],
+    "pre": [
+      ["A current sale is present.", "CurrentSale.oclIsUndefined() = false"],
+      ["The current sale is incomplete.", "CurrentSale.IsComplete = false"],
+      ["The current sale is ready for payment.", "CurrentSale.IsReadytoPay = true"],
+      ["The supplied amount is at least the current sale's amount.", "amount >= CurrentSale.Amount"]
+    ],
+    "post": [
+      ["Create a new cash payment.", "cp.oclIsNew()"],
+      ["Record amount as the payment's tendered amount.", "cp.AmountTendered = amount"],
+      ["Link the payment to the current sale.", "cp.BelongedSale = CurrentSale"],
+      [
+        "Set the current sale's associated payment to the new payment.",
+        "CurrentSale.AssoicatedPayment = cp"
+      ],
+      ["Link the current sale to the current store.", "CurrentSale.Belongedstore = CurrentStore"],
+      [
+        "Add the current sale to the current store's sales.",
+        "CurrentStore.Sales->includes(CurrentSale)"
+      ],
+      ["Mark the current sale as complete.", "CurrentSale.IsComplete = true"],
+      ["Record the current time as the sale time.", "CurrentSale.Time = Now"],
+      [
+        "Set the payment balance to amount minus the current sale amount.",
+        "cp.Balance = amount - CurrentSale.Amount"
+      ],
+      ["Store the new payment among cash payments.", "CashPayment.allInstances()->includes(cp)"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "cp.oclIsNew()"],
+      ["association_add", "postcondition", "CurrentStore.Sales->includes(CurrentSale)"],
+      ["multi_object_effect", "postcondition", "CurrentSale.AssoicatedPayment = cp"],
+      ["state_transition", "postcondition", "CurrentSale.IsComplete = true"],
+      ["collection_operation", "postcondition", "CurrentStore.Sales->includes(CurrentSale)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": null,
+    "difficulty_basis": "Current-store availability obligation is unresolved.",
+    "missing": [
+      "Original workflow/operation specification must establish CurrentStore availability: reference postcondition updates CurrentStore.Sales but its precondition does not require a current store. Jest initializes it. No guard was inferred from this setup."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"],
+        "Tendered 2 against amount 1 gives balance 1; links, completion, stored payment and current time checked under initialized store."
+      ],
+      ["negative", ["p2"], "Not-ready sale violates payment guard."],
+      ["negative", ["p0"], "Missing current sale violates guard."]
+    ],
+    "effects_audit": "All explicit payment/store/sale effects restored. No current-store guard or extra sale amount/frame guarantee added."
+  }
+]

@@ -1,0 +1,138 @@
+[
+  {
+    "name": "borrowBook",
+    "status": "VERIFIED",
+    "intent": [
+      "Process a librarian's checkout request for the user and book copy identified by uid and barcode.",
+      "librarian scans a user ID and a book barcode",
+      "description"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      ["A book copy with the supplied barcode exists.", "copy.oclIsUndefined() = false"],
+      ["The user's borrowing status is NORMAL.", "user.BorrowStatus = BorrowStatus::NORMAL"],
+      ["The user's remaining suspension days equal zero.", "user.SuspensionDays = 0"],
+      [
+        "If the selected user is a BACHELOR student, that student has fewer than 20 loans.",
+        "stu.LoanedNumber < 20"
+      ],
+      [
+        "If the selected user is a MASTER student, that student has fewer than 40 loans.",
+        "stu.LoanedNumber < 40"
+      ],
+      [
+        "If the selected user is a student whose programme is neither BACHELOR nor MASTER, that student has fewer than 60 loans.",
+        "stu.LoanedNumber < 60"
+      ],
+      [
+        "For a non-student user, the faculty record with that uid has fewer than 60 loans.",
+        "fac.LoanedNumber < 60"
+      ],
+      [
+        "The selected copy's status is AVAILABLE or ONHOLDSHELF.",
+        "copy.Status = CopyStatus::AVAILABLE or"
+      ],
+      ["If the selected copy is ONHOLDSHELF, it is marked as reserved.", "copy.IsReserved = true"],
+      [
+        "If the selected copy is ONHOLDSHELF, an open reservation links this copy to this user.",
+        "res.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      ["Create a new loan record.", "loan.oclIsNew()"],
+      ["Link the new loan to the selected user.", "loan.LoanedUser = user"],
+      ["Link the new loan to the selected copy.", "loan.LoanedCopy = copy"],
+      ["Mark the new loan as not returned.", "loan.IsReturned = false"],
+      ["Set the loan date to today.", "loan.LoanDate = Today"],
+      [
+        "Increase the user's loan count by one relative to its value before checkout.",
+        "user.LoanedNumber = user.LoanedNumber@pre + 1"
+      ],
+      ["Add the new loan to the user's loans.", "user.LoanedBook->includes(loan)"],
+      ["Add the new loan to the copy's loan records.", "copy.LoanedRecord->includes(loan)"],
+      ["For a student, set the due date to 30 days after today.", "loan.DueDate = Today.After(30)"],
+      [
+        "For a non-student, set the due date to 60 days after today.",
+        "loan.DueDate = Today.After(60)"
+      ],
+      [
+        "If the copy was ONHOLDSHELF before checkout, clear its reserved flag.",
+        "copy.IsReserved = false"
+      ],
+      [
+        "If the copy was ONHOLDSHELF before checkout, close the matching open reservation for this user and copy.",
+        "res.IsReserveClosed = true"
+      ],
+      ["Set the copy's status to LOANED.", "copy.Status = CopyStatus::LOANED"],
+      ["Clear the new loan's three-day overdue flag.", "loan.OverDue3Days = false"],
+      ["Clear the new loan's ten-day overdue flag.", "loan.OverDue10Days = false"],
+      ["Clear the new loan's seventeen-day overdue flag.", "loan.OverDue17Days = false"],
+      ["Clear the new loan's thirty-one-day overdue flag.", "loan.OverDue31Days = false"],
+      [
+        "Store the new loan among the system's loan records.",
+        "Loan.allInstances()->includes(loan)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "loan.oclIsNew()"],
+      ["association_add", "postcondition", "user.LoanedBook->includes(loan)"],
+      ["collection_operation", "postcondition", "copy.LoanedRecord->includes(loan)"],
+      ["pre_state_relation", "postcondition", "user.LoanedNumber@pre + 1"],
+      ["conditional_effect", "postcondition", "copy.Status@pre = CopyStatus::ONHOLDSHELF"],
+      ["multi_object_effect", "postcondition", "res.IsReserveClosed = true"],
+      ["state_transition", "postcondition", "copy.Status = CopyStatus::LOANED"],
+      ["attribute_update", "postcondition", "user.LoanedNumber ="],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Subtype/programme guards, borrowing quotas, two due-date branches, reservation branch, new loan and several object/association effects.",
+    "description_audit": "KEEP + NORMALIZE: retained original librarian checkout/eligibility/availability/loan/due-date/status/result meaning. Quantitative quotas, dates, flags and association details are explicit local reference refinements, not new business rules. Copy availability was normalized into preconditions rather than left under the original Postcondition heading.",
+    "scenarios": [
+      [
+        "positive",
+        [
+          "q0",
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q5",
+          "q6",
+          "q7",
+          "q8",
+          "q10",
+          "q11",
+          "q12",
+          "q13",
+          "q14",
+          "q15",
+          "q16",
+          "q17",
+          "q18"
+        ],
+        "Reserved student copy exercises 30-day loan, reservation closure, all four overdue flags, loan links/count/status/result; setup checked in seedBorrower."
+      ],
+      [
+        "positive",
+        ["q1", "q9", "q12", "q18"],
+        "Faculty available-copy branch checks 60-day due date, user link, LOANED and true."
+      ],
+      ["negative", ["p0"], "Missing user violates existence guard."],
+      ["negative", ["p1"], "Missing copy violates existence guard."],
+      ["negative", ["p2"], "SUSPEND violates NORMAL status."],
+      ["negative", ["p7"], "Faculty count 60 violates strict below-60 limit."],
+      [
+        "negative",
+        ["p4", "p5", "p6"],
+        "Parameterized BACHELOR/MASTER/PHD cases hit 20/40/60 boundaries; each violates its source quota."
+      ],
+      [
+        "positive",
+        ["p4", "p5", "p6", "q0", "q5", "q12", "q18"],
+        "Parameterized 19/39/59 counts are below quota; loan creation/count increment/status/true checked."
+      ]
+    ],
+    "effects_audit": "No renewal-count initialization, overdue-fee check, librarian association, registration-status guard or reservation deletion added. Nonzero SuspensionDays, reservation-for-other-user and unsupported copy-status negative coverage are still absent; this is static consistency, not complete behavioral coverage."
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "name": "openStore",
+    "status": "VERIFIED",
+    "intent": ["Open the selected store and make it the current store.", "self.CurrentStore = sto"],
+    "pre": [
+      ["A store with the supplied storeID exists.", "sto.oclIsUndefined() = false"],
+      ["The selected store is closed.", "sto.IsOpened = false"]
+    ],
+    "post": [
+      ["Make the selected store the current store.", "self.CurrentStore = sto"],
+      ["Mark the selected store as open.", "sto.IsOpened = true"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["temporary_state", "postcondition", "self.CurrentStore = sto"],
+      ["state_transition", "postcondition", "sto.IsOpened = true"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Single guarded store transition and session binding.",
+    "scenarios": [
+      ["positive", ["q0", "q1", "q2"], "Store becomes current and open; true result asserted."],
+      ["negative", ["p0"], "Absent store violates existence guard."]
+    ],
+    "effects_audit": "No implicit opening of cash desks or other objects."
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "name": "sendNotificationEmail",
+    "status": "NEEDS_SOURCE",
+    "reference_accepted": false,
+    "intent": ["Accept a nonempty email value and return true.", "result = true"],
+    "pre": [["The supplied email is not empty.", "email <> \"\""]],
+    "post": [["Return true.", "result = true"]],
+    "features": [["result_constraint", "postcondition", "result = true"]],
+    "difficulty": null,
+    "difficulty_basis": "Only a nonempty-input/constant-result stub is evidenced; real notification behavior is unspecified.",
+    "missing": [
+      "Original service requirement is needed to establish any actual notification side effect, message contents, delivery success/failure meaning or external-service interaction. Local reference and Jest only establish nonempty email and constant true; operation name is insufficient evidence for sending an email."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Input 'a' returns true; it does not establish a valid email address or delivery."
+      ],
+      ["negative", ["p0"], "Empty email violates explicit guard."]
+    ],
+    "effects_audit": "No address-format validation, outgoing message, notification record or actual email delivery fabricated."
+  }
+]

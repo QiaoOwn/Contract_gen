@@ -1,0 +1,86 @@
+{
+  "approve": {
+    "assessment": "The original formal operation uses reject <> false for the advancing branch and false for process 5. This resolves the polarity conflict in favor of the upstream specification, not the parameter name or later local description. History creation precedes the nested process tests and does not change Process; the branch therefore uses the incoming process/role. This is the RM2PT operational reading corroborated by all existing branch tests, not a standard-OCL conformance claim. No unmatched-role else effect is added.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/Airport/airms.remodel",
+      "quote": "Contract RepairService::approve(sid : Integer, rid : Integer, reject : Boolean, suggestion : String) : ApprovalHistory {"
+    },
+    "updates": {
+      "status": "VERIFIED",
+      "reference_accepted": true,
+      "missing": [],
+      "conflicts": [],
+      "post": [
+        ["A new approval-history entry is created.", "ah.oclIsNew()"],
+        ["The entry records the supplied reject value.", "ah.Reject = reject"],
+        ["The entry records the supplied suggestion.", "ah.Suggestion = suggestion"],
+        [
+          "The entry is stored among approval-history records.",
+          "ApprovalHistory.allInstances()->includes(ah)"
+        ],
+        ["The entry is added to the repair's history.", "rep.History->includes(ah)"],
+        ["The repair remains stored in the system.", "Repair.allInstances()->includes(rep)"],
+        ["The operation returns the new history entry.", "result = ah"],
+        [
+          "When reject is true, an incoming repair process of 0 and staff role of 1 advance the repair to process 1.",
+          "rep.Process = 1 // MASTERAPPROVE"
+        ],
+        [
+          "When reject is true, an incoming repair process of 1 and staff role of 2 advance the repair to process 2.",
+          "rep.Process = 2 // MANAGERAPPROVE"
+        ],
+        [
+          "When reject is true, an incoming repair process of 2 and staff role of 3 advance the repair to process 3.",
+          "rep.Process = 3 // WORKERAPPROVE"
+        ],
+        [
+          "When reject is false, set the repair process to rejection stage 5.",
+          "rep.Process = 5 // REJECT"
+        ]
+      ],
+      "difficulty": "Hard",
+      "difficulty_basis": "Object creation, two repository/association memberships and four role/process-dependent effects.",
+      "description_audit": "Preserve description_original verbatim. Correct only the disputed polarity using the pinned original formal specification; do not silently rename reject.",
+      "reference_audit": "Upstream branch constants, roles and effects agree with the local encoded reference. Reference sections are copied verbatim from that existing local encoding; the upstream allInstance spelling is not silently rewritten into new gold.",
+      "effects_audit": "Recovered all three advancement branches and the rejection branch, in addition to history creation, links, fields and result. No effect for unhandled process/role combinations or role precondition invented.",
+      "scenarios": [
+        [
+          "positive",
+          ["q0", "q1", "q2", "q3", "q4", "q6", "q7"],
+          "History and role-1 advancement match the original formal specification."
+        ],
+        [
+          "positive",
+          ["q1", "q8", "q9"],
+          "Parameterized manager/worker cases check both remaining advancement branches."
+        ],
+        [
+          "positive",
+          ["q1", "q10"],
+          "False reject input records false and sets stage 5, exactly as specified upstream."
+        ],
+        ["negative", ["p0"], "Missing repair violates the explicit existence guard."],
+        ["negative", ["p1"], "Missing staff violates the explicit existence guard."]
+      ]
+    }
+  },
+  "finishRepair": {
+    "assessment": "The original operation has only Process=7 and true result; res is also unused upstream. The later local intent claiming result-text storage is not supported and is excluded from structured NL. This resolves that conflict without creating or editing gold. There is no explicit missing-repair guard in the formal source; no new guard or promise of total behavior on all malformed model states is inferred. Such source underspecification is a benchmark limitation, not successful runtime validation of those states.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/Airport/airms.remodel",
+      "quote": "Contract RepairService::finishRepair(id : Integer, sid : Integer, did : Integer, res : String) : Boolean {"
+    },
+    "updates": {
+      "status": "VERIFIED",
+      "reference_accepted": true,
+      "missing": [],
+      "conflicts": [],
+      "review_findings": [],
+      "difficulty": "Medium",
+      "difficulty_basis": "Target lookups, contact/role guards, one process transition and a Boolean result.",
+      "description_audit": "Original description is preserved. Its claim about recording result text is rejected by the original formal operation, which contains no res assignment.",
+      "reference_audit": "State-7 effect and true result are confirmed upstream; retain original parameter res without assigning it an invented effect.",
+      "effects_audit": "All effects actually present in the original specification are represented. No res persistence, missing-target guard, starting-process guard or device-repair association guard added."
+    }
+  }
+}

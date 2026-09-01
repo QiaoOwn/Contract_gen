@@ -1,0 +1,74 @@
+[
+  {
+    "name": "createCashDesk",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "cash desk",
+      "entity": "CashDesk",
+      "selected": "cashdesk",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cas",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"],
+        ["IsOpened", "isopened", "open status"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "New cash desk found by ID; name, open status and true result checked.",
+      "negative_audit": "First creation succeeds; second with the same ID violates the absence guard."
+    }
+  },
+  {
+    "name": "queryCashDesk",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "cash desk",
+      "entity": "CashDesk",
+      "selected": "cashdesk",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cashdesk",
+      "assignments": [],
+      "membership_guard": false,
+      "positive_audit": "Exact selected cash desk object returned.",
+      "negative_audit": "Missing cash desk violates existence guard."
+    }
+  },
+  {
+    "name": "modifyCashDesk",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "cash desk",
+      "entity": "CashDesk",
+      "selected": "cashdesk",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cashdesk",
+      "assignments": [
+        ["Id", "id", "identifier"],
+        ["Name", "name", "name"],
+        ["IsOpened", "isopened", "open status"]
+      ],
+      "membership_guard": false,
+      "positive_audit": "Name and open status updated; true result checked. Reference also assigns the lookup ID.",
+      "negative_audit": "Missing cash desk violates existence guard."
+    }
+  },
+  {
+    "name": "deleteCashDesk",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "cash desk",
+      "entity": "CashDesk",
+      "selected": "cashdesk",
+      "binding": "cas",
+      "key": ["Id", "id"],
+      "variable": "cashdesk",
+      "assignments": [],
+      "membership_guard": true,
+      "positive_audit": "Cash desk removed from repository; true result checked.",
+      "negative_audit": "Missing cash desk violates existence/membership guards."
+    }
+  }
+]

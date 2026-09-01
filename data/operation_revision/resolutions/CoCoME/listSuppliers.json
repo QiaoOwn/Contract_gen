@@ -1,0 +1,28 @@
+{
+  "listSuppliers": {
+    "assessment": "Both sources specify the complete supplier collection, not a particular JS array. V2 compares exact entity membership, cardinality and exclusions; reversed or copied arrays can pass, missing/extra/wrong entities cannot.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+      "quote": "Contract CoCoMESystem::listSuppliers() : Set(Supplier) {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": []},
+    "set_assertions": true,
+    "oracle_edits": [
+      {
+        "before": "    expect(result).toBe(getRepository(Supplier));\n",
+        "after": "",
+        "count": 2,
+        "reason": "Array identity is not a requirement."
+      },
+      {
+        "before": "    expect(result).toEqual([first, second]);",
+        "after": "    expectSameMembers(result, [first, second]);",
+        "reason": "Check exact unordered entity membership instead of array order."
+      }
+    ],
+    "scenario_assessments": [
+      "All and only registered suppliers required, irrespective of array identity/order.",
+      "Empty repository requires an empty result; no invented precondition."
+    ]
+  }
+}

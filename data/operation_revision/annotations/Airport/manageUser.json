@@ -1,0 +1,72 @@
+[
+  {
+    "name": "createStaff",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "Register an airport staff member's identity, contact details, role and reporting relationship.",
+      "the admin records their basic information",
+      "description"
+    ],
+    "pre": [
+      [
+        "The supplied staff identifier is not already assigned to a staff member.",
+        "sta.oclIsUndefined() = true"
+      ]
+    ],
+    "post": [
+      ["A new staff member is created.", "s.oclIsNew()"],
+      ["The new staff member has the supplied identifier.", "s.Id = id"],
+      ["The new staff member has the supplied name.", "s.Name = name"],
+      ["The new staff member's password is the supplied pswd value.", "s.Password = pswd"],
+      ["The new staff member has the supplied phone number.", "s.Phone = phone"],
+      ["The new staff member has the supplied role value.", "s.Role = role"],
+      [
+        "If bossid identifies an existing staff member, that person is assigned as the new staff member's boss.",
+        "if bo.oclIsUndefined() = false then s.Boss = bo endif"
+      ],
+      [
+        "The new staff member is stored in the system's staff records.",
+        "Staff.allInstances()->includes(s)"
+      ],
+      ["The operation returns true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "s.oclIsNew()"],
+      ["attribute_update", "postcondition", "s.Role = role"],
+      ["association_add", "postcondition", "s.Boss = bo"],
+      ["conditional_effect", "postcondition", "if bo.oclIsUndefined() = false"],
+      ["collection_operation", "postcondition", "Staff.allInstances()->includes(s)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Creation, five field initializations and a conditional reporting relationship.",
+    "scenarios": [
+      [
+        "positive",
+        [
+          "postconditions_nl[0]",
+          "postconditions_nl[1]",
+          "postconditions_nl[2]",
+          "postconditions_nl[3]",
+          "postconditions_nl[4]",
+          "postconditions_nl[5]",
+          "postconditions_nl[7]",
+          "postconditions_nl[8]"
+        ],
+        "Confirms stored staff and fields. The additional undefined-boss assertion relies on initialization behavior, not an explicit else obligation in the reference."
+      ],
+      [
+        "positive",
+        ["postconditions_nl[6]", "postconditions_nl[8]"],
+        "Existing boss is linked and result is true."
+      ],
+      ["negative", ["preconditions_nl[0]"], "Duplicate staff ID explains rejection."]
+    ],
+    "conflicts": [
+      "Jest requires an undefined boss for an unknown bossid; the reference only specifies the existing-boss branch. No missing-boss postcondition was invented."
+    ],
+    "description_audit": "KEEP + NORMALIZE; retain optional boss semantics without inventing a required boss or a role whitelist.",
+    "reference_audit": "All asserted NL obligations map to exact local clauses. Missing-boss initialization is left for review.",
+    "effects_audit": "New staff, individual attributes, conditional boss association, storage and true return are covered. No else effect is inferred."
+  }
+]

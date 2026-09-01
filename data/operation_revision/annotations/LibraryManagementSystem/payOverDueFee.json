@@ -1,0 +1,47 @@
+[
+  {
+    "name": "payOverDueFee",
+    "status": "VERIFIED",
+    "intent": [
+      "Clear the selected user's overdue fees covered by the supplied payment.",
+      "user.OverDueFee = 0"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      [
+        "At least one loan for this user is returned, has a due date before today, and carries a positive overdue fee.",
+        "loans.notEmpty()"
+      ],
+      ["The supplied fee is at least the user's recorded overdue fee.", "fee >= user.OverDueFee"]
+    ],
+    "post": [
+      ["Set the user's overdue fee to zero.", "user.OverDueFee = 0"],
+      [
+        "For each selected loan belonging to this user that was returned, due before today and carried a positive overdue fee, set its overdue fee to zero.",
+        "l.OverDueFee = 0"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["attribute_update", "postcondition", "user.OverDueFee = 0"],
+      ["multi_object_effect", "postcondition", "loans->forAll"],
+      ["collection_operation", "definition", "Loan.allInstances()->select"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "Compound loan selection, payment bound and user-plus-many-loan updates.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2"],
+        "Payment 2 covers fee 1; user and matching returned overdue loan fees become zero."
+      ],
+      [
+        "negative",
+        ["p2"],
+        "Payment 1 below fee 5 violates explicit bound; unchanged fees are rejection behavior."
+      ]
+    ],
+    "effects_audit": "No refund/change result, payment record, BorrowStatus reset, suspension reset or clearing of unreturned loans inferred."
+  }
+]

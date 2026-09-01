@@ -1,0 +1,51 @@
+{
+  "checkBalance": {
+    "assessment": "V2 evaluates the declared result under the authenticated-card guards. The source has no positive-path frame clauses for balance, card binding or validation flags. Their extra positive-path assertions are removed without altering the requirement or historical tests. Rejection-state checks remain part of the existing rejection convention; successful-state frame completeness is not claimed.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+      "quote": "Contract AutomatedTellerMachineSystem::checkBalance() : Real {"
+    },
+    "updates": {
+      "status": "VERIFIED",
+      "conflicts": [],
+      "review_findings": [],
+      "effects_audit": "The scalar result is covered. No state mutation or positive-path frame obligation is added to the input."
+    },
+    "oracle_edits": [
+      {
+        "before": "    expect(card.Balance).toBe(9999);\n    expect(service.InputCard).toBe(card);\n    expect(service.PasswordValidated).toBe(true);\n    expect(service.CardIDValidated).toBe(true);\n",
+        "after": "",
+        "reason": "These four successful-path frame assertions have no corresponding source obligation."
+      },
+      {
+        "before": "Happy Path: returns current card balance without changing it",
+        "after": "returns the specified current-card balance",
+        "reason": "Remove the unsupported frame claim from the title, not from historical data."
+      }
+    ],
+    "scenario_assessments": [
+      "Correct scalar balance result checked; no stronger successful-path frame assertion.",
+      "Unvalidated password violates the explicit guard; rejection check retained.",
+      "Missing session card violates the explicit guard."
+    ]
+  },
+  "ejectCard": {
+    "assessment": "All seven session resets and the true result remain checked. The backend null-to-undefined representation is confirmed. The extra successful-path repository-frame assertion is omitted because neither local nor original contract specifies it; this does not create a deletion requirement or certify global frame completeness.",
+    "upstream": {
+      "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+      "quote": "Contract AutomatedTellerMachineSystem::ejectCard() : Boolean {"
+    },
+    "updates": {"status": "VERIFIED", "conflicts": [], "review_findings": []},
+    "oracle_edits": [
+      {
+        "before": "    expect(getRepository(BankCard)).toContain(card);\n",
+        "after": "",
+        "reason": "Repository persistence is not an explicit postcondition of this operation; keep every specified session reset."
+      }
+    ],
+    "scenario_assessments": [
+      "All seven resets and true result checked with the actual null representation; no extra repository-frame assertion.",
+      "Unauthenticated session violates explicit validation guards; rejection-state assertion retained."
+    ]
+  }
+}

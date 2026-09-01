@@ -1,0 +1,73 @@
+[
+  {
+    "name": "createBankCard",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "bank card",
+      "entity": "BankCard",
+      "variable": "ban",
+      "selected": "bankcard",
+      "binding": "ban",
+      "key": ["CardID", "cardid"],
+      "assignments": [
+        ["CardID", "cardid", "card identifier"],
+        ["CardStatus", "cardstatus", "status"],
+        ["Catalog", "catalog", "catalog"],
+        ["Password", "password", "password"],
+        ["Balance", "balance", "balance"]
+      ],
+      "positive_audit": "New stored card found by ID; supplied status, catalog, password, balance and true result checked. No ownership association asserted.",
+      "negative_audit": "Duplicate CardID violates the source's absence guard; repository preservation is a rejection convention."
+    }
+  },
+  {
+    "name": "queryBankCard",
+    "literal_contract_review": {
+      "action": "query",
+      "noun": "bank card",
+      "entity": "BankCard",
+      "variable": "bankcard",
+      "selected": "bankcard",
+      "binding": "ban",
+      "key": ["CardID", "cardid"],
+      "positive_audit": "Returned object is the exact selected card.",
+      "negative_audit": "Missing card violates the existence guard."
+    }
+  },
+  {
+    "name": "modifyBankCard",
+    "literal_contract_review": {
+      "action": "modify",
+      "noun": "bank card",
+      "entity": "BankCard",
+      "variable": "bankcard",
+      "selected": "bankcard",
+      "binding": "ban",
+      "key": ["CardID", "cardid"],
+      "assignments": [
+        ["CardID", "cardid", "card identifier"],
+        ["CardStatus", "cardstatus", "status"],
+        ["Catalog", "catalog", "catalog"],
+        ["Password", "password", "password"],
+        ["Balance", "balance", "balance"]
+      ],
+      "positive_audit": "Status, catalog, password, balance and true result checked; CardID assignment is explicit in reference but not separately asserted.",
+      "negative_audit": "Missing target card violates existence guard."
+    }
+  },
+  {
+    "name": "deleteBankCard",
+    "literal_contract_review": {
+      "action": "delete",
+      "noun": "bank card",
+      "entity": "BankCard",
+      "variable": "bankcard",
+      "selected": "bankcard",
+      "binding": "ban",
+      "key": ["CardID", "cardid"],
+      "membership_guard": true,
+      "positive_audit": "Selected card is removed from repository; true result checked. No cascade assertion.",
+      "negative_audit": "Missing card violates existence and membership guards."
+    }
+  }
+]

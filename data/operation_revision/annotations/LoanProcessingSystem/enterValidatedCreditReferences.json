@@ -1,0 +1,97 @@
+[
+  {
+    "name": "listSubmitedLoanRequest",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "Load the submitted loan requests into the current request list and return them.",
+      "self.CurrentLoanRequests = rs"
+    ],
+    "pre": [["At least one registered loan request has status SUBMITTED.", "rs.size() > 0"]],
+    "post": [
+      [
+        "Set the current request list to all registered requests with status SUBMITTED.",
+        "self.CurrentLoanRequests = rs"
+      ],
+      ["Return the submitted requests loaded into that list.", "result = rs"]
+    ],
+    "features": [
+      ["query", "postcondition", "result = rs"],
+      ["collection_operation", "definition", "LoanRequestStatus::SUBMITTED"],
+      ["temporary_state", "postcondition", "self.CurrentLoanRequests = rs"],
+      ["result_constraint", "postcondition", "result = rs"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Filtered collection with nonempty guard and session-list update.",
+    "conflicts": [
+      "Jest additionally requires the result and session list to be the same JavaScript array instance; reference equality is value-level."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1"],
+        "Submitted request included and current list assigned; array identity is stronger than contents equality."
+      ],
+      ["negative", ["p0"], "No requests violates nonempty submitted-list guard."]
+    ],
+    "effects_audit": "This query updates session state. No limit, sorting or automatic validation added; empty list is a precondition failure."
+  },
+  {
+    "name": "chooseLoanRequest",
+    "status": "VERIFIED",
+    "intent": ["Select a request from the current request list.", "self.CurrentLoanRequest = rs"],
+    "pre": [
+      [
+        "The current request list contains a request with the supplied requestid.",
+        "rs.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      ["Make the matching request the current loan request.", "self.CurrentLoanRequest = rs"],
+      ["Return that request.", "result = rs"]
+    ],
+    "features": [
+      ["temporary_state", "postcondition", "self.CurrentLoanRequest = rs"],
+      ["result_constraint", "postcondition", "result = rs"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Session-list lookup and current-object binding.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1"],
+        "Request in current list becomes current object and returned object."
+      ],
+      ["negative", ["p0"], "ID 99 absent from initialized empty list violates lookup guard."]
+    ],
+    "effects_audit": "Lookup scope is current list, not all requests. No SUBMITTED guard independently added."
+  },
+  {
+    "name": "markRequestValid",
+    "status": "VERIFIED",
+    "intent": [
+      "Mark the current request's references as validated.",
+      "LoanRequestStatus::REFERENCESVALIDATED"
+    ],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "Set the current request's status to REFERENCESVALIDATED.",
+        "self.CurrentLoanRequest.Status = LoanRequestStatus::REFERENCESVALIDATED"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "LoanRequestStatus::REFERENCESVALIDATED"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "One guarded status assignment.",
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Current request receives REFERENCESVALIDATED and true result."],
+      ["negative", ["p0"], "Missing current request violates guard."]
+    ],
+    "effects_audit": "No external credit checks, prior SUBMITTED status guard or removal from current list inferred."
+  }
+]

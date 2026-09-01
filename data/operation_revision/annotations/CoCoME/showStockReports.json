@@ -1,0 +1,32 @@
+[
+  {
+    "name": "showStockReports",
+    "status": "NEEDS_REVIEW",
+    "intent": ["Return the registered items for the stock report.", "result = Item.allInstances()"],
+    "pre": [],
+    "post": [["Return all registered items.", "result = Item.allInstances()"]],
+    "features": [
+      ["query", "postcondition", "result = Item.allInstances()"],
+      ["collection_operation", "postcondition", "Item.allInstances()"],
+      ["result_constraint", "postcondition", "result = Item.allInstances()"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Unconditional unfiltered collection result.",
+    "conflicts": [
+      "Jest asserts repository-array identity, order and unchanged repository size; these representation/frame guarantees are not explicit in reference."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "Empty repository returned by identity; identity is stronger than contents requirement."
+      ],
+      [
+        "positive",
+        ["q0"],
+        "Both items returned; order, identity and preserved size are noted oracle additions."
+      ]
+    ],
+    "effects_audit": "No stock-positive filter or state changes invented; source precondition true produces no NL guard."
+  }
+]

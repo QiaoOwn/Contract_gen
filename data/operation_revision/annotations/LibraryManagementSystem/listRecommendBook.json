@@ -1,0 +1,34 @@
+[
+  {
+    "name": "listRecommendBook",
+    "status": "NEEDS_REVIEW",
+    "intent": ["List the selected user's book recommendation records.", "result = rBooks"],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      [
+        "The selected user's recommendation collection is defined.",
+        "rBooks.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [["Return the selected user's recommendation records.", "result = rBooks"]],
+    "features": [
+      ["query", "postcondition", "result = rBooks"],
+      ["collection_operation", "definition", "rBooks:Set(RecommendBook) = user.RecommendedBook"],
+      ["result_constraint", "postcondition", "result = rBooks"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Guarded direct recommendation-list result.",
+    "conflicts": [
+      "Positive Jest requires JavaScript array identity; reference constrains collection value only."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0"],
+        "User recommendation collection returned; identity assertion is stronger than value requirement."
+      ],
+      ["negative", ["p1"], "Undefined recommendation collection violates guard."]
+    ],
+    "effects_audit": "Distinct service from ListBookHistory variant preserved. No recommendation creation or sorting inferred."
+  }
+]

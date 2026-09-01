@@ -1,0 +1,60 @@
+[
+  {
+    "name": "recommendBook",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "Record the selected user's book recommendation with the supplied bibliographic details.",
+      "r.RecommendUser = user"
+    ],
+    "pre": [
+      ["A user with the supplied uid exists.", "user.oclIsUndefined() = false"],
+      ["No book recommendation with the supplied callNo exists.", "rb.oclIsUndefined() = true"]
+    ],
+    "post": [
+      ["Create a new book recommendation.", "r.oclIsNew()"],
+      ["Set the recommendation's call number to callNo.", "r.CallNo = callNo"],
+      ["Set the recommendation's title to title.", "r.Title = title"],
+      ["Set the recommendation's edition to edition.", "r.Edition = edition"],
+      ["Set the recommendation's author to author.", "r.Author = author"],
+      ["Set the recommendation's publisher to publisher.", "r.Publisher = publisher"],
+      ["Set the recommendation's description to description.", "r.Description = description"],
+      ["Set the recommendation's ISBN to isbn.", "r.ISBn = isbn"],
+      ["Set the recommendation date to today.", "r.RecommendDate = Today"],
+      ["Link the recommendation to the selected user.", "r.RecommendUser = user"],
+      [
+        "Add the recommendation to the user's recommendations.",
+        "user.RecommendedBook->includes(r)"
+      ],
+      [
+        "Store the new recommendation among the system's book recommendations.",
+        "RecommendBook.allInstances()->includes(r)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "r.oclIsNew()"],
+      ["association_add", "postcondition", "user.RecommendedBook->includes(r)"],
+      ["collection_operation", "postcondition", "user.RecommendedBook->includes(r)"],
+      ["multi_object_effect", "postcondition", "r.RecommendUser = user"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "New recommendation with date, bibliographic fields and user association/membership.",
+    "conflicts": [
+      "Negative Jest passes numeric 99 for preserved String uid. No input-type correction performed."
+    ],
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12"],
+        "All supplied fields/date/user link/user collection/stored record/result checked."
+      ],
+      [
+        "negative",
+        ["p0"],
+        "Missing user explains rejection, but fixture violates declared uid type."
+      ]
+    ],
+    "effects_audit": "Uniqueness is among all recommendations by callNo, not per user or by ISBN. No BookCopy creation or publication validation inferred."
+  }
+]

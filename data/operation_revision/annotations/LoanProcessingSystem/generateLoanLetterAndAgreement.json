@@ -1,0 +1,142 @@
+[
+  {
+    "name": "listApprovalRequest",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "Load approved loan requests into the current list and return them.",
+      "self.CurrentLoanRequests = rs"
+    ],
+    "pre": [
+      [
+        "The collection of registered requests with status APPROVED is defined.",
+        "rs.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      [
+        "Set the current request list to all registered requests with status APPROVED.",
+        "self.CurrentLoanRequests = rs"
+      ],
+      ["Return those approved requests.", "result = rs"]
+    ],
+    "features": [
+      ["query", "postcondition", "result = rs"],
+      ["temporary_state", "postcondition", "self.CurrentLoanRequests = rs"],
+      ["collection_operation", "definition", "LoanRequestStatus::APPROVED"],
+      ["result_constraint", "postcondition", "result = rs"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Filtered collection plus session-list update.",
+    "conflicts": ["Jest compares an ordered array; reference has no ordering obligation."],
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Approved request included in result/current list."],
+      [
+        "positive",
+        ["q0", "q1"],
+        "Approved requests included and submitted excluded; array-order assertion is stronger than source."
+      ]
+    ],
+    "effects_audit": "No nonempty guard, count limit, approval side effect or document creation inferred."
+  },
+  {
+    "name": "genereateApprovalLetter",
+    "status": "VERIFIED",
+    "intent": [
+      "Create an approval-letter record for the selected request.",
+      "r.AttachedApprovalLetter = l"
+    ],
+    "pre": [["A loan request with the supplied id exists.", "r.oclIsUndefined() = false"]],
+    "post": [
+      ["Create a new approval-letter record.", "l.oclIsNew()"],
+      [
+        "Set its content to the literal text ApprovalLetterContent.",
+        "l.Content = \"ApprovalLetterContent\""
+      ],
+      ["Attach the new letter to the selected request.", "r.AttachedApprovalLetter = l"],
+      ["Make the selected request the current loan request.", "self.CurrentLoanRequest = r"],
+      [
+        "Store the new letter among the system's approval letters.",
+        "ApprovalLetter.allInstances()->includes(l)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "l.oclIsNew()"],
+      ["association_add", "postcondition", "r.AttachedApprovalLetter = l"],
+      ["multi_object_effect", "postcondition", "r.AttachedApprovalLetter = l"],
+      ["temporary_state", "postcondition", "self.CurrentLoanRequest = r"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "New record, request association and session binding.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4", "q5"],
+        "Stored letter literal content, attached request/current request and true result checked."
+      ],
+      ["negative", ["p0"], "Unknown request ID violates existence guard."]
+    ],
+    "effects_audit": "Literal content is an evidenced benchmark placeholder, not an actual generated financial letter. No APPROVED guard, previous-letter deletion or mailing side effect inferred. Original misspelling preserved."
+  },
+  {
+    "name": "generateLoanAgreement",
+    "status": "VERIFIED",
+    "intent": [
+      "Create a loan-agreement record for the current request.",
+      "self.CurrentLoanRequest.AttachedLoanAgreement = la"
+    ],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"]
+    ],
+    "post": [
+      ["Create a new loan-agreement record.", "la.oclIsNew()"],
+      ["Set its content to the literal text Loan Agreement.", "la.Content = \"Loan Agreement\""],
+      [
+        "Attach the new agreement to the current request.",
+        "self.CurrentLoanRequest.AttachedLoanAgreement = la"
+      ],
+      [
+        "Store the new agreement among the system's loan agreements.",
+        "LoanAgreement.allInstances()->includes(la)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["object_creation", "postcondition", "la.oclIsNew()"],
+      ["association_add", "postcondition", "AttachedLoanAgreement = la"],
+      ["multi_object_effect", "postcondition", "AttachedLoanAgreement = la"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Hard",
+    "difficulty_basis": "New agreement and request association.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1", "q2", "q3", "q4"],
+        "Stored agreement content, request link and true result checked."
+      ],
+      ["negative", ["p0"], "Missing current request violates guard."]
+    ],
+    "effects_audit": "Literal content retained as benchmark semantics. No approval-letter prerequisite, legal clause generation, signing or old-agreement deletion inferred."
+  },
+  {
+    "name": "createLoanAccount",
+    "literal_contract_review": {
+      "action": "create",
+      "noun": "loan account",
+      "entity": "LoanAccount",
+      "variable": "loa",
+      "selected": "loanaccount",
+      "binding": "loa",
+      "key": ["LoanAccountID", "loanaccountid"],
+      "assignments": [
+        ["LoanAccountID", "loanaccountid", "identifier"],
+        ["Balance", "balance", "balance"],
+        ["Status", "status", "status"]
+      ],
+      "positive_audit": "New account has supplied ID, balance, status and true result; no request or loan association asserted.",
+      "negative_audit": "Repeated account ID violates absence guard."
+    }
+  }
+]

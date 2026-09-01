@@ -1,0 +1,238 @@
+[
+  {
+    "name": "listTenLoanRequest",
+    "status": "NEEDS_REVIEW",
+    "intent": [
+      "Load requests with validated references into the current request list and return them.",
+      "self.CurrentLoanRequests = rs"
+    ],
+    "pre": [
+      [
+        "The collection of registered requests with status REFERENCESVALIDATED is defined.",
+        "rs.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      [
+        "Set the current request list to all registered requests with status REFERENCESVALIDATED.",
+        "self.CurrentLoanRequests = rs"
+      ],
+      ["Return those requests.", "result = rs"]
+    ],
+    "features": [
+      ["query", "postcondition", "result = rs"],
+      ["temporary_state", "postcondition", "self.CurrentLoanRequests = rs"],
+      ["collection_operation", "definition", "LoanRequestStatus::REFERENCESVALIDATED"],
+      ["result_constraint", "postcondition", "result = rs"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "State-filtered collection lookup and session-list update.",
+    "conflicts": [
+      "Jest's second scenario compares an ordered array; source does not establish ordering."
+    ],
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Validated request present in result and current list."],
+      [
+        "positive",
+        ["q0", "q1"],
+        "Two validated requests selected and SUBMITTED excluded; ordering assertion is stronger than source."
+      ]
+    ],
+    "effects_audit": "Despite name listTenLoanRequest, reference contains no ten-item limit. No nonempty guard, ordering or pagination invented."
+  },
+  {
+    "name": "chooseOneForReview",
+    "status": "VERIFIED",
+    "intent": [
+      "Select a request from the current request list for review.",
+      "self.CurrentLoanRequest = rs"
+    ],
+    "pre": [
+      [
+        "The current request list contains a request with the supplied requestid.",
+        "rs.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      ["Make the matching request the current loan request.", "self.CurrentLoanRequest = rs"],
+      ["Return that request.", "result = rs"]
+    ],
+    "features": [
+      ["temporary_state", "postcondition", "self.CurrentLoanRequest = rs"],
+      ["result_constraint", "postcondition", "result = rs"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Current-list lookup and current-object binding.",
+    "scenarios": [
+      [
+        "positive",
+        ["q0", "q1"],
+        "Request becomes current and returned object; REFERENCESVALIDATED in setup is not an independent guard."
+      ],
+      ["negative", ["p0"], "ID not in current list violates lookup guard."]
+    ],
+    "effects_audit": "No status update, global lookup or validation guard inferred."
+  },
+  {
+    "name": "checkCreditHistory",
+    "status": "VERIFIED",
+    "intent": [
+      "Retrieve the credit history associated with the current request.",
+      "result = CurrentLoanRequest.RequestedCreditHistory"
+    ],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"],
+      [
+        "The current request has an associated credit history.",
+        "CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      [
+        "Return the current request's associated credit history.",
+        "result = CurrentLoanRequest.RequestedCreditHistory"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = CurrentLoanRequest.RequestedCreditHistory"],
+      ["result_constraint", "postcondition", "result = CurrentLoanRequest.RequestedCreditHistory"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Guarded association lookup.",
+    "scenarios": [
+      ["positive", ["q0"], "Exact associated CreditHistory object returned."],
+      ["negative", ["p0"], "Missing current request violates guard."]
+    ],
+    "effects_audit": "No external credit lookup, credit-score calculation or credit-history update inferred."
+  },
+  {
+    "name": "reviewCheckingAccount",
+    "status": "VERIFIED",
+    "intent": [
+      "Retrieve the checking-account history associated with the current request.",
+      "result = CurrentLoanRequest.RequestedCAHistory"
+    ],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"],
+      [
+        "The current request has associated checking-account history.",
+        "CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false"
+      ]
+    ],
+    "post": [
+      [
+        "Return the current request's associated checking-account history.",
+        "result = CurrentLoanRequest.RequestedCAHistory"
+      ]
+    ],
+    "features": [
+      ["query", "postcondition", "result = CurrentLoanRequest.RequestedCAHistory"],
+      ["result_constraint", "postcondition", "result = CurrentLoanRequest.RequestedCAHistory"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Guarded association lookup.",
+    "scenarios": [
+      ["positive", ["q0"], "Exact associated CheckingAccount object returned."],
+      ["negative", ["p0"], "Missing current request violates guard."]
+    ],
+    "effects_audit": "No account-balance check, account modification or review-decision side effect inferred."
+  },
+  {
+    "name": "listAvaiableLoanTerm",
+    "status": "NEEDS_REVIEW",
+    "intent": ["List all registered loan terms.", "result = LoanTerm.allInstances()"],
+    "pre": [],
+    "post": [["Return all registered loan terms.", "result = LoanTerm.allInstances()"]],
+    "features": [
+      ["query", "postcondition", "result = LoanTerm.allInstances()"],
+      ["collection_operation", "postcondition", "LoanTerm.allInstances()"],
+      ["result_constraint", "postcondition", "result = LoanTerm.allInstances()"]
+    ],
+    "difficulty": "Easy",
+    "difficulty_basis": "Unconditional collection result.",
+    "conflicts": [
+      "Jest asserts repository-array identity, order and preserved repository size; reference states only collection result."
+    ],
+    "scenarios": [
+      ["positive", ["q0"], "Empty repository returned; array identity assertion is stronger."],
+      ["positive", ["q0"], "Both terms returned; identity/order/frame assertions noted."]
+    ],
+    "effects_audit": "No availability eligibility filter inferred from the name; source returns every term."
+  },
+  {
+    "name": "addLoanTerm",
+    "status": "VERIFIED",
+    "intent": [
+      "Attach the selected existing loan term to the current request.",
+      "CurrentLoanRequest.AttachedLoanTerms->includes(loanterm)"
+    ],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"],
+      ["A loan term with ItemID equal to termid exists.", "loanterm.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "Ensure the selected term is attached to the current request.",
+        "CurrentLoanRequest.AttachedLoanTerms->includes(loanterm)"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["association_add", "postcondition", "AttachedLoanTerms->includes(loanterm)"],
+      ["collection_operation", "postcondition", "AttachedLoanTerms->includes(loanterm)"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Existing term lookup and association membership obligation.",
+    "review_findings": [
+      {
+        "assessment": "The misleading test title is resolved by the actual setup and assertion: the second call uses a fresh service without CurrentLoanRequest. It tests the explicit session-existence precondition, not duplicate-identifier rejection. No duplicate guard or business effect is added; the existing requirement is locally consistent. The test title is left unchanged to preserve historical oracle files.",
+        "evidence": [
+          {
+            "path": "test/LoanProcessingSystem-EvaluateLoanRequestModule-addLoanTerm/index.test.ts",
+            "quote": "const again = new EvaluateLoanRequestModule();\n    expectPreconditionRejected(() => again.addLoanTerm(term.ItemID));"
+          },
+          {
+            "path": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+            "quote": "CurrentLoanRequest.AttachedLoanTerms->includes(loanterm)"
+          }
+        ]
+      }
+    ],
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Existing term attached and true returned."],
+      [
+        "mixed",
+        ["p0", "q0", "q1"],
+        "First call succeeds. Second call uses a fresh service without current request and fails p0; no duplicate prohibition is supported."
+      ]
+    ],
+    "effects_audit": "No new LoanTerm object or duplicate-term guard added. Membership wording does not require a duplicate insertion."
+  },
+  {
+    "name": "approveLoanRequest",
+    "status": "VERIFIED",
+    "intent": ["Mark the current loan request as approved.", "LoanRequestStatus::APPROVED"],
+    "pre": [
+      ["A current loan request is present.", "self.CurrentLoanRequest.oclIsUndefined() = false"]
+    ],
+    "post": [
+      [
+        "Set the current request's status to APPROVED.",
+        "self.CurrentLoanRequest.Status = LoanRequestStatus::APPROVED"
+      ],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "LoanRequestStatus::APPROVED"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "One guarded request-state assignment.",
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Current request becomes APPROVED and returns true."],
+      ["negative", ["p0"], "Missing current request violates guard."]
+    ],
+    "effects_audit": "No credit threshold, required loan terms, prior-status guard, Loan creation or agreement generation inferred."
+  }
+]

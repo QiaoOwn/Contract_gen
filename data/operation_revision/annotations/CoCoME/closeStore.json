@@ -1,0 +1,26 @@
+[
+  {
+    "name": "closeStore",
+    "status": "VERIFIED",
+    "intent": ["Close the store identified by storeID.", "sto.IsOpened = false"],
+    "pre": [
+      ["A store with the supplied storeID exists.", "sto.oclIsUndefined() = false"],
+      ["The selected store is open.", "sto.IsOpened = true"]
+    ],
+    "post": [
+      ["Mark the selected store as closed.", "sto.IsOpened = false"],
+      ["Return true.", "result = true"]
+    ],
+    "features": [
+      ["state_transition", "postcondition", "sto.IsOpened = false"],
+      ["result_constraint", "postcondition", "result = true"]
+    ],
+    "difficulty": "Medium",
+    "difficulty_basis": "Single guarded open-to-closed state transition.",
+    "scenarios": [
+      ["positive", ["q0", "q1"], "Opened store becomes closed and returns true."],
+      ["negative", ["p0"], "Absent store violates existence guard."]
+    ],
+    "effects_audit": "No closing of related cash desks or change to current-store session is specified."
+  }
+]
