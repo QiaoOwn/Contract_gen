@@ -1,0 +1,31 @@
+{
+  "version": "input-optimization-ablation-plan-v1",
+  "status": "design-only-unapproved",
+  "groups": [
+    {"id": "v4", "organized": false, "relations": false, "modelSelection": false, "compactK": false},
+    {"id": "layout", "organized": true, "relations": false, "modelSelection": false, "compactK": false},
+    {"id": "model", "organized": true, "relations": false, "modelSelection": true, "compactK": false},
+    {"id": "relations", "organized": true, "relations": true, "modelSelection": false, "compactK": false},
+    {"id": "relationsK", "organized": true, "relations": true, "modelSelection": false, "compactK": true},
+    {"id": "full", "organized": true, "relations": true, "modelSelection": true, "compactK": true}
+  ],
+  "contrasts": {
+    "layoutEffect": ["v4", "layout"],
+    "modelSelectionEffect": ["layout", "model"],
+    "relationsEffect": ["layout", "relations"],
+    "compactKGivenRelationsEffect": ["relations", "relationsK"],
+    "modelSelectionGivenRelationsKEffect": ["relationsK", "full"]
+  },
+  "pilotCases": ["CoCoME_manageStore_queryStore", "LoanProcessingSystem_loanPayment_loanPayment", "CoCoME_processSale_enterItem"],
+  "pilotPurpose": "Optional mechanism/cost smoke on already-fixed cases, not accuracy evidence under ceiling effects",
+  "maxFirstCallsPerCell": 1,
+  "maxPilotLogicalCallsIfSeparatelyApproved": 18,
+  "repairCalls": 0,
+  "generationBeforeTerminalEvaluation": true,
+  "publicEvaluator": "scripts/lib/m43CommonEvaluation.ts",
+  "matchedFactors": ["frozen requirement", "signature", "authoritative full backend model", "LLM and sampling", "Rules V5/system", "output schema", "Oracle", "first-attempt budget"],
+  "metrics": ["protocol", "syntax", "model/type", "common PreExec", "determinate cross-clause findings", "frozen behavioral suite", "finite obligation scenario support", "unresolved", "usage tokens", "generation latency", "compilation latency"],
+  "compilationCostNote": "Measure compilation separately; original v4 production path remains unchanged. Preview factories may compile audit-only data even when an input switch is off.",
+  "expansion": "Separate authorization and predeclared remaining M0 set or repetitions; no winner-driven case selection",
+  "realModelCallsAuthorized": 0
+}

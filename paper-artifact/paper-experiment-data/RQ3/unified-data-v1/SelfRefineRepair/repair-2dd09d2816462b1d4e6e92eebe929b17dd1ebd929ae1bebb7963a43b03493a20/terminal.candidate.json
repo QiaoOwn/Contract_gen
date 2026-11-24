@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "let cd : CashDesk = self.CurrentCashDesk, oldSale : Sale = self.CurrentSale in if cd.oclIsUndefined() = true then false else CashDesk.allInstances()->includes(cd) and cd.IsOpened = true and (if oldSale.oclIsUndefined() = true then true else oldSale.IsComplete = true endif) endif",
+    "postcondition": "let cd : CashDesk = self.CurrentCashDesk, newSale : Sale = self.CurrentSale, st : Store = self.CurrentCashDesk.BelongedStore in result = true and newSale.oclIsNew() = true and newSale.IsComplete = false and newSale.IsReadytoPay = false and newSale.BelongedCashDesk = cd and cd.ContainedSales->includes(newSale) and st.Sales->includes(newSale)"
+  },
+  "methodAccepted": true
+}

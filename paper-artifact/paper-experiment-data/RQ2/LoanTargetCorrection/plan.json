@@ -1,0 +1,25 @@
+{
+  "mutations": [
+    {
+      "mutation_id": "loan_target_wrong_amount",
+      "operation_id": "LoanProcessingSystem_loanPayment_loanPayment",
+      "typescript_statement": "getRepository(Loan).find((x:any) => x.LoanID === loanid)!.RemainAmountToPay += 1;",
+      "source": "reduces a Loan's remaining amount by that loan's repayment amount",
+      "obligation_family": "loan_wrong_amount",
+      "expected_decision": false,
+      "source_requirement": {
+        "operationId": "LoanProcessingSystem_loanPayment_loanPayment",
+        "project": "LoanProcessingSystem",
+        "description": "A scheduled repayment reduces a Loan's remaining amount by that loan's repayment amount and returns true. The loan must exist and have LSOPEN status to receive the repayment.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 1,
+      "source_test_name": "LoanProcessingSystem/LoanProcessingSystemSystem/loanPayment subtracts the loan RepaymentAmount from RemainAmountToPay (31 - 4) without changing a neighbor",
+      "captureFile": "results/rq2-validation-narrative-v1/capture-smoke-v1/LoanProcessingSystem_loanPayment_loanPayment/capture.json",
+      "captureSha256": "ee9a8a62931df8ca0718fd7ae676fd8da9d81667e6ed803fceb9ab5e0237fd13",
+      "reason": "Explicit parameter-based target selection; original boundary mutation changed the neighbor"
+    }
+  ],
+  "runnerSha256": "edf98d3740d9db5fd38cbe2a5c2b798a4e3554b29b55754524a7747db6ada41f"
+}

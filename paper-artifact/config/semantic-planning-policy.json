@@ -1,0 +1,84 @@
+{
+  "version": "declaration-grounded-planning-policy-v2",
+  "scope": "Explicit structured requirement patterns; not unrestricted English understanding",
+  "aliases": {
+    "identifier": ["id"],
+    "open state": ["isopened"],
+    "sale price": ["saleprice"],
+    "stock quantity": ["stocknumber", "stockquantity"],
+    "order price": ["orderprice"],
+    "phone number": ["phonenumber", "phone"],
+    "email address": ["email", "emailaddress"]
+  },
+  "domainRoles": {
+    "scope": "Explicit domain vocabulary adapters, not automatic meaning discovery or universal UML defaults. Model names and types are checked at runtime.",
+    "stateTransition": {
+      "booleanFeature": ["IsOpened"],
+      "currentPrefix": "Current",
+      "openEnum": ["LSOPEN"],
+      "closedEnum": ["CLOSED"],
+      "basis": "Explicit open/closed requirements map to the declared IsOpened flag or declared status literals. Current-object assignments require an explicit postcondition. CoCoME OP1-4 and LoanProcessing OP24 provide the audited vocabulary basis; no membership, balance, cascade or frame guard is inferred."
+    },
+    "atmSession": {
+      "currentCard": ["InputCard"],
+      "authentication": [["CardIDValidated"], ["PasswordValidated"]],
+      "transactionFlags": [["IsDeposit"], ["IsWithdraw"]],
+      "amounts": [["DepositedNumber"], ["WithdrawedNumber"]],
+      "basis": "The session-reset requirement and the read-only ATM OP5 specification explicitly clear the card, reset Boolean flags to false and transaction amounts to zero. These are declared vocabulary semantics, not defaults for all service fields."
+    },
+    "repayment": {
+      "openStatus": ["LSOPEN"],
+      "remaining": ["RemainAmountToPay"],
+      "installment": ["RepaymentAmount"],
+      "basis": "The supplied requirement states that the remaining amount decreases by the Loan repayment amount; decrease is compiled against the pre-state value."
+    },
+    "staffRegistration": {
+      "fields": [
+        {"feature": ["Id"], "parameter": ["id"]},
+        {"feature": ["Name"], "parameter": ["name"]},
+        {"feature": ["Password"], "parameter": ["pswd", "password"]},
+        {"feature": ["Phone"], "parameter": ["phone"]},
+        {"feature": ["Role"], "parameter": ["role"]}
+      ],
+      "basis": "The Staff registration vocabulary expands identity to Id and Name and maps the explicit contact and role fields. Airport OP1 independently identifies those assignments. The absent Boss branch is explicit in the current frozen requirement."
+    }
+  },
+  "rules": [
+    {
+      "id": "SP-EFFECT",
+      "meaning": "Compile source-linked obligations to typed state, pre-state, conditional and association effects. Targets and branch guards are program-owned; unresolved declarations or extra obligations block the plan."
+    },
+    {
+      "id": "SP-SELECT",
+      "meaning": "Resolve the entity and selector explicitly named by a retrieval, update or deletion intent; require a unique compatible model-field/parameter pair."
+    },
+    {
+      "id": "SP-EXISTS",
+      "meaning": "Compile an explicit existence requirement into object definedness; do not infer existence or uniqueness from CRUD names."
+    },
+    {
+      "id": "SP-UPDATE",
+      "meaning": "Compile a stated supplied-field update only after every listed field has one source-backed model feature and one compatible parameter."
+    },
+    {
+      "id": "SP-DELETE",
+      "meaning": "Compile only the stated repository removal; do not infer cascade or inverse-link changes."
+    },
+    {
+      "id": "SP-CREATE",
+      "meaning": "Compile explicitly requested object creation and stored supplied fields; uniqueness needs its own requirement."
+    },
+    {
+      "id": "SP-RETURN",
+      "meaning": "Compile only an explicit return obligation and check it against the operation return declaration."
+    },
+    {
+      "id": "SP-COVERAGE",
+      "meaning": "Every supplied pre/post bullet must be accounted for before generation. Unrecognized or ambiguous semantics block the planner."
+    },
+    {
+      "id": "SP-COMPLETE",
+      "meaning": "The model may propose typed slot ASTs only; it cannot replace the program-owned contract or change unrelated slots."
+    }
+  ]
+}

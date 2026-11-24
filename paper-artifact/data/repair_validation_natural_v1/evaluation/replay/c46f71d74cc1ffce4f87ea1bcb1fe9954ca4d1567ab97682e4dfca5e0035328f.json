@@ -1,0 +1,148 @@
+{
+  "operationId": "LibraryManagementSystem_searchBook_searchBookByAuthor",
+  "candidateIdentity": "c46f71d74cc1ffce4f87ea1bcb1fe9954ca4d1567ab97682e4dfca5e0035328f",
+  "origins": [
+    {
+      "method": "full",
+      "file": "results/rq1-four-methods-114-v1/runs/LibraryManagementSystem_searchBook_searchBookByAuthor/full/full.candidate.json",
+      "sha256": "ece67bbba3fbfc1653fb80911247cfae17b1c61e61bf91e337c5056a1682c5b3"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "authorname.isEmpty() = false",
+    "postcondition": "result = Book.allInstances()->select(book:Book | book.Author = authorname)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract SearchBook::searchBookByAuthor(authorname:String): Set(Book) {\n          \n            precondition:\n          authorname.isEmpty() = false\n            \n            postcondition:\n          result = Book.allInstances()->select(book:Book | book.Author = authorname)\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": true,
+      "preExecValid": false,
+      "lowering": [
+        {
+          "line": 247,
+          "column": 53,
+          "msg": "Argument of type 'string' is not assignable to parameter of type 'unknown[]'.",
+          "code": 2345
+        }
+      ],
+      "typescript": {
+        "originalEntity": "/*The user account*/\nclass User {\n  /*User ID*/\n  UserID: string;\n  /*Name*/\n  Name: string;\n  /*Sex*/\n  Sex: Sex;\n  /*Password*/\n  Password: string;\n  /*Email*/\n  Email: string;\n  /*Faculty*/\n  Faculty: string;\n  /*Number of loaned books*/\n  LoanedNumber: number;\n  /*Borrow status*/\n  BorrowStatus: BorrowStatus;\n  /*Suspension days*/\n  SuspensionDays: number;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Loans made by the user*/\n  LoanedBook: Loan[];\n  /*Reservations made by the user*/\n  ReservedBook: Reserve[];\n  /*Books recommended by the user*/\n  RecommendedBook: RecommendBook[];\n}\n/*The student account*/\nclass Student extends User {\n  /*Major*/\n  Major: string;\n  /*Programme*/\n  Programme: Programme;\n  /*Registration status*/\n  RegistrationStatus: StudentStatus;\n}\n/*The faculty account*/\nclass Faculty extends User {\n  /*Position*/\n  Position: Position;\n  /*Status*/\n  Status: Status;\n}\n/*Books owned by the library*/\nclass Book {\n  /*Call Number*/\n  CallNo: string;\n  /*Title*/\n  Title: string;\n  /*Edition*/\n  Edition: string;\n  /*Author*/\n  Author: string;\n  /*Publisher*/\n  Publisher: string;\n  /*Description*/\n  Description: string;\n  /*ISBN*/\n  ISBn: string;\n  /*Number of copies*/\n  CopyNum: number;\n  /*Copies of the book*/\n  Copys: BookCopy[];\n  /*Subjects of the book*/\n  Subject: Subject[];\n}\n/*The subject of books*/\nclass Subject {\n  /*Subject name*/\n  Name: string;\n  /*Super subject*/\n  SuperSubject: Subject;\n  /*Sub subjects*/\n  SubSubject: Subject;\n}\n/*The copy of a book for borrowing*/\nclass BookCopy {\n  /*Barcode*/\n  Barcode: string;\n  /*Status*/\n  Status: CopyStatus;\n  /*Location*/\n  Location: string;\n  /*Is reserved*/\n  IsReserved: boolean;\n  /*The book this copy belongs to*/\n  BookBelongs: Book;\n  /*Loan records of this copy*/\n  LoanedRecord: Loan[];\n  /*Reservation records of this copy*/\n  ReservationRecord: Reserve[];\n}\n/*The record of borrowing books*/\nclass Loan {\n  /*Loan date*/\n  LoanDate: dayjs.Dayjs;\n  /*Renew date*/\n  RenewDate: dayjs.Dayjs;\n  /*Due date*/\n  DueDate: dayjs.Dayjs;\n  /*Return date*/\n  ReturnDate: dayjs.Dayjs;\n  /*Number of times renewed*/\n  RenewedTimes: number;\n  /*Is returned*/\n  IsReturned: boolean;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Overdue for 3 days*/\n  OverDue3Days: boolean;\n  /*Overdue for 10 days*/\n  OverDue10Days: boolean;\n  /*Overdue for 17 days*/\n  OverDue17Days: boolean;\n  /*Overdue for 31 days*/\n  OverDue31Days: boolean;\n  /*User who loaned the book*/\n  LoanedUser: User;\n  /*The copy loaned*/\n  LoanedCopy: BookCopy;\n  /*Librarian who processed the loan*/\n  LoanLibrarian: Librarian;\n  /*Librarian who processed the return*/\n  ReturnLibrarian: Librarian;\n}\n/*The record of book reservation*/\nclass Reserve {\n  /*Reservation date*/\n  ReserveDate: dayjs.Dayjs;\n  /*Is reservation closed*/\n  IsReserveClosed: boolean;\n  /*Reserved copy*/\n  ReservedCopy: BookCopy;\n  /*User who made the reservation*/\n  ReservedUser: User;\n}\n/*The book recommended by users to the library*/\nclass RecommendBook extends Book {\n  /*Recommendation date*/\n  RecommendDate: dayjs.Dayjs;\n  /*User who recommended the book*/\n  RecommendUser: User;\n}\n/*The administrator account*/\nclass Administrator {\n  /*Administrator ID*/\n  AdminID: string;\n  /*Username*/\n  UserName: string;\n  /*Password*/\n  Password: string;\n}\n/*The librarian account*/\nclass Librarian {\n  /*Librarian ID*/\n  LibrarianID: string;\n  /*Name*/\n  Name: string;\n  /*Password*/\n  Password: string;\n}\nenum Sex {\n  M = \"M\",\n  F = \"F\",\n}\nenum BorrowStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n}\nenum Programme {\n  BACHELOR = \"BACHELOR\",\n  MASTER = \"MASTER\",\n  PHD = \"PHD\",\n}\nenum StudentStatus {\n  GRADUATED = \"GRADUATED\",\n  PROGRAMMING = \"PROGRAMMING\",\n}\nenum Position {\n  ASSISTANTPROFESSORS = \"ASSISTANTPROFESSORS\",\n  ASSOCIATEPROFESSOR = \"ASSOCIATEPROFESSOR\",\n  PROFESSOR = \"PROFESSOR\",\n  CHAIRPROFESSOR = \"CHAIRPROFESSOR\",\n}\nenum Status {\n  HASRETIRED = \"HASRETIRED\",\n  INPOSITION = \"INPOSITION\",\n}\nenum CopyStatus {\n  AVAILABLE = \"AVAILABLE\",\n  INPROCESSING = \"INPROCESSING\",\n  LIBUSEONLY = \"LIBUSEONLY\",\n  ONHOLDSHELF = \"ONHOLDSHELF\",\n  LOANED = \"LOANED\",\n}\nconst map = new Map();\nmap.set(User, []);\nmap.set(Student, []);\nmap.set(Faculty, []);\nmap.set(Book, []);\nmap.set(Subject, []);\nmap.set(BookCopy, []);\nmap.set(Loan, []);\nmap.set(Reserve, []);\nmap.set(RecommendBook, []);\nmap.set(Administrator, []);\nmap.set(Librarian, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  Sex,\n  BorrowStatus,\n  Programme,\n  StudentStatus,\n  Position,\n  Status,\n  CopyStatus,\n  User,\n  Student,\n  Faculty,\n  Book,\n  Subject,\n  BookCopy,\n  Loan,\n  Reserve,\n  RecommendBook,\n  Administrator,\n  Librarian,\n  getRepository,\n};\n",
+        "originalService": "class SearchBook_AutoGenerated {\n  /*Definition: The searchBookByAuthor operation handles its intended business action in this system.\n   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.\n   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/\n  searchBookByAuthor(authorname: string): Book[] {\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () =>\n          StandardOPs.oclEquals(StandardOPs.isEmpty(authorname), false),\n        description: \"authorname.isEmpty()=false\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*OCL Pre-state Snapshot*/\n    const oclState = new OCLStateSnapshot(map, [this]);\n    /*OCL Effect Trace*/\n    const oclExecutionTrace = new OCLExecutionTrace();\n    const result = (() => {\n      /*Postcondition Effects Start*/\n      let _oclOperationResult!: Book[];\n      l({\n        execute: () =>\n          (_oclOperationResult = getRepository(Book).filter(\n            (book: Book) =>\n              l({\n                logic: () => StandardOPs.oclEquals(book.Author, authorname),\n                description: \"book.Author=authorname\",\n              }).build().pass,\n          )),\n        description:\n          \"result=Book.allInstances()->select(book:Book|book.Author=authorname)\",\n      }).build().value;\n      return _oclOperationResult;\n      /*Postcondition Effects End*/\n    })();\n    /*OCL Post-state Snapshot*/\n    oclState.capturePost();\n    const {\n      errorMessage: postconditionErrorMessage,\n      pass: isPostconditionPass,\n    } = (() => {\n      /*Postcondition Check Start*/\n      return l({\n        logic: () =>\n          StandardOPs.oclSetEquals(\n            result,\n            getRepository(Book).filter(\n              (book: Book) =>\n                l({\n                  logic: () => StandardOPs.oclEquals(book?.Author, authorname),\n                  description: \"book.Author=authorname\",\n                }).build().pass,\n            ),\n          ),\n        description:\n          \"result=Book.allInstances()->select(book:Book|book.Author=authorname)\",\n      }).build();\n      /*Postcondition Check End*/\n    })();\n    if (!isPostconditionPass) {\n      throw new PostconditionError(postconditionErrorMessage);\n    }\n    return result;\n  }\n}\nexport { SearchBook_AutoGenerated };\n",
+        "entity": "/*The user account*/\nclass User {\n  /*User ID*/\n  UserID: string;\n  /*Name*/\n  Name: string;\n  /*Sex*/\n  Sex: Sex;\n  /*Password*/\n  Password: string;\n  /*Email*/\n  Email: string;\n  /*Faculty*/\n  Faculty: string;\n  /*Number of loaned books*/\n  LoanedNumber: number;\n  /*Borrow status*/\n  BorrowStatus: BorrowStatus;\n  /*Suspension days*/\n  SuspensionDays: number;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Loans made by the user*/\n  LoanedBook: Loan[];\n  /*Reservations made by the user*/\n  ReservedBook: Reserve[];\n  /*Books recommended by the user*/\n  RecommendedBook: RecommendBook[];\n}\n/*The student account*/\nclass Student extends User {\n  /*Major*/\n  Major: string;\n  /*Programme*/\n  Programme: Programme;\n  /*Registration status*/\n  RegistrationStatus: StudentStatus;\n}\n/*The faculty account*/\nclass Faculty extends User {\n  /*Position*/\n  Position: Position;\n  /*Status*/\n  Status: Status;\n}\n/*Books owned by the library*/\nclass Book {\n  /*Call Number*/\n  CallNo: string;\n  /*Title*/\n  Title: string;\n  /*Edition*/\n  Edition: string;\n  /*Author*/\n  Author: string;\n  /*Publisher*/\n  Publisher: string;\n  /*Description*/\n  Description: string;\n  /*ISBN*/\n  ISBn: string;\n  /*Number of copies*/\n  CopyNum: number;\n  /*Copies of the book*/\n  Copys: BookCopy[];\n  /*Subjects of the book*/\n  Subject: Subject[];\n}\n/*The subject of books*/\nclass Subject {\n  /*Subject name*/\n  Name: string;\n  /*Super subject*/\n  SuperSubject: Subject;\n  /*Sub subjects*/\n  SubSubject: Subject;\n}\n/*The copy of a book for borrowing*/\nclass BookCopy {\n  /*Barcode*/\n  Barcode: string;\n  /*Status*/\n  Status: CopyStatus;\n  /*Location*/\n  Location: string;\n  /*Is reserved*/\n  IsReserved: boolean;\n  /*The book this copy belongs to*/\n  BookBelongs: Book;\n  /*Loan records of this copy*/\n  LoanedRecord: Loan[];\n  /*Reservation records of this copy*/\n  ReservationRecord: Reserve[];\n}\n/*The record of borrowing books*/\nclass Loan {\n  /*Loan date*/\n  LoanDate: dayjs.Dayjs;\n  /*Renew date*/\n  RenewDate: dayjs.Dayjs;\n  /*Due date*/\n  DueDate: dayjs.Dayjs;\n  /*Return date*/\n  ReturnDate: dayjs.Dayjs;\n  /*Number of times renewed*/\n  RenewedTimes: number;\n  /*Is returned*/\n  IsReturned: boolean;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Overdue for 3 days*/\n  OverDue3Days: boolean;\n  /*Overdue for 10 days*/\n  OverDue10Days: boolean;\n  /*Overdue for 17 days*/\n  OverDue17Days: boolean;\n  /*Overdue for 31 days*/\n  OverDue31Days: boolean;\n  /*User who loaned the book*/\n  LoanedUser: User;\n  /*The copy loaned*/\n  LoanedCopy: BookCopy;\n  /*Librarian who processed the loan*/\n  LoanLibrarian: Librarian;\n  /*Librarian who processed the return*/\n  ReturnLibrarian: Librarian;\n}\n/*The record of book reservation*/\nclass Reserve {\n  /*Reservation date*/\n  ReserveDate: dayjs.Dayjs;\n  /*Is reservation closed*/\n  IsReserveClosed: boolean;\n  /*Reserved copy*/\n  ReservedCopy: BookCopy;\n  /*User who made the reservation*/\n  ReservedUser: User;\n}\n/*The book recommended by users to the library*/\nclass RecommendBook extends Book {\n  /*Recommendation date*/\n  RecommendDate: dayjs.Dayjs;\n  /*User who recommended the book*/\n  RecommendUser: User;\n}\n/*The administrator account*/\nclass Administrator {\n  /*Administrator ID*/\n  AdminID: string;\n  /*Username*/\n  UserName: string;\n  /*Password*/\n  Password: string;\n}\n/*The librarian account*/\nclass Librarian {\n  /*Librarian ID*/\n  LibrarianID: string;\n  /*Name*/\n  Name: string;\n  /*Password*/\n  Password: string;\n}\nenum Sex {\n  M = \"M\",\n  F = \"F\",\n}\nenum BorrowStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n}\nenum Programme {\n  BACHELOR = \"BACHELOR\",\n  MASTER = \"MASTER\",\n  PHD = \"PHD\",\n}\nenum StudentStatus {\n  GRADUATED = \"GRADUATED\",\n  PROGRAMMING = \"PROGRAMMING\",\n}\nenum Position {\n  ASSISTANTPROFESSORS = \"ASSISTANTPROFESSORS\",\n  ASSOCIATEPROFESSOR = \"ASSOCIATEPROFESSOR\",\n  PROFESSOR = \"PROFESSOR\",\n  CHAIRPROFESSOR = \"CHAIRPROFESSOR\",\n}\nenum Status {\n  HASRETIRED = \"HASRETIRED\",\n  INPOSITION = \"INPOSITION\",\n}\nenum CopyStatus {\n  AVAILABLE = \"AVAILABLE\",\n  INPROCESSING = \"INPROCESSING\",\n  LIBUSEONLY = \"LIBUSEONLY\",\n  ONHOLDSHELF = \"ONHOLDSHELF\",\n  LOANED = \"LOANED\",\n}\nconst map = new Map();\nmap.set(User, []);\nmap.set(Student, []);\nmap.set(Faculty, []);\nmap.set(Book, []);\nmap.set(Subject, []);\nmap.set(BookCopy, []);\nmap.set(Loan, []);\nmap.set(Reserve, []);\nmap.set(RecommendBook, []);\nmap.set(Administrator, []);\nmap.set(Librarian, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\n",
+        "service": "class SearchBook_AutoGenerated {\n  /*Definition: The searchBookByAuthor operation handles its intended business action in this system.\n   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.\n   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/\n  searchBookByAuthor(authorname: string): Book[] {\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () =>\n          StandardOPs.oclEquals(StandardOPs.isEmpty(authorname), false),\n        description: \"authorname.isEmpty()=false\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*OCL Pre-state Snapshot*/\n    const oclState = new OCLStateSnapshot(map, [this]);\n    /*OCL Effect Trace*/\n    const oclExecutionTrace = new OCLExecutionTrace();\n    const result = (() => {\n      /*Postcondition Effects Start*/\n      let _oclOperationResult!: Book[];\n      l({\n        execute: () =>\n          (_oclOperationResult = getRepository(Book).filter(\n            (book: Book) =>\n              l({\n                logic: () => StandardOPs.oclEquals(book.Author, authorname),\n                description: \"book.Author=authorname\",\n              }).build().pass,\n          )),\n        description:\n          \"result=Book.allInstances()->select(book:Book|book.Author=authorname)\",\n      }).build().value;\n      return _oclOperationResult;\n      /*Postcondition Effects End*/\n    })();\n    /*OCL Post-state Snapshot*/\n    oclState.capturePost();\n    const {\n      errorMessage: postconditionErrorMessage,\n      pass: isPostconditionPass,\n    } = (() => {\n      /*Postcondition Check Start*/\n      return l({\n        logic: () =>\n          StandardOPs.oclSetEquals(\n            result,\n            getRepository(Book).filter(\n              (book: Book) =>\n                l({\n                  logic: () => StandardOPs.oclEquals(book?.Author, authorname),\n                  description: \"book.Author=authorname\",\n                }).build().pass,\n            ),\n          ),\n        description:\n          \"result=Book.allInstances()->select(book:Book|book.Author=authorname)\",\n      }).build();\n      /*Postcondition Check End*/\n    })();\n    if (!isPostconditionPass) {\n      throw new PostconditionError(postconditionErrorMessage);\n    }\n    return result;\n  }\n}\n",
+        "entry": "import dayjs from \"dayjs\";\nimport {evaluateDefinition, l, OCLExecutionTrace, OCLStateSnapshot, PostconditionError, PreconditionError, StandardOPs} from \"../globalEntry\";\n/*The user account*/\nclass User {\n  /*User ID*/\n  UserID: string;\n  /*Name*/\n  Name: string;\n  /*Sex*/\n  Sex: Sex;\n  /*Password*/\n  Password: string;\n  /*Email*/\n  Email: string;\n  /*Faculty*/\n  Faculty: string;\n  /*Number of loaned books*/\n  LoanedNumber: number;\n  /*Borrow status*/\n  BorrowStatus: BorrowStatus;\n  /*Suspension days*/\n  SuspensionDays: number;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Loans made by the user*/\n  LoanedBook: Loan[];\n  /*Reservations made by the user*/\n  ReservedBook: Reserve[];\n  /*Books recommended by the user*/\n  RecommendedBook: RecommendBook[];\n}\n/*The student account*/\nclass Student extends User {\n  /*Major*/\n  Major: string;\n  /*Programme*/\n  Programme: Programme;\n  /*Registration status*/\n  RegistrationStatus: StudentStatus;\n}\n/*The faculty account*/\nclass Faculty extends User {\n  /*Position*/\n  Position: Position;\n  /*Status*/\n  Status: Status;\n}\n/*Books owned by the library*/\nclass Book {\n  /*Call Number*/\n  CallNo: string;\n  /*Title*/\n  Title: string;\n  /*Edition*/\n  Edition: string;\n  /*Author*/\n  Author: string;\n  /*Publisher*/\n  Publisher: string;\n  /*Description*/\n  Description: string;\n  /*ISBN*/\n  ISBn: string;\n  /*Number of copies*/\n  CopyNum: number;\n  /*Copies of the book*/\n  Copys: BookCopy[];\n  /*Subjects of the book*/\n  Subject: Subject[];\n}\n/*The subject of books*/\nclass Subject {\n  /*Subject name*/\n  Name: string;\n  /*Super subject*/\n  SuperSubject: Subject;\n  /*Sub subjects*/\n  SubSubject: Subject;\n}\n/*The copy of a book for borrowing*/\nclass BookCopy {\n  /*Barcode*/\n  Barcode: string;\n  /*Status*/\n  Status: CopyStatus;\n  /*Location*/\n  Location: string;\n  /*Is reserved*/\n  IsReserved: boolean;\n  /*The book this copy belongs to*/\n  BookBelongs: Book;\n  /*Loan records of this copy*/\n  LoanedRecord: Loan[];\n  /*Reservation records of this copy*/\n  ReservationRecord: Reserve[];\n}\n/*The record of borrowing books*/\nclass Loan {\n  /*Loan date*/\n  LoanDate: dayjs.Dayjs;\n  /*Renew date*/\n  RenewDate: dayjs.Dayjs;\n  /*Due date*/\n  DueDate: dayjs.Dayjs;\n  /*Return date*/\n  ReturnDate: dayjs.Dayjs;\n  /*Number of times renewed*/\n  RenewedTimes: number;\n  /*Is returned*/\n  IsReturned: boolean;\n  /*Overdue fee*/\n  OverDueFee: number;\n  /*Overdue for 3 days*/\n  OverDue3Days: boolean;\n  /*Overdue for 10 days*/\n  OverDue10Days: boolean;\n  /*Overdue for 17 days*/\n  OverDue17Days: boolean;\n  /*Overdue for 31 days*/\n  OverDue31Days: boolean;\n  /*User who loaned the book*/\n  LoanedUser: User;\n  /*The copy loaned*/\n  LoanedCopy: BookCopy;\n  /*Librarian who processed the loan*/\n  LoanLibrarian: Librarian;\n  /*Librarian who processed the return*/\n  ReturnLibrarian: Librarian;\n}\n/*The record of book reservation*/\nclass Reserve {\n  /*Reservation date*/\n  ReserveDate: dayjs.Dayjs;\n  /*Is reservation closed*/\n  IsReserveClosed: boolean;\n  /*Reserved copy*/\n  ReservedCopy: BookCopy;\n  /*User who made the reservation*/\n  ReservedUser: User;\n}\n/*The book recommended by users to the library*/\nclass RecommendBook extends Book {\n  /*Recommendation date*/\n  RecommendDate: dayjs.Dayjs;\n  /*User who recommended the book*/\n  RecommendUser: User;\n}\n/*The administrator account*/\nclass Administrator {\n  /*Administrator ID*/\n  AdminID: string;\n  /*Username*/\n  UserName: string;\n  /*Password*/\n  Password: string;\n}\n/*The librarian account*/\nclass Librarian {\n  /*Librarian ID*/\n  LibrarianID: string;\n  /*Name*/\n  Name: string;\n  /*Password*/\n  Password: string;\n}\nenum Sex {\n  M = \"M\",\n  F = \"F\",\n}\nenum BorrowStatus {\n  NORMAL = \"NORMAL\",\n  SUSPEND = \"SUSPEND\",\n}\nenum Programme {\n  BACHELOR = \"BACHELOR\",\n  MASTER = \"MASTER\",\n  PHD = \"PHD\",\n}\nenum StudentStatus {\n  GRADUATED = \"GRADUATED\",\n  PROGRAMMING = \"PROGRAMMING\",\n}\nenum Position {\n  ASSISTANTPROFESSORS = \"ASSISTANTPROFESSORS\",\n  ASSOCIATEPROFESSOR = \"ASSOCIATEPROFESSOR\",\n  PROFESSOR = \"PROFESSOR\",\n  CHAIRPROFESSOR = \"CHAIRPROFESSOR\",\n}\nenum Status {\n  HASRETIRED = \"HASRETIRED\",\n  INPOSITION = \"INPOSITION\",\n}\nenum CopyStatus {\n  AVAILABLE = \"AVAILABLE\",\n  INPROCESSING = \"INPROCESSING\",\n  LIBUSEONLY = \"LIBUSEONLY\",\n  ONHOLDSHELF = \"ONHOLDSHELF\",\n  LOANED = \"LOANED\",\n}\nconst map = new Map();\nmap.set(User, []);\nmap.set(Student, []);\nmap.set(Faculty, []);\nmap.set(Book, []);\nmap.set(Subject, []);\nmap.set(BookCopy, []);\nmap.set(Loan, []);\nmap.set(Reserve, []);\nmap.set(RecommendBook, []);\nmap.set(Administrator, []);\nmap.set(Librarian, []);\nconst getRepository = <T,>(clazz: new (...args: any[]) => T) => {\n  return map.get(clazz) as T[];\n};\nexport {\n  Sex,\n  BorrowStatus,\n  Programme,\n  StudentStatus,\n  Position,\n  Status,\n  CopyStatus,\n  User,\n  Student,\n  Faculty,\n  Book,\n  Subject,\n  BookCopy,\n  Loan,\n  Reserve,\n  RecommendBook,\n  Administrator,\n  Librarian,\n  getRepository,\n};\n\n\nclass SearchBook_AutoGenerated {\n  /*Definition: The searchBookByAuthor operation handles its intended business action in this system.\n   *Precondition: Required inputs are present, referenced data is valid, and the action is allowed by business rules.\n   *Postcondition: The system applies the requested outcome, keeps data consistent, and returns the defined result.*/\n  searchBookByAuthor(authorname: string): Book[] {\n    /*Precondition Start*/\n    const { errorMessage: preconditionErrorMessage, pass: isPreconditionPass } =\n      l({\n        logic: () =>\n          StandardOPs.oclEquals(StandardOPs.isEmpty(authorname), false),\n        description: \"authorname.isEmpty()=false\",\n      }).build();\n    if (!isPreconditionPass) {\n      throw new PreconditionError(preconditionErrorMessage);\n    }\n    /*Precondition End*/\n\n    /*OCL Pre-state Snapshot*/\n    const oclState = new OCLStateSnapshot(map, [this]);\n    /*OCL Effect Trace*/\n    const oclExecutionTrace = new OCLExecutionTrace();\n    const result = (() => {\n      /*Postcondition Effects Start*/\n      let _oclOperationResult!: Book[];\n      l({\n        execute: () =>\n          (_oclOperationResult = getRepository(Book).filter(\n            (book: Book) =>\n              l({\n                logic: () => StandardOPs.oclEquals(book.Author, authorname),\n                description: \"book.Author=authorname\",\n              }).build().pass,\n          )),\n        description:\n          \"result=Book.allInstances()->select(book:Book|book.Author=authorname)\",\n      }).build().value;\n      return _oclOperationResult;\n      /*Postcondition Effects End*/\n    })();\n    /*OCL Post-state Snapshot*/\n    oclState.capturePost();\n    const {\n      errorMessage: postconditionErrorMessage,\n      pass: isPostconditionPass,\n    } = (() => {\n      /*Postcondition Check Start*/\n      return l({\n        logic: () =>\n          StandardOPs.oclSetEquals(\n            result,\n            getRepository(Book).filter(\n              (book: Book) =>\n                l({\n                  logic: () => StandardOPs.oclEquals(book?.Author, authorname),\n                  description: \"book.Author=authorname\",\n                }).build().pass,\n            ),\n          ),\n        description:\n          \"result=Book.allInstances()->select(book:Book|book.Author=authorname)\",\n      }).build();\n      /*Postcondition Check End*/\n    })();\n    if (!isPostconditionPass) {\n      throw new PostconditionError(postconditionErrorMessage);\n    }\n    return result;\n  }\n}\nexport { SearchBook_AutoGenerated };\n"
+      },
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "lowering",
+          "status": "PASS",
+          "evidence": null
+        },
+        {
+          "stage": "typescript",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 247,
+              "column": 53,
+              "msg": "Argument of type 'string' is not assignable to parameter of type 'unknown[]'.",
+              "code": 2345
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "typescript",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "TSC",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "type",
+          "code": "2345",
+          "msg": "Argument of type 'string' is not assignable to parameter of type 'unknown[]'.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "generated-typescript",
+            "line": 247,
+            "column": 53
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/searchBook/operation/searchBookByAuthor/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/searchBook/operation/searchBookByAuthor/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

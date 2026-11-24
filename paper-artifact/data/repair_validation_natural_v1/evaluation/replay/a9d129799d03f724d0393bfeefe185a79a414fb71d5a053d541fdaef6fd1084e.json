@@ -1,0 +1,461 @@
+{
+  "operationId": "CoCoME_orderProducts_chooseSupplier",
+  "candidateIdentity": "a9d129799d03f724d0393bfeefe185a79a414fb71d5a053d541fdaef6fd1084e",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_orderProducts_chooseSupplier/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "6d043eb2ae3ffc4ef65b537086fd0f20fa873b857ae1699816f27f2c6a5056e4"
+    }
+  ],
+  "contract": {
+    "definition": "supplier: Supplier = Supplier.allInstances()->any(s: Supplier | s.Id = supplierID)",
+    "precondition": "Supplier.allInstances()->exists(s: Supplier | s.Id = supplierID) and CurrentOrderProduct.oclIsUndefined() = false",
+    "postcondition": "CurrentOrderProduct.Supplier = supplier and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract CoCoMEOrderProducts::chooseSupplier(supplierID:Integer): Boolean {\n          definition:\n          supplier: Supplier = Supplier.allInstances()->any(s: Supplier | s.Id = supplierID)\n            \n            precondition:\n          Supplier.allInstances()->exists(s: Supplier | s.Id = supplierID) and CurrentOrderProduct.oclIsUndefined() = false\n            \n            postcondition:\n          CurrentOrderProduct.Supplier = supplier and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 80,
+              "endLine": 6,
+              "endColumn": 99,
+              "startOffset": 309,
+              "endOffset": 328,
+              "expression": "CurrentOrderProduct",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+                  "declaration": "CurrentOrderProduct: OrderProduct",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                    "line": 12,
+                    "column": 24,
+                    "endLine": 12,
+                    "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 11,
+              "endLine": 9,
+              "endColumn": 30,
+              "startOffset": 404,
+              "endOffset": 423,
+              "expression": "CurrentOrderProduct",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+                  "declaration": "CurrentOrderProduct: OrderProduct",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                    "line": 12,
+                    "column": 24,
+                    "endLine": 12,
+                    "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+              "declaration": "CurrentOrderProduct: OrderProduct",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                "line": 12,
+                "column": 24,
+                "endLine": 12,
+                "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 80
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentOrderProduct"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+              "declaration": "CurrentOrderProduct: OrderProduct",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                "line": 12,
+                "column": 24,
+                "endLine": 12,
+                "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentOrderProduct"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 80,
+            "endLine": 6,
+            "endColumn": 99,
+            "startOffset": 309,
+            "endOffset": 328,
+            "expression": "CurrentOrderProduct",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+                "declaration": "CurrentOrderProduct: OrderProduct",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                  "line": 12,
+                  "column": 24,
+                  "endLine": 12,
+                  "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 80,
+                "endLine": 6,
+                "endColumn": 99,
+                "startOffset": 309,
+                "endOffset": 328,
+                "expression": "CurrentOrderProduct",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+                    "declaration": "CurrentOrderProduct: OrderProduct",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                      "line": 12,
+                      "column": 24,
+                      "endLine": 12,
+                      "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11,
+            "endLine": 9,
+            "endColumn": 30,
+            "startOffset": 404,
+            "endOffset": 423,
+            "expression": "CurrentOrderProduct",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+                "declaration": "CurrentOrderProduct: OrderProduct",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                  "line": 12,
+                  "column": 24,
+                  "endLine": 12,
+                  "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/constraint-task/Q1",
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              8,
+              9
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 11,
+                "endLine": 9,
+                "endColumn": 30,
+                "startOffset": 404,
+                "endOffset": 423,
+                "expression": "CurrentOrderProduct",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentOrderProduct must be accessed as self.CurrentOrderProduct.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/orderProducts/operation/chooseSupplier/state/CurrentOrderProduct"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/orderProducts/operation/chooseSupplier/state/local/CurrentOrderProduct",
+                    "declaration": "CurrentOrderProduct: OrderProduct",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/orderProducts.ts",
+                      "line": 12,
+                      "column": 24,
+                      "endLine": 12,
+                      "sha256": "c85e6a5fd8d412d45dd506e4b30a953864664510652c2df1fba0bd91250dc4bc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/orderProducts/operation/chooseSupplier/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

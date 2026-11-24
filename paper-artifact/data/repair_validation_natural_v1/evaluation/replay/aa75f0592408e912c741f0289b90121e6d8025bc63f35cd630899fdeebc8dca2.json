@@ -1,0 +1,1165 @@
+{
+  "operationId": "LoanProcessingSystem_evaluateLoanRequest_addLoanTerm",
+  "candidateIdentity": "aa75f0592408e912c741f0289b90121e6d8025bc63f35cd630899fdeebc8dca2",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LoanProcessingSystem_evaluateLoanRequest_addLoanTerm/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "267cd82b3feb181bb3eaead1f987dd1c087e54edc51c767de15bdd247e47dbf3"
+    }
+  ],
+  "contract": {
+    "definition": "selectedTerm : LoanTerm = LoanTerm.allInstances()->any(t : LoanTerm | t.LoanTermID = termid)",
+    "precondition": "CurrentLoanRequest <> null and CurrentLoanRequests->includes(CurrentLoanRequest) and LoanTerm.allInstances()->exists(t : LoanTerm | t.LoanTermID = termid)",
+    "postcondition": "CurrentLoanRequest.LoanTerm = selectedTerm and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract EvaluateLoanRequestModule::addLoanTerm(termid:Integer): Boolean {\n          definition:\n          selectedTerm : LoanTerm = LoanTerm.allInstances()->any(t : LoanTerm | t.LoanTermID = termid)\n            \n            precondition:\n          CurrentLoanRequest <> null and CurrentLoanRequests->includes(CurrentLoanRequest) and LoanTerm.allInstances()->exists(t : LoanTerm | t.LoanTermID = termid)\n            \n            postcondition:\n          CurrentLoanRequest.LoanTerm = selectedTerm and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 83,
+              "endLine": 3,
+              "endColumn": 93,
+              "startOffset": 179,
+              "endOffset": 189,
+              "expression": "LoanTermID",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LoanProcessingSystem/entity/LoanTerm"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/entity/LoanTerm",
+                  "declaration": "class LoanTerm",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                    "line": 189,
+                    "column": 13,
+                    "endLine": 204,
+                    "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:107:selectedTerm",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 41,
+                  "endLine": 9,
+                  "endColumn": 53,
+                  "startOffset": 484,
+                  "endOffset": 496,
+                  "expression": "selectedTerm"
+                }
+              ]
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 11,
+              "endLine": 6,
+              "endColumn": 29,
+              "startOffset": 249,
+              "endOffset": 267,
+              "expression": "CurrentLoanRequest",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+              "ruleIds": [
+                "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+              ],
+              "modelElementIds": [
+                "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                  "declaration": "CurrentLoanRequest: LoanRequest",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 42,
+              "endLine": 6,
+              "endColumn": 61,
+              "startOffset": 280,
+              "endOffset": 299,
+              "expression": "CurrentLoanRequests",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+              "ruleIds": [
+                "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequests"
+              ],
+              "modelElementIds": [
+                "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests",
+                  "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 17,
+                    "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 72,
+              "endLine": 6,
+              "endColumn": 90,
+              "startOffset": 310,
+              "endOffset": 328,
+              "expression": "CurrentLoanRequest",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+              "ruleIds": [
+                "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+              ],
+              "modelElementIds": [
+                "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                  "declaration": "CurrentLoanRequest: LoanRequest",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 145,
+              "endLine": 6,
+              "endColumn": 155,
+              "startOffset": 383,
+              "endOffset": 393,
+              "expression": "LoanTermID",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LoanProcessingSystem/entity/LoanTerm"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/entity/LoanTerm",
+                  "declaration": "class LoanTerm",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                    "line": 189,
+                    "column": 13,
+                    "endLine": 204,
+                    "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 11,
+              "endLine": 9,
+              "endColumn": 29,
+              "startOffset": 454,
+              "endOffset": 472,
+              "expression": "CurrentLoanRequest",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+              "ruleIds": [
+                "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+              ],
+              "modelElementIds": [
+                "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                  "declaration": "CurrentLoanRequest: LoanRequest",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/entity/LoanTerm",
+              "declaration": "class LoanTerm",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                "line": 189,
+                "column": 13,
+                "endLine": 204,
+                "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 83
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "LoanTermID"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "selectedTerm"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+              "declaration": "CurrentLoanRequest: LoanRequest",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentLoanRequest"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequests"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests",
+              "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 17,
+                "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 42
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentLoanRequests"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+              "declaration": "CurrentLoanRequest: LoanRequest",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 72
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentLoanRequest"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/entity/LoanTerm",
+              "declaration": "class LoanTerm",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                "line": 189,
+                "column": 13,
+                "endLine": 204,
+                "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 145
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "LoanTermID"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+              "declaration": "CurrentLoanRequest: LoanRequest",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentLoanRequest"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 83,
+            "endLine": 3,
+            "endColumn": 93,
+            "startOffset": 179,
+            "endOffset": 189,
+            "expression": "LoanTermID",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/entity/LoanTerm",
+                "declaration": "class LoanTerm",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                  "line": 189,
+                  "column": 13,
+                  "endLine": 204,
+                  "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:107:selectedTerm",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 41,
+                "endLine": 9,
+                "endColumn": 53,
+                "startOffset": 484,
+                "endOffset": 496,
+                "expression": "selectedTerm"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 83,
+                "endLine": 3,
+                "endColumn": 93,
+                "startOffset": 179,
+                "endOffset": 189,
+                "expression": "LoanTermID",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LoanProcessingSystem/entity/LoanTerm"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/entity/LoanTerm",
+                    "declaration": "class LoanTerm",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                      "line": 189,
+                      "column": 13,
+                      "endLine": 204,
+                      "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:107:selectedTerm",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 41,
+                    "endLine": 9,
+                    "endColumn": 53,
+                    "startOffset": 484,
+                    "endOffset": 496,
+                    "expression": "selectedTerm"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 11,
+            "endLine": 6,
+            "endColumn": 29,
+            "startOffset": 249,
+            "endOffset": 267,
+            "expression": "CurrentLoanRequest",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+            "ruleIds": [
+              "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+            ],
+            "modelElementIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                "declaration": "CurrentLoanRequest: LoanRequest",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 11,
+                "endLine": 6,
+                "endColumn": 29,
+                "startOffset": 249,
+                "endOffset": 267,
+                "expression": "CurrentLoanRequest",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+                "ruleIds": [
+                  "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+                ],
+                "modelElementIds": [
+                  "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                    "declaration": "CurrentLoanRequest: LoanRequest",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 42,
+            "endLine": 6,
+            "endColumn": 61,
+            "startOffset": 280,
+            "endOffset": 299,
+            "expression": "CurrentLoanRequests",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+            "ruleIds": [
+              "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequests"
+            ],
+            "modelElementIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests",
+                "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 17,
+                  "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 42,
+                "endLine": 6,
+                "endColumn": 61,
+                "startOffset": 280,
+                "endOffset": 299,
+                "expression": "CurrentLoanRequests",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+                "ruleIds": [
+                  "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequests"
+                ],
+                "modelElementIds": [
+                  "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequests",
+                    "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 17,
+                      "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 72,
+            "endLine": 6,
+            "endColumn": 90,
+            "startOffset": 310,
+            "endOffset": 328,
+            "expression": "CurrentLoanRequest",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+            "ruleIds": [
+              "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+            ],
+            "modelElementIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                "declaration": "CurrentLoanRequest: LoanRequest",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 72,
+                "endLine": 6,
+                "endColumn": 90,
+                "startOffset": 310,
+                "endOffset": 328,
+                "expression": "CurrentLoanRequest",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+                "ruleIds": [
+                  "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+                ],
+                "modelElementIds": [
+                  "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                    "declaration": "CurrentLoanRequest: LoanRequest",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 145,
+            "endLine": 6,
+            "endColumn": 155,
+            "startOffset": 383,
+            "endOffset": 393,
+            "expression": "LoanTermID",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/entity/LoanTerm",
+                "declaration": "class LoanTerm",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                  "line": 189,
+                  "column": 13,
+                  "endLine": 204,
+                  "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 145,
+                "endLine": 6,
+                "endColumn": 155,
+                "startOffset": 383,
+                "endOffset": 393,
+                "expression": "LoanTermID",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature LoanTermID is not available on LoanTerm.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LoanProcessingSystem/entity/LoanTerm"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/entity/LoanTerm",
+                    "declaration": "class LoanTerm",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                      "line": 189,
+                      "column": 13,
+                      "endLine": 204,
+                      "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11,
+            "endLine": 9,
+            "endColumn": 29,
+            "startOffset": 454,
+            "endOffset": 472,
+            "expression": "CurrentLoanRequest",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+            "ruleIds": [
+              "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+            ],
+            "modelElementIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                "declaration": "CurrentLoanRequest: LoanRequest",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/Q1",
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              8,
+              9
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 11,
+                "endLine": 9,
+                "endColumn": 29,
+                "startOffset": 454,
+                "endOffset": 472,
+                "expression": "CurrentLoanRequest",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentLoanRequest must be accessed as self.CurrentLoanRequest.",
+                "ruleIds": [
+                  "MG-06::LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/CurrentLoanRequest"
+                ],
+                "modelElementIds": [
+                  "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/state/local/CurrentLoanRequest",
+                    "declaration": "CurrentLoanRequest: LoanRequest",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/evaluateLoanRequest.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "1f66667164a395148b35e4a17935691c1a7948b021f996449485a926c1aa236f"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/evaluateLoanRequest/operation/addLoanTerm/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

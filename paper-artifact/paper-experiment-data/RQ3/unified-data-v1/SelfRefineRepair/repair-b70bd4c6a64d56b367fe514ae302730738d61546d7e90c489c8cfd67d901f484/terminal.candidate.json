@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentOrderProduct.oclIsUndefined() = false and Item.allInstances()->exists(i: Item | i.Barcode = barcode)",
+    "postcondition": "result = true and self.CurrentOrderProduct.ContainedEntries@pre->forAll(e: OrderEntry | self.CurrentOrderProduct.ContainedEntries->includes(e)) and OrderEntry.allInstances()->exists(oe: OrderEntry | oe.oclIsNew() and self.CurrentOrderProduct.ContainedEntries->includes(oe) and Item.allInstances()->exists(i: Item | i.Barcode = barcode and oe.Item = i and oe.Quantity = quantity and oe.SubAmount = quantity * i.OrderPrice))"
+  },
+  "methodAccepted": true
+}

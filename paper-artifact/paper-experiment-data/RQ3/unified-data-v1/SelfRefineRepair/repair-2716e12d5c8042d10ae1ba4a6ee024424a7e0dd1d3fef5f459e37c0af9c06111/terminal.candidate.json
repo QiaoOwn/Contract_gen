@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "u: User = User.allInstances()->any(x: User | x.UserID = uid), c: BookCopy = BookCopy.allInstances()->any(x: BookCopy | x.Barcode = barcode), r: Reserve = Reserve.allInstances()->any(x: Reserve | x.ReservedUser = u and x.ReservedCopy = c and x.IsReserveClosed = false)",
+    "precondition": "User.allInstances()->exists(x: User | x.UserID = uid) and BookCopy.allInstances()->exists(x: BookCopy | x.Barcode = barcode) and c.Status = CopyStatus::LOANED and c.IsReserved = true and Reserve.allInstances()->exists(x: Reserve | x.ReservedUser = u and x.ReservedCopy = c and x.IsReserveClosed = false)",
+    "postcondition": "c.IsReserved = false and r.IsReserveClosed = true and result = true"
+  },
+  "methodAccepted": true
+}

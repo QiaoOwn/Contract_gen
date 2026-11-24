@@ -1,0 +1,34 @@
+{
+  "schema_version": "rm2pt-authority-adjudication-v1",
+  "decision_id": "R04",
+  "operation_id": "CoCoME_receiveOrderedProduct_receiveOrderedProduct",
+  "status": "APPROVED",
+  "option": "A",
+  "decision_date": "2026-10-27",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "source_file": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+  "source_sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+  "source_lines": [803, 810, 820, 821, 822, 824],
+  "source_problem": "Multiple OrderEntry objects can refer to the same Item. Per-entry equalities then constrain its one post-state stock against the same operation-entry stock, rather than summing the quantities.",
+  "approved_preconditions": ["The referenced OrderProduct exists."],
+  "approved_postconditions": [
+    "The order status becomes RECEIVED.",
+    "For each Item referred to by this order's entries, its final stock equals its operation-entry stock plus the quantities of all this order's entries referring to that same Item.",
+    "Distinct entries referring to the same Item contribute separately, including equal quantities.",
+    "Different Items have their quantities accumulated separately.",
+    "The operation returns true."
+  ],
+  "fixture_identity_note": "fixture_key/item_key in the examples name object identities in the test data; they do not add a model attribute or business precondition.",
+  "business_examples": [
+    {"items": [{"fixture_key": "a", "before_stock": 10, "after_stock": 15}], "entries": [{"item_key": "a", "quantity": 2}, {"item_key": "a", "quantity": 3}]},
+    {"items": [{"fixture_key": "a", "before_stock": 10, "after_stock": 14}], "entries": [{"item_key": "a", "quantity": 2}, {"item_key": "a", "quantity": 2}]},
+    {"items": [{"fixture_key": "a", "before_stock": 10, "after_stock": 15}, {"fixture_key": "b", "before_stock": 40, "after_stock": 44}], "entries": [{"item_key": "a", "quantity": 2}, {"item_key": "b", "quantity": 4}, {"item_key": "a", "quantity": 3}]}
+  ],
+  "correction_scope": "Replace alias-conflicting per-entry equalities with per-Item accumulation from the operation-entry stock. Preserve the existing-order guard, RECEIVED status and Boolean success result. Do not impose entry uniqueness, cascade effects or unrelated frame conditions.",
+  "additional_business_constraints": [],
+  "upstream_snapshot_modified": false,
+  "generation_reference_contract_supplied": false,
+  "executable_subset_status": "PENDING_ALIAS_AWARE_AGGREGATION_REPRESENTATION_REVIEW_LEGACY_CATALOG_RETAINS_PER_ENTRY_EQUALITIES",
+  "oracle_review_status": "PENDING_RM2PT_AUTHORITY_REVIEW"
+}

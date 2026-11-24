@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentSale <> null and self.CurrentStore <> null and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = true and amount >= self.CurrentSale.Amount",
+    "postcondition": "result = true and self.CurrentSale.Belongedstore = self.CurrentStore and self.CurrentSale.Time = Now and self.CurrentSale.IsComplete = true and CashPayment.allInstances()->exists(p:CashPayment|p.oclIsNew() and p.AmountTendered = amount and p.Balance = amount - self.CurrentSale.Amount and p.BelongedSale = self.CurrentSale and self.CurrentSale.AssoicatedPayment = p and Payment.allInstances()->includes(p))"
+  },
+  "methodAccepted": true
+}

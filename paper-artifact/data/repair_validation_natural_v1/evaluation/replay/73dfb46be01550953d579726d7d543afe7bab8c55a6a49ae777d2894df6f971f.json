@@ -1,0 +1,1343 @@
+{
+  "operationId": "CoCoME_manageProductCatalog_deleteProductCatalog",
+  "candidateIdentity": "73dfb46be01550953d579726d7d543afe7bab8c55a6a49ae777d2894df6f971f",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_manageProductCatalog_deleteProductCatalog/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "139fc6344834f705483075fed79408f95ae03251d4de7e544621b02a5a5c3250"
+    }
+  ],
+  "contract": {
+    "definition": "deletedCatalog : ProductCatalog = CurrentStore.ProductCatalog@pre->any(catalog : ProductCatalog | catalog.id = id)",
+    "precondition": "CurrentStore.ProductCatalog->exists(catalog : ProductCatalog | catalog.id = id)",
+    "postcondition": "CurrentStore.ProductCatalog@pre->includes(deletedCatalog) and CurrentStore.ProductCatalog->excludes(deletedCatalog) and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ManageProductCatalogCRUDService::deleteProductCatalog(id:Integer): Boolean {\n          definition:\n          deletedCatalog : ProductCatalog = CurrentStore.ProductCatalog@pre->any(catalog : ProductCatalog | catalog.id = id)\n            \n            precondition:\n          CurrentStore.ProductCatalog->exists(catalog : ProductCatalog | catalog.id = id)\n            \n            postcondition:\n          CurrentStore.ProductCatalog@pre->includes(deletedCatalog) and CurrentStore.ProductCatalog->excludes(deletedCatalog) and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 3,
+              "column": 72,
+              "code": "DIA_PRESTATE_SCOPE",
+              "clause": "definition",
+              "ruleIds": [
+                "G-TMP-01"
+              ],
+              "msg": "[generation-semantics] @pre is permitted only in a postcondition."
+            }
+          ]
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 45,
+              "endLine": 3,
+              "endColumn": 57,
+              "startOffset": 152,
+              "endOffset": 164,
+              "expression": "CurrentStore",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "rootBindingId": "binding:118:deletedCatalog",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 53,
+                  "endLine": 9,
+                  "endColumn": 67,
+                  "startOffset": 454,
+                  "endOffset": 468,
+                  "expression": "deletedCatalog"
+                },
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 111,
+                  "endLine": 9,
+                  "endColumn": 125,
+                  "startOffset": 512,
+                  "endOffset": 526,
+                  "expression": "deletedCatalog"
+                }
+              ]
+            },
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 117,
+              "endLine": 3,
+              "endColumn": 119,
+              "startOffset": 224,
+              "endOffset": 226,
+              "expression": "id",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/ProductCatalog"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/ProductCatalog",
+                  "declaration": "class ProductCatalog",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 81,
+                    "column": 19,
+                    "endLine": 105,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:118:deletedCatalog",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 53,
+                  "endLine": 9,
+                  "endColumn": 67,
+                  "startOffset": 454,
+                  "endOffset": 468,
+                  "expression": "deletedCatalog"
+                },
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 111,
+                  "endLine": 9,
+                  "endColumn": 125,
+                  "startOffset": 512,
+                  "endOffset": 526,
+                  "expression": "deletedCatalog"
+                }
+              ]
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 11,
+              "endLine": 6,
+              "endColumn": 23,
+              "startOffset": 282,
+              "endOffset": 294,
+              "expression": "CurrentStore",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 82,
+              "endLine": 6,
+              "endColumn": 84,
+              "startOffset": 353,
+              "endOffset": 355,
+              "expression": "id",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/ProductCatalog"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/ProductCatalog",
+                  "declaration": "class ProductCatalog",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 81,
+                    "column": 19,
+                    "endLine": 105,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 11,
+              "endLine": 9,
+              "endColumn": 23,
+              "startOffset": 412,
+              "endOffset": 424,
+              "expression": "CurrentStore",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 73,
+              "endLine": 9,
+              "endColumn": 85,
+              "startOffset": 474,
+              "endOffset": 486,
+              "expression": "CurrentStore",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "DIA_PRESTATE_SCOPE",
+          "msg": "[generation-semantics] @pre is permitted only in a postcondition.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "G-TMP-01"
+          ],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 3,
+            "column": 72
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 45
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "CurrentStore"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "deletedCatalog"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "deletedCatalog"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/ProductCatalog",
+              "declaration": "class ProductCatalog",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 81,
+                "column": 19,
+                "endLine": 105,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 117
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "id"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "deletedCatalog"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "deletedCatalog"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentStore"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/ProductCatalog",
+              "declaration": "class ProductCatalog",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 81,
+                "column": 19,
+                "endLine": 105,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 82
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "id"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentStore"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 73
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentStore"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 45,
+            "endLine": 3,
+            "endColumn": 57,
+            "startOffset": 152,
+            "endOffset": 164,
+            "expression": "CurrentStore",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "rootBindingId": "binding:118:deletedCatalog",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 53,
+                "endLine": 9,
+                "endColumn": 67,
+                "startOffset": 454,
+                "endOffset": 468,
+                "expression": "deletedCatalog"
+              },
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 111,
+                "endLine": 9,
+                "endColumn": 125,
+                "startOffset": 512,
+                "endOffset": 526,
+                "expression": "deletedCatalog"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 45,
+                "endLine": 3,
+                "endColumn": 57,
+                "startOffset": 152,
+                "endOffset": 164,
+                "expression": "CurrentStore",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "rootBindingId": "binding:118:deletedCatalog",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 53,
+                    "endLine": 9,
+                    "endColumn": 67,
+                    "startOffset": 454,
+                    "endOffset": 468,
+                    "expression": "deletedCatalog"
+                  },
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 111,
+                    "endLine": 9,
+                    "endColumn": 125,
+                    "startOffset": 512,
+                    "endOffset": 526,
+                    "expression": "deletedCatalog"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 117,
+            "endLine": 3,
+            "endColumn": 119,
+            "startOffset": 224,
+            "endOffset": 226,
+            "expression": "id",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/ProductCatalog",
+                "declaration": "class ProductCatalog",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 81,
+                  "column": 19,
+                  "endLine": 105,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:118:deletedCatalog",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 53,
+                "endLine": 9,
+                "endColumn": 67,
+                "startOffset": 454,
+                "endOffset": 468,
+                "expression": "deletedCatalog"
+              },
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 111,
+                "endLine": 9,
+                "endColumn": 125,
+                "startOffset": 512,
+                "endOffset": 526,
+                "expression": "deletedCatalog"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature id is not available on ProductCatalog.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 117,
+                "endLine": 3,
+                "endColumn": 119,
+                "startOffset": 224,
+                "endOffset": 226,
+                "expression": "id",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/ProductCatalog"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/ProductCatalog",
+                    "declaration": "class ProductCatalog",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 81,
+                      "column": 19,
+                      "endLine": 105,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:118:deletedCatalog",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 53,
+                    "endLine": 9,
+                    "endColumn": 67,
+                    "startOffset": 454,
+                    "endOffset": 468,
+                    "expression": "deletedCatalog"
+                  },
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 111,
+                    "endLine": 9,
+                    "endColumn": 125,
+                    "startOffset": 512,
+                    "endOffset": 526,
+                    "expression": "deletedCatalog"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 11,
+            "endLine": 6,
+            "endColumn": 23,
+            "startOffset": 282,
+            "endOffset": 294,
+            "expression": "CurrentStore",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 11,
+                "endLine": 6,
+                "endColumn": 23,
+                "startOffset": 282,
+                "endOffset": 294,
+                "expression": "CurrentStore",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 82,
+            "endLine": 6,
+            "endColumn": 84,
+            "startOffset": 353,
+            "endOffset": 355,
+            "expression": "id",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/ProductCatalog",
+                "declaration": "class ProductCatalog",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 81,
+                  "column": 19,
+                  "endLine": 105,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature id is not available on ProductCatalog.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 82,
+                "endLine": 6,
+                "endColumn": 84,
+                "startOffset": 353,
+                "endOffset": 355,
+                "expression": "id",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/ProductCatalog"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/ProductCatalog",
+                    "declaration": "class ProductCatalog",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 81,
+                      "column": 19,
+                      "endLine": 105,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11,
+            "endLine": 9,
+            "endColumn": 23,
+            "startOffset": 412,
+            "endOffset": 424,
+            "expression": "CurrentStore",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/Q1",
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              8,
+              9
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 11,
+                "endLine": 9,
+                "endColumn": 23,
+                "startOffset": 412,
+                "endOffset": 424,
+                "expression": "CurrentStore",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 73,
+            "endLine": 9,
+            "endColumn": 85,
+            "startOffset": 474,
+            "endOffset": 486,
+            "expression": "CurrentStore",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/Q1",
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              8,
+              9
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 73,
+                "endLine": 9,
+                "endColumn": 85,
+                "startOffset": 474,
+                "endOffset": 486,
+                "expression": "CurrentStore",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/CurrentStore"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TEMPORAL",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 72,
+            "endLine": 3,
+            "endColumn": 76,
+            "startOffset": 179,
+            "endOffset": 183,
+            "expression": "@pre"
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "DIA_PRESTATE_SCOPE",
+          "constraint": "[generation-semantics] @pre is permitted only in a postcondition.",
+          "message": "[generation-semantics] @pre is permitted only in a postcondition.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 72,
+                "endLine": 3,
+                "endColumn": 76,
+                "startOffset": 179,
+                "endOffset": 183,
+                "expression": "@pre"
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/deleteProductCatalog/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

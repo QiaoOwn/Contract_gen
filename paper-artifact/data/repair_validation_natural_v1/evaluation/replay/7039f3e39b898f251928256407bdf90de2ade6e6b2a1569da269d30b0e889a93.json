@@ -1,0 +1,317 @@
+{
+  "operationId": "LoanProcessingSystem_manageLoanTerm_queryLoanTerm",
+  "candidateIdentity": "7039f3e39b898f251928256407bdf90de2ade6e6b2a1569da269d30b0e889a93",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LoanProcessingSystem_manageLoanTerm_queryLoanTerm/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "4a30a9c643e81c956cc35111d41d67062b5d8983dc21f9b4731377f6d2e663bf"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "Loan.allInstances()->exists(loan:Loan|loan.LoanID = itemid)",
+    "postcondition": "result = Loan.allInstances()->any(loan:Loan|loan.LoanID = itemid)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ManageLoanTermCRUDService::queryLoanTerm(itemid:Integer): LoanTerm {\n          \n            precondition:\n          Loan.allInstances()->exists(loan:Loan|loan.LoanID = itemid)\n            \n            postcondition:\n          result = Loan.allInstances()->any(loan:Loan|loan.LoanID = itemid)\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 11,
+              "endLine": 7,
+              "endColumn": 76,
+              "startOffset": 235,
+              "endOffset": 300,
+              "expression": "result=Loan.allInstances()->any(loan:Loan|loan.LoanID=itemid)",
+              "kind": "model-rule",
+              "family": "MG-07",
+              "code": "INCOMPATIBLE_VALUE_TYPES",
+              "msg": "[MG-07] Types LoanTerm and Loan are incompatible.",
+              "ruleIds": [
+                "MG-07::LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm"
+              ],
+              "modelElementIds": [
+                "LoanProcessingSystem/entity/Loan",
+                "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/entity/Loan",
+                  "declaration": "class Loan",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                    "line": 124,
+                    "column": 9,
+                    "endLine": 188,
+                    "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                  }
+                },
+                {
+                  "id": "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return",
+                  "declaration": "result: LoanTerm",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/manageLoanTerm.ts",
+                    "line": 41,
+                    "column": 17,
+                    "endLine": 41,
+                    "sha256": "8075f1a57ad0d62721343b54c90787b9750f88ec60972b88c95a295f39110704"
+                  }
+                }
+              ],
+              "repair": "Keep result only in the postcondition and respect the declared return type. Determine its value from the requirement, not from the type alone.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INCOMPATIBLE_VALUE_TYPES",
+          "msg": "[MG-07] Types LoanTerm and Loan are incompatible.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-07::LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/entity/Loan",
+              "declaration": "class Loan",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                "line": 124,
+                "column": 9,
+                "endLine": 188,
+                "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+              }
+            },
+            {
+              "id": "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return",
+              "declaration": "result: LoanTerm",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/manageLoanTerm.ts",
+                "line": 41,
+                "column": 17,
+                "endLine": 41,
+                "sha256": "8075f1a57ad0d62721343b54c90787b9750f88ec60972b88c95a295f39110704"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "result=Loan.allInstances()->any(loan:Loan|loan.LoanID=itemid)"
+            }
+          ],
+          "repair": "Keep result only in the postcondition and respect the declared return type. Determine its value from the requirement, not from the type alone."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 11,
+            "endLine": 7,
+            "endColumn": 76,
+            "startOffset": 235,
+            "endOffset": 300,
+            "expression": "result=Loan.allInstances()->any(loan:Loan|loan.LoanID=itemid)",
+            "kind": "model-rule",
+            "family": "MG-07",
+            "code": "INCOMPATIBLE_VALUE_TYPES",
+            "msg": "[MG-07] Types LoanTerm and Loan are incompatible.",
+            "ruleIds": [
+              "MG-07::LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm"
+            ],
+            "modelElementIds": [
+              "LoanProcessingSystem/entity/Loan",
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/entity/Loan",
+                "declaration": "class Loan",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                  "line": 124,
+                  "column": 9,
+                  "endLine": 188,
+                  "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                }
+              },
+              {
+                "id": "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return",
+                "declaration": "result: LoanTerm",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/manageLoanTerm.ts",
+                  "line": 41,
+                  "column": 17,
+                  "endLine": 41,
+                  "sha256": "8075f1a57ad0d62721343b54c90787b9750f88ec60972b88c95a295f39110704"
+                }
+              }
+            ],
+            "repair": "Keep result only in the postcondition and respect the declared return type. Determine its value from the requirement, not from the type alone.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INCOMPATIBLE_VALUE_TYPES",
+          "constraint": "Keep result only in the postcondition and respect the declared return type. Determine its value from the requirement, not from the type alone.",
+          "message": "[MG-07] Types LoanTerm and Loan are incompatible.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/entity/Loan",
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 11,
+                "endLine": 7,
+                "endColumn": 76,
+                "startOffset": 235,
+                "endOffset": 300,
+                "expression": "result=Loan.allInstances()->any(loan:Loan|loan.LoanID=itemid)",
+                "kind": "model-rule",
+                "family": "MG-07",
+                "code": "INCOMPATIBLE_VALUE_TYPES",
+                "msg": "[MG-07] Types LoanTerm and Loan are incompatible.",
+                "ruleIds": [
+                  "MG-07::LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm"
+                ],
+                "modelElementIds": [
+                  "LoanProcessingSystem/entity/Loan",
+                  "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/entity/Loan",
+                    "declaration": "class Loan",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                      "line": 124,
+                      "column": 9,
+                      "endLine": 188,
+                      "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                    }
+                  },
+                  {
+                    "id": "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/return",
+                    "declaration": "result: LoanTerm",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/manageLoanTerm.ts",
+                      "line": 41,
+                      "column": 17,
+                      "endLine": 41,
+                      "sha256": "8075f1a57ad0d62721343b54c90787b9750f88ec60972b88c95a295f39110704"
+                    }
+                  }
+                ],
+                "repair": "Keep result only in the postcondition and respect the declared return type. Determine its value from the requirement, not from the type alone.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/queryLoanTerm/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

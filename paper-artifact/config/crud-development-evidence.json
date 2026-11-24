@@ -1,0 +1,1452 @@
+{
+  "version": "source-backed-crud-extension-v1",
+  "deferred": {},
+  "records": [
+    {
+      "id": "AutomatedTellerMachine_manageBankCard_createBankCard",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageBankCard",
+      "operation": "createBankCard",
+      "service": "ManageBankCardCRUDService",
+      "entity": "BankCard",
+      "fields": [
+        "CardID",
+        "CardStatus",
+        "Catalog",
+        "Password",
+        "Balance"
+      ],
+      "parameters": [
+        {
+          "name": "cardid",
+          "type": "Integer"
+        },
+        {
+          "name": "cardstatus",
+          "type": "CardStatus[NORMAL|SUSPEND|CANNEL]"
+        },
+        {
+          "name": "catalog",
+          "type": "CardCatalog[CREDIT|DESPOSIT]"
+        },
+        {
+          "name": "password",
+          "type": "Integer"
+        },
+        {
+          "name": "balance",
+          "type": "Real"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a BankCard record from the supplied card identifier, status, catalog, password, balance.\n\nPreconditions:\n- No existing BankCard has the supplied card identifier.\n\nPostconditions:\n- A new BankCard is stored with the supplied card identifier, status, catalog, password, balance.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1113,
+      "documentPostLine": 1117,
+      "modelPreLines": [
+        480,
+        493
+      ],
+      "modelPostLines": [
+        495,
+        503
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageBankCard_queryBankCard",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageBankCard",
+      "operation": "queryBankCard",
+      "service": "ManageBankCardCRUDService",
+      "entity": "BankCard",
+      "fields": [
+        "CardID",
+        "CardStatus",
+        "Catalog",
+        "Password",
+        "Balance"
+      ],
+      "parameters": [
+        {
+          "name": "cardid",
+          "type": "Integer"
+        }
+      ],
+      "kind": "query",
+      "requirement": "Operation intent:\nRetrieve the BankCard identified by the supplied card identifier.\n\nPreconditions:\n- The referenced BankCard exists.\n\nPostconditions:\n- The operation returns the referenced BankCard.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1195,
+      "documentPostLine": 1199,
+      "modelPreLines": [
+        522,
+        527
+      ],
+      "modelPostLines": [
+        529,
+        529
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageBankCard_modifyBankCard",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageBankCard",
+      "operation": "modifyBankCard",
+      "service": "ManageBankCardCRUDService",
+      "entity": "BankCard",
+      "fields": [
+        "CardID",
+        "CardStatus",
+        "Catalog",
+        "Password",
+        "Balance"
+      ],
+      "parameters": [
+        {
+          "name": "cardid",
+          "type": "Integer"
+        },
+        {
+          "name": "cardstatus",
+          "type": "CardStatus[NORMAL|SUSPEND|CANNEL]"
+        },
+        {
+          "name": "catalog",
+          "type": "CardCatalog[CREDIT|DESPOSIT]"
+        },
+        {
+          "name": "password",
+          "type": "Integer"
+        },
+        {
+          "name": "balance",
+          "type": "Real"
+        }
+      ],
+      "kind": "modify",
+      "requirement": "Operation intent:\nUpdate the BankCard identified by card identifier with the supplied card identifier, status, catalog, password, balance.\n\nPreconditions:\n- The referenced BankCard exists.\n\nPostconditions:\n- The stored BankCard contains the supplied card identifier, status, catalog, password, balance.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1261,
+      "documentPostLine": 1265,
+      "modelPreLines": [
+        548,
+        558
+      ],
+      "modelPostLines": [
+        560,
+        565
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageBankCard_deleteBankCard",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageBankCard",
+      "operation": "deleteBankCard",
+      "service": "ManageBankCardCRUDService",
+      "entity": "BankCard",
+      "fields": [
+        "CardID",
+        "CardStatus",
+        "Catalog",
+        "Password",
+        "Balance"
+      ],
+      "parameters": [
+        {
+          "name": "cardid",
+          "type": "Integer"
+        }
+      ],
+      "kind": "delete",
+      "requirement": "Operation intent:\nDelete the BankCard identified by the supplied card identifier.\n\nPreconditions:\n- The referenced BankCard exists in the repository.\n\nPostconditions:\n- The BankCard is removed from the repository.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1337,
+      "documentPostLine": 1341,
+      "modelPreLines": [
+        585,
+        592
+      ],
+      "modelPostLines": [
+        594,
+        595
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageUser_createUser",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageUser",
+      "operation": "createUser",
+      "service": "ManageUserCRUDService",
+      "entity": "User",
+      "fields": [
+        "UserID",
+        "Name",
+        "Address"
+      ],
+      "parameters": [
+        {
+          "name": "userid",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "address",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a User record from the supplied user identifier, name, address.\n\nPreconditions:\n- No existing User has the supplied user identifier.\n\nPostconditions:\n- A new User is stored with the supplied user identifier, name, address.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1407,
+      "documentPostLine": 1411,
+      "modelPreLines": [
+        614,
+        625
+      ],
+      "modelPostLines": [
+        627,
+        633
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageUser_queryUser",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageUser",
+      "operation": "queryUser",
+      "service": "ManageUserCRUDService",
+      "entity": "User",
+      "fields": [
+        "UserID",
+        "Name",
+        "Address"
+      ],
+      "parameters": [
+        {
+          "name": "userid",
+          "type": "Integer"
+        }
+      ],
+      "kind": "query",
+      "requirement": "Operation intent:\nRetrieve the User identified by the supplied user identifier.\n\nPreconditions:\n- The referenced User exists.\n\nPostconditions:\n- The operation returns the referenced User.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1485,
+      "documentPostLine": 1489,
+      "modelPreLines": [
+        652,
+        657
+      ],
+      "modelPostLines": [
+        659,
+        659
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageUser_modifyUser",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageUser",
+      "operation": "modifyUser",
+      "service": "ManageUserCRUDService",
+      "entity": "User",
+      "fields": [
+        "UserID",
+        "Name",
+        "Address"
+      ],
+      "parameters": [
+        {
+          "name": "userid",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "address",
+          "type": "String"
+        }
+      ],
+      "kind": "modify",
+      "requirement": "Operation intent:\nUpdate the User identified by user identifier with the supplied user identifier, name, address.\n\nPreconditions:\n- The referenced User exists.\n\nPostconditions:\n- The stored User contains the supplied user identifier, name, address.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1551,
+      "documentPostLine": 1555,
+      "modelPreLines": [
+        678,
+        686
+      ],
+      "modelPostLines": [
+        688,
+        691
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "AutomatedTellerMachine_manageUser_deleteUser",
+      "project": "AutomatedTellerMachine",
+      "useCase": "manageUser",
+      "operation": "deleteUser",
+      "service": "ManageUserCRUDService",
+      "entity": "User",
+      "fields": [
+        "UserID",
+        "Name",
+        "Address"
+      ],
+      "parameters": [
+        {
+          "name": "userid",
+          "type": "Integer"
+        }
+      ],
+      "kind": "delete",
+      "requirement": "Operation intent:\nDelete the User identified by the supplied user identifier.\n\nPreconditions:\n- The referenced User exists in the repository.\n\nPostconditions:\n- The User is removed from the repository.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 1623,
+      "documentPostLine": 1627,
+      "modelPreLines": [
+        711,
+        718
+      ],
+      "modelPostLines": [
+        720,
+        721
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageCashDesk_createCashDesk",
+      "project": "CoCoME",
+      "useCase": "manageCashDesk",
+      "operation": "createCashDesk",
+      "service": "ManageCashDeskCRUDService",
+      "entity": "CashDesk",
+      "fields": [
+        "Id",
+        "Name",
+        "IsOpened"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "isopened",
+          "type": "Boolean"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a CashDesk record from the supplied identifier, name, open state.\n\nPreconditions:\n- No existing CashDesk has the supplied identifier.\n\nPostconditions:\n- A new CashDesk is stored with the supplied identifier, name, open state.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 3643,
+      "documentPostLine": 3647,
+      "modelPreLines": [
+        1140,
+        1151
+      ],
+      "modelPostLines": [
+        1153,
+        1160
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageCashier_createCashier",
+      "project": "CoCoME",
+      "useCase": "manageCashier",
+      "operation": "createCashier",
+      "service": "ManageCashierCRUDService",
+      "entity": "Cashier",
+      "fields": [
+        "Id",
+        "Name"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a Cashier record from the supplied identifier, name.\n\nPreconditions:\n- No existing Cashier has the supplied identifier.\n\nPostconditions:\n- A new Cashier is stored with the supplied identifier, name.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 3929,
+      "documentPostLine": 3933,
+      "modelPreLines": [
+        1270,
+        1280
+      ],
+      "modelPostLines": [
+        1282,
+        1288
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageProductCatalog_createProductCatalog",
+      "project": "CoCoME",
+      "useCase": "manageProductCatalog",
+      "operation": "createProductCatalog",
+      "service": "ManageProductCatalogCRUDService",
+      "entity": "ProductCatalog",
+      "fields": [
+        "Id",
+        "Name"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a ProductCatalog record from the supplied identifier, name.\n\nPreconditions:\n- No existing ProductCatalog has the supplied identifier.\n\nPostconditions:\n- A new ProductCatalog is stored with the supplied identifier, name.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 3361,
+      "documentPostLine": 3365,
+      "modelPreLines": [
+        1014,
+        1024
+      ],
+      "modelPostLines": [
+        1026,
+        1032
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageStore_createStore",
+      "project": "CoCoME",
+      "useCase": "manageStore",
+      "operation": "createStore",
+      "service": "ManageStoreCRUDService",
+      "entity": "Store",
+      "fields": [
+        "Id",
+        "Name",
+        "Address",
+        "IsOpened"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "address",
+          "type": "String"
+        },
+        {
+          "name": "isopened",
+          "type": "Boolean"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a Store record from the supplied identifier, name, address, open state.\n\nPreconditions:\n- No existing Store has the supplied identifier.\n\nPostconditions:\n- A new Store is stored with the supplied identifier, name, address, open state.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 3071,
+      "documentPostLine": 3075,
+      "modelPreLines": [
+        880,
+        892
+      ],
+      "modelPostLines": [
+        894,
+        902
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageSupplier_createSupplier",
+      "project": "CoCoME",
+      "useCase": "manageSupplier",
+      "operation": "createSupplier",
+      "service": "ManageSupplierCRUDService",
+      "entity": "Supplier",
+      "fields": [
+        "Id",
+        "Name"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a Supplier record from the supplied identifier, name.\n\nPreconditions:\n- No existing Supplier has the supplied identifier.\n\nPostconditions:\n- A new Supplier is stored with the supplied identifier, name.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 4505,
+      "documentPostLine": 4509,
+      "modelPreLines": [
+        1534,
+        1544
+      ],
+      "modelPostLines": [
+        1546,
+        1552
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageItem_createItem",
+      "project": "CoCoME",
+      "useCase": "manageItem",
+      "operation": "createItem",
+      "service": "ManageItemCRUDService",
+      "entity": "Item",
+      "fields": [
+        "Barcode",
+        "Name",
+        "Price",
+        "StockNumber",
+        "OrderPrice"
+      ],
+      "parameters": [
+        {
+          "name": "barcode",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "price",
+          "type": "Real"
+        },
+        {
+          "name": "stocknumber",
+          "type": "Integer"
+        },
+        {
+          "name": "orderprice",
+          "type": "Real"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a Item record from the supplied barcode, name, sale price, stock quantity, order price.\n\nPreconditions:\n- No existing Item has the supplied barcode.\n\nPostconditions:\n- A new Item is stored with the supplied barcode, name, sale price, stock quantity, order price.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 4211,
+      "documentPostLine": 4215,
+      "modelPreLines": [
+        1396,
+        1409
+      ],
+      "modelPostLines": [
+        1411,
+        1420
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "CoCoME_manageItem_modifyItem",
+      "project": "CoCoME",
+      "useCase": "manageItem",
+      "operation": "modifyItem",
+      "service": "ManageItemCRUDService",
+      "entity": "Item",
+      "fields": [
+        "Barcode",
+        "Name",
+        "Price",
+        "StockNumber",
+        "OrderPrice"
+      ],
+      "parameters": [
+        {
+          "name": "barcode",
+          "type": "Integer"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "price",
+          "type": "Real"
+        },
+        {
+          "name": "stocknumber",
+          "type": "Integer"
+        },
+        {
+          "name": "orderprice",
+          "type": "Real"
+        }
+      ],
+      "kind": "modify",
+      "requirement": "Operation intent:\nUpdate the Item identified by barcode with the supplied barcode, name, sale price, stock quantity, order price.\n\nPreconditions:\n- The referenced Item exists.\n\nPostconditions:\n- The stored Item contains the supplied barcode, name, sale price, stock quantity, order price.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 4359,
+      "documentPostLine": 4363,
+      "modelPreLines": [
+        1466,
+        1476
+      ],
+      "modelPostLines": [
+        1478,
+        1484
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LibraryManagementSystem_manageBook_createBook",
+      "project": "LibraryManagementSystem",
+      "useCase": "manageBook",
+      "operation": "createBook",
+      "service": "ManageBookCRUDService",
+      "entity": "Book",
+      "fields": [
+        "CallNo",
+        "Title",
+        "Edition",
+        "Author",
+        "Publisher",
+        "Description",
+        "ISBn",
+        "CopyNum"
+      ],
+      "parameters": [
+        {
+          "name": "callno",
+          "type": "String"
+        },
+        {
+          "name": "title",
+          "type": "String"
+        },
+        {
+          "name": "edition",
+          "type": "String"
+        },
+        {
+          "name": "author",
+          "type": "String"
+        },
+        {
+          "name": "publisher",
+          "type": "String"
+        },
+        {
+          "name": "description",
+          "type": "String"
+        },
+        {
+          "name": "isbn",
+          "type": "String"
+        },
+        {
+          "name": "copynum",
+          "type": "Integer"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a bibliographic Book record from the supplied catalog information.\n\nPreconditions:\n- No existing Book uses the supplied call number.\n\nPostconditions:\n- A new Book stores the call number, title, edition, author, publisher, description, ISBN, and copy count.\n- The Book is stored and the operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 4315,
+      "documentPostLine": 4319,
+      "modelPreLines": [
+        1459,
+        1475
+      ],
+      "modelPostLines": [
+        1477,
+        1488
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LibraryManagementSystem_manageLibrarian_createLibrarian",
+      "project": "LibraryManagementSystem",
+      "useCase": "manageLibrarian",
+      "operation": "createLibrarian",
+      "service": "ManageLibrarianCRUDService",
+      "entity": "Librarian",
+      "fields": [
+        "LibrarianID",
+        "Name",
+        "Password"
+      ],
+      "parameters": [
+        {
+          "name": "librarianid",
+          "type": "String"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "password",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nRegister a librarian with an identifier, name, and password.\n\nPreconditions:\n- The librarian identifier is unused.\n\nPostconditions:\n- A new Librarian is stored with the supplied data.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 5200,
+      "documentPostLine": 5204,
+      "modelPreLines": [
+        1863,
+        1874
+      ],
+      "modelPostLines": [
+        1876,
+        1882
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LibraryManagementSystem_manageSubject_createSubject",
+      "project": "LibraryManagementSystem",
+      "useCase": "manageSubject",
+      "operation": "createSubject",
+      "service": "ManageSubjectCRUDService",
+      "entity": "Subject",
+      "fields": [
+        "Name"
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a library subject category.\n\nPreconditions:\n- No existing Subject has the supplied name.\n\nPostconditions:\n- A new Subject with that name is stored.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 4621,
+      "documentPostLine": 4625,
+      "modelPreLines": [
+        1605,
+        1614
+      ],
+      "modelPostLines": [
+        1616,
+        1620
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LibraryManagementSystem_manageUser_createUser",
+      "project": "LibraryManagementSystem",
+      "useCase": "manageUser",
+      "operation": "createUser",
+      "service": "ManageUserCRUDService",
+      "entity": "User",
+      "fields": [
+        "UserID",
+        "Name",
+        "Sex",
+        "Password",
+        "Email",
+        "Faculty",
+        "LoanedNumber",
+        "BorrowStatus",
+        "SuspensionDays",
+        "OverDueFee"
+      ],
+      "parameters": [
+        {
+          "name": "userid",
+          "type": "String"
+        },
+        {
+          "name": "name",
+          "type": "String"
+        },
+        {
+          "name": "sex",
+          "type": "Sex [M|F]"
+        },
+        {
+          "name": "password",
+          "type": "String"
+        },
+        {
+          "name": "email",
+          "type": "String"
+        },
+        {
+          "name": "faculty",
+          "type": "String"
+        },
+        {
+          "name": "loanednumber",
+          "type": "Integer"
+        },
+        {
+          "name": "borrowstatus",
+          "type": "BorrowStatus [NORMAL|SUSPEND]"
+        },
+        {
+          "name": "suspensiondays",
+          "type": "Integer"
+        },
+        {
+          "name": "overduefee",
+          "type": "Real"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nRegister a library user with identity, authentication, faculty, and borrowing-state data.\n\nPreconditions:\n- The user identifier is unused.\n\nPostconditions:\n- A new User stores all supplied personal, login, loan-count, status, suspension, and fee values.\n- The User is stored and the operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 4001,
+      "documentPostLine": 4005,
+      "modelPreLines": [
+        1305,
+        1323
+      ],
+      "modelPostLines": [
+        1325,
+        1338
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LoanProcessingSystem_generateLoanLetterAndAgreement_createLoanAccount",
+      "project": "LoanProcessingSystem",
+      "useCase": "generateLoanLetterAndAgreement",
+      "operation": "createLoanAccount",
+      "service": "GenerateLoanLetterAndAgreementModule",
+      "entity": "LoanAccount",
+      "fields": [
+        "LoanAccountID",
+        "Balance",
+        "Status"
+      ],
+      "parameters": [
+        {
+          "name": "loanaccountid",
+          "type": "Integer"
+        },
+        {
+          "name": "balance",
+          "type": "Real"
+        },
+        {
+          "name": "status",
+          "type": "LoanAccountStatus[NORMAL|HASPAIDINFULL]"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a loan account with the supplied identifier, balance, and status.\n\nPreconditions:\n- The loan-account identifier is unused.\n\nPostconditions:\n- A new LoanAccount stores the supplied values and enters the repository.\n- The operation returns true.",
+      "requirementSourceId": "aligned-input",
+      "documentPreLine": 107,
+      "documentPostLine": 107,
+      "modelPreLines": [
+        764,
+        769
+      ],
+      "modelPostLines": [
+        771,
+        777
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Commented draft, not an active upstream contract. The user-approved laboratory requirement is authoritative; original OP33 has another service and signature."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        },
+        {
+          "id": "lab-decision",
+          "path": "data/operation_revision/development_create_loan_account_decision.json",
+          "sha256": "dfd3c8c36a2127810eff1d881e7a6a84f2173edf27f0f69988967c0268c3e791",
+          "note": "User/laboratory decision, not independent expert approval."
+        }
+      ]
+    },
+    {
+      "id": "LoanProcessingSystem_manageLoanTerm_createLoanTerm",
+      "project": "LoanProcessingSystem",
+      "useCase": "manageLoanTerm",
+      "operation": "createLoanTerm",
+      "service": "ManageLoanTermCRUDService",
+      "entity": "LoanTerm",
+      "fields": [
+        "ItemID",
+        "Content"
+      ],
+      "parameters": [
+        {
+          "name": "itemid",
+          "type": "Integer"
+        },
+        {
+          "name": "content",
+          "type": "String"
+        }
+      ],
+      "kind": "create",
+      "requirement": "Operation intent:\nCreate a LoanTerm record from the supplied item identifier, content.\n\nPreconditions:\n- No existing LoanTerm has the supplied item identifier.\n\nPostconditions:\n- A new LoanTerm is stored with the supplied item identifier, content.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 2879,
+      "documentPostLine": 2883,
+      "modelPreLines": [
+        997,
+        1007
+      ],
+      "modelPostLines": [
+        1009,
+        1014
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LoanProcessingSystem_manageLoanTerm_queryLoanTerm",
+      "project": "LoanProcessingSystem",
+      "useCase": "manageLoanTerm",
+      "operation": "queryLoanTerm",
+      "service": "ManageLoanTermCRUDService",
+      "entity": "LoanTerm",
+      "fields": [
+        "ItemID",
+        "Content"
+      ],
+      "parameters": [
+        {
+          "name": "itemid",
+          "type": "Integer"
+        }
+      ],
+      "kind": "query",
+      "requirement": "Operation intent:\nRetrieve the LoanTerm identified by the supplied item identifier.\n\nPreconditions:\n- The referenced LoanTerm exists.\n\nPostconditions:\n- The operation returns the referenced LoanTerm.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 2955,
+      "documentPostLine": 2959,
+      "modelPreLines": [
+        1033,
+        1038
+      ],
+      "modelPostLines": [
+        1040,
+        1040
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LoanProcessingSystem_manageLoanTerm_modifyLoanTerm",
+      "project": "LoanProcessingSystem",
+      "useCase": "manageLoanTerm",
+      "operation": "modifyLoanTerm",
+      "service": "ManageLoanTermCRUDService",
+      "entity": "LoanTerm",
+      "fields": [
+        "ItemID",
+        "Content"
+      ],
+      "parameters": [
+        {
+          "name": "itemid",
+          "type": "Integer"
+        },
+        {
+          "name": "content",
+          "type": "String"
+        }
+      ],
+      "kind": "modify",
+      "requirement": "Operation intent:\nUpdate the LoanTerm identified by item identifier with the supplied item identifier, content.\n\nPreconditions:\n- The referenced LoanTerm exists.\n\nPostconditions:\n- The stored LoanTerm contains the supplied item identifier, content.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 3021,
+      "documentPostLine": 3025,
+      "modelPreLines": [
+        1059,
+        1066
+      ],
+      "modelPostLines": [
+        1068,
+        1070
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "id": "LoanProcessingSystem_manageLoanTerm_deleteLoanTerm",
+      "project": "LoanProcessingSystem",
+      "useCase": "manageLoanTerm",
+      "operation": "deleteLoanTerm",
+      "service": "ManageLoanTermCRUDService",
+      "entity": "LoanTerm",
+      "fields": [
+        "ItemID",
+        "Content"
+      ],
+      "parameters": [
+        {
+          "name": "itemid",
+          "type": "Integer"
+        }
+      ],
+      "kind": "delete",
+      "requirement": "Operation intent:\nDelete the LoanTerm identified by the supplied item identifier.\n\nPreconditions:\n- The referenced LoanTerm exists in the repository.\n\nPostconditions:\n- The LoanTerm is removed from the repository.\n- The operation returns true.",
+      "requirementSourceId": "requirement-document",
+      "documentPreLine": 3091,
+      "documentPostLine": 3095,
+      "modelPreLines": [
+        1090,
+        1097
+      ],
+      "modelPostLines": [
+        1099,
+        1100
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    }
+  ]
+}

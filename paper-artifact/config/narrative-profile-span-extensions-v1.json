@@ -1,0 +1,64 @@
+{
+ "version":"author-reviewed-narrative-span-extensions-v1",
+ "mappings":{
+  "LibraryManagementSystem_listBookHistory_listOverDueBook":{
+   "P01":"an existing user's","P02":"The overdue active-loan collection must be resolvable",
+   "Q01":"returns the distinct BookCopy objects linked to an existing user's unreturned Loans whose overdue fee is positive",
+   "Q02":"A copy appearing in several qualifying loans is returned once","Q03":"different copy objects remain separate even if all their attribute values are equal"},
+  "CoCoME_openCashDesk_openCashDesk":{
+   "P01":"The selected desk must exist","P02":"be closed","P03":"the current Store must exist","P04":"be open",
+   "Q01":"makes it open","Q02":"records it as the current cash desk","Q03":"The operation returns true"},
+  "CoCoME_orderProducts_placeOrder":{
+   "P01":"A current OrderProduct must exist","Q01":"changes its status to REQUESTED",
+   "Q02":"Its final amount is its amount before this operation plus the subtotals of all associated OrderEntries, with every distinct entry contributing even when subtotals are equal. With no entries, the amount remains unchanged.","Q03":"returns true"},
+  "AutomatedTellerMachine_withdrawCash_printReceipt":{
+   "P01":"its identifier","P02":"the session password validated","P03":"A current BankCard must be present",
+   "Q01":"return the withdrawal amount after a withdrawal","Q02":"the deposit amount after a deposit","Q03":"zero if neither occurred"},
+  "CoCoME_manageCashDesk_createCashDesk":{
+   "P01":"The identifier must not be used by an existing CashDesk","Q01":"A new CashDesk is recorded with the supplied identifier, name and open state",
+   "Q02":"is included in the cash-desk collection","Q03":"Creation returns true"},
+  "CoCoME_orderProducts_makeNewOrder":{
+   "P01":"uses an unused order identifier","Q01":"create a new OrderProduct","Q02":"in NEW status",
+   "Q03":"order identifier","Q04":"with the current time","Q05":"includes the order in the order collection",
+   "Q06":"makes it the current product order","Q07":"returns true"},
+  "CoCoME_orderProducts_chooseSupplier":{
+   "P01":"that Supplier","P02":"a current OrderProduct must exist",
+   "Q01":"links the selected Supplier to the current product order","Q02":"returns true"},
+  "CoCoME_receiveOrderedProduct_receiveOrderedProduct":{
+   "P01":"an existing OrderProduct","Q01":"marks it RECEIVED",
+   "Q02":"Each Item represented in the order has its stock increased from its value before this operation by the quantities of all associated OrderEntries referring to that item. Multiple entries for the same item all contribute, rather than only one entry being counted.","Q03":"returns true"},
+  "LibraryManagementSystem_cancelReservation_cancelReservation":{
+   "P01":"The User, copy and matching reservation must exist","P02":"The User, copy and matching reservation must exist","P03":"The copy must be LOANED","P04":"marked reserved","P05":"matching reservation must exist","P06":"the reservation must still be open",
+   "Q01":"clears the reserved mark on a BookCopy","Q02":"closes the matching Reserve record","Q03":"returns true"},
+  "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay":{
+   "Q01":"reduces by one the suspension-day count of each User whose count was positive before the operation",
+   "Q02":"A user previously in SUSPEND returns to NORMAL when the reduction reaches zero and there is no overdue fee",
+   "Q03":"A previously suspended user with an outstanding overdue fee remains SUSPEND even if the days reach zero",
+   "Q04":"users already at zero days are unchanged"},
+  "LibraryManagementSystem_listBookHistory_listReservationBook":{
+   "P01":"The User must exist","P02":"the reservation collection must be resolvable",
+   "Q01":"returns distinct BookCopy objects linked to the referenced user's reservation records",
+   "Q02":"A copy linked to several reservations appears once","Q03":"different copies remain separate even when their attribute values are equal","Q04":"including closed reservations"},
+  "LoanProcessingSystem_evaluateLoanRequest_chooseOneForReview":{
+   "P01":"That identifier must match a request in the current collection",
+   "Q01":"makes the LoanRequest matched by the supplied identifier current","Q02":"returns it"},
+  "LoanProcessingSystem_evaluateLoanRequest_approveLoanRequest":{
+   "P01":"An existing current request is required","Q01":"changes the current LoanRequest's status to APPROVED","Q02":"returns true"},
+  "LoanProcessingSystem_generateLoanLetterAndAgreement_genereateApprovalLetter":{
+   "P01":"The request must exist","Q01":"the new letter is included in the letter collection",
+   "Q02":"with the standard content","Q03":"attach it to that request","Q04":"It becomes the current request","Q05":"the operation returns true"},
+  "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement":{
+   "P01":"A current request must exist","Q01":"includes it in the agreement collection",
+   "Q02":"with the standard content","Q03":"attaches a new LoanAgreement with the standard content to the current LoanRequest","Q04":"the operation returns true"},
+  "LoanProcessingSystem_submitLoanRequest_enterLoanInformation":{
+   "P01":"Its request identifier must be unused",
+   "Q01":"all supplied applicant, requested-loan, contact, reference and account fields","Q02":"all supplied applicant, requested-loan, contact, reference and account fields",
+   "Q03":"all supplied applicant, requested-loan, contact, reference and account fields","Q04":"all supplied applicant, requested-loan, contact, reference and account fields",
+   "Q05":"all supplied applicant, requested-loan, contact, reference and account fields","Q06":"all supplied applicant, requested-loan, contact, reference and account fields",
+   "Q07":"all supplied applicant, requested-loan, contact, reference and account fields","Q08":"all supplied applicant, requested-loan, contact, reference and account fields",
+   "Q09":"all supplied applicant, requested-loan, contact, reference and account fields","Q10":"all supplied applicant, requested-loan, contact, reference and account fields",
+   "Q11":"all supplied applicant, requested-loan, contact, reference and account fields","Q12":"all supplied applicant, requested-loan, contact, reference and account fields",
+   "Q13":"all supplied applicant, requested-loan, contact, reference and account fields","Q14":"The new request is included in the request collection",
+   "Q15":"becomes the current LoanRequest","Q16":"the operation returns true"}
+ }
+}

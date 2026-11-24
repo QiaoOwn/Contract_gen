@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "book: Book = Book.allInstances()->any(b: Book | b.CallNo = callNo)",
+    "precondition": "Book.allInstances()->exists(b: Book | b.CallNo = callNo and b.Copys->forAll(c: BookCopy | c.Barcode <> barcode))",
+    "postcondition": "result = true and BookCopy.allInstances()->one(c: BookCopy | c.oclIsNew() and c.Barcode = barcode and c.Location = location and c.Status = CopyStatus::AVAILABLE and c.IsReserved = false and c.BookBelongs = book and book.Copys->includes(c) and book.Copys->size() = book.Copys@pre->size() + 1 and book.CopyNum = book.CopyNum@pre + 1)"
+  },
+  "methodAccepted": true
+}

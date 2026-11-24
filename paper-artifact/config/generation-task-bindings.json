@@ -1,0 +1,75 @@
+{
+  "version": "explicit-generation-task-bindings-v1",
+  "bindings": [
+    {
+      "operation": "CoCoME/manageStore/modifyStore",
+      "clause": "precondition",
+      "requirement": "The referenced Store exists.",
+      "context": ["Store", "Store.Id", "$parameter.id"],
+      "requiredReferences": []
+    },
+    {
+      "operation": "CoCoME/manageStore/modifyStore",
+      "clause": "postcondition",
+      "requirement": "The stored Store contains the supplied identifier, name, address, open state.",
+      "context": [
+        "Store",
+        "Store.Id",
+        "$parameter.id",
+        "$parameter.name",
+        "$parameter.address",
+        "$parameter.isopened"
+      ],
+      "requiredReferences": ["Store.Name", "Store.Address", "Store.IsOpened"]
+    },
+    {
+      "operation": "CoCoME/manageStore/modifyStore",
+      "clause": "postcondition",
+      "requirement": "The operation returns true.",
+      "context": [],
+      "requiredReferences": ["$result"]
+    },
+    {
+      "operation": "AutomatedTellerMachine/checkBalance/ejectCard",
+      "clause": "precondition",
+      "requirement": "The card identifier and password are validated.",
+      "context": [],
+      "requiredReferences": ["self.CardIDValidated", "self.PasswordValidated"]
+    },
+    {
+      "operation": "AutomatedTellerMachine/checkBalance/ejectCard",
+      "clause": "precondition",
+      "requirement": "A current BankCard is present.",
+      "context": ["BankCard"],
+      "requiredReferences": ["self.InputCard"]
+    },
+    {
+      "operation": "AutomatedTellerMachine/checkBalance/ejectCard",
+      "clause": "postcondition",
+      "requirement": "The current card is cleared.",
+      "context": [],
+      "requiredReferences": ["self.InputCard"]
+    },
+    {
+      "operation": "AutomatedTellerMachine/checkBalance/ejectCard",
+      "clause": "postcondition",
+      "requirement": "Authentication, deposit, and withdrawal state is reset, including transaction amounts.",
+      "context": [],
+      "requiredReferences": [
+        "self.CardIDValidated",
+        "self.PasswordValidated",
+        "self.IsDeposit",
+        "self.IsWithdraw",
+        "self.DepositedNumber",
+        "self.WithdrawedNumber"
+      ]
+    },
+    {
+      "operation": "AutomatedTellerMachine/checkBalance/ejectCard",
+      "clause": "postcondition",
+      "requirement": "The operation returns true.",
+      "context": [],
+      "requiredReferences": ["$result"]
+    }
+  ]
+}

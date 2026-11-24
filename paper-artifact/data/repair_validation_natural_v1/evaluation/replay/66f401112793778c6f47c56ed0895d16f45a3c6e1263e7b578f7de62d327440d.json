@@ -1,0 +1,139 @@
+{
+  "operationId": "AutomatedTellerMachine_manageUser_queryUser",
+  "candidateIdentity": "66f401112793778c6f47c56ed0895d16f45a3c6e1263e7b578f7de62d327440d",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/AutomatedTellerMachine_manageUser_queryUser/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "d1e2a4ef6a7ab34ef015ecaee328c6f445c3d8a96056317a4b0861fdc4b57ae7"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "User.allInstances()->exists(u:User|u.UserID = userid)",
+    "postcondition": "User.allInstances()->includes(result) and result.UserID = userid"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ManageUserCRUDService::queryUser(userid:Integer): User {\n          \n            precondition:\n          User.allInstances()->exists(u:User|u.UserID = userid)\n            \n            postcondition:\n          User.allInstances()->includes(result) and result.UserID = userid\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 7,
+              "column": 40,
+              "msg": "mismatched input 'result' expecting RULE_ID"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'result' expecting RULE_ID",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 7,
+            "column": 40
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'result' expecting RULE_ID",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/manageUser/operation/queryUser/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/manageUser/operation/queryUser/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

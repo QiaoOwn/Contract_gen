@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "User.allInstances()->one(u: User | u.UserID = uid) and User.allInstances()->forAll(u: User | if u.UserID = uid then u.LoanedBook.oclIsUndefined() = false and u.LoanedBook->forAll(l: Loan | if l.IsReturned = false and l.OverDueFee > 0.0 then l.LoanedCopy.oclIsUndefined() = false else true endif) else true endif)",
+    "postcondition": "let u: User = User.allInstances()->any(x: User | x.UserID = uid), loans: Set(Loan) = u.LoanedBook->select(l: Loan | l.IsReturned = false and l.OverDueFee > 0.0) in result = loans->projectSet(l: Loan | l.LoanedCopy)"
+  },
+  "methodAccepted": false
+}

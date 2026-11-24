@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract CoCoMESystem::receiveOrderedProduct(orderID: Integer): Boolean {\n\tdefinition:\n\t\torderProduct: OrderProduct = OrderProduct.allInstances()->any(op: OrderProduct|op.Id = orderID)\n\tprecondition:\n\t\tOrderProduct.allInstances()->one(op: OrderProduct|op.Id = orderID)\n\tpostcondition:\n\t\tresult = true and\n\t\torderProduct.OrderStatus = OrderStatus::RECEIVED and\n\t\tItem.allInstances()->forAll(i: Item|if orderProduct.ContainedEntries@pre->exists(e: OrderEntry|e.Item@pre = i) \n\t\tthen i.StockNumber = i.StockNumber@pre+orderProduct.ContainedEntries@pre->sumBy(e: OrderEntry|if e.Item@pre = i \n\t\tthen e.Quantity@pre \n\t\telse 0 \n\t\tendif ) \n\t\telse true \n\t\tendif )\n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 6,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

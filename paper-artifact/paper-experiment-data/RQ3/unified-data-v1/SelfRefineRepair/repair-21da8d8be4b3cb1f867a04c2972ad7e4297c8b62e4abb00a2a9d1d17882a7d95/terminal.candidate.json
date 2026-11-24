@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and quantity > 0 and Item.allInstances()->exists(i: Item | i.Barcode = barcode and i.StockNumber > 0 and quantity <= i.StockNumber)",
+    "postcondition": "result = true and Item.allInstances()->exists(i: Item | i.Barcode = barcode and i.StockNumber@pre > 0 and quantity <= i.StockNumber@pre and i.StockNumber = i.StockNumber@pre - quantity and SalesLineItem.allInstances()->exists(sl: SalesLineItem | sl.oclIsNew() = true and sl.Quantity = quantity and sl.Subamount = i.Price * quantity and sl.BelongedSale = self.CurrentSale and sl.BelongedItem = i and self.CurrentSale.ContainedSalesLine->includes(sl) and self.CurrentSaleLine = sl and self.CurrentSale.ContainedSalesLine@pre->excludes(sl)))"
+  },
+  "methodAccepted": true
+}

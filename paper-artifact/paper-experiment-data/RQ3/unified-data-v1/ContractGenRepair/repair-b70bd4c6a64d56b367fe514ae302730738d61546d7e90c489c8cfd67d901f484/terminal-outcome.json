@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tprecondition:\n\t\tself.CurrentOrderProduct.oclIsUndefined() = false and\n\t\tItem.allInstances()->exists(i: Item|i.Barcode = barcode)\n\tpostcondition:\n\t\tlet oldEntries: Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries@pre,newEntry: OrderEntry,selectedItem: Item = Item.allInstances()->any(candidate: Item|candidate.Barcode = barcode) in\n\t\tresult = true and\n\t\tself.CurrentOrderProduct.ContainedEntries->includesAll(oldEntries) and\n\t\tnewEntry.oclIsNew() and\n\t\tOrderEntry.allInstances()->includes(newEntry) and\n\t\tself.CurrentOrderProduct.ContainedEntries->includes(newEntry) and\n\t\tnewEntry.Item = selectedItem and\n\t\tnewEntry.Quantity = quantity and\n\t\tnewEntry.SubAmount = quantity*selectedItem.OrderPrice\n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 3,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

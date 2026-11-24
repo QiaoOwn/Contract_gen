@@ -1,0 +1,2012 @@
+{
+  "version": "author-reviewed-narrative-span-extensions-v1",
+  "role": "public-source-span-alignment",
+  "inputSha256": "71ee9ceb2a01813ed1db077e331912b4a8c4d6e3666cdbdeb1b14166e01d8344",
+  "profiles": [
+    {
+      "operationId": "LibraryManagementSystem_listBookHistory_listOverDueBook",
+      "requirement": "The overdue-copy enquiry returns the distinct BookCopy objects linked to an existing user's unreturned Loans whose overdue fee is positive. The overdue active-loan collection must be resolvable. A copy appearing in several qualifying loans is returned once; different copy objects remain separate even if all their attribute values are equal.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "an existing user's"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "The overdue active-loan collection must be resolvable"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "returns the distinct BookCopy objects linked to an existing user's unreturned Loans whose overdue fee is positive"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "A copy appearing in several qualifying loans is returned once"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "different copy objects remain separate even if all their attribute values are equal"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 15,
+          "modelLines": [
+            925,
+            925
+          ],
+          "modelFeatures": [
+            "User.UserID",
+            "$parameter.uid"
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 16,
+          "modelLines": [
+            916,
+            926
+          ],
+          "modelFeatures": [
+            "User.LoanedBook",
+            "Loan.IsReturned",
+            "Loan.OverDueFee"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 19,
+          "modelLines": [
+            933,
+            933
+          ],
+          "modelFeatures": [
+            "User.LoanedBook",
+            "Loan.IsReturned",
+            "Loan.OverDueFee",
+            "Loan.LoanedCopy",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 20,
+          "modelLines": [
+            933,
+            933
+          ],
+          "modelFeatures": [
+            "Loan.LoanedCopy",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 21,
+          "modelLines": [
+            933,
+            933
+          ],
+          "modelFeatures": [
+            "BookCopy",
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original generated requirement document; interpretation follows the cited owner-approved adjudication."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53"
+        },
+        {
+          "id": "adjudication",
+          "path": "data/operation_revision/rm2pt_authority_decisions/R06_listOverDueBook.json",
+          "sha256": "fd5c3c37c2998fe881b8ba430af25e54fcb57bd9752d4387661620df700ca820"
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_openCashDesk_openCashDesk",
+      "requirement": "Opening a CashDesk makes it open and records it as the current cash desk. The selected desk must exist and be closed, while the current Store must exist and be open. The operation returns true.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "The selected desk must exist"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "be closed"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "the current Store must exist"
+        },
+        {
+          "id": "P04",
+          "clause": "precondition",
+          "text": "be open"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "makes it open"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "records it as the current cash desk"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "The operation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 1862,
+          "modelLines": [
+            314,
+            314
+          ],
+          "modelFeatures": [
+            "CashDesk.Id",
+            "$parameter.cashDeskID"
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 1862,
+          "modelLines": [
+            315,
+            315
+          ],
+          "modelFeatures": [
+            "CashDesk.IsOpened"
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 1862,
+          "modelLines": [
+            316,
+            316
+          ],
+          "modelFeatures": [
+            "self.CurrentStore"
+          ]
+        },
+        {
+          "id": "P04",
+          "documentLine": 1862,
+          "modelLines": [
+            317,
+            317
+          ],
+          "modelFeatures": [
+            "self.CurrentStore",
+            "Store.IsOpened"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 1866,
+          "modelLines": [
+            327,
+            327
+          ],
+          "modelFeatures": [
+            "CashDesk.IsOpened"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 1866,
+          "modelLines": [
+            326,
+            326
+          ],
+          "modelFeatures": [
+            "self.CurrentCashDesk",
+            "CashDesk.Id",
+            "$parameter.cashDeskID"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 1866,
+          "modelLines": [
+            328,
+            328
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "OP1-4 pre/post tables individually inspected. RM2Doc and remodel share one origin, not independent oracles."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Lines 234-364: explicit existence/state guards, state updates, current-object assignments and true returns only."
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_orderProducts_placeOrder",
+      "requirement": "Placing the current product order changes its status to REQUESTED and returns true. A current OrderProduct must exist. Its final amount is its amount before this operation plus the subtotals of all associated OrderEntries, with every distinct entry contributing even when subtotals are equal. With no entries, the amount remains unchanged.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "A current OrderProduct must exist"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "changes its status to REQUESTED"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "Its final amount is its amount before this operation plus the subtotals of all associated OrderEntries, with every distinct entry contributing even when subtotals are equal. With no entries, the amount remains unchanged."
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 14,
+          "modelLines": [
+            749,
+            749
+          ],
+          "modelFeatures": [
+            "self.CurrentOrderProduct"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 16,
+          "modelLines": [
+            759,
+            759
+          ],
+          "modelFeatures": [
+            "self.CurrentOrderProduct",
+            "OrderProduct.OrderStatus"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 17,
+          "modelLines": [
+            760,
+            761
+          ],
+          "modelFeatures": [
+            "self.CurrentOrderProduct",
+            "OrderProduct.Amount",
+            "OrderProduct.ContainedEntries",
+            "OrderEntry.SubAmount"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 20,
+          "modelLines": [
+            763,
+            763
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Historical RM2Doc specification, not an independent source. Aggregation differences are resolved by the cited laboratory decision."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Unmodified original model. The original conflicting per-entry equalities and collection typing are not treated as equivalent to the approved semantics."
+        },
+        {
+          "id": "adjudication",
+          "path": "data/operation_revision/rm2pt_authority_decisions/R02_placeOrder.json",
+          "sha256": "a7b82189f073ad724abb46f05dcb7480fc892ad988fc59ff586d576b13930cb0",
+          "note": "Owner-approved R02, not independent expert review."
+        }
+      ]
+    },
+    {
+      "operationId": "AutomatedTellerMachine_withdrawCash_printReceipt",
+      "requirement": "The receipt amount reflects the current transaction: return the withdrawal amount after a withdrawal, the deposit amount after a deposit, or zero if neither occurred. A current BankCard must be present, with both its identifier and the session password validated.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "its identifier"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "the session password validated"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "A current BankCard must be present"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "return the withdrawal amount after a withdrawal"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "the deposit amount after a deposit"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "zero if neither occurred"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 766,
+          "modelLines": [
+            316,
+            316
+          ],
+          "modelFeatures": [
+            "self.CardIDValidated"
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 766,
+          "modelLines": [
+            317,
+            317
+          ],
+          "modelFeatures": [
+            "self.PasswordValidated"
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 766,
+          "modelLines": [
+            318,
+            318
+          ],
+          "modelFeatures": [
+            "self.InputCard"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 770,
+          "modelLines": [
+            332,
+            334
+          ],
+          "modelFeatures": [
+            "self.IsWithdraw",
+            "self.WithdrawedNumber",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 770,
+          "modelLines": [
+            332,
+            339
+          ],
+          "modelFeatures": [
+            "self.IsWithdraw",
+            "self.IsDeposit",
+            "self.DepositedNumber",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 770,
+          "modelLines": [
+            332,
+            341
+          ],
+          "modelFeatures": [
+            "self.IsWithdraw",
+            "self.IsDeposit",
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/RequirementDocument.md",
+          "sha256": "2f1e4d3c7607d49ec23cf695db8d4d7776d7d177c306d6ba97b0f0dc7a3cda3c",
+          "note": "OP3 printReceipt 766/770; OP5 ejectCard 902/906; OP6 withdrawCash 975/979. One upstream specification family."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+          "sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+          "note": "Active contracts 307-344, 369-402 and 405-432. Preserve receipt branch priority and exact session effects; no cascade, frame or extra amount-domain condition is inferred."
+        },
+        {
+          "id": "verification-decision",
+          "path": "data/operation_revision/verification_decisions/withdrawCash_nonpositive_20261028.json",
+          "sha256": "65c63915149ddbefd52f342215141fea45bec73eb7b41314df9493a615fbada1",
+          "note": "Requirement owner approved source-preserving zero/negative withdrawal boundary checks; original model and frozen input remain unchanged."
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_manageCashDesk_createCashDesk",
+      "requirement": "A new CashDesk is recorded with the supplied identifier, name and open state and is included in the cash-desk collection. The identifier must not be used by an existing CashDesk. Creation returns true.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "The identifier must not be used by an existing CashDesk"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "A new CashDesk is recorded with the supplied identifier, name and open state"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "is included in the cash-desk collection"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "Creation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 3643,
+          "modelLines": [
+            1140,
+            1151
+          ],
+          "modelFeatures": [
+            "CashDesk.Id",
+            "$parameter.id"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 3647,
+          "modelLines": [
+            1153,
+            1160
+          ],
+          "modelFeatures": [
+            "CashDesk",
+            "CashDesk.Id",
+            "CashDesk.Name",
+            "CashDesk.IsOpened",
+            "$parameter.id",
+            "$parameter.name",
+            "$parameter.isopened"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 3647,
+          "modelLines": [
+            1153,
+            1160
+          ],
+          "modelFeatures": [
+            "CashDesk"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 3647,
+          "modelLines": [
+            1153,
+            1160
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Original operation table; same origin as remodel, not an independent source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Explicit create/query/modify/delete contract inspected; no cascade, inverse update or frame condition is inferred."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4"
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_orderProducts_makeNewOrder",
+      "requirement": "Starting a product order uses an unused order identifier to create a new OrderProduct in NEW status with the current time. The system includes the order in the order collection and makes it the current product order, then returns true.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "uses an unused order identifier"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "create a new OrderProduct"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "in NEW status"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "order identifier"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "with the current time"
+        },
+        {
+          "id": "Q05",
+          "clause": "postcondition",
+          "text": "includes the order in the order collection"
+        },
+        {
+          "id": "Q06",
+          "clause": "postcondition",
+          "text": "makes it the current product order"
+        },
+        {
+          "id": "Q07",
+          "clause": "postcondition",
+          "text": "returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 626,
+          "modelLines": [
+            626,
+            626
+          ],
+          "modelFeatures": [
+            "OrderProduct.Id",
+            "$parameter.orderid"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2483,
+          "modelLines": [
+            641,
+            641
+          ],
+          "modelFeatures": [
+            "OrderProduct"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2483,
+          "modelLines": [
+            642,
+            642
+          ],
+          "modelFeatures": [
+            "OrderProduct.OrderStatus"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2483,
+          "modelLines": [
+            643,
+            643
+          ],
+          "modelFeatures": [
+            "OrderProduct.Id",
+            "$parameter.orderid"
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2483,
+          "modelLines": [
+            644,
+            644
+          ],
+          "modelFeatures": [
+            "OrderProduct.Time"
+          ]
+        },
+        {
+          "id": "Q05",
+          "documentLine": 2483,
+          "modelLines": [
+            645,
+            645
+          ],
+          "modelFeatures": [
+            "OrderProduct"
+          ]
+        },
+        {
+          "id": "Q06",
+          "documentLine": 2483,
+          "modelLines": [
+            646,
+            646
+          ],
+          "modelFeatures": [
+            "self.CurrentOrderProduct",
+            "OrderProduct"
+          ]
+        },
+        {
+          "id": "Q07",
+          "documentLine": 2483,
+          "modelLines": [
+            647,
+            647
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "OP5 2010/2014, OP11 2479/2483. OP11 table says None, but the active model and current frozen input explicitly require an unused identifier."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Active 368-408 and 609-649 contracts. Check freshness and specified associations without imposing exact creation counts, positive IDs or unstated defaults."
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_orderProducts_chooseSupplier",
+      "requirement": "Assigning a supplier links the selected Supplier to the current product order and returns true. Both that Supplier and a current OrderProduct must exist.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "that Supplier"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "a current OrderProduct must exist"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "links the selected Supplier to the current product order"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2688,
+          "modelLines": [
+            728,
+            728
+          ],
+          "modelFeatures": [
+            "Supplier.Id",
+            "$parameter.supplierID"
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 2688,
+          "modelLines": [
+            729,
+            729
+          ],
+          "modelFeatures": [
+            "self.CurrentOrderProduct"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2692,
+          "modelLines": [
+            737,
+            737
+          ],
+          "modelFeatures": [
+            "self.CurrentOrderProduct",
+            "OrderProduct.Supplier",
+            "Supplier.Id",
+            "$parameter.supplierID"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2692,
+          "modelLines": [
+            738,
+            738
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "OP12, OP14, OP16, OP18, OP19 pre/post tables; same provenance as remodel, not independent requirements."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Active contracts 652-669, 712-740, 767-793, 828-844, 846-862; no extra price, stock, order-status or repository guards."
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_receiveOrderedProduct_receiveOrderedProduct",
+      "requirement": "Receiving an existing OrderProduct marks it RECEIVED and returns true. Each Item represented in the order has its stock increased from its value before this operation by the quantities of all associated OrderEntries referring to that item. Multiple entries for the same item all contribute, rather than only one entry being counted.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "an existing OrderProduct"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "marks it RECEIVED"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "Each Item represented in the order has its stock increased from its value before this operation by the quantities of all associated OrderEntries referring to that item. Multiple entries for the same item all contribute, rather than only one entry being counted."
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 14,
+          "modelLines": [
+            810,
+            810
+          ],
+          "modelFeatures": [
+            "OrderProduct.Id",
+            "$parameter.orderID"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 16,
+          "modelLines": [
+            820,
+            820
+          ],
+          "modelFeatures": [
+            "OrderProduct.OrderStatus",
+            "$parameter.orderID"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 17,
+          "modelLines": [
+            821,
+            822
+          ],
+          "modelFeatures": [
+            "OrderProduct.ContainedEntries",
+            "OrderEntry.Item",
+            "OrderEntry.Quantity",
+            "Item.StockNumber"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 20,
+          "modelLines": [
+            824,
+            824
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Historical RM2Doc specification, not an independent source. Aggregation differences are resolved by the cited laboratory decision."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Unmodified original model. The original conflicting per-entry equalities and collection typing are not treated as equivalent to the approved semantics."
+        },
+        {
+          "id": "adjudication",
+          "path": "data/operation_revision/rm2pt_authority_decisions/R04_receiveOrderedProduct.json",
+          "sha256": "4bebf20704aec7de71871edc8ed8823ed0e69bef95c4a86cddda810012831100",
+          "note": "Owner-approved R04, not independent expert review."
+        }
+      ]
+    },
+    {
+      "operationId": "LibraryManagementSystem_cancelReservation_cancelReservation",
+      "requirement": "Cancelling a reservation clears the reserved mark on a BookCopy, closes the matching Reserve record and returns true. The User, copy and matching reservation must exist. The copy must be LOANED and marked reserved, and the reservation must still be open.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "The User, copy and matching reservation must exist"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "The User, copy and matching reservation must exist"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "The copy must be LOANED"
+        },
+        {
+          "id": "P04",
+          "clause": "precondition",
+          "text": "marked reserved"
+        },
+        {
+          "id": "P05",
+          "clause": "precondition",
+          "text": "matching reservation must exist"
+        },
+        {
+          "id": "P06",
+          "clause": "precondition",
+          "text": "the reservation must still be open"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "clears the reserved mark on a BookCopy"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "closes the matching Reserve record"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2312,
+          "modelLines": [
+            352,
+            352
+          ],
+          "modelFeatures": [
+            "User.UserID",
+            "$parameter.uid"
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 2313,
+          "modelLines": [
+            353,
+            353
+          ],
+          "modelFeatures": [
+            "BookCopy.Barcode",
+            "$parameter.barcode"
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 2314,
+          "modelLines": [
+            354,
+            354
+          ],
+          "modelFeatures": [
+            "BookCopy.Status"
+          ]
+        },
+        {
+          "id": "P04",
+          "documentLine": 2315,
+          "modelLines": [
+            355,
+            355
+          ],
+          "modelFeatures": [
+            "BookCopy.IsReserved"
+          ]
+        },
+        {
+          "id": "P05",
+          "documentLine": 2316,
+          "modelLines": [
+            356,
+            356
+          ],
+          "modelFeatures": [
+            "Reserve.ReservedUser",
+            "Reserve.ReservedCopy"
+          ]
+        },
+        {
+          "id": "P06",
+          "documentLine": 2317,
+          "modelLines": [
+            357,
+            357
+          ],
+          "modelFeatures": [
+            "Reserve.IsReserveClosed"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2325,
+          "modelLines": [
+            366,
+            366
+          ],
+          "modelFeatures": [
+            "BookCopy.IsReserved"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2326,
+          "modelLines": [
+            367,
+            367
+          ],
+          "modelFeatures": [
+            "Reserve.IsReserveClosed"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2327,
+          "modelLines": [
+            368,
+            368
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Active reservation clauses; document and remodel share a source lineage."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Active reservation clauses; document and remodel share a source lineage."
+        }
+      ]
+    },
+    {
+      "operationId": "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay",
+      "requirement": "The daily countdown reduces by one the suspension-day count of each User whose count was positive before the operation; users already at zero days are unchanged. No additional business condition is required. A user previously in SUSPEND returns to NORMAL when the reduction reaches zero and there is no overdue fee. A previously suspended user with an outstanding overdue fee remains SUSPEND even if the days reach zero.",
+      "obligations": [
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "reduces by one the suspension-day count of each User whose count was positive before the operation"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "A user previously in SUSPEND returns to NORMAL when the reduction reaches zero and there is no overdue fee"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "A previously suspended user with an outstanding overdue fee remains SUSPEND even if the days reach zero"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "users already at zero days are unchanged"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "Q01",
+          "documentLine": 16,
+          "modelLines": [
+            822,
+            840
+          ],
+          "modelFeatures": [
+            "User.SuspensionDays"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 17,
+          "modelLines": [
+            842,
+            846
+          ],
+          "modelFeatures": [
+            "User.SuspensionDays",
+            "User.BorrowStatus",
+            "User.OverDueFee"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 18,
+          "modelLines": [
+            842,
+            846
+          ],
+          "modelFeatures": [
+            "User.SuspensionDays",
+            "User.BorrowStatus",
+            "User.OverDueFee"
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 19,
+          "modelLines": [
+            822,
+            846
+          ],
+          "modelFeatures": [
+            "User.SuspensionDays",
+            "User.BorrowStatus",
+            "User.OverDueFee"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original generated requirement document; interpretation follows the cited owner-approved adjudication."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53"
+        },
+        {
+          "id": "adjudication",
+          "path": "data/operation_revision/rm2pt_authority_decisions/R05_countDownSuspensionDay.json",
+          "sha256": "c96a4ab299f7348c6caace19041030fb0b0499d4bca94f22160ffcaf4cdc192a"
+        }
+      ]
+    },
+    {
+      "operationId": "LibraryManagementSystem_listBookHistory_listReservationBook",
+      "requirement": "The reserved-copy listing returns distinct BookCopy objects linked to the referenced user's reservation records, including closed reservations. The User must exist and the reservation collection must be resolvable. A copy linked to several reservations appears once, while different copies remain separate even when their attribute values are equal.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "The User must exist"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "the reservation collection must be resolvable"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "returns distinct BookCopy objects linked to the referenced user's reservation records"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "A copy linked to several reservations appears once"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "different copies remain separate even when their attribute values are equal"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "including closed reservations"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 15,
+          "modelLines": [
+            954,
+            954
+          ],
+          "modelFeatures": [
+            "User.UserID",
+            "$parameter.uid"
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 16,
+          "modelLines": [
+            945,
+            955
+          ],
+          "modelFeatures": [
+            "User.ReservedBook"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 19,
+          "modelLines": [
+            962,
+            962
+          ],
+          "modelFeatures": [
+            "User.ReservedBook",
+            "Reserve.ReservedCopy",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 20,
+          "modelLines": [
+            962,
+            962
+          ],
+          "modelFeatures": [
+            "Reserve.ReservedCopy",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 21,
+          "modelLines": [
+            962,
+            962
+          ],
+          "modelFeatures": [
+            "BookCopy",
+            "$result"
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 22,
+          "modelLines": [
+            945,
+            962
+          ],
+          "modelFeatures": [
+            "User.ReservedBook",
+            "Reserve.IsReserveClosed",
+            "Reserve.ReservedCopy",
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Original generated requirement document; interpretation follows the cited owner-approved adjudication."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53"
+        },
+        {
+          "id": "adjudication",
+          "path": "data/operation_revision/rm2pt_authority_decisions/R07_listReservationBook.json",
+          "sha256": "a9a5b7fb1a6220b5bf0a3405eed2b952a91034aa62c1a932695763f32d3e0cfb"
+        }
+      ]
+    },
+    {
+      "operationId": "LoanProcessingSystem_evaluateLoanRequest_chooseOneForReview",
+      "requirement": "The review selection makes the LoanRequest matched by the supplied identifier current and returns it. That identifier must match a request in the current collection.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "That identifier must match a request in the current collection"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "makes the LoanRequest matched by the supplied identifier current"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "returns it"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 1809,
+          "modelLines": [
+            499,
+            499
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequests",
+            "LoanRequest.RequestID",
+            "$parameter.requestid"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 1816,
+          "modelLines": [
+            507,
+            507
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequest"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 1817,
+          "modelLines": [
+            508,
+            508
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "OP9, lines 1796-1817: current-list selection, state assignment and result."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Active contract lines 484-508: scoped selection, guard, state assignment and result."
+        }
+      ]
+    },
+    {
+      "operationId": "LoanProcessingSystem_evaluateLoanRequest_approveLoanRequest",
+      "requirement": "Approval changes the current LoanRequest's status to APPROVED and returns true. An existing current request is required.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "An existing current request is required"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "changes the current LoanRequest's status to APPROVED"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2105,
+          "modelLines": [
+            608,
+            608
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequest"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2112,
+          "modelLines": [
+            616,
+            616
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequest",
+            "LoanRequest.Status",
+            "LoanRequestStatus.APPROVED"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2113,
+          "modelLines": [
+            617,
+            617
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "OP14, lines 2099-2113: current-request guard, APPROVED status and true result."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Active contract lines 601-617: current-request guard, APPROVED status and true result."
+        }
+      ]
+    },
+    {
+      "operationId": "LoanProcessingSystem_generateLoanLetterAndAgreement_genereateApprovalLetter",
+      "requirement": "For the LoanRequest identified by the supplied identifier, create an ApprovalLetter with the standard content and attach it to that request. The request must exist. It becomes the current request, the new letter is included in the letter collection, and the operation returns true.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "The request must exist"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "the new letter is included in the letter collection"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "with the standard content"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "attach it to that request"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "It becomes the current request"
+        },
+        {
+          "id": "Q05",
+          "clause": "postcondition",
+          "text": "the operation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2241,
+          "modelLines": [
+            664,
+            664
+          ],
+          "modelFeatures": [
+            "LoanRequest.RequestID",
+            "$parameter.id"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2254,
+          "modelLines": [
+            678,
+            678
+          ],
+          "modelFeatures": [
+            "ApprovalLetter"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2255,
+          "modelLines": [
+            679,
+            679
+          ],
+          "modelFeatures": [
+            "ApprovalLetter.Content"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2256,
+          "modelLines": [
+            680,
+            680
+          ],
+          "modelFeatures": [
+            "LoanRequest.AttachedApprovalLetter",
+            "ApprovalLetter"
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2257,
+          "modelLines": [
+            681,
+            681
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequest"
+          ]
+        },
+        {
+          "id": "Q05",
+          "documentLine": 2259,
+          "modelLines": [
+            683,
+            683
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Active genereateApprovalLetter contract at lines 2228-2259."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Active genereateApprovalLetter model contract at lines 649-684."
+        }
+      ]
+    },
+    {
+      "operationId": "LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement",
+      "requirement": "Agreement generation attaches a new LoanAgreement with the standard content to the current LoanRequest and includes it in the agreement collection. A current request must exist, and the operation returns true.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "A current request must exist"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "includes it in the agreement collection"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "with the standard content"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "attaches a new LoanAgreement with the standard content to the current LoanRequest"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "the operation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2366,
+          "modelLines": [
+            715,
+            715
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequest"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2378,
+          "modelLines": [
+            728,
+            728
+          ],
+          "modelFeatures": [
+            "LoanAgreement"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2379,
+          "modelLines": [
+            729,
+            729
+          ],
+          "modelFeatures": [
+            "LoanAgreement.Content"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2380,
+          "modelLines": [
+            730,
+            730
+          ],
+          "modelFeatures": [
+            "LoanRequest.AttachedLoanAgreement",
+            "LoanAgreement"
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2382,
+          "modelLines": [
+            732,
+            732
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Active generateLoanAgreement contract at lines 2360-2382."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Active generateLoanAgreement model contract at lines 708-733."
+        }
+      ]
+    },
+    {
+      "operationId": "LoanProcessingSystem_submitLoanRequest_enterLoanInformation",
+      "requirement": "Submitting application information creates a LoanRequest containing all supplied applicant, requested-loan, contact, reference and account fields. Its request identifier must be unused. The new request is included in the request collection, becomes the current LoanRequest and the operation returns true.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "Its request identifier must be unused"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q05",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q06",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q07",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q08",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q09",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q10",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q11",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q12",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q13",
+          "clause": "postcondition",
+          "text": "all supplied applicant, requested-loan, contact, reference and account fields"
+        },
+        {
+          "id": "Q14",
+          "clause": "postcondition",
+          "text": "The new request is included in the request collection"
+        },
+        {
+          "id": "Q15",
+          "clause": "postcondition",
+          "text": "becomes the current LoanRequest"
+        },
+        {
+          "id": "Q16",
+          "clause": "postcondition",
+          "text": "the operation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled exact Narrative spans checked against registered public source obligations. Shared coordinated clauses and the all-supplied-fields clause may support multiple obligations. No reference contract or hidden Oracle is read. This is not independent expert certification.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 1254,
+          "modelLines": [
+            251,
+            251
+          ],
+          "modelFeatures": [
+            "LoanRequest.RequestID",
+            "$parameter.requestid"
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 1279,
+          "modelLines": [
+            277,
+            277
+          ],
+          "modelFeatures": [
+            "LoanRequest.RequestID",
+            "$parameter.requestid"
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 1280,
+          "modelLines": [
+            278,
+            278
+          ],
+          "modelFeatures": [
+            "LoanRequest.Name",
+            "$parameter.name"
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 1281,
+          "modelLines": [
+            279,
+            279
+          ],
+          "modelFeatures": [
+            "LoanRequest.LoanAmount",
+            "$parameter.loanamount"
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 1282,
+          "modelLines": [
+            280,
+            280
+          ],
+          "modelFeatures": [
+            "LoanRequest.LoanPurpose",
+            "$parameter.loanpurpose"
+          ]
+        },
+        {
+          "id": "Q05",
+          "documentLine": 1283,
+          "modelLines": [
+            281,
+            281
+          ],
+          "modelFeatures": [
+            "LoanRequest.Income",
+            "$parameter.income"
+          ]
+        },
+        {
+          "id": "Q06",
+          "documentLine": 1284,
+          "modelLines": [
+            282,
+            282
+          ],
+          "modelFeatures": [
+            "LoanRequest.PhoneNumber",
+            "$parameter.phonenumber"
+          ]
+        },
+        {
+          "id": "Q07",
+          "documentLine": 1285,
+          "modelLines": [
+            283,
+            283
+          ],
+          "modelFeatures": [
+            "LoanRequest.PostalAddress",
+            "$parameter.postaladdress"
+          ]
+        },
+        {
+          "id": "Q08",
+          "documentLine": 1286,
+          "modelLines": [
+            284,
+            284
+          ],
+          "modelFeatures": [
+            "LoanRequest.ZipCode",
+            "$parameter.zipcode"
+          ]
+        },
+        {
+          "id": "Q09",
+          "documentLine": 1287,
+          "modelLines": [
+            285,
+            285
+          ],
+          "modelFeatures": [
+            "LoanRequest.Email",
+            "$parameter.email"
+          ]
+        },
+        {
+          "id": "Q10",
+          "documentLine": 1288,
+          "modelLines": [
+            286,
+            286
+          ],
+          "modelFeatures": [
+            "LoanRequest.WorkReferences",
+            "$parameter.workreferences"
+          ]
+        },
+        {
+          "id": "Q11",
+          "documentLine": 1289,
+          "modelLines": [
+            287,
+            287
+          ],
+          "modelFeatures": [
+            "LoanRequest.CreditReferences",
+            "$parameter.creditreferences"
+          ]
+        },
+        {
+          "id": "Q12",
+          "documentLine": 1290,
+          "modelLines": [
+            288,
+            288
+          ],
+          "modelFeatures": [
+            "LoanRequest.CheckingAccountNumber",
+            "$parameter.checkingaccountnumber"
+          ]
+        },
+        {
+          "id": "Q13",
+          "documentLine": 1291,
+          "modelLines": [
+            289,
+            289
+          ],
+          "modelFeatures": [
+            "LoanRequest.SecurityNumber",
+            "$parameter.securitynumber"
+          ]
+        },
+        {
+          "id": "Q14",
+          "documentLine": 1292,
+          "modelLines": [
+            290,
+            290
+          ],
+          "modelFeatures": [
+            "LoanRequest"
+          ]
+        },
+        {
+          "id": "Q15",
+          "documentLine": 1293,
+          "modelLines": [
+            291,
+            291
+          ],
+          "modelFeatures": [
+            "self.CurrentLoanRequest"
+          ]
+        },
+        {
+          "id": "Q16",
+          "documentLine": 1294,
+          "modelLines": [
+            292,
+            292
+          ],
+          "modelFeatures": [
+            "$result"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/RequirementDocument.md",
+          "sha256": "57195c7d36692da66bf358663c8f7619225a9987560f0064dbf4079d79e58af2",
+          "note": "Active enterLoanInformation requirement contract at lines 1241-1294."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LoanProcessingSystem/loan.remodel",
+          "sha256": "ceb5948c8a83c37e726122c5236219944b1ce69c74ed78f1ecafdb40fdd3e40c",
+          "note": "Active enterLoanInformation model contract at lines 236-293."
+        }
+      ]
+    }
+  ],
+  "realModelCalls": 0
+}

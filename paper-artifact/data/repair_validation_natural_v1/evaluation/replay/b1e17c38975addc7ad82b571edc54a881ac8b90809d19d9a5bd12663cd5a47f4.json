@@ -1,0 +1,2349 @@
+{
+  "operationId": "CoCoME_closeCashDesk_closeCashDesk",
+  "candidateIdentity": "b1e17c38975addc7ad82b571edc54a881ac8b90809d19d9a5bd12663cd5a47f4",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_closeCashDesk_closeCashDesk/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "d68543a1df03777d1dedb691f5a5a71c73d699c10cb6252455bd8a135ee897b5"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentCashDesk.oclIsUndefined() = false and self.CurrentCashDesk.CashDeskID = cashDeskID and self.CurrentCashDesk.IsOpen = true and self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.IsOpen = true",
+    "postcondition": "self.CurrentCashDesk = self.CurrentCashDesk@pre and self.CurrentCashDesk.CashDeskID = cashDeskID and self.CurrentCashDesk.IsOpen@pre = true and self.CurrentCashDesk.IsOpen = false and self.CurrentStore = self.CurrentStore@pre and self.CurrentStore.IsOpen = true and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract CoCoMESystem::closeCashDesk(cashDeskID:Integer): Boolean {\n          \n            precondition:\n          self.CurrentCashDesk.oclIsUndefined() = false and self.CurrentCashDesk.CashDeskID = cashDeskID and self.CurrentCashDesk.IsOpen = true and self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.IsOpen = true\n            \n            postcondition:\n          self.CurrentCashDesk = self.CurrentCashDesk@pre and self.CurrentCashDesk.CashDeskID = cashDeskID and self.CurrentCashDesk.IsOpen@pre = true and self.CurrentCashDesk.IsOpen = false and self.CurrentStore = self.CurrentStore@pre and self.CurrentStore.IsOpen = true and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 82,
+              "endLine": 4,
+              "endColumn": 92,
+              "startOffset": 186,
+              "endOffset": 196,
+              "expression": "CashDeskID",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 4,
+                    "column": 3,
+                    "endLine": 4,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 131,
+              "endLine": 4,
+              "endColumn": 137,
+              "startOffset": 235,
+              "endOffset": 241,
+              "expression": "IsOpen",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 4,
+                    "column": 3,
+                    "endLine": 4,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 214,
+              "endLine": 4,
+              "endColumn": 220,
+              "startOffset": 318,
+              "endOffset": 324,
+              "expression": "IsOpen",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsOpen is not available on Store.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/Store",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/Store",
+                  "declaration": "class Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 25,
+                    "column": 10,
+                    "endLine": 79,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 84,
+              "endLine": 7,
+              "endColumn": 94,
+              "startOffset": 455,
+              "endOffset": 465,
+              "expression": "CashDeskID",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 4,
+                    "column": 3,
+                    "endLine": 4,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 133,
+              "endLine": 7,
+              "endColumn": 139,
+              "startOffset": 504,
+              "endOffset": 510,
+              "expression": "IsOpen",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 4,
+                    "column": 3,
+                    "endLine": 4,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 176,
+              "endLine": 7,
+              "endColumn": 182,
+              "startOffset": 547,
+              "endOffset": 553,
+              "expression": "IsOpen",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 13,
+                    "column": 3,
+                    "endLine": 13,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                  "declaration": "CurrentCashDesk: CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 4,
+                    "column": 3,
+                    "endLine": 4,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 259,
+              "endLine": 7,
+              "endColumn": 265,
+              "startOffset": 630,
+              "endOffset": 636,
+              "expression": "IsOpen",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsOpen is not available on Store.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/Store",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/Store",
+                  "declaration": "class Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 25,
+                    "column": 10,
+                    "endLine": 79,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "declaration": "CoCoMESystem::closeCashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 35,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                  }
+                },
+                {
+                  "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 4,
+                "column": 3,
+                "endLine": 4,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 82
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CashDeskID"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 4,
+                "column": 3,
+                "endLine": 4,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 131
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "IsOpen"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsOpen is not available on Store.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/Store",
+              "declaration": "class Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 25,
+                "column": 10,
+                "endLine": 79,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 214
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "IsOpen"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 4,
+                "column": 3,
+                "endLine": 4,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 84
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CashDeskID"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 4,
+                "column": 3,
+                "endLine": 4,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 133
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "IsOpen"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 13,
+                "column": 3,
+                "endLine": 13,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+              "declaration": "CurrentCashDesk: CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 4,
+                "column": 3,
+                "endLine": 4,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 176
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "IsOpen"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsOpen is not available on Store.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/Store",
+              "declaration": "class Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 25,
+                "column": 10,
+                "endLine": 79,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "declaration": "CoCoMESystem::closeCashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 35,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+              }
+            },
+            {
+              "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 259
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "IsOpen"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 82,
+            "endLine": 4,
+            "endColumn": 92,
+            "startOffset": 186,
+            "endOffset": 196,
+            "expression": "CashDeskID",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 4,
+                  "column": 3,
+                  "endLine": 4,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P2",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P3",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P4"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7,
+              8
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 82,
+                "endLine": 4,
+                "endColumn": 92,
+                "startOffset": 186,
+                "endOffset": 196,
+                "expression": "CashDeskID",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 4,
+                      "column": 3,
+                      "endLine": 4,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 131,
+            "endLine": 4,
+            "endColumn": 137,
+            "startOffset": 235,
+            "endOffset": 241,
+            "expression": "IsOpen",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 4,
+                  "column": 3,
+                  "endLine": 4,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsOpen is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P2",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P3",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P4"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7,
+              8
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 131,
+                "endLine": 4,
+                "endColumn": 137,
+                "startOffset": 235,
+                "endOffset": 241,
+                "expression": "IsOpen",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 4,
+                      "column": 3,
+                      "endLine": 4,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 214,
+            "endLine": 4,
+            "endColumn": 220,
+            "startOffset": 318,
+            "endOffset": 324,
+            "expression": "IsOpen",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsOpen is not available on Store.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/Store",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/Store",
+                "declaration": "class Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 25,
+                  "column": 10,
+                  "endLine": 79,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsOpen is not available on Store.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P2",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P3",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P4"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7,
+              8
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/Store",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 214,
+                "endLine": 4,
+                "endColumn": 220,
+                "startOffset": 318,
+                "endOffset": 324,
+                "expression": "IsOpen",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsOpen is not available on Store.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/Store",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/Store",
+                    "declaration": "class Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 25,
+                      "column": 10,
+                      "endLine": 79,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 84,
+            "endLine": 7,
+            "endColumn": 94,
+            "startOffset": 455,
+            "endOffset": 465,
+            "expression": "CashDeskID",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 4,
+                  "column": 3,
+                  "endLine": 4,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              11,
+              12
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 84,
+                "endLine": 7,
+                "endColumn": 94,
+                "startOffset": 455,
+                "endOffset": 465,
+                "expression": "CashDeskID",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 4,
+                      "column": 3,
+                      "endLine": 4,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 133,
+            "endLine": 7,
+            "endColumn": 139,
+            "startOffset": 504,
+            "endOffset": 510,
+            "expression": "IsOpen",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 4,
+                  "column": 3,
+                  "endLine": 4,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsOpen is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              11,
+              12
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 133,
+                "endLine": 7,
+                "endColumn": 139,
+                "startOffset": 504,
+                "endOffset": 510,
+                "expression": "IsOpen",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 4,
+                      "column": 3,
+                      "endLine": 4,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 176,
+            "endLine": 7,
+            "endColumn": 182,
+            "startOffset": 547,
+            "endOffset": 553,
+            "expression": "IsOpen",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 13,
+                  "column": 3,
+                  "endLine": 13,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                "declaration": "CurrentCashDesk: CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 4,
+                  "column": 3,
+                  "endLine": 4,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsOpen is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              11,
+              12
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 176,
+                "endLine": 7,
+                "endColumn": 182,
+                "startOffset": 547,
+                "endOffset": 553,
+                "expression": "IsOpen",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsOpen is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 13,
+                      "column": 3,
+                      "endLine": 13,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentCashDesk",
+                    "declaration": "CurrentCashDesk: CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 4,
+                      "column": 3,
+                      "endLine": 4,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 259,
+            "endLine": 7,
+            "endColumn": 265,
+            "startOffset": 630,
+            "endOffset": 636,
+            "expression": "IsOpen",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsOpen is not available on Store.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/Store",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/Store",
+                "declaration": "class Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 25,
+                  "column": 10,
+                  "endLine": 79,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                "declaration": "CoCoMESystem::closeCashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 35,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                }
+              },
+              {
+                "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsOpen is not available on Store.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q1",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              11,
+              12
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/Store",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 259,
+                "endLine": 7,
+                "endColumn": 265,
+                "startOffset": 630,
+                "endOffset": 636,
+                "expression": "IsOpen",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsOpen is not available on Store.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/Store",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                  "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/Store",
+                    "declaration": "class Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 25,
+                      "column": 10,
+                      "endLine": 79,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk",
+                    "declaration": "CoCoMESystem::closeCashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 35,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/local/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/closeCashDesk.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "8bca21073130cf7470b396d35ed123aa6fc1337678835fde1441fc9f003f36f3"
+                    }
+                  },
+                  {
+                    "id": "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P3"
+            ],
+            "sourceLines": [
+              7
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/P4"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/closeCashDesk/operation/closeCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              12
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "rm2pt-authority-adjudication-v1",
+  "decision_id": "R02",
+  "operation_id": "CoCoME_orderProducts_placeOrder",
+  "status": "APPROVED",
+  "option": "A",
+  "decision_date": "2026-10-27",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "source_file": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+  "source_sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+  "source_lines": [749, 759, 760, 761, 763],
+  "source_problem": "The same post-state Amount is constrained independently for each OrderEntry against the operation-entry Amount. Entries with different subtotals create incompatible equalities; equal subtotals do not accumulate.",
+  "approved_preconditions": ["A current OrderProduct exists."],
+  "approved_postconditions": [
+    "The order status becomes REQUESTED.",
+    "The final amount equals the operation-entry amount plus the sum of the subtotal of every associated OrderEntry.",
+    "Distinct OrderEntry objects with equal subtotals contribute separately.",
+    "When there are no entries, the amount remains equal to its operation-entry value.",
+    "The operation returns true."
+  ],
+  "business_examples": [
+    {"before_amount": 100, "entry_subtotals": [20, 30], "after_amount": 150},
+    {"before_amount": 100, "entry_subtotals": [20, 20], "after_amount": 140},
+    {"before_amount": 100, "entry_subtotals": [], "after_amount": 100}
+  ],
+  "correction_scope": "Replace conflicting per-entry final-amount equalities with one duplicate-preserving aggregate over the associated entries. Preserve the current-order guard, REQUESTED status and Boolean success result.",
+  "additional_business_constraints": [],
+  "upstream_snapshot_modified": false,
+  "generation_reference_contract_supplied": false,
+  "executable_subset_status": "PENDING_EXECUTABLE_REPRESENTATION_REVIEW_LEGACY_CATALOG_USES_COLLECT",
+  "oracle_review_status": "PENDING_RM2PT_AUTHORITY_REVIEW"
+}

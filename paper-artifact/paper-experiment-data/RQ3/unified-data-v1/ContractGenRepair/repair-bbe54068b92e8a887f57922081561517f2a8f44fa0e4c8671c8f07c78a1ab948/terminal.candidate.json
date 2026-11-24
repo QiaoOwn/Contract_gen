@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "currentSale:Sale = self.CurrentSale, currentStore:Store = self.CurrentStore",
+    "precondition": "currentSale.oclIsUndefined() = false and currentStore.oclIsUndefined() = false and Sale.allInstances()->includes(currentSale) and currentSale.IsComplete = false and currentSale.IsReadytoPay = true and amount >= currentSale.Amount",
+    "postcondition": "let cashPayment:CashPayment in cashPayment.oclIsNew() and CashPayment.allInstances()->includes(cashPayment) and cashPayment.AmountTendered = amount and cashPayment.Balance = amount - currentSale.Amount and cashPayment.BelongedSale = currentSale and currentSale.AssoicatedPayment = cashPayment and currentSale.Belongedstore = currentStore and currentStore.Sales->includes(currentSale) and currentSale.Time = Now and currentSale.IsComplete = true and result = true"
+  },
+  "methodAccepted": true
+}

@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentOrderProduct <> null",
+    "postcondition": "let entries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries@pre in self.CurrentOrderProduct.OrderStatus = OrderStatus::REQUESTED and result = true and if entries->isEmpty() then self.CurrentOrderProduct.Amount = self.CurrentOrderProduct.Amount@pre else self.CurrentOrderProduct.Amount = self.CurrentOrderProduct.Amount@pre + entries->sumBy(e:OrderEntry | e.SubAmount@pre) endif"
+  },
+  "methodAccepted": true
+}

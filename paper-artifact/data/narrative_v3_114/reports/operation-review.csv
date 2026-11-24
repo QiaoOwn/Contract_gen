@@ -1,0 +1,1077 @@
+﻿"Operation ID","Project","Structured Requirement","Narrative V3","Source Stratum","Review Status","Exceptions"
+"Airport_manageDevice_createDevice","Airport","Operation intent:
+Register a newly installed airport device and assign its responsible staff contact.
+
+Preconditions:
+- The device identifier is unused.
+- The selected contact identifies an existing Staff member.
+
+Postconditions:
+- A Device is created with the supplied identifier, name, and location.
+- The Device is linked to the selected Staff contact and stored.
+- The operation returns true.","Registering an airport device creates a Device carrying the supplied identifier, name and location, with the selected Staff member as its responsible contact. The identifier must not already be in use and that Staff member must exist. The newly created device is included in the Device collection, and registration returns true.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"Airport_manageUser_createStaff","Airport","Operation intent:
+Register a new airport Staff member with contact, role, and optional reporting information.
+
+Preconditions:
+- The staff identifier is unused.
+
+Postconditions:
+- A Staff member is created with the supplied identity, password, phone, and role.
+- If bossid identifies an existing Staff member, the new Staff member is linked to that Boss.
+- The operation returns true.","Registration adds a new Staff member carrying the supplied identity, password, phone and role, provided the staff identifier is unused. If bossid identifies an existing Staff member, that person becomes the new member's Boss. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen description does not explicitly mention Name assignment or instance inclusion; upstream/approved clarification does. V3 preserves frozen scope rather than importing those obligations. | Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"Airport_raiseRepair_approve","Airport","Operation intent:
+Record a staff approval decision for a repair request.
+
+Preconditions:
+- The referenced Repair exists.
+- The referenced Staff member exists.
+
+Postconditions:
+- A new ApprovalHistory records the decision and suggestion and is linked to the Repair.
+- When reject is true, Process advances from 0 to 1 for a role-1 Staff member, from 1 to 2 for role 2, and from 2 to 3 for role 3.
+- When reject is false, Repair.Process is set to the rejected stage value 5.
+- The operation returns the new ApprovalHistory.","An approval decision records the supplied decision and suggestion in a new ApprovalHistory associated with the selected Repair and returns that history. Both the Repair and the deciding Staff member must exist. When reject is true, a role-1 member advances Process from 0 to 1, role 2 advances it from 1 to 2, and role 3 advances it from 2 to 3. When reject is false, the repair instead enters the rejected stage, Process 5.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"Airport_raiseRepair_finishRepair","Airport","Operation intent:
+Mark a repair assigned to a worker as finished.
+
+Preconditions:
+- The referenced Device is assigned to the supplied Staff member.
+- The Staff member has the Worker role value 3.
+- The referenced Repair exists (laboratory-adjudicated requirement).
+
+Postconditions:
+- The Repair.Process is set to the finished stage value 7.
+- The operation returns true.","Finishing an assigned repair sets its Process to 7 and returns true. The referenced Device must be assigned to the supplied Staff member, whose Worker role value must be 3. The referenced Repair must also exist.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"Airport_raiseRepair_feedback","Airport","Operation intent:
+Record feedback from the staff member who raised a completed repair.
+
+Preconditions:
+- The supplied Staff member raised the Repair.
+- The Staff member has the GroundStaff role value 0.
+- The Repair.Process is the finished stage value 7.
+
+Postconditions:
+- The Repair score is updated.
+- A score greater than or equal to 3 closes the Repair.
+- A score below 3 leaves the Repair open, records des as its Description, and sets Process to the initial stage value 0.
+- The operation returns true.","Feedback records a new score on a repair that has reached Process 7. It may be given by the Staff member who raised that repair, and that member must have GroundStaff role 0. A score of at least 3 closes the repair; a lower score keeps it open, places des in its Description and returns Process to 0. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_checkBalance_inputCard","AutomatedTellerMachine","Operation intent:
+Read a bank-card identifier and record whether the card can be found.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- If the card exists, the ATM stores that card as the current card.
+- If the card exists, the card identifier is marked as validated and the operation returns true.
+- If the card does not exist, the card identifier is marked as unvalidated and the operation returns false.","Reading a card identifier has no additional business restriction. If a matching bank card is found, the ATM makes that card current, marks its identifier as validated and returns true. If no card is found, the identifier is marked unvalidated and the operation returns false.","source-faithful-narrative","author-reviewed-frozen-paraphrase-source-aligned-pilot",""
+"AutomatedTellerMachine_checkBalance_inputPassword","AutomatedTellerMachine","Operation intent:
+Validate the supplied password for the card in the current ATM session.
+
+Preconditions:
+- The card identifier has been validated.
+- A current BankCard is present.
+
+Postconditions:
+- A matching password marks the session password as validated and returns true.
+- A non-matching password marks it as unvalidated and returns false.","The ATM compares the supplied password with the current BankCard's password after the card identifier has been validated; a current card must be present. A match marks the session password as validated and returns true. Otherwise the password is marked unvalidated and the result is false.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_checkBalance_checkBalance","AutomatedTellerMachine","Operation intent:
+Read the balance of the card in the authenticated ATM session.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+
+Postconditions:
+- The operation returns the current card balance.","A balance enquiry returns the balance of the current BankCard. The enquiry requires a present current card and a session in which both the card identifier and password are validated.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_checkBalance_ejectCard","AutomatedTellerMachine","Operation intent:
+End the authenticated ATM session and eject the current card.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+
+Postconditions:
+- The current card is cleared.
+- Authentication, deposit, and withdrawal state is reset, including transaction amounts.
+- The operation returns true.","Ejecting the card ends a session whose card identifier and password are validated and whose current BankCard is present. The ATM clears the current card and resets authentication, deposit and withdrawal state, including transaction amounts. It returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_depositFunds_inputCard","AutomatedTellerMachine","Operation intent:
+Read a bank-card identifier and record whether the card can be found.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- If the card exists, the ATM stores that card as the current card.
+- If the card exists, the card identifier is marked as validated and the operation returns true.
+- If the card does not exist, the card identifier is marked as unvalidated and the operation returns false.","Reading a card identifier has no additional business restriction. If a matching bank card is found, the ATM makes that card current, marks its identifier as validated and returns true. If no card is found, the identifier is marked unvalidated and the operation returns false.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_depositFunds_inputPassword","AutomatedTellerMachine","Operation intent:
+Validate the supplied password for the card in the current ATM session.
+
+Preconditions:
+- The card identifier has been validated.
+- A current BankCard is present.
+
+Postconditions:
+- A matching password marks the session password as validated and returns true.
+- A non-matching password marks it as unvalidated and returns false.","The ATM compares the supplied password with the current BankCard's password after the card identifier has been validated; a current card must be present. A match marks the session password as validated and returns true. Otherwise the password is marked unvalidated and the result is false.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_depositFunds_depositFunds","AutomatedTellerMachine","Operation intent:
+Deposit the supplied amount into the card account in the authenticated ATM session.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+- The deposit amount is at least 100.
+
+Postconditions:
+- The card balance increases by the deposited amount.
+- The session records the deposit and its amount.
+- The operation returns true.","For a deposit of at least 100, the ATM increases the current card's balance by the supplied amount and records both the deposit and its amount in the session. A current BankCard must be present and the card identifier and password must be validated. The deposit operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_depositFunds_printReceipt","AutomatedTellerMachine","Operation intent:
+Return the amount to print on the receipt for the current ATM transaction.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+
+Postconditions:
+- The withdrawal amount is returned after a withdrawal, the deposit amount after a deposit, and zero when neither occurred.","The receipt amount reflects the current transaction: return the withdrawal amount after a withdrawal, the deposit amount after a deposit, or zero if neither occurred. A current BankCard must be present, with both its identifier and the session password validated.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_depositFunds_ejectCard","AutomatedTellerMachine","Operation intent:
+End the authenticated ATM session and eject the current card.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+
+Postconditions:
+- The current card is cleared.
+- Authentication, deposit, and withdrawal state is reset, including transaction amounts.
+- The operation returns true.","Ejecting the card ends a session whose card identifier and password are validated and whose current BankCard is present. The ATM clears the current card and resets authentication, deposit and withdrawal state, including transaction amounts. It returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageBankCard_createBankCard","AutomatedTellerMachine","Operation intent:
+Create a BankCard record from the supplied card identifier, status, catalog, password, balance.
+
+Preconditions:
+- No existing BankCard has the supplied card identifier.
+
+Postconditions:
+- A new BankCard is stored with the supplied card identifier, status, catalog, password, balance.
+- The operation returns true.","Adding a bank card records its supplied card identifier, status, catalog, password and balance in a new BankCard and includes it in the card collection. There must be no existing card with that identifier. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageBankCard_queryBankCard","AutomatedTellerMachine","Operation intent:
+Retrieve the BankCard identified by the supplied card identifier.
+
+Preconditions:
+- The referenced BankCard exists.
+
+Postconditions:
+- The operation returns the referenced BankCard.","A card lookup returns the BankCard matching the supplied card identifier. The requested card must exist before the lookup can be performed.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageBankCard_modifyBankCard","AutomatedTellerMachine","Operation intent:
+Update the BankCard identified by card identifier with the supplied card identifier, status, catalog, password, balance.
+
+Preconditions:
+- The referenced BankCard exists.
+
+Postconditions:
+- The stored BankCard contains the supplied card identifier, status, catalog, password, balance.
+- The operation returns true.","For a BankCard already identified by the supplied card identifier, replace the recorded card identifier, status, catalog, password and balance with the supplied values. The referenced card must exist, and the update returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageBankCard_deleteBankCard","AutomatedTellerMachine","Operation intent:
+Delete the BankCard identified by the supplied card identifier.
+
+Preconditions:
+- The referenced BankCard exists in the repository.
+
+Postconditions:
+- The BankCard is removed from the repository.
+- The operation returns true.","Removing a bank card uses its supplied card identifier to select an existing record in the card collection. The selected BankCard is removed from that collection and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageUser_createUser","AutomatedTellerMachine","Operation intent:
+Create a User record from the supplied user identifier, name, address.
+
+Preconditions:
+- No existing User has the supplied user identifier.
+
+Postconditions:
+- A new User is stored with the supplied user identifier, name, address.
+- The operation returns true.","User registration records the supplied user identifier, name and address in a new User included in the user collection. Registration requires that no existing User has that identifier, and returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageUser_queryUser","AutomatedTellerMachine","Operation intent:
+Retrieve the User identified by the supplied user identifier.
+
+Preconditions:
+- The referenced User exists.
+
+Postconditions:
+- The operation returns the referenced User.","The user enquiry returns the User selected by the supplied user identifier, provided that user exists.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageUser_modifyUser","AutomatedTellerMachine","Operation intent:
+Update the User identified by user identifier with the supplied user identifier, name, address.
+
+Preconditions:
+- The referenced User exists.
+
+Postconditions:
+- The stored User contains the supplied user identifier, name, address.
+- The operation returns true.","Updating a user replaces the user identifier, name and address of the record selected by the supplied user identifier. That User must exist. The record then contains the supplied values and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_manageUser_deleteUser","AutomatedTellerMachine","Operation intent:
+Delete the User identified by the supplied user identifier.
+
+Preconditions:
+- The referenced User exists in the repository.
+
+Postconditions:
+- The User is removed from the repository.
+- The operation returns true.","To delete a user, select the User with the supplied user identifier from the user collection; that record must exist there. Remove the selected user from the collection and return true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_withdrawCash_inputCard","AutomatedTellerMachine","Operation intent:
+Read a bank-card identifier and record whether the card can be found.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- If the card exists, the ATM stores that card as the current card.
+- If the card exists, the card identifier is marked as validated and the operation returns true.
+- If the card does not exist, the card identifier is marked as unvalidated and the operation returns false.","Reading a card identifier has no additional business restriction. If a matching bank card is found, the ATM makes that card current, marks its identifier as validated and returns true. If no card is found, the identifier is marked unvalidated and the operation returns false.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_withdrawCash_inputPassword","AutomatedTellerMachine","Operation intent:
+Validate the supplied password for the card in the current ATM session.
+
+Preconditions:
+- The card identifier has been validated.
+- A current BankCard is present.
+
+Postconditions:
+- A matching password marks the session password as validated and returns true.
+- A non-matching password marks it as unvalidated and returns false.","The ATM compares the supplied password with the current BankCard's password after the card identifier has been validated; a current card must be present. A match marks the session password as validated and returns true. Otherwise the password is marked unvalidated and the result is false.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_withdrawCash_withdrawCash","AutomatedTellerMachine","Operation intent:
+Withdraw the supplied amount from the card account in the authenticated ATM session.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+- The card balance covers the requested amount.
+
+Postconditions:
+- The card balance decreases by the withdrawn amount.
+- The session records the withdrawal and its amount.
+- The operation returns true.","A withdrawal deducts the supplied amount from the current card balance and records the withdrawal and its amount in the ATM session. It requires a current BankCard, validated card identifier and password, and a balance covering the requested amount. The operation returns true.","source-faithful-narrative","author-reviewed-frozen-paraphrase-source-aligned-pilot",""
+"AutomatedTellerMachine_withdrawCash_printReceipt","AutomatedTellerMachine","Operation intent:
+Return the amount to print on the receipt for the current ATM transaction.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+
+Postconditions:
+- The withdrawal amount is returned after a withdrawal, the deposit amount after a deposit, and zero when neither occurred.","The receipt amount reflects the current transaction: return the withdrawal amount after a withdrawal, the deposit amount after a deposit, or zero if neither occurred. A current BankCard must be present, with both its identifier and the session password validated.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"AutomatedTellerMachine_withdrawCash_ejectCard","AutomatedTellerMachine","Operation intent:
+End the authenticated ATM session and eject the current card.
+
+Preconditions:
+- The card identifier and password are validated.
+- A current BankCard is present.
+
+Postconditions:
+- The current card is cleared.
+- Authentication, deposit, and withdrawal state is reset, including transaction amounts.
+- The operation returns true.","Ejecting the card ends a session whose card identifier and password are validated and whose current BankCard is present. The ATM clears the current card and resets authentication, deposit and withdrawal state, including transaction amounts. It returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_changePrice_changePrice","CoCoME","Operation intent:
+Change the sale price of the item identified by a barcode.
+
+Preconditions:
+- The referenced Item exists.
+
+Postconditions:
+- The Item price is set to the supplied new price.
+- The operation returns true.","Changing a selling price finds the Item by the supplied barcode and sets its price to the supplied new price. The item must exist; the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_closeCashDesk_closeCashDesk","CoCoME","Operation intent:
+Close a cash desk in the current open store.
+
+Preconditions:
+- The CashDesk exists and is open.
+- The current Store exists and is open.
+
+Postconditions:
+- The CashDesk becomes closed and remains the current cash desk.
+- The operation returns true.","Closing a CashDesk changes it from open to closed while retaining it as the current cash desk. The desk must exist and be open, and the current Store must also exist and be open. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_closeStore_closeStore","CoCoME","Operation intent:
+Close an existing open store.
+
+Preconditions:
+- The Store exists and is currently open.
+
+Postconditions:
+- The Store becomes closed.
+- The operation returns true.","An existing Store that is currently open can be closed. Its open state becomes closed, and the closing operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_listSuppliers_listSuppliers","CoCoME","Operation intent:
+List all registered suppliers.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- The operation returns all Supplier records.","Supplier listing returns every registered Supplier record, without an additional business restriction.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashDesk_createCashDesk","CoCoME","Operation intent:
+Create a CashDesk record from the supplied identifier, name, open state.
+
+Preconditions:
+- No existing CashDesk has the supplied identifier.
+
+Postconditions:
+- A new CashDesk is stored with the supplied identifier, name, open state.
+- The operation returns true.","A new CashDesk is recorded with the supplied identifier, name and open state and is included in the cash-desk collection. The identifier must not be used by an existing CashDesk. Creation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashDesk_queryCashDesk","CoCoME","Operation intent:
+Retrieve the CashDesk identified by the supplied identifier.
+
+Preconditions:
+- The referenced CashDesk exists.
+
+Postconditions:
+- The operation returns the referenced CashDesk.","The cash-desk enquiry returns the CashDesk selected by the supplied identifier. It requires that the selected desk exists.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashDesk_modifyCashDesk","CoCoME","Operation intent:
+Update the CashDesk identified by identifier with the supplied identifier, name, open state.
+
+Preconditions:
+- The referenced CashDesk exists.
+
+Postconditions:
+- The stored CashDesk contains the supplied identifier, name, open state.
+- The operation returns true.","The cash-desk update changes the identifier, name and open state of the existing CashDesk selected by identifier to the supplied values. The selected desk must exist, and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashDesk_deleteCashDesk","CoCoME","Operation intent:
+Delete the CashDesk identified by the supplied identifier.
+
+Preconditions:
+- The referenced CashDesk exists in the repository.
+
+Postconditions:
+- The CashDesk is removed from the repository.
+- The operation returns true.","An existing CashDesk selected by the supplied identifier is removed from the cash-desk collection. Selection requires that record to be present in the collection. Deletion returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashier_createCashier","CoCoME","Operation intent:
+Create a Cashier record from the supplied identifier, name.
+
+Preconditions:
+- No existing Cashier has the supplied identifier.
+
+Postconditions:
+- A new Cashier is stored with the supplied identifier, name.
+- The operation returns true.","Register a Cashier using the supplied identifier and name, returning true after the new record has been included in the cashier collection. No existing Cashier may have that identifier.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashier_queryCashier","CoCoME","Operation intent:
+Retrieve the Cashier identified by the supplied identifier.
+
+Preconditions:
+- The referenced Cashier exists.
+
+Postconditions:
+- The operation returns the referenced Cashier.","Looking up a cashier returns the Cashier with the supplied identifier; the referenced cashier must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashier_modifyCashier","CoCoME","Operation intent:
+Update the Cashier identified by identifier with the supplied identifier, name.
+
+Preconditions:
+- The referenced Cashier exists.
+
+Postconditions:
+- The stored Cashier contains the supplied identifier, name.
+- The operation returns true.","An existing Cashier located by identifier receives the supplied identifier and name. The record must exist for this update, which returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageCashier_deleteCashier","CoCoME","Operation intent:
+Delete the Cashier identified by the supplied identifier.
+
+Preconditions:
+- The referenced Cashier exists in the repository.
+
+Postconditions:
+- The Cashier is removed from the repository.
+- The operation returns true.","Delete the Cashier located by the supplied identifier from the cashier collection and return true. The selected cashier must already exist in that collection.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageProductCatalog_createProductCatalog","CoCoME","Operation intent:
+Create a ProductCatalog record from the supplied identifier, name.
+
+Preconditions:
+- No existing ProductCatalog has the supplied identifier.
+
+Postconditions:
+- A new ProductCatalog is stored with the supplied identifier, name.
+- The operation returns true.","Catalog registration includes a new ProductCatalog with the supplied identifier and name in the catalog collection. Registration is available only when that identifier is unused by any existing ProductCatalog, and returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageProductCatalog_queryProductCatalog","CoCoME","Operation intent:
+Retrieve the ProductCatalog identified by the supplied identifier.
+
+Preconditions:
+- The referenced ProductCatalog exists.
+
+Postconditions:
+- The operation returns the referenced ProductCatalog.","A catalog lookup returns the ProductCatalog matching the supplied identifier. The matching catalog must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageProductCatalog_modifyProductCatalog","CoCoME","Operation intent:
+Update the ProductCatalog identified by identifier with the supplied identifier, name.
+
+Preconditions:
+- The referenced ProductCatalog exists.
+
+Postconditions:
+- The stored ProductCatalog contains the supplied identifier, name.
+- The operation returns true.","For the ProductCatalog found by identifier, record the supplied identifier and name and return true. The catalog being updated must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageProductCatalog_deleteProductCatalog","CoCoME","Operation intent:
+Delete the ProductCatalog identified by the supplied identifier.
+
+Preconditions:
+- The referenced ProductCatalog exists in the repository.
+
+Postconditions:
+- The ProductCatalog is removed from the repository.
+- The operation returns true.","Removing a catalog takes the ProductCatalog with the supplied identifier out of the catalog collection. That catalog must exist in the collection, and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageStore_createStore","CoCoME","Operation intent:
+Create a Store record from the supplied identifier, name, address, open state.
+
+Preconditions:
+- No existing Store has the supplied identifier.
+
+Postconditions:
+- A new Store is stored with the supplied identifier, name, address, open state.
+- The operation returns true.","Store registration records the supplied identifier, name, address and open state in a new Store and includes it in the store collection. The identifier must be unused by existing Store records. Registration returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageStore_queryStore","CoCoME","Operation intent:
+Retrieve the Store identified by the supplied identifier.
+
+Preconditions:
+- The referenced Store exists.
+
+Postconditions:
+- The operation returns the referenced Store.","A store enquiry returns the Store identified by the supplied identifier. The requested store must exist; the returned object is that same requested store.","source-faithful-narrative","author-reviewed-frozen-paraphrase-source-aligned-pilot",""
+"CoCoME_manageStore_modifyStore","CoCoME","Operation intent:
+Update the Store identified by identifier with the supplied identifier, name, address, open state.
+
+Preconditions:
+- The referenced Store exists.
+
+Postconditions:
+- The stored Store contains the supplied identifier, name, address, open state.
+- The operation returns true.","The store update locates an existing Store by identifier and replaces its identifier, name, address and open state with the supplied values. The selected store must exist, and the update returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageStore_deleteStore","CoCoME","Operation intent:
+Delete the Store identified by the supplied identifier.
+
+Preconditions:
+- The referenced Store exists in the repository.
+
+Postconditions:
+- The Store is removed from the repository.
+- The operation returns true.","Delete the Store identified by the supplied identifier from the store collection, returning true. The referenced store must exist in that collection before deletion.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageSupplier_createSupplier","CoCoME","Operation intent:
+Create a Supplier record from the supplied identifier, name.
+
+Preconditions:
+- No existing Supplier has the supplied identifier.
+
+Postconditions:
+- A new Supplier is stored with the supplied identifier, name.
+- The operation returns true.","To register a supplier, include a new Supplier with the supplied identifier and name in the supplier collection. Registration requires an identifier not used by an existing Supplier and returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageSupplier_querySupplier","CoCoME","Operation intent:
+Retrieve the Supplier identified by the supplied identifier.
+
+Preconditions:
+- The referenced Supplier exists.
+
+Postconditions:
+- The operation returns the referenced Supplier.","The supplier enquiry returns the Supplier selected by the supplied identifier, with existence of that supplier required.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageSupplier_modifySupplier","CoCoME","Operation intent:
+Update the Supplier identified by identifier with the supplied identifier, name.
+
+Preconditions:
+- The referenced Supplier exists.
+
+Postconditions:
+- The stored Supplier contains the supplied identifier, name.
+- The operation returns true.","Update the Supplier selected by identifier so that its identifier and name contain the supplied values. This requires an existing supplier and returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageSupplier_deleteSupplier","CoCoME","Operation intent:
+Delete the Supplier identified by the supplied identifier.
+
+Preconditions:
+- The referenced Supplier exists in the repository.
+
+Postconditions:
+- The Supplier is removed from the repository.
+- The operation returns true.","The supplier selected by the supplied identifier must be present in the supplier collection. Removing that Supplier takes it out of the collection and returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageItem_createItem","CoCoME","Operation intent:
+Create a Item record from the supplied barcode, name, sale price, stock quantity, order price.
+
+Preconditions:
+- No existing Item has the supplied barcode.
+
+Postconditions:
+- A new Item is stored with the supplied barcode, name, sale price, stock quantity, order price.
+- The operation returns true.","Registering a product creates a new Item containing the supplied barcode, name, sale price, stock quantity and order price, and includes it in the item collection. An existing Item must not already use that barcode. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageItem_queryItem","CoCoME","Operation intent:
+Retrieve the Item identified by the supplied barcode.
+
+Preconditions:
+- The referenced Item exists.
+
+Postconditions:
+- The operation returns the referenced Item.","A barcode enquiry returns the Item having the supplied barcode. The referenced item must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageItem_modifyItem","CoCoME","Operation intent:
+Update the Item identified by barcode with the supplied barcode, name, sale price, stock quantity, order price.
+
+Preconditions:
+- The referenced Item exists.
+
+Postconditions:
+- The stored Item contains the supplied barcode, name, sale price, stock quantity, order price.
+- The operation returns true.","The product update selects an existing Item by barcode and records the supplied barcode, name, sale price, stock quantity and order price on it. The item must exist and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_manageItem_deleteItem","CoCoME","Operation intent:
+Delete the Item identified by the supplied barcode.
+
+Preconditions:
+- The referenced Item exists in the repository.
+
+Postconditions:
+- The Item is removed from the repository.
+- The operation returns true.","Deleting an item removes the Item identified by the supplied barcode from the item collection and returns true. The record must exist in that collection.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_openCashDesk_openCashDesk","CoCoME","Operation intent:
+Open a cash desk in the current store and make it the current cash desk.
+
+Preconditions:
+- The CashDesk exists and is closed.
+- The current Store exists and is open.
+
+Postconditions:
+- The CashDesk becomes open and is stored as the current cash desk.
+- The operation returns true.","Opening a CashDesk makes it open and records it as the current cash desk. The selected desk must exist and be closed, while the current Store must exist and be open. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_openStore_openStore","CoCoME","Operation intent:
+Open an existing store and make it the current store.
+
+Preconditions:
+- The Store exists and is currently closed.
+
+Postconditions:
+- The Store becomes open and is stored as the current store.
+- The operation returns true.","An existing, currently closed Store can be opened and made the current store. The system changes its state to open, records it as current and returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_orderProducts_makeNewOrder","CoCoME","Operation intent:
+Start a new product order with the supplied order identifier.
+
+Preconditions:
+- The order identifier is unused.
+
+Postconditions:
+- A new OrderProduct is created in NEW status with the current time.
+- The order is stored as the current product order and added to the repository.
+- The operation returns true.","Starting a product order uses an unused order identifier to create a new OrderProduct in NEW status with the current time. The system includes the order in the order collection and makes it the current product order, then returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_orderProducts_listAllOutOfStoreProducts","CoCoME","Operation intent:
+List products whose stock is exhausted.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- The operation returns every Item with a stock quantity of zero.","The exhausted-stock listing returns every Item whose stock quantity is zero. There is no additional business restriction on requesting the list.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_orderProducts_orderItem","CoCoME","Operation intent:
+Add a requested item and quantity to the current product order.
+
+Preconditions:
+- The Item identified by the supplied barcode exists.
+- A current OrderProduct exists.
+
+Postconditions:
+- A new OrderEntry records the Item, quantity, and order-price subtotal.
+- The entry is stored and linked to the current OrderProduct.
+- The operation returns true.","Adding an item to the current product order creates an OrderEntry recording the selected Item, the requested quantity and its order-price subtotal. The item selected by the supplied barcode and the current OrderProduct must both exist. The new entry is included in the entry collection and linked to that order; the operation returns true.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"CoCoME_orderProducts_chooseSupplier","CoCoME","Operation intent:
+Assign a supplier to the current product order.
+
+Preconditions:
+- The Supplier exists.
+- A current OrderProduct exists.
+
+Postconditions:
+- The current order is linked to the selected Supplier.
+- The operation returns true.","Assigning a supplier links the selected Supplier to the current product order and returns true. Both that Supplier and a current OrderProduct must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_orderProducts_placeOrder","CoCoME","Operation intent:
+Place the current product order after its entries have been assembled.
+
+Preconditions:
+- A current OrderProduct exists.
+
+Postconditions:
+- The order status becomes REQUESTED.
+- The order amount becomes its amount before this operation plus the subtotal of every associated OrderEntry; distinct entries with equal subtotals each contribute.
+- When the order has no entries, its amount remains unchanged.
+- The operation returns true.","Placing the current product order changes its status to REQUESTED and returns true. A current OrderProduct must exist. Its final amount is its amount before this operation plus the subtotals of all associated OrderEntries, with every distinct entry contributing even when subtotals are equal. With no entries, the amount remains unchanged.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"CoCoME_processSale_makeNewSale","CoCoME","Operation intent:
+Start a new sale at the current cash desk.
+
+Preconditions:
+- The current CashDesk exists and is open.
+- There is no current Sale, or the previous current Sale is complete.
+
+Postconditions:
+- A new incomplete and not-yet-payable Sale is created and linked to the current CashDesk.
+- The Sale is stored as the current sale and added to the repository.
+- The operation returns true.","A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"CoCoME_processSale_enterItem","CoCoME","Operation intent:
+Add a scanned item and quantity to the current sale.
+
+Preconditions:
+- The current Sale exists and is incomplete.
+- The scanned Item exists and has positive stock.
+- The entered quantity does not exceed the Item stock (laboratory-adjudicated requirement).
+
+Postconditions:
+- A SalesLineItem is created, linked to the Sale and Item, and records the quantity and subtotal.
+- The new SalesLineItem is stored and becomes the current sale line.
+- The Item stock decreases by the entered quantity.
+- The operation returns true.","Entering a scanned item and quantity creates a SalesLineItem for the current Sale and the scanned Item, recording that quantity and its subtotal. The current sale must exist and be incomplete; the item must exist with positive stock, and the entered quantity must not exceed that stock. The newly created sales line is included in the sales-line collection and becomes the current sale line. The item stock is reduced by the entered quantity, and the operation returns true.","adjudicated-narrative","draft-source-review-pending","Frozen summary does not explicitly specify reverse Sale.ContainedSalesLine or the subtotal equation. Unlike expanded pilot V2, V3 keeps frozen scope and records this specificity gap. | Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"CoCoME_processSale_endSale","CoCoME","Operation intent:
+Finish item entry and calculate the amount due for the current sale.
+
+Preconditions:
+- The current Sale exists, is incomplete, and is not yet ready for payment.
+
+Postconditions:
+- The Sale amount becomes the sum of the subtotal of every associated sales line; distinct lines with equal subtotals each contribute.
+- If there are no sales lines, the Sale amount becomes zero.
+- The Sale becomes ready for payment.
+- The operation returns the resulting Sale amount.","Ending item entry calculates the current Sale amount by adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals. A current sale must exist, be incomplete and not yet ready for payment. With no lines its amount becomes zero. The sale becomes ready for payment and the operation returns the resulting amount.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"CoCoME_processSale_makeCashPayment","CoCoME","Operation intent:
+Pay the current sale with the supplied cash amount.
+
+Preconditions:
+- The current Sale exists, is incomplete, and is ready for payment.
+- The tendered amount covers the Sale amount.
+- A current Store exists.
+
+Postconditions:
+- A CashPayment records the tendered amount and change and is linked to the Sale.
+- The Sale is linked to the current Store, timestamped, and marked complete.
+- The payment is stored and the operation returns true.","Cash payment records the tendered amount and change in a CashPayment linked to the current Sale. Payment requires an existing, incomplete sale that is ready for payment, a tendered amount covering its amount, and a current Store. The sale is linked to that store, timestamped and marked complete. The payment is included in the payment collection, and the operation returns true.","adjudicated-narrative","draft-source-review-pending","Frozen summary leaves explicit CashPayment creation, reverse associations and change formula less specific than upstream; no extra predicates imported from reference OCL. | Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"CoCoME_receiveOrderedProduct_receiveOrderedProduct","CoCoME","Operation intent:
+Receive an existing product order and replenish stock from its entries.
+
+Preconditions:
+- The referenced OrderProduct exists.
+
+Postconditions:
+- The order status becomes RECEIVED.
+- For each Item in the order, its stock becomes its stock before this operation plus the quantities of all associated OrderEntries referring to that Item.
+- If multiple entries refer to the same Item, every entry's quantity contributes.
+- The operation returns true.","Receiving an existing OrderProduct marks it RECEIVED and returns true. Each Item represented in the order has its stock increased from its value before this operation by the quantities of all associated OrderEntries referring to that item. Multiple entries for the same item all contribute, rather than only one entry being counted.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"CoCoME_showStockReports_showStockReports","CoCoME","Operation intent:
+Produce a stock report containing all items.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- The operation returns all Item records.","The stock report returns all Item records. Requesting it has no additional business restriction.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_borrowBook_borrowBook","LibraryManagementSystem","Operation intent:
+Process a borrowing request from a user identifier and a book-copy barcode.
+
+Preconditions:
+- The User and BookCopy exist.
+- The User has NORMAL borrowing status and no suspension days.
+- A BACHELOR Student has fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60.
+- The copy is AVAILABLE, or it is ONHOLDSHELF, marked reserved, and has a matching open reservation for this user.
+
+Postconditions:
+- A new unreturned Loan is created and linked to the User and BookCopy with today as the loan date.
+- The new loan is added to the borrowing user's loan collection.
+- The new loan is added to the borrowed copy's loan history.
+- The due date is 30 days for a Student and 60 days for a Faculty user.
+- The user loan count increases by one, the copy becomes LOANED, and the 3-, 10-, 17-, and 31-day overdue flags start as false.
+- If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed.
+- The operation returns true.","A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.
+
+Borrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen text does not separately specify Loan instance inclusion; V3 does not silently add the pilot V2 source-level expansion. | Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_cancelReservation_cancelReservation","LibraryManagementSystem","Operation intent:
+Cancel an open reservation for a user and a borrowed book copy.
+
+Preconditions:
+- The User, BookCopy, and matching Reserve record exist.
+- The copy is LOANED, marked reserved, and the reservation is still open.
+
+Postconditions:
+- The copy is no longer marked reserved.
+- The reservation is closed.
+- The operation returns true.","Cancelling a reservation clears the reserved mark on a BookCopy, closes the matching Reserve record and returns true. The User, copy and matching reservation must exist. The copy must be LOANED and marked reserved, and the reservation must still be open.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay","LibraryManagementSystem","Operation intent:
+Advance the daily suspension countdown for users with remaining suspension days.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- Each User whose suspension days were positive before this operation has that count reduced by one.
+- A User who was SUSPEND before this operation, has no overdue fee, and reaches zero days after the reduction returns to NORMAL status.
+- A User who was SUSPEND and has an outstanding overdue fee remains SUSPEND even when the remaining days reach zero.
+- Users who already had zero suspension days are unchanged.","The daily countdown reduces by one the suspension-day count of each User whose count was positive before the operation; users already at zero days are unchanged. No additional business condition is required. A user previously in SUSPEND returns to NORMAL when the reduction reaches zero and there is no overdue fee. A previously suspended user with an outstanding overdue fee remains SUSPEND even if the days reach zero.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"LibraryManagementSystem_listBookHistory_listBorrowHistory","LibraryManagementSystem","Operation intent:
+List the complete loan history of a user.
+
+Preconditions:
+- The referenced User exists.
+
+Postconditions:
+- The operation returns all Loan records linked to the User.","For an existing User, the borrowing-history enquiry returns all Loan records linked to that user, giving the complete loan history.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_listBookHistory_listHodingBook","LibraryManagementSystem","Operation intent:
+List the loans currently held by a user.
+
+Preconditions:
+- The referenced User exists.
+
+Postconditions:
+- The operation returns the User loans that have not been returned.","The current-holdings enquiry returns the referenced User's loans that have not been returned. The user must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_listBookHistory_listOverDueBook","LibraryManagementSystem","Operation intent:
+List book copies associated with a user's overdue loans.
+
+Preconditions:
+- The referenced User exists.
+- The overdue active-loan collection can be resolved.
+
+Postconditions:
+- The operation returns the distinct BookCopy objects linked to that user's unreturned Loans with a positive overdue fee.
+- A BookCopy linked to more than one qualifying Loan appears only once; different BookCopy objects remain separate even when their attribute values are equal.","The overdue-copy enquiry returns the distinct BookCopy objects linked to an existing user's unreturned Loans whose overdue fee is positive. The overdue active-loan collection must be resolvable. A copy appearing in several qualifying loans is returned once; different copy objects remain separate even if all their attribute values are equal.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"LibraryManagementSystem_listBookHistory_listReservationBook","LibraryManagementSystem","Operation intent:
+List book copies reserved by a user.
+
+Preconditions:
+- The referenced User exists.
+- The reservation collection can be resolved.
+
+Postconditions:
+- The operation returns the distinct BookCopy objects linked to that user's reservation records, including closed reservations.
+- A BookCopy linked to more than one reservation appears only once; different BookCopy objects remain separate even when their attribute values are equal.","The reserved-copy listing returns distinct BookCopy objects linked to the referenced user's reservation records, including closed reservations. The User must exist and the reservation collection must be resolvable. A copy linked to several reservations appears once, while different copies remain separate even when their attribute values are equal.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"LibraryManagementSystem_listBookHistory_listRecommendBook","LibraryManagementSystem","Operation intent:
+List the books recommended by a user.
+
+Preconditions:
+- The referenced User exists.
+- The recommendation collection can be resolved.
+
+Postconditions:
+- The operation returns all RecommendBook records linked to the User.","The recommendation enquiry returns every RecommendBook record linked to the referenced User. That user must exist and the recommendation collection must be resolvable.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_listRecommendBook_listRecommendBook","LibraryManagementSystem","Operation intent:
+List the books recommended by a user.
+
+Preconditions:
+- The referenced User exists.
+- The recommendation collection can be resolved.
+
+Postconditions:
+- The operation returns all RecommendBook records linked to the User.","The recommendation enquiry returns every RecommendBook record linked to the referenced User. That user must exist and the recommendation collection must be resolvable.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"LibraryManagementSystem_makeReservation_makeReservation","LibraryManagementSystem","Operation intent:
+Create a reservation for a user and a currently loaned copy.
+
+Preconditions:
+- The User and BookCopy exist.
+- The copy is LOANED and is not already reserved.
+
+Postconditions:
+- A new open Reserve record is created for today and linked to the User and BookCopy.
+- The copy is marked reserved and the reservation is stored.
+- The operation returns true.","Reserving a currently loaned copy creates a new open Reserve record dated today and linked to the selected User and BookCopy. The user and copy must exist; the copy must be LOANED and not already reserved. The copy is marked reserved, the reservation is included in the reservation collection, and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_manageBook_createBook","LibraryManagementSystem","Operation intent:
+Create a bibliographic Book record from the supplied catalog information.
+
+Preconditions:
+- No existing Book uses the supplied call number.
+
+Postconditions:
+- A new Book stores the call number, title, edition, author, publisher, description, ISBN, and copy count.
+- The Book is stored and the operation returns true.","Cataloging a Book records the supplied call number, title, edition, author, publisher, description, ISBN and copy count in a new bibliographic record. No existing Book may use that call number. The Book is included in the book collection and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_manageBookCopy_addBookCopy","LibraryManagementSystem","Operation intent:
+Add a physical copy to an existing book.
+
+Preconditions:
+- The Book identified by call number exists.
+- That Book has no copy with the supplied barcode.
+
+Postconditions:
+- A new AVAILABLE and unreserved BookCopy is created with the supplied barcode and location.
+- The copy is linked to the Book, the copy count increases, and the copy is stored.
+- The operation returns true.","Adding a physical BookCopy creates it with the supplied barcode and location in AVAILABLE status and with its reserved flag false. The Book selected by call number must exist and have no copy with that barcode. The new copy is linked to the Book, the copy count increases and the copy is included in the copy collection. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_manageLibrarian_createLibrarian","LibraryManagementSystem","Operation intent:
+Register a librarian with an identifier, name, and password.
+
+Preconditions:
+- The librarian identifier is unused.
+
+Postconditions:
+- A new Librarian is stored with the supplied data.
+- The operation returns true.","Librarian registration includes a new Librarian with the supplied identifier, name and password in the librarian collection. The identifier must be unused. Registration returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_manageSubject_createSubject","LibraryManagementSystem","Operation intent:
+Create a library subject category.
+
+Preconditions:
+- No existing Subject has the supplied name.
+
+Postconditions:
+- A new Subject with that name is stored.
+- The operation returns true.","Adding a library subject creates a Subject bearing the supplied name and includes it in the subject collection. No existing Subject may already have that name. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_manageUser_createUser","LibraryManagementSystem","Operation intent:
+Register a library user with identity, authentication, faculty, and borrowing-state data.
+
+Preconditions:
+- The user identifier is unused.
+
+Postconditions:
+- A new User stores all supplied personal, login, loan-count, status, suspension, and fee values.
+- The User is stored and the operation returns true.","Library user registration includes a new User in the user collection, recording all supplied identity, personal, authentication, faculty, loan-count, borrowing-status, suspension and fee information. The user identifier must be unused, and registration returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_payOverDueFee_payOverDueFee","LibraryManagementSystem","Operation intent:
+Pay the outstanding overdue fee for a user and the associated returned overdue loans.
+
+Preconditions:
+- The User exists and has returned overdue loans with positive fees.
+- The supplied payment covers the user total overdue fee.
+
+Postconditions:
+- The User overdue fee and each applicable Loan overdue fee become zero.
+- The operation returns true.","Paying overdue fees sets the existing User's total overdue fee and each applicable Loan fee to zero, and returns true. The user must have returned overdue loans with positive fees, and the supplied payment must cover the user's total overdue fee.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_recommendBook_recommendBook","LibraryManagementSystem","Operation intent:
+Record a user recommendation for a book not yet represented by that recommendation call number.
+
+Preconditions:
+- The User exists.
+- The recommendation call number is unused.
+
+Postconditions:
+- A RecommendBook is created with the supplied catalog data and today as the recommendation date.
+- It is linked to the User and stored.
+- The operation returns true.","A book recommendation creates a RecommendBook with the supplied catalog data and today's recommendation date, links it to the User and includes it in the recommendation collection. The user must exist and the recommendation call number must be unused. The operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_renewBook_renewBook","LibraryManagementSystem","Operation intent:
+Renew a matching loan for a user and a loaned book copy.
+
+Preconditions:
+- The User, BookCopy, and matching Loan exist and the User has NORMAL status.
+- The copy is not reserved, the due date is after today, and the Loan has no overdue fee.
+- A Student has fewer than 3 renewals and a non-Student user has fewer than 6.
+
+Postconditions:
+- The renewal count increases and the renewal date becomes today.
+- From its previous value, the due date is extended by 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student, and 60 for a non-Student user.
+- The operation returns true.","Renewing a loan requires an existing User, BookCopy and matching Loan, with the user in NORMAL status. The copy must not be reserved, its loan due date must be after today and the Loan must have no overdue fee. A Student may have fewer than 3 renewals and a non-Student user fewer than 6. The renewal count increases and the renewal date becomes today. Starting from the previous due date, the extension is 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user. Renewal returns true.","source-review-pending","draft-source-review-pending","Frozen text says renewal count increases, not exactly +1. Pilot V2 clarified +1 from source; this frozen-scope V3 records the mismatch rather than silently changing semantics. | Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_searchBook_searchBookByBarCode","LibraryManagementSystem","Operation intent:
+Search the library catalog by book-copy barcode.
+
+Preconditions:
+- The supplied barcode is a String value.
+
+Postconditions:
+- The operation returns Books having a copy with the supplied barcode.","Searching by book-copy barcode returns Books having a copy with the supplied barcode. The barcode supplied for the search must be a String value.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_searchBook_searchBookByTitle","LibraryManagementSystem","Operation intent:
+Search the library catalog by title.
+
+Preconditions:
+- The supplied title is not empty.
+
+Postconditions:
+- The operation returns Books whose title equals the supplied title.","The title search accepts a nonempty supplied title and returns the Books whose title equals it.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_searchBook_searchBookByAuthor","LibraryManagementSystem","Operation intent:
+Search the library catalog by author.
+
+Preconditions:
+- The supplied author name is not empty.
+
+Postconditions:
+- The operation returns Books whose author equals the supplied name.","An author search returns Books whose author equals the supplied name. The author name must not be empty.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_searchBook_searchBookByISBN","LibraryManagementSystem","Operation intent:
+Search the library catalog by ISBN.
+
+Preconditions:
+- The supplied ISBN is a String value.
+
+Postconditions:
+- The operation returns Books whose ISBN equals the supplied value.","The ISBN enquiry returns Books whose ISBN equals the supplied value, which must be a String.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_searchBook_searchBookBySubject","LibraryManagementSystem","Operation intent:
+Search the library catalog by subject.
+
+Preconditions:
+- The supplied subject is a String value.
+
+Postconditions:
+- The operation returns Books linked to a Subject with the supplied name.","Searching by subject returns Books linked to a Subject with the supplied name. The supplied subject must be a String value.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LibraryManagementSystem_sendNotificationEmail_sendNotificationEmail","LibraryManagementSystem","Operation intent:
+Send a notification to a supplied email address.
+
+Preconditions:
+- The email address is not empty.
+
+Postconditions:
+- The notification request succeeds and the operation returns true.","Sending a notification requires a nonempty email address. The notification request succeeds for the supplied address and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_closeOutLoan_closeOutLoan","LoanProcessingSystem","Operation intent:
+Close an existing open loan.
+
+Preconditions:
+- The Loan exists and has LSOPEN status.
+
+Postconditions:
+- The Loan status becomes CLOSED.
+- The operation returns true.","Closing a Loan changes its status from LSOPEN to CLOSED and returns true. The selected loan must exist and be in LSOPEN status before closing.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_enterValidatedCreditReferences_listSubmitedLoanRequest","LoanProcessingSystem","Operation intent:
+Load all submitted loan requests for credit-reference validation.
+
+Preconditions:
+- At least one submitted LoanRequest exists.
+
+Postconditions:
+- The submitted requests become the current request collection and are returned.","Loading requests for credit-reference validation makes all submitted LoanRequests the current request collection and returns that collection. At least one submitted request must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_enterValidatedCreditReferences_chooseLoanRequest","LoanProcessingSystem","Operation intent:
+Select one loan request from the current request collection.
+
+Preconditions:
+- The supplied request identifier matches a current LoanRequest.
+
+Postconditions:
+- The matching request becomes the current LoanRequest and is returned.","Selecting a request returns the LoanRequest matching the supplied request identifier from the current collection and makes that request current. The identifier must match a request in that collection.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_enterValidatedCreditReferences_markRequestValid","LoanProcessingSystem","Operation intent:
+Mark the selected loan request references as validated.
+
+Preconditions:
+- A current LoanRequest exists.
+
+Postconditions:
+- Its status becomes REFERENCESVALIDATED.
+- The operation returns true.","Reference validation marks the current LoanRequest REFERENCESVALIDATED and returns true. A current request must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_listTenLoanRequest","LoanProcessingSystem","Operation intent:
+Load LoanRequest records whose status is REFERENCESVALIDATED for evaluation.
+
+Preconditions:
+- The collection of matching LoanRequest records can be resolved.
+
+Postconditions:
+- The matching requests become the current request collection and are returned.","Loading requests for evaluation returns all LoanRequests in REFERENCESVALIDATED status and sets them as the current request collection. The collection of matching records must be resolvable.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_chooseOneForReview","LoanProcessingSystem","Operation intent:
+Select a loan request from the current collection for review.
+
+Preconditions:
+- The supplied identifier matches a current LoanRequest.
+
+Postconditions:
+- The matching request becomes the current LoanRequest and is returned.","The review selection makes the LoanRequest matched by the supplied identifier current and returns it. That identifier must match a request in the current collection.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_checkCreditHistory","LoanProcessingSystem","Operation intent:
+Retrieve the credit history attached to the current loan request.
+
+Preconditions:
+- A current LoanRequest and its requested CreditHistory exist.
+
+Postconditions:
+- The operation returns that CreditHistory.","The credit-history enquiry returns the CreditHistory requested by the current LoanRequest. Both a current request and its requested credit history must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_reviewCheckingAccount","LoanProcessingSystem","Operation intent:
+Retrieve the checking-account history attached to the current loan request.
+
+Preconditions:
+- A current LoanRequest and its requested CheckingAccount exist.
+
+Postconditions:
+- The operation returns that CheckingAccount.","Reviewing the checking-account history returns the CheckingAccount requested by the current LoanRequest. The current request and its requested checking-account record must both exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_listAvaiableLoanTerm","LoanProcessingSystem","Operation intent:
+List all loan terms available for evaluation.
+
+Preconditions:
+- No additional business condition is required.
+
+Postconditions:
+- The operation returns all LoanTerm records.","The available-term listing returns all LoanTerm records, with no additional business restriction.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_addLoanTerm","LoanProcessingSystem","Operation intent:
+Attach a selected loan term to the current loan request.
+
+Preconditions:
+- A current LoanRequest exists.
+- The selected LoanTerm exists.
+
+Postconditions:
+- The LoanTerm is linked to the current request.
+- The operation returns true.","Adding a loan term links the selected LoanTerm to the current LoanRequest and returns true. Both a current request and the selected term must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_evaluateLoanRequest_approveLoanRequest","LoanProcessingSystem","Operation intent:
+Approve the current loan request.
+
+Preconditions:
+- A current LoanRequest exists.
+
+Postconditions:
+- Its status becomes APPROVED.
+- The operation returns true.","Approval changes the current LoanRequest's status to APPROVED and returns true. An existing current request is required.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_generateLoanLetterAndAgreement_listApprovalRequest","LoanProcessingSystem","Operation intent:
+Load all approved loan requests for document generation.
+
+Preconditions:
+- The collection of approved LoanRequest records can be resolved.
+
+Postconditions:
+- The approved requests become the current request collection and are returned.","Document preparation loads all approved LoanRequests into the current request collection and returns them. The collection of approved requests must be resolvable.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_generateLoanLetterAndAgreement_genereateApprovalLetter","LoanProcessingSystem","Operation intent:
+Generate an approval letter for an existing loan request.
+
+Preconditions:
+- The LoanRequest identified by the supplied identifier exists.
+
+Postconditions:
+- A new ApprovalLetter with the standard content is created and attached to the request.
+- The request becomes current, the letter is stored, and the operation returns true.","For the LoanRequest identified by the supplied identifier, create an ApprovalLetter with the standard content and attach it to that request. The request must exist. It becomes the current request, the new letter is included in the letter collection, and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_generateLoanLetterAndAgreement_generateLoanAgreement","LoanProcessingSystem","Operation intent:
+Generate a loan agreement for the current request.
+
+Preconditions:
+- A current LoanRequest exists.
+
+Postconditions:
+- A new LoanAgreement with the standard content is attached to the current request and stored.
+- The operation returns true.","Agreement generation attaches a new LoanAgreement with the standard content to the current LoanRequest and includes it in the agreement collection. A current request must exist, and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_generateLoanLetterAndAgreement_createLoanAccount","LoanProcessingSystem","Operation intent:
+Create a loan account with the supplied identifier, balance, and status.
+
+Preconditions:
+- The loan-account identifier is unused.
+
+Postconditions:
+- A new LoanAccount stores the supplied values and enters the repository.
+- The operation returns true.","Opening a loan account creates a LoanAccount containing the supplied identifier, balance and status, and includes it in the account collection. The account identifier must be unused. The operation returns true.","adjudicated-narrative","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence. | Contains documented laboratory/source-resolution decisions; evaluate in adjudicated stratum, not as unchanged original engineering requirements."
+"LoanProcessingSystem_loanPayment_loanPayment","LoanProcessingSystem","Operation intent:
+Apply one scheduled repayment to an open loan.
+
+Preconditions:
+- The Loan exists and has LSOPEN status.
+
+Postconditions:
+- The remaining amount decreases by the Loan repayment amount.
+- The operation returns true.","A scheduled repayment reduces a Loan's remaining amount by that loan's repayment amount and returns true. The loan must exist and have LSOPEN status to receive the repayment.","source-faithful-narrative","author-reviewed-frozen-paraphrase-source-aligned-pilot",""
+"LoanProcessingSystem_manageLoanTerm_createLoanTerm","LoanProcessingSystem","Operation intent:
+Create a LoanTerm record from the supplied item identifier, content.
+
+Preconditions:
+- No existing LoanTerm has the supplied item identifier.
+
+Postconditions:
+- A new LoanTerm is stored with the supplied item identifier, content.
+- The operation returns true.","A new LoanTerm containing the supplied item identifier and content is included in the term collection. No existing LoanTerm may use that item identifier. Creating it returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_manageLoanTerm_queryLoanTerm","LoanProcessingSystem","Operation intent:
+Retrieve the LoanTerm identified by the supplied item identifier.
+
+Preconditions:
+- The referenced LoanTerm exists.
+
+Postconditions:
+- The operation returns the referenced LoanTerm.","The loan-term enquiry returns the LoanTerm identified by the supplied item identifier, provided the term exists.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_manageLoanTerm_modifyLoanTerm","LoanProcessingSystem","Operation intent:
+Update the LoanTerm identified by item identifier with the supplied item identifier, content.
+
+Preconditions:
+- The referenced LoanTerm exists.
+
+Postconditions:
+- The stored LoanTerm contains the supplied item identifier, content.
+- The operation returns true.","Updating an existing LoanTerm selected by item identifier records the supplied item identifier and content on that term and returns true. The selected term must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_manageLoanTerm_deleteLoanTerm","LoanProcessingSystem","Operation intent:
+Delete the LoanTerm identified by the supplied item identifier.
+
+Preconditions:
+- The referenced LoanTerm exists in the repository.
+
+Postconditions:
+- The LoanTerm is removed from the repository.
+- The operation returns true.","Remove the LoanTerm with the supplied item identifier from the term collection and return true. The referenced term must exist in that collection.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_submitLoanRequest_enterLoanInformation","LoanProcessingSystem","Operation intent:
+Create a loan request from the applicant, requested-loan, contact, reference, and account information.
+
+Preconditions:
+- The request identifier is unused.
+
+Postconditions:
+- A new LoanRequest stores all supplied application fields and enters the repository.
+- The request becomes the current LoanRequest and the operation returns true.","Submitting application information creates a LoanRequest containing all supplied applicant, requested-loan, contact, reference and account fields. Its request identifier must be unused. The new request is included in the request collection, becomes the current LoanRequest and the operation returns true.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."
+"LoanProcessingSystem_submitLoanRequest_calculateScore","LoanProcessingSystem","Operation intent:
+Calculate and record the credit score for the current loan request.
+
+Preconditions:
+- A current LoanRequest, its checking-account history, and its credit history exist.
+
+Postconditions:
+- The request credit score becomes 100 and its status becomes SUBMITTED.
+- The operation returns the calculated score.","Scoring assigns the current LoanRequest a credit score of 100 and SUBMITTED status, then returns that score. A current request and its checking-account history and credit history must exist.","source-review-pending","draft-source-review-pending","Frozen source metadata retains review flags; paraphrase author review is not certification of upstream semantic equivalence."

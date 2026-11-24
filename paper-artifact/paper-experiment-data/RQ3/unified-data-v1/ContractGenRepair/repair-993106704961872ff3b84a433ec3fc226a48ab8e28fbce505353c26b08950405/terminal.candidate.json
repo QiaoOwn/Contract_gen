@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "existingUser : User = User.allInstances()->any(u : User | u.UserID = uid), overdueActiveLoans : Set(Loan) = existingUser.LoanedBook->select(l : Loan | l.IsReturned = false and l.OverDueFee > 0.0)",
+    "precondition": "User.allInstances()->exists(u : User | u.UserID = uid) and overdueActiveLoans.oclIsUndefined() = false",
+    "postcondition": "result = overdueActiveLoans->projectSet(l : Loan | l.LoanedCopy)"
+  },
+  "methodAccepted": false
+}

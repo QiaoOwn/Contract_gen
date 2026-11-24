@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "selectedStaff: Staff = Staff.allInstances()->any(s: Staff | s.Id = contactsid)",
+    "precondition": "Device.allInstances()->forAll(d: Device | d.Id <> id) and Staff.allInstances()->exists(s: Staff | s.Id = contactsid)",
+    "postcondition": "let newDevice: Device in newDevice.oclIsNew() and result = true and Device.allInstances()->includes(newDevice) and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = selectedStaff"
+  },
+  "methodAccepted": true
+}

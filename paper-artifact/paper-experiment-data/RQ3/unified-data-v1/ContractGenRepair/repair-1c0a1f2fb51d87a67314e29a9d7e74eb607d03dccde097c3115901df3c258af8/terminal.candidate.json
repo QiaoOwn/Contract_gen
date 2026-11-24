@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "currentOrderProduct: OrderProduct = self.CurrentOrderProduct",
+    "precondition": "currentOrderProduct.oclIsUndefined() = false",
+    "postcondition": "result = true and currentOrderProduct.OrderStatus = OrderStatus::REQUESTED and if currentOrderProduct.ContainedEntries->isEmpty() then currentOrderProduct.Amount = currentOrderProduct.Amount@pre else currentOrderProduct.Amount = currentOrderProduct.Amount@pre + currentOrderProduct.ContainedEntries->sumBy(entry:OrderEntry | entry.SubAmount) endif"
+  },
+  "methodAccepted": true
+}

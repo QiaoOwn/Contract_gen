@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tu: User = User.allInstances()->any(x: User|x.UserID = uid),\n\t\tc: BookCopy = BookCopy.allInstances()->any(x: BookCopy|x.Barcode = barcode),\n\t\tr: Reserve = Reserve.allInstances()->any(x: Reserve|x.ReservedUser = u and\n\t\tx.ReservedCopy = c and\n\t\tx.IsReserveClosed = false)\n\tprecondition:\n\t\tUser.allInstances()->exists(x: User|x.UserID = uid) and\n\t\tBookCopy.allInstances()->exists(x: BookCopy|x.Barcode = barcode) and\n\t\tc.Status = \"LOANED\" and\n\t\tc.IsReserved = true and\n\t\tReserve.allInstances()->exists(x: Reserve|x.ReservedUser = u and\n\t\tx.ReservedCopy = c and\n\t\tx.IsReserveClosed = false)\n\tpostcondition:\n\t\tc.IsReserved = false and\n\t\tr.IsReserveClosed = true and\n\t\tresult = true\n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 8,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

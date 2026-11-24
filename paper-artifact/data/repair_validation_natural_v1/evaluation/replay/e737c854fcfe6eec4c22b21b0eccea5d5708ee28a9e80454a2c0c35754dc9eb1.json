@@ -1,0 +1,199 @@
+{
+  "operationId": "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay",
+  "candidateIdentity": "e737c854fcfe6eec4c22b21b0eccea5d5708ee28a9e80454a2c0c35754dc9eb1",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "571ecc3d0733a7efe3310990e8de33569217eb1254f95ed001efba5aa4eb4570"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "true",
+    "postcondition": "User.allInstances()->forAll(u:User|true = true and u.UserID = u.UserID@pre and u.Name = u.Name@pre and u.Sex = u.Sex@pre and u.Password = u.Password@pre and u.Email = u.Email@pre and u.Faculty = u.Faculty@pre and u.LoanedNumber = u.LoanedNumber@pre and u.OverDueFee = u.OverDueFee@pre and if u.SuspensionDays@pre > 0 then u.SuspensionDays = u.SuspensionDays@pre - 1 else u.SuspensionDays = u.SuspensionDays@pre endif and if u.BorrowStatus@pre = BorrowStatus::SUSPEND and u.SuspensionDays@pre = 1 and u.OverDueFee@pre = 0.0 then u.BorrowStatus = BorrowStatus::NORMAL else u.BorrowStatus = u.BorrowStatus@pre endif)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n          \n            precondition:\n          true\n            \n            postcondition:\n          User.allInstances()->forAll(u:User|true = true and u.UserID = u.UserID@pre and u.Name = u.Name@pre and u.Sex = u.Sex@pre and u.Password = u.Password@pre and u.Email = u.Email@pre and u.Faculty = u.Faculty@pre and u.LoanedNumber = u.LoanedNumber@pre and u.OverDueFee = u.OverDueFee@pre and if u.SuspensionDays@pre > 0 then u.SuspensionDays = u.SuspensionDays@pre - 1 else u.SuspensionDays = u.SuspensionDays@pre endif and if u.BorrowStatus@pre = BorrowStatus::SUSPEND and u.SuspensionDays@pre = 1 and u.OverDueFee@pre = 0.0 then u.BorrowStatus = BorrowStatus::NORMAL else u.BorrowStatus = u.BorrowStatus@pre endif)\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 7,
+              "column": 45,
+              "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}"
+            },
+            {
+              "line": 7,
+              "column": 622,
+              "msg": "extraneous input ')' expecting '}'"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 7,
+            "column": 45
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        },
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "extraneous input ')' expecting '}'",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 7,
+            "column": 622
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'true' expecting {'self', 'result', 'if', RULE_ID}",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "extraneous input ')' expecting '}'",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/countDownSuspensionDay/operation/countDownSuspensionDay/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              7
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/countDownSuspensionDay/operation/countDownSuspensionDay/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/countDownSuspensionDay/operation/countDownSuspensionDay/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

@@ -1,0 +1,2072 @@
+{
+  "operationId": "CoCoME_processSale_makeCashPayment",
+  "candidateIdentity": "bbe54068b92e8a887f57922081561517f2a8f44fa0e4c8671c8f07c78a1ab948",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_processSale_makeCashPayment/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "57d18537e61ea80b24cf21962695b0bb3ed416065c3cc5315bcdeffaacd2ac27"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "CurrentSale <> null and CurrentStore <> null and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount",
+    "postcondition": "result = true and CurrentSale.Belongedstore = CurrentStore and CurrentSale.Time = Now and CurrentSale.IsComplete = true and Payment.allInstances()->exists(p:Payment|p.oclIsNew() and p.AmountTendered = amount and p.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = p and Payment.allInstances()->includes(p))"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ProcessSaleService::makeCashPayment(amount:Real): Boolean {\n          \n            precondition:\n          CurrentSale <> null and CurrentStore <> null and CurrentSale.IsComplete = false and CurrentSale.IsReadytoPay = true and amount >= CurrentSale.Amount\n            \n            postcondition:\n          result = true and CurrentSale.Belongedstore = CurrentStore and CurrentSale.Time = Now and CurrentSale.IsComplete = true and Payment.allInstances()->exists(p:Payment|p.oclIsNew() and p.AmountTendered = amount and p.BelongedSale = CurrentSale and CurrentSale.AssoicatedPayment = p and Payment.allInstances()->includes(p))\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 11,
+              "endLine": 4,
+              "endColumn": 22,
+              "startOffset": 116,
+              "endOffset": 127,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 35,
+              "endLine": 4,
+              "endColumn": 47,
+              "startOffset": 140,
+              "endOffset": 152,
+              "expression": "CurrentStore",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 60,
+              "endLine": 4,
+              "endColumn": 71,
+              "startOffset": 165,
+              "endOffset": 176,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 95,
+              "endLine": 4,
+              "endColumn": 106,
+              "startOffset": 200,
+              "endOffset": 211,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 141,
+              "endLine": 4,
+              "endColumn": 152,
+              "startOffset": 246,
+              "endOffset": 257,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 29,
+              "endLine": 7,
+              "endColumn": 40,
+              "startOffset": 333,
+              "endOffset": 344,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 57,
+              "endLine": 7,
+              "endColumn": 69,
+              "startOffset": 361,
+              "endOffset": 373,
+              "expression": "CurrentStore",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+                  "declaration": "CurrentStore: Store",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                    "line": 5,
+                    "column": 3,
+                    "endLine": 5,
+                    "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 74,
+              "endLine": 7,
+              "endColumn": 85,
+              "startOffset": 378,
+              "endOffset": 389,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 101,
+              "endLine": 7,
+              "endColumn": 112,
+              "startOffset": 405,
+              "endOffset": 416,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 240,
+              "endLine": 7,
+              "endColumn": 251,
+              "startOffset": 544,
+              "endOffset": 555,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 256,
+              "endLine": 7,
+              "endColumn": 267,
+              "startOffset": 560,
+              "endOffset": 571,
+              "expression": "CurrentSale",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+              "ruleIds": [
+                "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+              ],
+              "modelElementIds": [
+                "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                  "declaration": "CurrentSale: Sale",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 35
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentStore"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 60
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 95
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 141
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 29
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+              "declaration": "CurrentStore: Store",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                "line": 5,
+                "column": 3,
+                "endLine": 5,
+                "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 57
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentStore"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 74
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 101
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 240
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+          ],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+              "declaration": "CurrentSale: Sale",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 256
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentSale"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 11,
+            "endLine": 4,
+            "endColumn": 22,
+            "startOffset": 116,
+            "endOffset": 127,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 11,
+                "endLine": 4,
+                "endColumn": 22,
+                "startOffset": 116,
+                "endOffset": 127,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 35,
+            "endLine": 4,
+            "endColumn": 47,
+            "startOffset": 140,
+            "endOffset": 152,
+            "expression": "CurrentStore",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 35,
+                "endLine": 4,
+                "endColumn": 47,
+                "startOffset": 140,
+                "endOffset": 152,
+                "expression": "CurrentStore",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 60,
+            "endLine": 4,
+            "endColumn": 71,
+            "startOffset": 165,
+            "endOffset": 176,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 60,
+                "endLine": 4,
+                "endColumn": 71,
+                "startOffset": 165,
+                "endOffset": 176,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 95,
+            "endLine": 4,
+            "endColumn": 106,
+            "startOffset": 200,
+            "endOffset": 211,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 95,
+                "endLine": 4,
+                "endColumn": 106,
+                "startOffset": 200,
+                "endOffset": 211,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 141,
+            "endLine": 4,
+            "endColumn": 152,
+            "startOffset": 246,
+            "endOffset": 257,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 141,
+                "endLine": 4,
+                "endColumn": 152,
+                "startOffset": 246,
+                "endOffset": 257,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 29,
+            "endLine": 7,
+            "endColumn": 40,
+            "startOffset": 333,
+            "endOffset": 344,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 29,
+                "endLine": 7,
+                "endColumn": 40,
+                "startOffset": 333,
+                "endOffset": 344,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 57,
+            "endLine": 7,
+            "endColumn": 69,
+            "startOffset": 361,
+            "endOffset": 373,
+            "expression": "CurrentStore",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+                "declaration": "CurrentStore: Store",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                  "line": 5,
+                  "column": 3,
+                  "endLine": 5,
+                  "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 57,
+                "endLine": 7,
+                "endColumn": 69,
+                "startOffset": 361,
+                "endOffset": 373,
+                "expression": "CurrentStore",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentStore must be accessed as self.CurrentStore.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentStore"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/system/CurrentStore",
+                    "declaration": "CurrentStore: Store",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/systemService.ts",
+                      "line": 5,
+                      "column": 3,
+                      "endLine": 5,
+                      "sha256": "e59932c611b61212cc56ec5842d77ba93740c080ca017c7bfd20639c09da02bb"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 74,
+            "endLine": 7,
+            "endColumn": 85,
+            "startOffset": 378,
+            "endOffset": 389,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 74,
+                "endLine": 7,
+                "endColumn": 85,
+                "startOffset": 378,
+                "endOffset": 389,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 101,
+            "endLine": 7,
+            "endColumn": 112,
+            "startOffset": 405,
+            "endOffset": 416,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 101,
+                "endLine": 7,
+                "endColumn": 112,
+                "startOffset": 405,
+                "endOffset": 416,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 240,
+            "endLine": 7,
+            "endColumn": 251,
+            "startOffset": 544,
+            "endOffset": 555,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 240,
+                "endLine": 7,
+                "endColumn": 251,
+                "startOffset": 544,
+                "endOffset": 555,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 256,
+            "endLine": 7,
+            "endColumn": 267,
+            "startOffset": 560,
+            "endOffset": 571,
+            "expression": "CurrentSale",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+            "ruleIds": [
+              "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+            ],
+            "modelElementIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                "declaration": "CurrentSale: Sale",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3",
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 256,
+                "endLine": 7,
+                "endColumn": 267,
+                "startOffset": 560,
+                "endOffset": 571,
+                "expression": "CurrentSale",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentSale must be accessed as self.CurrentSale.",
+                "ruleIds": [
+                  "MG-06::CoCoME/use-case/processSale/operation/makeCashPayment/state/CurrentSale"
+                ],
+                "modelElementIds": [
+                  "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/use-case/processSale/operation/makeCashPayment/state/local/CurrentSale",
+                    "declaration": "CurrentSale: Sale",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/processSale.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "1515ee96376eb41975275544b909bd8221f3e7083c04e0d1d260e5063d5f49fc"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeCashPayment/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract ProcessSaleService::makeCashPayment(amount: Real): Boolean {\n\tdefinition:\n\t\tcurrentSale: Sale = self.CurrentSale,\n\t\tcurrentStore: Store = self.CurrentStore\n\tprecondition:\n\t\tcurrentSale.oclIsUndefined() = false and\n\t\tcurrentStore.oclIsUndefined() = false and\n\t\tSale.allInstances()->includes(currentSale) and\n\t\tcurrentSale.IsComplete = false and\n\t\tcurrentSale.IsReadytoPay = true and\n\t\tamount>=currentSale.Amount\n\tpostcondition:\n\t\tlet cashPayment: CashPayment in\n\t\tcashPayment.oclIsNew() and\n\t\tCashPayment.allInstances()->includes(cashPayment) and\n\t\tcashPayment.AmountTendered = amount and\n\t\tcashPayment.Balance = amount-currentSale.Amount and\n\t\tcashPayment.BelongedSale = currentSale and\n\t\tcurrentSale.AssoicatedPayment = cashPayment and\n\t\tcurrentSale.Belongedstore = currentStore and\n\t\tcurrentStore.Sales->includes(currentSale) and\n\t\tcurrentSale.Time = Now and\n\t\tcurrentSale.IsComplete = true and\n\t\tresult = true\n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 3,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

@@ -1,0 +1,169 @@
+{
+  "operationId": "Airport_manageDevice_createDevice",
+  "candidateIdentity": "c5c664eef15232b3a6b21bfddff7fdf46d040198c0f162681bab373987acf481",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/Airport_manageDevice_createDevice/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "ca0b56a98ed3ca5500fa95f96afbe103c80a3d288085b9e0c32529e355d2f289"
+    }
+  ],
+  "contract": {
+    "definition": "selectedStaff: Staff = Staff.allInstances()->any(s:Staff|s.Id = contactsid), newDevice: Device = Device.allInstances()->any(d:Device|d.oclIsNew())",
+    "precondition": "Device.allInstances()->forAll(d:Device|d.Id <> id) and Staff.allInstances()->exists(s:Staff|s.Id = contactsid)",
+    "postcondition": "result = true and Device.allInstances()->includes(newDevice) and newDevice.oclIsNew() and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = selectedStaff"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract AirportSystem::createDevice(id:Integer,name:String,location:String,contactsid:Integer): Boolean {\n          definition:\n          selectedStaff: Staff = Staff.allInstances()->any(s:Staff|s.Id = contactsid), newDevice: Device = Device.allInstances()->any(d:Device|d.oclIsNew())\n            \n            precondition:\n          Device.allInstances()->forAll(d:Device|d.Id <> id) and Staff.allInstances()->exists(s:Staff|s.Id = contactsid)\n            \n            postcondition:\n          result = true and Device.allInstances()->includes(newDevice) and newDevice.oclIsNew() and newDevice.Id = id and newDevice.Name = name and newDevice.Location = location and newDevice.Contacts = selectedStaff\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": false,
+      "modelTypeValid": true,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 3,
+              "column": 146,
+              "code": "DIA_NEWNESS_SCOPE",
+              "clause": "definition",
+              "ruleIds": [
+                "G-QRY-05"
+              ],
+              "msg": "[generation-semantics] oclIsNew() is permitted only in a postcondition."
+            }
+          ]
+        },
+        {
+          "stage": "model-type",
+          "status": "PASS",
+          "evidence": []
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "DIA_NEWNESS_SCOPE",
+          "msg": "[generation-semantics] oclIsNew() is permitted only in a postcondition.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "G-QRY-05"
+          ],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 3,
+            "column": 146
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/manageDevice/operation/createDevice/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/manageDevice/operation/createDevice/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/manageDevice/operation/createDevice/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/manageDevice/operation/createDevice/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

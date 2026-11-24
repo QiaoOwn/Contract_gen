@@ -1,0 +1,158 @@
+{
+  "operationId": "LoanProcessingSystem_enterValidatedCreditReferences_chooseLoanRequest",
+  "candidateIdentity": "06bfaa04081e552705301888bf5e1234c0793be98f61e55d2c9944d8bb11b417",
+  "origins": [
+    {
+      "method": "codexprompt-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LoanProcessingSystem_enterValidatedCreditReferences_chooseLoanRequest/codexprompt-style/codexprompt-style.candidate.json",
+      "sha256": "96cc97a1b02399d54889a9e0c3b3cb69160319fa01a868c50521406c87f85dc3"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentLoanRequests->exists(lr:LoanRequest | lr.RequestID = requestid)",
+    "postcondition": "self.CurrentLoanRequests@pre->includes(result) and result.RequestID = requestid and self.CurrentLoanRequest = result"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract EnterValidatedCreditReferencesModule::chooseLoanRequest(requestid:Integer): LoanRequest {\n          \n            precondition:\n          self.CurrentLoanRequests->exists(lr:LoanRequest | lr.RequestID = requestid)\n            \n            postcondition:\n          self.CurrentLoanRequests@pre->includes(result) and result.RequestID = requestid and self.CurrentLoanRequest = result\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 7,
+              "column": 49,
+              "msg": "mismatched input 'result' expecting RULE_ID"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'result' expecting RULE_ID",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 7,
+            "column": 49
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'result' expecting RULE_ID",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/enterValidatedCreditReferences/operation/chooseLoanRequest/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/enterValidatedCreditReferences/operation/chooseLoanRequest/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/enterValidatedCreditReferences/operation/chooseLoanRequest/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

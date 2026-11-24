@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "user:User = User.allInstances()->any(candidate:User | candidate.UserID = uid), copy:BookCopy = BookCopy.allInstances()->any(candidate:BookCopy | candidate.Barcode = barcode), loan:Loan = Loan.allInstances()->any(candidate:Loan | candidate.LoanedUser.UserID = uid and candidate.LoanedCopy.Barcode = barcode), student:Student = Student.allInstances()->any(candidate:Student | candidate.UserID = uid)",
+    "precondition": "user.oclIsUndefined() = false and copy.oclIsUndefined() = false and loan.oclIsUndefined() = false and user.BorrowStatus = BorrowStatus::NORMAL and copy.IsReserved = false and copy.Status = CopyStatus::LOANED and loan.DueDate.isAfter(Today) and loan.OverDueFee = 0.0 and if user.oclIsTypeOf(Student) then loan.RenewedTimes < 3 else loan.RenewedTimes < 6 endif",
+    "postcondition": "result = true and loan.RenewedTimes = loan.RenewedTimes@pre + 1 and loan.RenewDate = Today and if user.oclIsTypeOf(Student) then if student.Programme = Programme::BACHELOR then loan.DueDate = loan.DueDate@pre.After(20) else if student.Programme = Programme::MASTER then loan.DueDate = loan.DueDate@pre.After(40) else loan.DueDate = loan.DueDate@pre.After(60) endif endif else loan.DueDate = loan.DueDate@pre.After(60) endif"
+  },
+  "methodAccepted": false
+}

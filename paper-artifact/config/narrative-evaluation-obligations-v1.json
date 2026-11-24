@@ -1,0 +1,86 @@
+{
+  "version": "narrative-evaluation-annotation-v1",
+  "annotationProvenance": "Assistant-authored source-span annotations, stored independently of compiler; NOT independent human Gold.",
+  "independentHumanReviewCompleted": false,
+  "matching": "Maximum one-to-one source-span overlap (IoU >= 0.25); classification scored separately. Multi-span unions allowed. Metrics are provisional segmentation diagnostics, not certified semantic precision/recall.",
+  "cases": {
+    "CoCoME_manageStore_queryStore": [
+      ["The referenced Store must exist", "precondition"], ["the operation returns that Store.", "postcondition"]
+    ],
+    "LoanProcessingSystem_loanPayment_loanPayment": [
+      ["The Loan must exist", "precondition"], ["have LSOPEN status.", "precondition"],
+      ["The remaining amount decreases by the Loan repayment amount.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "Airport_manageDevice_createDevice": [
+      ["The device identifier must be unused", "precondition"], ["the selected contact must identify an existing Staff member.", "precondition"],
+      ["The system creates a Device with the supplied identifier, name and location.", "postcondition"],
+      ["The system links the Device to the selected Staff contact", "postcondition"], ["stores the Device.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "Airport_raiseRepair_finishRepair": [
+      ["The referenced Device must be assigned to the supplied Staff member", "precondition"], ["whose Worker role value must be 3.", "precondition"],
+      ["The referenced Repair must exist", "precondition"], ["The system sets Repair.Process to the finished stage value 7.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "Airport_manageUser_createStaff": [
+      ["The staff identifier must be unused.", "precondition"], ["The system creates a Staff member with the supplied identity, password, phone and role.", "postcondition"],
+      ["If bossid identifies an existing Staff member, the system links the new Staff member to that Boss.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "AutomatedTellerMachine_checkBalance_inputCard": [
+      ["with no additional business condition required.", "precondition"],
+      ["If the card exists, the ATM stores that card as the current card, marks the card identifier as validated and returns true.", "postcondition"],
+      ["If the card does not exist, the ATM marks the card identifier as unvalidated and returns false.", "postcondition"]
+    ],
+    "AutomatedTellerMachine_withdrawCash_withdrawCash": [
+      ["The card identifier and password must be validated", "precondition"], ["a current BankCard must be present", "precondition"], ["the card balance must cover the requested amount.", "precondition"],
+      ["The card balance decreases by the withdrawn amount.", "postcondition"], ["The session records the withdrawal and its amount.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "CoCoME_orderProducts_placeOrder": [
+      ["A current OrderProduct must exist.", "precondition"], ["The order status becomes REQUESTED.", "postcondition"],
+      ["The order amount becomes its amount before this operation plus the subtotal of every associated OrderEntry, with distinct entries of equal subtotal each contributing.", "postcondition"],
+      ["When the order has no entries, its amount remains unchanged.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "CoCoME_processSale_enterItem": [
+      ["a current Sale that exists and is incomplete", "precondition"], ["a scanned Item that exists and has positive stock.", "precondition"],
+      ["The entered quantity must not exceed the Item stock", "precondition"],
+      ["The system creates a SalesLineItem linked to the Sale and Item, recording the quantity and subtotal.", "postcondition"],
+      ["The system stores the new SalesLineItem", "postcondition"], ["makes it the current sale line.", "postcondition"],
+      ["The Item stock decreases by the entered quantity.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "CoCoME_processSale_makeCashPayment": [
+      ["The current Sale must exist", "precondition"], ["be incomplete", "precondition"], ["be ready for payment.", "precondition"],
+      ["The tendered amount must cover the Sale amount", "precondition"], ["a current Store must exist.", "precondition"],
+      ["A CashPayment records the tendered amount and change and is linked to the Sale.", "postcondition"],
+      ["The system links the Sale to the current Store", "postcondition"], ["timestamps the Sale", "postcondition"], ["marks it complete.", "postcondition"],
+      ["The system stores the payment", "postcondition"], ["returns true.", "postcondition"]
+    ],
+    "LibraryManagementSystem_borrowBook_borrowBook": [
+      ["The User and BookCopy must exist.", "precondition"], ["The User must have NORMAL borrowing status and no suspension days.", "precondition"],
+      ["A BACHELOR Student must have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60.", "precondition"],
+      ["The copy must be AVAILABLE, or ONHOLDSHELF and marked reserved with a matching open reservation for this user.", "precondition"],
+      ["The system creates a new unreturned Loan linked to the User and BookCopy with today as the loan date.", "postcondition"],
+      ["The system adds the new loan to the borrowing user's loan collection and the borrowed copy's loan history.", "postcondition"],
+      ["The due date is 30 days for a Student and 60 days for a Faculty user.", "postcondition"],
+      ["The user loan count increases by one", "postcondition"], ["the copy becomes LOANED", "postcondition"],
+      ["the 3-, 10-, 17- and 31-day overdue flags start as false.", "postcondition"],
+      ["If the copy was ONHOLDSHELF, the system clears its reserved flag and closes the matching reservation.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ],
+    "LibraryManagementSystem_renewBook_renewBook": [
+      ["The User, BookCopy and matching Loan must exist", "precondition"], ["the User must have NORMAL status.", "precondition"],
+      ["The copy must not be reserved", "precondition"], ["the due date must be after today", "precondition"], ["the Loan must have no overdue fee.", "precondition"],
+      ["A Student must have fewer than 3 renewals and a non-Student user fewer than 6.", "precondition"],
+      ["The renewal count increases", "postcondition"], ["the renewal date becomes today.", "postcondition"],
+      ["From its previous value, the due date is extended by 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user.", "postcondition"], ["The operation returns true.", "postcondition"]
+    ]
+  },
+  "relations": [
+    {"operationId":"CoCoME_manageStore_queryStore","type":"same-target","from":"The referenced Store must exist","to":"the operation returns that Store."},
+    {"operationId":"CoCoME_processSale_enterItem","type":"create-use","from":"The system creates a SalesLineItem","to":"The system stores the new SalesLineItem"},
+    {"operationId":"CoCoME_processSale_enterItem","type":"guard-effect","from":"a scanned Item that exists","to":"The Item stock decreases"},
+    {"operationId":"CoCoME_processSale_enterItem","type":"same-quantity","from":"The entered quantity must not exceed","to":"The Item stock decreases"},
+    {"operationId":"CoCoME_processSale_enterItem","type":"pre-post-state","from":"The Item stock decreases","to":"The Item stock decreases"},
+    {"operationId":"LoanProcessingSystem_loanPayment_loanPayment","type":"pre-post-state","from":"The remaining amount decreases","to":"The remaining amount decreases"},
+    {"operationId":"Airport_manageUser_createStaff","type":"conditional-effect","from":"If bossid identifies","to":"If bossid identifies"},
+    {"operationId":"AutomatedTellerMachine_checkBalance_inputCard","type":"conditional-effect","from":"If the card exists","to":"If the card exists"},
+    {"operationId":"AutomatedTellerMachine_checkBalance_inputCard","type":"conditional-effect","from":"If the card does not exist","to":"If the card does not exist"},
+    {"operationId":"CoCoME_orderProducts_placeOrder","type":"conditional-effect","from":"When the order has no entries","to":"When the order has no entries"}
+  ]
+}

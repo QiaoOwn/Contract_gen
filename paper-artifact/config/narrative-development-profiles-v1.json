@@ -1,0 +1,273 @@
+{
+  "version": "narrative-public-development-v1",
+  "role": "author-compiled-public-development-not-hidden-oracle",
+  "profiles": [
+    {"operationId":"LibraryManagementSystem_searchBook_searchBookByAuthor","requirement":"An author search returns Books whose author equals the supplied name. The author name must not be empty.","obligations":[{"id":"P01","clause":"precondition","text":"The author name must not be empty"},{"id":"Q01","clause":"postcondition","text":"returns Books whose author equals the supplied name"}],"interpretation":"Author-compiled mapping to registered exact author search; no normalization or substring matching added."},
+    {"operationId":"LibraryManagementSystem_searchBook_searchBookByTitle","requirement":"The title search accepts a nonempty supplied title and returns the Books whose title equals it.","obligations":[{"id":"P01","clause":"precondition","text":"a nonempty supplied title"},{"id":"Q01","clause":"postcondition","text":"returns the Books whose title equals it"}],"interpretation":"Author-compiled mapping to registered exact title search."},
+    {"operationId":"LibraryManagementSystem_searchBook_searchBookBySubject","requirement":"Searching by subject returns Books linked to a Subject with the supplied name. The supplied subject must be a String value.","obligations":[{"id":"P01","clause":"precondition","text":"The supplied subject must be a String value"},{"id":"Q01","clause":"postcondition","text":"returns Books linked to a Subject with the supplied name"}],"interpretation":"Preserve Subject association traversal; no extra nonempty-string guard."},
+    {"operationId":"LibraryManagementSystem_sendNotificationEmail_sendNotificationEmail","requirement":"Sending a notification requires a nonempty email address. The notification request succeeds for the supplied address and the operation returns true.","obligations":[{"id":"P01","clause":"precondition","text":"requires a nonempty email address"},{"id":"Q01","clause":"postcondition","text":"the operation returns true"}],"interpretation":"Source formal clauses cover nonempty string and true result only; no delivery or address syntax claim is verified."},
+    {"operationId":"LoanProcessingSystem_evaluateLoanRequest_checkCreditHistory","requirement":"The credit-history enquiry returns the CreditHistory requested by the current LoanRequest. Both a current request and its requested credit history must exist.","obligations":[{"id":"P01","clause":"precondition","text":"a current request"},{"id":"P02","clause":"precondition","text":"its requested credit history must exist"},{"id":"Q01","clause":"postcondition","text":"returns the CreditHistory requested by the current LoanRequest"}],"interpretation":"P01 and P02 share the explicit Both ... must exist condition. No credit scoring is inferred."},
+    {"operationId":"LoanProcessingSystem_evaluateLoanRequest_reviewCheckingAccount","requirement":"Reviewing the checking-account history returns the CheckingAccount requested by the current LoanRequest. The current request and its requested checking-account record must both exist.","obligations":[{"id":"P01","clause":"precondition","text":"The current request"},{"id":"P02","clause":"precondition","text":"its requested checking-account record must both exist"},{"id":"Q01","clause":"postcondition","text":"returns the CheckingAccount requested by the current LoanRequest"}],"interpretation":"Both existence requirements share the final must both exist qualifier; exact attached object identity is retained."},
+    {"operationId":"CoCoME_manageProductCatalog_queryProductCatalog","requirement":"A catalog lookup returns the ProductCatalog matching the supplied identifier. The matching catalog must exist.","obligations":[{"id":"P01","clause":"precondition","text":"The matching catalog must exist"},{"id":"Q01","clause":"postcondition","text":"returns the ProductCatalog matching the supplied identifier"}],"interpretation":"Exact registered identifier query; no additional Store association precondition."},
+    {"operationId":"CoCoME_manageCashDesk_queryCashDesk","requirement":"The cash-desk enquiry returns the CashDesk selected by the supplied identifier. It requires that the selected desk exists.","obligations":[{"id":"P01","clause":"precondition","text":"requires that the selected desk exists"},{"id":"Q01","clause":"postcondition","text":"returns the CashDesk selected by the supplied identifier"}],"interpretation":"Exact registered identifier query."},
+    {"operationId":"AutomatedTellerMachine_manageUser_queryUser","requirement":"The user enquiry returns the User selected by the supplied user identifier, provided that user exists.","obligations":[{"id":"P01","clause":"precondition","text":"provided that user exists"},{"id":"Q01","clause":"postcondition","text":"returns the User selected by the supplied user identifier"}],"interpretation":"Exact registered user identity query."},
+    {"operationId":"LoanProcessingSystem_manageLoanTerm_deleteLoanTerm","requirement":"Remove the LoanTerm with the supplied item identifier from the term collection and return true. The referenced term must exist in that collection.","obligations":[{"id":"P01","clause":"precondition","text":"The referenced term must exist in that collection"},{"id":"Q01","clause":"postcondition","text":"Remove the LoanTerm with the supplied item identifier from the term collection"},{"id":"Q02","clause":"postcondition","text":"return true"}],"interpretation":"Repository deletion only; no cascade, rollback or inverse-association update is added."},
+    {
+    "operationId": "LoanProcessingSystem_loanPayment_loanPayment",
+    "requirement": "A scheduled repayment reduces a Loan's remaining amount by that loan's repayment amount and returns true. The loan must exist and have LSOPEN status to receive the repayment.",
+    "obligations": [
+      {"id": "P01", "text": "The loan must exist", "clause": "precondition"},
+      {"id": "P02", "text": "have LSOPEN status", "clause": "precondition"},
+      {"id": "Q01", "text": "reduces a Loan's remaining amount by that loan's repayment amount", "clause": "postcondition"},
+      {"id": "Q02", "text": "returns true", "clause": "postcondition"}
+    ],
+    "interpretation": "Q01 compares the pre-invocation remaining amount with the post-invocation repayment amount, as in the cited upstream formula. No repayment-amount preservation, clamp, positivity or frame obligation is added. This is an explicit author-compiled finite development interpretation, not automatic semantic equivalence certification."
+  }, {
+    "operationId": "LoanProcessingSystem_submitLoanRequest_calculateScore",
+    "requirement": "Scoring assigns the current LoanRequest a credit score of 100 and SUBMITTED status, then returns that score. A current request and its checking-account history and credit history must exist.",
+    "obligations": [
+      {"id":"P01","text":"A current request","clause":"precondition"},
+      {"id":"P02","text":"its checking-account history","clause":"precondition"},
+      {"id":"P03","text":"credit history must exist","clause":"precondition"},
+      {"id":"Q01","text":"a credit score of 100","clause":"postcondition"},
+      {"id":"Q02","text":"SUBMITTED status","clause":"postcondition"},
+      {"id":"Q03","text":"returns that score","clause":"postcondition"}
+    ],
+    "interpretation":"The three existence clauses share the sentence-final must exist. No additional status precondition is imposed. Score and status updates apply to the current request."
+  }, {
+    "operationId":"CoCoME_manageCashDesk_deleteCashDesk",
+    "requirement":"An existing CashDesk selected by the supplied identifier is removed from the cash-desk collection. Selection requires that record to be present in the collection. Deletion returns true.",
+    "obligations":[
+      {"id":"P01","text":"Selection requires that record to be present in the collection","clause":"precondition"},
+      {"id":"Q01","text":"An existing CashDesk selected by the supplied identifier is removed from the cash-desk collection","clause":"postcondition"},
+      {"id":"Q02","text":"Deletion returns true","clause":"postcondition"}
+    ],
+    "interpretation":"The collection is the CashDesk repository used by the source operation. No current-store precondition, cascade or unrelated-object frame requirement is added."
+  }, {
+    "operationId":"CoCoME_manageProductCatalog_deleteProductCatalog",
+    "requirement":"Removing a catalog takes the ProductCatalog with the supplied identifier out of the catalog collection. That catalog must exist in the collection, and the operation returns true.",
+    "obligations":[
+      {"id":"P01","text":"That catalog must exist in the collection","clause":"precondition"},
+      {"id":"Q01","text":"takes the ProductCatalog with the supplied identifier out of the catalog collection","clause":"postcondition"},
+      {"id":"Q02","text":"the operation returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Remove the selected repository member and return true. No cascade or unrelated-object frame requirement is inferred."
+  }, {
+    "operationId":"CoCoME_manageCashier_queryCashier",
+    "requirement":"Looking up a cashier returns the Cashier with the supplied identifier; the referenced cashier must exist.",
+    "obligations":[
+      {"id":"P01","text":"the referenced cashier must exist","clause":"precondition"},
+      {"id":"Q01","text":"returns the Cashier with the supplied identifier","clause":"postcondition"}
+    ],
+    "interpretation":"Return the selected existing Cashier identity, not a clone or a neighboring record."
+  }, {
+    "operationId":"LoanProcessingSystem_manageLoanTerm_queryLoanTerm",
+    "requirement":"The loan-term enquiry returns the LoanTerm identified by the supplied item identifier, provided the term exists.",
+    "obligations":[
+      {"id":"P01","text":"provided the term exists","clause":"precondition"},
+      {"id":"Q01","text":"returns the LoanTerm identified by the supplied item identifier","clause":"postcondition"}
+    ],
+    "interpretation":"The supplied item identifier selects an existing LoanTerm; the result is that same object."
+  }, {
+    "operationId":"Airport_manageDevice_createDevice",
+    "requirement":"Registering an airport device creates a Device carrying the supplied identifier, name and location, with the selected Staff member as its responsible contact. The identifier must not already be in use and that Staff member must exist. The newly created device is included in the Device collection, and registration returns true.",
+    "obligations":[
+      {"id":"P01","text":"The identifier must not already be in use","clause":"precondition"},
+      {"id":"P02","text":"that Staff member must exist","clause":"precondition"},
+      {"id":"Q01","text":"creates a Device carrying the supplied identifier, name and location","clause":"postcondition"},
+      {"id":"Q02","text":"with the selected Staff member as its responsible contact","clause":"postcondition"},
+      {"id":"Q03","text":"registration returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Q02 also uses the explicit sentence The newly created device is included in the Device collection. Contact and repository membership are one registered observation. No frame obligation is added."
+  }, {
+    "operationId":"CoCoME_closeCashDesk_closeCashDesk",
+    "requirement":"Closing a CashDesk changes it from open to closed while retaining it as the current cash desk. The desk must exist and be open, and the current Store must also exist and be open. The operation returns true.",
+    "obligations":[
+      {"id":"P01","text":"The desk must exist","clause":"precondition"},
+      {"id":"P02","text":"The desk must exist and be open","clause":"precondition"},
+      {"id":"P03","text":"the current Store must also exist","clause":"precondition"},
+      {"id":"P04","text":"the current Store must also exist and be open","clause":"precondition"},
+      {"id":"Q01","text":"changes it from open to closed","clause":"postcondition"},
+      {"id":"Q02","text":"retaining it as the current cash desk","clause":"postcondition"},
+      {"id":"Q03","text":"The operation returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Existence and openness share coordinated subjects. The selected desk becomes CurrentCashDesk; no unrelated frame condition is inferred."
+  }, {
+    "operationId":"CoCoME_manageProductCatalog_createProductCatalog",
+    "requirement":"Catalog registration includes a new ProductCatalog with the supplied identifier and name in the catalog collection. Registration is available only when that identifier is unused by any existing ProductCatalog, and returns true.",
+    "obligations":[
+      {"id":"P01","text":"that identifier is unused by any existing ProductCatalog","clause":"precondition"},
+      {"id":"Q01","text":"a new ProductCatalog with the supplied identifier and name","clause":"postcondition"},
+      {"id":"Q02","text":"includes a new ProductCatalog with the supplied identifier and name in the catalog collection","clause":"postcondition"},
+      {"id":"Q03","text":"returns true","clause":"postcondition"}
+    ],
+    "interpretation":"The identifier and name correspond to Id and Name in the authoritative UML. No positive identifier or uniqueness beyond the supplied identifier is added."
+  }, {
+    "operationId":"CoCoME_orderProducts_orderItem",
+    "requirement":"Adding an item to the current product order creates an OrderEntry recording the selected Item, the requested quantity and its order-price subtotal. The item selected by the supplied barcode and the current OrderProduct must both exist. The new entry is included in the entry collection and linked to that order; the operation returns true.",
+    "obligations":[
+      {"id":"P01","text":"The item selected by the supplied barcode","clause":"precondition"},
+      {"id":"P02","text":"the current OrderProduct must both exist","clause":"precondition"},
+      {"id":"Q01","text":"The new entry is included in the entry collection","clause":"postcondition"},
+      {"id":"Q02","text":"the requested quantity","clause":"postcondition"},
+      {"id":"Q03","text":"its order-price subtotal","clause":"postcondition"},
+      {"id":"Q04","text":"recording the selected Item","clause":"postcondition"},
+      {"id":"Q05","text":"linked to that order","clause":"postcondition"},
+      {"id":"Q06","text":"the operation returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Both-exist scopes over item and current order. Order-price subtotal uses Item.OrderPrice times quantity as in the cited operation definition. No positive quantity or stock condition is added."
+  }, {
+    "operationId":"CoCoME_processSale_enterItem",
+    "requirement":"Entering a scanned item and quantity creates a SalesLineItem for the current Sale and the scanned Item, recording that quantity and its subtotal. The current sale must exist and be incomplete; the item must exist with positive stock, and the entered quantity must not exceed that stock. The newly created sales line is included in the sales-line collection and becomes the current sale line. The item stock is reduced by the entered quantity, and the operation returns true.",
+    "obligations":[
+      {"id":"P01","text":"The current sale must exist","clause":"precondition"},
+      {"id":"P02","text":"The current sale must exist and be incomplete","clause":"precondition"},
+      {"id":"P03","text":"the item must exist","clause":"precondition"},
+      {"id":"P04","text":"the item must exist with positive stock","clause":"precondition"},
+      {"id":"P05","text":"the entered quantity must not exceed that stock","clause":"precondition"},
+      {"id":"Q01","text":"The newly created sales line is included in the sales-line collection","clause":"postcondition"},
+      {"id":"Q02","text":"becomes the current sale line","clause":"postcondition"},
+      {"id":"Q03","text":"creates a SalesLineItem for the current Sale","clause":"postcondition"},
+      {"id":"Q04","text":"creates a SalesLineItem for the current Sale","clause":"postcondition"},
+      {"id":"Q05","text":"recording that quantity","clause":"postcondition"},
+      {"id":"Q06","text":"the scanned Item","clause":"postcondition"},
+      {"id":"Q07","text":"The item stock is reduced by the entered quantity","clause":"postcondition"},
+      {"id":"Q08","text":"its subtotal","clause":"postcondition"},
+      {"id":"Q09","text":"the operation returns true","clause":"postcondition"}
+    ],
+    "interpretation":"For the current Sale maps to the source-prescribed two association directions, not arbitrary inverse-link inference. Subtotal uses Item.Price times quantity. The approved quantity <= entry stock requirement is explicit; no positivity restriction on quantity is added."
+  }, {
+    "operationId":"CoCoME_processSale_endSale",
+    "requirement":"Ending item entry calculates the current Sale amount by adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals. A current sale must exist, be incomplete and not yet ready for payment. With no lines its amount becomes zero. The sale becomes ready for payment and the operation returns the resulting amount.",
+    "obligations":[
+      {"id":"P01","text":"A current sale must exist","clause":"precondition"},
+      {"id":"P02","text":"be incomplete","clause":"precondition"},
+      {"id":"P03","text":"not yet ready for payment","clause":"precondition"},
+      {"id":"Q01","text":"The sale becomes ready for payment","clause":"postcondition"},
+      {"id":"Q02","text":"adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals","clause":"postcondition"},
+      {"id":"Q03","text":"the operation returns the resulting amount","clause":"postcondition"}
+    ],
+    "interpretation":"Q02 also includes the explicit empty-lines zero sentence. Equal values do not collapse distinct line identities. No payment or extra status condition is added."
+  }, {
+    "operationId":"CoCoME_processSale_makeCashPayment",
+    "requirement":"Cash payment records the tendered amount and change in a CashPayment linked to the current Sale. Payment requires an existing, incomplete sale that is ready for payment, a tendered amount covering its amount, and a current Store. The sale is linked to that store, timestamped and marked complete. The payment is included in the payment collection, and the operation returns true.",
+    "obligations":[
+      {"id":"P01","text":"Payment requires an existing, incomplete sale","clause":"precondition"},
+      {"id":"P02","text":"incomplete sale","clause":"precondition"},
+      {"id":"P03","text":"that is ready for payment","clause":"precondition"},
+      {"id":"P04","text":"a tendered amount covering its amount","clause":"precondition"},
+      {"id":"P05","text":"and a current Store","clause":"precondition"},
+      {"id":"Q01","text":"The payment is included in the payment collection","clause":"postcondition"},
+      {"id":"Q02","text":"records the tendered amount","clause":"postcondition"},
+      {"id":"Q03","text":"a CashPayment linked to the current Sale","clause":"postcondition"},
+      {"id":"Q04","text":"a CashPayment linked to the current Sale","clause":"postcondition"},
+      {"id":"Q05","text":"The sale is linked to that store","clause":"postcondition"},
+      {"id":"Q06","text":"The sale is linked to that store","clause":"postcondition"},
+      {"id":"Q07","text":"marked complete","clause":"postcondition"},
+      {"id":"Q08","text":"timestamped","clause":"postcondition"},
+      {"id":"Q09","text":"the tendered amount and change","clause":"postcondition"},
+      {"id":"Q10","text":"the operation returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Change equals tendered amount minus sale amount. Link phrases map only to the two directions explicitly required by the cited source operation. Timestamp is the invocation clock. No extra tender or store-openness condition is added."
+  }, {
+    "operationId":"LibraryManagementSystem_listBookHistory_listRecommendBook",
+    "requirement":"The recommendation enquiry returns every RecommendBook record linked to the referenced User. That user must exist and the recommendation collection must be resolvable.",
+    "obligations":[
+      {"id":"P01","text":"That user must exist","clause":"precondition"},
+      {"id":"P02","text":"the recommendation collection must be resolvable","clause":"precondition"},
+      {"id":"Q01","text":"returns every RecommendBook record linked to the referenced User","clause":"postcondition"}
+    ],
+    "interpretation":"Return exactly the referenced user's association identities, including an empty collection. Do not return Book objects or all repository recommendations."
+  }, {
+    "operationId":"LibraryManagementSystem_listRecommendBook_listRecommendBook",
+    "requirement":"The recommendation enquiry returns every RecommendBook record linked to the referenced User. That user must exist and the recommendation collection must be resolvable.",
+    "obligations":[
+      {"id":"P01","text":"That user must exist","clause":"precondition"},
+      {"id":"P02","text":"the recommendation collection must be resolvable","clause":"precondition"},
+      {"id":"Q01","text":"returns every RecommendBook record linked to the referenced User","clause":"postcondition"}
+    ],
+    "interpretation":"This use-case view has its own operation identity, but the same explicit association-return obligations as the history view."
+  }, {
+    "operationId":"LibraryManagementSystem_manageBookCopy_addBookCopy",
+    "requirement":"Adding a physical BookCopy creates it with the supplied barcode and location in AVAILABLE status and with its reserved flag false. The Book selected by call number must exist and have no copy with that barcode. The new copy is linked to the Book, the copy count increases and the copy is included in the copy collection. The operation returns true.",
+    "obligations":[
+      {"id":"P01","text":"The Book selected by call number must exist","clause":"precondition"},
+      {"id":"P02","text":"have no copy with that barcode","clause":"precondition"},
+      {"id":"Q01","text":"Adding a physical BookCopy creates it","clause":"postcondition"},
+      {"id":"Q02","text":"the supplied barcode","clause":"postcondition"},
+      {"id":"Q03","text":"AVAILABLE status","clause":"postcondition"},
+      {"id":"Q04","text":"barcode and location","clause":"postcondition"},
+      {"id":"Q05","text":"its reserved flag false","clause":"postcondition"},
+      {"id":"Q06","text":"The new copy is linked to the Book","clause":"postcondition"},
+      {"id":"Q07","text":"The new copy is linked to the Book","clause":"postcondition"},
+      {"id":"Q08","text":"the copy count increases","clause":"postcondition"},
+      {"id":"Q09","text":"the copy is included in the copy collection","clause":"postcondition"},
+      {"id":"Q10","text":"The operation returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Adding one copy increments the selected book count by one. The Book link maps to both association assignments explicitly listed in the source operation; no generic inverse-link inference is applied."
+  }, {
+    "operationId":"LibraryManagementSystem_payOverDueFee_payOverDueFee",
+    "requirement":"Paying overdue fees sets the existing User's total overdue fee and each applicable Loan fee to zero, and returns true. The user must have returned overdue loans with positive fees, and the supplied payment must cover the user's total overdue fee.",
+    "obligations":[
+      {"id":"P01","text":"the existing User","clause":"precondition"},
+      {"id":"P02","text":"The user must have returned overdue loans with positive fees","clause":"precondition"},
+      {"id":"P03","text":"the supplied payment must cover the user's total overdue fee","clause":"precondition"},
+      {"id":"Q01","text":"sets the existing User's total overdue fee and each applicable Loan fee to zero","clause":"postcondition"},
+      {"id":"Q02","text":"each applicable Loan fee to zero","clause":"postcondition"},
+      {"id":"Q03","text":"returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Overdue means DueDate before invocation Today, as in the source definition, not DueDate before ReturnDate. Applicable loans belong to the selected user, are returned and have positive fees. No positive total-user-fee guard is added."
+  }, {
+    "operationId":"LoanProcessingSystem_enterValidatedCreditReferences_chooseLoanRequest",
+    "requirement":"Selecting a request returns the LoanRequest matching the supplied request identifier from the current collection and makes that request current. The identifier must match a request in that collection.",
+    "obligations":[
+      {"id":"P01","text":"The identifier must match a request in that collection","clause":"precondition"},
+      {"id":"Q01","text":"makes that request current","clause":"postcondition"},
+      {"id":"Q02","text":"returns the LoanRequest matching the supplied request identifier from the current collection","clause":"postcondition"}
+    ],
+    "interpretation":"Selection is from CurrentLoanRequests rather than the global repository. State and return must refer to that same object."
+  }, {
+    "operationId":"LoanProcessingSystem_enterValidatedCreditReferences_markRequestValid",
+    "requirement":"Reference validation marks the current LoanRequest REFERENCESVALIDATED and returns true. A current request must exist.",
+    "obligations":[
+      {"id":"P01","text":"A current request must exist","clause":"precondition"},
+      {"id":"Q01","text":"marks the current LoanRequest REFERENCESVALIDATED","clause":"postcondition"},
+      {"id":"Q02","text":"returns true","clause":"postcondition"}
+    ],
+    "interpretation":"No initial request-status restriction is imposed."
+  }, {
+    "operationId":"LoanProcessingSystem_evaluateLoanRequest_addLoanTerm",
+    "requirement":"Adding a loan term links the selected LoanTerm to the current LoanRequest and returns true. Both a current request and the selected term must exist.",
+    "obligations":[
+      {"id":"P01","text":"a current request","clause":"precondition"},
+      {"id":"P02","text":"the selected term must exist","clause":"precondition"},
+      {"id":"Q01","text":"links the selected LoanTerm to the current LoanRequest","clause":"postcondition"},
+      {"id":"Q02","text":"returns true","clause":"postcondition"}
+    ],
+    "interpretation":"Both-exist scopes over the current request and parameter-selected term. No duplicate-link refusal is added."
+  }, {
+    "operationId":"LoanProcessingSystem_generateLoanLetterAndAgreement_listApprovalRequest",
+    "requirement":"Document preparation loads all approved LoanRequests into the current request collection and returns them. The collection of approved requests must be resolvable.",
+    "obligations":[
+      {"id":"P01","text":"The collection of approved requests must be resolvable","clause":"precondition"},
+      {"id":"Q01","text":"loads all approved LoanRequests into the current request collection","clause":"postcondition"},
+      {"id":"Q02","text":"returns them","clause":"postcondition"}
+    ],
+    "interpretation":"Approved corresponds to APPROVED in the UML enum; empty selected collections remain valid. State and return have the same selected members."
+  }, {
+    "operationId":"LoanProcessingSystem_manageLoanTerm_createLoanTerm",
+    "requirement":"A new LoanTerm containing the supplied item identifier and content is included in the term collection. No existing LoanTerm may use that item identifier. Creating it returns true.",
+    "obligations":[
+      {"id":"P01","text":"No existing LoanTerm may use that item identifier","clause":"precondition"},
+      {"id":"Q01","text":"A new LoanTerm containing the supplied item identifier and content","clause":"postcondition"},
+      {"id":"Q02","text":"is included in the term collection","clause":"postcondition"},
+      {"id":"Q03","text":"Creating it returns true","clause":"postcondition"}
+    ],
+    "interpretation":"The item identifier maps to ItemID and content to Content. No positive identifier or nonempty content requirement is inferred."
+  }],
+  "blockedProfiles":[{
+    "operationId":"Airport_raiseRepair_approve",
+    "reason":"SOURCE_SCOPE_GAP",
+    "detail":"The development Q01 combines creation, repository storage and linking. Current Narrative describes creation and linking but does not require repository storage. Do not use the combined obligation to authorize repair until that source difference is resolved."
+  }]
+}

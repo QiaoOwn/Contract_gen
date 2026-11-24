@@ -1,0 +1,80 @@
+{
+  "version": "rm2pt-authority-policy-v1",
+  "authority": "Pinned original RM2PT active operation specifications",
+  "source_commit": "3c08c41dc8671f857169e82cce662a075a306aa3",
+  "decision_date": "2026-10-27",
+  "decision_maker": "user/laboratory requirement owner; not independent expert review",
+  "new_input": "data/benchmark/rm2pt_authoritative_114/operations.jsonl",
+  "preserve_previous_input_and_oracle": true,
+  "formal_experiment_ready": false,
+  "generation_rules_changed": false,
+  "approved_source_corrections": {
+    "LibraryManagementSystem_listBookHistory_listReservationBook": {
+      "decision_id": "R07",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R07_listReservationBook.json",
+      "note": "User-approved Set projection: return distinct BookCopy object identities from the selected user's reservations, including closed reservation records. Do not merge different objects by equal attributes or add an open-reservation filter. Existing source preconditions and return type are preserved; executable representation and Oracle alignment remain separate checks."
+    },
+    "LibraryManagementSystem_listBookHistory_listOverDueBook": {
+      "decision_id": "R06",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R06_listOverDueBook.json",
+      "note": "User-approved Set result: return distinct BookCopy object identities from the selected user's unreturned Loans with fee > 0. Multiple qualifying Loans may share one returned copy; equal attribute values do not merge different objects. Existing filters and return type are preserved. Executable representation and Oracle alignment remain separate checks."
+    },
+    "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay": {
+      "decision_id": "R05",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R05_countDownSuspensionDay.json",
+      "note": "User-approved state timing: select users with positive days at operation entry, decrement once, and restore previously SUSPEND users only at the post-decrement zero-day boundary with no overdue fee. Retain suspension with outstanding fees; leave initially zero-day users unchanged. Executable representation and Oracle alignment remain separate checks."
+    },
+    "CoCoME_receiveOrderedProduct_receiveOrderedProduct": {
+      "decision_id": "R04",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R04_receiveOrderedProduct.json",
+      "note": "User-approved alias-aware stock semantics: for each Item, add the quantities of all this order's entries referring to that object to its operation-entry stock. Distinct entries count separately; different Items are accumulated independently. Executable representation and Oracle alignment remain separate checks."
+    },
+    "CoCoME_processSale_endSale": {
+      "decision_id": "R03",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R03_endSale.json",
+      "note": "User-approved collection semantics: every sales line contributes its subtotal, including equal amounts on distinct lines. Replace Sale.Amount with the total, use zero for an empty sale, mark payment-ready and return the numeric total. Executable representation and Oracle alignment remain separate checks."
+    },
+    "CoCoME_orderProducts_placeOrder": {
+      "decision_id": "R02",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R02_placeOrder.json",
+      "note": "User-approved source correction: add every entry subtotal to the operation-entry amount, including equal subtotals on distinct entries; empty orders preserve the initial amount. Executable representation and full Oracle alignment remain separate checks."
+    },
+    "Airport_manageDevice_createDevice": {
+      "decision_id": "R01",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R01_createDevice.json",
+      "note": "User-approved variable-target correction: store newly created d, not absent lookup result dev. Original RM2PT snapshot remains unchanged; this is a laboratory-adjudicated source correction."
+    }
+  },
+  "approved_source_mappings": {
+    "LibraryManagementSystem_listRecommendBook_listRecommendBook": {
+      "decision_id": "R08",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R08_listRecommendBook.json",
+      "source_service": "ListBookHistory",
+      "source_operation": "listRecommendBook",
+      "note": "User-approved source service alias: preserve both use-case samples and runtime service names, but link them to the same active original ListBookHistory operation. No business clauses are changed; the views are not independent original sources."
+    }
+  },
+  "approved_restored_drafts": {
+    "LoanProcessingSystem_generateLoanLetterAndAgreement_createLoanAccount": {
+      "decision_id": "R09",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R09_createLoanAccount.json",
+      "note": "User-approved laboratory restoration of the commented three-parameter Boolean draft. Retain operation identity and business semantics; do not classify it as an original active contract or substitute the one-parameter ThirdPartyServices operation."
+    }
+  },
+  "source_conflicts": {},
+  "missing_or_aliased_sources": {},
+  "documented_dialect_adaptations": {
+    "CoCoME_orderProducts_makeNewOrder": "Time.isEqual(Now) is represented using the OCLTSVM Date equality/effect convention; no extra business guard is added.",
+    "CoCoME_processSale_makeCashPayment": "Time.isEqual(Now) is represented using the Date equality/effect convention; the original precondition does not require a current Store explicitly.",
+    "LibraryManagementSystem_makeReservation_makeReservation": "ReserveDate.isEqual(Today) is represented using the Date equality/effect convention.",
+    "CoCoME_orderProducts_orderItem": "The source effect spells subAmount, while the source entity declares SubAmount. The project keeps the declared field spelling, not a new business rule; the original precondition has no current-order guard."
+  },
+  "clear_repairs": [
+    "AutomatedTellerMachine_checkBalance_inputCard",
+    "AutomatedTellerMachine_depositFunds_inputCard",
+    "AutomatedTellerMachine_withdrawCash_inputCard",
+    "AutomatedTellerMachine_manageUser_deleteUser",
+    "LoanProcessingSystem_manageLoanTerm_deleteLoanTerm",
+    "LibraryManagementSystem_renewBook_renewBook"
+  ]
+}

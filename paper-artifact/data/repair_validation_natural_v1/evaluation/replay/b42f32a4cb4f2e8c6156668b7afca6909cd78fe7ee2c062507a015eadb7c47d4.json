@@ -1,0 +1,269 @@
+{
+  "operationId": "LoanProcessingSystem_generateLoanLetterAndAgreement_listApprovalRequest",
+  "candidateIdentity": "b42f32a4cb4f2e8c6156668b7afca6909cd78fe7ee2c062507a015eadb7c47d4",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LoanProcessingSystem_generateLoanLetterAndAgreement_listApprovalRequest/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "ed72df622a9f8eade5e31c71810d8c33678d9a5daaea764abe50b954199f19fe"
+    }
+  ],
+  "contract": {
+    "definition": "approvedRequests : Set(LoanRequest) = LoanRequest.allInstances()",
+    "precondition": "approvedRequests.oclIsUndefined() = false",
+    "postcondition": "CurrentLoanRequests = approvedRequests and result = approvedRequests"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract GenerateLoanLetterAndAgreementModule::listApprovalRequest(): Set(LoanRequest) {\n          definition:\n          approvedRequests : Set(LoanRequest) = LoanRequest.allInstances()\n            \n            precondition:\n          approvedRequests.oclIsUndefined() = false\n            \n            postcondition:\n          CurrentLoanRequests = approvedRequests and result = approvedRequests\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 11,
+              "endLine": 9,
+              "endColumn": 30,
+              "startOffset": 327,
+              "endOffset": 346,
+              "expression": "CurrentLoanRequests",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+              "ruleIds": [
+                "MG-06::LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/CurrentLoanRequests"
+              ],
+              "modelElementIds": [
+                "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests",
+                  "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/generateLoanLetterAndAgreement.ts",
+                    "line": 22,
+                    "column": 3,
+                    "endLine": 25,
+                    "sha256": "54d80078509e02810e149f176f1f8f504ecc52befb3196643b1319e353d98395"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/CurrentLoanRequests"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests",
+              "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/generateLoanLetterAndAgreement.ts",
+                "line": 22,
+                "column": 3,
+                "endLine": 25,
+                "sha256": "54d80078509e02810e149f176f1f8f504ecc52befb3196643b1319e353d98395"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "CurrentLoanRequests"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 11,
+            "endLine": 9,
+            "endColumn": 30,
+            "startOffset": 327,
+            "endOffset": 346,
+            "expression": "CurrentLoanRequests",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+            "ruleIds": [
+              "MG-06::LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/CurrentLoanRequests"
+            ],
+            "modelElementIds": [
+              "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests",
+                "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/generateLoanLetterAndAgreement.ts",
+                  "line": 22,
+                  "column": 3,
+                  "endLine": 25,
+                  "sha256": "54d80078509e02810e149f176f1f8f504ecc52befb3196643b1319e353d98395"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 11,
+                "endLine": 9,
+                "endColumn": 30,
+                "startOffset": 327,
+                "endOffset": 346,
+                "expression": "CurrentLoanRequests",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CurrentLoanRequests must be accessed as self.CurrentLoanRequests.",
+                "ruleIds": [
+                  "MG-06::LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/CurrentLoanRequests"
+                ],
+                "modelElementIds": [
+                  "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/state/local/CurrentLoanRequests",
+                    "declaration": "CurrentLoanRequests: Set(LoanRequest)",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/generateLoanLetterAndAgreement.ts",
+                      "line": 22,
+                      "column": 3,
+                      "endLine": 25,
+                      "sha256": "54d80078509e02810e149f176f1f8f504ecc52befb3196643b1319e353d98395"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/generateLoanLetterAndAgreement/operation/listApprovalRequest/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

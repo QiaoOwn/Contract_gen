@@ -1,0 +1,199 @@
+{
+  "operationId": "Airport_raiseRepair_approve",
+  "candidateIdentity": "f8e9baa8158b0be8ada7ce50876e8bc651428ffd859a28da309759e23e3032a9",
+  "origins": [
+    {
+      "method": "direct",
+      "file": "results/rq1-four-methods-114-v1/runs/Airport_raiseRepair_approve/direct/direct.candidate.json",
+      "sha256": "25a32769f85e27ab97d4430f81a965e624977b735d01d8deb96ef72d3e61ca56"
+    }
+  ],
+  "contract": {
+    "definition": "r : Repair = Repair.allInstances()->any(rr : Repair | rr.Id = rid), s : Staff = Staff.allInstances()->any(ss : Staff | ss.Id = sid)",
+    "precondition": "Repair.allInstances()->exists(rr : Repair | rr.Id = rid) and Staff.allInstances()->exists(ss : Staff | ss.Id = sid)",
+    "postcondition": "result.oclIsNew() and result.StaffId = sid and result.Reject = reject and result.Suggestion = suggestion and r.History->includes(result) and r.History@pre->excludes(result) and if reject = true then if s.Role = 1 and r.Process@pre = 0 then r.Process = 1 else if s.Role = 2 and r.Process@pre = 1 then r.Process = 2 else if s.Role = 3 and r.Process@pre = 2 then r.Process = 3 else r.Process = r.Process@pre endif endif endif else r.Process = 5 endif"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          definition:\n          r : Repair = Repair.allInstances()->any(rr : Repair | rr.Id = rid), s : Staff = Staff.allInstances()->any(ss : Staff | ss.Id = sid)\n            \n            precondition:\n          Repair.allInstances()->exists(rr : Repair | rr.Id = rid) and Staff.allInstances()->exists(ss : Staff | ss.Id = sid)\n            \n            postcondition:\n          result.oclIsNew() and result.StaffId = sid and result.Reject = reject and result.Suggestion = suggestion and r.History->includes(result) and r.History@pre->excludes(result) and if reject = true then if s.Role = 1 and r.Process@pre = 0 then r.Process = 1 else if s.Role = 2 and r.Process@pre = 1 then r.Process = 2 else if s.Role = 3 and r.Process@pre = 2 then r.Process = 3 else r.Process = r.Process@pre endif endif endif else r.Process = 5 endif\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 9,
+              "column": 139,
+              "msg": "mismatched input 'result' expecting RULE_ID"
+            },
+            {
+              "line": 9,
+              "column": 175,
+              "msg": "mismatched input 'result' expecting RULE_ID"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'result' expecting RULE_ID",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 9,
+            "column": 139
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        },
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'result' expecting RULE_ID",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 9,
+            "column": 175
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'result' expecting RULE_ID",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'result' expecting RULE_ID",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/raiseRepair/operation/approve/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/raiseRepair/operation/approve/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/raiseRepair/operation/approve/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

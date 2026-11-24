@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "selectedCashDesk: CashDesk = CashDesk.allInstances()->any(cashDesk: CashDesk | cashDesk.Id = cashDeskID)",
+    "precondition": "self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.IsOpened = true and CashDesk.allInstances()->exists(cashDesk: CashDesk | cashDesk.Id = cashDeskID and cashDesk.IsOpened = false)",
+    "postcondition": "selectedCashDesk.IsOpened = true and self.CurrentCashDesk = selectedCashDesk and result = true"
+  },
+  "methodAccepted": true
+}

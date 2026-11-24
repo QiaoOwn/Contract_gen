@@ -1,0 +1,237 @@
+{
+  "operationId": "LibraryManagementSystem_listBookHistory_listOverDueBook",
+  "candidateIdentity": "ee60c8e444c1c4ff0d6240fb993f187339534a95e4784fdc8d262e607dd6a14b",
+  "origins": [
+    {
+      "method": "direct",
+      "file": "results/rq1-four-methods-114-v1/runs/LibraryManagementSystem_listBookHistory_listOverDueBook/direct/direct.candidate.json",
+      "sha256": "b32813291a66f5fb37708ad016fd991f209378c9952f890bc174bc5975df9a60"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "User.allInstances()->one(u: User|u.UserID = uid) and User.allInstances()->forAll(u: User|if u.UserID = uid then u.LoanedBook.oclIsUndefined() = false and u.LoanedBook->forAll(l: Loan|if l.IsReturned = false and l.OverDueFee > 0.0 then l.LoanedCopy.oclIsUndefined() = false else true endif) else true endif)",
+    "postcondition": "let u: User = User.allInstances()->any(x: User|x.UserID = uid) in result->forAll(c: BookCopy|u.LoanedBook->exists(l: Loan|l.IsReturned = false and l.OverDueFee > 0.0 and l.LoanedCopy = c)) and u.LoanedBook->forAll(l: Loan|if l.IsReturned = false and l.OverDueFee > 0.0 then result->exists(c: BookCopy|c = l.LoanedCopy) else true endif)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ListBookHistory::listOverDueBook(uid:String): Set(BookCopy) {\n          \n            precondition:\n          User.allInstances()->one(u: User|u.UserID = uid) and User.allInstances()->forAll(u: User|if u.UserID = uid then u.LoanedBook.oclIsUndefined() = false and u.LoanedBook->forAll(l: Loan|if l.IsReturned = false and l.OverDueFee > 0.0 then l.LoanedCopy.oclIsUndefined() = false else true endif) else true endif)\n            \n            postcondition:\n          let u: User = User.allInstances()->any(x: User|x.UserID = uid) in result->forAll(c: BookCopy|u.LoanedBook->exists(l: Loan|l.IsReturned = false and l.OverDueFee > 0.0 and l.LoanedCopy = c)) and u.LoanedBook->forAll(l: Loan|if l.IsReturned = false and l.OverDueFee > 0.0 then result->exists(c: BookCopy|c = l.LoanedCopy) else true endif)\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 7,
+              "column": 84,
+              "msg": "mismatched input 'forAll' expecting {'oclIsNew()', 'oclIsUndefined()', 'isEmpty()', 'notEmpty()', 'size()', 'sum()', 'oclIsTypeOf', 'After', 'Before', 'isAfter', 'isBefore', 'isEqual'}"
+            },
+            {
+              "line": 7,
+              "column": 196,
+              "msg": "mismatched input ')' expecting '}'"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'forAll' expecting {'oclIsNew()', 'oclIsUndefined()', 'isEmpty()', 'notEmpty()', 'size()', 'sum()', 'oclIsTypeOf', 'After', 'Before', 'isAfter', 'isBefore', 'isEqual'}",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 7,
+            "column": 84
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        },
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input ')' expecting '}'",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 7,
+            "column": 196
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'forAll' expecting {'oclIsNew()', 'oclIsUndefined()', 'isEmpty()', 'notEmpty()', 'size()', 'sum()', 'oclIsTypeOf', 'After', 'Before', 'isAfter', 'isBefore', 'isEqual'}",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input ')' expecting '}'",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listOverDueBook/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listOverDueBook/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listOverDueBook/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listOverDueBook/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listOverDueBook/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

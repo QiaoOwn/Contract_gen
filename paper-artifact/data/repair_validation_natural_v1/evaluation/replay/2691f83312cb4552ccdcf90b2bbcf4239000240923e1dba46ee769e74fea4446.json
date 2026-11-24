@@ -1,0 +1,139 @@
+{
+  "operationId": "LoanProcessingSystem_submitLoanRequest_calculateScore",
+  "candidateIdentity": "2691f83312cb4552ccdcf90b2bbcf4239000240923e1dba46ee769e74fea4446",
+  "origins": [
+    {
+      "method": "full",
+      "file": "results/rq1-four-methods-114-v1/runs/LoanProcessingSystem_submitLoanRequest_calculateScore/full/full.candidate.json",
+      "sha256": "de4e29f89af9991b08542e9d6faa545beb9fd04e230dc175e998f3642e1d416e"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentLoanRequest.oclIsUndefined() = false and self.CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and self.CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false",
+    "postcondition": "self.CurrentLoanRequest.CreditScore = 100 and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = 100"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract SubmitLoanRequestModule::calculateScore(): Integer {\n          \n            precondition:\n          self.CurrentLoanRequest.oclIsUndefined() = false and self.CurrentLoanRequest.RequestedCAHistory.oclIsUndefined() = false and self.CurrentLoanRequest.RequestedCreditHistory.oclIsUndefined() = false\n            \n            postcondition:\n          self.CurrentLoanRequest.CreditScore = 100 and self.CurrentLoanRequest.Status = LoanRequestStatus::SUBMITTED and result = 100\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 4,
+              "column": 105,
+              "msg": "mismatched input '.' expecting 'postcondition'"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input '.' expecting 'postcondition'",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 4,
+            "column": 105
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input '.' expecting 'postcondition'",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/submitLoanRequest/operation/calculateScore/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/submitLoanRequest/operation/calculateScore/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

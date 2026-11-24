@@ -1,0 +1,574 @@
+{
+  "operationId": "CoCoME_openCashDesk_openCashDesk",
+  "candidateIdentity": "51472bca594e3922c6f792df57f872b90131cbb570db0a781e51a40831a11e88",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_openCashDesk_openCashDesk/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "fe4078abedcc12538a0f32c51b7c9370b5273fb39e643bc2c96e5b74ad8cc76e"
+    }
+  ],
+  "contract": {
+    "definition": "selectedCashDesk: CashDesk = CashDesk.allInstances()->any(cashDesk: CashDesk | cashDesk.CashDeskID = cashDeskID)",
+    "precondition": "self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.IsOpened = true and CashDesk.allInstances()->exists(cashDesk: CashDesk | cashDesk.CashDeskID = cashDeskID and cashDesk.IsOpened = false)",
+    "postcondition": "selectedCashDesk.IsOpened = true and self.CurrentCashDesk = selectedCashDesk and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract CoCoMESystem::openCashDesk(cashDeskID:Integer): Boolean {\n          definition:\n          selectedCashDesk: CashDesk = CashDesk.allInstances()->any(cashDesk: CashDesk | cashDesk.CashDeskID = cashDeskID)\n            \n            precondition:\n          self.CurrentStore.oclIsUndefined() = false and self.CurrentStore.IsOpened = true and CashDesk.allInstances()->exists(cashDesk: CashDesk | cashDesk.CashDeskID = cashDeskID and cashDesk.IsOpened = false)\n            \n            postcondition:\n          selectedCashDesk.IsOpened = true and self.CurrentCashDesk = selectedCashDesk and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 99,
+              "endLine": 3,
+              "endColumn": 109,
+              "startOffset": 187,
+              "endOffset": 197,
+              "expression": "CashDeskID",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:99:selectedCashDesk",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 11,
+                  "endLine": 9,
+                  "endColumn": 27,
+                  "startOffset": 513,
+                  "endOffset": 529,
+                  "expression": "selectedCashDesk"
+                },
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 71,
+                  "endLine": 9,
+                  "endColumn": 87,
+                  "startOffset": 573,
+                  "endOffset": 589,
+                  "expression": "selectedCashDesk"
+                }
+              ]
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 158,
+              "endLine": 6,
+              "endColumn": 168,
+              "startOffset": 408,
+              "endOffset": 418,
+              "expression": "CashDeskID",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/CashDesk"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/CashDesk",
+                  "declaration": "class CashDesk",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 107,
+                    "column": 13,
+                    "endLine": 143,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 99
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "CashDeskID"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "selectedCashDesk"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "selectedCashDesk"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/CashDesk",
+              "declaration": "class CashDesk",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 107,
+                "column": 13,
+                "endLine": 143,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 158
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CashDeskID"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 99,
+            "endLine": 3,
+            "endColumn": 109,
+            "startOffset": 187,
+            "endOffset": 197,
+            "expression": "CashDeskID",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:99:selectedCashDesk",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 11,
+                "endLine": 9,
+                "endColumn": 27,
+                "startOffset": 513,
+                "endOffset": 529,
+                "expression": "selectedCashDesk"
+              },
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 71,
+                "endLine": 9,
+                "endColumn": 87,
+                "startOffset": 573,
+                "endOffset": 589,
+                "expression": "selectedCashDesk"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 99,
+                "endLine": 3,
+                "endColumn": 109,
+                "startOffset": 187,
+                "endOffset": 197,
+                "expression": "CashDeskID",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:99:selectedCashDesk",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 11,
+                    "endLine": 9,
+                    "endColumn": 27,
+                    "startOffset": 513,
+                    "endOffset": 529,
+                    "expression": "selectedCashDesk"
+                  },
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 71,
+                    "endLine": 9,
+                    "endColumn": 87,
+                    "startOffset": 573,
+                    "endOffset": 589,
+                    "expression": "selectedCashDesk"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 158,
+            "endLine": 6,
+            "endColumn": 168,
+            "startOffset": 408,
+            "endOffset": 418,
+            "expression": "CashDeskID",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/CashDesk"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/CashDesk",
+                "declaration": "class CashDesk",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 107,
+                  "column": 13,
+                  "endLine": 143,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/P1",
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/P2",
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/P3"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/CashDesk"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 158,
+                "endLine": 6,
+                "endColumn": 168,
+                "startOffset": 408,
+                "endOffset": 418,
+                "expression": "CashDeskID",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature CashDeskID is not available on CashDesk.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/CashDesk"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/CashDesk",
+                    "declaration": "class CashDesk",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 107,
+                      "column": 13,
+                      "endLine": 143,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/P3"
+            ],
+            "sourceLines": [
+              7
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/openCashDesk/operation/openCashDesk/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              12
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

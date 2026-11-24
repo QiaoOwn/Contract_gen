@@ -1,0 +1,1439 @@
+{
+  "operationId": "LibraryManagementSystem_cancelReservation_cancelReservation",
+  "candidateIdentity": "2716e12d5c8042d10ae1ba4a6ee024424a7e0dd1d3fef5f459e37c0af9c06111",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LibraryManagementSystem_cancelReservation_cancelReservation/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "d37e4aa905b6fb8eee781ae67e7d2a2401606fc62244e98463b8f0e7b53d5326"
+    }
+  ],
+  "contract": {
+    "definition": "u: User = User.allInstances()->any(x: User | x.UserID = uid), c: BookCopy = BookCopy.allInstances()->any(x: BookCopy | x.Barcode = barcode), r: Reserve = Reserve.allInstances()->any(x: Reserve | x.user = u and x.copy = c and x.IsClosed = false)",
+    "precondition": "User.allInstances()->exists(x: User | x.UserID = uid) and BookCopy.allInstances()->exists(x: BookCopy | x.Barcode = barcode) and c.Status = \"LOANED\" and c.IsReserved = true and Reserve.allInstances()->exists(x: Reserve | x.user = u and x.copy = c and x.IsClosed = false)",
+    "postcondition": "c.IsReserved = false and r.IsClosed = true and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract LibraryManagementSystemSystem::cancelReservation(uid:String,barcode:String): Boolean {\n          definition:\n          u: User = User.allInstances()->any(x: User | x.UserID = uid), c: BookCopy = BookCopy.allInstances()->any(x: BookCopy | x.Barcode = barcode), r: Reserve = Reserve.allInstances()->any(x: Reserve | x.user = u and x.copy = c and x.IsClosed = false)\n            \n            precondition:\n          User.allInstances()->exists(x: User | x.UserID = uid) and BookCopy.allInstances()->exists(x: BookCopy | x.Barcode = barcode) and c.Status = \"LOANED\" and c.IsReserved = true and Reserve.allInstances()->exists(x: Reserve | x.user = u and x.copy = c and x.IsClosed = false)\n            \n            postcondition:\n          c.IsReserved = false and r.IsClosed = true and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 208,
+              "endLine": 3,
+              "endColumn": 212,
+              "startOffset": 325,
+              "endOffset": 329,
+              "expression": "user",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature user is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:269:r",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 36,
+                  "endLine": 9,
+                  "endColumn": 37,
+                  "startOffset": 768,
+                  "endOffset": 769,
+                  "expression": "r"
+                }
+              ]
+            },
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 223,
+              "endLine": 3,
+              "endColumn": 227,
+              "startOffset": 340,
+              "endOffset": 344,
+              "expression": "copy",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature copy is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:269:r",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 36,
+                  "endLine": 9,
+                  "endColumn": 37,
+                  "startOffset": 768,
+                  "endOffset": 769,
+                  "expression": "r"
+                }
+              ]
+            },
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 238,
+              "endLine": 3,
+              "endColumn": 246,
+              "startOffset": 355,
+              "endOffset": 363,
+              "expression": "IsClosed",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:269:r",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 36,
+                  "endLine": 9,
+                  "endColumn": 37,
+                  "startOffset": 768,
+                  "endOffset": 769,
+                  "expression": "r"
+                }
+              ]
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 234,
+              "endLine": 6,
+              "endColumn": 238,
+              "startOffset": 645,
+              "endOffset": 649,
+              "expression": "user",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature user is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 249,
+              "endLine": 6,
+              "endColumn": 253,
+              "startOffset": 660,
+              "endOffset": 664,
+              "expression": "copy",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature copy is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 264,
+              "endLine": 6,
+              "endColumn": 272,
+              "startOffset": 675,
+              "endOffset": 683,
+              "expression": "IsClosed",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 38,
+              "endLine": 9,
+              "endColumn": 46,
+              "startOffset": 770,
+              "endOffset": 778,
+              "expression": "IsClosed",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Reserve"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Reserve",
+                  "declaration": "class Reserve",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 311,
+                    "column": 12,
+                    "endLine": 340,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature user is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 208
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "user"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "r"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature copy is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 223
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "copy"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "r"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 238
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "IsClosed"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "r"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature user is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 234
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "user"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature copy is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 249
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "copy"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 264
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "IsClosed"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Reserve",
+              "declaration": "class Reserve",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 311,
+                "column": 12,
+                "endLine": 340,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 38
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "IsClosed"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 208,
+            "endLine": 3,
+            "endColumn": 212,
+            "startOffset": 325,
+            "endOffset": 329,
+            "expression": "user",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature user is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:269:r",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 36,
+                "endLine": 9,
+                "endColumn": 37,
+                "startOffset": 768,
+                "endOffset": 769,
+                "expression": "r"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature user is not available on Reserve.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 208,
+                "endLine": 3,
+                "endColumn": 212,
+                "startOffset": 325,
+                "endOffset": 329,
+                "expression": "user",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature user is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:269:r",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 36,
+                    "endLine": 9,
+                    "endColumn": 37,
+                    "startOffset": 768,
+                    "endOffset": 769,
+                    "expression": "r"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 223,
+            "endLine": 3,
+            "endColumn": 227,
+            "startOffset": 340,
+            "endOffset": 344,
+            "expression": "copy",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature copy is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:269:r",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 36,
+                "endLine": 9,
+                "endColumn": 37,
+                "startOffset": 768,
+                "endOffset": 769,
+                "expression": "r"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature copy is not available on Reserve.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 223,
+                "endLine": 3,
+                "endColumn": 227,
+                "startOffset": 340,
+                "endOffset": 344,
+                "expression": "copy",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature copy is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:269:r",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 36,
+                    "endLine": 9,
+                    "endColumn": 37,
+                    "startOffset": 768,
+                    "endOffset": 769,
+                    "expression": "r"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 238,
+            "endLine": 3,
+            "endColumn": 246,
+            "startOffset": 355,
+            "endOffset": 363,
+            "expression": "IsClosed",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:269:r",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 36,
+                "endLine": 9,
+                "endColumn": 37,
+                "startOffset": 768,
+                "endOffset": 769,
+                "expression": "r"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsClosed is not available on Reserve.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 238,
+                "endLine": 3,
+                "endColumn": 246,
+                "startOffset": 355,
+                "endOffset": 363,
+                "expression": "IsClosed",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:269:r",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 36,
+                    "endLine": 9,
+                    "endColumn": 37,
+                    "startOffset": 768,
+                    "endOffset": 769,
+                    "expression": "r"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 234,
+            "endLine": 6,
+            "endColumn": 238,
+            "startOffset": 645,
+            "endOffset": 649,
+            "expression": "user",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature user is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature user is not available on Reserve.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P1",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P2",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P3"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 234,
+                "endLine": 6,
+                "endColumn": 238,
+                "startOffset": 645,
+                "endOffset": 649,
+                "expression": "user",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature user is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 249,
+            "endLine": 6,
+            "endColumn": 253,
+            "startOffset": 660,
+            "endOffset": 664,
+            "expression": "copy",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature copy is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature copy is not available on Reserve.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P1",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P2",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P3"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 249,
+                "endLine": 6,
+                "endColumn": 253,
+                "startOffset": 660,
+                "endOffset": 664,
+                "expression": "copy",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature copy is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 264,
+            "endLine": 6,
+            "endColumn": 272,
+            "startOffset": 675,
+            "endOffset": 683,
+            "expression": "IsClosed",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsClosed is not available on Reserve.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P1",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P2",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P3"
+            ],
+            "sourceLines": [
+              5,
+              6,
+              7
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 264,
+                "endLine": 6,
+                "endColumn": 272,
+                "startOffset": 675,
+                "endOffset": 683,
+                "expression": "IsClosed",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 38,
+            "endLine": 9,
+            "endColumn": 46,
+            "startOffset": 770,
+            "endOffset": 778,
+            "expression": "IsClosed",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Reserve",
+                "declaration": "class Reserve",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 311,
+                  "column": 12,
+                  "endLine": 340,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature IsClosed is not available on Reserve.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/Q1",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/Q2",
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              10,
+              11,
+              12
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Reserve"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 38,
+                "endLine": 9,
+                "endColumn": 46,
+                "startOffset": 770,
+                "endOffset": 778,
+                "expression": "IsClosed",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature IsClosed is not available on Reserve.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Reserve"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Reserve",
+                    "declaration": "class Reserve",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 311,
+                      "column": 12,
+                      "endLine": 340,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/P3"
+            ],
+            "sourceLines": [
+              7
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/cancelReservation/operation/cancelReservation/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              12
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

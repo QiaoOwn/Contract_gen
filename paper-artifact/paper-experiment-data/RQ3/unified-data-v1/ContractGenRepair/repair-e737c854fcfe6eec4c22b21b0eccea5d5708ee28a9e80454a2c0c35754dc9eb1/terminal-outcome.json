@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract LibraryManagementSystemSystem::countDownSuspensionDay() {\n\tprecondition:\n\t\ttrue\n\tpostcondition:\n\t\tUser.allInstances()->forAll(u: User|if u.SuspensionDays@pre>0 \n\t\tthen u.SuspensionDays = u.SuspensionDays@pre-1 \n\t\telse u.SuspensionDays = u.SuspensionDays@pre \n\t\tendif ) and\n\t\tUser.allInstances()->forAll(u: User|if u.BorrowStatus@pre = BorrowStatus::SUSPEND and\n\t\tu.SuspensionDays@pre = 1 and\n\t\tu.OverDueFee@pre = 0.0 \n\t\tthen u.BorrowStatus = BorrowStatus::NORMAL \n\t\telse if u.BorrowStatus@pre = BorrowStatus::SUSPEND and\n\t\tu.SuspensionDays@pre = 1 and\n\t\tu.OverDueFee@pre>0.0 \n\t\tthen u.BorrowStatus = BorrowStatus::SUSPEND \n\t\telse u.BorrowStatus = u.BorrowStatus@pre \n\t\tendif  \n\t\tendif )\n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 10,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": "source-bound-verification-decision-v1",
+  "operation_id": "AutomatedTellerMachine_withdrawCash_withdrawCash",
+  "decision_date": "2026-10-28",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "status": "APPROVED",
+  "source_file": "data/operation_revision/upstream_rm2pt/AutomatedTellerMachine/atm.remodel",
+  "source_sha256": "5d09eba89cd6060319d42449d5b7c2c30a57cc02433456ce423a0101ac3fa019",
+  "source_lines": [405, 432],
+  "decision": "Evaluate the original balance >= quantity guard without adding quantity > 0. Include zero and negative integer quantities when the stated session and balance preconditions are satisfied.",
+  "expected_behavior": [
+    "A zero quantity leaves the numeric balance unchanged, records zero, sets IsWithdraw to true and returns true.",
+    "A negative quantity is subtracted from the entry balance, records that same negative quantity, sets IsWithdraw to true and returns true."
+  ],
+  "scope": "Source-preserving verification of the research benchmark; not a recommendation for banking requirements.",
+  "upstream_modified": false,
+  "frozen_input_modified": false,
+  "model_context_modified": false,
+  "additional_positive_amount_guard": false
+}

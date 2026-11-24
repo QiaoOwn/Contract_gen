@@ -1,0 +1,460 @@
+{
+  "operationId": "CoCoME_manageProductCatalog_queryProductCatalog",
+  "candidateIdentity": "87acc5991c60a5bf770f5ee5252df3e08c90ae959d2706db333e6e247a27ee90",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_manageProductCatalog_queryProductCatalog/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "d06e8b33e73bf94eb74c77cc0e2ee9873e41140ae92d97cc5af4791e3e10e825"
+    }
+  ],
+  "contract": {
+    "definition": "catalog: ProductCatalog = ProductCatalog.allInstances()->any(pc: ProductCatalog | pc.id = id)",
+    "precondition": "ProductCatalog.allInstances()->exists(pc: ProductCatalog | pc.id = id)",
+    "postcondition": "result = catalog"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ManageProductCatalogCRUDService::queryProductCatalog(id:Integer): ProductCatalog {\n          definition:\n          catalog: ProductCatalog = ProductCatalog.allInstances()->any(pc: ProductCatalog | pc.id = id)\n            \n            precondition:\n          ProductCatalog.allInstances()->exists(pc: ProductCatalog | pc.id = id)\n            \n            postcondition:\n          result = catalog\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 96,
+              "endLine": 3,
+              "endColumn": 98,
+              "startOffset": 209,
+              "endOffset": 211,
+              "expression": "id",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/ProductCatalog"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/ProductCatalog",
+                  "declaration": "class ProductCatalog",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 81,
+                    "column": 19,
+                    "endLine": 105,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:124:catalog",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 20,
+                  "endLine": 9,
+                  "endColumn": 27,
+                  "startOffset": 397,
+                  "endOffset": 404,
+                  "expression": "catalog"
+                }
+              ]
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 73,
+              "endLine": 6,
+              "endColumn": 75,
+              "startOffset": 329,
+              "endOffset": 331,
+              "expression": "id",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "CoCoME/entity/ProductCatalog"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "CoCoME/entity/ProductCatalog",
+                  "declaration": "class ProductCatalog",
+                  "source": {
+                    "file": "src/rm2pt/project/CoCoME/entity.ts",
+                    "line": 81,
+                    "column": 19,
+                    "endLine": 105,
+                    "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/ProductCatalog",
+              "declaration": "class ProductCatalog",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 81,
+                "column": 19,
+                "endLine": 105,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 96
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "id"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "catalog"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "CoCoME/entity/ProductCatalog",
+              "declaration": "class ProductCatalog",
+              "source": {
+                "file": "src/rm2pt/project/CoCoME/entity.ts",
+                "line": 81,
+                "column": 19,
+                "endLine": 105,
+                "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 73
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "id"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 96,
+            "endLine": 3,
+            "endColumn": 98,
+            "startOffset": 209,
+            "endOffset": 211,
+            "expression": "id",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/ProductCatalog",
+                "declaration": "class ProductCatalog",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 81,
+                  "column": 19,
+                  "endLine": 105,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:124:catalog",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 20,
+                "endLine": 9,
+                "endColumn": 27,
+                "startOffset": 397,
+                "endOffset": 404,
+                "expression": "catalog"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature id is not available on ProductCatalog.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 96,
+                "endLine": 3,
+                "endColumn": 98,
+                "startOffset": 209,
+                "endOffset": 211,
+                "expression": "id",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/ProductCatalog"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/ProductCatalog",
+                    "declaration": "class ProductCatalog",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 81,
+                      "column": 19,
+                      "endLine": 105,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:124:catalog",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 20,
+                    "endLine": 9,
+                    "endColumn": 27,
+                    "startOffset": 397,
+                    "endOffset": 404,
+                    "expression": "catalog"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 73,
+            "endLine": 6,
+            "endColumn": 75,
+            "startOffset": 329,
+            "endOffset": 331,
+            "expression": "id",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "modelEvidence": [
+              {
+                "id": "CoCoME/entity/ProductCatalog",
+                "declaration": "class ProductCatalog",
+                "source": {
+                  "file": "src/rm2pt/project/CoCoME/entity.ts",
+                  "line": 81,
+                  "column": 19,
+                  "endLine": 105,
+                  "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature id is not available on ProductCatalog.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/queryProductCatalog/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "CoCoME/entity/ProductCatalog"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 73,
+                "endLine": 6,
+                "endColumn": 75,
+                "startOffset": 329,
+                "endOffset": 331,
+                "expression": "id",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature id is not available on ProductCatalog.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "CoCoME/entity/ProductCatalog"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "CoCoME/entity/ProductCatalog",
+                    "declaration": "class ProductCatalog",
+                    "source": {
+                      "file": "src/rm2pt/project/CoCoME/entity.ts",
+                      "line": 81,
+                      "column": 19,
+                      "endLine": 105,
+                      "sha256": "38579f6b70ac4fbfab946eb4420dcbb2f6a6ecb99701d90e305e72c5e48fe8d1"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/queryProductCatalog/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageProductCatalog/operation/queryProductCatalog/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

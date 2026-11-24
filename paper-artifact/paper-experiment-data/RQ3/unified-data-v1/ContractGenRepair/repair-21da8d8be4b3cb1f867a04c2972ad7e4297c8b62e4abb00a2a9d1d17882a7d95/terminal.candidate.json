@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "item: Item = Item.allInstances()->any(i: Item | i.Barcode = barcode)",
+    "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and quantity > 0 and item.oclIsUndefined() = false and item.StockNumber > 0 and quantity <= item.StockNumber",
+    "postcondition": "result = true and item.StockNumber = item.StockNumber@pre - quantity and (let sl: SalesLineItem in sl.oclIsNew() and SalesLineItem.allInstances()->includes(sl) and sl.Quantity = quantity and sl.Subamount = item.Price * quantity and sl.BelongedSale = self.CurrentSale and sl.BelongedItem = item and self.CurrentSale.ContainedSalesLine->includes(sl) and self.CurrentSaleLine = sl)"
+  },
+  "methodAccepted": true
+}

@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract LibraryManagementSystemSystem::renewBook(uid: String,barcode: String): Boolean {\n\tdefinition:\n\t\tuser: User = User.allInstances()->any(candidate: User|candidate.UserID = uid),\n\t\tcopy: BookCopy = BookCopy.allInstances()->any(candidate: BookCopy|candidate.Barcode = barcode),\n\t\tloan: Loan = Loan.allInstances()->any(candidate: Loan|candidate.LoanedUser.UserID = uid and\n\t\tcandidate.LoanedCopy.Barcode = barcode),\n\t\tstudent: Student = Student.allInstances()->any(candidate: Student|candidate.UserID = uid)\n\tprecondition:\n\t\tuser.oclIsUndefined() = false and\n\t\tcopy.oclIsUndefined() = false and\n\t\tloan.oclIsUndefined() = false and\n\t\tuser.BorrowStatus = BorrowStatus::NORMAL and\n\t\tcopy.IsReserved = false and\n\t\tcopy.Status = CopyStatus::LOANED and\n\t\tloan.DueDate.isAfter(Today) and\n\t\tloan.OverDueFee = 0.0 and\n\t\tif user.oclIsTypeOf(Student) \n\t\tthen loan.RenewedTimes<3 \n\t\telse loan.RenewedTimes<6 \n\t\tendif \n\tpostcondition:\n\t\tresult = true and\n\t\tloan.RenewedTimes = loan.RenewedTimes@pre+1 and\n\t\tloan.RenewDate = Today and\n\t\tif user.oclIsTypeOf(Student) \n\t\tthen if student.Programme = Programme::BACHELOR \n\t\tthen loan.DueDate = loan.DueDate@pre.After(20) \n\t\telse if student.Programme = Programme::MASTER \n\t\tthen loan.DueDate = loan.DueDate@pre.After(40) \n\t\telse loan.DueDate = loan.DueDate@pre.After(60) \n\t\tendif  \n\t\tendif  \n\t\telse loan.DueDate = loan.DueDate@pre.After(60) \n\t\tendif \n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 17,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

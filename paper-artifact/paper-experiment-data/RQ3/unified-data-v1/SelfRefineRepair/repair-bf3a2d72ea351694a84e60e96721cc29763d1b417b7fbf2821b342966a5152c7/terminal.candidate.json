@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "orderProduct: OrderProduct = OrderProduct.allInstances()->any(op: OrderProduct | op.Id = orderID)",
+    "precondition": "OrderProduct.allInstances()->one(op: OrderProduct | op.Id = orderID)",
+    "postcondition": "result = true and orderProduct.OrderStatus = OrderStatus::RECEIVED and Item.allInstances()->forAll(i: Item | if orderProduct.ContainedEntries@pre->exists(e: OrderEntry | e.Item@pre = i) then i.StockNumber = i.StockNumber@pre + orderProduct.ContainedEntries@pre->sumBy(e: OrderEntry | if e.Item@pre = i then e.Quantity@pre else 0 endif) else true endif)"
+  },
+  "methodAccepted": true
+}

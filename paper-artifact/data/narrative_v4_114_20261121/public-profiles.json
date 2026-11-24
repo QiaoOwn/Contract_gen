@@ -1,0 +1,1097 @@
+{
+  "version": "narrative-v4-approved-public-profiles-v1",
+  "profiles": [
+    {
+      "operationId": "Airport_raiseRepair_approve",
+      "requirement": "An approval decision records the supplied decision and suggestion in a new ApprovalHistory associated with the selected Repair and returns that history. Both the Repair and the deciding Staff member must exist. When reject is true, a role-1 member advances Process from 0 to 1, role 2 advances it from 1 to 2, and role 3 advances it from 2 to 3. When reject is false, the repair instead enters the rejected stage, Process 5. The newly created ApprovalHistory is included in the ApprovalHistory collection.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "the Repair"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "the deciding Staff member must exist"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "The newly created ApprovalHistory is included in the ApprovalHistory collection."
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "When reject is true, a role-1 member advances Process from 0 to 1, role 2 advances it from 1 to 2, and role 3 advances it from 2 to 3"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "When reject is false, the repair instead enters the rejected stage, Process 5"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "returns that history"
+        }
+      ],
+      "interpretation": "Author-compiled source alignment with explicit laboratory-owner approval on 2026-11-21. Coordinated clauses may support multiple obligations. No reference OCL or hidden test is used.",
+      "laboratoryClarification": "The newly created ApprovalHistory is included in the ApprovalHistory collection.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 729,
+          "modelLines": [
+            218,
+            218
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 729,
+          "modelLines": [
+            219,
+            219
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 733,
+          "modelLines": [
+            222,
+            227
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 733,
+          "modelLines": [
+            228,
+            250
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 733,
+          "modelLines": [
+            251,
+            252
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 733,
+          "modelLines": [
+            255,
+            255
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/Airport/RequirementDocument.md",
+          "sha256": "4e88bfe620de3747ff7813c374bc5bd401815af45507ddadd8eda306df31533d",
+          "note": "OP2-5 tables; generated from the same RM2PT model, not independent corroboration."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/Airport/airms.remodel",
+          "sha256": "fdfe96bdea560f9b2490edf97398793e39024da0f647e714df444ef87dc99604",
+          "note": "Lines 190-297. Preserve the reject=true transition convention and do not infer res assignment."
+        },
+        {
+          "id": "aligned-input",
+          "path": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+          "sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4",
+          "note": "The current input requires storing the newly created Device. The upstream inclusion uses dev instead of d; this discrepancy is recorded, not silently repaired upstream."
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_processSale_makeNewSale",
+      "requirement": "A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true. The current CashDesk's ContainedSales collection includes the new Sale.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "an existing open current CashDesk"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "an existing open current CashDesk"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "when there is no current Sale or the previous current Sale is complete"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "A new sale starts"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "is linked to that desk"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "The current CashDesk's ContainedSales collection includes the new Sale."
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "The new Sale is incomplete"
+        },
+        {
+          "id": "Q05",
+          "clause": "postcondition",
+          "text": "not yet ready for payment"
+        },
+        {
+          "id": "Q06",
+          "clause": "postcondition",
+          "text": "is included in the sale collection"
+        },
+        {
+          "id": "Q07",
+          "clause": "postcondition",
+          "text": "becomes the current sale"
+        },
+        {
+          "id": "Q08",
+          "clause": "postcondition",
+          "text": "Starting it returns true"
+        }
+      ],
+      "interpretation": "Author-compiled source alignment with explicit laboratory-owner approval on 2026-11-21. Coordinated clauses may support multiple obligations. No reference OCL or hidden test is used.",
+      "laboratoryClarification": "The current CashDesk's ContainedSales collection includes the new Sale.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2010,
+          "modelLines": [
+            377,
+            377
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 2010,
+          "modelLines": [
+            378,
+            378
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 2010,
+          "modelLines": [
+            379,
+            379
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2014,
+          "modelLines": [
+            399,
+            399
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2014,
+          "modelLines": [
+            400,
+            400
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2014,
+          "modelLines": [
+            401,
+            401
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2014,
+          "modelLines": [
+            402,
+            402
+          ]
+        },
+        {
+          "id": "Q05",
+          "documentLine": 2014,
+          "modelLines": [
+            403,
+            403
+          ]
+        },
+        {
+          "id": "Q06",
+          "documentLine": 2014,
+          "modelLines": [
+            404,
+            404
+          ]
+        },
+        {
+          "id": "Q07",
+          "documentLine": 2014,
+          "modelLines": [
+            405,
+            405
+          ]
+        },
+        {
+          "id": "Q08",
+          "documentLine": 2014,
+          "modelLines": [
+            406,
+            406
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "OP5 2010/2014, OP11 2479/2483. OP11 table says None, but the active model and current frozen input explicitly require an unused identifier."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Active 368-408 and 609-649 contracts. Check freshness and specified associations without imposing exact creation counts, positive IDs or unstated defaults."
+        }
+      ]
+    },
+    {
+      "operationId": "CoCoME_processSale_endSale",
+      "requirement": "Ending item entry calculates the current Sale amount by adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals. A current sale must exist, be incomplete and not yet ready for payment. With no lines its amount becomes zero. The sale becomes ready for payment and the operation returns the resulting amount. The operation does not change the current Sale's IsComplete value.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "A current sale must exist"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "be incomplete"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "not yet ready for payment"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "The sale becomes ready for payment and the operation returns the resulting amount. The operation does not change the current Sale's IsComplete value."
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "the operation returns the resulting amount"
+        }
+      ],
+      "interpretation": "Author-compiled source alignment with explicit laboratory-owner approval on 2026-11-21. Coordinated clauses may support multiple obligations. No reference OCL or hidden test is used.",
+      "laboratoryClarification": "The operation does not change the current Sale's IsComplete value.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 14,
+          "modelLines": [
+            480,
+            480
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 14,
+          "modelLines": [
+            481,
+            481
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 14,
+          "modelLines": [
+            482,
+            482
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 19,
+          "modelLines": [
+            492,
+            492
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 16,
+          "modelLines": [
+            491,
+            491
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 20,
+          "modelLines": [
+            493,
+            493
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/RequirementDocument.md",
+          "sha256": "0d16f7590884c8f41774ff54038f1174757d3dd6f1416011d0ad773b7c2fb7dc",
+          "note": "Historical RM2Doc specification, not an independent source. Aggregation differences are resolved by the cited laboratory decision."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+          "sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+          "note": "Unmodified original model. The original conflicting per-entry equalities and collection typing are not treated as equivalent to the approved semantics."
+        },
+        {
+          "id": "adjudication",
+          "path": "data/operation_revision/rm2pt_authority_decisions/R03_endSale.json",
+          "sha256": "61806438449f2fe00e814a31ffb8ac23bb94f1135996e3bb1f799188608407b7",
+          "note": "Owner-approved R03, not independent expert review."
+        }
+      ]
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "requirement": "A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.\n\nBorrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true. The new Loan is included in the Loan collection.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "Both must exist"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "Both must exist"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "the user must have NORMAL borrowing status"
+        },
+        {
+          "id": "P04",
+          "clause": "precondition",
+          "text": "no suspension days"
+        },
+        {
+          "id": "P05",
+          "clause": "precondition",
+          "text": "A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60"
+        },
+        {
+          "id": "P06",
+          "clause": "precondition",
+          "text": "The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "The new Loan is included in the Loan collection."
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "linked to the user and copy"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "linked to the user and copy"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "a new unreturned Loan"
+        },
+        {
+          "id": "Q05",
+          "clause": "postcondition",
+          "text": "dated today"
+        },
+        {
+          "id": "Q06",
+          "clause": "postcondition",
+          "text": "The user loan count increases by one"
+        },
+        {
+          "id": "Q07",
+          "clause": "postcondition",
+          "text": "adds it to both the user's loan collection and the copy's loan history"
+        },
+        {
+          "id": "Q08",
+          "clause": "postcondition",
+          "text": "adds it to both the user's loan collection and the copy's loan history"
+        },
+        {
+          "id": "Q09",
+          "clause": "postcondition",
+          "text": "Its due date is 30 days for a Student and 60 days for a Faculty user"
+        },
+        {
+          "id": "Q10",
+          "clause": "postcondition",
+          "text": "If the copy was ONHOLDSHELF, its reserved flag is cleared"
+        },
+        {
+          "id": "Q11",
+          "clause": "postcondition",
+          "text": "the matching reservation is closed"
+        },
+        {
+          "id": "Q12",
+          "clause": "postcondition",
+          "text": "the copy becomes LOANED"
+        },
+        {
+          "id": "Q13",
+          "clause": "postcondition",
+          "text": "the new loan's 3-, 10-, 17- and 31-day overdue flags are false"
+        },
+        {
+          "id": "Q14",
+          "clause": "postcondition",
+          "text": "the new loan's 3-, 10-, 17- and 31-day overdue flags are false"
+        },
+        {
+          "id": "Q15",
+          "clause": "postcondition",
+          "text": "the new loan's 3-, 10-, 17- and 31-day overdue flags are false"
+        },
+        {
+          "id": "Q16",
+          "clause": "postcondition",
+          "text": "the new loan's 3-, 10-, 17- and 31-day overdue flags are false"
+        },
+        {
+          "id": "Q17",
+          "clause": "postcondition",
+          "text": "The operation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled source alignment with explicit laboratory-owner approval on 2026-11-21. Coordinated clauses may support multiple obligations. No reference OCL or hidden test is used.",
+      "laboratoryClarification": "The new Loan is included in the Loan collection.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2363,
+          "modelLines": [
+            398,
+            398
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 2363,
+          "modelLines": [
+            399,
+            399
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 2363,
+          "modelLines": [
+            400,
+            400
+          ]
+        },
+        {
+          "id": "P04",
+          "documentLine": 2363,
+          "modelLines": [
+            401,
+            401
+          ]
+        },
+        {
+          "id": "P05",
+          "documentLine": 2363,
+          "modelLines": [
+            402,
+            411
+          ]
+        },
+        {
+          "id": "P06",
+          "documentLine": 2363,
+          "modelLines": [
+            384,
+            444
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2367,
+          "modelLines": [
+            448,
+            469
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2367,
+          "modelLines": [
+            450,
+            450
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2367,
+          "modelLines": [
+            451,
+            451
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2367,
+          "modelLines": [
+            452,
+            452
+          ]
+        },
+        {
+          "id": "Q05",
+          "documentLine": 2367,
+          "modelLines": [
+            453,
+            453
+          ]
+        },
+        {
+          "id": "Q06",
+          "documentLine": 2367,
+          "modelLines": [
+            454,
+            454
+          ]
+        },
+        {
+          "id": "Q07",
+          "documentLine": 2367,
+          "modelLines": [
+            455,
+            455
+          ]
+        },
+        {
+          "id": "Q08",
+          "documentLine": 2367,
+          "modelLines": [
+            456,
+            456
+          ]
+        },
+        {
+          "id": "Q09",
+          "documentLine": 2367,
+          "modelLines": [
+            457,
+            460
+          ]
+        },
+        {
+          "id": "Q10",
+          "documentLine": 2367,
+          "modelLines": [
+            461,
+            462
+          ]
+        },
+        {
+          "id": "Q11",
+          "documentLine": 2367,
+          "modelLines": [
+            461,
+            463
+          ]
+        },
+        {
+          "id": "Q12",
+          "documentLine": 2367,
+          "modelLines": [
+            464,
+            464
+          ]
+        },
+        {
+          "id": "Q13",
+          "documentLine": 2367,
+          "modelLines": [
+            465,
+            465
+          ]
+        },
+        {
+          "id": "Q14",
+          "documentLine": 2367,
+          "modelLines": [
+            466,
+            466
+          ]
+        },
+        {
+          "id": "Q15",
+          "documentLine": 2367,
+          "modelLines": [
+            467,
+            467
+          ]
+        },
+        {
+          "id": "Q16",
+          "documentLine": 2367,
+          "modelLines": [
+            468,
+            468
+          ]
+        },
+        {
+          "id": "Q17",
+          "documentLine": 2367,
+          "modelLines": [
+            470,
+            470
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "OP8 operation specification. This document is generated from the RM2PT model, not an independent second source."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Original operation contract; read-only evidence, never supplied as a reference answer."
+        }
+      ]
+    },
+    {
+      "operationId": "LibraryManagementSystem_makeReservation_makeReservation",
+      "requirement": "Reserving a currently loaned copy creates a new open Reserve record dated today and linked to the selected User and BookCopy. The user and copy must exist; the copy must be LOANED and not already reserved. The copy is marked reserved, the reservation is included in the reservation collection, and the operation returns true. The new Reserve is included in the User's ReservedBook collection and the BookCopy's ReservationRecord collection.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "The user and copy must exist"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "The user and copy must exist"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "the copy must be LOANED"
+        },
+        {
+          "id": "P04",
+          "clause": "precondition",
+          "text": "not already reserved"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "creates a new open Reserve record"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "The copy is marked reserved"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "a new open Reserve record"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "dated today"
+        },
+        {
+          "id": "Q05",
+          "clause": "postcondition",
+          "text": "linked to the selected User and BookCopy"
+        },
+        {
+          "id": "Q06",
+          "clause": "postcondition",
+          "text": "linked to the selected User and BookCopy"
+        },
+        {
+          "id": "Q07",
+          "clause": "postcondition",
+          "text": "the User's ReservedBook collection"
+        },
+        {
+          "id": "Q08",
+          "clause": "postcondition",
+          "text": "the BookCopy's ReservationRecord collection"
+        },
+        {
+          "id": "Q09",
+          "clause": "postcondition",
+          "text": "the reservation is included in the reservation collection"
+        },
+        {
+          "id": "Q10",
+          "clause": "postcondition",
+          "text": "the operation returns true"
+        }
+      ],
+      "interpretation": "Author-compiled source alignment with explicit laboratory-owner approval on 2026-11-21. Coordinated clauses may support multiple obligations. No reference OCL or hidden test is used.",
+      "laboratoryClarification": "The new Reserve is included in the User's ReservedBook collection and the BookCopy's ReservationRecord collection.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2211,
+          "modelLines": [
+            291,
+            291
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 2212,
+          "modelLines": [
+            292,
+            292
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 2213,
+          "modelLines": [
+            293,
+            293
+          ]
+        },
+        {
+          "id": "P04",
+          "documentLine": 2214,
+          "modelLines": [
+            294,
+            294
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2231,
+          "modelLines": [
+            312,
+            312
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2232,
+          "modelLines": [
+            313,
+            313
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2233,
+          "modelLines": [
+            314,
+            314
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2234,
+          "modelLines": [
+            315,
+            315
+          ]
+        },
+        {
+          "id": "Q05",
+          "documentLine": 2235,
+          "modelLines": [
+            316,
+            316
+          ]
+        },
+        {
+          "id": "Q06",
+          "documentLine": 2236,
+          "modelLines": [
+            317,
+            317
+          ]
+        },
+        {
+          "id": "Q07",
+          "documentLine": 2237,
+          "modelLines": [
+            318,
+            318
+          ]
+        },
+        {
+          "id": "Q08",
+          "documentLine": 2238,
+          "modelLines": [
+            319,
+            319
+          ]
+        },
+        {
+          "id": "Q09",
+          "documentLine": 2239,
+          "modelLines": [
+            320,
+            320
+          ]
+        },
+        {
+          "id": "Q10",
+          "documentLine": 2240,
+          "modelLines": [
+            321,
+            321
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "Active reservation clauses; document and remodel share a source lineage."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "Active reservation clauses; document and remodel share a source lineage."
+        }
+      ]
+    },
+    {
+      "operationId": "LibraryManagementSystem_renewBook_renewBook",
+      "requirement": "Renewing a loan requires an existing User, BookCopy and matching Loan, with the user in NORMAL status. The copy must not be reserved, its loan due date must be after today and the Loan must have no overdue fee. A Student may have fewer than 3 renewals and a non-Student user fewer than 6. The renewal count increases and the renewal date becomes today. Starting from the previous due date, the extension is 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user. Renewal returns true. The selected BookCopy must have LOANED status.",
+      "obligations": [
+        {
+          "id": "P01",
+          "clause": "precondition",
+          "text": "an existing User"
+        },
+        {
+          "id": "P02",
+          "clause": "precondition",
+          "text": "the user in NORMAL status"
+        },
+        {
+          "id": "P03",
+          "clause": "precondition",
+          "text": "The selected BookCopy must have LOANED status."
+        },
+        {
+          "id": "P04",
+          "clause": "precondition",
+          "text": "matching Loan"
+        },
+        {
+          "id": "P05",
+          "clause": "precondition",
+          "text": "The copy must not be reserved"
+        },
+        {
+          "id": "P06",
+          "clause": "precondition",
+          "text": "its loan due date must be after today"
+        },
+        {
+          "id": "P07",
+          "clause": "precondition",
+          "text": "A Student may have fewer than 3 renewals and a non-Student user fewer than 6"
+        },
+        {
+          "id": "P08",
+          "clause": "precondition",
+          "text": "the Loan must have no overdue fee"
+        },
+        {
+          "id": "Q01",
+          "clause": "postcondition",
+          "text": "The renewal count increases"
+        },
+        {
+          "id": "Q02",
+          "clause": "postcondition",
+          "text": "the renewal date becomes today"
+        },
+        {
+          "id": "Q03",
+          "clause": "postcondition",
+          "text": "Starting from the previous due date, the extension is 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user"
+        },
+        {
+          "id": "Q04",
+          "clause": "postcondition",
+          "text": "Renewal returns true"
+        }
+      ],
+      "interpretation": "Author-compiled source alignment with explicit laboratory-owner approval on 2026-11-21. Coordinated clauses may support multiple obligations. No reference OCL or hidden test is used.",
+      "laboratoryClarification": "The selected BookCopy must have LOANED status.",
+      "sourceEvidence": [
+        {
+          "id": "P01",
+          "documentLine": 2685,
+          "modelLines": [
+            604,
+            604
+          ]
+        },
+        {
+          "id": "P02",
+          "documentLine": 2684,
+          "modelLines": [
+            603,
+            603
+          ]
+        },
+        {
+          "id": "P03",
+          "documentLine": 2686,
+          "modelLines": [
+            605,
+            605
+          ]
+        },
+        {
+          "id": "P04",
+          "documentLine": 2687,
+          "modelLines": [
+            606,
+            606
+          ]
+        },
+        {
+          "id": "P05",
+          "documentLine": 2688,
+          "modelLines": [
+            607,
+            607
+          ]
+        },
+        {
+          "id": "P06",
+          "documentLine": 2689,
+          "modelLines": [
+            608,
+            608
+          ]
+        },
+        {
+          "id": "P07",
+          "documentLine": 2690,
+          "modelLines": [
+            609,
+            615
+          ]
+        },
+        {
+          "id": "P08",
+          "documentLine": 2697,
+          "modelLines": [
+            616,
+            616
+          ]
+        },
+        {
+          "id": "Q01",
+          "documentLine": 2715,
+          "modelLines": [
+            635,
+            635
+          ]
+        },
+        {
+          "id": "Q02",
+          "documentLine": 2716,
+          "modelLines": [
+            636,
+            636
+          ]
+        },
+        {
+          "id": "Q03",
+          "documentLine": 2717,
+          "modelLines": [
+            637,
+            655
+          ]
+        },
+        {
+          "id": "Q04",
+          "documentLine": 2736,
+          "modelLines": [
+            656,
+            656
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "requirement-document",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/RequirementDocument.md",
+          "sha256": "0ce4f753e2df4b33c621d927c52da55890b0815ab151bb492c5523259582b48c",
+          "note": "RenewBook active clauses 564-657; IsReturned is not an admission condition."
+        },
+        {
+          "id": "upstream-model",
+          "path": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+          "sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+          "note": "RenewBook active clauses 564-657; IsReturned is not an admission condition."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentOrderProduct.oclIsUndefined() = false and Item.allInstances()->exists(i:Item | i.Barcode = barcode)",
+    "postcondition": "let oldEntries:Set(OrderEntry) = self.CurrentOrderProduct.ContainedEntries@pre, newEntry:OrderEntry, selectedItem:Item = Item.allInstances()->any(candidate:Item | candidate.Barcode = barcode) in result = true and self.CurrentOrderProduct.ContainedEntries->includesAll(oldEntries) and newEntry.oclIsNew() and OrderEntry.allInstances()->includes(newEntry) and self.CurrentOrderProduct.ContainedEntries->includes(newEntry) and newEntry.Item = selectedItem and newEntry.Quantity = quantity and newEntry.SubAmount = quantity * selectedItem.OrderPrice"
+  },
+  "methodAccepted": true
+}

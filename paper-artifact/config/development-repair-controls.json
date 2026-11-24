@@ -1,0 +1,159 @@
+{
+  "version": "development-repair-functional-controls-v1",
+  "controls": {
+    "atm-eject-missing-password-reset": {
+      "operationId": "AutomatedTellerMachine_checkBalance_ejectCard",
+      "clause": "postcondition", "targetObligationId": "Q02",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["self.PasswordValidated: Boolean"],
+      "taskReferenceTarget": "self.PasswordValidated",
+      "description": "Remove exactly one AST-located self.PasswordValidated = false conjunct from the saved successful ejectCard candidate; preserve the requirement, D/P, other session resets and result."
+    },
+    "cocome-store-delete-retain-target": {
+      "operationId": "CoCoME_manageStore_deleteStore", "mutationKind": "retain-target",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Store.Id", "parameter id: Integer"],
+      "description": "Change exactly one AST-located Store repository excludes effect to includes, retaining the target while returning true; preserve the requirement, D/P and other obligations."
+    },
+    "cocome-product-catalog-delete-retain-target": {
+      "operationId": "CoCoME_manageProductCatalog_deleteProductCatalog", "mutationKind": "retain-target",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["ProductCatalog.Id", "parameter id: Integer"],
+      "description": "Change exactly one AST-located ProductCatalog repository excludes effect to includes, retaining the target while returning true; preserve the requirement, D/P and other obligations."
+    },
+    "cocome-cash-desk-delete-retain-target": {
+      "operationId": "CoCoME_manageCashDesk_deleteCashDesk", "mutationKind": "retain-target",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["CashDesk.Id", "parameter id: Integer"],
+      "description": "Change exactly one AST-located CashDesk repository excludes effect to includes, retaining the target while returning true; preserve the requirement, D/P and other obligations."
+    },
+    "cocome-cashier-delete-retain-target": {
+      "operationId": "CoCoME_manageCashier_deleteCashier", "mutationKind": "retain-target",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Cashier.Id", "parameter id: Integer"],
+      "description": "Change exactly one AST-located Cashier repository excludes effect to includes, retaining the target while returning true; preserve the requirement, D/P and other obligations."
+    },
+    "cocome-supplier-delete-retain-target": {
+      "operationId": "CoCoME_manageSupplier_deleteSupplier", "mutationKind": "retain-target",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Supplier.Id", "parameter id: Integer"],
+      "description": "Change exactly one AST-located Supplier repository excludes effect to includes, retaining the target while returning true; preserve the requirement, D/P and other obligations."
+    },
+    "cocome-store-query-wrong-object": {
+      "operationId": "CoCoME_manageStore_queryStore", "mutationKind": "wrong-object",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Store.Id", "result: Store"],
+      "description": "Change only the AST-located result binding to an existing Store with a different Id. Retain the actual requirement, definition and precondition."
+    },
+    "cocome-product-catalog-query-wrong-object": {
+      "operationId": "CoCoME_manageProductCatalog_queryProductCatalog", "mutationKind": "wrong-object",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["ProductCatalog.Id", "result: ProductCatalog"],
+      "description": "Change only the AST-located result binding to a ProductCatalog lookup with a different Id; retain the requirement, definition and precondition."
+    },
+    "cocome-cash-desk-query-wrong-object": {
+      "operationId": "CoCoME_manageCashDesk_queryCashDesk", "mutationKind": "wrong-object",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["CashDesk.Id", "result: CashDesk"],
+      "description": "Change only the AST-located result binding to a CashDesk lookup with a different Id; retain the requirement, definition and precondition."
+    },
+    "cocome-cashier-query-wrong-object": {
+      "operationId": "CoCoME_manageCashier_queryCashier", "mutationKind": "wrong-object",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Cashier.Id", "result: Cashier"],
+      "description": "Change only the AST-located result binding to a Cashier lookup with a different Id; retain the requirement, definition and precondition."
+    },
+    "cocome-supplier-query-wrong-object": {
+      "operationId": "CoCoME_manageSupplier_querySupplier", "mutationKind": "wrong-object",
+      "clause": "postcondition", "targetObligationId": "Q01", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Supplier.Id", "result: Supplier"],
+      "description": "Change only the AST-located result binding to a Supplier lookup with a different Id; retain the requirement, definition and precondition."
+    },
+    "cocome-store-modify-missing-name": {
+      "operationId": "CoCoME_manageStore_modifyStore", "mutationKind": "missing-name",
+      "clause": "postcondition", "targetObligationId": "Q02", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Store.Name", "parameter name: String"],
+      "taskReferenceTarget": "Store.Name",
+      "description": "Remove exactly one AST-located Name = name assignment conjunct; preserve the requirement, other field assignments and true return."
+    },
+    "cocome-product-catalog-modify-missing-name": {
+      "operationId": "CoCoME_manageProductCatalog_modifyProductCatalog", "mutationKind": "missing-name",
+      "clause": "postcondition", "targetObligationId": "Q02", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["ProductCatalog.Name", "parameter name: String"],
+      "description": "Remove exactly one AST-located Name = name assignment conjunct; preserve the requirement, other field assignments and true return."
+    },
+    "cocome-cash-desk-modify-missing-name": {
+      "operationId": "CoCoME_manageCashDesk_modifyCashDesk", "mutationKind": "missing-name",
+      "clause": "postcondition", "targetObligationId": "Q02", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["CashDesk.Name", "parameter name: String"],
+      "description": "Remove exactly one AST-located Name = name assignment conjunct; preserve the requirement, other field assignments and true return."
+    },
+    "cocome-cashier-modify-missing-name": {
+      "operationId": "CoCoME_manageCashier_modifyCashier", "mutationKind": "missing-name",
+      "clause": "postcondition", "targetObligationId": "Q02", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Cashier.Name", "parameter name: String"],
+      "description": "Remove exactly one AST-located Name = name assignment conjunct; preserve the requirement, other field assignments and true return."
+    },
+    "cocome-supplier-modify-missing-name": {
+      "operationId": "CoCoME_manageSupplier_modifySupplier", "mutationKind": "missing-name",
+      "clause": "postcondition", "targetObligationId": "Q02", "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Supplier.Name", "parameter name: String"],
+      "description": "Remove exactly one AST-located Name = name assignment conjunct; preserve the requirement, other field assignments and true return."
+    },
+    "submitted-requests-missing-current-update": {
+      "operationId": "LoanProcessingSystem_enterValidatedCreditReferences_listSubmitedLoanRequest",
+      "clause": "postcondition", "targetObligationId": "Q01",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["LoanRequest.Status", "self.CurrentLoanRequests"],
+      "description": "Remove exactly one AST-located CurrentLoanRequests assignment conjunct, retaining the submitted-request definition, precondition and return binding."
+    },
+    "loan-payment-wrong-direction": {
+      "operationId": "LoanProcessingSystem_loanPayment_loanPayment",
+      "clause": "postcondition", "targetObligationId": "Q01",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Loan.RemainAmountToPay", "Loan.RepaymentAmount"],
+      "description": "Replace the unique AST-located subtraction of the repayment from the previous remaining amount with addition; retain all source requirements and other clauses."
+    },
+    "cocome-query-wrong-object": {
+      "operationId": "CoCoME_manageItem_queryItem",
+      "clause": "postcondition", "targetObligationId": "Q01",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH", "requiredModelEvidence": ["Item.Barcode", "result: Item"],
+      "description": "Change the AST-located query result to an Item lookup with a different barcode; retain the current requirement and precondition."
+    },
+    "cocome-delete-retain-target": {
+      "operationId": "CoCoME_manageItem_deleteItem",
+      "clause": "postcondition", "targetObligationId": "Q01",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH", "requiredModelEvidence": ["Item.Barcode", "parameter barcode: Integer"],
+      "description": "Change the AST-located Item repository excludes effect to includes, retaining the target while returning success; preserve the actual requirement."
+    },
+    "staff-wrong-result": {
+      "operationId": "Airport_manageUser_createStaff",
+      "clause": "postcondition",
+      "targetObligationId": "Q10",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["result: Boolean"],
+      "description": "Change exactly one AST-located result = true to false in a saved passing createStaff candidate; preserve the actual requirement and all other clauses."
+    },
+    "wrong-due-date": {
+      "clause": "postcondition",
+      "targetObligationId": "Q09",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["Loan.DueDate"],
+      "description": "Change AST-located After(30) durations to 10; keep the actual borrowing requirements unchanged."
+    },
+    "missing-user-loan-link": {
+      "clause": "postcondition",
+      "targetObligationId": "Q07",
+      "expectedDiagnosticCode": "OBLIGATION_MISMATCH",
+      "requiredModelEvidence": ["User.LoanedBook"],
+      "description": "Remove exactly one standalone conjunct updating the user's LoanedBook collection; retain loan creation and all other obligations."
+    },
+    "overstrict-precondition": {
+      "clause": "precondition",
+      "targetObligationId": "P05",
+      "expectedDiagnosticCode": "UNEXPECTED_REJECTION",
+      "requiredModelEvidence": ["User.LoanedNumber"],
+      "description": "Tighten the unique LoanedNumber < 20 comparison to < 5; keep the source-backed bachelor quota of 20 in the requirement."
+    }
+  }
+}

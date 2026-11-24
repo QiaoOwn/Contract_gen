@@ -1,0 +1,731 @@
+grammar net.mydreamy.requirementmodel.REMODEL hidden(WS, ML_COMMENT, SL_COMMENT)
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+//import "http://www.eclipse.org/uml2/5.0.0/UML" as uml
+
+
+generate rEMODEL "http://www.mydreamy.net/requirementmodel/REMODEL"
+
+RequirementModel returns RequirementModel:
+	
+	('RequirementsModel::' name=SimpleNameCS)? ('@Description('description=DOUBLE_QUOTED_STRING')')?
+	
+	
+	//	name = SimpleNameCS
+	//	lifeline += Lifeline*
+		UseCaseModel = UseCaseModel
+		DomainModel = DomainModel
+		
+		
+	
+//		workflow += Workflow*
+		
+		
+	//	contract += Contract*
+		
+//		ssd += [uml::Interaction]*
+	
+;
+
+
+/* ----------------- Sequence Diagram ------------- */
+
+
+
+Interaction returns Interaction: 
+	
+	'Interaction' name=SimpleNameCS '{'
+	'[Participants:' participants+=[Participant]* ']'
+	messages+=Message* 
+	executions+=Execution* 
+	combinedFragments+=CombinedFragment* 
+	ends+=AbstractEnd*
+	'}'
+;
+
+
+Message:
+	CallMessage | ReturnMessage
+;	
+	
+CallMessage:	
+	'CallMessage::' name=SimpleNameCS '('
+	op=[Operation]
+	sendingEnd=[MixEnd] '->'
+	receivingEnd=[MixEnd] 
+	')'	
+;
+
+ReturnMessage:	
+	'ReturnMessage::' name=SimpleNameCS '('
+	sendingEnd=[MixEnd] '->'
+	receivingEnd=[MixEnd] 
+	invocationMessage=[Message] ')'
+;
+
+Execution:
+	'Execution::' name=SimpleNameCS '('
+	owner=[Participant]
+	start=[ExecutionEnd]
+	end=[ExecutionEnd] ')'
+;
+
+CombinedFragment returns CombinedFragment:
+	'CombinedFragment::' name=SimpleNameCS '->' operator=Operator '{'
+	'[Participants:' coveredParticipants+=[Participant]* ']'
+	start=[CombinedFragmentEnd] '->' finish=[CombinedFragmentEnd]
+	ownedOperands+=Operand*
+	'}'
+;
+
+Operator:
+	'loop' | 'alt' | 'option'
+;
+
+Operand:
+	'Operand::' name=SimpleNameCS '('
+	start=[OperandEnd] finish=[MixOpAndCFEnd] ')'
+;
+
+AbstractEnd:
+    MixEnd | MixOpAndCFEnd 
+;
+
+MixEnd:
+	ExecutionEnd | MessageEnd
+;
+
+MixOpAndCFEnd:
+	CombinedFragmentEnd | OperandEnd
+;
+
+MessageEnd:
+	'MessageEnd::' name=SimpleNameCS '('
+	context=[MultiEnd]
+	message=[Message] ')'
+;
+
+MultiEnd :
+	Participant | Execution	
+;
+
+ExecutionEnd:
+	'ExecutionEnd::' name=SimpleNameCS '('
+	context=[MultiEnd]
+	execution=[Execution] ')'
+;
+
+CombinedFragmentEnd:
+	'CombinedFragmentEnd::' name=SimpleNameCS '('
+	owner=[CombinedFragment] ')'
+;
+
+OperandEnd:
+	'OperandEnd::' name=SimpleNameCS '('
+	owner=[Operand] ')'
+;
+
+DomainModel returns DomainModel: 
+	
+	'DomainModel' name=SimpleNameCS ('('label=DOUBLE_QUOTED_STRING')')? '{'
+	
+		entity += Entity*
+	
+	'}' 
+	
+;
+
+/* ----------------- UseCase ----------------- */
+UseCaseModel returns UseCaseModel:
+	
+	'UseCaseModel' name=SimpleNameCS ('('label=DOUBLE_QUOTED_STRING')')? '{'
+		uc += UC*		
+		actor+=Actor*
+		interaction += Interaction*
+		service += Service*
+		contract += Contract*
+		
+	'}'	
+;
+
+
+Actor returns Actor:
+//	
+	
+	'Actor' name=SimpleNameCS ('('label=DOUBLE_QUOTED_STRING')')? ('extends' superActor=[Actor])?'{'
+		('@Description('description=DOUBLE_QUOTED_STRING')')?
+		uc+=[UC]*
+	'}' 
+;
+
+//Actor returns Actor:
+//	('@actor_description:' description=DOUBLE_QUOTED_STRING)?
+//	'Actor' name=SimpleNameCS ('extends' superActor=[Actor])?'{'
+//		uc+=(UC)*
+//	'}'
+//;
+
+UC returns UC:
+	 
+//	 ('@uc_description:' description=DOUBLE_QUOTED_STRING)?
+	 'UC' '::' name=SimpleNameCS ('(')? (label=DOUBLE_QUOTED_STRING)? (')')? (UCRelation=USECASE_RELATION relateduc+=[UC] (',' relateduc+=[UC])*)? ('definedBySSD' '(' ssd+=[Interaction] (',' ssd+=[Interaction])* ')')? ('relatedService' '(' service+=[Service] (',' service+=[Service])* ')')? ('@Description('description=DOUBLE_QUOTED_STRING')')?
+;
+
+//UC:
+//	 'UC' '::' ucname=Operation (UCRelation=USECASE_RELATION relatedopname=Operation)? 
+//;
+
+/* ---------------- Controller  ------------------- */
+Service returns Service:
+	
+	'Service' name=SimpleNameCS '{'
+	
+	('@Description('description=DOUBLE_QUOTED_STRING')')?
+	
+	('[Operation]' operation += Operation*)? 
+	
+	('[TempProperty]' temp_property += Attribute*)? 
+	
+	('[WorkFlow]' workflow += [Workflow]*)? 
+	
+	('[INV]' invariance+=Invariance*)?
+	
+	'}'
+;
+
+Participant:
+	Actor | Service
+;
+
+
+/* ---------------- Workflow ------------------- */
+Workflow returns Workflow:
+	'Workflow' name=SimpleNameCS '{'
+	
+		'[' participants+=[Participant]* ']'
+		
+		partitions+=Partition*
+		
+	'}'
+;
+
+Partition:
+	name=[Participant] '{'
+		exps+=WorkflowExp*
+	'}'
+;
+
+WorkflowExp:
+	SimpleOperation | ComplexOpeartion | InitalNode | ActivityFinal | ForkNode | JoinNode | PartitionAction
+;
+
+PartitionAction:
+	'->' patition=[Participant] ':' action=[JoinExp]
+;
+
+JoinExp returns JoinExp:
+	Operation | SwitchExp | LoopExp
+;
+
+ActivityFinal:
+	name='ActivityFinal'
+;
+
+InitalNode:
+	name='ActivityStart'
+;
+
+ForkNode:
+	'ForkNode' '->' '(' startlinks+=[JoinExp]+ ')'
+;
+
+JoinNode:
+	'(' endlinks+=[JoinExp]+ ')' '->' 'JoinNode' 
+;
+
+ComplexOpeartion:
+	LoopExp | SwitchExp // | ConcurrentExp
+;
+
+//ConcurrentExp:
+//	ConcurrentStartRelationExp | ConcurrentEndRelationExp
+//;
+//
+//ConcurrentStartRelationExp:
+//	forknode=[ForkNode] '->' '(' startlinks+=[Operation] (',' startlinks+=[Operation])* ')'
+//;
+//
+//ConcurrentEndRelationExp:
+//	'(' startlinks+=[Operation] (',' startlinks+=[Operation])* ')' '->' joinnode=[JoinNode] 
+//;
+
+SimpleOperation:
+	ref=[Operation]
+;
+
+
+//LoopExp:
+//	'Loop' '->' condition=SimpleNameCS '{'
+//		exps += WorkflowExp*
+//	'}'
+//;
+
+LoopExp:
+	'Loop' '->' name=SimpleNameCS '{'
+		exps += WorkflowExp*
+	'}'
+;
+//SwitchExp:
+//	
+//	'Switch' '->' caseVarible=SimpleNameCS '{'
+//		cases += SwitchCase*
+//		default = SwitchDefault?
+//	'}'
+//;
+
+SwitchExp:
+	
+	'Switch' '->' name=SimpleNameCS '{'
+		cases += SwitchCase*
+		default = SwitchDefault?
+	'}'
+;
+
+
+
+SwitchCase:
+	'case:' caseValue=SimpleNameCS '->' op=SimpleOperation
+;
+
+SwitchDefault:
+	'default:' op=SimpleOperation
+;
+
+
+Operation :
+	name=OperationName '(' parameter+=Parameter? (',' parameter+=Parameter)* ')' (':' returnType=TypeCS)?
+;
+
+
+OperationName:
+	SimpleNameCS
+;
+
+Parameter:
+	name=ParametersName (':' type=TypeCS)?
+;
+
+ParametersName:
+	SimpleNameCS
+;
+
+
+
+/* --------------- Entity Model --------------- */
+Entity returns Entity:
+	
+	(isCRUD?='@AutoCRUD')?
+	'Entity' name=SimpleNameCS ('extends' superEntity=[Entity])? '{'
+	
+		('@Description('description=DOUBLE_QUOTED_STRING')')?
+	
+		attributes+=Attribute*
+		
+		('[Refer]' reference+=Reference*)?
+		
+		('[INV]' invariance+=Invariance*)?
+		
+	'}'
+;
+
+Attribute returns Attribute:
+	name=SimpleNameCS ':' type=TypeCS (ismultiple?='*')?
+;
+
+
+Reference returns Reference :
+	name=SimpleNameCS ':' entity=[Entity] (ismultiple?='*')? (isReverseAssoication?='!')? (isAggregation?='@-')? (isComposition?='*-')? type=AssociationTypeCS
+;
+
+TypeCS:
+     EntityType | PrimitiveTypeCS | EnumEntity | CollectionTypeCS // | Collection 
+;
+
+//Collection:
+//	collectiontype='List' '(' type=Type ')'
+//;
+
+Invariance:
+	'inv' name=SimpleNameCS ':' ('{' ocl=OCLExpressionCS '}' |  ocl=OCLExpressionCS) (isForAssociation?='ASSOCINV')?
+;
+
+EntityType:
+	entity=[Entity]
+;
+
+EnumEntity:
+	name=SimpleNameCS '[' element+=EnumItem ('|' element+=EnumItem)* ']'
+;
+
+EnumItem:
+//	name=ENUM
+	name=ID
+	
+;
+
+USECASE_RELATION :
+	'include' | 'extend'
+; 
+
+
+/* ----------------- Contract ------------------- */
+Contract returns Contract:
+	'Contract' service=[Service]'::'op=Operation '{'
+		def=Definition?
+		pre=Precondition
+		post=Postcondition
+	'}'
+;
+
+Definition:
+	'definition' ':' variable+=VariableDeclarationCS (',' variable+=VariableDeclarationCS)*
+;
+
+Precondition:
+	'precondition' ':' (oclexp=OCLExpressionCS | '{' oclexp=OCLExpressionCS '}')
+;
+
+Postcondition:
+	'postcondition' ':' (oclexp=OCLExpressionCS | '{' oclexp=OCLExpressionCS '}')
+;
+
+
+/* ------------------ OCLExpressionCS -------------- */
+OCLExpressionCS returns OCLExpressionCS: 
+	  LiteralExpCS | LetExpCS | IfExpCS | LogicFormulaExpCS | NestedExpCS // | -> CallExpCS 
+;
+
+NestedExpCS returns NestedExpCS:
+	'(' nestedExpression=OCLExpressionCS ')';
+
+LogicFormulaExpCS returns LogicFormulaExpCS:
+	 atomicexp+=(AtomicExpression) (-> connector+=('and' | 'or')  atomicexp+=(AtomicExpression | IfExpCS | NestedExpCS))* 
+;
+
+AtomicExpression returns AtomicExpression:
+		leftside=(LeftSubAtomicExpression) (infixop=InfixCompareOperatorName rightside=(RightSubAtomicExpression) (op=InfixOperatorName (num=PrimitiveLiteralExpCS | exp=AtomicExpression) )?)?
+;
+
+//AtomicExpression returns AtomicExpression:
+//		leftside=(VariableExpCS | CallExpCS) (infixop=InfixCompareOperatorName rightside=(LiteralExpCS | VariableExpCS | CallExpCS) (op=InfixOperatorName (num=OCLExpressionCS) )?)?
+//;
+
+LeftSubAtomicExpression :
+    VariableExpCS |  CallExpCS
+;
+
+RightSubAtomicExpression :
+	LiteralExpCS | VariableExpCS | CallExpCS
+;
+
+//RightExpression:
+//	LiteralExpCS | VariableExpCS | CallExpCS
+//;
+
+InfixCompareOperatorName:
+	 '>' | '<' | '>=' | '<=' | '=' | '<>'
+;
+
+InfixOperatorName:
+	'*' | '/' | '+' | '-' 
+;
+	
+InfixlogicConjunctionOperatorName:
+	'and' | 'or' | 'xor' | 'implies'
+;
+EssentialOCLNavigationOperatorName:
+	'.' | '->' | '?.' | '?->';	
+
+/* ------------------ CallExpCS ---------------- */
+CallExpCS:
+    FeatureCallExpCS |  
+    LoopExpCS
+;
+
+LoopExpCS:
+	IteratorExpCS //| IterateExpCS
+;
+
+//IterateExpCS:
+//	SimpleNameCS '->' 'iterate'
+//	'('
+//		(first=VariableDeclarationCS ';')? next=VariableDeclarationCS '|' exp=OCLExpressionCS
+//	')'
+//;
+
+//IteratorExpCS:
+//	(objectCall=FeatureCallExpCS | simpleCall=SimpleNameCS) '->' iterator=IteratorIdentifier '(' (varibles+=VariableDeclarationCS (',' varibles+=VariableDeclarationCS)? '|')? -> exp=(LogicFormulaExpCS | IfExpCS) ')' 
+//;
+
+IteratorExpCS:
+	(objectCall=(ClassiferCallExpCS | PropertyCallExpCS) | simpleCall=SimpleNameCS) '->' iterator=IteratorIdentifier '(' (varibles+=VariableDeclarationCS (',' varibles+=VariableDeclarationCS)* '|')?  -> exp=(LogicFormulaExpCS | IfExpCS ) ')' 
+;
+
+EntityAttributeName:
+	name=SimpleNameCS
+;
+
+IteratorIdentifier:
+	'one' | 'exists' | 'select' | 'any' | 'forAll' | 'collect' | 'isUnique'
+;
+
+ArgumentsCS:
+	first=OCLExpressionCS (',' next=ArgumentsCS)?
+;
+
+FeatureCallExpCS:
+    PropertyCallExpCS | 
+	ClassiferCallExpCS |
+	StandardOperationExpCS |
+	StandardNavigationCallExpCS | 
+	OperationCallExpCS 
+;
+
+StandardNavigationCallExpCS:
+	(classifercall=ClassiferCallExpCS | propertycall=PropertyCallExpCS | object=SimpleNameCS) navop='->' standardOP=StandardCollectionOperation
+;
+
+
+StandardOperationExpCS:
+	object=VariableExpCS '.' (property=VariableExpCS premark=IsMarkedPreCS? '.')? predefinedop=(PredefineOp)
+;
+
+PredefineOp:
+	StandardNoneParameterOperation |  StandardParameterOperation  | StandardDateOperation
+;
+
+StandardNoneParameterOperation:
+	name=('oclIsNew()' | 'oclIsUndefined()' | 'isEmpty()' | 'notEmpty()' | 'oclIsInvaild()' | 'size()' | 'sum()')
+;
+
+StandardParameterOperation:
+	name='oclIsTypeOf' '(' type=(PrimitiveTypeCS | EntityType ) ')'
+;
+
+StandardCollectionOperation:
+	name=("includes" | "excludes" | "includesAll" | "excludesAll") '(' object=SimpleNameCS ')'
+;
+
+StandardDateOperation:
+	name=("After" | "Before" | "isAfter" | "isBefore" | "isEqual" ) '(' (object=SimpleNameCS | datenum=NumberLiteralExpCS | procall=PropertyCallExpCS) ')' ('.' nested=StandardDateOperation)?
+;
+
+
+
+ClassiferCallExpCS:
+	entity=SimpleNameCS '.' op='allInstance()'
+;
+
+PropertyCallExpCS:
+	name=VariableExpCS '.' (selfproperty=VariableExpCS '.')?  attribute=SimpleNameCS (premark=IsMarkedPreCS)?
+;
+
+OperationCallExpCS:
+	name=SimpleNameCS '(' parameters+=OperationParameters? (',' parameters+=OperationParameters)* ')'
+;
+
+OperationParameters:
+	object=SimpleNameCS | objectproperty=PropertyCallExpCS | string=(SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING)
+;
+
+
+IsMarkedPreCS:
+	'@' 'pre'
+;
+
+
+
+/* ------------------ VariableExpCS -------------- */
+VariableExpCS:
+	symbol=('self' | 'result'| SimpleNameCS)
+;
+
+SimpleNameCS:
+	ID 
+;
+
+/* ------------------ IfExpCS -------------- */
+IfExpCS:
+	'if' condition=OCLExpressionCS
+	'then' thenExpression=OCLExpressionCS
+	('else' elseExpression=OCLExpressionCS)?
+	'endif'
+;
+
+/* ------------------ LetExpCS -------------- */
+LetExpCS:
+	'let' variable+=VariableDeclarationCS (',' variable+=VariableDeclarationCS)*
+	'in' inExpression=OCLExpressionCS
+;
+
+VariableDeclarationCS:
+	name=SimpleNameCS (':' type=TypeCS)? ('=' initExpression=OCLExpressionCS)?
+;
+
+/* ------------------ LiteralExpCS -------------- */
+LiteralExpCS:
+	CollectionLiteralExpCS | TupleLiteralExpCS | PrimitiveLiteralExpCS | EnumLiteralExpCS //| TypeCS 
+;
+
+//-----------EnumLiteralExpCS
+EnumLiteralExpCS:
+//	enumname=SimpleNameCS '::' eunmitem=ENUM
+	enumname=SimpleNameCS '::' eunmitem=ID
+;
+
+
+//-----------TupleLiteralExpCS
+TupleLiteralExpCS:
+	name='Tuple' '{' variables+=VariableDeclarationCS? (',' variables+=VariableDeclarationCS)* '}'
+;
+
+//TypeCS:
+//	   Type // | CollectionTypeCS// | PathNameCS  CollectionTypeCS | TupleTypeCS | OclTypeCS  |
+//;
+
+TupleTypeCS:
+	name='Tuple' '(' variables+=VariableDeclarationCS? (',' variables+=VariableDeclarationCS)* ')'
+;
+
+CollectionTypeCS:
+	name=CollectionTypeIdentifierCS '(' type=TypeCS ')'
+; 
+
+
+//-----------CollectionLiteralExpCS
+CollectionLiteralExpCS:
+	kind=CollectionTypeIdentifierCS '{' part+=CollectionLiteralPartCS? (-> ',' part+=CollectionLiteralPartCS)* '}'
+;
+
+CollectionLiteralPartCS:
+	CollectionRangeCS | -> CollectionItem
+;
+
+CollectionRangeCS:
+	-> first=OCLExpressionCS '..' last=OCLExpressionCS
+;
+
+CollectionItem:
+	item=OCLExpressionCS
+;
+
+
+
+//-----------PrimitiveLiteralExpCS
+PrimitiveLiteralExpCS:
+	  NumberLiteralExpCS
+	| StringLiteralExpCS
+	| BooleanLiteralExpCS
+	| InvalidLiteralExpCS
+	| NullLiteralExpCS;
+
+
+NumberLiteralExpCS returns NumberLiteralExpCS:
+	symbol=(IntegerLiteralExpCS | RealLiteralExpCS | UnlimitedNaturalLiteralExpCS)
+;
+
+IntegerLiteralExpCS :
+	INT
+;
+
+RealLiteralExpCS:
+	Float
+;
+
+UnlimitedNaturalLiteralExpCS:
+	'*'
+;
+
+BooleanLiteralExpCS:
+    symbol=('true' | 'false')
+;
+
+StringLiteralExpCS:
+	symbol= (SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING)
+;
+
+NullLiteralExpCS:
+	symbol='null'
+;
+
+InvalidLiteralExpCS:
+	symbol='invalid'
+;
+
+Float: 
+	INT '.' INT
+;
+
+    
+
+terminal DOUBLE_QUOTED_STRING:
+	'"' (ESCAPED_CHARACTER | !('\\' | '"' | '.'))* '"';
+
+terminal SINGLE_QUOTED_STRING:
+	"'" (ESCAPED_CHARACTER | !('\\' | "'" | '.'))* "'";	
+	
+terminal fragment ESCAPED_CHARACTER:
+	'\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\');
+
+terminal ID: 
+    '^'?('a'..'z'|'A'..'Z'|'_')('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
+  
+terminal INT: 
+  ('0'..'9')+;
+
+terminal ML_COMMENT  : 
+  '/*' -> '*/';
+  
+terminal SL_COMMENT : 
+  '//' !('\n'|'\r')* ('\r'? '\n')?;
+ 
+terminal WS  : 
+  (' '|'\t'|'\r'|'\n')+; 
+  
+//terminal ENUM :
+//	('A'..'Z')+ 
+//;
+  
+  
+ReservedKeywordCS:
+	CollectionTypeIdentifierCS | PrimitiveTypeCS | OclTypeCS | 'Tuple'
+;  
+
+CollectionTypeIdentifierCS:
+name=('Set' |
+	'Bag' |
+	'Sequence' |
+	'Collection' |
+	'OrderedSet')
+;
+  
+PrimitiveTypeCS:
+name=('Boolean'
+	| 'Integer'
+	| 'Real'
+	| 'String'
+	| 'UnlimitedNatural'
+	| 'Date')
+;
+	
+OclTypeCS: 
+name=('OclAny'
+	| 'OclInvalid'
+	| 'OclVoid')
+;
+
+AssociationTypeCS:
+      'Association'
+	| 'Aggregation'
+	| 'Composition'
+;

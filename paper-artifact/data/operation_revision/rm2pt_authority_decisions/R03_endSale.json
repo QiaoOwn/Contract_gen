@@ -1,0 +1,34 @@
+{
+  "schema_version": "rm2pt-authority-adjudication-v1",
+  "decision_id": "R03",
+  "operation_id": "CoCoME_processSale_endSale",
+  "status": "APPROVED",
+  "option": "A",
+  "decision_date": "2026-10-27",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "source_file": "data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel",
+  "source_sha256": "5756182ccc1003c3e1ecaa42983f7fc723511e387f31b097da1266b046478dd9",
+  "source_lines": [470, 471, 480, 481, 482, 491, 492, 493],
+  "source_problem": "The projection of SalesLineItem.Subamount is declared Set(Real), leaving a collection-kind inconsistency with duplicate-preserving charging per sales line.",
+  "approved_preconditions": ["The current Sale exists, is incomplete, and is not yet ready for payment."],
+  "approved_postconditions": [
+    "The Sale amount becomes the sum of the subtotal of every associated sales line.",
+    "Distinct sales lines with equal subtotals each contribute; subtotals are not deduplicated by numeric value.",
+    "When there are no sales lines, the Sale amount becomes zero.",
+    "The Sale becomes ready for payment.",
+    "The operation returns the resulting Sale amount."
+  ],
+  "business_examples": [
+    {"before_amount": 777, "line_subtotals": [20, 20], "after_amount": 40, "result": 40},
+    {"before_amount": 777, "line_subtotals": [20, 30], "after_amount": 50, "result": 50},
+    {"before_amount": 777, "line_subtotals": [], "after_amount": 0, "result": 0},
+    {"before_amount": 777, "line_subtotals": [12.5, 7.25], "after_amount": 19.75, "result": 19.75}
+  ],
+  "correction_scope": "Specify duplicate-preserving aggregation by SalesLineItem identity. Replace, rather than increment, the Sale amount with this total. Preserve the preconditions, payment-ready update and numeric return type.",
+  "additional_business_constraints": [],
+  "upstream_snapshot_modified": false,
+  "generation_reference_contract_supplied": false,
+  "executable_subset_status": "PENDING_EXECUTABLE_REPRESENTATION_REVIEW_LEGACY_CATALOG_USES_COLLECT",
+  "oracle_review_status": "PENDING_RM2PT_AUTHORITY_REVIEW"
+}

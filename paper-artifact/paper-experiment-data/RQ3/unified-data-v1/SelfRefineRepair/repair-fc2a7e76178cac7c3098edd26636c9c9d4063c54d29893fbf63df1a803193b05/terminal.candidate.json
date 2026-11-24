@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "loanRequest: LoanRequest = self.CurrentLoanRequests->any(lr: LoanRequest | lr.RequestID = id), approvalLetter: ApprovalLetter = self.CurrentApprovalLetter",
+    "precondition": "self.CurrentLoanRequests->exists(lr: LoanRequest | lr.RequestID = id)",
+    "postcondition": "self.CurrentLoanRequest = loanRequest and approvalLetter.oclIsNew() and approvalLetter.Content = 'standard content' and self.CurrentLoanRequest.AttachedApprovalLetter = approvalLetter and result = true"
+  },
+  "methodAccepted": true
+}

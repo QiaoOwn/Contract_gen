@@ -1,0 +1,1631 @@
+{
+  "operationId": "AutomatedTellerMachine_withdrawCash_printReceipt",
+  "candidateIdentity": "fd5910bcf89060418852e5ff6c1f4dae005a5f96319e9b97d4ae9977499f266b",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/AutomatedTellerMachine_withdrawCash_printReceipt/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "102e97e8be2e4a52d13e93dc7d2442cc2a82d1144ace67ea156af8373451c385"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "InputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true",
+    "postcondition": "if IsWithdraw = true then result = WithdrawedNumber else if IsDeposit = true then result = DepositedNumber else result = 0.0 endif endif"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract AutomatedTellerMachineSystem::printReceipt(): Real {\n          \n            precondition:\n          InputCard.oclIsUndefined() = false and CardIDValidated = true and PasswordValidated = true\n            \n            postcondition:\n          if IsWithdraw = true then result = WithdrawedNumber else if IsDeposit = true then result = DepositedNumber else result = 0.0 endif endif\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 11,
+              "endLine": 4,
+              "endColumn": 20,
+              "startOffset": 109,
+              "endOffset": 118,
+              "expression": "InputCard",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state InputCard must be accessed as self.InputCard.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/InputCard"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+                  "declaration": "InputCard: BankCard",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 16,
+                    "column": 3,
+                    "endLine": 16,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard",
+                  "declaration": "InputCard: BankCard",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 9,
+                    "column": 5,
+                    "endLine": 9,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 50,
+              "endLine": 4,
+              "endColumn": 65,
+              "startOffset": 148,
+              "endOffset": 163,
+              "expression": "CardIDValidated",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state CardIDValidated must be accessed as self.CardIDValidated.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/CardIDValidated"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+                  "declaration": "CardIDValidated: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 17,
+                    "column": 3,
+                    "endLine": 17,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated",
+                  "declaration": "CardIDValidated: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 10,
+                    "column": 5,
+                    "endLine": 10,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "precondition",
+              "line": 4,
+              "column": 77,
+              "endLine": 4,
+              "endColumn": 94,
+              "startOffset": 175,
+              "endOffset": 192,
+              "expression": "PasswordValidated",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state PasswordValidated must be accessed as self.PasswordValidated.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/PasswordValidated"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+                  "declaration": "PasswordValidated: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 14,
+                    "column": 3,
+                    "endLine": 14,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated",
+                  "declaration": "PasswordValidated: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 7,
+                    "column": 5,
+                    "endLine": 7,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 14,
+              "endLine": 7,
+              "endColumn": 24,
+              "startOffset": 253,
+              "endOffset": 263,
+              "expression": "IsWithdraw",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state IsWithdraw must be accessed as self.IsWithdraw.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsWithdraw"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+                  "declaration": "IsWithdraw: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 19,
+                    "column": 3,
+                    "endLine": 19,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw",
+                  "declaration": "IsWithdraw: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 12,
+                    "column": 5,
+                    "endLine": 12,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 46,
+              "endLine": 7,
+              "endColumn": 62,
+              "startOffset": 285,
+              "endOffset": 301,
+              "expression": "WithdrawedNumber",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state WithdrawedNumber must be accessed as self.WithdrawedNumber.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/WithdrawedNumber"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+                  "declaration": "WithdrawedNumber: Real",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 15,
+                    "column": 3,
+                    "endLine": 15,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber",
+                  "declaration": "WithdrawedNumber: Real",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 8,
+                    "column": 5,
+                    "endLine": 8,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 71,
+              "endLine": 7,
+              "endColumn": 80,
+              "startOffset": 310,
+              "endOffset": 319,
+              "expression": "IsDeposit",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state IsDeposit must be accessed as self.IsDeposit.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsDeposit"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+                  "declaration": "IsDeposit: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 18,
+                    "column": 3,
+                    "endLine": 18,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit",
+                  "declaration": "IsDeposit: Boolean",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 11,
+                    "column": 5,
+                    "endLine": 11,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 102,
+              "endLine": 7,
+              "endColumn": 117,
+              "startOffset": 341,
+              "endOffset": 356,
+              "expression": "DepositedNumber",
+              "kind": "model-rule",
+              "family": "MG-06",
+              "code": "STATE_REQUIRES_SELF",
+              "msg": "[MG-06] Service state DepositedNumber must be accessed as self.DepositedNumber.",
+              "ruleIds": [
+                "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/DepositedNumber"
+              ],
+              "modelElementIds": [
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+                "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+                  "declaration": "DepositedNumber: Real",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                    "line": 20,
+                    "column": 3,
+                    "endLine": 20,
+                    "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                  }
+                },
+                {
+                  "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber",
+                  "declaration": "DepositedNumber: Real",
+                  "source": {
+                    "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                    "line": 13,
+                    "column": 5,
+                    "endLine": 13,
+                    "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                  }
+                }
+              ],
+              "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state InputCard must be accessed as self.InputCard.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/InputCard"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+              "declaration": "InputCard: BankCard",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 16,
+                "column": 3,
+                "endLine": 16,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard",
+              "declaration": "InputCard: BankCard",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 9,
+                "column": 5,
+                "endLine": 9,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 11
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "InputCard"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state CardIDValidated must be accessed as self.CardIDValidated.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/CardIDValidated"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+              "declaration": "CardIDValidated: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 17,
+                "column": 3,
+                "endLine": 17,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated",
+              "declaration": "CardIDValidated: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 10,
+                "column": 5,
+                "endLine": 10,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 50
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "CardIDValidated"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state PasswordValidated must be accessed as self.PasswordValidated.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/PasswordValidated"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+              "declaration": "PasswordValidated: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 14,
+                "column": 3,
+                "endLine": 14,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated",
+              "declaration": "PasswordValidated: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 7,
+                "column": 5,
+                "endLine": 7,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 4,
+            "column": 77
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "PasswordValidated"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state IsWithdraw must be accessed as self.IsWithdraw.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsWithdraw"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+              "declaration": "IsWithdraw: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 19,
+                "column": 3,
+                "endLine": 19,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw",
+              "declaration": "IsWithdraw: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 12,
+                "column": 5,
+                "endLine": 12,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 14
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "IsWithdraw"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state WithdrawedNumber must be accessed as self.WithdrawedNumber.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/WithdrawedNumber"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+              "declaration": "WithdrawedNumber: Real",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 15,
+                "column": 3,
+                "endLine": 15,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber",
+              "declaration": "WithdrawedNumber: Real",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 8,
+                "column": 5,
+                "endLine": 8,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 46
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "WithdrawedNumber"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state IsDeposit must be accessed as self.IsDeposit.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsDeposit"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+              "declaration": "IsDeposit: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 18,
+                "column": 3,
+                "endLine": 18,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit",
+              "declaration": "IsDeposit: Boolean",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 11,
+                "column": 5,
+                "endLine": 11,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 71
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "IsDeposit"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "STATE_REQUIRES_SELF",
+          "msg": "[MG-06] Service state DepositedNumber must be accessed as self.DepositedNumber.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/DepositedNumber"
+          ],
+          "modelEvidence": [
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+              "declaration": "DepositedNumber: Real",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                "line": 20,
+                "column": 3,
+                "endLine": 20,
+                "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+              }
+            },
+            {
+              "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber",
+              "declaration": "DepositedNumber: Real",
+              "source": {
+                "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                "line": 13,
+                "column": 5,
+                "endLine": 13,
+                "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 102
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "DepositedNumber"
+            }
+          ],
+          "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 11,
+            "endLine": 4,
+            "endColumn": 20,
+            "startOffset": 109,
+            "endOffset": 118,
+            "expression": "InputCard",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state InputCard must be accessed as self.InputCard.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/InputCard"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+                "declaration": "InputCard: BankCard",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 16,
+                  "column": 3,
+                  "endLine": 16,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard",
+                "declaration": "InputCard: BankCard",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 9,
+                  "column": 5,
+                  "endLine": 9,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state InputCard must be accessed as self.InputCard.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 11,
+                "endLine": 4,
+                "endColumn": 20,
+                "startOffset": 109,
+                "endOffset": 118,
+                "expression": "InputCard",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state InputCard must be accessed as self.InputCard.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/InputCard"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/InputCard",
+                    "declaration": "InputCard: BankCard",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 16,
+                      "column": 3,
+                      "endLine": 16,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/InputCard",
+                    "declaration": "InputCard: BankCard",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 9,
+                      "column": 5,
+                      "endLine": 9,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 50,
+            "endLine": 4,
+            "endColumn": 65,
+            "startOffset": 148,
+            "endOffset": 163,
+            "expression": "CardIDValidated",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state CardIDValidated must be accessed as self.CardIDValidated.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/CardIDValidated"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+                "declaration": "CardIDValidated: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 17,
+                  "column": 3,
+                  "endLine": 17,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated",
+                "declaration": "CardIDValidated: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 10,
+                  "column": 5,
+                  "endLine": 10,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state CardIDValidated must be accessed as self.CardIDValidated.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 50,
+                "endLine": 4,
+                "endColumn": 65,
+                "startOffset": 148,
+                "endOffset": 163,
+                "expression": "CardIDValidated",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state CardIDValidated must be accessed as self.CardIDValidated.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/CardIDValidated"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/CardIDValidated",
+                    "declaration": "CardIDValidated: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 17,
+                      "column": 3,
+                      "endLine": 17,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/CardIDValidated",
+                    "declaration": "CardIDValidated: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 10,
+                      "column": 5,
+                      "endLine": 10,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 4,
+            "column": 77,
+            "endLine": 4,
+            "endColumn": 94,
+            "startOffset": 175,
+            "endOffset": 192,
+            "expression": "PasswordValidated",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state PasswordValidated must be accessed as self.PasswordValidated.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/PasswordValidated"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+                "declaration": "PasswordValidated: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 14,
+                  "column": 3,
+                  "endLine": 14,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated",
+                "declaration": "PasswordValidated: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 7,
+                  "column": 5,
+                  "endLine": 7,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state PasswordValidated must be accessed as self.PasswordValidated.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 4,
+                "column": 77,
+                "endLine": 4,
+                "endColumn": 94,
+                "startOffset": 175,
+                "endOffset": 192,
+                "expression": "PasswordValidated",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state PasswordValidated must be accessed as self.PasswordValidated.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/PasswordValidated"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/PasswordValidated",
+                    "declaration": "PasswordValidated: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 14,
+                      "column": 3,
+                      "endLine": 14,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/PasswordValidated",
+                    "declaration": "PasswordValidated: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 7,
+                      "column": 5,
+                      "endLine": 7,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 14,
+            "endLine": 7,
+            "endColumn": 24,
+            "startOffset": 253,
+            "endOffset": 263,
+            "expression": "IsWithdraw",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state IsWithdraw must be accessed as self.IsWithdraw.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsWithdraw"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+                "declaration": "IsWithdraw: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 19,
+                  "column": 3,
+                  "endLine": 19,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw",
+                "declaration": "IsWithdraw: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 12,
+                  "column": 5,
+                  "endLine": 12,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state IsWithdraw must be accessed as self.IsWithdraw.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 14,
+                "endLine": 7,
+                "endColumn": 24,
+                "startOffset": 253,
+                "endOffset": 263,
+                "expression": "IsWithdraw",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state IsWithdraw must be accessed as self.IsWithdraw.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsWithdraw"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsWithdraw",
+                    "declaration": "IsWithdraw: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 19,
+                      "column": 3,
+                      "endLine": 19,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsWithdraw",
+                    "declaration": "IsWithdraw: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 12,
+                      "column": 5,
+                      "endLine": 12,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 46,
+            "endLine": 7,
+            "endColumn": 62,
+            "startOffset": 285,
+            "endOffset": 301,
+            "expression": "WithdrawedNumber",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state WithdrawedNumber must be accessed as self.WithdrawedNumber.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/WithdrawedNumber"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+                "declaration": "WithdrawedNumber: Real",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 15,
+                  "column": 3,
+                  "endLine": 15,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber",
+                "declaration": "WithdrawedNumber: Real",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 8,
+                  "column": 5,
+                  "endLine": 8,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state WithdrawedNumber must be accessed as self.WithdrawedNumber.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 46,
+                "endLine": 7,
+                "endColumn": 62,
+                "startOffset": 285,
+                "endOffset": 301,
+                "expression": "WithdrawedNumber",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state WithdrawedNumber must be accessed as self.WithdrawedNumber.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/WithdrawedNumber"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/WithdrawedNumber",
+                    "declaration": "WithdrawedNumber: Real",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 15,
+                      "column": 3,
+                      "endLine": 15,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/WithdrawedNumber",
+                    "declaration": "WithdrawedNumber: Real",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 8,
+                      "column": 5,
+                      "endLine": 8,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 71,
+            "endLine": 7,
+            "endColumn": 80,
+            "startOffset": 310,
+            "endOffset": 319,
+            "expression": "IsDeposit",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state IsDeposit must be accessed as self.IsDeposit.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsDeposit"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+                "declaration": "IsDeposit: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 18,
+                  "column": 3,
+                  "endLine": 18,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit",
+                "declaration": "IsDeposit: Boolean",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 11,
+                  "column": 5,
+                  "endLine": 11,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state IsDeposit must be accessed as self.IsDeposit.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 71,
+                "endLine": 7,
+                "endColumn": 80,
+                "startOffset": 310,
+                "endOffset": 319,
+                "expression": "IsDeposit",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state IsDeposit must be accessed as self.IsDeposit.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/IsDeposit"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/IsDeposit",
+                    "declaration": "IsDeposit: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 18,
+                      "column": 3,
+                      "endLine": 18,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/IsDeposit",
+                    "declaration": "IsDeposit: Boolean",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 11,
+                      "column": 5,
+                      "endLine": 11,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-SCOPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 102,
+            "endLine": 7,
+            "endColumn": 117,
+            "startOffset": 341,
+            "endOffset": 356,
+            "expression": "DepositedNumber",
+            "kind": "model-rule",
+            "family": "MG-06",
+            "code": "STATE_REQUIRES_SELF",
+            "msg": "[MG-06] Service state DepositedNumber must be accessed as self.DepositedNumber.",
+            "ruleIds": [
+              "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/DepositedNumber"
+            ],
+            "modelElementIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber"
+            ],
+            "modelEvidence": [
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+                "declaration": "DepositedNumber: Real",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                  "line": 20,
+                  "column": 3,
+                  "endLine": 20,
+                  "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                }
+              },
+              {
+                "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber",
+                "declaration": "DepositedNumber: Real",
+                "source": {
+                  "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                  "line": 13,
+                  "column": 5,
+                  "endLine": 13,
+                  "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                }
+              }
+            ],
+            "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "STATE_REQUIRES_SELF",
+          "constraint": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+          "message": "[MG-06] Service state DepositedNumber must be accessed as self.DepositedNumber.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 102,
+                "endLine": 7,
+                "endColumn": 117,
+                "startOffset": 341,
+                "endOffset": 356,
+                "expression": "DepositedNumber",
+                "kind": "model-rule",
+                "family": "MG-06",
+                "code": "STATE_REQUIRES_SELF",
+                "msg": "[MG-06] Service state DepositedNumber must be accessed as self.DepositedNumber.",
+                "ruleIds": [
+                  "MG-06::AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/DepositedNumber"
+                ],
+                "modelElementIds": [
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+                  "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/local/DepositedNumber",
+                    "declaration": "DepositedNumber: Real",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/withdrawCash.ts",
+                      "line": 20,
+                      "column": 3,
+                      "endLine": 20,
+                      "sha256": "f39bf87420e44418fd1ff9ee58ed03d84fbfcb7386c15730b3851085932c6fe5"
+                    }
+                  },
+                  {
+                    "id": "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/state/system/DepositedNumber",
+                    "declaration": "DepositedNumber: Real",
+                    "source": {
+                      "file": "src/rm2pt/project/AutomatedTellerMachine/systemService.ts",
+                      "line": 13,
+                      "column": 5,
+                      "endLine": 13,
+                      "sha256": "14477f3dde355b8c1cad198b3b53d64e97d1e0d9d9124d2ec26f6da3cda36202"
+                    }
+                  }
+                ],
+                "repair": "Check lexical bindings, parameters and self state. Restore a missing binding only when its source is justified by the requirement and model.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "AutomatedTellerMachine/use-case/withdrawCash/operation/printReceipt/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

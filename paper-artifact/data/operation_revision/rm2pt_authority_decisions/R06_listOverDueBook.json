@@ -1,0 +1,36 @@
+{
+  "schema_version": "rm2pt-authority-adjudication-v1",
+  "decision_id": "R06",
+  "operation_id": "LibraryManagementSystem_listBookHistory_listOverDueBook",
+  "status": "APPROVED",
+  "option": "A",
+  "decision_date": "2026-10-27",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "source_file": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+  "source_sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+  "source_lines": [905, 916, 917, 925, 926, 933],
+  "source_problem": "The declared Set(BookCopy) result and collect projection need an explicit duplicate-handling interpretation when multiple qualifying Loans refer to the same BookCopy.",
+  "approved_preconditions": [
+    "The referenced User exists.",
+    "The overdue active-loan collection can be resolved."
+  ],
+  "approved_postconditions": [
+    "Return the BookCopy objects linked to the selected user's unreturned Loans with an overdue fee greater than zero.",
+    "Each BookCopy object appears once even when multiple qualifying Loans refer to it.",
+    "Different BookCopy objects remain separate even when their attribute values are equal."
+  ],
+  "fixture_identity_note": "copy_key and in_selected_user_history describe fixture identities and membership in the selected user's LoanedBook association; they are not added model attributes. Deduplication is by object identity, not barcode, title, serialization or structural equality.",
+  "business_examples": [
+    {"loans": [{"in_selected_user_history": true, "is_returned": false, "overdue_fee": 2, "copy_key": "a"}, {"in_selected_user_history": true, "is_returned": false, "overdue_fee": 4, "copy_key": "a"}], "expected_copy_keys": ["a"]},
+    {"loans": [{"in_selected_user_history": true, "is_returned": false, "overdue_fee": 0.25, "copy_key": "a"}, {"in_selected_user_history": true, "is_returned": false, "overdue_fee": 3, "copy_key": "b"}], "copies_have_equal_attribute_values": true, "expected_copy_keys": ["a", "b"]},
+    {"loans": [{"in_selected_user_history": true, "is_returned": true, "overdue_fee": 2, "copy_key": "returned"}, {"in_selected_user_history": true, "is_returned": false, "overdue_fee": 0, "copy_key": "no-fee"}, {"in_selected_user_history": false, "is_returned": false, "overdue_fee": 5, "copy_key": "other-user"}], "expected_copy_keys": []},
+    {"loans": [], "expected_copy_keys": []}
+  ],
+  "correction_scope": "Clarify the declared Set result as identity-based deduplication after the existing user-history, unreturned-loan and positive-fee filter. Preserve the uid parameter and Set(BookCopy) return type. Add no extra eligibility filter, global state-frame condition or model field.",
+  "additional_business_constraints": [],
+  "upstream_snapshot_modified": false,
+  "generation_reference_contract_supplied": false,
+  "executable_subset_status": "PENDING_IDENTITY_SET_QUERY_REPRESENTATION_REVIEW_LEGACY_CATALOG_USES_COLLECT",
+  "oracle_review_status": "PENDING_RM2PT_AUTHORITY_REVIEW"
+}

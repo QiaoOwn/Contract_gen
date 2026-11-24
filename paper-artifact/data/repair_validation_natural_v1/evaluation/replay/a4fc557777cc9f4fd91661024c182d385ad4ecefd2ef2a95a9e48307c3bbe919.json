@@ -1,0 +1,207 @@
+{
+  "operationId": "CoCoME_manageCashDesk_deleteCashDesk",
+  "candidateIdentity": "a4fc557777cc9f4fd91661024c182d385ad4ecefd2ef2a95a9e48307c3bbe919",
+  "origins": [
+    {
+      "method": "codexprompt-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_manageCashDesk_deleteCashDesk/codexprompt-style/codexprompt-style.candidate.json",
+      "sha256": "0f886268f710744d1bc48f1c74add3aca8fdab3bd05c7400997d5d28584b946a"
+    }
+  ],
+  "contract": {
+    "definition": "cashDesk: CashDesk = self.CurrentStore.AssociationCashdeskes@pre->any(cd: CashDesk | cd.Id = id)",
+    "precondition": "self.CurrentStore.AssociationCashdeskes->exists(cd: CashDesk | cd.Id = id)",
+    "postcondition": "self.CurrentStore.AssociationCashdeskes->excludes(cashDesk) and result = true"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ManageCashDeskCRUDService::deleteCashDesk(id:Integer): Boolean {\n          definition:\n          cashDesk: CashDesk = self.CurrentStore.AssociationCashdeskes@pre->any(cd: CashDesk | cd.Id = id)\n            \n            precondition:\n          self.CurrentStore.AssociationCashdeskes->exists(cd: CashDesk | cd.Id = id)\n            \n            postcondition:\n          self.CurrentStore.AssociationCashdeskes->excludes(cashDesk) and result = true\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": false,
+      "modelTypeValid": true,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 3,
+              "column": 71,
+              "code": "DIA_PRESTATE_SCOPE",
+              "clause": "definition",
+              "ruleIds": [
+                "G-TMP-01"
+              ],
+              "msg": "[generation-semantics] @pre is permitted only in a postcondition."
+            }
+          ]
+        },
+        {
+          "stage": "model-type",
+          "status": "PASS",
+          "evidence": []
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "DIA_PRESTATE_SCOPE",
+          "msg": "[generation-semantics] @pre is permitted only in a postcondition.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "G-TMP-01"
+          ],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 3,
+            "column": 71
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TEMPORAL",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 71,
+            "endLine": 3,
+            "endColumn": 75,
+            "startOffset": 166,
+            "endOffset": 170,
+            "expression": "@pre"
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "DIA_PRESTATE_SCOPE",
+          "constraint": "[generation-semantics] @pre is permitted only in a postcondition.",
+          "message": "[generation-semantics] @pre is permitted only in a postcondition.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 71,
+                "endLine": 3,
+                "endColumn": 75,
+                "startOffset": 166,
+                "endOffset": 170,
+                "expression": "@pre"
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageCashDesk/operation/deleteCashDesk/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageCashDesk/operation/deleteCashDesk/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageCashDesk/operation/deleteCashDesk/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/manageCashDesk/operation/deleteCashDesk/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

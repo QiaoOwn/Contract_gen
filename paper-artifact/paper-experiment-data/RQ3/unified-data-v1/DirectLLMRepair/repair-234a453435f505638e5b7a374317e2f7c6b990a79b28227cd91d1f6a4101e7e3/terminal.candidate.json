@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "saleLines: Set(SalesLineItem) = SalesLineItem.allInstances()->select(line: SalesLineItem | line.BelongedSale = self.CurrentSale), resultingAmount: Real = if saleLines->isEmpty() then 0.0 else saleLines->sumBy(line: SalesLineItem | line.Subamount) endif",
+    "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false",
+    "postcondition": "self.CurrentSale.Amount = resultingAmount and self.CurrentSale.IsReadytoPay = true and self.CurrentSale.IsComplete = true and result = resultingAmount"
+  },
+  "methodAccepted": true
+}

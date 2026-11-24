@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "r: Repair = Repair.allInstances()->any(rp: Repair | rp.Id = rid)",
+    "precondition": "Repair.allInstances()->exists(rp: Repair | rp.Id = rid) and (reject = false or r.Process = 0 or r.Process = 1 or r.Process = 2)",
+    "postcondition": "let ah: ApprovalHistory in ah.oclIsNew() and ah.oclIsTypeOf(ApprovalHistory) and ApprovalHistory.allInstances()->includes(ah) and ah.StaffId = sid and ah.Reject = reject and ah.Suggestion = suggestion and r.History@pre->excludes(ah) and r.History->includes(ah) and r.History@pre->forAll(h: ApprovalHistory | r.History->includes(h)) and result = ah and if reject = true then if r.Process@pre = 0 then r.Process = 1 else if r.Process@pre = 1 then r.Process = 2 else if r.Process@pre = 2 then r.Process = 3 else true endif endif endif else r.Process = 5 endif"
+  },
+  "methodAccepted": true
+}

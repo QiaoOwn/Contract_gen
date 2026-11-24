@@ -1,0 +1,58 @@
+{
+  "version": "narrative-v2-revisions-v1",
+  "sourceType": "paraphrased",
+  "notes": "Source mappings are preparation/evaluation metadata, never reference OCL in generator messages. V1 is immutable. No independent Gold metrics are computed.",
+  "cases": {
+    "CoCoME_processSale_enterItem": {
+      "stratum": "adjudicated-narrative",
+      "text": "The operation adds a scanned item and quantity to the current sale. It requires a current Sale that exists and is incomplete, and a scanned Item that exists and has positive stock. The entered quantity must not exceed the Item stock; this restriction is a laboratory-adjudicated requirement. The system creates a SalesLineItem linked to the Sale and Item, recording the quantity and a subtotal equal to the Item price times quantity. The Sale's contained sales lines include the new SalesLineItem. The system stores the new SalesLineItem in the SalesLineItem instance collection and makes it the current sale line. The Item stock decreases by the entered quantity. The operation returns true.",
+      "evidence": [
+        {"anchor":"subtotal equal to the Item price times quantity","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The attribute Subamount of the object sli became the attribute Price of the object item times quantity","kind":"upstream-generated-documentary-description"},
+        {"anchor":"The Sale's contained sales lines include the new SalesLineItem.","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The object CurrentSale was linked to the object sli by ContainedSalesLine","kind":"upstream-generated-documentary-description"},
+        {"anchor":"in the SalesLineItem instance collection","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The object sli was put into the instance set of class SalesLineItem","kind":"upstream-generated-documentary-description"},
+        {"anchor":"The entered quantity must not exceed the Item stock","file":"data/benchmark/rm2pt_authoritative_114_v4/source_lab_replay_differences.json","sourceText":"Reject a quantity greater than the selected Item's operation-entry stock.","kind":"laboratory-extension"}
+      ]
+    },
+    "Airport_manageDevice_createDevice": {
+      "stratum":"adjudicated-narrative",
+      "evidence":[{"anchor":"stores the Device","file":"data/operation_revision/rm2pt_authority_decisions/R01_createDevice.json","sourceText":"The newly created Device itself is stored in the Device repository","kind":"R01-source-correction-not-original-inclusion-target"}]
+    },
+    "Airport_manageUser_createStaff": {
+      "stratum":"source-faithful-narrative",
+      "text":"The operation registers a new airport Staff member with contact, role and optional reporting information. The staff identifier must be unused. The system creates a Staff member with the supplied identity, password, phone and role. The new Staff member's name equals the supplied name. The system stores the new Staff member in the Staff instance collection. If bossid identifies an existing Staff member, the system links the new Staff member to that Boss. The operation returns true.",
+      "evidence":[
+        {"anchor":"The new Staff member's name equals the supplied name.","file":"data/operation_revision/pending_input_alignment/createStaff_name_repository_20261028.json","sourceText":"The new Staff member's name equals the supplied name.","kind":"owner-approved-source-supported-clarification"},
+        {"anchor":"The system stores the new Staff member in the Staff instance collection.","file":"data/operation_revision/pending_input_alignment/createStaff_name_repository_20261028.json","sourceText":"The new Staff member is stored in the Staff repository.","kind":"owner-approved-source-supported-clarification"}
+      ]
+    },
+    "CoCoME_orderProducts_placeOrder": {
+      "stratum":"adjudicated-narrative",
+      "evidence":[{"anchor":"The order amount becomes its amount before this operation plus the subtotal of every associated OrderEntry","file":"data/operation_revision/rm2pt_authority_decisions/R02_placeOrder.json","sourceText":"The final amount equals the operation-entry amount plus the sum of the subtotal of every associated OrderEntry.","kind":"R02-aggregate-adjudication-not-original-per-entry-equality"}]
+    },
+    "CoCoME_processSale_makeCashPayment": {
+      "stratum":"adjudicated-narrative",
+      "text":"The operation pays the current sale with the supplied cash amount. The current Sale must exist, be incomplete and be ready for payment. The tendered amount must cover the Sale amount, and a current Store must exist. The system creates a CashPayment recording the tendered amount and change equal to the tendered amount minus the Sale amount. The CashPayment is linked to the Sale, and the Sale's associated payment is that CashPayment. The system links the Sale to the current Store, and the Store's sales include that Sale. The system timestamps the Sale with the operation-entry time Now and marks it complete. The system stores the CashPayment in the CashPayment instance collection and returns true.",
+      "evidence":[
+        {"anchor":"a current Store must exist","file":"data/operation_revision/pending_input_alignment/cocome_context_guards_20261029.json","sourceText":"A current Store exists.","kind":"laboratory-extension"},
+        {"anchor":"The system creates a CashPayment","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The object cp was created","kind":"upstream-generated-documentary-description"},
+        {"anchor":"change equal to the tendered amount minus the Sale amount","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The attribute Balance of the object cp became amount minus the attribute Amount of the object CurrentSale","kind":"upstream-generated-documentary-description"},
+        {"anchor":"the Sale's associated payment is that CashPayment","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The object CurrentSale was linked to the object cp by AssoicatedPayment","kind":"upstream-generated-documentary-description"},
+        {"anchor":"the Store's sales include that Sale","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The object CurrentStore was linked to the object CurrentSale by Sales","kind":"upstream-generated-documentary-description"},
+        {"anchor":"operation-entry time Now","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The attribute Time of the object CurrentSale was equal to Now","kind":"upstream-generated-documentary-description"},
+        {"anchor":"in the CashPayment instance collection","file":"data/operation_revision/upstream_rm2pt/CoCoME/cocome.remodel","sourceText":"The object cp was put into the instance set of class CashPayment","kind":"upstream-generated-documentary-description"}
+      ]
+    },
+    "LibraryManagementSystem_borrowBook_borrowBook": {
+      "stratum":"source-faithful-narrative",
+      "insertAfter":"The system adds the new loan to the borrowing user's loan collection and the borrowed copy's loan history.",
+      "insert":" The system stores the new Loan in the Loan instance collection.",
+      "evidence":[{"anchor":"The system stores the new Loan in the Loan instance collection.","file":"data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel","sourceText":"The object loan was put into the instance set of class Loan","kind":"upstream-generated-documentary-description"}]
+    },
+    "LibraryManagementSystem_renewBook_renewBook": {
+      "stratum":"source-faithful-narrative",
+      "replaceFrom":"The renewal count increases and the renewal date becomes today.",
+      "replaceTo":"The renewal count increases by exactly one and the renewal date becomes today.",
+      "evidence":[{"anchor":"The renewal count increases by exactly one","file":"data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel","sourceText":"The attribute RenewedTimes of the object loan became the previous value of the attribute RenewedTimes of the object loan plus 1","kind":"upstream-generated-documentary-description"}]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "currentRequest : LoanRequest = self.CurrentLoanRequest, selectedTerm : LoanTerm = LoanTerm.allInstances()->any(t : LoanTerm | t.ItemID = termid)",
+    "precondition": "currentRequest <> null and self.CurrentLoanRequests->includes(currentRequest) and LoanTerm.allInstances()->exists(t : LoanTerm | t.ItemID = termid)",
+    "postcondition": "currentRequest.AttachedLoanTerms->includes(selectedTerm) and result = true"
+  },
+  "methodAccepted": true
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "rm2pt-authority-adjudication-v1",
+  "decision_id": "R07",
+  "operation_id": "LibraryManagementSystem_listBookHistory_listReservationBook",
+  "status": "APPROVED",
+  "option": "A",
+  "decision_date": "2026-10-27",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "source_file": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+  "source_sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+  "source_lines": [936, 945, 946, 954, 955, 962],
+  "source_problem": "The declared Set(BookCopy) result and reservation-to-copy projection need explicit duplicate handling when multiple Reserve objects refer to the same BookCopy.",
+  "approved_preconditions": [
+    "The referenced User exists.",
+    "The reservation collection can be resolved."
+  ],
+  "approved_postconditions": [
+    "Return the BookCopy objects linked to the selected user's reservation records.",
+    "Each BookCopy object appears once even when multiple reservation records refer to it.",
+    "Different BookCopy objects remain separate even when their attribute values are equal.",
+    "Do not restrict the query to open reservations; the original operation has no reservation-closed filter."
+  ],
+  "fixture_identity_note": "copy_key and in_selected_user_reservations describe object identities and membership in the selected user's ReservedBook association, not additional model attributes. is_closed varies to verify the absence of an added eligibility filter.",
+  "business_examples": [
+    {"reservations": [{"in_selected_user_reservations": true, "is_closed": false, "copy_key": "a"}, {"in_selected_user_reservations": true, "is_closed": true, "copy_key": "a"}], "expected_copy_keys": ["a"]},
+    {"reservations": [{"in_selected_user_reservations": true, "is_closed": false, "copy_key": "a"}, {"in_selected_user_reservations": true, "is_closed": true, "copy_key": "b"}], "copies_have_equal_attribute_values": true, "expected_copy_keys": ["a", "b"]},
+    {"reservations": [{"in_selected_user_reservations": true, "is_closed": true, "copy_key": "closed-included"}, {"in_selected_user_reservations": false, "is_closed": false, "copy_key": "other-user"}], "expected_copy_keys": ["closed-included"]},
+    {"reservations": [], "expected_copy_keys": []}
+  ],
+  "correction_scope": "Clarify identity-based Set projection from the selected user's existing reservation collection. Preserve uid, the existing source preconditions and Set(BookCopy). Add no open-reservation filter, model field, inverse update or global state-frame condition.",
+  "additional_business_constraints": [],
+  "upstream_snapshot_modified": false,
+  "generation_reference_contract_supplied": false,
+  "executable_subset_status": "PENDING_IDENTITY_SET_QUERY_REPRESENTATION_REVIEW_LEGACY_CATALOG_USES_COLLECT",
+  "oracle_review_status": "PENDING_RM2PT_AUTHORITY_REVIEW"
+}

@@ -1,0 +1,839 @@
+{
+  "operationId": "LibraryManagementSystem_renewBook_renewBook",
+  "candidateIdentity": "fdbcbc4b5e2511918c73be116cfb9dab39d93c38559b68903a33942c3daa1c83",
+  "origins": [
+    {
+      "method": "codexprompt-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LibraryManagementSystem_renewBook_renewBook/codexprompt-style/codexprompt-style.candidate.json",
+      "sha256": "1b16652115a9c9cd21cd4f0b62c4f97bed791202458053c3664c99de651bee2f"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "User.allInstances()->one(u:User|u.UserID = uid and u.BorrowStatus = BorrowStatus::NORMAL) and BookCopy.allInstances()->one(c:BookCopy|c.Barcode = barcode and c.IsReserved = false) and Loan.allInstances()->one(l:Loan|l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false and l.LoanedUser.BorrowStatus = BorrowStatus::NORMAL and l.LoanedCopy.IsReserved = false and l.DueDate.After(Today) and l.OverDueFee = 0.0 and if l.LoanedUser.oclIsTypeOf(Student) then l.RenewedTimes < 3 else l.RenewedTimes < 6 endif)",
+    "postcondition": "result = true and Loan.allInstances()->one(l:Loan|l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false and l.RenewedTimes = l.RenewedTimes@pre + 1 and l.RenewDate = Today and if l.LoanedUser.oclIsTypeOf(Student) then if l.LoanedUser.Programme = Programme::BACHELOR then l.DueDate = l.DueDate@pre + 20 else if l.LoanedUser.Programme = Programme::MASTER then l.DueDate = l.DueDate@pre + 40 else l.DueDate = l.DueDate@pre + 60 endif endif else l.DueDate = l.DueDate@pre + 60 endif)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract LibraryManagementSystemSystem::renewBook(uid:String,barcode:String): Boolean {\n          \n            precondition:\n          User.allInstances()->one(u:User|u.UserID = uid and u.BorrowStatus = BorrowStatus::NORMAL) and BookCopy.allInstances()->one(c:BookCopy|c.Barcode = barcode and c.IsReserved = false) and Loan.allInstances()->one(l:Loan|l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false and l.LoanedUser.BorrowStatus = BorrowStatus::NORMAL and l.LoanedCopy.IsReserved = false and l.DueDate.After(Today) and l.OverDueFee = 0.0 and if l.LoanedUser.oclIsTypeOf(Student) then l.RenewedTimes < 3 else l.RenewedTimes < 6 endif)\n            \n            postcondition:\n          result = true and Loan.allInstances()->one(l:Loan|l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false and l.RenewedTimes = l.RenewedTimes@pre + 1 and l.RenewDate = Today and if l.LoanedUser.oclIsTypeOf(Student) then if l.LoanedUser.Programme = Programme::BACHELOR then l.DueDate = l.DueDate@pre + 20 else if l.LoanedUser.Programme = Programme::MASTER then l.DueDate = l.DueDate@pre + 40 else l.DueDate = l.DueDate@pre + 60 endif endif else l.DueDate = l.DueDate@pre + 60 endif)\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 277,
+              "endLine": 7,
+              "endColumn": 286,
+              "startOffset": 988,
+              "endOffset": 997,
+              "expression": "Programme",
+              "kind": "model-rule",
+              "family": "MG-04",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+              "ruleIds": [
+                "MG-04::LibraryManagementSystem/entity/Faculty",
+                "MG-04::LibraryManagementSystem/entity/Student"
+              ],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Loan",
+                "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                "LibraryManagementSystem/entity/Student",
+                "LibraryManagementSystem/entity/User"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Loan",
+                  "declaration": "class Loan",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 227,
+                    "column": 9,
+                    "endLine": 309,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                },
+                {
+                  "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                  "declaration": "Loan.LoanedUser: User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 284,
+                    "column": 7,
+                    "endLine": 289,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                },
+                {
+                  "id": "LibraryManagementSystem/entity/Student",
+                  "declaration": "class Student extends User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 115,
+                    "column": 12,
+                    "endLine": 132,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                },
+                {
+                  "id": "LibraryManagementSystem/entity/User",
+                  "declaration": "class User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 4,
+                    "column": 14,
+                    "endLine": 63,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 7,
+              "column": 366,
+              "endLine": 7,
+              "endColumn": 375,
+              "startOffset": 1077,
+              "endOffset": 1086,
+              "expression": "Programme",
+              "kind": "model-rule",
+              "family": "MG-04",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+              "ruleIds": [
+                "MG-04::LibraryManagementSystem/entity/Faculty",
+                "MG-04::LibraryManagementSystem/entity/Student"
+              ],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/Loan",
+                "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                "LibraryManagementSystem/entity/Student",
+                "LibraryManagementSystem/entity/User"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/Loan",
+                  "declaration": "class Loan",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 227,
+                    "column": 9,
+                    "endLine": 309,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                },
+                {
+                  "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                  "declaration": "Loan.LoanedUser: User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 284,
+                    "column": 7,
+                    "endLine": 289,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                },
+                {
+                  "id": "LibraryManagementSystem/entity/Student",
+                  "declaration": "class Student extends User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 115,
+                    "column": 12,
+                    "endLine": 132,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                },
+                {
+                  "id": "LibraryManagementSystem/entity/User",
+                  "declaration": "class User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 4,
+                    "column": 14,
+                    "endLine": 63,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-04::LibraryManagementSystem/entity/Faculty",
+            "MG-04::LibraryManagementSystem/entity/Student"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Loan",
+              "declaration": "class Loan",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 227,
+                "column": 9,
+                "endLine": 309,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            },
+            {
+              "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+              "declaration": "Loan.LoanedUser: User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 284,
+                "column": 7,
+                "endLine": 289,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            },
+            {
+              "id": "LibraryManagementSystem/entity/Student",
+              "declaration": "class Student extends User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 115,
+                "column": 12,
+                "endLine": 132,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            },
+            {
+              "id": "LibraryManagementSystem/entity/User",
+              "declaration": "class User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 4,
+                "column": 14,
+                "endLine": 63,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 277
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "Programme"
+            }
+          ],
+          "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-04::LibraryManagementSystem/entity/Faculty",
+            "MG-04::LibraryManagementSystem/entity/Student"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/Loan",
+              "declaration": "class Loan",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 227,
+                "column": 9,
+                "endLine": 309,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            },
+            {
+              "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+              "declaration": "Loan.LoanedUser: User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 284,
+                "column": 7,
+                "endLine": 289,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            },
+            {
+              "id": "LibraryManagementSystem/entity/Student",
+              "declaration": "class Student extends User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 115,
+                "column": 12,
+                "endLine": 132,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            },
+            {
+              "id": "LibraryManagementSystem/entity/User",
+              "declaration": "class User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 4,
+                "column": 14,
+                "endLine": 63,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 7,
+            "column": 366
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "Programme"
+            }
+          ],
+          "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 277,
+            "endLine": 7,
+            "endColumn": 286,
+            "startOffset": 988,
+            "endOffset": 997,
+            "expression": "Programme",
+            "kind": "model-rule",
+            "family": "MG-04",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+            "ruleIds": [
+              "MG-04::LibraryManagementSystem/entity/Faculty",
+              "MG-04::LibraryManagementSystem/entity/Student"
+            ],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Loan",
+              "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+              "LibraryManagementSystem/entity/Student",
+              "LibraryManagementSystem/entity/User"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Loan",
+                "declaration": "class Loan",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 227,
+                  "column": 9,
+                  "endLine": 309,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              },
+              {
+                "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                "declaration": "Loan.LoanedUser: User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 284,
+                  "column": 7,
+                  "endLine": 289,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              },
+              {
+                "id": "LibraryManagementSystem/entity/Student",
+                "declaration": "class Student extends User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 115,
+                  "column": 12,
+                  "endLine": 132,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              },
+              {
+                "id": "LibraryManagementSystem/entity/User",
+                "declaration": "class User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 4,
+                  "column": 14,
+                  "endLine": 63,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+          "message": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q1",
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q2",
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              11,
+              12,
+              13
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Loan",
+              "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+              "LibraryManagementSystem/entity/Student",
+              "LibraryManagementSystem/entity/User"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 277,
+                "endLine": 7,
+                "endColumn": 286,
+                "startOffset": 988,
+                "endOffset": 997,
+                "expression": "Programme",
+                "kind": "model-rule",
+                "family": "MG-04",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+                "ruleIds": [
+                  "MG-04::LibraryManagementSystem/entity/Faculty",
+                  "MG-04::LibraryManagementSystem/entity/Student"
+                ],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Loan",
+                  "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                  "LibraryManagementSystem/entity/Student",
+                  "LibraryManagementSystem/entity/User"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Loan",
+                    "declaration": "class Loan",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 227,
+                      "column": 9,
+                      "endLine": 309,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  },
+                  {
+                    "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                    "declaration": "Loan.LoanedUser: User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 284,
+                      "column": 7,
+                      "endLine": 289,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  },
+                  {
+                    "id": "LibraryManagementSystem/entity/Student",
+                    "declaration": "class Student extends User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 115,
+                      "column": 12,
+                      "endLine": 132,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  },
+                  {
+                    "id": "LibraryManagementSystem/entity/User",
+                    "declaration": "class User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 4,
+                      "column": 14,
+                      "endLine": 63,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 7,
+            "column": 366,
+            "endLine": 7,
+            "endColumn": 375,
+            "startOffset": 1077,
+            "endOffset": 1086,
+            "expression": "Programme",
+            "kind": "model-rule",
+            "family": "MG-04",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+            "ruleIds": [
+              "MG-04::LibraryManagementSystem/entity/Faculty",
+              "MG-04::LibraryManagementSystem/entity/Student"
+            ],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/Loan",
+              "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+              "LibraryManagementSystem/entity/Student",
+              "LibraryManagementSystem/entity/User"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/Loan",
+                "declaration": "class Loan",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 227,
+                  "column": 9,
+                  "endLine": 309,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              },
+              {
+                "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                "declaration": "Loan.LoanedUser: User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 284,
+                  "column": 7,
+                  "endLine": 289,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              },
+              {
+                "id": "LibraryManagementSystem/entity/Student",
+                "declaration": "class Student extends User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 115,
+                  "column": 12,
+                  "endLine": 132,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              },
+              {
+                "id": "LibraryManagementSystem/entity/User",
+                "declaration": "class User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 4,
+                  "column": 14,
+                  "endLine": 63,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+          "message": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q1",
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q2",
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              11,
+              12,
+              13
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/Loan",
+              "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+              "LibraryManagementSystem/entity/Student",
+              "LibraryManagementSystem/entity/User"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 7,
+                "column": 366,
+                "endLine": 7,
+                "endColumn": 375,
+                "startOffset": 1077,
+                "endOffset": 1086,
+                "expression": "Programme",
+                "kind": "model-rule",
+                "family": "MG-04",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-04] Feature Programme is not available on User; it is declared only on a subtype.",
+                "ruleIds": [
+                  "MG-04::LibraryManagementSystem/entity/Faculty",
+                  "MG-04::LibraryManagementSystem/entity/Student"
+                ],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/Loan",
+                  "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                  "LibraryManagementSystem/entity/Student",
+                  "LibraryManagementSystem/entity/User"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/Loan",
+                    "declaration": "class Loan",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 227,
+                      "column": 9,
+                      "endLine": 309,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  },
+                  {
+                    "id": "LibraryManagementSystem/entity/Loan/association/LoanedUser",
+                    "declaration": "Loan.LoanedUser: User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 284,
+                      "column": 7,
+                      "endLine": 289,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  },
+                  {
+                    "id": "LibraryManagementSystem/entity/Student",
+                    "declaration": "class Student extends User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 115,
+                      "column": 12,
+                      "endLine": 132,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  },
+                  {
+                    "id": "LibraryManagementSystem/entity/User",
+                    "declaration": "class User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 4,
+                      "column": 14,
+                      "endLine": 63,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the declared inheritance and the receiver binding. A type-test branch alone does not narrow a base-typed binding; do not invent an unsupported cast.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/P3"
+            ],
+            "sourceLines": [
+              7
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/P4"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              12
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/renewBook/operation/renewBook/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              13
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

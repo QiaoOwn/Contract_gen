@@ -1,0 +1,244 @@
+{
+  "mutations": [
+    {
+      "operation_id": "Airport_manageUser_createStaff",
+      "mutation_id": "creation_membership",
+      "obligation_family": "Staff.allInstances()",
+      "typescript_statement": "getRepository(Staff).splice(getRepository(Staff).findIndex((x:any)=>x.Id===id),1);",
+      "mutates_result": false,
+      "sourceExcerpt": "adds a new Staff member",
+      "requirement": {
+        "operationId": "Airport_manageUser_createStaff",
+        "project": "Airport",
+        "description": "Registration adds a new Staff member carrying the supplied identity, password, phone and role, provided the staff identifier is unused. If bossid identifies an existing Staff member, that person becomes the new member's Boss. The operation returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "Airport/AirportSystem/createStaff creates and stores exactly one Staff member without a matching boss",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/Airport_manageUser_createStaff/capture.json",
+      "captureSha256": "abe29c970b9ad7b43fd7e62f3667a6c0c828dc51e37dbf382ed39757286d6caa",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "Airport_manageUser_createStaff",
+      "mutation_id": "created_password",
+      "obligation_family": "Staff.Password",
+      "typescript_statement": "getRepository(Staff).find((x:any)=>x.Id===id)!.Password += '__fault';",
+      "mutates_result": false,
+      "sourceExcerpt": "password",
+      "requirement": {
+        "operationId": "Airport_manageUser_createStaff",
+        "project": "Airport",
+        "description": "Registration adds a new Staff member carrying the supplied identity, password, phone and role, provided the staff identifier is unused. If bossid identifies an existing Staff member, that person becomes the new member's Boss. The operation returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "Airport/AirportSystem/createStaff creates and stores exactly one Staff member without a matching boss",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/Airport_manageUser_createStaff/capture.json",
+      "captureSha256": "abe29c970b9ad7b43fd7e62f3667a6c0c828dc51e37dbf382ed39757286d6caa",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "CoCoME_manageStore_deleteStore",
+      "mutation_id": "deleted_member_restored",
+      "obligation_family": "Store membership",
+      "typescript_statement": "getRepository(Store).push(targetStore);",
+      "mutates_result": false,
+      "sourceExcerpt": "Delete the Store",
+      "requirement": {
+        "operationId": "CoCoME_manageStore_deleteStore",
+        "project": "CoCoME",
+        "description": "Delete the Store identified by the supplied identifier from the store collection, returning true. The referenced store must exist in that collection before deletion.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "CoCoME/ManageStoreCRUDService/deleteStore removes the selected Store, preserves its neighbor, and returns true",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/CoCoME_manageStore_deleteStore/capture.json",
+      "captureSha256": "f8c10e04fee9545d07b4865e3f94a73c80928112cdb2647643e34c7eb62f32ef",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "CoCoME_processSale_makeNewSale",
+      "mutation_id": "created_state",
+      "obligation_family": "Sale.IsComplete",
+      "typescript_statement": "this.CurrentSale.IsComplete = true;",
+      "mutates_result": false,
+      "sourceExcerpt": "new Sale is incomplete",
+      "requirement": {
+        "operationId": "CoCoME_processSale_makeNewSale",
+        "project": "CoCoME",
+        "description": "A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "CoCoME/ProcessSaleService/makeNewSale creates exactly one incomplete Sale linked to the open desk: {\"previous\":false,\"neighbor\":false,\"ready\":false}",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/CoCoME_processSale_makeNewSale/capture.json",
+      "captureSha256": "8a9c81e75d52cffd1091069d2d579f10939506dc0e63479d758b2f8745c2d3e4",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "CoCoME_processSale_makeNewSale",
+      "mutation_id": "created_association",
+      "obligation_family": "Sale.BelongedCashDesk",
+      "typescript_statement": "this.CurrentSale.BelongedCashDesk = undefined as any;",
+      "mutates_result": false,
+      "sourceExcerpt": "linked to that desk",
+      "requirement": {
+        "operationId": "CoCoME_processSale_makeNewSale",
+        "project": "CoCoME",
+        "description": "A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "CoCoME/ProcessSaleService/makeNewSale creates exactly one incomplete Sale linked to the open desk: {\"previous\":false,\"neighbor\":false,\"ready\":false}",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/CoCoME_processSale_makeNewSale/capture.json",
+      "captureSha256": "8a9c81e75d52cffd1091069d2d579f10939506dc0e63479d758b2f8745c2d3e4",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "CoCoME_processSale_makeNewSale",
+      "mutation_id": "created_collection",
+      "obligation_family": "CashDesk.ContainedSales",
+      "typescript_statement": "this.CurrentCashDesk.ContainedSales = this.CurrentCashDesk.ContainedSales.filter((x:any)=>x!==this.CurrentSale);",
+      "mutates_result": false,
+      "sourceExcerpt": "linked to that desk",
+      "requirement": {
+        "operationId": "CoCoME_processSale_makeNewSale",
+        "project": "CoCoME",
+        "description": "A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "CoCoME/ProcessSaleService/makeNewSale creates exactly one incomplete Sale linked to the open desk: {\"previous\":false,\"neighbor\":false,\"ready\":false}",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/CoCoME_processSale_makeNewSale/capture.json",
+      "captureSha256": "8a9c81e75d52cffd1091069d2d579f10939506dc0e63479d758b2f8745c2d3e4",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "AutomatedTellerMachine_checkBalance_inputCard",
+      "mutation_id": "found_branch_result",
+      "obligation_family": "result",
+      "typescript_statement": "result = !result;",
+      "mutates_result": true,
+      "sourceExcerpt": "returns true",
+      "requirement": {
+        "operationId": "AutomatedTellerMachine_checkBalance_inputCard",
+        "project": "AutomatedTellerMachine",
+        "description": "Reading a card identifier has no additional business restriction. If a matching bank card is found, the ATM makes that card current, marks its identifier as validated and returns true. If no card is found, the identifier is marked unvalidated and the operation returns false.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "source-aligned inputCard acceptance accepts an existing card without adding a status, owner or key-range requirement: {\"key\":47,\"status\":\"NORMAL\",\"owner\":true}",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/AutomatedTellerMachine_checkBalance_inputCard/capture.json",
+      "captureSha256": "c707a5748ee43ebc7726e4e0086edbb4ad77671ce59862f1db9ef87eea919469",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "AutomatedTellerMachine_checkBalance_inputCard",
+      "mutation_id": "missing_branch_result",
+      "obligation_family": "result",
+      "typescript_statement": "result = !result;",
+      "mutates_result": true,
+      "sourceExcerpt": "returns false",
+      "requirement": {
+        "operationId": "AutomatedTellerMachine_checkBalance_inputCard",
+        "project": "AutomatedTellerMachine",
+        "description": "Reading a card identifier has no additional business restriction. If a matching bank card is found, the ATM makes that card current, marks its identifier as validated and returns true. If no card is found, the identifier is marked unvalidated and the operation returns false.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 5,
+      "source_test_name": "source-aligned inputCard acceptance returns false normally when the card is absent, initially validated=true",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/AutomatedTellerMachine_checkBalance_inputCard/capture.json",
+      "captureSha256": "c707a5748ee43ebc7726e4e0086edbb4ad77671ce59862f1db9ef87eea919469",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "AutomatedTellerMachine_checkBalance_inputCard",
+      "mutation_id": "found_validation",
+      "obligation_family": "CardIDValidated",
+      "typescript_statement": "this.CardIDValidated = false;",
+      "mutates_result": false,
+      "sourceExcerpt": "marks its identifier as validated",
+      "requirement": {
+        "operationId": "AutomatedTellerMachine_checkBalance_inputCard",
+        "project": "AutomatedTellerMachine",
+        "description": "Reading a card identifier has no additional business restriction. If a matching bank card is found, the ATM makes that card current, marks its identifier as validated and returns true. If no card is found, the identifier is marked unvalidated and the operation returns false.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "source-aligned inputCard acceptance accepts an existing card without adding a status, owner or key-range requirement: {\"key\":47,\"status\":\"NORMAL\",\"owner\":true}",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/AutomatedTellerMachine_checkBalance_inputCard/capture.json",
+      "captureSha256": "c707a5748ee43ebc7726e4e0086edbb4ad77671ce59862f1db9ef87eea919469",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "LibraryManagementSystem_borrowBook_borrowBook",
+      "mutation_id": "loan_counter",
+      "obligation_family": "User.LoanedNumber",
+      "typescript_statement": "user.LoanedNumber += 1;",
+      "mutates_result": false,
+      "sourceExcerpt": "user loan count increases by one",
+      "requirement": {
+        "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+        "project": "LibraryManagementSystem",
+        "description": "A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.\n\nBorrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans a reserved copy to a student and records every post-state obligation",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/LibraryManagementSystem_borrowBook_borrowBook/capture.json",
+      "captureSha256": "65d9cd85b45c3f9c713276e55fa599446207949e524e4d3e5ebcb26714f91e90",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "LibraryManagementSystem_borrowBook_borrowBook",
+      "mutation_id": "loan_copy_association",
+      "obligation_family": "Loan.LoanedCopy",
+      "typescript_statement": "copy.LoanedRecord.find((x:any)=>x.LoanedUser===user)!.LoanedCopy = undefined as any;",
+      "mutates_result": false,
+      "sourceExcerpt": "linked to the user and copy",
+      "requirement": {
+        "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+        "project": "LibraryManagementSystem",
+        "description": "A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.\n\nBorrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans a reserved copy to a student and records every post-state obligation",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/LibraryManagementSystem_borrowBook_borrowBook/capture.json",
+      "captureSha256": "65d9cd85b45c3f9c713276e55fa599446207949e524e4d3e5ebcb26714f91e90",
+      "expected_decision": false
+    },
+    {
+      "operation_id": "LibraryManagementSystem_borrowBook_borrowBook",
+      "mutation_id": "loan_collection",
+      "obligation_family": "BookCopy.LoanedRecord",
+      "typescript_statement": "copy.LoanedRecord = [];",
+      "mutates_result": false,
+      "sourceExcerpt": "copy's loan history",
+      "requirement": {
+        "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+        "project": "LibraryManagementSystem",
+        "description": "A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.\n\nBorrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true.",
+        "requirementVersion": "Narrative-V3",
+        "sourceType": "paraphrased"
+      },
+      "source_capture_index": 0,
+      "source_test_name": "LibraryManagementSystem/LibraryManagementSystemSystem/borrowBook loans a reserved copy to a student and records every post-state obligation",
+      "captureFile": "results/rq2-validation-narrative-v1/extended-v1/captures/LibraryManagementSystem_borrowBook_borrowBook/capture.json",
+      "captureSha256": "65d9cd85b45c3f9c713276e55fa599446207949e524e4d3e5ebcb26714f91e90",
+      "expected_decision": false
+    }
+  ]
+}

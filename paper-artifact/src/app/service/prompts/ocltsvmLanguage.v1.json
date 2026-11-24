@@ -1,0 +1,41 @@
+{
+  "version": "ocltsvm-operation-contract-language-v1",
+  "name": "OCLTSVM executable operation-contract language",
+  "scope": "Target-language syntax, static restrictions and execution semantics. This document contains no requirement decomposition, business target selection or repair strategy.",
+  "clauses": {
+    "definition": "Optional initialized, explicitly typed bindings. Query-only; result, @pre, object creation and effects are not admitted.",
+    "precondition": "A non-mutating Boolean condition evaluated before effects. result, @pre and object creation are not admitted.",
+    "postcondition": "Boolean obligations over the post-state, with executable effects as described below. result has the operation's declared return type."
+  },
+  "types": {
+    "primitives": ["Boolean", "Integer", "Real", "String", "Date"],
+    "collections": ["Set(T)"],
+    "modelTypes": "Entity names, feature names, enumeration names and literals come from the supplied UML. Enum literals use Type::LITERAL. Service state uses self.name; parameters use their declared names.",
+    "bindings": "Definition and iterator bindings require explicit types. Definition bindings require initializers; iterator bindings cannot have initializers.",
+    "receivers": "isEmpty, notEmpty, size and sum are collection operations, not String operations in this language. String equality and inequality are supported.",
+    "typeTest": "oclIsTypeOf(T) returns a Boolean. It does not statically narrow the receiver to T; subtype-only features require a receiver declared with that subtype."
+  },
+  "expressions": {
+    "comparison": ["=", "<>", ">", "<", ">=", "<="],
+    "arithmetic": ["+", "-", "*", "/"],
+    "logic": "and, or and if-then-else-endif. There is no standalone not, implies or xor keyword. Mixed and/or at one nesting level is not admitted.",
+    "navigation": "Property receivers are variables or self, not arbitrary query expressions. A standard-operation receiver supports a variable or one property segment, such as self.state; longer chained navigation followed by a standard operation is not admitted by the parser. See the grammar for property and date-call forms.",
+    "iteratorBody": "Typed iterators have a logical-formula or if-expression body. A bare true/false literal as an iterator body is not admitted.",
+    "membership": "includes, excludes, includesAll and excludesAll accept a bound identifier argument, not an inline query expression."
+  },
+  "collections": {
+    "queries": ["allInstances", "one", "exists", "select", "any", "forAll", "isUnique", "includes", "excludes", "includesAll", "excludesAll", "isEmpty", "notEmpty", "size", "sum"],
+    "sumBy": "source->sumBy(element:Entity | numericSelector). One typed iterator, a pure Integer/Real selector, numeric branches for conditional selectors. Each distinct source object contributes; equal projected numbers retain multiplicity. Empty source yields zero. Undefined or nonnumeric selector results fail.",
+    "projectSet": "source->projectSet(element:Entity | objectSelector). One typed iterator, a pure selector returning one defined model object. Result is an identity-deduplicated Set, with no flattening and no target-repository registration requirement. Null, scalar and collection-valued results fail.",
+    "unsupported": ["collect", "including", "excluding", "reject", "iterate", "oclIsKindOf", "oclAsType", "Bag", "Sequence", "OrderedSet", "Tuple", "invalid", "OclInvalid", "UnlimitedNatural"]
+  },
+  "execution": {
+    "assignment": "In a postcondition, equality on a mutable attribute or association is an update obligation. result = expression specifies the operation's return value. Other conditions are predicates checked against the resulting state.",
+    "creation": "An uninitialized typed let object can be created by object.oclIsNew() in the effect path.",
+    "membershipEffects": "Postcondition includes/excludes on repositories or association collections add/remove membership. Pure checking observes membership without changing it.",
+    "forAll": "A postcondition forAll body containing effects executes those effects for source elements; pure rechecking evaluates predicates without mutation.",
+    "preState": "Property @pre references in postconditions read captured pre-operation values. Preconditions and Definitions cannot contain @pre. New objects have no pre-state property snapshot.",
+    "time": "Declared Today and Now are read-only invocation environment values. Today is the entry calendar day. Date comparisons are isBefore, isAfter and isEqual; After(n)/Before(n) return dates offset by n days.",
+    "calls": "User-defined operation calls and implicit casts are outside the executable generation subset."
+  }
+}

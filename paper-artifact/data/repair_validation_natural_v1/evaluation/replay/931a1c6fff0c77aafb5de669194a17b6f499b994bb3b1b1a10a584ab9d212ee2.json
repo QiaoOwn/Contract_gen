@@ -1,0 +1,479 @@
+{
+  "operationId": "LoanProcessingSystem_manageLoanTerm_deleteLoanTerm",
+  "candidateIdentity": "931a1c6fff0c77aafb5de669194a17b6f499b994bb3b1b1a10a584ab9d212ee2",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LoanProcessingSystem_manageLoanTerm_deleteLoanTerm/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "8b88c9c80785bee32ba4949557b1035f4616500777014965d32c49a8e453453e"
+    }
+  ],
+  "contract": {
+    "definition": "term : LoanTerm = LoanTerm.allInstances()->any(t : LoanTerm | t.itemid = itemid)",
+    "precondition": "LoanTerm.allInstances()->exists(t : LoanTerm | t.itemid = itemid)",
+    "postcondition": "result = true and LoanTerm.allInstances()->excludes(term)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ManageLoanTermCRUDService::deleteLoanTerm(itemid:Integer): Boolean {\n          definition:\n          term : LoanTerm = LoanTerm.allInstances()->any(t : LoanTerm | t.itemid = itemid)\n            \n            precondition:\n          LoanTerm.allInstances()->exists(t : LoanTerm | t.itemid = itemid)\n            \n            postcondition:\n          result = true and LoanTerm.allInstances()->excludes(term)\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "definition",
+              "line": 3,
+              "column": 75,
+              "endLine": 3,
+              "endColumn": 81,
+              "startOffset": 174,
+              "endOffset": 180,
+              "expression": "itemid",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LoanProcessingSystem/entity/LoanTerm"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/entity/LoanTerm",
+                  "declaration": "class LoanTerm",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                    "line": 189,
+                    "column": 13,
+                    "endLine": 204,
+                    "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "rootBindingId": "binding:110:term",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 63,
+                  "endLine": 9,
+                  "endColumn": 67,
+                  "startOffset": 408,
+                  "endOffset": 412,
+                  "expression": "term"
+                }
+              ]
+            },
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 60,
+              "endLine": 6,
+              "endColumn": 66,
+              "startOffset": 289,
+              "endOffset": 295,
+              "expression": "itemid",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LoanProcessingSystem/entity/LoanTerm"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LoanProcessingSystem/entity/LoanTerm",
+                  "declaration": "class LoanTerm",
+                  "source": {
+                    "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                    "line": 189,
+                    "column": 13,
+                    "endLine": 204,
+                    "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/entity/LoanTerm",
+              "declaration": "class LoanTerm",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                "line": 189,
+                "column": 13,
+                "endLine": 204,
+                "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "definition",
+            "line": 3,
+            "column": 75
+          },
+          "candidateScopes": [
+            {
+              "clause": "definition",
+              "expression": "itemid"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "term"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LoanProcessingSystem/entity/LoanTerm",
+              "declaration": "class LoanTerm",
+              "source": {
+                "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                "line": 189,
+                "column": 13,
+                "endLine": 204,
+                "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 60
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "itemid"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "definition",
+          "location": {
+            "clause": "definition",
+            "line": 3,
+            "column": 75,
+            "endLine": 3,
+            "endColumn": 81,
+            "startOffset": 174,
+            "endOffset": 180,
+            "expression": "itemid",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/entity/LoanTerm",
+                "declaration": "class LoanTerm",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                  "line": 189,
+                  "column": 13,
+                  "endLine": 204,
+                  "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "rootBindingId": "binding:110:term",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 63,
+                "endLine": 9,
+                "endColumn": 67,
+                "startOffset": 408,
+                "endOffset": 412,
+                "expression": "term"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature itemid is not available on LoanTerm.",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "locations": [
+              {
+                "clause": "definition",
+                "line": 3,
+                "column": 75,
+                "endLine": 3,
+                "endColumn": 81,
+                "startOffset": 174,
+                "endOffset": 180,
+                "expression": "itemid",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LoanProcessingSystem/entity/LoanTerm"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/entity/LoanTerm",
+                    "declaration": "class LoanTerm",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                      "line": 189,
+                      "column": 13,
+                      "endLine": 204,
+                      "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "rootBindingId": "binding:110:term",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 63,
+                    "endLine": 9,
+                    "endColumn": 67,
+                    "startOffset": 408,
+                    "endOffset": 412,
+                    "expression": "term"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 60,
+            "endLine": 6,
+            "endColumn": 66,
+            "startOffset": 289,
+            "endOffset": 295,
+            "expression": "itemid",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LoanProcessingSystem/entity/LoanTerm",
+                "declaration": "class LoanTerm",
+                "source": {
+                  "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                  "line": 189,
+                  "column": 13,
+                  "endLine": 204,
+                  "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature itemid is not available on LoanTerm.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/deleteLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [
+              "LoanProcessingSystem/entity/LoanTerm"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 60,
+                "endLine": 6,
+                "endColumn": 66,
+                "startOffset": 289,
+                "endOffset": 295,
+                "expression": "itemid",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature itemid is not available on LoanTerm.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LoanProcessingSystem/entity/LoanTerm"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LoanProcessingSystem/entity/LoanTerm",
+                    "declaration": "class LoanTerm",
+                    "source": {
+                      "file": "src/rm2pt/project/LoanProcessingSystem/entity.ts",
+                      "line": 189,
+                      "column": 13,
+                      "endLine": 204,
+                      "sha256": "0d04d300b2c0fbbc2c5eb04bac0d9222919d8f50253bd4263813bf56657b8c44"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/deleteLoanTerm/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/deleteLoanTerm/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LoanProcessingSystem/use-case/manageLoanTerm/operation/deleteLoanTerm/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

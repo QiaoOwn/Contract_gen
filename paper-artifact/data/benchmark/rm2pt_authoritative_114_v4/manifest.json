@@ -1,0 +1,98 @@
+{
+  "version": "rm2pt-authoritative-input-preparation-v1",
+  "role": "source-reconciliation-not-ready-for-formal-experiment",
+  "authority_policy": "config/rm2pt-authority-policy.json",
+  "authority_policy_sha256": "290988856600099f94ac9432c6dc912a3eb8edcfb12f54ce65bb0b5af309de5b",
+  "audit_directory": "authority-audit",
+  "previous_preparation_snapshot": "data/benchmark/rm2pt_authoritative_114_v3",
+  "approved_source_correction_count": 7,
+  "approved_source_corrections": [
+    {
+      "id": "LibraryManagementSystem_listBookHistory_listReservationBook",
+      "decision_id": "R07",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R07_listReservationBook.json",
+      "note": "User-approved Set projection: return distinct BookCopy object identities from the selected user's reservations, including closed reservation records. Do not merge different objects by equal attributes or add an open-reservation filter. Existing source preconditions and return type are preserved; executable representation and Oracle alignment remain separate checks.",
+      "decision_sha256": "a9a5b7fb1a6220b5bf0a3405eed2b952a91034aa62c1a932695763f32d3e0cfb"
+    },
+    {
+      "id": "LibraryManagementSystem_listBookHistory_listOverDueBook",
+      "decision_id": "R06",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R06_listOverDueBook.json",
+      "note": "User-approved Set result: return distinct BookCopy object identities from the selected user's unreturned Loans with fee > 0. Multiple qualifying Loans may share one returned copy; equal attribute values do not merge different objects. Existing filters and return type are preserved. Executable representation and Oracle alignment remain separate checks.",
+      "decision_sha256": "fd5c3c37c2998fe881b8ba430af25e54fcb57bd9752d4387661620df700ca820"
+    },
+    {
+      "id": "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay",
+      "decision_id": "R05",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R05_countDownSuspensionDay.json",
+      "note": "User-approved state timing: select users with positive days at operation entry, decrement once, and restore previously SUSPEND users only at the post-decrement zero-day boundary with no overdue fee. Retain suspension with outstanding fees; leave initially zero-day users unchanged. Executable representation and Oracle alignment remain separate checks.",
+      "decision_sha256": "c96a4ab299f7348c6caace19041030fb0b0499d4bca94f22160ffcaf4cdc192a"
+    },
+    {
+      "id": "CoCoME_receiveOrderedProduct_receiveOrderedProduct",
+      "decision_id": "R04",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R04_receiveOrderedProduct.json",
+      "note": "User-approved alias-aware stock semantics: for each Item, add the quantities of all this order's entries referring to that object to its operation-entry stock. Distinct entries count separately; different Items are accumulated independently. Executable representation and Oracle alignment remain separate checks.",
+      "decision_sha256": "4bebf20704aec7de71871edc8ed8823ed0e69bef95c4a86cddda810012831100"
+    },
+    {
+      "id": "CoCoME_processSale_endSale",
+      "decision_id": "R03",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R03_endSale.json",
+      "note": "User-approved collection semantics: every sales line contributes its subtotal, including equal amounts on distinct lines. Replace Sale.Amount with the total, use zero for an empty sale, mark payment-ready and return the numeric total. Executable representation and Oracle alignment remain separate checks.",
+      "decision_sha256": "61806438449f2fe00e814a31ffb8ac23bb94f1135996e3bb1f799188608407b7"
+    },
+    {
+      "id": "CoCoME_orderProducts_placeOrder",
+      "decision_id": "R02",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R02_placeOrder.json",
+      "note": "User-approved source correction: add every entry subtotal to the operation-entry amount, including equal subtotals on distinct entries; empty orders preserve the initial amount. Executable representation and full Oracle alignment remain separate checks.",
+      "decision_sha256": "a7b82189f073ad724abb46f05dcb7480fc892ad988fc59ff586d576b13930cb0"
+    },
+    {
+      "id": "Airport_manageDevice_createDevice",
+      "decision_id": "R01",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R01_createDevice.json",
+      "note": "User-approved variable-target correction: store newly created d, not absent lookup result dev. Original RM2PT snapshot remains unchanged; this is a laboratory-adjudicated source correction.",
+      "decision_sha256": "f07c24ef4faf35c71f161a225fb8167f2cf33aa10862ef65d006d081fb848ae5"
+    }
+  ],
+  "approved_source_mapping_count": 1,
+  "approved_source_mappings": [
+    {
+      "id": "LibraryManagementSystem_listRecommendBook_listRecommendBook",
+      "decision_id": "R08",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R08_listRecommendBook.json",
+      "source_service": "ListBookHistory",
+      "source_operation": "listRecommendBook",
+      "note": "User-approved source service alias: preserve both use-case samples and runtime service names, but link them to the same active original ListBookHistory operation. No business clauses are changed; the views are not independent original sources.",
+      "decision_sha256": "a7102a77ca012e3a9736dd4f77849482941d9cecd6563db956663a8f4284c9eb"
+    }
+  ],
+  "approved_restored_draft_count": 1,
+  "approved_restored_drafts": [
+    {
+      "id": "LoanProcessingSystem_generateLoanLetterAndAgreement_createLoanAccount",
+      "decision_id": "R09",
+      "decision_file": "data/operation_revision/rm2pt_authority_decisions/R09_createLoanAccount.json",
+      "note": "User-approved laboratory restoration of the commented three-parameter Boolean draft. Retain operation identity and business semantics; do not classify it as an original active contract or substitute the one-parameter ThirdPartyServices operation.",
+      "decision_sha256": "deeb2ae6cfcb061c02295659f3a8967baa3729065101e7eac843bc2487242ee7"
+    }
+  ],
+  "parent_input": "data/benchmark/lab_adjudicated_114_v2/operations-lab-adjudicated-114-v2.jsonl",
+  "parent_input_sha256": "8206dab27fce4ca0dbbda88c5ed151d19d478af9e3501cdeb5c82a59be7b34c4",
+  "output_sha256": "c4d427804abb4a76b5c40b8669b2238e7cf2cda3555a788e156f93c4bd677633",
+  "operation_count": 114,
+  "requirement_change_count": 11,
+  "unresolved_source_operation_count": 0,
+  "pending_requirement_fidelity_review_count": 114,
+  "pending_oracle_alignment_count": 114,
+  "solver_prompt_version": "constraint-guided-ocl-solver-v2",
+  "solver_prompt_hash": "f956a54ae591f96accc113ff0072300117b18c431b14a4a58f9c7d58bc999277",
+  "formal_experiment_ready": false,
+  "previous_input_oracle_results_modified": false,
+  "upstream_modified": false,
+  "model_calls": 0,
+  "hidden_evaluations": 0,
+  "note": "All 114 operations are retained. Source conflicts, commented drafts and service aliases are not silently repaired or certified. Existing laboratory decisions remain historical evidence, not original-source equivalence."
+}

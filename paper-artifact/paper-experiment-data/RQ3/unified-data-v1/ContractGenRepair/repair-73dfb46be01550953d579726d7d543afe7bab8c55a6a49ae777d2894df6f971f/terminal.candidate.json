@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "deletedCatalogs: Set(ProductCatalog) = ProductCatalog.allInstances()->select(catalog: ProductCatalog | catalog.Id = id)",
+    "precondition": "deletedCatalogs->notEmpty()",
+    "postcondition": "deletedCatalogs->forAll(deletedCatalog: ProductCatalog | ProductCatalog.allInstances()->excludes(deletedCatalog)) and result = true"
+  },
+  "methodAccepted": true
+}

@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "CashDesk.allInstances()->exists(cd: CashDesk|cd = self.CurrentCashDesk) and self.CurrentCashDesk.IsOpened = true and (self.CurrentSale.oclIsUndefined() = true or self.CurrentSale.IsComplete = true)",
+    "postcondition": "result = true and Sale.allInstances()->exists(s: Sale|s.oclIsNew() = true and s = self.CurrentSale and s.IsComplete = false and s.IsReadytoPay = false and s.BelongedCashDesk = self.CurrentCashDesk and self.CurrentCashDesk.ContainedSales->includes(s))"
+  },
+  "methodAccepted": true
+}

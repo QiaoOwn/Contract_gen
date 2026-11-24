@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false",
+    "postcondition": "let total: Real = self.CurrentSale.ContainedSalesLine->sumBy(line: SalesLineItem | line.Subamount) in self.CurrentSale.Amount = total and self.CurrentSale.IsReadytoPay = true and result = total and self.CurrentSale.IsComplete = self.CurrentSale.IsComplete@pre"
+  },
+  "methodAccepted": true
+}

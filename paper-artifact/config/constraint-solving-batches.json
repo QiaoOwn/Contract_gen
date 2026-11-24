@@ -1,0 +1,125 @@
+{
+  "version": "constraint-solving-development-batches-v1",
+  "batches": {
+    "library-history-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Complete ListBookHistory use case: source-bound Loan history and holdings plus reviewed overdue-copy, reservation-copy and recommendation-record queries. No seeded expressions or terminal feedback.",
+      "operations": [
+        {"id":"LibraryManagementSystem_listBookHistory_listBorrowHistory","focus":"All associated Loan identities, including returned records"},
+        {"id":"LibraryManagementSystem_listBookHistory_listHodingBook","focus":"Exactly unreturned Loan identities without a fee filter"},
+        {"id":"LibraryManagementSystem_listBookHistory_listOverDueBook","focus":"Distinct BookCopy identities from unreturned positive-fee Loans"},
+        {"id":"LibraryManagementSystem_listBookHistory_listReservationBook","focus":"Distinct BookCopy identities from all reservations, including closed records"},
+        {"id":"LibraryManagementSystem_listBookHistory_listRecommendBook","focus":"All RecommendBook record identities, not Book or BookCopy projection"}
+      ]
+    },
+    "library-search-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Five source-bound SearchBook operations with explicit result-identity and source-specific precondition checks; independent terminal evaluation, no seeded answers.",
+      "operations": [
+        {"id":"LibraryManagementSystem_searchBook_searchBookByBarCode","focus":"Book identity Set selected through linked copy barcodes, including empty String"},
+        {"id":"LibraryManagementSystem_searchBook_searchBookByTitle","focus":"Exact nonempty title lookup without trimming or substring matching"},
+        {"id":"LibraryManagementSystem_searchBook_searchBookByAuthor","focus":"Exact nonempty author lookup with all matching Book identities"},
+        {"id":"LibraryManagementSystem_searchBook_searchBookByISBN","focus":"Exact ISBn attribute lookup preserving spelling and String-only guard"},
+        {"id":"LibraryManagementSystem_searchBook_searchBookBySubject","focus":"Exact linked Subject.Name selection without related-object repository assumptions"}
+      ]
+    },
+    "cocome-creation-2": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Two source-bound creation operations aligned to the current frozen input; three other operations await approved changes at unified freeze. No seeded expressions or final-test feedback.",
+      "operations": [
+        {"id":"CoCoME_orderProducts_makeNewOrder","focus":"Fresh order, supplied ID, NEW state, invocation time, repository membership and current reference"},
+        {"id":"CoCoME_processSale_makeNewSale","focus":"New incomplete/unready Sale with both CashDesk association ends, repository and current reference"}
+      ]
+    },
+    "cocome-stock-supplier-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Five individually inspected source specifications; independent collection identity, attribute and association observations; final tests never enter repair feedback.",
+      "operations": [
+        {"id":"CoCoME_changePrice_changePrice","focus":"Selected Item sale price and true result without an unstated positive-price guard"},
+        {"id":"CoCoME_listSuppliers_listSuppliers","focus":"Complete Supplier identity Set, including empty and equal-attribute objects"},
+        {"id":"CoCoME_showStockReports_showStockReports","focus":"Complete Item identity Set without an extra stock filter"},
+        {"id":"CoCoME_orderProducts_listAllOutOfStoreProducts","focus":"Exactly-zero stock membership, excluding positive and negative stock"},
+        {"id":"CoCoME_orderProducts_chooseSupplier","focus":"Selected Supplier identity association on the current order without requiring order repository membership"}
+      ]
+    },
+    "atm-transactions-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Five explicitly source-mapped operations; paired receipt/ejection identities share upstream specifications. Final tests are isolated from repair feedback.",
+      "operations": [
+        {"id":"AutomatedTellerMachine_depositFunds_printReceipt","focus":"Receipt branch priority and recorded amounts in deposit context"},
+        {"id":"AutomatedTellerMachine_withdrawCash_printReceipt","focus":"Receipt branch priority including both flags and zero amounts"},
+        {"id":"AutomatedTellerMachine_depositFunds_ejectCard","focus":"Clear current card and reset all required session fields"},
+        {"id":"AutomatedTellerMachine_withdrawCash_ejectCard","focus":"Clear withdrawal and deposit history after authenticated session"},
+        {"id":"AutomatedTellerMachine_withdrawCash_withdrawCash","focus":"Available-balance guard, operation-entry balance subtraction and recorded withdrawal"}
+      ]
+    },
+    "atm-session-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Five source-bound session operations with new development coverage and independent terminal cases; three password identities share one upstream specification.",
+      "operations": [
+        {"id":"AutomatedTellerMachine_checkBalance_inputPassword","focus":"Matching and nonmatching passwords update session state and return the corresponding Boolean"},
+        {"id":"AutomatedTellerMachine_depositFunds_inputPassword","focus":"Password validation in the deposit use case; reject missing or unidentified current card"},
+        {"id":"AutomatedTellerMachine_withdrawCash_inputPassword","focus":"Password validation in the withdrawal use case; preserve both legitimate return branches"},
+        {"id":"AutomatedTellerMachine_checkBalance_checkBalance","focus":"Authenticated session returns actual current-card balance"},
+        {"id":"AutomatedTellerMachine_depositFunds_depositFunds","focus":"Minimum amount, entry-balance increment and deposit session effects"}
+      ]
+    },
+    "state-transitions-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Five individually source-mapped state transitions with existing development validators and independently calibrated final scenarios; no seeded answers.",
+      "operations": [
+        {"id": "CoCoME_openStore_openStore", "focus": "Closed-to-open transition, selected CurrentStore identity and true result"},
+        {"id": "CoCoME_closeStore_closeStore", "focus": "Open-to-closed Store transition and true result"},
+        {"id": "CoCoME_openCashDesk_openCashDesk", "focus": "Current Store guards, closed-to-open CashDesk transition and CurrentCashDesk assignment"},
+        {"id": "CoCoME_closeCashDesk_closeCashDesk", "focus": "Current Store guards, open-to-closed CashDesk transition and selected current identity"},
+        {"id": "LoanProcessingSystem_closeOutLoan_closeOutLoan", "focus": "LSOPEN-to-CLOSED transition; no unstated zero-balance guard"}
+      ]
+    },
+    "cocome-queries-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Five individually source-mapped identifier queries; independent final cases and existing development validators; no seeded answers.",
+      "operations": [
+        {"id": "CoCoME_manageStore_queryStore", "focus": "Return selected Store identity; accept existing zero and negative identifiers"},
+        {"id": "CoCoME_manageProductCatalog_queryProductCatalog", "focus": "Return selected ProductCatalog identity; reject missing identifiers"},
+        {"id": "CoCoME_manageCashDesk_queryCashDesk", "focus": "Return selected CashDesk identity independent of repository order"},
+        {"id": "CoCoME_manageCashier_queryCashier", "focus": "Return selected Cashier identity without extra identifier restrictions"},
+        {"id": "CoCoME_manageSupplier_querySupplier", "focus": "Return selected Supplier identity; distinguish missing and empty repositories"}
+      ]
+    },
+    "library-adjudicated-3": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Owner-approved R05-R07 with independently calibrated development and final scenarios; no seeded candidate or hidden-test feedback.",
+      "operations": [
+        {"id": "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay", "focus": "Operation-entry membership/status, post-decrement zero-day boundary and debt-sensitive restoration"},
+        {"id": "LibraryManagementSystem_listBookHistory_listOverDueBook", "focus": "Active positive-fee loans of the selected user; identity Set projection without an extra repository requirement"},
+        {"id": "LibraryManagementSystem_listBookHistory_listReservationBook", "focus": "Identity Set projection including closed reservations and preserving different equal-attribute copies"}
+      ]
+    },
+    "complex-effects-5": {
+      "role": "natural-generation-development-validation",
+      "selection_basis": "Existing source-backed development validators and diverse operation effects; not an unseen test split.",
+      "operations": [
+        {
+          "id": "CoCoME_openStore_openStore",
+          "focus": "State transition and current-service reference update"
+        },
+        {
+          "id": "CoCoME_manageItem_deleteItem",
+          "focus": "Repository removal and Boolean result; no inferred cascade deletion"
+        },
+        {
+          "id": "LoanProcessingSystem_evaluateLoanRequest_addLoanTerm",
+          "focus": "Association membership update using the current request and selected term"
+        },
+        {
+          "id": "Airport_manageUser_createStaff",
+          "focus": "Object creation, attribute initialization and conditional Boss association"
+        },
+        {
+          "id": "LibraryManagementSystem_borrowBook_borrowBook",
+          "focus": "Multi-object effects, collection updates, dates and conditional reservation effects"
+        }
+      ]
+    }
+  }
+}

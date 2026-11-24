@@ -1,0 +1,679 @@
+{
+  "operationId": "LibraryManagementSystem_listBookHistory_listReservationBook",
+  "candidateIdentity": "a387cad6f1201b0f54e3ff2f611be5a9ef6b856f69c8483a9a061d4110333a94",
+  "origins": [
+    {
+      "method": "pathocl-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/LibraryManagementSystem_listBookHistory_listReservationBook/pathocl-style/pathocl-style.candidate.json",
+      "sha256": "c3fa64cbebeba58efaff30c8adefa2d38501a600629fbf36311c372380d929a7"
+    }
+  ],
+  "contract": {
+    "definition": "u: User = User.allInstances()->any(x: User | x.UserID = uid)",
+    "precondition": "User.allInstances()->exists(x: User | x.UserID = uid) and u.reservation.oclIsUndefined() = false",
+    "postcondition": "result = u.reservation->projectSet(r: Reservation | r.bookCopy)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ListBookHistory::listReservationBook(uid:String): Set(BookCopy) {\n          definition:\n          u: User = User.allInstances()->any(x: User | x.UserID = uid)\n            \n            precondition:\n          User.allInstances()->exists(x: User | x.UserID = uid) and u.reservation.oclIsUndefined() = false\n            \n            postcondition:\n          result = u.reservation->projectSet(r: Reservation | r.bookCopy)\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "clause": "precondition",
+              "line": 6,
+              "column": 71,
+              "endLine": 6,
+              "endColumn": 82,
+              "startOffset": 277,
+              "endOffset": 288,
+              "expression": "reservation",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature reservation is not available on User.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/User"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/User",
+                  "declaration": "class User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 4,
+                    "column": 14,
+                    "endLine": 63,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 22,
+              "endLine": 9,
+              "endColumn": 33,
+              "startOffset": 375,
+              "endOffset": 386,
+              "expression": "reservation",
+              "kind": "model-rule",
+              "family": "MG-02",
+              "code": "INVALID_FEATURE_ACCESS",
+              "msg": "[MG-02] Feature reservation is not available on User.",
+              "ruleIds": [],
+              "modelElementIds": [
+                "LibraryManagementSystem/entity/User"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/entity/User",
+                  "declaration": "class User",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                    "line": 4,
+                    "column": 14,
+                    "endLine": 63,
+                    "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                  }
+                }
+              ],
+              "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+              "relatedLocations": []
+            },
+            {
+              "clause": "postcondition",
+              "line": 9,
+              "column": 49,
+              "endLine": 9,
+              "endColumn": 60,
+              "startOffset": 402,
+              "endOffset": 413,
+              "expression": "Reservation",
+              "kind": "model-rule",
+              "family": "MG-01",
+              "code": "UNKNOWN_TYPE",
+              "msg": "[MG-01] Type Reservation is not declared by this project.",
+              "ruleIds": [
+                "MG-01::LibraryManagementSystem/vocabulary"
+              ],
+              "modelElementIds": [
+                "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook"
+              ],
+              "modelEvidence": [
+                {
+                  "id": "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook",
+                  "declaration": "ListBookHistory::listReservationBook",
+                  "source": {
+                    "file": "src/rm2pt/project/LibraryManagementSystem/listBookHistory.ts",
+                    "line": 46,
+                    "column": 3,
+                    "endLine": 57,
+                    "sha256": "dbe8ab7ba94f068ece6ee4fe10c94d7d42627757e6ea6b617210633fdc8fe95c"
+                  }
+                }
+              ],
+              "repair": "Check the declared model vocabulary. Do not create or rename model declarations to accommodate the candidate.",
+              "rootBindingId": "binding:399:r",
+              "relatedLocations": [
+                {
+                  "clause": "postcondition",
+                  "line": 9,
+                  "column": 63,
+                  "endLine": 9,
+                  "endColumn": 64,
+                  "startOffset": 416,
+                  "endOffset": 417,
+                  "expression": "r"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature reservation is not available on User.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/User",
+              "declaration": "class User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 4,
+                "column": 14,
+                "endLine": 63,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "precondition",
+            "line": 6,
+            "column": 71
+          },
+          "candidateScopes": [
+            {
+              "clause": "precondition",
+              "expression": "reservation"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "INVALID_FEATURE_ACCESS",
+          "msg": "[MG-02] Feature reservation is not available on User.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/entity/User",
+              "declaration": "class User",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                "line": 4,
+                "column": 14,
+                "endLine": 63,
+                "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 22
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "reservation"
+            }
+          ],
+          "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement."
+        },
+        {
+          "stage": "model",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "MOD",
+            "evidenceKind": "model-declaration",
+            "disposition": "repair-candidate"
+          },
+          "category": "model-structure",
+          "code": "UNKNOWN_TYPE",
+          "msg": "[MG-01] Type Reservation is not declared by this project.",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [
+            "MG-01::LibraryManagementSystem/vocabulary"
+          ],
+          "modelEvidence": [
+            {
+              "id": "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook",
+              "declaration": "ListBookHistory::listReservationBook",
+              "source": {
+                "file": "src/rm2pt/project/LibraryManagementSystem/listBookHistory.ts",
+                "line": 46,
+                "column": 3,
+                "endLine": 57,
+                "sha256": "dbe8ab7ba94f068ece6ee4fe10c94d7d42627757e6ea6b617210633fdc8fe95c"
+              }
+            }
+          ],
+          "location": {
+            "resolution": "ocl-expression",
+            "clause": "postcondition",
+            "line": 9,
+            "column": 49
+          },
+          "candidateScopes": [
+            {
+              "clause": "postcondition",
+              "expression": "Reservation"
+            },
+            {
+              "clause": "postcondition",
+              "expression": "r"
+            }
+          ],
+          "repair": "Check the declared model vocabulary. Do not create or rename model declarations to accommodate the candidate."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "precondition",
+          "location": {
+            "clause": "precondition",
+            "line": 6,
+            "column": 71,
+            "endLine": 6,
+            "endColumn": 82,
+            "startOffset": 277,
+            "endOffset": 288,
+            "expression": "reservation",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature reservation is not available on User.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/User"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/User",
+                "declaration": "class User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 4,
+                  "column": 14,
+                  "endLine": 63,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature reservation is not available on User.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/P1",
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/P2"
+            ],
+            "sourceLines": [
+              5,
+              6
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/User"
+            ],
+            "locations": [
+              {
+                "clause": "precondition",
+                "line": 6,
+                "column": 71,
+                "endLine": 6,
+                "endColumn": 82,
+                "startOffset": 277,
+                "endOffset": 288,
+                "expression": "reservation",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature reservation is not available on User.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/User"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/User",
+                    "declaration": "class User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 4,
+                      "column": 14,
+                      "endLine": 63,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 22,
+            "endLine": 9,
+            "endColumn": 33,
+            "startOffset": 375,
+            "endOffset": 386,
+            "expression": "reservation",
+            "kind": "model-rule",
+            "family": "MG-02",
+            "code": "INVALID_FEATURE_ACCESS",
+            "msg": "[MG-02] Feature reservation is not available on User.",
+            "ruleIds": [],
+            "modelElementIds": [
+              "LibraryManagementSystem/entity/User"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/entity/User",
+                "declaration": "class User",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                  "line": 4,
+                  "column": 14,
+                  "endLine": 63,
+                  "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                }
+              }
+            ],
+            "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+            "relatedLocations": []
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "INVALID_FEATURE_ACCESS",
+          "constraint": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+          "message": "[MG-02] Feature reservation is not available on User.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/Q1",
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9,
+              10
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/entity/User"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 22,
+                "endLine": 9,
+                "endColumn": 33,
+                "startOffset": 375,
+                "endOffset": 386,
+                "expression": "reservation",
+                "kind": "model-rule",
+                "family": "MG-02",
+                "code": "INVALID_FEATURE_ACCESS",
+                "msg": "[MG-02] Feature reservation is not available on User.",
+                "ruleIds": [],
+                "modelElementIds": [
+                  "LibraryManagementSystem/entity/User"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/entity/User",
+                    "declaration": "class User",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/entity.ts",
+                      "line": 4,
+                      "column": 14,
+                      "endLine": 63,
+                      "sha256": "c739fd14055b050f39bdcd69e8d1d12222dfef6b8cbc459e30b497184a4d6d91"
+                    }
+                  }
+                ],
+                "repair": "Check the receiver binding and the attribute owner/type. Change only the inconsistent binding or access, according to the requirement.",
+                "relatedLocations": []
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-TYPE",
+          "status": "conflict",
+          "clause": "postcondition",
+          "location": {
+            "clause": "postcondition",
+            "line": 9,
+            "column": 49,
+            "endLine": 9,
+            "endColumn": 60,
+            "startOffset": 402,
+            "endOffset": 413,
+            "expression": "Reservation",
+            "kind": "model-rule",
+            "family": "MG-01",
+            "code": "UNKNOWN_TYPE",
+            "msg": "[MG-01] Type Reservation is not declared by this project.",
+            "ruleIds": [
+              "MG-01::LibraryManagementSystem/vocabulary"
+            ],
+            "modelElementIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook"
+            ],
+            "modelEvidence": [
+              {
+                "id": "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook",
+                "declaration": "ListBookHistory::listReservationBook",
+                "source": {
+                  "file": "src/rm2pt/project/LibraryManagementSystem/listBookHistory.ts",
+                  "line": 46,
+                  "column": 3,
+                  "endLine": 57,
+                  "sha256": "dbe8ab7ba94f068ece6ee4fe10c94d7d42627757e6ea6b617210633fdc8fe95c"
+                }
+              }
+            ],
+            "repair": "Check the declared model vocabulary. Do not create or rename model declarations to accommodate the candidate.",
+            "rootBindingId": "binding:399:r",
+            "relatedLocations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 63,
+                "endLine": 9,
+                "endColumn": 64,
+                "startOffset": 416,
+                "endOffset": 417,
+                "expression": "r"
+              }
+            ]
+          },
+          "reliablyLocated": true,
+          "underlyingCode": "UNKNOWN_TYPE",
+          "constraint": "Check the declared model vocabulary. Do not create or rename model declarations to accommodate the candidate.",
+          "message": "[MG-01] Type Reservation is not declared by this project.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/Q1",
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9,
+              10
+            ],
+            "modelDeclarationIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook"
+            ],
+            "locations": [
+              {
+                "clause": "postcondition",
+                "line": 9,
+                "column": 49,
+                "endLine": 9,
+                "endColumn": 60,
+                "startOffset": 402,
+                "endOffset": 413,
+                "expression": "Reservation",
+                "kind": "model-rule",
+                "family": "MG-01",
+                "code": "UNKNOWN_TYPE",
+                "msg": "[MG-01] Type Reservation is not declared by this project.",
+                "ruleIds": [
+                  "MG-01::LibraryManagementSystem/vocabulary"
+                ],
+                "modelElementIds": [
+                  "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook"
+                ],
+                "modelEvidence": [
+                  {
+                    "id": "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook",
+                    "declaration": "ListBookHistory::listReservationBook",
+                    "source": {
+                      "file": "src/rm2pt/project/LibraryManagementSystem/listBookHistory.ts",
+                      "line": 46,
+                      "column": 3,
+                      "endLine": 57,
+                      "sha256": "dbe8ab7ba94f068ece6ee4fe10c94d7d42627757e6ea6b617210633fdc8fe95c"
+                    }
+                  }
+                ],
+                "repair": "Check the declared model vocabulary. Do not create or rename model declarations to accommodate the candidate.",
+                "rootBindingId": "binding:399:r",
+                "relatedLocations": [
+                  {
+                    "clause": "postcondition",
+                    "line": 9,
+                    "column": 63,
+                    "endLine": 9,
+                    "endColumn": 64,
+                    "startOffset": 416,
+                    "endOffset": 417,
+                    "expression": "r"
+                  }
+                ]
+              }
+            ],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "LibraryManagementSystem/use-case/listBookHistory/operation/listReservationBook/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

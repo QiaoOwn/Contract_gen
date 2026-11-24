@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "User.allInstances()->exists(u:User | u.UserID = uid and fee >= u.OverDueFee and Loan.allInstances()->exists(l:Loan | l.LoanedUser = u and l.IsReturned = true and l.OverDueFee > 0.0 and l.DueDate.isBefore(Today)))",
+    "postcondition": "result = true and User.allInstances()->forAll(u:User | if u.UserID@pre = uid then u.OverDueFee = 0.0 else true endif) and Loan.allInstances()->forAll(l:Loan | if l.LoanedUser.UserID@pre = uid and l.IsReturned@pre = true and l.OverDueFee@pre > 0.0 and l.DueDate@pre.isBefore(Today) then l.OverDueFee = 0.0 else true endif)"
+  },
+  "methodAccepted": true
+}

@@ -1,0 +1,199 @@
+{
+  "operationId": "Airport_raiseRepair_approve",
+  "candidateIdentity": "eb82dc7028c7d09026d9ec73a97fcc9dcdb3b9c09396313262f7799c30ab23d4",
+  "origins": [
+    {
+      "method": "codexprompt-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/Airport_raiseRepair_approve/codexprompt-style/codexprompt-style.candidate.json",
+      "sha256": "b6923304c8cef98df7b51a1f971208555d9904c54c983a9aca1db31e8eacfb66"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "Repair.allInstances()->one(r: Repair | r.Id = rid) and Staff.allInstances()->one(s: Staff | s.Id = sid) and (reject = false or Repair.allInstances()->exists(r: Repair | r.Id = rid and Staff.allInstances()->exists(s: Staff | s.Id = sid and ((s.Role = 1 and r.Process = 0) or (s.Role = 2 and r.Process = 1) or (s.Role = 3 and r.Process = 2)))))",
+    "postcondition": "let r: Repair = Repair.allInstances()->any(x: Repair | x.Id = rid), s: Staff = Staff.allInstances()->any(y: Staff | y.Id = sid), oldHistory: Set(ApprovalHistory) = r.History@pre in result.oclIsNew() and result.StaffId = sid and result.Reject = reject and result.Suggestion = suggestion and oldHistory->excludes(result) and r.History->includes(result) and r.History->includesAll(oldHistory) and r.History->size() = oldHistory->size() + 1 and if reject = true then ((s.Role = 1 and r.Process@pre = 0 and r.Process = 1) or (s.Role = 2 and r.Process@pre = 1 and r.Process = 2) or (s.Role = 3 and r.Process@pre = 2 and r.Process = 3)) else r.Process = 5 endif and Repair.allInstances()->forAll(rr: Repair | rr.Id = rid or (rr.Process = rr.Process@pre and rr.History = rr.History@pre))"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract RepairService::approve(sid:Integer,rid:Integer,reject:Boolean,suggestion:String): ApprovalHistory {\n          \n            precondition:\n          Repair.allInstances()->one(r: Repair | r.Id = rid) and Staff.allInstances()->one(s: Staff | s.Id = sid) and (reject = false or Repair.allInstances()->exists(r: Repair | r.Id = rid and Staff.allInstances()->exists(s: Staff | s.Id = sid and ((s.Role = 1 and r.Process = 0) or (s.Role = 2 and r.Process = 1) or (s.Role = 3 and r.Process = 2)))))\n            \n            postcondition:\n          let r: Repair = Repair.allInstances()->any(x: Repair | x.Id = rid), s: Staff = Staff.allInstances()->any(y: Staff | y.Id = sid), oldHistory: Set(ApprovalHistory) = r.History@pre in result.oclIsNew() and result.StaffId = sid and result.Reject = reject and result.Suggestion = suggestion and oldHistory->excludes(result) and r.History->includes(result) and r.History->includesAll(oldHistory) and r.History->size() = oldHistory->size() + 1 and if reject = true then ((s.Role = 1 and r.Process@pre = 0 and r.Process = 1) or (s.Role = 2 and r.Process@pre = 1 and r.Process = 2) or (s.Role = 3 and r.Process@pre = 2 and r.Process = 3)) else r.Process = 5 endif and Repair.allInstances()->forAll(rr: Repair | rr.Id = rid or (rr.Process = rr.Process@pre and rr.History = rr.History@pre))\n            \n        }",
+      "syntaxValid": false,
+      "subsetValid": false,
+      "modelTypeValid": false,
+      "preExecValid": false,
+      "lowering": null,
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "FAIL",
+          "evidence": [
+            {
+              "line": 4,
+              "column": 281,
+              "msg": "mismatched input 'or' expecting ')'"
+            },
+            {
+              "line": 4,
+              "column": 349,
+              "msg": "mismatched input ')' expecting 'postcondition'"
+            }
+          ]
+        },
+        {
+          "stage": "dialect",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        },
+        {
+          "stage": "model-type",
+          "status": "NOT_EVALUATED",
+          "evidence": null
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input 'or' expecting ')'",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 4,
+            "column": 281
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        },
+        {
+          "stage": "parser",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "SYN",
+            "evidenceKind": "validator-diagnostic",
+            "disposition": "repair-candidate"
+          },
+          "category": "syntax",
+          "code": "PARSER",
+          "msg": "mismatched input ')' expecting 'postcondition'",
+          "repairEligible": true,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "ocl-expression",
+            "line": 4,
+            "column": 349
+          },
+          "repair": "Preserve all source-required obligations and unaffected clauses. Remove an extra restriction only when the cited requirement evidence supports its removal; retain every source-required precondition and postcondition. Do not alter the model, signature, dialect or tests, replace obligations with true, or special-case fixture identifiers."
+        }
+      ],
+      "deterministicConflicts": [
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input 'or' expecting ')'",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        },
+        {
+          "code": "CC-PARSE",
+          "status": "conflict",
+          "reliablyLocated": false,
+          "constraint": "Candidate must parse before AST dependency analysis",
+          "message": "mismatched input ')' expecting 'postcondition'",
+          "provenance": {
+            "taskIds": [],
+            "sourceLines": [],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "validator fact; clause task links are context, not semantic proof"
+          }
+        }
+      ],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/raiseRepair/operation/approve/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/raiseRepair/operation/approve/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              8
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "Airport/use-case/raiseRepair/operation/approve/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

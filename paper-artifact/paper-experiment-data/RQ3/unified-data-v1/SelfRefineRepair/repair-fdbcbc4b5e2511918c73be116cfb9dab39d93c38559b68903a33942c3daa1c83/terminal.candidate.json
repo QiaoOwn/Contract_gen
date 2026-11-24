@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": null,
+    "precondition": "User.allInstances()->one(u:User|u.UserID = uid and u.BorrowStatus = BorrowStatus::NORMAL) and BookCopy.allInstances()->one(c:BookCopy|c.Barcode = barcode and c.IsReserved = false) and Loan.allInstances()->one(l:Loan|l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false and l.LoanedUser.BorrowStatus = BorrowStatus::NORMAL and l.LoanedCopy.IsReserved = false and l.DueDate.isAfter(Today) and l.OverDueFee = 0.0 and if l.LoanedUser.oclIsTypeOf(Student) then l.RenewedTimes < 3 else l.RenewedTimes < 6 endif)",
+    "postcondition": "result = true and Loan.allInstances()->one(l:Loan|l.LoanedUser.UserID = uid and l.LoanedCopy.Barcode = barcode and l.IsReturned = false and l.RenewedTimes = l.RenewedTimes@pre + 1 and l.RenewDate = Today and if l.LoanedUser.oclIsTypeOf(Student) then if Student.allInstances()->exists(s:Student|s.UserID = uid and s.Programme = Programme::BACHELOR) then l.DueDate = l.DueDate@pre.After(20) else if Student.allInstances()->exists(s:Student|s.UserID = uid and s.Programme = Programme::MASTER) then l.DueDate = l.DueDate@pre.After(40) else l.DueDate = l.DueDate@pre.After(60) endif endif else l.DueDate = l.DueDate@pre.After(60) endif)"
+  },
+  "methodAccepted": true
+}

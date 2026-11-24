@@ -1,0 +1,216 @@
+{
+  "operationId": "CoCoME_processSale_makeNewSale",
+  "candidateIdentity": "03e19c0475ca315fabfd1f9e35efb516fba4789d2a4ab419f6abdecea274880c",
+  "origins": [
+    {
+      "method": "codexprompt-style",
+      "file": "results/rq1-independent-baselines-114-v2/runs/CoCoME_processSale_makeNewSale/codexprompt-style/codexprompt-style.candidate.json",
+      "sha256": "5154dee2a9841a8eb47e142bfd31f4fa985347d71360968524f5085d8dc450af"
+    }
+  ],
+  "contract": {
+    "definition": null,
+    "precondition": "CashDesk.allInstances()->exists(cd: CashDesk|cd = self.CurrentCashDesk) and self.CurrentCashDesk.IsOpened = true and (self.CurrentSale.oclIsUndefined() = true or self.CurrentSale.IsComplete = true)",
+    "postcondition": "result = true and self.CurrentSale.oclIsNew() = true and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false and self.CurrentSale.BelongedCashDesk = self.CurrentCashDesk and self.CurrentCashDesk.ContainedSales->exists(s: Sale|s = self.CurrentSale)"
+  },
+  "evaluation": {
+    "publicProtocolValid": true,
+    "evaluation": {
+      "publicContractValid": true,
+      "internalProtocolValid": true,
+      "contract": "Contract ProcessSaleService::makeNewSale(): Boolean {\n          \n            precondition:\n          CashDesk.allInstances()->exists(cd: CashDesk|cd = self.CurrentCashDesk) and self.CurrentCashDesk.IsOpened = true and (self.CurrentSale.oclIsUndefined() = true or self.CurrentSale.IsComplete = true)\n            \n            postcondition:\n          result = true and self.CurrentSale.oclIsNew() = true and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false and self.CurrentSale.BelongedCashDesk = self.CurrentCashDesk and self.CurrentCashDesk.ContainedSales->exists(s: Sale|s = self.CurrentSale)\n            \n        }",
+      "syntaxValid": true,
+      "subsetValid": true,
+      "modelTypeValid": true,
+      "preExecValid": false,
+      "lowering": "CandidateLoweringError: Cannot determine the OCL type of self for oclIsNew()",
+      "typescript": null,
+      "stages": [
+        {
+          "stage": "parser",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "dialect",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "model-type",
+          "status": "PASS",
+          "evidence": []
+        },
+        {
+          "stage": "lowering",
+          "status": "FAIL",
+          "evidence": "CandidateLoweringError: Cannot determine the OCL type of self for oclIsNew()"
+        }
+      ],
+      "diagnostics": [
+        {
+          "stage": "lowering",
+          "classification": {
+            "version": "evidence-guided-repair-taxonomy-v2",
+            "family": "LOW",
+            "evidenceKind": "unresolved",
+            "disposition": "inspect-tool"
+          },
+          "category": "translation",
+          "code": "LOWERING",
+          "msg": "CandidateLoweringError: Cannot determine the OCL type of self for oclIsNew()",
+          "repairEligible": false,
+          "obligationIds": [],
+          "ruleIds": [],
+          "modelEvidence": [],
+          "location": {
+            "resolution": "unknown"
+          },
+          "repair": "Inspect the tool or unresolved observation before changing business OCL; the root cause is not established."
+        }
+      ],
+      "deterministicConflicts": [],
+      "unresolved": [
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/P1"
+            ],
+            "sourceLines": [
+              5
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "precondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/P2"
+            ],
+            "sourceLines": [
+              6
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/Q1"
+            ],
+            "sourceLines": [
+              9
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/Q2"
+            ],
+            "sourceLines": [
+              10
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/Q3"
+            ],
+            "sourceLines": [
+              11
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/Q4"
+            ],
+            "sourceLines": [
+              12
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        },
+        {
+          "code": "CC-SEMANTIC-UNRESOLVED",
+          "status": "unresolved",
+          "clause": "postcondition",
+          "reliablyLocated": false,
+          "constraint": "AST binding agreement is not NL semantic equivalence",
+          "message": "Business obligation satisfaction requires independent behavioral evidence; lexical hints are not hard target bindings.",
+          "provenance": {
+            "taskIds": [
+              "CoCoME/use-case/processSale/operation/makeNewSale/constraint-task/Q5"
+            ],
+            "sourceLines": [
+              13
+            ],
+            "modelDeclarationIds": [],
+            "locations": [],
+            "basis": "frozen requirement, semantic interpretation not decided by M1"
+          }
+        }
+      ],
+      "behavior": "not-evaluated"
+    },
+    "behavior": "not-evaluated",
+    "businessErrorVerdicts": "not-assessed",
+    "meaning": "Typed AST diagnoses structural conflicts; business categories require separate frozen terminal evidence."
+  },
+  "status": "still-preexec-failure",
+  "hiddenJestEvaluations": 0
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "rm2pt-authority-adjudication-v1",
+  "decision_id": "R05",
+  "operation_id": "LibraryManagementSystem_countDownSuspensionDay_countDownSuspensionDay",
+  "status": "APPROVED",
+  "option": "A",
+  "decision_date": "2026-10-27",
+  "approved_by": "user/laboratory requirement owner",
+  "independent_expert_review": false,
+  "source_file": "data/operation_revision/upstream_rm2pt/LibraryManagementSystem/library.remodel",
+  "source_sha256": "d7f4ac436ae349c70b0e908c098f0f02e49516f3e2efec0da673a70ce74fdc53",
+  "source_lines": [822, 829, 840, 842, 843, 844, 846],
+  "source_problem": "BorrowStatus is read in the restoration guard and assigned in its consequent without explicit state qualification. The processing set, restored status and countdown boundary need a consistent pre/post-state interpretation.",
+  "approved_preconditions": ["No additional business condition is required."],
+  "approved_postconditions": [
+    "Select the users whose suspension days are positive at operation entry and reduce each selected user's days by one.",
+    "Restore NORMAL when a selected user was SUSPEND at operation entry, has zero overdue fee, and reaches zero days after the decrement.",
+    "A user who was SUSPEND and has an outstanding overdue fee remains SUSPEND even when the days reach zero.",
+    "Users whose suspension days were already zero are not processed and remain unchanged."
+  ],
+  "business_examples": [
+    {"before_days": 1, "before_status": "SUSPEND", "overdue_fee": 0, "after_days": 0, "after_status": "NORMAL", "processed": true},
+    {"before_days": 1, "before_status": "SUSPEND", "overdue_fee": 5, "after_days": 0, "after_status": "SUSPEND", "processed": true},
+    {"before_days": 3, "before_status": "SUSPEND", "overdue_fee": 0, "after_days": 2, "after_status": "SUSPEND", "processed": true},
+    {"before_days": 0, "before_status": "SUSPEND", "overdue_fee": 0, "after_days": 0, "after_status": "SUSPEND", "processed": false}
+  ],
+  "correction_scope": "Qualify processing membership and prior suspension status at operation entry; evaluate the zero-day boundary after the decrement. Do not add suspension of previously NORMAL users, fee updates, new preconditions or a return value.",
+  "additional_business_constraints": [],
+  "upstream_snapshot_modified": false,
+  "generation_reference_contract_supplied": false,
+  "executable_subset_status": "PENDING_PRE_POST_STATE_REPRESENTATION_REVIEW_LEGACY_CATALOG_USES_POST_STATE_GUARD",
+  "oracle_review_status": "PENDING_RM2PT_AUTHORITY_REVIEW"
+}

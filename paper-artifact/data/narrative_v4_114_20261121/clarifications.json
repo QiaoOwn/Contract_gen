@@ -1,0 +1,44 @@
+{
+  "approvedOn": "2026-11-21",
+  "approvedBy": "user/laboratory requirement owner",
+  "changes": [
+    {
+      "operationId": "Airport_raiseRepair_approve",
+      "before": "An approval decision records the supplied decision and suggestion in a new ApprovalHistory associated with the selected Repair and returns that history. Both the Repair and the deciding Staff member must exist. When reject is true, a role-1 member advances Process from 0 to 1, role 2 advances it from 1 to 2, and role 3 advances it from 2 to 3. When reject is false, the repair instead enters the rejected stage, Process 5.",
+      "after": "An approval decision records the supplied decision and suggestion in a new ApprovalHistory associated with the selected Repair and returns that history. Both the Repair and the deciding Staff member must exist. When reject is true, a role-1 member advances Process from 0 to 1, role 2 advances it from 1 to 2, and role 3 advances it from 2 to 3. When reject is false, the repair instead enters the rejected stage, Process 5. The newly created ApprovalHistory is included in the ApprovalHistory collection.",
+      "addition": "The newly created ApprovalHistory is included in the ApprovalHistory collection."
+    },
+    {
+      "operationId": "CoCoME_processSale_makeNewSale",
+      "before": "A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true.",
+      "after": "A new sale starts at an existing open current CashDesk when there is no current Sale or the previous current Sale is complete. The new Sale is incomplete and not yet ready for payment, is linked to that desk, is included in the sale collection and becomes the current sale. Starting it returns true. The current CashDesk's ContainedSales collection includes the new Sale.",
+      "addition": "The current CashDesk's ContainedSales collection includes the new Sale."
+    },
+    {
+      "operationId": "CoCoME_processSale_endSale",
+      "before": "Ending item entry calculates the current Sale amount by adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals. A current sale must exist, be incomplete and not yet ready for payment. With no lines its amount becomes zero. The sale becomes ready for payment and the operation returns the resulting amount.",
+      "after": "Ending item entry calculates the current Sale amount by adding the subtotals of every associated sales line, counting distinct lines separately even when they have equal subtotals. A current sale must exist, be incomplete and not yet ready for payment. With no lines its amount becomes zero. The sale becomes ready for payment and the operation returns the resulting amount. The operation does not change the current Sale's IsComplete value.",
+      "addition": "The operation does not change the current Sale's IsComplete value."
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "before": "A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.\n\nBorrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true.",
+      "after": "A borrowing request identifies a User and a BookCopy by user identifier and copy barcode. Both must exist, and the user must have NORMAL borrowing status with no suspension days. A BACHELOR Student may have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or be ONHOLDSHELF, marked reserved and have an open reservation matching this user.\n\nBorrowing creates a new unreturned Loan linked to the user and copy, dated today, and adds it to both the user's loan collection and the copy's loan history. Its due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the new loan's 3-, 10-, 17- and 31-day overdue flags are false. If the copy was ONHOLDSHELF, its reserved flag is cleared and the matching reservation is closed. The operation returns true. The new Loan is included in the Loan collection.",
+      "addition": "The new Loan is included in the Loan collection."
+    },
+    {
+      "operationId": "LibraryManagementSystem_makeReservation_makeReservation",
+      "before": "Reserving a currently loaned copy creates a new open Reserve record dated today and linked to the selected User and BookCopy. The user and copy must exist; the copy must be LOANED and not already reserved. The copy is marked reserved, the reservation is included in the reservation collection, and the operation returns true.",
+      "after": "Reserving a currently loaned copy creates a new open Reserve record dated today and linked to the selected User and BookCopy. The user and copy must exist; the copy must be LOANED and not already reserved. The copy is marked reserved, the reservation is included in the reservation collection, and the operation returns true. The new Reserve is included in the User's ReservedBook collection and the BookCopy's ReservationRecord collection.",
+      "addition": "The new Reserve is included in the User's ReservedBook collection and the BookCopy's ReservationRecord collection."
+    },
+    {
+      "operationId": "LibraryManagementSystem_renewBook_renewBook",
+      "before": "Renewing a loan requires an existing User, BookCopy and matching Loan, with the user in NORMAL status. The copy must not be reserved, its loan due date must be after today and the Loan must have no overdue fee. A Student may have fewer than 3 renewals and a non-Student user fewer than 6. The renewal count increases and the renewal date becomes today. Starting from the previous due date, the extension is 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user. Renewal returns true.",
+      "after": "Renewing a loan requires an existing User, BookCopy and matching Loan, with the user in NORMAL status. The copy must not be reserved, its loan due date must be after today and the Loan must have no overdue fee. A Student may have fewer than 3 renewals and a non-Student user fewer than 6. The renewal count increases and the renewal date becomes today. Starting from the previous due date, the extension is 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user. Renewal returns true. The selected BookCopy must have LOANED status.",
+      "addition": "The selected BookCopy must have LOANED status."
+    }
+  ],
+  "upstreamModified": false,
+  "oracleModified": false
+}

@@ -1,0 +1,70 @@
+{
+  "version": "narrative-pilot-selection-v1",
+  "status": "fixed-development-selection-before-real-generation",
+  "selectionBasis": "Five-project coverage of retrieval, creation, branching, state changes, aggregation, numeric updates and multi-obligation navigation; not selected using comparative generation outcomes.",
+  "sourceType": "paraphrased",
+  "fidelityReviewStatus": "draft-pending-independent-semantic-review",
+  "realModelCallsAuthorized": 0,
+  "cases": [
+    {
+      "operationId": "CoCoME_manageStore_queryStore",
+      "reason": "Retrieval, existence and object return; mandatory representative.",
+      "text": "The operation retrieves a Store identified by the supplied identifier. The referenced Store must exist, and the operation returns that Store."
+    },
+    {
+      "operationId": "CoCoME_processSale_enterItem",
+      "reason": "Creation, shared objects, quantity, stock update and laboratory clarification; mandatory representative.",
+      "text": "The operation adds a scanned item and quantity to the current sale. It requires a current Sale that exists and is incomplete, and a scanned Item that exists and has positive stock. The entered quantity must not exceed the Item stock; this restriction is a laboratory-adjudicated requirement. The system creates a SalesLineItem linked to the Sale and Item, recording the quantity and subtotal. The system stores the new SalesLineItem and makes it the current sale line. The Item stock decreases by the entered quantity. The operation returns true."
+    },
+    {
+      "operationId": "LoanProcessingSystem_loanPayment_loanPayment",
+      "reason": "Numeric before/after state and Boolean result; mandatory representative.",
+      "text": "The operation applies one scheduled repayment to an open loan. The Loan must exist and have LSOPEN status. The remaining amount decreases by the Loan repayment amount. The operation returns true."
+    },
+    {
+      "operationId": "Airport_manageDevice_createDevice",
+      "reason": "Creation, identifier freshness and association; adjudicated source correction.",
+      "text": "The operation registers a newly installed airport device and assigns its responsible staff contact. The device identifier must be unused, and the selected contact must identify an existing Staff member. The system creates a Device with the supplied identifier, name and location. The system links the Device to the selected Staff contact and stores the Device. The operation returns true."
+    },
+    {
+      "operationId": "Airport_raiseRepair_finishRepair",
+      "reason": "Role restriction, update and laboratory existence condition.",
+      "text": "The operation marks a repair assigned to a worker as finished. The referenced Device must be assigned to the supplied Staff member, whose Worker role value must be 3. The referenced Repair must exist; this is a laboratory-adjudicated requirement. The system sets Repair.Process to the finished stage value 7. The operation returns true."
+    },
+    {
+      "operationId": "Airport_manageUser_createStaff",
+      "reason": "Conditional reporting association and unresolved source completeness.",
+      "text": "The operation registers a new airport Staff member with contact, role and optional reporting information. The staff identifier must be unused. The system creates a Staff member with the supplied identity, password, phone and role. If bossid identifies an existing Staff member, the system links the new Staff member to that Boss. The operation returns true."
+    },
+    {
+      "operationId": "AutomatedTellerMachine_checkBalance_inputCard",
+      "reason": "Explicit positive/negative branches without extra preconditions; select one shared inputCard signature, not three duplicates.",
+      "text": "The operation reads a bank-card identifier and records whether the card can be found, with no additional business condition required. If the card exists, the ATM stores that card as the current card, marks the card identifier as validated and returns true. If the card does not exist, the ATM marks the card identifier as unvalidated and returns false."
+    },
+    {
+      "operationId": "AutomatedTellerMachine_withdrawCash_withdrawCash",
+      "reason": "Authenticated session, amount and state changes; no invented positive-amount restriction.",
+      "text": "The operation withdraws the supplied amount from the card account in the authenticated ATM session. The card identifier and password must be validated, a current BankCard must be present, and the card balance must cover the requested amount. The card balance decreases by the withdrawn amount. The session records the withdrawal and its amount. The operation returns true."
+    },
+    {
+      "operationId": "CoCoME_orderProducts_placeOrder",
+      "reason": "Aggregation, equal-value distinct entries, empty collection and source correction.",
+      "text": "The operation places the current product order after its entries have been assembled. A current OrderProduct must exist. The order status becomes REQUESTED. The order amount becomes its amount before this operation plus the subtotal of every associated OrderEntry, with distinct entries of equal subtotal each contributing. When the order has no entries, its amount remains unchanged. The operation returns true."
+    },
+    {
+      "operationId": "CoCoME_processSale_makeCashPayment",
+      "reason": "Multiple objects, cash, creation, timestamp and completion.",
+      "text": "The operation pays the current sale with the supplied cash amount. The current Sale must exist, be incomplete and be ready for payment. The tendered amount must cover the Sale amount, and a current Store must exist. A CashPayment records the tendered amount and change and is linked to the Sale. The system links the Sale to the current Store, timestamps the Sale and marks it complete. The system stores the payment and returns true."
+    },
+    {
+      "operationId": "LibraryManagementSystem_borrowBook_borrowBook",
+      "reason": "Complex conditional eligibility, dates, creation, collection navigation and reservation.",
+      "text": "The operation processes a borrowing request from a user identifier and a book-copy barcode. The User and BookCopy must exist. The User must have NORMAL borrowing status and no suspension days. A BACHELOR Student must have fewer than 20 loans, a MASTER Student fewer than 40, another Student fewer than 60, and a Faculty user fewer than 60. The copy must be AVAILABLE, or ONHOLDSHELF and marked reserved with a matching open reservation for this user. The system creates a new unreturned Loan linked to the User and BookCopy with today as the loan date. The system adds the new loan to the borrowing user's loan collection and the borrowed copy's loan history. The due date is 30 days for a Student and 60 days for a Faculty user. The user loan count increases by one, the copy becomes LOANED, and the 3-, 10-, 17- and 31-day overdue flags start as false. If the copy was ONHOLDSHELF, the system clears its reserved flag and closes the matching reservation. The operation returns true."
+    },
+    {
+      "operationId": "LibraryManagementSystem_renewBook_renewBook",
+      "reason": "Dates, prior values and subtype-dependent limits.",
+      "text": "The operation renews a matching loan for a user and a loaned book copy. The User, BookCopy and matching Loan must exist, and the User must have NORMAL status. The copy must not be reserved, the due date must be after today and the Loan must have no overdue fee. A Student must have fewer than 3 renewals and a non-Student user fewer than 6. The renewal count increases and the renewal date becomes today. From its previous value, the due date is extended by 20 days for a BACHELOR Student, 40 for a MASTER Student, 60 for another Student and 60 for a non-Student user. The operation returns true."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "contract": {
+    "definition": "saleLines: Set(SalesLineItem) = self.CurrentSale.ContainedSalesLine, resultingAmount: Real = saleLines->sumBy(line: SalesLineItem | line.Subamount)",
+    "precondition": "self.CurrentSale.oclIsUndefined() = false and self.CurrentSale.IsComplete = false and self.CurrentSale.IsReadytoPay = false",
+    "postcondition": "self.CurrentSale.Amount = resultingAmount and self.CurrentSale.IsReadytoPay = true and self.CurrentSale.IsComplete = self.CurrentSale.IsComplete@pre and result = resultingAmount"
+  },
+  "methodAccepted": true
+}

@@ -1,0 +1,15 @@
+{
+  "contract_parse_ok": true,
+  "contract": "Contract CoCoMEOrderProducts::orderItem(barcode: Integer,quantity: Integer): Boolean {\n\tdefinition:\n\t\tcurrentOrderProduct: OrderProduct = self.CurrentOrderProduct,\n\t\tselectedItem: Item = Item.allInstances()->any(candidate: Item|candidate.Barcode = barcode)\n\tprecondition:\n\t\tcurrentOrderProduct.oclIsUndefined() = false and\n\t\tselectedItem.oclIsUndefined() = false\n\tpostcondition:\n\t\tlet entry: OrderEntry in\n\t\tentry.oclIsNew() and\n\t\tOrderEntry.allInstances()->includes(entry) and\n\t\tentry.Item = selectedItem and\n\t\tentry.Quantity = quantity and\n\t\tentry.SubAmount = quantity*selectedItem.OrderPrice and\n\t\tcurrentOrderProduct.ContainedEntries->includes(entry) and\n\t\tresult = true\n}",
+  "contract_errors": [],
+  "typescript_generation_ok": true,
+  "typescript_parse_ok": true,
+  "typescript_errors": [],
+  "test_execution_ok": true,
+  "test_result_status": "passed",
+  "test_result_summary_version": "jest-result-summary-v1",
+  "test_execution_error": "",
+  "test_passing_count": 3,
+  "test_failing_count": 0,
+  "test_pending_count": 0
+}

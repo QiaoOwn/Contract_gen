@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {responseModelAccepted8} from './lib/contractgenStage8';
+import {read} from './lib/m4LiveAdapter';
+const config=read('config/contractgen-stage8-pilot-v1.json');
+assert.equal(config.sampling.model,'gpt-5.5');
+assert(responseModelAccepted8(config,'gpt-5.5'));
+assert(responseModelAccepted8(config,'gpt-5.5-2026-04-24'));
+assert(responseModelAccepted8(config,'gpt-5.5-2026-04-23'));
+assert(responseModelAccepted8(config,'gpt-5.5-2027-01-01'));
+for(const value of [undefined,null,'gpt-5.4','gpt-5.5-unverified','','gpt-5.50','gpt-5.5-2026-04-24-other'])assert(!responseModelAccepted8(config,value));
+assert(!responseModelAccepted8({...config,sampling:{...config.sampling,model:'other'}},'gpt-5.5'));
+const legacy={...config,responseModelPolicy:{requestedModel:'gpt-5.5',allowedResponseModels:['gpt-5.5']}};
+assert(responseModelAccepted8(legacy,'gpt-5.5'));
+assert(!responseModelAccepted8(legacy,'gpt-5.5-2026-04-23'));
+console.log(JSON.stringify({passed:14,realModelCalls:0,paidCalls:0}));
