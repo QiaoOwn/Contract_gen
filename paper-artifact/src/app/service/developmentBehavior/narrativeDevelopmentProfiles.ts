@@ -1,6 +1,6 @@
 import profiles from '../../../../config/narrative-development-profiles-v1.json';
 import extensions from '../../../../config/narrative-development-profile-extensions-v1.json';
-import approved from '../../../../data/narrative_v4_114_20261121/public-profiles.json';
+import approved from '../../../../data/narrative_v4_114/public-profiles.json';
 import {ccHash} from '../crossClauseGraph';
 
 export function narrativeDevelopmentProfile(operationId:string,requirement:string){

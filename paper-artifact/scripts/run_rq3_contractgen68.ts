@@ -15,7 +15,7 @@ const mode=get('--mode','prepare'),output=get('--output','results/rq3-contractge
 assert(['prepare','status','run','mock'].includes(mode));assert(['require-all','mapped-only'].includes(policy));
 assert(!args.includes('--execute-paid')||mode==='run');assert(!args.includes('--resume-network')||mode==='run');
 if(mode==='run')assert(args.includes('--execute-paid'),'Explicit paid execution required');
-const inputRoot=get('--input-root','data/repair_validation_natural_v2_20261121');
+const inputRoot=get('--input-root','data/repair_validation_natural_v2');
 const input=`${inputRoot}/generation/repair-inputs.jsonl`;
 const read=(f:string)=>JSON.parse(fs.readFileSync(f,'utf8'));
 const sha=(f:string)=>createHash('sha256').update(fs.readFileSync(f)).digest('hex');
@@ -31,7 +31,7 @@ const plan={version:'rq3-contractgen68-v3-unified-v2',entry:'scripts/run_rq3_rep
  samples,initialGenerations:1,maximumNewCallsPerSeed:4,maximumNewCalls:272,
  inputSha256:sha(input),profileSha256:sha('config/narrative-development-profiles-v1.json'),
  profileExtensionsSha256:sha('config/narrative-development-profile-extensions-v1.json'),
- approvedProfilesSha256:sha('data/narrative_v4_114_20261121/public-profiles.json'),
+ approvedProfilesSha256:sha('data/narrative_v4_114/public-profiles.json'),
  sourceFiles:{...rq3V3SourceFiles(),...behaviorFiles,...Object.fromEntries(['scripts/run_rq3_contractgen68.ts','scripts/run_rq3_repair_v3.ts','scripts/rq3PermissionRetryLoop.ts',
  'src/app/service/developmentBehavior/developmentRepairControllerV3.ts','src/app/service/developmentBehavior/developmentRepair.ts',
  'src/app/service/developmentBehavior/finiteScenarioReport.ts','src/app/service/developmentBehavior/loanRequestSelection.ts',

@@ -9,7 +9,7 @@ export const atmTransactionSources = atmInputCardSources.map(source => ({...sour
   note: source.id === 'requirement-document' ? 'OP3 printReceipt 766/770; OP5 ejectCard 902/906; OP6 withdrawCash 975/979. One upstream specification family.'
     : 'Active contracts 307-344, 369-402 and 405-432. Preserve receipt branch priority and exact session effects; no cascade, frame or extra amount-domain condition is inferred.'}));
 atmTransactionSources.push({id: 'verification-decision',
-  path: 'data/operation_revision/verification_decisions/withdrawCash_nonpositive_20261028.json',
+  path: 'data/operation_revision/verification_decisions/withdrawCash_nonpositive.json',
   sha256: '65c63915149ddbefd52f342215141fea45bec73eb7b41314df9493a615fbada1',
   note: 'Requirement owner approved source-preserving zero/negative withdrawal boundary checks; original model and frozen input remain unchanged.'});
 const obligation = (id: string, requirement: string, documentLine: number,

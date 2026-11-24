@@ -10,14 +10,14 @@ Data: `paper-experiment-data/RQ3/unified-data-v1/records.json`
 ## ContractGen_68
 Entry: `scripts/run_rq3_contractgen68.ts`
 
-Input: `data/repair_validation_natural_v2_20261121/generation/repair-inputs.jsonl`
+Input: `data/repair_validation_natural_v2/generation/repair-inputs.jsonl`
 
 Data: `paper-experiment-data/RQ3/unified-data-v1/ContractGenRepair`
 
 ## ContractGen_Single_Seed
 Entry: `scripts/run_rq3_repair_v3.ts`
 
-Input: `data/repair_validation_natural_v2_20261121/generation/repair-inputs.jsonl`
+Input: `data/repair_validation_natural_v2/generation/repair-inputs.jsonl`
 
 Data: `paper-experiment-data/RQ3/unified-data-v1/ContractGenRepair`
 

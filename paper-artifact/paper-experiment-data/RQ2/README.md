@@ -47,7 +47,7 @@ Entry: `scripts/run_use_ocltsvm_semantic_agreement.py`
 
 Input: `Captured boundaries or external input specified by the entry; see EXPERIMENT_CATALOG.json`
 
-Data: `paper-experiment-data/RQ2/USE-semantic-20261122`
+Data: `paper-experiment-data/RQ2/USE-semantic`
 
 ## External_USE20
 Entry: `scripts/run_use_external_current.ts`
